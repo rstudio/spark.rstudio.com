@@ -227,12 +227,13 @@ $(document).ready(function () {
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>load_csv(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE)</div>
+    <pre class="code"><code class="r"><div>load_csv(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
 <div>save_csv(x, path)</div>
-<div>load_parquet(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE)</div>
+<div>load_parquet(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
 <div>save_parquet(x, path)</div>
-<div>load_json(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE)</div>
-<div>save_json(x, path)</div></code></pre>
+<div>load_json(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
+<div>save_json(x, path)</div>
+<div>load_df(con, name, value, memory&nbsp;=&nbsp;TRUE, repartition&nbsp;=&nbsp;0, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -246,6 +247,8 @@ $(document).ready(function () {
       <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
       <dt>memory</dt>
       <dd>Loads data into memory</dd>
+      <dt>overwrite</dt>
+      <dd>Overwrite the table with the given name when it exists</dd>
       <dt>x</dt>
       <dd>A dplyr operation, for instance, `tbls(db, "flights")`</dd>
     </dl>
@@ -265,11 +268,13 @@ $(document).ready(function () {
   
       <p>Saves dplyr operation result as a JSON file</p>
   
+      <p>Loads a dataframe and provides a data source compatible with dplyr</p>
+  
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>dplyr-spark-data</li><li>load_csv</li><li>load_json</li><li>load_parquet</li><li>save_csv</li><li>save_json</li><li>save_parquet</li>
+      <li>dplyr-spark-data</li><li>load_csv</li><li>load_df</li><li>load_json</li><li>load_parquet</li><li>save_csv</li><li>save_json</li><li>save_parquet</li>
     </ul>
     <ul>
       

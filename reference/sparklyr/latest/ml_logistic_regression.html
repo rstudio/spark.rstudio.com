@@ -221,7 +221,7 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Logistic regression from a dplyr source</h1>
+<h1>Spark ML -- Logistic Regression</h1>
 </div>
 
 <div class="row">
@@ -232,31 +232,39 @@ $(document).ready(function () {
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
-      <dd>A dplyr source.</dd>
+      <dd>A <code>spark_tbl</code>.</dd>
       <dt>response</dt>
-      <dd>The prediction column</dd>
+      <dd>The name of the response vector.</dd>
       <dt>features</dt>
-      <dd>List of columns to use as features</dd>
+      <dd>The names of features (terms) to use as linear predictors
+for the response.</dd>
       <dt>intercept</dt>
-      <dd>TRUE to fit the intercept</dd>
-      <dt>alpha</dt>
-      <dd>The <em>elastic net</em> mixing parameter.</dd>
-      <dt>lambda</dt>
-      <dd>The <em>regularization penalty</em>.</dd>
+      <dd>Fit the model with an intercept term?</dd>
+      <dt>alpha, lambda</dt>
+      <dd>Parameters controlling loss function penalization (for e.g.
+lasso, elastic net, and ridge regression). See <strong>Details</strong> for more
+information.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Fit a logistic model using <code>spark.lm</code>.</p>
+      <p>Perform logistic regression on a <code>spark_tbl</code>.</p>
   
     </div>
 
     <div class="Details">
       <h2>Details</h2>
 
-      <p>See <a href = 'https://spark.apache.org/docs/latest/ml-classification-regression.html'>https://spark.apache.org/docs/latest/ml-classification-regression.html</a>
-for more information on how regression is implemented in Spark.</p>
+      <p>Spark implements for both $L1$ and $L2$ regularization in linear
+regression models. See the preamble in the
+<a href = 'http://spark.apache.org/docs/latest/ml-classification-regression.html'>Spark Classification and Regression</a>
+documentation for more details on how the loss function is parameterized.</p>
+  
+      <p>In particular, with <code>alpha</code> set to 1, the parameterization
+is equivalent to a <a href = 'https://en.wikipedia.org/wiki/Lasso_(statistics)'>lasso</a>
+model; if <code>alpha</code> is set to 0, the parameterization is equivalent to
+a <a href = 'https://en.wikipedia.org/wiki/Tikhonov_regularization'>ridge regression</a> model.</p>
   
     </div>
       </div>
@@ -268,6 +276,12 @@ for more information on how regression is implemented in Spark.</p>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other Spark ML routines: <code><a href='ml_kmeans.html'>ml_kmeans</a></code>,
+  <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>, <code><a href='ml_pca.html'>ml_pca</a></code>,
+  <code><a href='ml_random_forest.html'>ml_random_forest</a></code>
+
         
   </div>
 </div>

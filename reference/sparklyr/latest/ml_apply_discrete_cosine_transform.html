@@ -221,37 +221,37 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Spark ML -- K-Means Clustering</h1>
+<h1>Feature Transformation -- Discrete Cosine Transform (DCT)</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_kmeans(x, centers, iter.max&nbsp;=&nbsp;10, features&nbsp;=&nbsp;dplyr::tbl_vars(x))</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_apply_discrete_cosine_transform(df, input.col, output.col, inverse&nbsp;=&nbsp;FALSE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>x</dt>
-      <dd>A <code>spark_tbl</code>.</dd>
-      <dt>centers</dt>
-      <dd>The number of cluster centers to compute.</dd>
-      <dt>iter.max</dt>
-      <dd>Maximum number of iterations allowed.</dd>
-      <dt>features</dt>
-      <dd>Which columns to use in the k-means fit. Defaults to
-all columns within <code>x</code>.</dd>
+      <dt>df</dt>
+      <dd>A Spark Dataset.</dd>
+      <dt>input.col</dt>
+      <dd>The name of the input column(s).</dd>
+      <dt>output.col</dt>
+      <dd>The name of the output column.</dd>
+      <dt>inverse</dt>
+      <dd>Perform inverse DCT?</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Perform k-means clustering on a <code>spark_tbl</code>.</p>
+      <p>Transform a column in the time domain into another column in the frequency
+domain.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>ml_kmeans</li>
+      <li>ml_apply_discrete_cosine_transform</li>
     </ul>
     <ul>
       
@@ -259,12 +259,18 @@ all columns within <code>x</code>.</dd>
       
     <h2>See also</h2>
     
-For information on how Spark k-means clustering is implemented, please see
-  <a href = 'http://spark.apache.org/docs/latest/mllib-clustering.html#k-means'>http://spark.apache.org/docs/latest/mllib-clustering.html#k-means</a>.
+See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
+  more information on the set of transformations available for DataFrame
+  columns in Spark.
 
-Other Spark ML routines: <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
-  <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
-  <code><a href='ml_pca.html'>ml_pca</a></code>, <code><a href='ml_random_forest.html'>ml_random_forest</a></code>
+Other feature transformation routines: <code><a href='ml_apply_binarizer.html'>ml_apply_binarizer</a></code>,
+  <code><a href='ml_apply_bucketizer.html'>ml_apply_bucketizer</a></code>,
+  <code><a href='ml_apply_elementwise_product.html'>ml_apply_elementwise_product</a></code>,
+  <code><a href='ml_apply_index_to_string.html'>ml_apply_index_to_string</a></code>,
+  <code><a href='ml_apply_quantile_discretizer.html'>ml_apply_quantile_discretizer</a></code>,
+  <code><a href='ml_apply_sql_transformer.html'>ml_apply_sql_transformer</a></code>,
+  <code><a href='ml_apply_string_indexer.html'>ml_apply_string_indexer</a></code>,
+  <code><a href='ml_apply_vector_assembler.html'>ml_apply_vector_assembler</a></code>
 
         
   </div>

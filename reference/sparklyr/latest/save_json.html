@@ -131,25 +131,6 @@ body {
 }
 </style>
 
-<script>
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.parent().addClass('active');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-});
-</script>
-
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
@@ -175,7 +156,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">sparklyr</a>
+      <a class="navbar-brand" href="../../../index.html">sparklyr</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -197,7 +178,7 @@ $(document).ready(function () {
 <li>
   <a href="../../../examples.html">Examples</a>
 </li>
-<li>
+<li class="active">
   <a href="index.html">Reference</a>
 </li>
       </ul>
@@ -218,60 +199,32 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Loads a CSV file and provides a data source compatible with dplyr</h1>
+<h1>Saves dplyr operation result as a JSON file</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>load_csv(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
-<div>save_csv(x, path)</div>
-<div>load_parquet(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
-<div>save_parquet(x, path)</div>
-<div>load_json(con, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div>
-<div>save_json(x, path)</div>
-<div>load_df(con, name, value, memory&nbsp;=&nbsp;TRUE, repartition&nbsp;=&nbsp;0, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
+    <pre class="code"><code class="r"><div>save_json(x, path)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>con</dt>
-      <dd>Connection to dplyr source</dd>
-      <dt>name</dt>
-      <dd>Name to reference the data source once it's loaded</dd>
-      <dt>path</dt>
-      <dd>The path to the CSV file. Needs to be accessible from the cluster. Supports: "hdfs://" or "s3n://"</dd>
-      <dt>repartition</dt>
-      <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
-      <dt>memory</dt>
-      <dd>Loads data into memory</dd>
-      <dt>overwrite</dt>
-      <dd>Overwrite the table with the given name when it exists</dd>
       <dt>x</dt>
       <dd>A dplyr operation, for instance, `tbls(db, "flights")`</dd>
+      <dt>path</dt>
+      <dd>The path to the file. Needs to be accessible from the cluster. Supports: "hdfs://" or "s3n://"</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Loads a CSV file and provides a data source compatible with dplyr</p>
-  
-      <p>Saves a dplyr operation result as a CSV file</p>
-  
-      <p>Loads a parquet file and provides a data source compatible with dplyr</p>
-  
-      <p>Saves dplyr operation result as a parquet file</p>
-  
-      <p>Loads a JSON file and provides a data source compatible with dplyr</p>
-  
       <p>Saves dplyr operation result as a JSON file</p>
-  
-      <p>Loads a dataframe and provides a data source compatible with dplyr</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>dplyr-spark-data</li><li>load_csv</li><li>load_df</li><li>load_json</li><li>load_parquet</li><li>save_csv</li><li>save_json</li><li>save_parquet</li>
+      <li>save_json</li>
     </ul>
     <ul>
       

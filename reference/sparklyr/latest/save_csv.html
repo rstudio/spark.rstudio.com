@@ -199,59 +199,37 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Feature Transformation -- Bucketizer</h1>
+<h1>Saves a dplyr operation result as a CSV file</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_apply_bucketizer(df, input.col, output.col, splits)</div></code></pre>
+    <pre class="code"><code class="r"><div>save_csv(x, path)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>df</dt>
-      <dd>A Spark Dataset.</dd>
-      <dt>input.col</dt>
-      <dd>The name of the input column(s).</dd>
-      <dt>output.col</dt>
-      <dd>The name of the output column.</dd>
-      <dt>splits</dt>
-      <dd>A numeric vector of cutpoints, indicating the bucket
-boundaries.</dd>
+      <dt>x</dt>
+      <dd>A dplyr operation, for instance, `tbls(db, "flights")`</dd>
+      <dt>path</dt>
+      <dd>The path to the file. Needs to be accessible from the cluster. Supports: "hdfs://" or "s3n://"</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Similar to <span style="R">R</span>'s <code><a href='http://www.inside-r.org/r-doc/base/cut'>cut</a></code> function, this transforms a numeric column
-into a discretized column, with breaks specified through the <code>splits</code>
-parameter.</p>
+      <p>Saves a dplyr operation result as a CSV file</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>ml_apply_bucketizer</li>
+      <li>save_csv</li>
     </ul>
     <ul>
       
     </ul> -->
       
-    <h2>See also</h2>
-    
-See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
-  more information on the set of transformations available for DataFrame
-  columns in Spark.
-
-Other feature transformation routines: <code><a href='ml_apply_binarizer.html'>ml_apply_binarizer</a></code>,
-  <code><a href='ml_apply_discrete_cosine_transform.html'>ml_apply_discrete_cosine_transform</a></code>,
-  <code><a href='ml_apply_elementwise_product.html'>ml_apply_elementwise_product</a></code>,
-  <code><a href='ml_apply_index_to_string.html'>ml_apply_index_to_string</a></code>,
-  <code><a href='ml_apply_quantile_discretizer.html'>ml_apply_quantile_discretizer</a></code>,
-  <code><a href='ml_apply_sql_transformer.html'>ml_apply_sql_transformer</a></code>,
-  <code><a href='ml_apply_string_indexer.html'>ml_apply_string_indexer</a></code>,
-  <code><a href='ml_apply_vector_assembler.html'>ml_apply_vector_assembler</a></code>
-
         
   </div>
 </div>

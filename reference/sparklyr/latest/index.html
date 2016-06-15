@@ -131,25 +131,6 @@ body {
 }
 </style>
 
-<script>
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.parent().addClass('active');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-});
-</script>
-
-
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
@@ -175,7 +156,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">sparklyr</a>
+      <a class="navbar-brand" href="../../../index.html">sparklyr</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -197,7 +178,7 @@ $(document).ready(function () {
 <li>
   <a href="../../../examples.html">Examples</a>
 </li>
-<li>
+<li class="active">
   <a href="index.html">Reference</a>
 </li>
       </ul>
@@ -224,8 +205,8 @@ $(document).ready(function () {
 <div class="row">
   <div class="span8">
    
-    <h3>Connecting to Spark</h3>
-    <p>Functions for installing Spark components and connecting to Spark clusters.</p>
+    <h3>Connections</h3>
+    <p>Functions for managing connections to Spark clusters.</p>
 
     
     <ul class="index">
@@ -234,7 +215,13 @@ $(document).ready(function () {
         <code><a href="spark_connect.html">spark_connect</a></code><br />Connects to Spark and establishes the Spark Context</li>
             
       <li>
+        <code><a href="spark_context.html">spark_context</a></code><br />Retrieves the SparkContext reference from a Spark Connection</li>
+            
+      <li>
         <code><a href="spark_disconnect.html">spark_disconnect</a></code><br />Disconnects from Spark and terminates the running application</li>
+            
+      <li>
+        <code><a href="spark_disconnect_all.html">spark_disconnect_all</a></code><br />Closes all existing connections. Returns the total of connections closed.</li>
             
       <li>
         <code><a href="spark_log.html">spark_log</a></code>(print.spark_log, spark_log_file)<br />Retrieves the last n entries in the Spark log</li>
@@ -243,8 +230,36 @@ $(document).ready(function () {
         <code><a href="spark_web.html">spark_web</a></code><br />Opens the Spark web interface</li>
     
     </ul>
+    <h3>Reading and Writing Data</h3>
+    <p>Functions for reading and writing data within Spark clusters.</p>
+
+    
+    <ul class="index">
+        
+      <li>
+        <code><a href="load_df.html">load_df</a></code><br />Loads a dataframe and provides a data source compatible with dplyr</li>
+            
+      <li>
+        <code><a href="load_csv.html">load_csv</a></code><br />Loads a CSV file and provides a data source compatible with dplyr</li>
+            
+      <li>
+        <code><a href="load_json.html">load_json</a></code><br />Loads a JSON file and provides a data source compatible with dplyr</li>
+            
+      <li>
+        <code><a href="load_parquet.html">load_parquet</a></code><br />Loads a parquet file and provides a data source compatible with dplyr</li>
+            
+      <li>
+        <code><a href="save_csv.html">save_csv</a></code><br />Saves a dplyr operation result as a CSV file</li>
+            
+      <li>
+        <code><a href="save_json.html">save_json</a></code><br />Saves dplyr operation result as a JSON file</li>
+            
+      <li>
+        <code><a href="save_parquet.html">save_parquet</a></code><br />Saves dplyr operation result as a parquet file</li>
+    
+    </ul>
     <h3>MLlib Interface</h3>
-    <p>Functions for invoking MLlib algorithms</p>
+    <p>Functions for invoking MLlib algorithms.</p>
 
     
     <ul class="index">
@@ -263,39 +278,6 @@ $(document).ready(function () {
             
       <li>
         <code><a href="ml_pca.html">ml_pca</a></code><br />Spark ML -- Principal Components Analysis</li>
-    
-    </ul>
-    <h3>Other</h3>
-    
-    
-    <ul class="index">
-        
-      <li>
-        <code><a href="as_spark_dataframe.html">as_spark_dataframe</a></code><br />Convert a tbl to a Spark Dataset.</li>
-            
-      <li>
-        <code><a href="copy_to.src_spark.html">copy_to.src_spark</a></code><br />Copies the source data frame into a Spark table</li>
-            
-      <li>
-        <code><a href="db_data_type.src_spark.html">db_data_type.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="dbi-spark-table.html">dbi-spark-table</a></code>(dbExistsTable,DBISparkConnection,character-method, dbListTables,DBISparkConnection-method, dbReadTable,DBISparkConnection,character-method, dbRemoveTable,DBISparkConnection,character-method, dbWriteTable,DBISparkConnection-method, mutate_.tbl_spark)<br />DBI Spark Table</li>
-            
-      <li>
-        <code><a href="dbSetProperty.html">dbSetProperty</a></code><br />Sets a property for the connection</li>
-            
-      <li>
-        <code><a href="dbSetProperty-DBISparkConnection-character-character-method.html">dbSetProperty,DBISparkConnection,character,character-method</a></code><br />Sets a property for the connection</li>
-            
-      <li>
-        <code><a href="dplyr-spark-data.html">dplyr-spark-data</a></code>(load_csv, load_df, load_json, load_parquet, save_csv, save_json, save_parquet)<br />Loads a CSV file and provides a data source compatible with dplyr</li>
-            
-      <li>
-        <code><a href="dplyr-spark-table.html">dplyr-spark-table</a></code>(collect.tbl_spark, sample_frac.tbl_spark, sample_n.tbl_spark, sql_build.tbl_spark)<br />Dplyr table definitions for Spark</li>
-            
-      <li>
-        <code><a href="ec2-spark.html">ec2-spark</a></code>(spark_ec2_cluster, spark_ec2_deploy, spark_ec2_destroy, spark_ec2_login, spark_ec2_master, spark_ec2_rstudio, spark_ec2_start, spark_ec2_stop, spark_ec2_web)<br />Install an EC2 Spark cluster</li>
             
       <li>
         <code><a href="ml_apply_binarizer.html">ml_apply_binarizer</a></code><br />Feature Transformation -- Binarizer</li>
@@ -323,6 +305,61 @@ $(document).ready(function () {
             
       <li>
         <code><a href="ml_apply_vector_assembler.html">ml_apply_vector_assembler</a></code><br />Feature Transformation -- VectorAssembler</li>
+    
+    </ul>
+    <h3>Installation</h3>
+    <p>Functions for managing the installation of Spark components</p>
+
+    
+    <ul class="index">
+        
+      <li>
+        <code><a href="spark_install.html">spark_install</a></code><br />Provides support to download and install the given Spark version</li>
+            
+      <li>
+        <code><a href="spark_install_tar.html">spark_install_tar</a></code><br />Provides support to install a version of Spark from a given TAR file</li>
+            
+      <li>
+        <code><a href="spark_install_available.html">spark_install_available</a></code><br />Check if the given Spark version is available in this system</li>
+            
+      <li>
+        <code><a href="spark_can_install.html">spark_can_install</a></code><br />Check if Spark can be installed in this system</li>
+            
+      <li>
+        <code><a href="spark_versions.html">spark_versions</a></code><br />Retrieves available versions of Spark</li>
+            
+      <li>
+        <code><a href="spark_versions_info.html">spark_versions_info</a></code><br />Retrieves component information for the given Spark and Hadoop versions</li>
+    
+    </ul>
+    <h3>Other</h3>
+    
+    
+    <ul class="index">
+        
+      <li>
+        <code><a href="as_spark_dataframe.html">as_spark_dataframe</a></code><br />Convert a tbl to a Spark Dataset.</li>
+            
+      <li>
+        <code><a href="copy_to.src_spark.html">copy_to.src_spark</a></code><br />Copies the source data frame into a Spark table</li>
+            
+      <li>
+        <code><a href="db_data_type.src_spark.html">db_data_type.src_spark</a></code><br />This operation is currently not supported in Spark</li>
+            
+      <li>
+        <code><a href="dbi-spark-table.html">dbi-spark-table</a></code>(dbExistsTable,DBISparkConnection,character-method, dbListTables,DBISparkConnection-method, dbReadTable,DBISparkConnection,character-method, dbRemoveTable,DBISparkConnection,character-method, dbWriteTable,DBISparkConnection-method, mutate_.tbl_spark)<br />DBI Spark Table</li>
+            
+      <li>
+        <code><a href="dbSetProperty.html">dbSetProperty</a></code><br />Sets a property for the connection</li>
+            
+      <li>
+        <code><a href="dbSetProperty-DBISparkConnection-character-character-method.html">dbSetProperty,DBISparkConnection,character,character-method</a></code><br />Sets a property for the connection</li>
+            
+      <li>
+        <code><a href="dplyr-spark-table.html">dplyr-spark-table</a></code>(collect.tbl_spark, sample_frac.tbl_spark, sample_n.tbl_spark, sql_build.tbl_spark)<br />Dplyr table definitions for Spark</li>
+            
+      <li>
+        <code><a href="ec2-spark.html">ec2-spark</a></code>(spark_ec2_cluster, spark_ec2_deploy, spark_ec2_destroy, spark_ec2_login, spark_ec2_master, spark_ec2_rstudio, spark_ec2_start, spark_ec2_stop, spark_ec2_web)<br />Install an EC2 Spark cluster</li>
             
       <li>
         <code><a href="partition.html">partition</a></code><br />Partition a Spark Dataframe</li>
@@ -332,9 +369,6 @@ $(document).ready(function () {
             
       <li>
         <code><a href="print.src_spark.html">print.src_spark</a></code><br />Prints information associated to the dplyr source</li>
-            
-      <li>
-        <code><a href="spark_can_install.html">spark_can_install</a></code><br />Check if Spark can be installed in this system</li>
             
       <li>
         <code><a href="spark_config.html">spark_config</a></code><br />Defines a configuration file based on the config package and built-in defaults</li>
@@ -355,9 +389,6 @@ $(document).ready(function () {
         <code><a href="spark_connection_on_reconnect.html">spark_connection_on_reconnect</a></code><br />Provides an extension mechanism to allow package builders to support spark_connect(reconnect = TRUE)</li>
             
       <li>
-        <code><a href="spark_context.html">spark_context</a></code><br />Retrieves the SparkContext reference from a Spark Connection</li>
-            
-      <li>
         <code><a href="spark_context_master.html">spark_context_master</a></code>(spark_connection_master)<br />Retrieves master from a Spark Connection</li>
             
       <li>
@@ -365,18 +396,6 @@ $(document).ready(function () {
             
       <li>
         <code><a href="spark_dataframe_split.html">spark_dataframe_split</a></code><br />Split a Spark DataFrame</li>
-            
-      <li>
-        <code><a href="spark_disconnect_all.html">spark_disconnect_all</a></code><br />Closes all existing connections. Returns the total of connections closed.</li>
-            
-      <li>
-        <code><a href="spark_install.html">spark_install</a></code><br />Provides support to download and install the given Spark version</li>
-            
-      <li>
-        <code><a href="spark_install_available.html">spark_install_available</a></code><br />Check if the given Spark version is available in this system</li>
-            
-      <li>
-        <code><a href="spark_install_tar.html">spark_install_tar</a></code><br />Provides support to install a version of Spark from a given TAR file</li>
             
       <li>
         <code><a href="spark_invoke.html">spark_invoke</a></code><br />Executes a method on the given object</li>
@@ -389,12 +408,6 @@ $(document).ready(function () {
             
       <li>
         <code><a href="spark_sql.html">spark_sql</a></code><br />Executes arbitrary SQL statements</li>
-            
-      <li>
-        <code><a href="spark_versions.html">spark_versions</a></code><br />Retrieves available versions of Spark</li>
-            
-      <li>
-        <code><a href="spark_versions_info.html">spark_versions_info</a></code><br />Retrieves component information for the given Spark and Hadoop versions</li>
             
       <li>
         <code><a href="spark-transactions.html">spark-transactions</a></code>(dbBegin,DBISparkConnection-method, dbCommit,DBISparkConnection-method, dbRollback,DBISparkConnection-method)<br />Spark Transactions.</li>

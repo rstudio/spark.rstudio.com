@@ -1,28 +1,24 @@
-<div class="row">
-<h1>Function Reference</h1>
-</div>
+<h1>Function Reference <small>version {{version}}</small></h1>
 
-<div class="row">
-  <div class="span8">
-   
-    {{#sections}}
-    <h3>{{title}}</h3>
-    {{{description}}}
-    
-    <ul class="index">
+<table class="index">
+{{#sections}}
+  <tbody data-section="{{title}}">
+    <tr>
+      <td colspan="2">
+        <h3>{{title}}</h3>
+        <div class="section-desc">{{{description}}}</div>
+      </td>
+    </tr>
     {{#items}}
-    {{#icon}}
-      <li class = "icon">
-        <a href="{{file_out}}"><img src="{{icon}}" width = "40" height = "40" /></a><code><a href="{{file_out}}">{{name}}</a></code>{{aliases}}<br /> 
-        {{{title}}}</li>
-    {{/icon}}
-    {{^icon}}
-      <li>
-        <code><a href="{{file_out}}">{{name}}</a></code> &mdash; {{{title}}}</li>
-    {{/icon}}
+    <tr>
+      <td>
+        <h4 class="topic"><tt><a href="{{file_out}}">{{name}}</a></tt></h4>
+      </td>
+      <td>
+        <div class="desc">{{{title}}}</div>
+      </td>
+    </tr>
     {{/items}}
-    </ul>
-    {{/sections}}
-  </div>
-  
-</div>
+  </tbody>
+{{/sections}}
+</table>

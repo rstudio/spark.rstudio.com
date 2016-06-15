@@ -199,13 +199,13 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Feature Transformation -- SQLTransformer</h1>
+<h1>Feature Transformation -- ElementwiseProduct</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_apply_sql_transformer(x, input_col, output_col, sql)</div></code></pre>
+    <pre class="code"><code class="r"><div>ft_elementwise_product(x, input_col&nbsp;=&nbsp;NULL, output_col&nbsp;=&nbsp;NULL, scaling_col)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -215,21 +215,23 @@ $(document).ready(function () {
       <dd>The name of the input column(s).</dd>
       <dt>output_col</dt>
       <dd>The name of the output column.</dd>
-      <dt>sql</dt>
-      <dd>A SQL statement.</dd>
+      <dt>scaling_col</dt>
+      <dd>The column used to scale <code>input_col</code>.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Transform a data set using SQL. Use the <code>__THIS__</code>
-placeholder as a proxy for the active table.</p>
+      <p>Computes the element-wise product between two columns. Generally, this is
+intended as a scaling transformation, where an input vector is scaled by
+another vector, but this should apply for all element-wise product
+transformations.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>ml_apply_sql_transformer</li>
+      <li>ft_elementwise_product</li>
     </ul>
     <ul>
       
@@ -241,14 +243,14 @@ See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spar
   more information on the set of transformations available for DataFrame
   columns in Spark.
 
-Other feature transformation routines: <code><a href='ml_apply_binarizer.html'>ml_apply_binarizer</a></code>,
-  <code><a href='ml_apply_bucketizer.html'>ml_apply_bucketizer</a></code>,
-  <code><a href='ml_apply_discrete_cosine_transform.html'>ml_apply_discrete_cosine_transform</a></code>,
-  <code><a href='ml_apply_elementwise_product.html'>ml_apply_elementwise_product</a></code>,
-  <code><a href='ml_apply_index_to_string.html'>ml_apply_index_to_string</a></code>,
-  <code><a href='ml_apply_quantile_discretizer.html'>ml_apply_quantile_discretizer</a></code>,
-  <code><a href='ml_apply_string_indexer.html'>ml_apply_string_indexer</a></code>,
-  <code><a href='ml_apply_vector_assembler.html'>ml_apply_vector_assembler</a></code>
+Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
+  <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
+  <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,
+  <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
+  <code><a href='ft_quantile_discretizer.html'>ft_quantile_discretizer</a></code>,
+  <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
+  <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
+  <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>
 
         
   </div>

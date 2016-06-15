@@ -199,13 +199,13 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Feature Transformation -- Discrete Cosine Transform (DCT)</h1>
+<h1>Feature Transformation -- Binarizer</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_apply_discrete_cosine_transform(x, input_col, output_col, inverse&nbsp;=&nbsp;FALSE)</div></code></pre>
+    <pre class="code"><code class="r"><div>ft_binarizer(x, input_col&nbsp;=&nbsp;NULL, output_col&nbsp;=&nbsp;NULL, threshold&nbsp;=&nbsp;0.5)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -215,21 +215,22 @@ $(document).ready(function () {
       <dd>The name of the input column(s).</dd>
       <dt>output_col</dt>
       <dd>The name of the output column.</dd>
-      <dt>inverse</dt>
-      <dd>Perform inverse DCT?</dd>
+      <dt>threshold</dt>
+      <dd>The numeric threshold.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Transform a column in the time domain into another column in the frequency
-domain.</p>
+      <p>Apply thresholding to a column, such that values less than or equal to the
+<code>threshold</code> are assigned the value 0.0, and values greater than the
+threshold are assigned the value 1.0.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>ml_apply_discrete_cosine_transform</li>
+      <li>ft_binarizer</li>
     </ul>
     <ul>
       
@@ -241,14 +242,14 @@ See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spar
   more information on the set of transformations available for DataFrame
   columns in Spark.
 
-Other feature transformation routines: <code><a href='ml_apply_binarizer.html'>ml_apply_binarizer</a></code>,
-  <code><a href='ml_apply_bucketizer.html'>ml_apply_bucketizer</a></code>,
-  <code><a href='ml_apply_elementwise_product.html'>ml_apply_elementwise_product</a></code>,
-  <code><a href='ml_apply_index_to_string.html'>ml_apply_index_to_string</a></code>,
-  <code><a href='ml_apply_quantile_discretizer.html'>ml_apply_quantile_discretizer</a></code>,
-  <code><a href='ml_apply_sql_transformer.html'>ml_apply_sql_transformer</a></code>,
-  <code><a href='ml_apply_string_indexer.html'>ml_apply_string_indexer</a></code>,
-  <code><a href='ml_apply_vector_assembler.html'>ml_apply_vector_assembler</a></code>
+Other feature transformation routines: <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
+  <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,
+  <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
+  <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
+  <code><a href='ft_quantile_discretizer.html'>ft_quantile_discretizer</a></code>,
+  <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
+  <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
+  <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>
 
         
   </div>

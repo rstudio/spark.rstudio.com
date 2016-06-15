@@ -199,38 +199,57 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Disconnects from Spark and terminates the running application</h1>
+<h1>Feature Transformation -- Discrete Cosine Transform (DCT)</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_disconnect(sc)</div>
-<div>spark_disconnect_all()</div></code></pre>
+    <pre class="code"><code class="r"><div>ft_discrete_cosine_transform(x, input_col&nbsp;=&nbsp;NULL, output_col&nbsp;=&nbsp;NULL, inverse&nbsp;=&nbsp;FALSE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>sc</dt>
-      <dd>Spark connection provided by spark_connect</dd>
+      <dt>x</dt>
+      <dd>An object (usually a <code>spark_tbl</code>) coercable to a Spark DataFrame.</dd>
+      <dt>input_col</dt>
+      <dd>The name of the input column(s).</dd>
+      <dt>output_col</dt>
+      <dd>The name of the output column.</dd>
+      <dt>inverse</dt>
+      <dd>Perform inverse DCT?</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Disconnects from Spark and terminates the running application</p>
-  
-      <p>Closes all existing connections. Returns the total of connections closed.</p>
+      <p>Transform a column in the time domain into another column in the frequency
+domain.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>spark_disconnect</li><li>spark_disconnect_all</li>
+      <li>ft_discrete_cosine_transform</li>
     </ul>
     <ul>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
+  more information on the set of transformations available for DataFrame
+  columns in Spark.
+
+Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
+  <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
+  <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
+  <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
+  <code><a href='ft_quantile_discretizer.html'>ft_quantile_discretizer</a></code>,
+  <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
+  <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
+  <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>
+
         
   </div>
 </div>

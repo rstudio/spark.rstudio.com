@@ -199,41 +199,53 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Print a JVM object reference.</h1>
+<h1>DBI interface for Spark</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>"print"(x, ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>"dbWriteTable"(conn, name, value, temporary&nbsp;=&nbsp;TRUE, repartition&nbsp;=&nbsp;0)</div>
+<div>"dbReadTable"(conn, name)</div>
+<div>"dbListTables"(conn)</div>
+<div>"dbExistsTable"(conn, name)</div>
+<div>"dbRemoveTable"(conn, name)</div>
+<div>"mutate_"(.data, ..., .dots)</div>
+<div>"dbBegin"(conn)</div>
+<div>"dbCommit"(conn)</div>
+<div>"dbRollback"(conn)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>x</dt>
-      <dd>The JVM object reference</dd>
+      <dt>conn</dt>
+      <dd>a <code>DBISparkConnection</code> object, produced by
+<code><a href='http://www.inside-r.org/packages/cran/DBI/docs/dbConnect'>dbConnect</a></code></dd>
+      <dt>name</dt>
+      <dd>a character string specifying a table name.</dd>
+      <dt>value</dt>
+      <dd>A data.frame to write to the database.</dd>
+      <dt>temporary</dt>
+      <dd>If <code>TRUE</code>, will generate a temporary table statement.</dd>
+      <dt>repartition</dt>
+      <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
+      <dt>.data</dt>
+      <dd>Data and operations references</dd>
       <dt>...</dt>
-      <dd>further arguments passed to or from other methods</dd>
+      <dd>Additional parameters</dd>
+      <dt>.dots</dt>
+      <dd>Original parameters</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Prints information about a JVM object reference.</p>
-  
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>The underyling object id is printed; in addition, if the
-associated connection is active; prints the class and
-string representation of the underlying object.</p>
+      <p>DBI interface for Spark</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>print.jobj</li>
+      <li>DBI-interface</li><li>dbBegin,DBISparkConnection-method</li><li>dbCommit,DBISparkConnection-method</li><li>dbExistsTable,DBISparkConnection,character-method</li><li>dbListTables,DBISparkConnection-method</li><li>dbReadTable,DBISparkConnection,character-method</li><li>dbRemoveTable,DBISparkConnection,character-method</li><li>dbRollback,DBISparkConnection-method</li><li>dbWriteTable,DBISparkConnection-method</li><li>mutate_.tbl_spark</li>
     </ul>
     <ul>
       

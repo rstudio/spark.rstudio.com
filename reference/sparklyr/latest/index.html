@@ -205,20 +205,20 @@ $(document).ready(function () {
 <div class="row">
   <div class="span8">
    
-    <h3>Connections</h3>
-    <p>Functions for managing connections to Spark clusters.</p>
+    <h3>Connecting to Spark</h3>
+    <p>Functions for installing Spark components and managing connections to Spark.</p>
 
     
     <ul class="index">
         
       <li>
+        <code><a href="spark_install.html">spark_install</a></code>(spark_install_tar, spark_versions)<br />Provides support to download and install the given Spark version</li>
+            
+      <li>
         <code><a href="spark_connect.html">spark_connect</a></code><br />Connects to Spark and establishes the Spark Context</li>
             
       <li>
-        <code><a href="spark_disconnect.html">spark_disconnect</a></code><br />Disconnects from Spark and terminates the running application</li>
-            
-      <li>
-        <code><a href="spark_disconnect_all.html">spark_disconnect_all</a></code><br />Closes all existing connections. Returns the total of connections closed.</li>
+        <code><a href="spark_disconnect.html">spark_disconnect</a></code>(spark_disconnect_all)<br />Disconnects from Spark and terminates the running application</li>
             
       <li>
         <code><a href="spark_config.html">spark_config</a></code><br />Defines a configuration file based on the config package and built-in defaults</li>
@@ -265,10 +265,22 @@ $(document).ready(function () {
     <ul class="index">
         
       <li>
-        <code><a href="spark_sql.html">spark_sql</a></code><br />Executes arbitrary SQL statements</li>
+        <code><a href="dplyr-spark-interface.html">dplyr-interface</a></code><br />Connect to Spark for Dplyr.</li>
             
       <li>
-        <code><a href="dplyr-spark-interface.html">dplyr-spark-interface</a></code><br />Connect to Spark for Dplyr.</li>
+        <code><a href="src_spark.html">src_spark</a></code><br />Connect to Spark for Dplyr.</li>
+            
+      <li>
+        <code><a href="copy_to.src_spark.html">copy_to.src_spark</a></code><br />Copies the source data frame into a Spark table</li>
+            
+      <li>
+        <code><a href="tbl_cache.html">tbl_cache</a></code><br />Loads a table into memory</li>
+            
+      <li>
+        <code><a href="tbl_uncache.html">tbl_uncache</a></code><br />Unloads table from memory</li>
+            
+      <li>
+        <code><a href="as_spark_dataframe.html">as_spark_dataframe</a></code><br />Convert a tbl to a Spark Dataset.</li>
             
       <li>
         <code><a href="spark_dataframe_collect.html">spark_dataframe_collect</a></code><br />Read a Spark Dataset into R.</li>
@@ -278,6 +290,9 @@ $(document).ready(function () {
             
       <li>
         <code><a href="partition.html">partition</a></code><br />Partition a Spark Dataframe</li>
+            
+      <li>
+        <code><a href="DBI-interface.html">DBI-interface</a></code>(dbBegin,DBISparkConnection-method, dbCommit,DBISparkConnection-method, dbExistsTable,DBISparkConnection,character-method, dbListTables,DBISparkConnection-method, dbReadTable,DBISparkConnection,character-method, dbRemoveTable,DBISparkConnection,character-method, dbRollback,DBISparkConnection-method, dbWriteTable,DBISparkConnection-method, mutate_.tbl_spark)<br />DBI interface for Spark</li>
     
     </ul>
     <h3>MLlib Interface</h3>
@@ -300,6 +315,9 @@ $(document).ready(function () {
             
       <li>
         <code><a href="ml_pca.html">ml_pca</a></code><br />Spark ML -- Principal Components Analysis</li>
+            
+      <li>
+        <code><a href="ml_multilayer_perceptron.html">ml_multilayer_perceptron</a></code><br />Spark ML -- Multilayer Perceptron</li>
             
       <li>
         <code><a href="ml_apply_binarizer.html">ml_apply_binarizer</a></code><br />Feature Transformation -- Binarizer</li>
@@ -346,111 +364,6 @@ $(document).ready(function () {
             
       <li>
         <code><a href="spark_invoke_static_ctor.html">spark_invoke_static_ctor</a></code><br />Executes an static method on the given object</li>
-            
-      <li>
-        <code><a href="print.jobj.html">print.jobj</a></code><br />Print a JVM object reference.</li>
-    
-    </ul>
-    <h3>dplyr Interface</h3>
-    <p>Implementation of dplyr S3 methods for Spark</p>
-
-    
-    <ul class="index">
-        
-      <li>
-        <code><a href="src_spark.html">src_spark</a></code><br />Connect to Spark for Dplyr.</li>
-            
-      <li>
-        <code><a href="src_context.html">src_context</a></code><br />Retrieves the Spark connection object from a given dplyr src</li>
-            
-      <li>
-        <code><a href="tbl_cache.html">tbl_cache</a></code><br />Loads a table into memory</li>
-            
-      <li>
-        <code><a href="tbl_uncache.html">tbl_uncache</a></code><br />Unloads table from memory</li>
-            
-      <li>
-        <code><a href="print.src_spark.html">print.src_spark</a></code><br />Prints information associated to the dplyr source</li>
-            
-      <li>
-        <code><a href="copy_to.src_spark.html">copy_to.src_spark</a></code><br />Copies the source data frame into a Spark table</li>
-            
-      <li>
-        <code><a href="sql_drop_table.src_spark.html">sql_drop_table.src_spark</a></code><br />Removes a Spark table</li>
-            
-      <li>
-        <code><a href="sql_analyze.src_spark.html">sql_analyze.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_begin.src_spark.html">sql_begin.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_commit.src_spark.html">sql_commit.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_create_index.src_spark.html">sql_create_index.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_create_table.src_spark.html">sql_create_table.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_insert_into.src_spark.html">sql_insert_into.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="sql_rollback.src_spark.html">sql_rollback.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="db_data_type.src_spark.html">db_data_type.src_spark</a></code><br />This operation is currently not supported in Spark</li>
-            
-      <li>
-        <code><a href="dplyr-spark-table.html">dplyr-spark-table</a></code>(collect.tbl_spark, sample_frac.tbl_spark, sample_n.tbl_spark, sql_build.tbl_spark)<br />Dplyr table definitions for Spark</li>
-            
-      <li>
-        <code><a href="as_spark_dataframe.html">as_spark_dataframe</a></code><br />Convert a tbl to a Spark Dataset.</li>
-    
-    </ul>
-    <h3>DBI Interface</h3>
-    <p>Implentation of DBI S3 methods for Spark</p>
-
-    
-    <ul class="index">
-        
-      <li>
-        <code><a href="dbi-spark-table.html">dbi-spark-table</a></code>(dbExistsTable,DBISparkConnection,character-method, dbListTables,DBISparkConnection-method, dbReadTable,DBISparkConnection,character-method, dbRemoveTable,DBISparkConnection,character-method, dbWriteTable,DBISparkConnection-method, mutate_.tbl_spark)<br />DBI Spark Table</li>
-            
-      <li>
-        <code><a href="dbSetProperty.html">dbSetProperty</a></code><br />Sets a property for the connection</li>
-            
-      <li>
-        <code><a href="dbSetProperty-DBISparkConnection-character-character-method.html">dbSetProperty,DBISparkConnection,character,character-method</a></code><br />Sets a property for the connection</li>
-            
-      <li>
-        <code><a href="spark-transactions.html">spark-transactions</a></code>(dbBegin,DBISparkConnection-method, dbCommit,DBISparkConnection-method, dbRollback,DBISparkConnection-method)<br />Spark Transactions.</li>
-    
-    </ul>
-    <h3>Installation</h3>
-    <p>Functions for managing the installation of Spark components</p>
-
-    
-    <ul class="index">
-        
-      <li>
-        <code><a href="spark_install.html">spark_install</a></code><br />Provides support to download and install the given Spark version</li>
-            
-      <li>
-        <code><a href="spark_install_tar.html">spark_install_tar</a></code><br />Provides support to install a version of Spark from a given TAR file</li>
-            
-      <li>
-        <code><a href="spark_install_available.html">spark_install_available</a></code><br />Check if the given Spark version is available in this system</li>
-            
-      <li>
-        <code><a href="spark_can_install.html">spark_can_install</a></code><br />Check if Spark can be installed in this system</li>
-            
-      <li>
-        <code><a href="spark_versions.html">spark_versions</a></code><br />Retrieves available versions of Spark</li>
-            
-      <li>
-        <code><a href="spark_versions_info.html">spark_versions_info</a></code><br />Retrieves component information for the given Spark and Hadoop versions</li>
     
     </ul>
     <h3>EC2</h3>

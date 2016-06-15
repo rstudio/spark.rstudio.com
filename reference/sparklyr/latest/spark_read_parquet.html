@@ -199,32 +199,40 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Saves dplyr operation result as a JSON file</h1>
+<h1>Reads a parquet file and provides a data source compatible with dplyr</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>save_json(x, path)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_read_parquet(db, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>x</dt>
-      <dd>A dplyr operation, for instance, `tbls(db, "flights")`</dd>
+      <dt>db</dt>
+      <dd>dplyr interface</dd>
+      <dt>name</dt>
+      <dd>Name to reference the data source once it's loaded</dd>
       <dt>path</dt>
       <dd>The path to the file. Needs to be accessible from the cluster. Supports: "hdfs://" or "s3n://"</dd>
+      <dt>repartition</dt>
+      <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
+      <dt>memory</dt>
+      <dd>Loads data into memory</dd>
+      <dt>overwrite</dt>
+      <dd>Overwrite the table with the given name when it exists</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Saves dplyr operation result as a JSON file</p>
+      <p>Reads a parquet file and provides a data source compatible with dplyr</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>save_json</li>
+      <li>spark_read_parquet</li>
     </ul>
     <ul>
       

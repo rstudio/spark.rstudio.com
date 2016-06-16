@@ -202,12 +202,12 @@ $(document).ready(function () {
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_random_forest(x, response, features, max.bins&nbsp;=&nbsp;32L, max.depth&nbsp;=&nbsp;5L, num.trees&nbsp;=&nbsp;20L)</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_random_forest(x, response, features, max.bins&nbsp;=&nbsp;32L, max.depth&nbsp;=&nbsp;5L, num.trees&nbsp;=&nbsp;20L, type&nbsp;=&nbsp;c("auto", "regression", "classification"))</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
-      <dd>A <code>spark_tbl</code>.</dd>
+      <dd>An object convertable to a Spark DataFrame (typically, a <code>tbl_spark</code>).</dd>
       <dt>response</dt>
       <dd>The name of the response vector.</dd>
       <dt>features</dt>
@@ -221,6 +221,12 @@ each node. More bins give higher granularity.</dd>
 number of nodes separating any leaves from the root of the tree.</dd>
       <dt>num.trees</dt>
       <dd>Number of trees to train (>= 1).</dd>
+      <dt>type</dt>
+      <dd>The type of model to fit. <code>"regression"</code> treats the response
+as a continuous variable, while <code>"classification"</code> treats the response
+as a categorical variable. When <code>"auto"</code> is used, the model type is
+inferred based on the response variable type -- if it is a numeric type,
+then regression is used; classification otherwise.</dd>
     </dl>
     
     <div class="Description">
@@ -240,7 +246,8 @@ number of nodes separating any leaves from the root of the tree.</dd>
       
     <h2>See also</h2>
     
-Other Spark ML routines: <code><a href='ml_kmeans.html'>ml_kmeans</a></code>,
+Other Spark ML routines: <code><a href='ml_gradient_boosted_trees.html'>ml_gradient_boosted_trees</a></code>,
+  <code><a href='ml_kmeans.html'>ml_kmeans</a></code>,
   <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
   <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
   <code><a href='ml_multilayer_perceptron.html'>ml_multilayer_perceptron</a></code>,

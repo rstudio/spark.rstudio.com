@@ -196,30 +196,45 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Connect to Spark for Dplyr.</h1>
+<h1>Partition a Spark Dataframe</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>src_spark(sc)</div></code></pre>
+    <pre class="code"><code class="r"><div>df_partition(x, ..., seed&nbsp;=&nbsp;sample(.Machine$integer.max, 1))</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>sc</dt>
-      <dd>Spark connection provided by spark_connection</dd>
+      <dt>x</dt>
+      <dd>A <code>tbl_spark</code>.</dd>
+      <dt>...</dt>
+      <dd>Named parameters, mapping table names to weights.</dd>
+      <dt>seed</dt>
+      <dd>Random seed to use for randomly partitioning the dataset. Set
+this if you want your partitioning to be reproducible on repeated runs.</dd>
     </dl>
     
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+An <span style="R">R</span> <code>list</code> of <code>tbl_spark</code>s.
+</dl></p>
+  
+    </div>
+
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Connect to Spark for Dplyr.</p>
+      <p>Partition a Spark DataFrame into multiple groups. This routine is useful
+for splitting a DataFrame into, for example, training and test datasets.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>src_spark</li>
+      <li>df_partition</li>
     </ul>
     <ul>
       

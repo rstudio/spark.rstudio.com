@@ -196,39 +196,60 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Partition a Spark Dataframe</h1>
+<h1>Spark ML -- Gradient-Boosted Tree</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_partition(.data, ..., seed&nbsp;=&nbsp;sample(.Machine$integer.max, 1))</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_gradient_boosted_trees(x, response, features, max.bins&nbsp;=&nbsp;32L, max.depth&nbsp;=&nbsp;5L, type&nbsp;=&nbsp;c("auto", "regression", "classification"))</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>.data</dt>
-      <dd>Data</dd>
-      <dt>...</dt>
-      <dd>Named parameters, mapping table names to weights.</dd>
-      <dt>seed</dt>
-      <dd>Seed value for the partition</dd>
+      <dt>x</dt>
+      <dd>An object convertable to a Spark DataFrame (typically, a <code>tbl_spark</code>).</dd>
+      <dt>response</dt>
+      <dd>The name of the response vector.</dd>
+      <dt>features</dt>
+      <dd>The names of features (terms) included in the model.</dd>
+      <dt>max.bins</dt>
+      <dd>The maximum number of bins used for discretizing
+continuous features and for choosing how to split on features at
+each node. More bins give higher granularity.</dd>
+      <dt>max.depth</dt>
+      <dd>Maximum depth of the tree (>= 0); that is, the maximum
+number of nodes separating any leaves from the root of the tree.</dd>
+      <dt>type</dt>
+      <dd>The type of model to fit. <code>"regression"</code> treats the response
+as a continuous variable, while <code>"classification"</code> treats the response
+as a categorical variable. When <code>"auto"</code> is used, the model type is
+inferred based on the response variable type -- if it is a numeric type,
+then regression is used; classification otherwise.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Partition a Spark Dataframe</p>
+      <p>Perform regression or classification using gradient-boosted trees.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>ml_partition</li>
+      <li>ml_gradient_boosted_trees</li>
     </ul>
     <ul>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other Spark ML routines: <code><a href='ml_kmeans.html'>ml_kmeans</a></code>,
+  <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
+  <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
+  <code><a href='ml_multilayer_perceptron.html'>ml_multilayer_perceptron</a></code>,
+  <code><a href='ml_pca.html'>ml_pca</a></code>, <code><a href='ml_random_forest.html'>ml_random_forest</a></code>
+
         
   </div>
 </div>

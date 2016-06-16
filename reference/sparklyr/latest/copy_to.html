@@ -202,24 +202,18 @@ $(document).ready(function () {
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>"copy_to"(dest, df, name&nbsp;=&nbsp;deparse(substitute(df)), ..., memory&nbsp;=&nbsp;TRUE, repartition&nbsp;=&nbsp;0, overwrite&nbsp;=&nbsp;FALSE)</div></code></pre>
+    <pre class="code"><code class="r"><div>"copy_to"(dest, df, name&nbsp;=&nbsp;deparse(substitute(df)), ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>dest</dt>
-      <dd>dplyr database interface</dd>
+      <dd>A Spark connection</dd>
       <dt>df</dt>
       <dd>Local data frame to copy</dd>
       <dt>name</dt>
       <dd>Name of the destination table</dd>
       <dt>...</dt>
       <dd>Unused</dd>
-      <dt>memory</dt>
-      <dd>Cache table into memory for improved performance</dd>
-      <dt>repartition</dt>
-      <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
-      <dt>overwrite</dt>
-      <dd>When TRUE, overwrites table with existing name</dd>
     </dl>
     
     <div class="Description">
@@ -231,7 +225,7 @@ $(document).ready(function () {
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>copy_to</li><li>copy_to.src_spark</li>
+      <li>copy_to</li><li>copy_to.spark_connection</li>
     </ul>
     <ul>
       

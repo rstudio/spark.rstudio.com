@@ -199,40 +199,44 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Reads a local R dataframe and provides a data source compatible with dplyr</h1>
+<h1>Collect results of dplyr expression</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_read_df(db, name, value, memory&nbsp;=&nbsp;TRUE, repartition&nbsp;=&nbsp;0, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
+    <pre class="code"><code class="r"><div>"collect"(x, ..., n&nbsp;=&nbsp;Inf, warn_incomplete&nbsp;=&nbsp;TRUE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>db</dt>
-      <dd>dplyr interface</dd>
-      <dt>name</dt>
-      <dd>Name to reference the data source once it's loaded</dd>
-      <dt>value</dt>
-      <dd>R data frame to load into Spark</dd>
-      <dt>memory</dt>
-      <dd>Loads data into memory</dd>
-      <dt>repartition</dt>
-      <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
-      <dt>overwrite</dt>
-      <dd>Overwrite the table with the given name when it exists</dd>
+      <dt>x</dt>
+      <dd>A <code>tbl_spark</code>.</dd>
+      <dt>n</dt>
+      <dd>Limit on the number of records to copy</dd>
+      <dt>warn_incomplete</dt>
+      <dd>Warn if all of the records are not copied</dd>
     </dl>
     
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+An R data frame with classes <code>data.frame</code> and <code>tbl_df</code>.
+</dl></p>
+  
+    </div>
+
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Reads a local R dataframe and provides a data source compatible with dplyr</p>
+      <p>Force computation of remote Spark DataFrame and copy the results back
+to the client as an R data.frame</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>spark_read_df</li>
+      <li>collect</li><li>collect.tbl_spark</li>
     </ul>
     <ul>
       

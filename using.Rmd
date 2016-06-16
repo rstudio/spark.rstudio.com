@@ -71,8 +71,29 @@ You now have a connection to a Spark cluster. If you have a more advanced config
 
 ## Data Manipulation
 
-- Dplyr (basics only then link to dplyr page) 
-- DBI/SQL
+sparklyr uses the [dplyr](https://github.com/hadley/dplyr) semantics for interacting with data which enables you to perform dplyr operations on data hosted in Spark. If you have a dataset available in Spark, you can interact with it just as you would any other dplyr data source. For more advanced usage, refer to the [dplyr section](dplyr.html).
+
+```{r, eval=FALSE}
+iris_tbl <- tbl(db, "iris")
+
+iris_tbl %>% 
+  filter(Sepal_Length > 5) %>% 
+  group_by(Species) %>% 
+  summarize(plength = mean(Petal_Length), pwidth=mean(Petal_Width)) 
+```
+```
+Source:   query [?? x 3]
+Database: spark connection master=local app=rspark local=TRUE
+
+<S3: tbl_spark>
+     Species  plength    pwidth
+       <chr>    <dbl>     <dbl>
+1 versicolor 4.317021 1.3468085
+2     setosa 1.509091 0.2772727
+3  virginica 5.573469 2.0326531
+```
+
+<!-- TODO: DBI/SQL -->
 
 ## Machine Learning
 
@@ -81,9 +102,11 @@ You now have a connection to a Spark cluster. If you have a more advanced config
 
 ## Tools
 
-- SparkUI
-- SparkLog
-- EC2 functions
+There are a variety of tools that are included in sparklyr that make it easier to perform various common tasks while interacting with Spark clusters.
+
+- `spark_web(sc)` (or `spark_ec2_web`, for an EC2 cluster) will bring up the Spark web interface for a `spark_connection`. You can use this interface to inspect the currently running applications and even drill down into particular tasks.
+- `spark_log(sc)` prints the recent logs from a `spark_connection`. You can configure the number of log lines you want this function to include.
+- `spark_ec2_rstudio(cl)` will bring up RStudio Server in a web browser for a cluster that was provisioned using `spark_ec2_cluster()`. 
 
 ## RStudio
 

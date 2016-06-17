@@ -1,6 +1,40 @@
 ---
-title: "Using sparklyr"
+title: "sparklyr -- R interface for Apache Spark"
 ---
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Rotate the IDE screenshots
+  
+  // How many images do we have
+  var count = $('#ide-screenshots img').length;
+  
+  var counter = 0;
+  
+  // Hide the current image and show the next one.
+  function rotateImg(){
+    $('#ide-screenshots img').eq((counter-1) % count).fadeOut(500, function(){
+      $('#ide-screenshots img').eq(counter % count).fadeIn(500);
+      counter++;
+    });
+  }
+  
+  // Hide all images
+  $('#ide-screenshots img').hide();
+  
+  // Bring in the first image now
+  rotateImg();
+  
+  // Schedule the images to rotate every 5s
+  setInterval(rotateImg, 5000);
+})
+</script>
+
+Apache Spark is a tool that allows for distributed data storage and massively parallel computation on that data. Spark has increased in popularity over recent years as it enables relatively low-latency access to massive datasets and simultaneously provides libraries that can operate on that data in parallel on large clusters.
+
+sparklyr is a package that allows you to interact with data stored in Spark from a local R session. It implements a complete [dplyr](https://github.com/hadley/dplyr) backend for Spark which enables users to pull sets of data out of Spark and compute on it using all of the R libraries with which they're already familiar. dplyr attempts to perform as much of the data transformation and filtering remotely as possible, meaning that massive Spark datasets can be filtered, joined, and aggregated but only the results of all that work will be delivered to your local R session.
+
+sparklyr also exposes many of Spark's machine learning functions which allow you to perform some analytical functions in a distributed manner in Spark. These can even be paired with the feature transformation functions, resulting in R code that can drive even more complex analysis being performed in parallel across a Spark cluster.
 
 ## Installation
 
@@ -23,6 +57,8 @@ spark_install(version="1.6.1", hadoop_version="2.6")
 ```
 
 You can customize the versions of Spark or Hadoop to your liking. For more information on installation or to see examples of more advanced deployments, read the [Deployment section](deployment.html).
+
+If you use the RStudio IDE, you should download the latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE which includes support for interacting with Spark data sources; see the [RStudio IDE section](#rstudio-ide) below for more details.
 
 ## Connecting to Spark
 
@@ -71,7 +107,7 @@ You now have a connection to a Spark cluster. If you have a more advanced config
 
 ## Data Manipulation with dplyr
 
-sparklyr implements a complete [dplyr](https://github.com/hadley/dplyr) backend for data hosted in Spark. If you have a dataset available in Spark, you can interact with it just as you would any other dplyr data source.
+sparklyr implements a complete [dplyr](https://github.com/hadley/dplyr) back-end for data hosted in Spark. If you have a dataset available in Spark, you can interact with it just as you would any other dplyr data source.
 
 ```{r, eval=FALSE}
 iris_tbl <- tbl(db, "iris")
@@ -93,7 +129,33 @@ Database: spark connection master=local app=rspark local=TRUE
 3  virginica 5.573469 2.0326531
 ```
 
-<!-- TODO: DBI/SQL -->
+Alternatively, you can `collect()` the results of your dplyr sequence into your local R session and interact with it just like you do any other data. For example:
+
+<div class="row">
+<div class="col-md-7">
+```{r, eval=FALSE}
+delay <- tbl(sc, "flights") %>% 
+  group_by(tailnum) %>%
+  summarise(count = n(), 
+            dist = mean(distance), 
+            delay = mean(arr_delay)) %>%
+  filter(count > 20, 
+         dist < 2000, 
+         !is.na(delay)) %>%
+  collect
+
+# plot delays
+library(ggplot2)
+ggplot(delay, aes(dist, delay)) +
+  geom_point(aes(size = count), alpha = 1/2) +
+  geom_smooth() +
+  scale_size_area(max_size = 2)
+```
+</div>
+<div class="col-md-5">
+![ggplot2 graphic constructed using data collected from Spark](images/flights-dplyr.png)
+</div>
+</div>
 
 For more advanced usage, refer to the [dplyr section](dplyr.html).
 
@@ -106,12 +168,20 @@ For more advanced usage, refer to the [dplyr section](dplyr.html).
 
 There are a variety of tools that are included in sparklyr that make it easier to perform various common tasks while interacting with Spark clusters.
 
-- `spark_web(sc)` (or `spark_ec2_web`, for an EC2 cluster) will bring up the Spark web interface for a `spark_connection`. You can use this interface to inspect the currently running applications and even drill down into particular tasks.
+- `spark_web(sc)` will bring up the Spark web interface for a `spark_connection`. You can use this interface to inspect the currently running applications and even drill down into particular tasks.
 - `spark_log(sc)` prints the recent logs from a `spark_connection`. You can configure the number of log lines you want this function to include.
-- `spark_ec2_rstudio(cl)` will bring up RStudio Server in a web browser for a cluster that was provisioned using `spark_ec2_cluster()`. 
+- `spark_ec2_rstudio(cl)` will bring up RStudio Server in a web browser for a cluster that was provisioned using `spark_ec2_cluster()`. See the EC2 portion of the [Deployment section](deployment.html) for more information on provisioning a Spark cluster on EC2.
 
-## RStudio
+## RStudio IDE
 
-- Managing connections
-- Viewing tables
+<div id="ide-screenshots" class="pull-right">
+![](images/ide-full.png)
+![](images/ide-table.png)
+![](images/ide-connection.png)
+</div>
 
+The latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE includes support for interacting with Spark data sources. Once you've installed the sparklyr package, you should find a new tab entitled "Spark" in the upper right pane of the IDE. 
+
+In this tab, you can create a new connection to a Spark cluster (local or remote), view the tables available in a Spark cluster to which you're connected, or even preview the first 1,000 rows of a table in Spark.
+
+Additionally, there are buttons available to view the Spark web interface or the logs associated with a Spark cluster.

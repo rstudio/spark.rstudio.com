@@ -4,15 +4,63 @@ title: "Using sparklyr"
 
 ## Installation
 
-- Provide basics then link to [Deployment](deployment.html).
+sparklyr currently requires a version of devtools more recent than the one on CRAN. Assuming you already have an older version available, you can run the following commands to update to the latest version.
 
+```{r, eval=FALSE}
+library(devtools)
+install_github("hadley/devtools") # Install the latest version
+reload(devtools::inst("devtools")) # Reload devtools to use the latest
+
+# Install sparklyr
+devtools::install_github("rstudio/sparklyr")
+library(sparklyr)
+```
+
+Now that you have the sparklyr package installed, you need to install the Spark libraries. You can do so using the following command: 
+
+```{r, eval=FALSE}
+spark_install(version="1.6.1", hadoop_version="2.6")
+```
+
+You can customize the versions of Spark or Hadoop to your liking. For more information on installation or to see examples of more advanced deployments, read the [Deployment section](deployment.html).
 
 ## Connecting to Spark
 
-- Provide basics then link to [Deployment](deployment.html).
-- Show local example
-- Show remote example
-- Brief discussion/illustration of architecture?
+If you're just getting started with Spark, sparklyr provides a way to run a Spark cluster on your local machine; in this mode, you don't need any additional servers or infrastructure. Alternatively, you can use sparklyr to connect to an existing cluster, or even have it provision a remote cluster for you on Amazon EC2 (see the EC2 section in [Deployment](deployment.html)).
+
+Below, you can find how to connect to either a local or a remote cluster. If you're using the RStudio IDE, you can click "New Connection" in the `Spark` tab and have it produce this code for you.
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#local">Local</a></li>
+  <li><a data-toggle="tab" href="#remote">Remote</a></li>
+</ul>
+<div class="tab-content outlined-tab-content">
+<div id="local" class="tab-pane fade in active">
+
+If you're running a local Spark cluster, you can run whatever version of Spark you want with any available version of the Hadoop libraries so long as those versions have been installed using `spark_install()` previously.
+
+```{r, eval=FALSE}
+sc <- spark_connect("local", version="1.6.1")
+```
+</div>
+<div id="remote" class="tab-pane fade">
+
+If you're connecting to a remote cluster, it's important to make sure that the your targeted Spark version and the version of the Hadoop libraries that you use align with what the remote cluster is using. Even though you're connecting to a remote Spark instance, you'll still need to have those versions available on your local machine; you can download them using `spark_install()`.
+
+```{r, eval=FALSE}
+sc <- spark_connect("spark://spark.server.org:7077", 
+                    version = "1.6.1", 
+                    hadoop_version = "2.4")
+```
+
+where `spark.server.org` is the address of your Spark cluster's master node, and `7077` is the port on which Spark is listening.
+
+</div>
+</div>
+
+You now have a connection to a Spark cluster. If you have a more advanced configuration of need more guidance, see the [Deployment section](deployment.html).
+
+<!-- TODO: Brief discussion/illustration of architecture? -->
 
 ## Spark DataFrames
 
@@ -21,10 +69,33 @@ title: "Using sparklyr"
 - Loading CSV, JSON, parquet, etc. from HDFS, S3, etc.
 - Saving for future use
 
-## Data Manipulation
+## Data Manipulation with dplyr
 
-- Dplyr (basics only then link to dplyr page) 
-- DBI/SQL
+sparklyr implements a complete [dplyr](https://github.com/hadley/dplyr) backend for data hosted in Spark. If you have a dataset available in Spark, you can interact with it just as you would any other dplyr data source.
+
+```{r, eval=FALSE}
+iris_tbl <- tbl(db, "iris")
+
+iris_tbl %>% 
+  filter(Sepal_Length > 5) %>% 
+  group_by(Species) %>% 
+  summarize(plength = mean(Petal_Length), pwidth=mean(Petal_Width)) 
+```
+```
+Source:   query [?? x 3]
+Database: spark connection master=local app=rspark local=TRUE
+
+<S3: tbl_spark>
+     Species  plength    pwidth
+       <chr>    <dbl>     <dbl>
+1 versicolor 4.317021 1.3468085
+2     setosa 1.509091 0.2772727
+3  virginica 5.573469 2.0326531
+```
+
+<!-- TODO: DBI/SQL -->
+
+For more advanced usage, refer to the [dplyr section](dplyr.html).
 
 ## Machine Learning
 
@@ -33,9 +104,11 @@ title: "Using sparklyr"
 
 ## Tools
 
-- SparkUI
-- SparkLog
-- EC2 functions
+There are a variety of tools that are included in sparklyr that make it easier to perform various common tasks while interacting with Spark clusters.
+
+- `spark_web(sc)` (or `spark_ec2_web`, for an EC2 cluster) will bring up the Spark web interface for a `spark_connection`. You can use this interface to inspect the currently running applications and even drill down into particular tasks.
+- `spark_log(sc)` prints the recent logs from a `spark_connection`. You can configure the number of log lines you want this function to include.
+- `spark_ec2_rstudio(cl)` will bring up RStudio Server in a web browser for a cluster that was provisioned using `spark_ec2_cluster()`. 
 
 ## RStudio
 

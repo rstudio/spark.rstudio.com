@@ -2,19 +2,132 @@
 title: "Extending sparklyr"
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, include = FALSE)
+```
+
+```{r connect, eval=FALSE, include=FALSE}
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "1.6.1")
+```
+
+
 ## Introduction
 
-Motivation: creating high productivity R facades for Spark 
+The **sparklyr** package provides a [dplyr](dplyr.html) interface to Spark DataFrames as well as an R interface to [MLlib](mllib.html). However, since Spark is a general-purpose cluster computing system there are many other R interfaces that could be built (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).
 
-Simple example
+The facilities used internally by **sparklyr** for it's dplyr and MLlib interfaces are available to extension packages. This guide describes how you can use these tools to create your own custom R interfaces to Spark.
 
 ## Calling Spark from R
 
-spark_invoke
-etc.
+There are several functions available for calling the methods of Java objects and static methods of Java classes:
 
-## Data Transformations
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`spark_invoke_new`](reference/sparklyr/latest/spark_invoke_new.html) | Create a new object by invoking a constructor.  |
+| [`spark_invoke`](reference/sparklyr/latest/spark_invoke.html) | Call a method on an object. |
+| [`spark_invoke_static`](reference/sparklyr/latest/spark_invoke_static.html) | Call a static method on an object.  |
 
-## Case Study: MLlib
+For example, to create a new instance of the `java.math.BigInteger` class and then call the `longValue()` method on it you would use code like this:
+
+```{r}
+billionBigInteger <- spark_invoke_new(sc, "java.math.BigInteger", "1000000000")
+billion <- spark_invoke(billionBigInteger, "longValue")
+```
+
+This code can be re-written to be more compact and clear using [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) pipes: 
+
+```{r}
+billion <- sc %>% 
+  spark_invoke_new("java.math.BigInteger", "1000000000") %>%
+    spark_invoke("longValue")
+```
+
+This syntax is similar to the method-chaining syntax often used with Scala code, so we'll use this form for the remainder of this guide.
+
+Calling a static method of a class is also straightforward. For example, to call the `Math::hypot()` static function you would use this code:
+
+```{r}
+hypot <- sc %>% spark_invoke_static("java.lang.Math", "hypot", 10, 20) 
+```
+
+Note that arguments to methods are included immediately after the name of the method to be called.
+
+## Wrapper Functions
+
+Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we'll describe the typical form of these functions as well as how to handle special types like Spark DataFrames. 
+
+Here's an example of a wrapper function for the the text file line counting function available from the SparkContext object:
+
+```{r}
+count_lines <- function(sc, path) {
+  sc %>% spark_invoke("textFile", path, as.integer(1)) %>% 
+    spark_invoke("count")
+}
+```
+
+The `count_lines` function takes a Spark connection ("sc") argument, which when passed to `spark_invoke` enables executing methods of the SparkContext object. If the function had needed to create a new object then it would have also used the "sc" argument for that.
+
+In some cases you'll write wrapper functions that accept references to Spark objects (for example, a Spark DataFrame). In this scenario the following functions are also useful:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`spark_connection`](reference/sparklyr/latest/spark_connection.html) | Get the underlying Spark connection associated with objects of various types. |
+| [`as_spark_dataframe`](reference/sparklyr/latest/as_spark_dataframe.html) | Get a reference to a Spark DataFrame from objects of various types. |
+
+The use of these functions is illustrated in this (overly) simple example:
+
+```{r}
+analyze <- function(x, features) {
+  
+  # normalize whatever we were passed (e.g. a dplyr tbl) into a Spark DataFrame
+  df <- as_spark_dataframe(x)
+  
+  # get the underlying connection so we can create new objects
+  sc <- spark_connection(df)
+  
+  # create an object to do the analysis and call it's analyze and summary methods
+  # (note that the df and features are passed to the analyze function)
+  summary <- sc %>%  
+    spark_invoke_new("com.example.tools.Analyzer") %>% 
+      spark_invoke("analyze", df, features) %>% 
+      spark_invoke("summary")
+
+  # return the results
+  summary
+}
+```
+
+The first argument is an object that can be accessed using the Spark DataFrame API (this might be an actual reference to a DataFrame or could rather be a dplyr tbl which has a DataFrame reference inside it). After using the [`as_spark_dataframe`](reference/sparklyr/latest/as_spark_dataframe.html) function to normalize the reference, we call [`spark_connection`](reference/sparklyr/latest/spark_connection.html) to extract the underlying Spark connection associated with the data frame. Finally, we create a new `Analyzer` object, call it's `analyze` method with the DataFrame and list of features, and then call the `summary` method on the results of the analysis.
+
+Accepting a DataFrame as the first argument of a function makes it very easy to incorporate into dplyr pipelines so this pattern is highly recommended when possible.
+
+## Dependencies
+
+When creating an extension package you may need to include additional dependencies. Your dependencies might be a set of [Spark Packages](https://spark-packages.org/) or might be a custom JAR file. In either case, you'll need a way to specify that these dependencies be included during the initialization of a Spark session via [spark_connect](reference/sparklyr/latest/spark_connect).
+
+Your extension package can specify these dependencies by implementing a function named `spark_dependencies` within your package (it need not be publicly exported). For example, let's say you were creating an extension package named **sparkds** that needed to include a custom JAR as well as the Redshift and Apache Avro packages:
+
+```{r}
+spark_dependencies <- function(spark_version, hadoop_version, config) {
+  list(
+    jars = system.file("java/sparkds.jar", package = "sparkds"),
+    packages = c("com.databricks:spark-redshift_2.10:0.6.0",
+                 "com.databricks:spark-avro_2.10:2.0.1")
+  )
+}
+```
+
+When users connect to a Spark cluster and want to use your extension package within their session they simply include the **sparkds** package in a list of extensions passed to [`spark_connect`](reference/sparklyr/latest/spark_connect.html):
+
+```{r, eval=FALSE}
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "1.6.1", extensions = c("sparkds"))
+```
+
+
+
+
+
 
 

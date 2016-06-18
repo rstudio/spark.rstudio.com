@@ -42,8 +42,10 @@ sparklyr currently requires a version of devtools more recent than the one on CR
 
 ```{r, eval=FALSE}
 library(devtools)
-install_github("hadley/devtools") # Install the latest version
-reload(devtools::inst("devtools")) # Reload devtools to use the latest
+# Install the latest version
+install_github("hadley/devtools") 
+# Reload devtools to use the latest
+reload(devtools::inst("devtools")) 
 
 # Install sparklyr
 devtools::install_github("rstudio/sparklyr")
@@ -100,10 +102,81 @@ You now have a connection to a Spark cluster. If you have a more advanced config
 
 ## Spark DataFrames
 
-- Hive tables
-- R data frames
-- Loading CSV, JSON, parquet, etc. from HDFS, S3, etc.
-- Saving for future use
+sparklyr can operate on data from a variety of Spark sources. Effectively, you're only limited to the types of data that you can read into Spark.
+
+### R data.frames & dplyr Tables
+
+The simplest way to get started is to copy an existing data.frame or dplyr table into your Spark cluster. This will create a Spark DataFrame stored in your Spark cluster. Assuming you already have a connection to a Spark cluster (as shown above) in the `sc` variable:
+
+```{r, eval=FALSE}
+iris_tbl <- copy_to(sc, iris, "irisspark")
+```
+
+will copy the `iris` dataset to a Spark DataFrame named `irisspark`. A reference to that DataFrame will be stored in the `iris_tbl` variable in R. If you'd rather reference a DataFrame that already exists on a spark cluster, you can simply create a reference to it using the `tbl()` function. 
+
+```{r, eval=FALSE}
+iris_tbl2 <- tbl(sc, "irisspark")
+```
+
+Both `iris_tbl` and `iris_tbl2` reference the exact same Spark DataFrame, and you can treat them like any other dplyr table.
+
+```{r, eval=FALSE}
+iris_tbl %>% 
+  filter(Petal_Length < 1.2) %>% 
+  collect()
+```
+```
+Source: local data frame [2 x 5]
+
+  Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+         <dbl>       <dbl>        <dbl>       <dbl>   <chr>
+1          4.3         3.0          1.1         0.1  setosa
+2          4.6         3.6          1.0         0.2  setosa
+```
+
+### Reading Data
+
+sparklyr provides the packages necessary to be able to read from CSV, JSON, and [Parquet](http://parquet.apache.org/) formats. (Note that the JSON format used in Spark is more particular about newlines than most JSON parsers.) 
+
+Regardless of the format of your data, Spark supports reading data from a variety of different data sources. These include data stored on HDFS, Amazon S3, or local files available to the Spark worker nodes. By default, sparklyr provides the necessary Spark packages to enable you to work with HDFS, S3, or local files; you can add additional packages to your Spark context if you need to support other sources.
+
+To load data from S3, you'll need to make sure that your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` are both available. Then you can run a command like:
+
+```{r, eval=FALSE}
+my_tbl <- spark_read_csv(
+  sc, 
+  "tblname", 
+  "s3n://bucket-name/path/file-name.csv")
+```
+
+Loading data from HDFS is just as simple:
+
+```{r, eval=FALSE}
+iris_tbl <- spark_read_json(
+  sc, 
+  "iris", 
+  "hdfs://hdfs.company.org:9000/hdfs-path/iris.json")
+```
+
+You can also read from local files, but it's important to realize that the files are "local" *relative to the Spark worker nodes*. This means that a local file on the machine where you're running R, or even on your Spark master node will not be available.
+
+```{r, eval=FALSE}
+iris_tbl <- spark_read_csv(sc, "iris", "file:///iris.csv")
+```
+
+### Writing Data
+
+It is often useful to save the results of your analysis or the tables that you have generated on your Spark cluster into persistent storage. The best option in many scenarios is to right the table out to a [Parquet](http://parquet.apache.org/) file.
+
+```{r, eval=FALSE}
+spark_write_parquet(
+  tbl, 
+  "hdfs://hdfs.company.org:9000/hdfs-path/data")
+```
+
+This will write the Spark DataFrame referenced by the `tbl` R variable to the given HDFS path. Of course, you could use any of the other persistence media discussed above (local file, S3, etc.).
+
+<!-- TODO: Hive -->
 
 ## Data Manipulation with dplyr
 
@@ -115,13 +188,14 @@ iris_tbl <- tbl(db, "iris")
 iris_tbl %>% 
   filter(Sepal_Length > 5) %>% 
   group_by(Species) %>% 
-  summarize(plength = mean(Petal_Length), pwidth=mean(Petal_Width)) 
+  summarize(
+    plength = mean(Petal_Length), 
+    pwidth=mean(Petal_Width)) %>% 
+  collect()
 ```
 ```
-Source:   query [?? x 3]
-Database: spark connection master=local app=rspark local=TRUE
+Source: local data frame [3 x 3]
 
-<S3: tbl_spark>
      Species  plength    pwidth
        <chr>    <dbl>     <dbl>
 1 versicolor 4.317021 1.3468085

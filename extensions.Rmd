@@ -24,8 +24,8 @@ There are several functions available for calling the methods of Java objects an
 
 | Function | Description  |
 |----------------------------|---------------------------------------------|
-| [`spark_invoke_new`](reference/sparklyr/latest/spark_invoke_new.html) | Create a new object by invoking a constructor.  |
 | [`spark_invoke`](reference/sparklyr/latest/spark_invoke.html) | Call a method on an object. |
+| [`spark_invoke_new`](reference/sparklyr/latest/spark_invoke_new.html) | Create a new object by invoking a constructor.  |
 | [`spark_invoke_static`](reference/sparklyr/latest/spark_invoke_static.html) | Call a static method on an object.  |
 
 For example, to create a new instance of the `java.math.BigInteger` class and then call the `longValue()` method on it you would use code like this:
@@ -66,7 +66,7 @@ count_lines <- function(sc, path) {
 }
 ```
 
-The `count_lines` function takes a Spark connection (`sc`) argument, which when passed to `spark_invoke` enables executing methods of the SparkContext object. If the function had needed to create a new object then it would have also used the `sc ` argument for that.
+The `count_lines` function takes a Spark connection (`sc`) argument, which when passed to `spark_invoke` enables executing methods of the SparkContext object. Creating new objects also requires the `sc` argument.
 
 In some cases you'll write wrapper functions that accept references to Spark objects (for example, a Spark DataFrame). In this scenario the following functions are also useful:
 

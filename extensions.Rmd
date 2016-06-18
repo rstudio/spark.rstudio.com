@@ -115,7 +115,7 @@ When creating an extension package you may need to include additional dependenci
 Your extension package can specify it's dependencies by implementing a function named `spark_dependencies` within the package (this function should *not* be publicly exported). For example, let's say you were creating an extension package named **sparkds** that needed to include a custom JAR as well as the Redshift and Apache Avro packages:
 
 ```{r}
-spark_dependencies <- function(spark_version, hadoop_version, config) {
+spark_dependencies <- function(spark_version, hadoop_version, config, ...) {
   spark_dependency(
     jars = system.file("java/sparkds.jar", package = "sparkds"),
     packages = c("com.databricks:spark-redshift_2.10:0.6.0",
@@ -123,6 +123,8 @@ spark_dependencies <- function(spark_version, hadoop_version, config) {
   )
 }
 ```
+
+The `...` argument is unused but nevertheless should be included to ensure continued compatibility if new arguments are added to `spark_dependencies` in the future.
 
 When users connect to a Spark cluster and want to use your extension package within their session they simply include the **sparkds** package in a list of extensions passed to [`spark_connect`](reference/sparklyr/latest/spark_connect.html):
 

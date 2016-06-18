@@ -14,9 +14,11 @@ sc <- spark_connect(master = "local", version = "1.6.1")
 
 ## Introduction
 
-The **sparklyr** package provides a [dplyr](dplyr.html) interface to Spark DataFrames as well as an R interface to [MLlib](mllib.html). However, since Spark is a general-purpose cluster computing system there are many other R interfaces that could be built (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).
+The sparklyr package provides a [dplyr](dplyr.html) interface to Spark DataFrames as well as an R interface to [MLlib](mllib.html). However, since Spark is a general-purpose cluster computing system there are many other R interfaces that could be built (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).
 
-The facilities used internally by **sparklyr** for its dplyr and MLlib interfaces are available to extension packages. This guide describes how you can use these tools to create your own custom R interfaces to Spark.
+The facilities used internally by sparklyr for its dplyr and MLlib interfaces are available to extension packages. This guide describes how you can use these tools to create your own custom R interfaces to Spark.
+
+**IMPORTANT NOTE**: Extension packages should restrict their use of functions within sparklyr to those listed within this guide. This is because we plan to factor these functions out into a separate package that defines the core Spark extension API. This will it possible in principle for extension packages to work seamlessly with multiple Spark front-end packages (e.g both sparklyr and [SparkR](https://spark.apache.org/docs/latest/sparkr.html)).
 
 ## Calling Spark from R
 
@@ -104,13 +106,17 @@ Accepting a DataFrame as the first argument of a function makes it very easy to 
 
 ## Dependencies
 
-When creating an extension package you may need to include additional dependencies. Your dependencies might be a set of [Spark Packages](https://spark-packages.org/) or might be a custom JAR file. In either case, you'll need a way to specify that these dependencies be included during the initialization of a Spark session via [spark_connect](reference/sparklyr/latest/spark_connect).
+When creating an extension package you may need to include additional dependencies. Your dependencies might be a set of [Spark Packages](https://spark-packages.org/) or might be a custom JAR file. In either case, you'll need a way to specify that these dependencies be included during the initialization of a Spark session via [spark_connect](reference/sparklyr/latest/spark_connect). A Spark dependency is defined using the `spark_dependency` function:
 
-Your extension package can specify these dependencies by implementing a function named `spark_dependencies` within your package (it need not be publicly exported). For example, let's say you were creating an extension package named **sparkds** that needed to include a custom JAR as well as the Redshift and Apache Avro packages:
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`spark_dependency`](reference/sparklyr/latest/spark_dependency.html) | Define a Spark dependency consisting of JAR files and Spark packages. |
+
+Your extension package can specify it's dependencies by implementing a function named `spark_dependencies` within the package (this function should *not* be publicly exported). For example, let's say you were creating an extension package named **sparkds** that needed to include a custom JAR as well as the Redshift and Apache Avro packages:
 
 ```{r}
 spark_dependencies <- function(spark_version, hadoop_version, config) {
-  list(
+  spark_dependency(
     jars = system.file("java/sparkds.jar", package = "sparkds"),
     packages = c("com.databricks:spark-redshift_2.10:0.6.0",
                  "com.databricks:spark-avro_2.10:2.0.1")

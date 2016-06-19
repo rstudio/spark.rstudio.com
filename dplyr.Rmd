@@ -1,21 +1,213 @@
 ---
 title: "Manipulating data with dplyr"
 ---
+<!-- Introduction:Docs/concepts/motivating example
+Filtering
+Aggregation
+Sampling/Windowing
+Table Caching-->
 
-*Nathan: this doesn't even pretend to be an actual outline of topics, content and presentation are entirely up to you!*
+<!--sparklyr is an R package that provides a frontend to use Apache Spark from R. sparklyr provides a distributed data frame implementation that supports operations like selection, filtering, aggregation etc. (similar to R data frames, dplyr) but on large datasets. SparkR also supports distributed machine learning using MLlib.-->
 
-## Introduction
-    
-- Link to dplyr docs
-- High level concept(s)
-- Motivating example (somewhat non-trivial)
-
-## Filtering
-
-## Aggregation
-
-## Sampling / Windowing
-
-## Table Caching 
+<!--A DataFrame is a distributed collection of data organized into named columns. It is conceptually equivalent to a table in a relational database or a data frame in R, but with richer optimizations under the hood. DataFrames can be constructed from a wide array of sources such as: structured data files, tables in Hive, external databases, or existing local R data frames.-->
 
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+
+# Overview
+
+`sparklyr` depends on `dplyr`, an R package for working with structured data both in and outside of R. `dplyr` makes data manipulation for R users easy, consistent, and high performant. You can install `dplyr` from CRAN by running:
+
+```{r, eval = FALSE}
+install.packages("dplyr")
+```
+
+You can use `dplyr` as your main interface for manipulating Spark dataframes. `dplyr` gives you an interface to:
+
+* [Operate on a DataFrame (select, filter, aggregate, etc.)](#operate-on-a-dataframe)
+* [Use window functions](#use-window-functions)
+* [Join DataFrames](#join-dataframes)
+* [Sample data](#sample-data)
+* [Cache a DataFrame](#cache-a-dataframe)
+
+Statements in `dplyr` are chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. `dplyr` also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on `dplyr`, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
+
+*Note: `dplyr` also supports machine learning transformers and estimators via the `ml` and `mllib` packages in Spark. For more information see [Maching learning with MLlib](mllib.html).*
+
+# Setup and example data
+
+To explore the basic data manipulation verbs of dplyr, we'll start with the built in
+`nycflights13` data frame. This dataset contains all `r nrow(nycflights13::flights)` flights that departed from New York City in 2013. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
+
+We will begin by loading the flights table into a local spark context.
+
+```{r message=FALSE, warning=FALSE}
+library(sparklyr)
+library(nycflights13)
+sc <- spark_connect()
+flights <- copy_to(sc, nycflights13::flights, "flights")
+src_tbls(sc)
+```
+
+You can print the first records of the flight table by calling its reference object `fights`. You can also return the first records explicitly by passing a Spark SQL query into the `tbl` command.
+
+```{r}
+flights
+tbl(sc, sql("SELECT * FROM flights"))
+```
+
+# Operate on a DataFrame
+
+## Verbs
+
+Verbs are `dplyr` commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
+
+* `select` ~ `SELECT`
+* `filter` ~ `WHERE`
+* `arrange` ~ `ORDER`
+* `mutate` ~ `operator (+, *, log, etc.)`
+* `summarise` ~ `aggregator (sum, min, sd, etc.)`
+
+```{r}
+select(flights, year:day, dep_delay, arr_delay)
+filter(flights, dep_delay > 240)
+arrange(flights, year, month, day)
+mutate(flights, speed = air_time / distance)
+summarise(flights, delay = mean(dep_time))
+```
+
+## Laziness
+
+When working with databases, dplyr tries to be as lazy as possible:
+
+* It never pulls data into R unless you explicitly ask for it.
+
+* It delays doing any work until the last possible moment: it collects together
+  everything you want to do and then sends it to the database in one step.
+
+For example, take the following code:
+
+```{r}
+c1 <- filter(flights, year == 2013, month == 1, day == 1)
+c2 <- select(c1, year, month, day, carrier, dep_delay, air_time, distance)
+c3 <- mutate(c2, speed = distance / air_time * 60)
+c4 <- arrange(c3, year, month, day, carrier)
+```
+
+Suprisingly, this sequence of operations never actually touches the database. It's not until you ask for the data (e.g. by printing `c4`) that dplyr generates the SQL and requests the results from the database. Even then it only pulls down 10 rows.
+
+```{r}
+c4
+```
+
+To pull down all the results use `collect()`
+
+```{r}
+collect(c4)
+```
+
+You can see the query dplyr has generated by using `sql_render`:
+
+```{r}
+sql_render(c4)
+```
+
+## Collect, compute, collapse
+
+There are three ways to force the computation of a query:
+
+* `collect()` executes the query and returns the results to R.
+
+* `compute()` executes the query and stores the results in a temporary table
+  in the database.
+
+* `collapse()` turns the query into a table expression.
+
+`collect()` is the function you'll use most. Once you reach the set of operations you want, you use collect() to pull the data into a local `tbl_df()`. If you know SQL, you can use `compute()` and `collapse()` to optimise performance.
+
+## Chaining commands via pipes
+
+You can use pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:
+
+```{r, eval = FALSE}
+flights %>%
+  filter(year == 2013, month == 1, day == 1) %>%
+  select(year, month, day, carrier, dep_delay, air_time, distance) %>%
+  mutate(speed = distance / air_time * 60) %>%
+  arrange(year, month, day, carrier)
+```
+
+## Grouping
+
+The `group_by` function corresponds to the `GROUP BY` statement in SQL.
+
+```{r}
+flights %>%
+  group_by(tailnum) %>%
+  summarize(count = n(), dist = mean(distance), delay = mean(arr_delay)) %>%
+  filter(count > 20, dist < 2000)
+```
+
+## Translate SQL
+
+dplyr knows how to convert the following R functions to Spark SQL:
+
+```{r, eval = FALSE}
++, -, *, /, %%, ^
+abs, acos, acosh, asin, asinh, atan, atan2, atanh, ceiling, cos, cosh, cot, coth, exp, floor, log, log10, round, sign, sin, sinh, sqrt, tan, tanh
+<, <=, !=, >=, >, ==, %in%
+&, &&, |, ||, !, xor
+mean, sum, min, max, sd, var
+```
+*Verify which are supported in Spark SQL*
+
+
+# Use window functions
+
+`dplyr` supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems.
+
+```{r, collapse=TRUE}
+# Find the most and least delayed flight each day
+bestworst <- flights %>%
+  group_by(year, month, day)
+  select(arr_delay) %>% 
+  filter(arr_delay == min(arr_delay) || arr_delay == max(arr_delay))
+sql_render(bestworst)
+
+# Rank each flight within a daily
+ranked <- flights %>%
+  group_by(year, month, day) %>%
+  select(arr_delay) %>% 
+  mutate(rank = rank(desc(arr_delay)))
+sql_render(ranked)
+```
+
+# Join DataFrames
+
+*This is not currently supported*
+
+```{r, eval=FALSE}
+airlines <- copy_to(sc, nycflights13::airlines, "airlines")
+flights %>% left_join(airlines)
+sql_render(flights %>% left_join(airlines))
+tbl(sc, sql('select * from flights a left outer join airlines b on (a.carrier = b.carrier)'))
+```
+
+
+# Sample data
+
+```{r}
+sample_n(flights, 10)
+sample_frac(flights, 0.01)
+```
+
+
+# Cache a DataFrame
+
+```{r message=FALSE, warning=FALSE}
+tbl_cache(sc, 'flights')
+tbl_uncache(sc, 'flights')
+```

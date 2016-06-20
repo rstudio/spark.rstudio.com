@@ -2,24 +2,133 @@
 title: "Configuring and deploying sparklyr"
 ---
 
-## Introduction
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
-- Use case / justification
-- Local vs. remote execution (diagram?)
+## Installation
 
-## Spark Installation
+### Versions
 
-- Managing and using multiple versions
-- Local development mode
-- Server deployment mode
+You can use the `spark_install` function to install various versions of Spark on your system. For example:
 
-## Configuration (config package)
+```{r}
+spark_install(version = "1.6.1", hadoop_version = "2.6")
+```
 
-- Package options
-- Spark options (http://spark.apache.org/docs/latest/configuration.html)
-- User options
-- Multiple configurations
-    - Use case: smaller datasets for development e.g. local vs. staging vs. production
+This will install specified version of Spark within a shared directory for all Spark installations.
+
+The following functions are available for managing Spark installations:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`spark_install`](reference/sparklyr/latest/spark_install.html) | Install a version of Spark by spark/hadoop version.|
+| [`spark_install_tar`](reference/sparklyr/latest/spark_install.html) | Install a version of Spark from a Spark distribution tarball. |
+| [`spark_available_versions`](reference/sparklyr/latest/spark_install.html) | List all versions of Spark that can be installed via `spark_install`. |
+| [`spark_installed_versions`](reference/sparklyr/latest/spark_install.html) | List all versions of Spark currently installed. |
+| [`spark_install_dir`](reference/sparklyr/latest/spark_install.html) | Determine the directory where versions of Spark are installed. |
+
+
+### Install Directory
+
+The location of the Spark installation directory can be determined by calling the `spark_install_dir` function. By default this directory is a platform-specific location for application support files (determined using the [rappdirs](https://github.com/hadley/rappdirs) package). However, you can change the location by setting the `spark.install.dir` option. For example:
+
+```{r}
+options(spark.install.dir = "/opt/spark")
+```
+
+In server environments (e.g. when using RStudio Server or Shiny Server) it's highly recommended that system administrators install whichever Spark versions are required within a shared directory (e.g. `/opt/spark`) and then set the `spark.install.dir` option system-wide via [Rprofile.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html).
+
+
+## Deployment
+
+There are two well supported deployment modes for sparklyr: developing locally (typically on the desktop with smaller/sampled datasets) and working directly on the Spark cluster via RStudio Server.
+
+### Local
+
+You can easily download and install a local version of Spark on your desktop using the `spark_install` function described above. This is useful both for learning and experimentation, but also as a development environment for analyses, reports, and applications that you plan to eventually deploy to a multi-node Spark cluster.
+
+For the local development scenario, see the [Configuration] section below for details on how to have the same code work seamlessly in both development and production environments.
+
+### Cluster Node
+
+For production use the recommended configuration is to run [RStudio Server](https://www.rstudio.com/products/rstudio/) directly on one of the cluster nodes. 
+
+## Configuration 
+
+This section describes the various options available for configuring both the behavior of the **sparklyr** package as well as the underlying Spark cluster. Creating multiple configuration profiles (e.g. development, test, production) is also covered.
+
+### Config Files
+
+By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (this file is not required and only need be provided for overriding default behavior). The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
+
+### Package Options
+
+There are a number of options available to configure the behavior of the sparklyr package:
+
+| Option | Description  |
+|----------------------------|---------------------------------------------|
+| `sparklyr.defaultPackages`| Spark packages to automatically include within session (defaults to "com.databricks:spark-csv_2.11:1.3.0" and "com.amazonaws:aws-java-sdk-pom:1.10.34") |
+| `sparklyr.cores.local` | Number of cores to use when running in local mode (defaults to `parallel::detectCores`) |
+| `sparklyr.shell.*` | Command line parameters to pass to `spark-shell` (see the [Spark documentation](https://spark.apache.org/docs/latest/submitting-applications.html) for details on supported options) |
+
+For example, this configuration file sets the number of local cores to 4 and the amount of memory allocated for the Spark driver to 2G:
+
+```yaml
+default:
+  sparklyr.cores.local: 4
+  sparklyr.shell.driver-memory: 4GB
+```
+
+Note that the use of `default` will be explained below in [Multiple Profiles].
+
+### Spark Options
+
+You can also use `config.yml` to specify arbitrary Spark configuration properties:
+
+| Option | Description  |
+|----------------------------|---------------------------------------------|
+
+| `spark.*` Arbitrary configuration properties (applied by creating a `SparkConf` containing the specified properties). See the [Spark Configuration](http://spark.apache.org/docs/latest/configuration.html) for documentation on available properties.
+| `spark.sql.*`| Arbitrary configuration properties for Spark SQL (applied using SET). See the Spark [SQL Programming Guide](http://spark.apache.org/docs/latest/sql-programming-guide.html) for documentation on available properties. |
+
+For example, this configuration file set a custom scratch directory for Spark and specifies 100 as the number of partitions to use when shuffling data for joins or aggregations:
+
+```yaml
+default:
+  spark.local.dir: /tmp/spark-scratch
+  spark.sql.shuffle.partitions: 100
+```
+
+### User Options
+
+You can also include arbitrary custom user options within the `config.yml` file. These can be named anything you like so long as they *do not* use either `spark` or `sparklyr` as a prefix. For example, this configuration file defines `dataset` and `sample-size` options:
+
+```yaml
+default:
+  dataset: "observations.parquet"
+  sample-size: 10000
+```
+
+### Multiple Profiles
+
+The [config](https://github.com/rstudio/config) package enables the definition of multiple named configuration profiles for different environments (e.g. default, test, production). All environments automatically inherit from the `default` environment and can optionally also inherit from each other.
+
+For example, you might want to use a distinct datasets for development and testing or might want to use custom Spark configuration properties that are only applied when running on a production cluster. Here's how that would expressed in `config.yml`:
+
+```yaml
+default:
+  dataset: "observations-dev.parquet"
+  sample-size: 10000
+  
+production:
+  spark.memory.fraction: 0.9
+  spark.rdd.compress: true
+  dataset: "observations.parquet"
+  sample-size: null
+```
+
+The currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
 
 ## EC2
 

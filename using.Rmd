@@ -47,7 +47,7 @@ Below, you can find how to connect to either a local or a remote cluster. If you
 
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#local">Local</a></li>
-  <li><a data-toggle="tab" href="#remote">Remote</a></li>
+  <li><a data-toggle="tab" href="#cluster">Cluster</a></li>
 </ul>
 <div class="tab-content outlined-tab-content">
 <div id="local" class="tab-pane fade in active">
@@ -58,9 +58,9 @@ If you're running a local Spark cluster, you can run whatever version of Spark y
 sc <- spark_connect("local", version="1.6.1")
 ```
 </div>
-<div id="remote" class="tab-pane fade">
+<div id="cluster" class="tab-pane fade">
 
-If you're connecting to a remote cluster, it's important to make sure that the your targeted Spark version and the version of the Hadoop libraries that you use align with what the remote cluster is using. Even though you're connecting to a remote Spark instance, you'll still need to have those versions available on your local machine; you can download them using `spark_install()`.
+If you're connecting to a cluster, it's important to make sure that the your targeted Spark version and the version of the Hadoop libraries that you use align with what the remote cluster is using. Even though you're connecting to a remote Spark instance, you'll still need to have those versions available on your local machine; you can download them using `spark_install()`.
 
 ```{r, eval=FALSE}
 sc <- spark_connect("spark://spark.server.org:7077", 
@@ -74,8 +74,6 @@ where `spark.server.org` is the address of your Spark cluster's master node, and
 </div>
 
 You now have a connection to a Spark cluster. If you have a more advanced configuration of need more guidance, see the [Deployment section](deployment.html).
-
-<!-- TODO: Brief discussion/illustration of architecture? -->
 
 ## Spark DataFrames
 
@@ -182,17 +180,12 @@ Source: local data frame [3 x 3]
 
 Alternatively, you can `collect()` the results of your dplyr sequence into your local R session and interact with it just like you do any other data. For example:
 
-<div class="row">
-<div class="col-md-7">
 ```{r, eval=FALSE}
 delay <- tbl(sc, "flights") %>% 
   group_by(tailnum) %>%
-  summarise(count = n(), 
-            dist = mean(distance), 
+  summarise(count = n(),  dist = mean(distance), 
             delay = mean(arr_delay)) %>%
-  filter(count > 20, 
-         dist < 2000, 
-         !is.na(delay)) %>%
+  filter(count > 20,  dist < 2000,  !is.na(delay)) %>%
   collect
 
 # plot delays
@@ -202,11 +195,8 @@ ggplot(delay, aes(dist, delay)) +
   geom_smooth() +
   scale_size_area(max_size = 2)
 ```
-</div>
-<div class="col-md-5">
-![ggplot2 graphic constructed using data collected from Spark](images/flights-dplyr.png)
-</div>
-</div>
+
+![](images/flights-dplyr.png)
 
 For more advanced usage, refer to the [dplyr section](dplyr.html).
 
@@ -228,30 +218,23 @@ model <- flights_tbl %>%
 
 Now that we have a model, let's download a small portion of the dataset (just 250 rows) and plot them against the linear regression we performed on the whole dataset.
 
-<div class="row">
-<div class="col-md-7">
 ```{r, eval=FALSE}
 flights_tbl %>%
-  filter(!is.na(distance), 
-         !is.na(air_time)) %>% 
+  filter(!is.na(distance),  !is.na(air_time)) %>% 
   select(distance, air_time) %>%
   sample_n(250) %>% 
   collect %>%
   ggplot(aes(distance, air_time)) +
   geom_point(aes(distance, air_time), 
-             size = 1, 
-             alpha = 0.4) +
+             size = 1,  alpha = 0.4) +
   geom_abline(aes(
     slope = coef(model)[["distance"]],
     intercept = coef(model)[["(Intercept)"]],
     color = "red")) +
   theme(legend.position="none")
 ```
-</div>
-<div class="col-md-5">
-![Results of a linear regression performed on Spark data](images/mllib-linear-regression.png)
-</div>
-</div>
+
+![](images/mllib-linear-regression.png)
 
 Another example is the `ml_random_forest()` function in sparklyr which constructs a random forest on the specified data hosted in Spark. Again, this example does not load the data into R nor does it download the data to your machine; the data and all analysis happens on the Spark cluster.
 
@@ -282,10 +265,8 @@ There are a variety of tools that are included in sparklyr that make it easier t
 
 ## RStudio IDE
 
-The latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE includes support for interacting with Spark data sources. Once you've installed the sparklyr package, you should find a new tab entitled "Spark" in the upper right pane of the IDE. 
+The latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE includes support for interacting with Spark data sources. Once you've installed the sparklyr package, you should find a new tab entitled "Spark" in the upper right pane of the IDE. In this tab, you can create a new connection to a Spark cluster (local or remote), view the tables available in a Spark cluster to which you're connected, or even preview the first 1,000 rows of a table in Spark.
 
-In this tab, you can create a new connection to a Spark cluster (local or remote), view the tables available in a Spark cluster to which you're connected, or even preview the first 1,000 rows of a table in Spark.
-
-![](images/ide-connect.png)
-![](images/ide-preview.png)
-![](images/ide-spark.png)
+![Connect to a Spark cluster from the IDE.](images/ide-connect.png)
+![Preview the first 1,000 rows of tables in your Spark cluster.](images/ide-preview.png)
+![Drill down into tables in your Spark cluster to see the available columns and their types.](images/ide-spark.png)

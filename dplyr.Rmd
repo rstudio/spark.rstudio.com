@@ -215,9 +215,9 @@ You can use pipes to write cleaner syntax. Using the same example from above, yo
 
 ```{r, eval=FALSE}
 flights %>%
-  filter(day == 17, month == 5, carrier %in% c('UA', 'WN', 'AA', 'DL')) %>%
-  select(year, month, day, carrier, dep_delay, air_time, distance) %>%
-  arrange(year, month, day, carrier) %>%
+  filter(month == 5, day == 17, carrier %in% c('UA', 'WN', 'AA', 'DL')) %>%
+  select(carrier, dep_delay, air_time, distance) %>%
+  arrange(carrier) %>%
   mutate(air_time_hours = air_time / 60)
 ```
 
@@ -255,13 +255,17 @@ Database: spark connection master=local app=sparklyr local=TRUE
 dplyr knows how to convert the following R functions to Spark SQL:
 
 ```{r, eval = FALSE}
+# Basic math operators
 +, -, *, /, %%, ^
-abs, acos, acosh, asin, asinh, atan, atan2, atanh, ceiling, cos, cosh, cot, coth, exp, floor, log, log10, round, sign, sin, sinh, sqrt, tan, tanh
+# Math functions
+abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, log10, round, sign, sin, sinh, sqrt, tan, tanh
+# Logical comparisons
 <, <=, !=, >=, >, ==, %in%
-&, &&, |, ||, !, xor
-mean, sum, min, max, sd, var
+# Boolean operations
+&, &&, |, ||, !
+# Basic aggregations
+mean, sum, min, max
 ```
-
 
 
 # Use window functions
@@ -275,13 +279,32 @@ bestworst <- flights %>%
   select(dep_delay) %>% 
   filter(dep_delay == min(dep_delay) || dep_delay == max(dep_delay))
 sql_render(bestworst)
+bestworst
 ```
 ```
 <SQL> SELECT `year`, `month`, `day`, `dep_delay`
-FROM (SELECT `year`, `month`, `day`, `dep_delay`, min(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz16`, max(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz17`
+FROM (SELECT `year`, `month`, `day`, `dep_delay`, min(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz22`, max(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz23`
 FROM (SELECT `year` AS `year`, `month` AS `month`, `day` AS `day`, `dep_delay` AS `dep_delay`
-FROM `flights`) `ergulayaaq`) `rwcwyyloyj`
-WHERE (`dep_delay` = `zzz16` OR `dep_delay` = `zzz17`)
+FROM `flights`) `ihpghnsvzx`) `daiwgkrgiq`
+WHERE (`dep_delay` = `zzz22` OR `dep_delay` = `zzz23`)
+Source:   query [?? x 4]
+Database: spark connection master=local app=sparklyr local=TRUE
+Groups: year, month, day
+
+# S3: tbl_spark
+    year month   day dep_delay
+   <int> <int> <int>     <dbl>
+1   2013     1     5       327
+2   2013     1     5       -16
+3   2013     6    20       156
+4   2013     6    20       -17
+5   2013     1     6       -15
+6   2013     1     6       202
+7   2013     6    21       -15
+8   2013     6    21       375
+9   2013     1     7       -17
+10  2013     1     7       366
+... with more rows
 ```
 ```{r}
 # Rank each flight within a daily
@@ -290,11 +313,30 @@ ranked <- flights %>%
   select(dep_delay) %>% 
   mutate(rank = rank(desc(dep_delay)))
 sql_render(ranked)
+ranked
 ```
 ```
 <SQL> SELECT `year`, `month`, `day`, `dep_delay`, rank() OVER (PARTITION BY `year`, `month`, `day` ORDER BY `dep_delay` DESC) AS `rank`
 FROM (SELECT `year` AS `year`, `month` AS `month`, `day` AS `day`, `dep_delay` AS `dep_delay`
-FROM `flights`) `hsqqhfbsyl`
+FROM `flights`) `uflidyrkpj`
+Source:   query [?? x 5]
+Database: spark connection master=local app=sparklyr local=TRUE
+Groups: year, month, day
+
+# S3: tbl_spark
+    year month   day dep_delay  rank
+   <int> <int> <int>     <dbl> <int>
+1   2013     1     5       327     1
+2   2013     1     5       257     2
+3   2013     1     5       225     3
+4   2013     1     5       128     4
+5   2013     1     5       127     5
+6   2013     1     5       117     6
+7   2013     1     5       111     7
+8   2013     1     5       108     8
+9   2013     1     5       105     9
+10  2013     1     5       101    10
+... with more rows
 ```
 
 # Join DataFrames

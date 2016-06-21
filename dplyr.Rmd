@@ -37,11 +37,12 @@ Statements in `dplyr` can be chained together using pipes defined by the [magrit
 
 # Setup and example data
 
-To explore the basic data manipulation verbs of dplyr, we'll start with data stored in the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metada on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
+To explore the basic data manipulation verbs of dplyr, we'll start with data stored in the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
 
-We will begin by copying the flights data from R's memory into a local Spark cluster in standalone mode. Caveat: The flight data in `nycflights13` is convenient for `dplyr` demonstrations because it is small, but in practice large data will rarely be copied directly from R objects. 
+Connect to the cluster and copy the flights data using the `copy_to` function. Caveat: The flight data in `nycflights13` is convenient for `dplyr` demonstrations because it is small, but in practice large data will rarely be copied directly from R objects. 
 
-Connect to the cluster and copy the flights data using the `copy_to` function.
+
+
 
 ```{r message=FALSE, warning=FALSE}
 library(sparklyr)

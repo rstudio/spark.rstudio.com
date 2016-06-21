@@ -223,6 +223,33 @@ be applied.</dd>
 to mutate a Spark DataFrame.</p>
   
     </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p><code>sdf_mutate()</code> differs from <code>mutate</code> in a number of important ways:</p>
+  
+      <p><ul>
+<li> <code>mutate</code> returns a <code>tbl_spark</code>, while <code>sdf_mutate</code> returns
+  a Spark DataFrame (represented by a <code>jobj</code>),</p>
+  
+      <p></li>
+<li> <code>mutate</code> works 'lazily' (the generated SQL is not evaluated until <code>collect</code>
+  is called), while <code>sdf_mutate</code> works 'eagerly' (the feature transformer, as well as
+  and pending SQL from a previous pipeline, is applied),</p>
+  
+      <p></li>
+<li> To transform the Spark DataFrame back to a <code>tbl_spark</code>, you should
+  use <code><a href='sdf_register.html'>sdf_register</a></code>.</p>
+  
+      <p></li>
+</ul></p>
+  
+      <p>Overall, this implies that if you wish to mix a <code>dplyr</code> pipeline with <code>sdf_mutate</code>,
+you should generally apply your <code>dplyr</code> pipeline first, then finalize your output with
+<code>sdf_mutate</code>. See <strong>Examples</strong> for an example of how this might be done.</p>
+  
+    </div>
       </div>
   <div class="span4">
     <!-- <ul>

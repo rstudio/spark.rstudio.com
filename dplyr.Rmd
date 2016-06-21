@@ -266,7 +266,7 @@ Finally, you can use `collapse()` to turn the query into a table expression.
 
 # Translate SQL
 
-When doing simple mathematical operations of the form you normally use when filtering, mutating and summarising it’s relatively straightforward to translate R code to SQL (or indeed to any programming language). plyr knows how to convert the following R functions to Spark SQL:
+When doing simple mathematical operations of the form you normally use when filtering, mutating and summarising it’s relatively straightforward to translate R code to SQL (or indeed to any programming language). dplyr knows how to convert the following R functions to Spark SQL:
 
 ```{r, eval = FALSE}
 # Basic math operators
@@ -279,33 +279,6 @@ abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, log10,
 &, &&, |, ||, !
 # Basic aggregations
 mean, sum, min, max
-```
-
-```{r}
-flights %>%
-  mutate(x1 = dep_delay %% 2) %>%
-  mutate(x2 = floor(dep_delay)) %>%
-  mutate(x3 = arr_delay > dep_delay && sched_arr_time > sched_dep_time) %>%
-  select(arr_delay, dep_delay, x1:x3)
-```
-```
-Source:   query [?? x 5]
-Database: spark connection master=local app=sparklyr local=TRUE
-
-# S3: tbl_spark
-   arr_delay dep_delay    x1    x2    x3
-       <dbl>     <dbl> <dbl> <dbl> <dbl>
-1         11         2     0     2     1
-2         20         4     0     4     1
-3         33         2     0     2     1
-4        -18        -1    -1    -1     0
-5        -25        -6     0    -6     0
-6         12        -4     0    -4     1
-7         19        -5    -1    -5     1
-8        -14        -3    -1    -3     0
-9         -8        -3    -1    -3     0
-10         8        -2     0    -2     1
-... with more rows
 ```
 
 # Use window functions

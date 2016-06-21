@@ -19,13 +19,13 @@ knitr::opts_chunk$set(eval = FALSE)
 
 # Overview
 
-`sparklyr` depends on `dplyr`, an R package for working with structured data both in and outside of R. `dplyr` makes data manipulation for R users easy, consistent, and high performant. You can install `dplyr` from CRAN by running:
+`dplyr` is an R package for working with structured data both in and outside of R. `dplyr` makes data manipulation for R users easy, consistent, and high performant. You can load `dplyr` by running:
 
 ```{r, eval = FALSE}
-install.packages("dplyr")
+library("dplyr")
 ```
 
-You can use `dplyr` as your main interface for manipulating Spark dataframes. `dplyr` gives you an interface to:
+Use `dplyr` as your main interface for manipulating Spark dataframes. It gives you the ability to:
 
 * [Operate on a DataFrame (select, filter, aggregate, etc.)](#operate-on-a-dataframe)
 * [Use window functions](#use-window-functions)
@@ -33,16 +33,15 @@ You can use `dplyr` as your main interface for manipulating Spark dataframes. `d
 * [Sample data](#sample-data)
 * [Cache a DataFrame](#cache-a-dataframe)
 
-Statements in `dplyr` are chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. `dplyr` also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on `dplyr`, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
-
-*Note: `dplyr` also supports machine learning transformers and estimators via the `ml` and `mllib` packages in Spark. For more information see [Maching learning with MLlib](mllib.html).*
+Statements in `dplyr` can be chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. `dplyr` also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on `dplyr`, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
 
 # Setup and example data
 
-To explore the basic data manipulation verbs of dplyr, we'll start with the built in
-`nycflights13` data frame. This dataset contains all `r nrow(nycflights13::flights)` flights that departed from New York City in 2013. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
+To explore the basic data manipulation verbs of dplyr, we'll start with data stored in the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metada on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
 
-We will begin by loading the flights table into a local spark context.
+We will begin by copying the flights data from R's memory into a local Spark cluster in standalone mode. Caveat: The flight data in `nycflights13` is convenient for `dplyr` demonstrations because it is small, but in practice large data will rarely be copied directly from R objects. 
+
+Connect to the cluster and copy the flights data using the `copy_to` function.
 
 ```{r message=FALSE, warning=FALSE}
 library(sparklyr)
@@ -52,16 +51,9 @@ flights <- copy_to(sc, nycflights13::flights, "flights")
 src_tbls(sc)
 ```
 
-You can print the first records of the flight table by calling its reference object `fights`. You can also return the first records explicitly by passing a Spark SQL query into the `tbl` command.
-
-```{r}
-flights
-tbl(sc, sql("SELECT * FROM flights"))
-```
-
 # Operate on a DataFrame
 
-## Verbs
+## dplyr Verbs
 
 Verbs are `dplyr` commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
 
@@ -92,9 +84,10 @@ For example, take the following code:
 
 ```{r}
 c1 <- filter(flights, year == 2013, month == 1, day == 1)
-c2 <- select(c1, year, month, day, carrier, dep_delay, air_time, distance)
-c3 <- mutate(c2, speed = distance / air_time * 60)
-c4 <- arrange(c3, year, month, day, carrier)
+c2 <- filter(c1, carrier %in% c('UA', 'WN', 'AA', 'DL'), air_time > 0)
+c3 <- select(c2, year, month, day, carrier, dep_delay, air_time, distance)
+c4 <- mutate(c3, speed = distance / air_time * 60)
+c5 <- arrange(c4, year, month, day, carrier)
 ```
 
 Suprisingly, this sequence of operations never actually touches the database. It's not until you ask for the data (e.g. by printing `c4`) that dplyr generates the SQL and requests the results from the database. Even then it only pulls down 10 rows.
@@ -103,30 +96,25 @@ Suprisingly, this sequence of operations never actually touches the database. It
 c4
 ```
 
-To pull down all the results use `collect()`
-
-```{r}
-collect(c4)
-```
-
-You can see the query dplyr has generated by using `sql_render`:
-
-```{r}
-sql_render(c4)
-```
-
 ## Collect, compute, collapse
 
-There are three ways to force the computation of a query:
+You can copy data from Spark into R's memory by using `collect()`. `collect()` executes the Spark query and returns the results to R for further analysis and visualization.
 
-* `collect()` executes the query and returns the results to R.
+```{r, eval = FALSE}
+library(ggplot2)
+carrierspeed <- collect(c4)
+with(carrierspeed, pairwise.t.test(speed, carrier))
+ggplot(carrierspeed, aes(carrier, speed)) + geom_boxplot()
+```
 
-* `compute()` executes the query and stores the results in a temporary table
-  in the database.
+If you want to execute a query and store the results in a temporary table, use `compute()`
 
-* `collapse()` turns the query into a table expression.
+```{r, eval = FALSE}
+compute(c4, 'carrierspeed')
+src_tbls(sc)
+```
 
-`collect()` is the function you'll use most. Once you reach the set of operations you want, you use collect() to pull the data into a local `tbl_df()`. If you know SQL, you can use `compute()` and `collapse()` to optimise performance.
+Finally, you can use `collapse()` to turn the query into a table expression.
 
 ## Chaining commands via pipes
 
@@ -167,7 +155,7 @@ mean, sum, min, max, sd, var
 
 # Use window functions
 
-`dplyr` supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems.
+`dplyr` supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems. You can compare the `dplyr` syntax to the query it has generated by using `sql_render()`.
 
 ```{r, collapse=TRUE}
 # Find the most and least delayed flight each day
@@ -185,9 +173,22 @@ ranked <- flights %>%
 sql_render(ranked)
 ```
 
+
 # Join DataFrames
 
-*This is not currently supported*
+It's rare that a data analysis involves only a single table of data. In practice, you'll normally have many tables that contribute to an analysis, and you need flexible tools to combine them. In dplyr, there are three families of verbs that work with two tables at a time:
+
+* Mutating joins, which add new variables to one table from matching rows in 
+  another.
+
+* Filtering joins, which filter observations from one table based on whether or 
+  not they match an observation in the other table.
+
+* Set operations, which combine the observations in the data sets as if they 
+  were set elements.
+
+All two-table verbs work similarly. The first two arguments are `x` and `y`, and provide the tables to combine. The output is always a new table with the same type as `x`.
+
 
 ```{r, eval=FALSE}
 airlines <- copy_to(sc, nycflights13::airlines, "airlines")
@@ -199,6 +200,8 @@ tbl(sc, sql('select * from flights a left outer join airlines b on (a.carrier = 
 
 # Sample data
 
+You can use `sample_n()` and `sample_frac()` to take a random sample of rows: use `sample_n()` for a fixed number and `sample_frac()` for a fixed fraction.
+
 ```{r}
 sample_n(flights, 10)
 sample_frac(flights, 0.01)
@@ -206,6 +209,8 @@ sample_frac(flights, 0.01)
 
 
 # Cache a DataFrame
+
+You can cache and unchace DataFrames with `tbl_cache()` and `tbl_uncache()`. Caching DataFrames forces them into memory, improving query performance.
 
 ```{r message=FALSE, warning=FALSE}
 tbl_cache(sc, 'flights')

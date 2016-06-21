@@ -31,23 +31,26 @@ To explore the basic data manipulation verbs of dplyr, we'll start with data sto
 
 Connect to the cluster and copy the flights data using the `copy_to` function. Caveat: The flight data in `nycflights13` is convenient for `dplyr` demonstrations because it is small, but in practice large data will rarely be copied directly from R objects. 
 
-
 ```{r message=FALSE, warning=FALSE}
 library(sparklyr)
 library(nycflights13)
+library(ggplot2)
 sc <- spark_connect()
 flights <- copy_to(sc, flights, "flights")
 airlines <- copy_to(sc, airlines, "airlines")
 src_tbls(sc)
 ```
-
 ```
 [1] "airlines" "flights"
 ```
+You can cache and unchace DataFrames with `tbl_cache()` and `tbl_uncache()`. Caching DataFrames forces them into memory, improving query performance.
 
-# Operate on a DataFrame
+```{r message=FALSE, warning=FALSE}
+tbl_cache(sc, 'flights')
+```
 
-## dplyr verbs
+
+# dplyr verbs
 
 Verbs are `dplyr` commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
 
@@ -141,7 +144,8 @@ Database: spark connection master=local app=sparklyr local=TRUE
 ```{r, eval=FALSE}
 mutate(flights, speed = distance / air_time * 60)
 ```
-## Laziness
+
+# Laziness
 
 When working with databases, dplyr tries to be as lazy as possible:
 
@@ -164,19 +168,73 @@ This sequence of operations never actually touches the database. It's not until 
 ```{r, eval=FALSE}
 c4
 ```
+```
+Source:   query [?? x 8]
+Database: spark connection master=local app=sparklyr local=TRUE
 
-## Collect, compute, collapse
+# S3: tbl_spark
+    year month   day carrier dep_delay air_time distance air_time_hours
+   <int> <int> <int>   <chr>     <dbl>    <dbl>    <dbl>          <dbl>
+1   2013     5    17      AA        -2      294     2248       4.900000
+2   2013     5    17      AA        -1      146     1096       2.433333
+3   2013     5    17      AA        -2      185     1372       3.083333
+4   2013     5    17      AA        -9      186     1389       3.100000
+5   2013     5    17      AA         2      147     1096       2.450000
+6   2013     5    17      AA        -4      114      733       1.900000
+7   2013     5    17      AA        -7      117      733       1.950000
+8   2013     5    17      AA        -7      142     1089       2.366667
+9   2013     5    17      AA        -6      148     1089       2.466667
+10  2013     5    17      AA        -7      137      944       2.283333
+... with more rows
+```
+
+# Chaining commands via pipes
+
+You can use [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:
+
+```{r, eval=FALSE}
+c4 <- flights %>%
+  filter(month == 5, day == 17, carrier %in% c('UA', 'WN', 'AA', 'DL')) %>%
+  select(carrier, dep_delay, air_time, distance) %>%
+  arrange(carrier) %>%
+  mutate(air_time_hours = air_time / 60)
+```
+
+# Grouping
+
+The `group_by` function corresponds to the `GROUP BY` statement in SQL.
+
+```{r}
+c4 %>%
+  group_by(carrier) %>%
+  summarize(count = n(), mean_dep_delay = mean(dep_delay))
+```
+```
+Source:   query [?? x 3]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+# S3: tbl_spark
+  carrier count mean_dep_delay
+    <chr> <dbl>          <dbl>
+1      AA    94       1.468085
+2      UA   172       9.633721
+3      WN    34       7.970588
+4      DL   136       6.235294
+```
+
+# Collect, compute, collapse
 
 You can copy data from Spark into R's memory by using `collect()`. 
 ```{r}
-library(ggplot2)
 carrierhours <- collect(c4)
 ```
 
 `collect()` executes the Spark query and returns the results to R for further analysis and visualization.
 
 ```{r}
+# Test the significance of pairwise differences and plot the results
 with(carrierhours, pairwise.t.test(air_time, carrier))
+ggplot(carrierhours, aes(carrier, air_time_hours)) + geom_boxplot()
 ```
 ```
 
@@ -191,68 +249,24 @@ WN 0.07957 0.23488 0.00041
 
 P value adjustment method: holm 
 ```
-```{r}
-ggplot(carrierhours, aes(carrier, air_time_hours)) + geom_boxplot()
-```
 
 ![](images/dplyr-carrierhours.png)
 
 If you want to execute a query and store the results in a temporary table, use `compute()`
 
 ```{r}
-compute(c4, 'carrierspeed')
+compute(c4, 'carrierhours')
 src_tbls(sc)
 ```
 ```
-[1] "airlines"     "carrierspeed" "flights"     
+[1] "airlines"     "carrierhours" "flights"     
 ```
 
 Finally, you can use `collapse()` to turn the query into a table expression.
 
-## Chaining commands via pipes
+# Translate SQL
 
-You can use pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:
-
-```{r, eval=FALSE}
-flights %>%
-  filter(month == 5, day == 17, carrier %in% c('UA', 'WN', 'AA', 'DL')) %>%
-  select(carrier, dep_delay, air_time, distance) %>%
-  arrange(carrier) %>%
-  mutate(air_time_hours = air_time / 60)
-```
-
-## Grouping
-
-The `group_by` function corresponds to the `GROUP BY` statement in SQL.
-
-```{r}
-flights %>%
-  group_by(carrier) %>%
-  summarize(count = n(), mean_dep_delay = mean(dep_delay)) %>%
-  arrange(desc(mean_dep_delay)) %>%
-  filter(count > 10000)
-```
-```
-Source:   query [?? x 3]
-Database: spark connection master=local app=sparklyr local=TRUE
-
-# S3: tbl_spark
-  carrier count mean_dep_delay
-    <chr> <dbl>          <dbl>
-1      EV 54173      19.955390
-2      WN 12275      17.711744
-3      9E 18460      16.725769
-4      B6 54635      13.022522
-5      UA 58665      12.106073
-6      MQ 26397      10.552041
-7      DL 48110       9.264505
-8      AA 32729       8.586016
-9      US 20536       3.782418
-```
-
-## Translate SQL
-
-dplyr knows how to convert the following R functions to Spark SQL:
+When doing simple mathematical operations of the form you normally use when filtering, mutating and summarising it’s relatively straightforward to translate R code to SQL (or indeed to any programming language). plyr knows how to convert the following R functions to Spark SQL:
 
 ```{r, eval = FALSE}
 # Basic math operators
@@ -267,6 +281,32 @@ abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, log10,
 mean, sum, min, max
 ```
 
+```{r}
+flights %>%
+  mutate(x1 = dep_delay %% 2) %>%
+  mutate(x2 = floor(dep_delay)) %>%
+  mutate(x3 = arr_delay > dep_delay && sched_arr_time > sched_dep_time) %>%
+  select(arr_delay, dep_delay, x1:x3)
+```
+```
+Source:   query [?? x 5]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+# S3: tbl_spark
+   arr_delay dep_delay    x1    x2    x3
+       <dbl>     <dbl> <dbl> <dbl> <dbl>
+1         11         2     0     2     1
+2         20         4     0     4     1
+3         33         2     0     2     1
+4        -18        -1    -1    -1     0
+5        -25        -6     0    -6     0
+6         12        -4     0    -4     1
+7         19        -5    -1    -5     1
+8        -14        -3    -1    -3     0
+9         -8        -3    -1    -3     0
+10         8        -2     0    -2     1
+... with more rows
+```
 
 # Use window functions
 
@@ -371,11 +411,4 @@ sample_frac(flights, 0.01)
 ```
 
 
-# Cache DataFrames
 
-You can cache and unchace DataFrames with `tbl_cache()` and `tbl_uncache()`. Caching DataFrames forces them into memory, improving query performance.
-
-```{r message=FALSE, warning=FALSE}
-tbl_cache(sc, 'flights')
-tbl_uncache(sc, 'flights')
-```

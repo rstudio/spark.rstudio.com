@@ -196,70 +196,64 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>DBISparkResult results.</h1>
+<h1>Create a sparkapi_connection object.</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>"dbGetStatement"(res, ...)</div>
-<div>"dbIsValid"(dbObj, ...)</div>
-<div>"dbGetRowCount"(res, ...)</div>
-<div>"dbGetRowsAffected"(res, ...)</div>
-<div>"dbColumnInfo"(res, ...)</div>
-<div>"dbSendQuery"(conn, statement, params&nbsp;=&nbsp;NULL, ...)</div>
-<div>"dbFetch"(res, n&nbsp;=&nbsp;-1, ..., row.names&nbsp;=&nbsp;NA)</div>
-<div>"dbBind"(res, params, ...)</div>
-<div>"dbHasCompleted"(res, ...)</div>
-<div>"dbClearResult"(res, ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>sparkapi_connection_create(spark_context, hive_context, backend, monitor)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>res</dt>
-      <dd>Code a DBISparkResult produced by
-<code><a href='http://www.inside-r.org/packages/cran/DBI/docs/dbSendQuery'>dbSendQuery</a></code>.</dd>
-      <dt>conn</dt>
-      <dd>A <code>DBISparkConnection</code> created by <code>dbConnect</code>.</dd>
-      <dt>statement</dt>
-      <dd>An SQL string to execture</dd>
-      <dt>params</dt>
-      <dd>A list of query parameters to be substituted into
-a parameterised query.</dd>
-      <dt>n</dt>
-      <dd>Number of rows to return. If less than zero returns all rows.</dd>
-      <dt>row.names</dt>
-      <dd>Either <code>TRUE</code>, <code>FALSE</code>, <code>NA</code> or a string.
-
-  If <code>TRUE</code>, always translate row names to a column called "row_names".
-  If <code>FALSE</code>, never translate row names. If <code>NA</code>, translate
-  rownames only if they're a character vector.
-
-  A string is equivalent to <code>TRUE</code>, but allows you to override the
-  default name.
-
-  For backward compatibility, <code>NULL</code> is equivalent to <code>FALSE</code>.</dd>
+      <dt>spark_context</dt>
+      <dd>Instance of SparkContext object</dd>
+      <dt>hive_context</dt>
+      <dd>Instance of HiveContext object</dd>
+      <dt>backend</dt>
+      <dd>R socket connection to backend</dd>
+      <dt>monitor</dt>
+      <dd>R socket connection for monitor</dd>
     </dl>
     
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+Object of class <code>sparkapi_connection</code>.
+</dl></p>
+  
+    </div>
+
     <div class="Description">
       <h2>Description</h2>
 
-      <p>DBISparkResult results.</p>
+      <p>Create a <code>sparkapi_connection</code> based on the specified backend
+and monitor sockets.</p>
   
-      <p>To retrieve results a chunk at a time, use <code>dbSendQuery</code>,
-<code>dbFetch</code>, then <code>ClearResult</code>. Alternatively, if you want all the
-results (and they'll fit in memory) use <code>dbGetQuery</code> which sends,
-fetches and clears for you.</p>
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+
+      <p>This connection can be passed to the
+<code><a href='sparkapi_invoke.html'>sparkapi_invoke_new</a></code> and <code><a href='sparkapi_invoke.html'>sparkapi_invoke_static</a></code>
+functions.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>DBISparkResult-class</li><li>dbBind,DBISparkResult-method</li><li>dbClearResult,DBISparkResult-method</li><li>dbColumnInfo,DBISparkResult-method</li><li>dbFetch,DBISparkResult-method</li><li>dbGetRowCount,DBISparkResult-method</li><li>dbGetRowsAffected,DBISparkResult-method</li><li>dbGetStatement,DBISparkResult-method</li><li>dbHasCompleted,DBISparkResult-method</li><li>dbIsValid,DBISparkResult-method</li><li>dbSendQuery,DBISparkConnection,character-method</li><li>dbi-spark-query</li>
+      <li>sparkapi_connection_create</li>
     </ul>
     <ul>
       <li>internal</li>
     </ul> -->
       
+    <h2>See also</h2>
+    
+<code><a href='sparkapi_connection.html'>sparkapi_connection</a></code>
+
         
   </div>
 </div>

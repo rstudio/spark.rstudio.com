@@ -196,30 +196,45 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Sets a property for the connection</h1>
+<h1>Get the sparkapi dependencies for extension packages</h1>
 </div>
 
 <div class="row">
   <div class="span8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>"dbSetProperty"(conn, property, value)</div></code></pre>
+    <pre class="code"><code class="r"><div>sparkapi_dependencies_from_extension(config, extension)</div>
+<div>sparkapi_dependencies_from_extensions(config, extensions)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>property</dt>
-      <dd>The name of the property, for instance, "spark.sql.shuffle.partitions"</dd>
+      <dt>config</dt>
+      <dd>R list containing configuration data</dd>
+      <dt>extension</dt>
+      <dd>Name of extension package</dd>
+      <dt>extensions</dt>
+      <dd>Names of extension packages.</dd>
     </dl>
     
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+List of objects of type <code>spark_dependency</code>.
+</dl></p>
+  
+    </div>
+
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Sets a property for the connection</p>
+      <p>Call the <code>sparkapi_dependencies</code> function of the specified
+package to extract it's dependencies.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>dbSetProperty,DBISparkConnection,character,character-method</li>
+      <li>sparkapi_dependencies</li><li>sparkapi_dependencies_from_extension</li><li>sparkapi_dependencies_from_extensions</li>
     </ul>
     <ul>
       <li>internal</li>

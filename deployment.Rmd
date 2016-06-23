@@ -32,7 +32,7 @@ For the local development scenario, see the [Configuration] section below for de
 
 To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
 
-In cluster mode you don't use a version of Spark installed via `spark_install`, rather, you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
+In cluster mode you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
 
 To connect, pass the address of the master node to `spark_connect`, for example:
 
@@ -158,6 +158,12 @@ You can configure what connection choices are presented using the `rstudio.spark
 | `"cluster"`| Present only connections to Spark clusters. |
 | `"spark://local:7077"`| Present only a connection to a specific Spark cluster. |
 | `c("spark://local:7077", "cluster")`| Present a connection to a specific Spark cluster and other clusters. |
+
+This option should generally be set within [Rprofile.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html). For example:
+
+```{r}
+options(rstudio.spark.connections = "spark://local:7077")
+```
 
 
 ### Spark Installations

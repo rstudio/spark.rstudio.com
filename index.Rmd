@@ -2,48 +2,47 @@
 title: "sparklyr -- R interface for Apache Spark"
 ---
 
-<!-- ![](images/ide-connect-dialog.png){#ide-screenshots .pull-left} -->
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
-<div class="lead" id="intro-p">
 
-- Connect to Spark from R; sparklyr implements a complete [dplyr](https://github.com/hadley/dplyr) backend.
-- Interact with massive Spark datasets from an interactive R session.
-- Filter and mutate Spark datasets and bring them into R for further analysis and visuzliation.
-- Leverage Spark's MLlib machine learning techniques without ever downloading a Spark dataset to your R session.
+<!--
+![](images/ide-spark.png){#ide-screenshots .pull-left}
+-->
+
+<div class="lead">
+
+- Connect to [Spark](http://spark.apache.org/) from R --- sparklyr implements a complete [dplyr](https://github.com/hadley/dplyr) backend.
+- Filter and aggregate Spark datasets then bring them into R for analysis and visuzliation.
+- Leverage Spark's [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) (machine learning library) for distributed machine learning from R.
+- API for creating extensions that call the full Spark API and/or Spark packages. 
+- Tight integration with RStudio IDE (managing connections, viewing datasets, etc.)
 
 </div>
 
 ## Installation
 
-sparklyr currently requires a version of devtools more recent than the one on CRAN. Assuming you already have an older version available, you can run the following commands to update to the latest version.
+Installation of sparklyr currently depends on the development versions of a few other packages so requires a few steps. We'll soon publish sparklyr to CRAN which will simplify installation considerably.
 
 ```{r, eval=FALSE}
+# first install the development version of devtools
+install.packages("devtools")
 library(devtools)
-# Install the latest version
 install_github("hadley/devtools") 
-# Reload devtools to use the latest
 reload(devtools::inst("devtools")) 
 
-# Install sparklyr
-devtools::install_github("rstudio/sparklyr")
-library(sparklyr)
+# install sparklyr using devtools
+install_github("rstudio/sparklyr")
 ```
 
-Now that you have the sparklyr package installed, you need to install the Spark libraries. You can do so using the following command: 
-
-```{r, eval=FALSE}
-spark_install(version="1.6.1", hadoop_version="2.6")
-```
-
-You can customize the versions of Spark or Hadoop to your liking. For more information on installation or to see examples of more advanced deployments, read the [Deployment section](deployment.html).
-
-If you use the RStudio IDE, you should download the latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE which includes support for interacting with Spark data sources; see the [RStudio IDE section](#rstudio-ide) below for more details.
+If you use the RStudio IDE, you should also download the latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE which includes several enhancements for interacting with Spark (see the [RStudio IDE section](#rstudio-ide) below for more details).
 
 ## Connecting to Spark
 
-If you're just getting started with Spark, sparklyr provides a way to run a Spark cluster on your local machine; in this mode, you don't need any additional servers or infrastructure. Alternatively, you can use sparklyr to connect to an existing cluster.
+If you're just getting started with Spark, sparklyr provides a way to run Spark on your local machine; in this mode, you don't need any additional servers or infrastructure. Alternatively, you can use sparklyr within a Spark cluster.
 
-Below, you can find how to connect to either a local or a cluster. If you're using the RStudio IDE, you can click "New Connection" in the `Spark` tab and have it produce this code for you.
+Below, you can find how to connect to either a local Spark instance or use sparklyr within a cluster. If you're using the RStudio IDE, you can click "New Connection" in the **Spark** pane and have it produce this code for you.
 
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#local">Local</a></li>
@@ -52,23 +51,33 @@ Below, you can find how to connect to either a local or a cluster. If you're usi
 <div class="tab-content outlined-tab-content">
 <div id="local" class="tab-pane fade in active">
 
-If you're running Spark locally, you can run whatever version of Spark you want with any available version of the Hadoop libraries so long as those versions have been installed using `spark_install()` previously.
+To run in local mode you'll first need to install a local version of Spark. You can do this via the [install_spark](reference/sparklyr/latest/install_spark.html) function:
+
+```{r}
+library(sparklyr)
+install_spark(version = "1.6.1")
+```
+
+You can connect to this local version of Spark by passing `"master = local"` to the [spark_connect](reference/sparklyr/latest/spark_connect.html) function:
 
 ```{r, eval=FALSE}
-sc <- spark_connect("local", version="1.6.1")
+sc <- spark_connect(master = "local")
 ```
 </div>
 <div id="cluster" class="tab-pane fade">
 
-If you're connecting to a cluster, it's important to make sure that the your targeted Spark version and the version of the Hadoop libraries that you use align with what the cluster is using.
+To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) or an SSH session either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
 
-```{r, eval=FALSE}
-sc <- spark_connect("spark://spark.server.org:7077", 
-                    version = "1.6.1", 
-                    hadoop_version = "2.4")
+In cluster mode sparklyr will locate the version of Spark to use via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
+
+To connect, pass the address of the master node to [spark_connect](reference/sparklyr/latest/spark_connect.html), for example:
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "spark://spark.example.com:7077")
 ```
 
-where `spark.server.org` is the address of your Spark cluster's master node, and `7077` is the port on which Spark is listening.
+Where `spark.example.com` is the address of your Spark cluster's master node, and `7077` is the port on which Spark is listening. If you are running directly on the master node then the address of the master would be typically be  `"spark://local:7077"`.
 
 </div>
 </div>

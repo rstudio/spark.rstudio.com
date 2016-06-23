@@ -10,7 +10,9 @@ knitr::opts_chunk$set(eval = FALSE)
 
 You can orchestrate machine learning algorithms in a Spark cluster via specific functions in `sparklyr`. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning pipelines. 
 
-The following machine learning algorithms are supported in `sparklyr`:
+The ML package contains **Estimators** and **Transformers**. 
+
+An **Estimator** is an algorithm which can be fit on a DataFrame to produce a Transformer. The following machine learning algorithms are supported in `sparklyr`:
 
 * Classification 
     * Logistic regression
@@ -30,29 +32,32 @@ The following machine learning algorithms are supported in `sparklyr`:
 * Dimensionality reduction
     * Pricipal components analysis (PCA)
 
-You can also use specific functions in `sparklyr` to prepare data via the machine learning APIs. These functions help you extract, transform, and subset your data as part of an analytic pipeline.
+A **Transformer** is an algorithm which can transform one DataFrame into another DataFrame. Transformers roughly dived into these groups:
 
 * Extraction: Extracting features from “raw” data
 * Transformation: Scaling, converting, or modifying features
 * Selection: Selecting a subset from a larger set of features
 
-Note that `dplyr` connects to the Spark SQL API, whereas these `sparklyr` functions connect to the Spark Machine Learning APIs.
+Note that a learning algorithm itself (i.e. a fitted model) is also a Transformer. This is because a learning algorithm can be used to transform data into predicted values.
+
 
 ## Details
 
 Spark provides two main APIs for machine learning -- the newer, more modern API called [Spark.ML](http://spark.apache.org/docs/latest/ml-guide.html) built on top of Spark DataFrames, and the older API called [Spark.MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) built on top of RDD data structures . We target the newer interface. 
-
-Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).
-
-****
-
-## Concepts
 
 `sparklyr` functions that connect to the machine learning Spark APIs fall into three categories.
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
 - Verbs for manipulating DataFrames (`sdf_*`)
+
+*Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).*
+
+*Note that `dplyr` connects to the Spark SQL API, whereas these `sparklyr` functions connect to the Spark Machine Learning APIs.*
+
+****
+
+## Estimators
 
 In this example we'll use the `mtcars` data set to build a model. First we will initialize the Spark connection and copy the data into Spark.
 
@@ -86,18 +91,46 @@ residuals(fit)
 predict(fit, mtcars_df)
 ```
 
-Typically, data analysis requires data preprocessing. We can transform individual features by calling them inside of `sdf_mutate`. These routines generally take one or more input columns and generate a new output column formed as a transformation of those columns. A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. For example, we can set compare 8 cylindar vehicles to all other types of vehicles with the following:
+****
+
+## Transformers
+
+Typically, data analysis requires data preprocessing. We can transform individual features by calling `ft_*` inside of `sdf_mutate`. These routines generally take one or more input columns and generate a new output column formed as a transformation of those columns.
+
+Transformers are required to create a new DataFrame after every operation. Use `sdf_register()` to output the DataFrame and define its name. 
+
+A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. For example, we can set compare 8 cylindar vehicles to all other types of vehicles with the following:
 
 ```{r}
-sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 8))
+sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 6)) %>%
+  sdf_register("mtcars_df_mutated")
 ```
 
 It's important to note that the Spark DataFrame verbs (including sdf_mutate in the example here) compute their results eagerly whereas dplyr verbs compute their results lazily. In the example below, we combine Spark DataFrame verbs and dplyr verbs in the same chain.
 
 ```{r, eval=FALSE}
 mtcars_df %>%
-  mutate(weight = weight * 1000) %>%
-  sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 6))
+  mutate(wt = wt * 1000) %>%
+  sdf_mutate(cyl8 = ft_binarizer(cyl, 6)) %>%
+  sdf_register("mtcars_df_mutated")
+```
+```
+Source:   query [?? x 12]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+     mpg   cyl  disp    hp  drat  qsec    vs    am  gear  carb    wt  cyl8
+   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+1   21.0     6 160.0   110  3.90 16.46     0     1     4     4  2620     0
+2   21.0     6 160.0   110  3.90 17.02     0     1     4     4  2875     0
+3   22.8     4 108.0    93  3.85 18.61     1     1     4     1  2320     0
+4   21.4     6 258.0   110  3.08 19.44     1     0     3     1  3215     0
+5   18.7     8 360.0   175  3.15 17.02     0     0     3     2  3440     1
+6   18.1     6 225.0   105  2.76 20.22     1     0     3     1  3460     0
+7   14.3     8 360.0   245  3.21 15.84     0     0     3     4  3570     1
+8   24.4     4 146.7    62  3.69 20.00     1     0     4     2  3190     0
+9   22.8     4 140.8    95  3.92 22.90     1     0     4     2  3150     0
+10  19.2     6 167.6   123  3.92 18.30     1     0     4     4  3440     0
+# ... with more rows
 ```
 
 You can partion data into training and testing subsets with the `sdf_partition` verb.
@@ -112,7 +145,7 @@ predict(fit_training, mtcars_df_part$test)
 
 ## Examples
 
-### Initialization
+We will use the `iris` data set to examine a handful of learning altogithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
 
 ```{r, eval=FALSE}
 library(sparklyr)

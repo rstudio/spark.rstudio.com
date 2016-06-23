@@ -8,58 +8,34 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-You can orchestrate machine learning algorithms in a Spark cluster via specific functions in `sparklyr`. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
+You can orchestrate machine learning algorithms in a Spark cluster via the [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) functions in **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
 
-The ML package contains **Estimators** and **Transformers**. 
-
-An **Estimator** is an algorithm which can be fit on a DataFrame to produce a Transformer. The following machine learning algorithms are supported in `sparklyr`:
-
-* Classification 
-    * Logistic regression
-    * Multilayer perceptron classifier (MLPC)
-    * Random forest classifier
-    * Gradient-boosted tree classifier
-    * One vs rest classifier
-    * Naive Bayes
-* Regression
-    * Linear regression
-    * Random forest regression
-    * Gradient-boosted tree regression 
-    * Survival regression
-* Clustering
-    * K-means
-    * Latent Dirichlet allocation (LDA)
-* Dimensionality reduction
-    * Pricipal components analysis (PCA)
-
-A **Transformer** is an algorithm which can transform one DataFrame into another DataFrame. Transformers roughly dived into these groups:
-
-* Extraction: Extracting features from “raw” data
-* Transformation: Scaling, converting, or modifying features
-* Selection: Selecting a subset from a larger set of features
-
-Note that a learning algorithm itself (i.e. a fitted model) is also a Transformer. This is because a learning algorithm can be used to transform data into predicted values.
-
-
-## Details
-
-Spark provides two main APIs for machine learning -- the newer, more modern API called [Spark.ML](http://spark.apache.org/docs/latest/ml-guide.html) built on top of Spark DataFrames, and the older API called [Spark.MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) built on top of RDD data structures . We target the newer interface. 
-
-`sparklyr` functions that connect to the machine learning Spark APIs fall into three categories.
+sparklyr functions that connect to the machine learning Spark APIs fall into three categories.
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
-- Functions (Verbs?) for manipulating DataFrames (`sdf_*`)
+- Functions for manipulating Spark DataFrames (`sdf_*`)
 
-*Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).*
+## Algorithms
 
-*Note that `dplyr` connects to the Spark SQL API, whereas these `sparklyr` functions connect to the Spark Machine Learning APIs.*
+The following functions implement interfaces for various MLlib algorithms:
 
-****
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ml_kmeans`](reference/sparklyr/latest/ml_kmeans.html) | K-Means Clustering |
+| [`ml_linear_regression`](reference/sparklyr/latest/ml_linear_regression.html) | K-Means Clustering |
+| [`ml_logistic_regression`](reference/sparklyr/latest/ml_logistic_regression.html) | Logistic Regression |
+| [`ml_survival_regression`](reference/sparklyr/latest/ml_survival_regression.html) | Survival Regression |
+| [`ml_decision_tree`](reference/sparklyr/latest/ml_decision_tree.html) | Decision Trees |
+| [`ml_random_forest`](reference/sparklyr/latest/ml_random_forest.html) | Random Forests |
+| [`ml_gradient_boosted_trees`](reference/sparklyr/latest/ml_gradient_boosted_trees.html) | Gradient-Boosted Tree |
+| [`ml_pca`](reference/sparklyr/latest/ml_pca.html) | Principal Components Analysis |
+| [`ml_naive_bayes`](reference/sparklyr/latest/ml_naive_bayes.html) | Naive-Bayes |
+| [`ml_multilayer_perceptron`](reference/sparklyr/latest/ml_multilayer_perceptron.html) |  Multilayer Perceptron |
+| [`ml_lda`](reference/sparklyr/latest/ml_lda.html) | Latent Dirichlet Allocation |
+| [`ml_one_vs_rest`](reference/sparklyr/latest/ml_lda.html) | One vs Rest |
 
-## Estimators
-
-In this example we'll use the `mtcars` data set to build a model. First we will initialize the Spark connection and copy the data into Spark.
+Here's an example that uses the `mtcars` data set to build a model. First we will initialize the Spark connection and copy the data into Spark.
 
 ```{r}
 library(sparklyr)
@@ -91,15 +67,26 @@ residuals(fit)
 predict(fit, mtcars_df)
 ```
 
-****
-
 ## Transformers
 
 Typically, data analysis requires data preprocessing. We can transform individual features by calling `ft_*` inside of `sdf_mutate`. These routines generally take one or more input columns and generate a new output column formed as a transformation of those columns.
 
-Transformers are required to create a new DataFrame after every operation. Use `sdf_register()` to output the DataFrame and define its name. 
+The following functions implement interfaces to various MLlib feature transformers:
 
-A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. For example, we can set compare 8 cylindar vehicles to all other types of vehicles with the following:
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ft_binarizer`](reference/sparklyr/latest/ft_binarizer.html) | Threshold numerical features to binary (0/1) feature  |
+| [`ft_bucketizer`](reference/sparklyr/latest/ft_bucketizer.html) | Bucketizer transforms a column of continuous features to a column of feature buckets |
+| [`ft_discrete_cosine_transform`](reference/sparklyr/latest/ft_discrete_cosine_transform.html) | Transforms a length NN real-valued sequence in the time domain into another length NN real-valued sequence in the frequency domain |
+| [`ft_elementwise_product`](reference/sparklyr/latest/ft_elementwise_product.html) | Multiplies each input vector by a provided weight vector, using element-wise multiplication. |
+| [`ft_index_to_string`](reference/sparklyr/latest/ft_index_to_string.html) | Maps a column of label indices back to a column containing the original labels as strings |
+| [`ft_quantile_discretizer`](reference/sparklyr/latest/ft_quantile_discretizer.html) | Takes a column with continuous features and outputs a column with binned categorical features |
+| [`ft_sql_transformer`](reference/sparklyr/latest/ft_sql_transformer.html) | Implements the transformations which are defined by a SQL statement |
+| [`ft_string_indexer`](reference/sparklyr/latest/ft_string_indexer.html) | Encodes a string column of labels to a column of label indices |
+| [`ft_vector_assembler`](reference/sparklyr/latest/ft_vector_assembler.html) | Combines a given list of columns into a single vector column |
+
+
+A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. We can set compare 8 cylindar vehicles to all other types of vehicles with the following:
 
 ```{r}
 sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 6)) %>%
@@ -141,8 +128,6 @@ fit_training <- ml_linear_regression(mtcars_df_part$training, "mpg", c("wt", "cy
 predict(fit_training, mtcars_df_part$test)
 ```
 
-****
-
 ## Examples
 
 We will use the `iris` data set to examine a handful of learning altogithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
@@ -173,7 +158,6 @@ Database: spark connection master=local app=sparklyr local=TRUE
 10          4.9         3.1          1.5         0.1  setosa
 # ... with more rows
 ```
-*Note that the names of variables within the have been transformed (replacing `.` with `_`) to work around an issue in the Spark 2.0.0-preview used in constructing this document -- we expect the issue to be resolved with the release of Spark 2.0.0.*
 
 ### KMeans 
 
@@ -265,7 +249,7 @@ predict(fit, partitions$test)
  [1] 1.744571 1.521752 1.521752 1.521752 1.298933 1.521752 2.413029 1.521752 1.967390 1.521752 1.521752 1.521752 1.521752 3.527124 3.972763 3.972763 3.749944 5.309678 4.418401 5.086858 4.641220 4.418401 4.641220 4.195582 5.086858 3.972763 5.309678 5.086858 3.972763 5.532497 5.532497 3.972763 4.195582 6.423773 6.200954 4.641220 5.086858
 ```
 
-### Principal Components Analysis 
+### PCA 
 
 ```{r}
 model <- tbl(sc, "iris") %>%
@@ -285,7 +269,7 @@ Petal_Length -0.85667061  0.17337266 -0.07623608 -0.4798390
 Petal_Width  -0.35828920  0.07548102 -0.54583143  0.7536574
 ```
 
-### Random Forests
+### Random Forest
 
 ```{r}
 mForest <- iris_tbl %>%

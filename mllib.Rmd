@@ -8,7 +8,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-You can orchestrate machine learning algorithms in a Spark cluster via specific functions in `sparklyr`. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning pipelines. 
+You can orchestrate machine learning algorithms in a Spark cluster via specific functions in `sparklyr`. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
 
 The ML package contains **Estimators** and **Transformers**. 
 
@@ -49,7 +49,7 @@ Spark provides two main APIs for machine learning -- the newer, more modern API 
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
-- Verbs for manipulating DataFrames (`sdf_*`)
+- Functions (Verbs?) for manipulating DataFrames (`sdf_*`)
 
 *Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).*
 
@@ -106,7 +106,7 @@ sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 6)) %>%
   sdf_register("mtcars_df_mutated")
 ```
 
-It's important to note that the Spark DataFrame verbs (including sdf_mutate in the example here) compute their results eagerly whereas dplyr verbs compute their results lazily. In the example below, we combine Spark DataFrame verbs and dplyr verbs in the same chain.
+It's important to note that the Spark DataFrame commands (including sdf_mutate in the example here) compute their results eagerly whereas dplyr commands compute their results lazily. In the example below, we combine Spark DataFrame commands and commands into the same chain.
 
 ```{r, eval=FALSE}
 mtcars_df %>%

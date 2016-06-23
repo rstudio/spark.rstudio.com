@@ -196,35 +196,64 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>magrittr forward-pipe operator</h1>
+<h1>Randomly Sample Rows from a Spark DataFrame</h1>
 </div>
 
 <div class="row">
   <div class="span8">
+    <h2>Usage</h2>
+    <pre class="code"><code class="r"><div>sdf_sample(x, fraction&nbsp;=&nbsp;1, replacement&nbsp;=&nbsp;TRUE, seed&nbsp;=&nbsp;NULL)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>lhs</dt>
-      <dd>A value or the magrittr placeholder.</dd>
-      <dt>rhs</dt>
-      <dd>A function call using the magrittr semantics.</dd>
+      <dt>x</dt>
+      <dd>An object coercable to a Spark DataFrame.</dd>
+      <dt>fraction</dt>
+      <dd>The fraction to sample.</dd>
+      <dt>replacement</dt>
+      <dd>Boolean; sample with replacement?</dd>
+      <dt>seed</dt>
+      <dd>An (optional) integer seed.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Pipe an object forward into a function or call expression.</p>
+      <p>Draw a random sample of rows (with or without replacement)
+from a Spark DataFrame.</p>
+  
+    </div>
+
+    <div class="Transforming Spark DataFrames">
+      <h2>Transforming Spark DataFrames</h2>
+
+      <p></p>
+  
+      <p>The family of functions prefixed with <code>sdf_</code> generally
+access the Scala Spark DataFrame API directly, and return a
+lower-level Spark DataFrame object (represented in <span style="R">R</span> as a
+<code>sparkapi_jobj</code>). To bring these back to the <code>dplyr</code>
+world (in order to use, for example, <code>mutate</code>), you need
+to invoke <code><a href='sdf_register.html'>sdf_register</a>()</code>. This gives the Spark
+DataFrame a table name in the associated Spark SQL context, and
+then returns a <code>tbl_spark</code> which you can then use with
+the <code>dplyr</code> interface.</p>
   
     </div>
       </div>
   <div class="span4">
     <!-- <ul>
-      <li>%&gt;%</li>
+      <li>sdf_sample</li>
     </ul>
     <ul>
-      <li>internal</li>
+      
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other Spark DataFrame functions: <code><a href='sdf_partition.html'>sdf_partition</a></code>,
+  <code><a href='sdf_sort.html'>sdf_sort</a></code>
+
         
   </div>
 </div>

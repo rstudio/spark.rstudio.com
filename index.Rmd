@@ -38,18 +38,13 @@ install_github("rstudio/sparklyr")
 
 If you use the RStudio IDE, you should also download the latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE which includes several enhancements for interacting with Spark (see the [RStudio IDE section](#rstudio-ide) below for more details).
 
-## Connecting to Spark
+## Connecting to Spark {.tabset .tabset-fade}
 
 If you're just getting started with Spark, sparklyr provides a way to run Spark on your local machine; in this mode, you don't need any additional servers or infrastructure. Alternatively, you can use sparklyr within a Spark cluster.
 
-Below, you can find how to connect to either a local Spark instance or use sparklyr within a cluster. If you're using the RStudio IDE, you can click "New Connection" in the **Spark** pane and have it produce this code for you.
+Below there are instructions for connecting to either a local Spark instance or for using sparklyr within a cluster. For additional information see the [Deployment](deployment.html) section.
 
-<ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#local">Local</a></li>
-  <li><a data-toggle="tab" href="#cluster">Cluster</a></li>
-</ul>
-<div class="tab-content outlined-tab-content">
-<div id="local" class="tab-pane fade in active">
+### Local
 
 To run in local mode you'll first need to install a local version of Spark. You can do this via the [install_spark](reference/sparklyr/latest/install_spark.html) function:
 
@@ -63,8 +58,8 @@ You can connect to this local version of Spark by passing `"master = local"` to 
 ```{r, eval=FALSE}
 sc <- spark_connect(master = "local")
 ```
-</div>
-<div id="cluster" class="tab-pane fade">
+
+### Cluster
 
 To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) or an SSH session either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
 
@@ -79,10 +74,6 @@ sc <- spark_connect(master = "spark://spark.example.com:7077")
 
 Where `spark.example.com` is the address of your Spark cluster's master node, and `7077` is the port on which Spark is listening. If you are running directly on the master node then the address of the master would be typically be  `"spark://local:7077"`.
 
-</div>
-</div>
-
-You now have a connection to a Spark cluster. If you have a more advanced configuration of need more guidance, see the [Deployment section](deployment.html).
 
 ## Spark DataFrames
 

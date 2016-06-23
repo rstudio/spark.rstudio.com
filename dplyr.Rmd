@@ -1,38 +1,34 @@
 ---
-title: "Manipulating data with dplyr"
+title: "Manipulating Data with dplyr"
+output: 
+  html_document:
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
+## Overview
 
-# Overview
+**dplyr** is an R package for working with structured data both in and outside of R. dplyr makes data manipulation for R users easy, consistent, and high performant. With dplyr as an interface to manipulating Spark data frames you can:
 
-`dplyr` is an R package for working with structured data both in and outside of R. `dplyr` makes data manipulation for R users easy, consistent, and high performant. You can load `dplyr` by running:
-
-```{r, message=FALSE, warning=FALSE}
-library("dplyr")
-```
-
-Use `dplyr` as your main interface for manipulating Spark data frames. It gives you the ability to:
-
-* Operate on a DataFrame (select, filter, aggregate, etc.)
-* Use window functions
-* Join DataFrames
+* Select, filter, and aggregate data
+* Use window functions (e.g. for sampling)
+* Perform joins on DataFrames
 * Collect data from Spark into R
-* Sample data
 
-Statements in `dplyr` can be chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. `dplyr` also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on `dplyr`, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
+Statements in dplyr can be chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. dplyr also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on dplyr, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
 
-# Setup
+### Flights Data
 
 To explore the basic data manipulation verbs of dplyr, we'll start with data stored in the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
 
-Connect to the cluster and copy the flights data using the `copy_to` function. Caveat: The flight data in `nycflights13` is convenient for `dplyr` demonstrations because it is small, but in practice large data will rarely be copied directly from R objects. 
+Connect to the cluster and copy the flights data using the `copy_to` function. Caveat: The flight data in `nycflights13` is convenient for dplyr demonstrations because it is small, but in practice large data should rarely be copied directly from R objects. 
 
 ```{r message=FALSE, warning=FALSE}
 library(sparklyr)
+library(dplyr)
 library(nycflights13)
 library(ggplot2)
 sc <- spark_connect()
@@ -43,16 +39,10 @@ src_tbls(sc)
 ```
 [1] "airlines" "flights"
 ```
-You can cache and uncache DataFrames with `tbl_cache()` and `tbl_uncache()`. Caching DataFrames forces them into memory, improving query performance.
 
-```{r message=FALSE, warning=FALSE}
-tbl_cache(sc, 'flights')
-```
+## dplyr verbs
 
-
-# dplyr verbs
-
-Verbs are `dplyr` commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
+Verbs are dplyr commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
 
 * `select` ~ `SELECT`
 * `filter` ~ `WHERE`
@@ -145,7 +135,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 mutate(flights, speed = distance / air_time * 60)
 ```
 
-# Laziness
+## Laziness
 
 When working with databases, dplyr tries to be as lazy as possible:
 
@@ -188,7 +178,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 ... with more rows
 ```
 
-# Chaining commands
+## Piping
 
 You can use [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:
 
@@ -200,7 +190,7 @@ c4 <- flights %>%
   mutate(air_time_hours = air_time / 60)
 ```
 
-# Grouping
+## Grouping
 
 The `group_by` function corresponds to the `GROUP BY` statement in SQL.
 
@@ -222,9 +212,10 @@ Database: spark connection master=local app=sparklyr local=TRUE
 4      DL   136       6.235294
 ```
 
-# Collect, compute, collapse
+## Collecting to R
 
 You can copy data from Spark into R's memory by using `collect()`. 
+
 ```{r}
 carrierhours <- collect(c4)
 ```
@@ -262,28 +253,30 @@ src_tbls(sc)
 [1] "airlines"     "carrierhours" "flights"     
 ```
 
-Finally, you can use `collapse()` to turn the query into a table expression.
-
-# Translate SQL
+## SQL Translation
 
 When doing simple mathematical operations of the form you normally use when filtering, mutating and summarizing it’s relatively straightforward to translate R code to SQL (or indeed to any programming language). dplyr knows how to convert the following R functions to Spark SQL:
 
 ```{r, eval = FALSE}
 # Basic math operators
 +, -, *, /, %%, ^
+  
 # Math functions
 abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, log10, round, sign, sin, sinh, sqrt, tan, tanh
+
 # Logical comparisons
 <, <=, !=, >=, >, ==, %in%
+
 # Boolean operations
 &, &&, |, ||, !
+
 # Basic aggregations
 mean, sum, min, max
 ```
 
-# Use window functions
+## Window Functions
 
-`dplyr` supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems. You can compare the `dplyr` syntax to the query it has generated by using `sql_render()`.
+dplyr supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems. You can compare the dplyr syntax to the query it has generated by using `sql_render()`.
 
 ```{r, collapse=TRUE}
 # Find the most and least delayed flight each day
@@ -319,6 +312,7 @@ Groups: year, month, day
 10  2013     1     7       366
 ... with more rows
 ```
+
 ```{r}
 # Rank each flight within a daily
 ranked <- flights %>%
@@ -328,6 +322,7 @@ ranked <- flights %>%
 sql_render(ranked)
 ranked
 ```
+
 ```
 <SQL> SELECT `year`, `month`, `day`, `dep_delay`, rank() OVER (PARTITION BY `year`, `month`, `day` ORDER BY `dep_delay` DESC) AS `rank`
 FROM (SELECT `year` AS `year`, `month` AS `month`, `day` AS `day`, `dep_delay` AS `dep_delay`
@@ -352,7 +347,7 @@ Groups: year, month, day
 ... with more rows
 ```
 
-# Join DataFrames
+## Peforming Joins
 
 It's rare that a data analysis involves only a single table of data. In practice, you'll normally have many tables that contribute to an analysis, and you need flexible tools to combine them. In dplyr, there are three families of verbs that work with two tables at a time:
 
@@ -397,7 +392,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 #   name <chr>
 ```
 
-# Sample data
+## Sampling
 
 You can use `sample_n()` and `sample_frac()` to take a random sample of rows: use `sample_n()` for a fixed number and `sample_frac()` for a fixed fraction.
 

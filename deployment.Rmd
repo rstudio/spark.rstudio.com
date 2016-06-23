@@ -53,7 +53,7 @@ This section describes the various options available for configuring both the be
 
 ### Config Files
 
-By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (this file is not required and only need be provided for overriding default behavior). The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
+By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (or in parent directories if not located in the working directory). This file is not required and only need be provided for overriding default behavior. The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
 
 ### Package Options
 
@@ -121,7 +121,23 @@ production:
   sample-size: null
 ```
 
-The currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
+You can also use this feature to specify distinct Spark master nodes for different environments, for example:
+
+```yaml
+default:
+  spark.master: "local"
+  
+production:
+  spark.master: "spark://local:7077"
+```
+
+With this configuration, you can omit the `master` argument entirely from the call to `spark_connect`:
+
+```{r}
+sc <- spark_connect()
+```
+
+Note that the currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
 
 ## RStudio Server
 

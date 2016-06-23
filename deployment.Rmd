@@ -1,58 +1,51 @@
 ---
-title: "Configuring and deploying sparklyr"
+title: "Deploying Spark and sparklyr"
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-## Installation
+## Deployment Modes
 
-### Versions
+There are two well supported deployment modes for **sparklyr**: developing locally (typically on the desktop with smaller/sampled datasets) and working directly within a Spark cluster via RStudio Server.
 
-You can use the `spark_install` function to install various versions of Spark on your system. For example:
+### Local Deployment
+
+Local mode is an excellent way to learn and experiment with Spark. Local mode also provides a convenient development environment for analyses, reports, and applications that you plan to eventually deploy to a multi-node Spark cluster.
+
+To work in local mode you should first install a version of Spark for local use. You can do this using the [spark_install](reference/sparklyr/latest/spark_install.html) function, for example:
 
 ```{r}
 spark_install(version = "1.6.1", hadoop_version = "2.6")
 ```
 
-This will install specified version of Spark within a shared directory for all Spark installations.
-
-The following functions are available for managing Spark installations:
-
-| Function | Description  |
-|----------------------------|---------------------------------------------|
-| [`spark_install`](reference/sparklyr/latest/spark_install.html) | Install a version of Spark by spark/hadoop version.|
-| [`spark_install_tar`](reference/sparklyr/latest/spark_install.html) | Install a version of Spark from a Spark distribution tarball. |
-| [`spark_available_versions`](reference/sparklyr/latest/spark_install.html) | List all versions of Spark that can be installed via `spark_install`. |
-| [`spark_installed_versions`](reference/sparklyr/latest/spark_install.html) | List all versions of Spark currently installed. |
-| [`spark_install_dir`](reference/sparklyr/latest/spark_install.html) | Determine the directory where versions of Spark are installed. |
-
-
-### Install Directory
-
-The location of the Spark installation directory can be determined by calling the `spark_install_dir` function. By default this directory is a platform-specific location for application support files (determined using the [rappdirs](https://github.com/hadley/rappdirs) package). However, you can change the location by setting the `spark.install.dir` option. For example:
+To connect to the local Spark instance you pass "local" as the value of the Spark master node to [spark_connect](reference/sparklyr/latest/spark_connect.html):
 
 ```{r}
-options(spark.install.dir = "/opt/spark")
+sc <- spark_connect(master = "local")
 ```
-
-In server environments (e.g. when using RStudio Server or Shiny Server) it's highly recommended that system administrators install whichever Spark versions are required within a shared directory (e.g. `/opt/spark`) and then set the `spark.install.dir` option system-wide via [Rprofile.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html).
-
-
-## Deployment
-
-There are two well supported deployment modes for sparklyr: developing locally (typically on the desktop with smaller/sampled datasets) and working directly on the Spark cluster via RStudio Server.
-
-### Local
-
-You can easily download and install a local version of Spark on your desktop using the `spark_install` function described above. This is useful both for learning and experimentation, but also as a development environment for analyses, reports, and applications that you plan to eventually deploy to a multi-node Spark cluster.
 
 For the local development scenario, see the [Configuration] section below for details on how to have the same code work seamlessly in both development and production environments.
 
-### Cluster Node
+### Cluster Deployment
 
-For production use the recommended configuration is to run [RStudio Server](https://www.rstudio.com/products/rstudio/) directly on one of the cluster nodes. 
+To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
+
+In cluster mode you don't use a version of Spark installed via `spark_install`, rather, you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
+
+To connect, pass the address of the master node to `spark_connect`, for example:
+
+```{r}
+sc <- spark_connect(master = "spark://local:7077")
+```
+
+If you are running on EC2 using the Spark [EC2 deployment scripts](http://spark.apache.org/docs/latest/ec2-scripts.html) then you can read the master from `/root/spark-ec2/cluster-url`, for example:
+
+```{r}
+master <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
+sc <- spark_connect(master)
+```
 
 ## Configuration 
 
@@ -60,7 +53,7 @@ This section describes the various options available for configuring both the be
 
 ### Config Files
 
-By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (this file is not required and only need be provided for overriding default behavior). The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
+By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (or in parent directories if not located in the working directory). This file is not required and only need be provided for overriding default behavior. The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
 
 ### Package Options
 
@@ -128,95 +121,55 @@ production:
   sample-size: null
 ```
 
-The currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
+You can also use this feature to specify distinct Spark master nodes for different environments, for example:
 
-## EC2
-
-Spark provides some utilities that make it simpler to provision a Spark cluster on Amazon EC2. sparklyr wraps these utilities to make them available from within R. You should realize, however, that the default security settings for such clusters are very permissive; you should not use this technique to create a cluster that hosts any sensitive data. 
-
-### Deploying a Cluster
-
-Deploy a 1-master 1-worker cluster using:
-
-```{r, eval=FALSE}
-cl <- spark_ec2_cluster(access_key_id = "AAAAAAAAAAAAAAAAAAAA",
-                        secret_access_key = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
-                        pem_file = "spark.pem")
+```yaml
+default:
+  spark.master: "local"
+  
+production:
+  spark.master: "spark://local:7077"
 ```
 
-This gives you a handle to an unprovisioned cluster on EC2. You can bring this cluster to life by running `spark_ec2_deploy(cl)` or later destroy the cluster using `spark_ec2_destroy(cl)`.
+With this configuration, you can omit the `master` argument entirely from the call to `spark_connect`:
 
-To bring this cluster to life:
-
-```{r, eval=FALSE}
-spark_ec2_deploy(cl)
+```{r}
+sc <- spark_connect()
 ```
 
-You may need to remotely SSH into the master node to manage the system or install system-level dependencies. The following R command will give you the command you need to run in a terminal shell to log in to the Spark master on EC2:
+Note that the currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
 
-```{r, eval=FALSE}
-spark_ec2_login(cl)
+## RStudio Server
+
+RStudio Server provides a web-based IDE interface to a remote R session, making it ideal for use as a front-end to a Spark cluster. This section covers some additional configuration options that are useful for RStudio Server.
+
+### Connection Options
+
+The RStudio IDE provides a **New Connection** dialog to assist in connecting with both local instances of Spark and Spark clusters:
+
+<img src="images/connect-to-spark.png" width=486 height=302/>
+
+You can configure what connection choices are presented using the `rstudio.spark.connections` option. By default, users are presented with possibility of both local and cluster connections, however, you can modify this behavior to present only one of these, or even a specific Spark master URL. Some commonly used combinations of connection choices include:
+
+| Value | Description  |
+|----------------------------|---------------------------------------------|
+| `c("local", "cluster")` | Default. Present connections to both local and cluster Spark instances. |
+| `"local"`| Present only connections to local Spark instances. |
+| `"cluster"`| Present only connections to Spark clusters. |
+| `"spark://local:7077"`| Present only a connection to a specific Spark cluster. |
+| `c("spark://local:7077", "cluster")`| Present a connection to a specific Spark cluster and other clusters. |
+
+
+### Spark Installations
+
+If you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. `/opt/spark`) then designating it as the Spark installation directory. 
+
+For example, after installing one or more versions of Spark to `/opt/spark` you would add the following to [Rprofile.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html):
+
+```{r}
+options(spark.install.dir = "/opt/spark")
 ```
 
-Once connected in a terminal shell, change the password for the `rstudio` user using:
-
-`passwd rstudio`
-
-You now have a Spark cluster running remotely on EC2. You can interact with this cluster in one of two ways: 
-
-1. You can login to the cluster remotely using SSH and an instance of RStudio already installed on the cluster; or 
-
-2. You can connect to this remote cluster from your local machine, using your own computer to run R and only using this EC2 cluster to host Spark for you.
-
-### RStudio Server
-
-You can choose to login to the cluster and run your R code on the cluster itself. The EC2 cluster has an instance of [RStudio Server](https://www.rstudio.com/products/rstudio/#Server) installed on it by default. Run the following command to open that instance in your web browser.
-
-```{r, eval=FALSE}
-spark_ec2_rstudio(cl)
-```
-
-#### Install Dependencies
-
-Using the remote SSH terminal into the cluster, run:
-
-```
-yum -y install openssl-devel libcurl libcurl-devel
-```
-
-Now in the RStudio window that you opened by running `spark_ec2_rstudio()`, run the following R commands to install the packages you'll want on this cluster.
-
-```{r, eval=FALSE}
-# install the latest development version of devtools (required)
-install.packages("devtools")
-devtools::install_github("hadley/devtools")
-devtools::reload(devtools::inst("devtools"))
-
-# install sparklyr
-devtools::install_github("rstudio/sparklyr", auth_token = "56aef3d82d3ef05755e40a4f6bdaab6fbed8a1f1")
-```
-
-
-#### Connect to Spark
-
-Once you've installed all the necessary packages on the RStudio instance running on the EC2 Spark cluster, you can establish a connection to Spark by running:
-
-```{r, eval=FALSE}
-master <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
-sc <- spark_connect(master)
-
-src_tbls(sc)
-```
-
-### Remote Connection
-
-The alternative approach to leverage the cluster on EC2 would be to run sparklyr on your own machine locally, and connect from your local machine to the remote Spark instance.
-
-This connection isn't permitted in the default configuration of the cluster, so you'll need to [open port 7077 in the EC2 security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) associated with your Spark Master. You can enable TCP traffic on port 7077 from whatever IP addresses will be running sparklyr that you want to be able to connect.
-
-Once you've changed the firewall settings, you can now connect to your EC2 Spark cluster from a local sparklyr. In the IDE, you can merely click the "New Connection" button, then configure "Master" to be a "Remote server..." and provide the address and port of your remote EC2 instance. You can find this information by running `spark_ec2_web(cl)` and pulling the value for the `URL` field on that page. It should look something like `spark://1.2.3.4.compute-1.amazonaws.com:7077`. Use that value for the "Remote Server" URL in your local IDE.
-
-
-
+If this directory is read-only for ordinary users then RStudio will not offer installation of additional versions, which will help guide users to a version that is known to be compatible with versions of Spark deployed on clusters in the same organization.
 
 

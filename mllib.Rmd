@@ -1,5 +1,5 @@
 ---
-title: "Maching learning with MLlib"
+title: "Maching learning with Spark ML"
 ---
 
 ```{r setup, include = FALSE}
@@ -8,89 +8,141 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-Just for reference, Spark provides two main APIs for machine learning -- the newer, more modern API called Spark.ML (http://spark.apache.org/docs/latest/ml-guide.html) built on top of Spark DataFrames, and the older API called Spark.MLlib built on top of RDD data structures (http://spark.apache.org/docs/latest/mllib-guide.html). We target the newer interface as it's both easier to use, and we expect it to be more actively maintained going forward for the Spark team. Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).
+You can orchestrate machine learning algorithms in a Spark cluster via specific functions in `sparklyr`. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning pipelines. 
 
-Right now, all of the regression models are of the form e.g.
+The following machine learning algorithms are supported in `sparklyr`:
 
-```r
-ml_*(x, response, features, <extra params>)
-```
+* Classification 
+    * Logistic regression
+    * Multilayer perceptron classifier (MLPC)
+    * Random forest classifier
+    * Gradient-boosted tree classifier
+    * One vs rest classifier
+    * Naive Bayes
+* Regression
+    * Linear regression
+    * Random forest regression
+    * Gradient-boosted tree regression 
+    * Survival regression
+* Clustering
+    * K-means
+    * Latent Dirichlet allocation (LDA)
+* Dimensionality reduction
+    * Pricipal components analysis (PCA)
 
-replacing '*' with the name of the regression / classification routine, and with 'response' being omitted in the case of classification routines (e.g. k-means). Extra parameters are available as appropriate; e.g. random forest regression allows you to tweak the number of trees, the tree depth, and so on.
+You can also use specific functions in `sparklyr` to prepare data via the machine learning APIs. These functions help you extract, transform, and subset your data as part of an analytic pipeline.
 
-Using this interface, you can generally write code like e.g.:
+* Extraction: Extracting features from “raw” data
+* Transformation: Scaling, converting, or modifying features
+* Selection: Selecting a subset from a larger set of features
 
+Note that `dplyr` connects to the Spark SQL API, whereas these `sparklyr` functions connect to the Spark Machine Learning APIs.
+
+## Details
+
+Spark provides two main APIs for machine learning -- the newer, more modern API called [Spark.ML](http://spark.apache.org/docs/latest/ml-guide.html) built on top of Spark DataFrames, and the older API called [Spark.MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) built on top of RDD data structures . We target the newer interface. 
+
+Note that all of the routines we export should work in Spark 1.6.1, but in some cases some model fits don't provide as much information as in Spark 2.0.0 (e.g. in Spark 1.6.1 k-means doesn't provide the 'explained variance' for each component).
+
+****
+
+## Concepts
+
+`sparklyr` functions that connect to the machine learning Spark APIs fall into three categories.
+
+- Machine learning algorithms for analyzing data (`ml_*`)
+- Feature transformers for manipulating individual features (`ft_*`)
+- Verbs for manipulating DataFrames (`sdf_*`)
+
+In this example we'll use the `mtcars` data set to build a model. First we will initialize the Spark connection and copy the data into Spark.
 
 ```{r}
- fit <- tbl %>%
-  mutate(binary_response = response_var > 10) %>%
-  ml_logistic_regression(response = "binary_response", 
-                         features = c("feature_1", "feature_2"))
+library(sparklyr)
+library(ggplot2)
+library(dplyr)
+sc <- spark_connect("local", version = "1.6.1")
+mtcars_df <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
 ```
 
-It's a fairly 'low-level' interface; accepting things like formula model specifications or dplyr select statements is something we'll hopefully do in the future, but we might not get to it before useR.
-
-Model fits can generally be used in a similar way to R model fits -- e.g.
+We will then use a linear model to predict fuel consumption (mpg) as a function of weight (wt) and cylindars (cyl).
 
 ```{r}
+(fit <- ml_linear_regression(mtcars_df, "mpg", c("wt", "cyl")))
+```
+```
+Call: mpg ~ wt + cyl
+
+Coefficients:
+(Intercept)          wt         cyl 
+  39.686261   -3.190972   -1.507795 
+```
+
+We can also apply standard function methods in R to the fitted model.
+
+```{r, eval=FALSE}
+summary(fit)
 coefficients(fit)
 residuals(fit)
-predict(fit, newdata = df)
+predict(fit, mtcars_df)
 ```
 
-Note that 'predict' should accept both raw R data.frames, dplyr tbls and also Spark DataFrames / tbl_spark.
-
-Depending on the model fit, different components might be available -- you can generally see what's available just by inspecting the autocompletion results with '$' (anything that we know will be 'small' will be returned to R eagerly; e.g. scalars describing the model fit). I'll try to amend the documentation to describe the return values as well, but the elements should be mostly self-explanatory for users already familiar with the models.
-
-Finally, all of these routines except things that can be coerced to Spark DataFrames -- this usually implies a `tbl_spark` (for dplyr pipelines), but we could definitely implement something that transparently converts a raw data.frame to a Spark DataFrame, and fit models with that. The intention is definitely that users will use 'tbl_spark's when working with sparklyr, though.
-
----
-
-The other thing we're implementing is Spark's 'feature transformers'; currently a subset are implemented and exported with the 'ft_' prefix. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns. A simple example is the binarizer -- it just binarizes a numeric column on some threshold. It could be used like e.g.
+Typically, data analysis requires data preprocessing. We can transform individual features by calling them inside of `sdf_mutate`. These routines generally take one or more input columns and generate a new output column formed as a transformation of those columns. A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. For example, we can set compare 8 cylindar vehicles to all other types of vehicles with the following:
 
 ```{r}
-diamonds_tbl %>%
-  sdf_mutate(binary = ft_binarizer(carat, 0.25))
+sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 8))
 ```
 
-  This would generate a new column 'binary' in the dataset, made by thresholding the 'carat' variable.
+It's important to note that the Spark DataFrame verbs (including sdf_mutate in the example here) compute their results eagerly whereas dplyr verbs compute their results lazily. In the example below, we combine Spark DataFrame verbs and dplyr verbs in the same chain.
 
-Note that these are used with a separate interface, sdf_mutate, as their results are computed eagerly, rather than lazily, as with the SQL queries generated by a regular 'mutate'. This implies that in something like:
+```{r, eval=FALSE}
+mtcars_df %>%
+  mutate(weight = weight * 1000) %>%
+  sdf_mutate(mtcars_df, cyl8 = ft_binarizer(cyl, 6))
+```
+
+You can partion data into training and testing subsets with the `sdf_partition` verb.
 
 ```{r}
-
-tbl <- diamonds_tbl %>%
-  mutate(carat_squared = carat * carat) %>%
-  sdf_mutate(binary = ft_binarizer(carat_squared, 0.25))
+mtcars_df_part <- sdf_partition(mtcars_df, training=0.6, test=0.4)
+fit_training <- ml_linear_regression(mtcars_df_part$training, "mpg", c("wt", "cyl"))
+predict(fit_training, mtcars_df_part$test)
 ```
 
-
-The pending SQL is evaluated, and so the table returned is now a mutated form of the original (rather than just the original table with some pending operations waiting for a future collect). While this computation occurs eagerly, note that we don't 'collect' the dataset; it's still just a Spark DataFrame living over in Spark, but now it's just now a separate entity from the original Spark DataFrame. (Hopefully this all makes sense!)
-
-The other routine that should be interesting here is `sdf_partition` -- it performs a random split (e.g. for testing + training), and returns a list of tbl_sparks where you could e.g. train a model on one set, and test its predictive power on another. (I'll update the docs with examples so it becomes more obvious how it can be used)
+****
 
 ## Examples
 
 ### Initialization
 
-```{r}
+```{r, eval=FALSE}
 library(sparklyr)
 library(ggplot2)
-
+library(dplyr)
 sc <- spark_connect("local", version = "1.6.1")
-
 iris_tbl <- copy_to(sc, iris, "iris", overwrite = TRUE)
+iris_tbl
 ```
+```
+Source:   query [?? x 5]
+Database: spark connection master=local app=sparklyr local=TRUE
 
+   Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+          <dbl>       <dbl>        <dbl>       <dbl>   <chr>
+1           5.1         3.5          1.4         0.2  setosa
+2           4.9         3.0          1.4         0.2  setosa
+3           4.7         3.2          1.3         0.2  setosa
+4           4.6         3.1          1.5         0.2  setosa
+5           5.0         3.6          1.4         0.2  setosa
+6           5.4         3.9          1.7         0.4  setosa
+7           4.6         3.4          1.4         0.3  setosa
+8           5.0         3.4          1.5         0.2  setosa
+9           4.4         2.9          1.4         0.2  setosa
+10          4.9         3.1          1.5         0.1  setosa
+# ... with more rows
+```
+*Note that the names of variables within the have been transformed (replacing `.` with `_`) to work around an issue in the Spark 2.0.0-preview used in constructing this document -- we expect the issue to be resolved with the release of Spark 2.0.0.*
 
 ### KMeans 
-
-Basing kmeans over Spark on [spark.mllib K-means](http://spark.apache.org/docs/latest/mllib-clustering.html#k-means)
-
-Note that the names of variables within the iris `tbl` have been transformed
-(replacing `.` with `_`) to work around an issue in the Spark 2.0.0-preview
-used in constructing this document -- we expect the issue to be resolved with
-the release of Spark 2.0.0.
 
 ```{r}
 model <- iris_tbl %>%
@@ -103,9 +155,9 @@ iris_tbl %>%
   ggplot(aes(Petal_Length, Petal_Width)) +
     geom_point(data = model$centers, aes(Petal_Width, Petal_Length), size = 60, alpha = 0.1) +
     geom_point(aes(Petal_Width, Petal_Length), size = 2, alpha = 0.5)
-
 ```
 
+![](images/ml_kmeans.png)
 
 ### Linear Regression
 
@@ -124,6 +176,8 @@ iris_tbl %>%
                     color = "red"))
 ```
 
+![](images/ml_linreg.png)
+
 ### Logistic Regression
 
 ```{r}
@@ -139,7 +193,29 @@ model <- beaver_tbl %>%
 
 print(model)
 ```
+```
+Source:   query [?? x 4]
+Database: spark connection master=local app=sparklyr local=TRUE
 
+     day  time  temp      activ
+   <dbl> <dbl> <dbl>      <chr>
+1    307   930 36.58 Non-Active
+2    307   940 36.73 Non-Active
+3    307   950 36.93 Non-Active
+4    307  1000 37.15 Non-Active
+5    307  1010 37.23 Non-Active
+6    307  1020 37.24 Non-Active
+7    307  1030 37.24 Non-Active
+8    307  1040 36.90 Non-Active
+9    307  1050 36.95 Non-Active
+10   307  1100 36.89 Non-Active
+# ... with more rows
+Call: response ~ temp
+
+Coefficients:
+(Intercept)        temp 
+ -550.52331    14.69184 
+ ```
 
 ### Partitioning 
 
@@ -152,7 +228,9 @@ fit <- partitions$training %>%
 
 predict(fit, partitions$test)
 ```
-
+```
+ [1] 1.744571 1.521752 1.521752 1.521752 1.298933 1.521752 2.413029 1.521752 1.967390 1.521752 1.521752 1.521752 1.521752 3.527124 3.972763 3.972763 3.749944 5.309678 4.418401 5.086858 4.641220 4.418401 4.641220 4.195582 5.086858 3.972763 5.309678 5.086858 3.972763 5.532497 5.532497 3.972763 4.195582 6.423773 6.200954 4.641220 5.086858
+```
 
 ### Principal Components Analysis 
 
@@ -161,6 +239,17 @@ model <- tbl(sc, "iris") %>%
   select(-Species) %>%
   ml_pca()
 print(model)
+```
+```
+Explained variance:
+[not available in this version of Spark]
+
+Rotation:
+                     PC1         PC2         PC3        PC4
+Sepal_Length -0.36138659 -0.65658877  0.58202985  0.3154872
+Sepal_Width   0.08452251 -0.73016143 -0.59791083 -0.3197231
+Petal_Length -0.85667061  0.17337266 -0.07623608 -0.4798390
+Petal_Width  -0.35828920  0.07548102 -0.54583143  0.7536574
 ```
 
 ### Random Forests
@@ -177,5 +266,7 @@ mForest <- iris_tbl %>%
 mPredict <- predict(mForest, iris_tbl)
 head(mPredict)
 ```
-
+```
+[1] "setosa" "setosa" "setosa" "setosa" "setosa" "setosa"
+```
 

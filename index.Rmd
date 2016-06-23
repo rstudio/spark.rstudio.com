@@ -38,13 +38,18 @@ install_github("rstudio/sparklyr")
 
 If you use the RStudio IDE, you should also download the latest [preview release](https://www.rstudio.com/products/rstudio/download/preview/) of the IDE which includes several enhancements for interacting with Spark (see the [RStudio IDE section](#rstudio-ide) below for more details).
 
-## Connecting to Spark {.tabset .tabset-fade}
+## Connecting to Spark
 
 If you're just getting started with Spark, sparklyr provides a way to run Spark on your local machine; in this mode, you don't need any additional servers or infrastructure. Alternatively, you can use sparklyr within a Spark cluster.
 
-Below there are instructions for connecting to either a local Spark instance or for using sparklyr within a cluster. For additional information see the [Deployment](deployment.html) section.
+Below, you can find how to connect to either a local Spark instance or use sparklyr within a cluster. If you're using the RStudio IDE, you can click "New Connection" in the **Spark** pane and have it produce this code for you.
 
-### Local
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#local">Local</a></li>
+  <li><a data-toggle="tab" href="#cluster">Cluster</a></li>
+</ul>
+<div class="tab-content outlined-tab-content">
+<div id="local" class="tab-pane fade in active">
 
 To run in local mode you'll first need to install a local version of Spark. You can do this via the [install_spark](reference/sparklyr/latest/install_spark.html) function:
 
@@ -58,8 +63,8 @@ You can connect to this local version of Spark by passing `"master = local"` to 
 ```{r, eval=FALSE}
 sc <- spark_connect(master = "local")
 ```
-
-### Cluster
+</div>
+<div id="cluster" class="tab-pane fade">
 
 To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) or an SSH session either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
 
@@ -74,6 +79,25 @@ sc <- spark_connect(master = "spark://spark.example.com:7077")
 
 Where `spark.example.com` is the address of your Spark cluster's master node, and `7077` is the port on which Spark is listening. If you are running directly on the master node then the address of the master would be typically be  `"spark://local:7077"`.
 
+</div>
+</div>
+
+You can view the Spark web UI via the [spark_web](reference/sparklyr/latest/spark_web.html) function, and view the Spark log via the [spark_log](reference/sparklyr/latest/spark_log.html) function:
+
+```{r}
+spark_web(sc)
+spark_log(sc)
+```
+
+You can disconnect from Spark using the [spark_disconnect](reference/sparklyr/latest/spark_disconnect.html) function:
+
+```{r}
+spark_disconnect(sc)
+```
+
+
+
+For additional information on deployment and configuration of Spark and sparklyr see the [Deployment](deployment.html) section.
 
 ## Spark DataFrames
 
@@ -254,13 +278,6 @@ mPredict <- predict(mForest, flights_tbl)
 ```
 
 You would now have predictions for how long a flight's departure would be delayed for each day of the year.
-
-## Tools
-
-There are a variety of tools that are included in sparklyr that make it easier to perform various common tasks while interacting with Spark clusters.
-
-- `spark_web(sc)` will bring up the Spark web interface for a `spark_connection`. You can use this interface to inspect the currently running applications and even drill down into particular tasks.
-- `spark_log(sc)` prints the recent logs from a `spark_connection`. You can configure the number of log lines you want this function to include.
 
 ## RStudio IDE
 

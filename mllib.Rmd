@@ -23,7 +23,7 @@ A typical machine learning pipeline with **sparklyr** might be composed of the f
 3. Choose an appropriate machine learning algorithm from the `ml_*` family of functions to model your data,
 4. Inspect and use your model fit to make further predictions on new data.
 
-Let's walk through a motivating example to see how these pieces might come together. We'll use `ml_linear_regression` to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
+Let's walk through a motivating example to see how these pieces might come together. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
 
@@ -183,7 +183,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 # ... with more rows
 ```
 
-`sdf_mutate()` is provided as a helper function, to allow you to use feature transformers within a pipeline. For example, the previous code snippet could have been written as:
+[sdf_mutate](reference/sparklyr/latest/sdf_mutate.html) is provided as a helper function, to allow you to use feature transformers within a pipeline. For example, the previous code snippet could have been written as:
 
 ```{r, eval=FALSE}
 mtcars_tbl %>%
@@ -218,7 +218,7 @@ It's important to understand that the `sdf_*` and `ft_*` family of functions ret
 
 3. A `tbl_spark` has a name in the underlying Spark SQL context, thereby allowing you to query that table in SQL queries; the lower-level Spark DataFrames returned do not have an associated table name.
 
-If you need to transform a Spark DataFrame back into a `tbl_spark` within a pipeline, you can use `sdf_register()` to assign it a new name, and return that Spark DataFrame as a `tbl_spark`.
+If you need to transform a Spark DataFrame back into a `tbl_spark` within a pipeline, you can use [sdf_register](reference/sparklyr/latest/sdf_register.html) to assign it a new name, and return that Spark DataFrame as a `tbl_spark`.
 
 ## Examples
 

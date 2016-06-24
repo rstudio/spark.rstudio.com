@@ -255,15 +255,15 @@ of equal size.</p>
 
       <p></p>
   
-      <p>The family of functions prefixed with <code>sdf_</code> generally
-access the Scala Spark DataFrame API directly, and return a
-lower-level Spark DataFrame object (represented in <span style="R">R</span> as a
-<code>sparkapi_jobj</code>). To bring these back to the <code>dplyr</code>
-world (in order to use, for example, <code>mutate</code>), you need
-to invoke <code><a href='sdf_register.html'>sdf_register</a>()</code>. This gives the Spark
-DataFrame a table name in the associated Spark SQL context, and
-then returns a <code>tbl_spark</code> which you can then use with
-the <code>dplyr</code> interface.</p>
+      <p>The family of functions prefixed with <code>sdf_</code> generally access the Scala
+Spark DataFrame API directly, as opposed to the <code>dplyr</code> interface which
+uses Spark SQL. These functions will 'force' any pending SQL in a
+<code>dplyr</code> pipeline, such that the resulting <code>tbl_spark</code> object
+returned will no longer have the attached 'lazy' SQL operations. Note that
+the underlying Spark DataFrame <em>does</em> execute its operations lazily, so
+that even though the pending set of operations (currently) are not exposed at
+the <span style="R">R</span> level, these operations will only be executed when you explicitly
+<code>collect()</code> the table.</p>
   
     </div>
       </div>
@@ -277,10 +277,10 @@ the <code>dplyr</code> interface.</p>
       
     <h2>See also</h2>
     
-Other Spark data frames: <code><a href='sdf_collect.html'>sdf_collect</a></code>,
-  <code><a href='sdf_copy_to.html'>sdf_copy_to</a></code>, <code><a href='sdf_mutate.html'>sdf_mutate</a></code>,
-  <code><a href='sdf_predict.html'>sdf_predict</a></code>, <code><a href='sdf_register.html'>sdf_register</a></code>,
-  <code><a href='sdf_sample.html'>sdf_sample</a></code>, <code><a href='sdf_sort.html'>sdf_sort</a></code>
+Other Spark data frames: <code><a href='sdf_copy_to.html'>sdf_copy_to</a></code>,
+  <code><a href='sdf_mutate.html'>sdf_mutate</a></code>, <code><a href='sdf_predict.html'>sdf_predict</a></code>,
+  <code><a href='sdf_register.html'>sdf_register</a></code>, <code><a href='sdf_sample.html'>sdf_sample</a></code>,
+  <code><a href='sdf_sort.html'>sdf_sort</a></code>
 
         
   </div>

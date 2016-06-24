@@ -1,0 +1,34 @@
+---
+title: "Frequently Asked Questions"
+output: 
+  html_document:
+    toc: false
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+<div style="height: 20px;"></div>
+
+### What is the difference between sparklyr and SparkR?
+
+The [SparkR](https://spark.apache.org/docs/latest/sparkr.html) package provides another front-end to Spark from R, and is integrated into the core distribution of Apache Spark. The sparklyr package is an alternative front-end for R which is built on the same core R to Spark bridge that SparkR is, but has some differences in approach:
+
+1. The sparklyr package implements a full dplyr back-end for Spark. The SparkR package includes  functions that carry the same names as dplyr functions and have similar interfaces, but are nevertheless incompatible with dplyr, making it impractical to use both SparkR and dplyr in the same R session.
+
+2. The SparkR package is distributed within Apache Spark rather than on CRAN. This makes it impossible for external packages published to CRAN to depend on SparkR. The sparklyr package will be distributed on CRAN.
+
+3. The SparkR package includes an R to Spark bridge which enables calling arbitrary functions in the Spark public API. However, the R to Spark bridge is not publicly exported so it's impossible for external packages to use the SparkR connection to Spark to interact with the API. This means that all features of the R to Spark interface need to provided as functions in the SparkR package (as opposed to external packages). The sparklyr package exposes this R to Spark bridge publicly so that external packages can access it.
+
+On the final point, we are working closly with the Apache Spark project to attempt to define an API for extensions that could be used by both the SparkR and sparklyr packages. See the [Extensions](extensions.html) section for additonal details.
+
+
+
+### How can I execute R code on a Spark cluster?
+
+
+
+### How can I contribute to sparklyr?
+

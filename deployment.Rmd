@@ -8,7 +8,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Deployment
 
-There are two well supported deployment modes for **sparklyr**: developing locally (typically on the desktop with smaller/sampled datasets) and working directly within a Spark cluster via RStudio Server.
+There are two well supported deployment modes for **sparklyr**: developing locally (typically on the desktop with smaller/sampled datasets) and working directly within or alongside a Spark cluster via SSH or RStudio Server.
 
 ### Local Deployment
 
@@ -30,7 +30,9 @@ For the local development scenario, see the [Configuration] section below for de
 
 ### Cluster Deployment
 
-To use sparklyr within a Spark cluster you should run [RStudio Server](https://www.rstudio.com/products/rstudio/) either directly on one of the cluster nodes or on a machine close to the cluster that has a Spark configuration identical to that of the cluster nodes.
+To use spaklyr with a remote Spark cluster you should locate your R session on a machine that is either directly on one of the cluster nodes or is close to the cluster (for networking performance). In the case where R is not running directly on the cluster you should also ensure that the machine has a Spark version and configuration **identical** to that of the cluster nodes.
+
+The most straightforward way to run R within or near to the cluster is either a remote SSH session or via  [RStudio Server](https://www.rstudio.com/products/rstudio/).
 
 In cluster mode you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
 
@@ -53,7 +55,15 @@ This section describes the various options available for configuring both the be
 
 ### Config Files
 
-By default the sparklyr package reads it's configuration from a file named `config.yml` located in the current working directory (or in parent directories if not located in the working directory). This file is not required and only need be provided for overriding default behavior. The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
+The configuration for a Spark connection is specified via the `config` parameter of the [spark_connect](reference/sparklyr/latest/spark_connect.html) function. By default the configuration is established by calling the [spark_config](reference/sparklyr/latest/spark_config.html) function. This code represents the default behavior:
+
+```{r}
+spark_connect(master = "local", config = spark_config())
+```
+
+By default the [spark_config](reference/sparklyr/latest/spark_config.html) function reads configuration data from a file named `config.yml` located in the current working directory (or in parent directories if not located in the working directory). This file is not required and only need be provided for overriding default behavior. You can also specify an alternate config file name and/or location.
+
+The `config.yml` file is in turn processed using the [config](https://github.com/rstudio/config) package, which enables support for multiple named configuration profiles.
 
 ### Package Options
 

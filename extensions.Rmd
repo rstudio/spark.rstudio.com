@@ -1,5 +1,8 @@
 ---
 title: "Creating Extensions for sparklyr"
+output:
+  html_document:
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
@@ -66,9 +69,9 @@ Here's an example of a wrapper function for the the text file line counting func
 
 ```{r}
 count_lines <- function(sc, path) {
-  sparkapi_spark_context(sc) %>% 
-    sparkapi_invoke("textFile", path, as.integer(1)) %>% 
-      sparkapi_invoke("count")
+  sparkapi_spark_context(sc) %>%
+    sparkapi_invoke("textFile", path, 1L) %>%
+    sparkapi_invoke("count")
 }
 ```
 
@@ -138,6 +141,14 @@ When users connect to a Spark cluster and want to use your extension package wit
 library(sparklyr)
 sc <- spark_connect(master = "local", version = "1.6.1", extensions = c("sparkds"))
 ```
+
+### CRAN 
+
+When including a JAR file within an R package distributed on CRAN you should follow the guidlines provided in [Writing R Extensions](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Non_002dR-scripts-in-packages):
+
+"Java code is a special case: except for very small programs, .java files should be byte-compiled (to a .class file) and distributed as part of a .jar file: the conventional location for the .jar file(s) is `inst/java`. It is desirable (and required under an Open Source license) to make the Java source files available: this is best done in a top-level `java` directory in the package—the source files should not be installed."
+
+
 
 
 

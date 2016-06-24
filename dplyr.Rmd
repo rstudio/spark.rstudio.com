@@ -11,7 +11,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-**dplyr** is an R package for working with structured data both in and outside of R. dplyr makes data manipulation for R users easy, consistent, and high performant. With dplyr as an interface to manipulating Spark data frames you can:
+[**dplyr**](https://cran.r-project.org/web/packages/dplyr/index.html) is an R package for working with structured data both in and outside of R. dplyr makes data manipulation for R users easy, consistent, and high performant. With dplyr as an interface to manipulating Spark data frames you can:
 
 * Select, filter, and aggregate data
 * Use window functions (e.g. for sampling)
@@ -20,9 +20,24 @@ knitr::opts_chunk$set(eval = FALSE)
 
 Statements in dplyr can be chained together using pipes defined by the [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) R package. dplyr also supports [non-standard evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html) of its arguments. For more information on dplyr, see the [introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html), a guide for connecting to [databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html), and a variety of [vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
 
+
+## Reading Data
+
+You can read data into Spark DataFrames using the following functions: 
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`spark_read_csv`](reference/sparklyr/latest/spark_read_csv.html) | Reads a CSV file and provides a data source compatible with dplyr|
+| [`spark_read_json`](reference/sparklyr/latest/spark_read_json.html) | Reads a JSON file and provides a data source compatible with dplyr |
+| [`spark_read_parquet`](reference/sparklyr/latest/spark_read_json.html) | Reads a parquet file and provides a data source compatible with dplyr |
+
+Regardless of the format of your data, Spark supports reading data from a variety of different data sources. These include data stored on HDFS (`hdfs://` protocol), Amazon S3 (`s3n://` protocol), or local files available to the Spark worker nodes (`file://` protocol) 
+
+Each of these functions returns a reference to a Spark DataFrame which can be used as a dplyr table (`tbl`).
+
 ### Flights Data
 
-To explore the basic data manipulation verbs of dplyr, we'll start with data stored in the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
+This guide will demonstrate some of the basic data manipulation verbs of dplyr by using data from the `nycflights13` R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?nycflights13`
 
 Connect to the cluster and copy the flights data using the `copy_to` function. Caveat: The flight data in `nycflights13` is convenient for dplyr demonstrations because it is small, but in practice large data should rarely be copied directly from R objects. 
 
@@ -40,7 +55,7 @@ src_tbls(sc)
 [1] "airlines" "flights"
 ```
 
-## dplyr verbs
+## dplyr Verbs
 
 Verbs are dplyr commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:
 
@@ -401,7 +416,7 @@ sample_n(flights, 10)
 sample_frac(flights, 0.01)
 ```
 
-## Saving Data
+## Writing Data
 
 It is often useful to save the results of your analysis or the tables that you have generated on your Spark cluster into persistent storage. The best option in many scenarios is to write the table out to a [Parquet](https://parquet.apache.org/) file using the [spark_write_parquet](reference/sparklyr/spark_write_parquet.html) function. For example:
 

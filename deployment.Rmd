@@ -8,7 +8,10 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Deployment
 
-There are two well supported deployment modes for **sparklyr**: developing locally (typically on the desktop with smaller/sampled datasets) and working directly within or alongside a Spark cluster via SSH or RStudio Server.
+There are two well supported deployment modes for **sparklyr**: 
+
+- Local --- Working on a local desktop typically with smaller/sampled datasets
+- Cluster --- Working directly within or alongside a Spark cluster.
 
 ### Local Deployment
 
@@ -17,12 +20,13 @@ Local mode is an excellent way to learn and experiment with Spark. Local mode al
 To work in local mode you should first install a version of Spark for local use. You can do this using the [spark_install](reference/sparklyr/latest/spark_install.html) function, for example:
 
 ```{r}
-spark_install(version = "1.6.1", hadoop_version = "2.6")
+spakrlyr::spark_install(version = "1.6.1", hadoop_version = "2.6")
 ```
 
 To connect to the local Spark instance you pass "local" as the value of the Spark master node to [spark_connect](reference/sparklyr/latest/spark_connect.html):
 
 ```{r}
+library(sparklyr)
 sc <- spark_connect(master = "local")
 ```
 
@@ -39,15 +43,33 @@ In cluster mode you use the version of Spark already deployed on the cluster nod
 To connect, pass the address of the master node to [spark_connect](reference/sparklyr/latest/spark_connect.html), for example:
 
 ```{r}
+library(sparklyr)
 sc <- spark_connect(master = "spark://local:7077")
 ```
 
 If you are running on EC2 using the Spark [EC2 deployment scripts](http://spark.apache.org/docs/latest/ec2-scripts.html) then you can read the master from `/root/spark-ec2/cluster-url`, for example:
 
 ```{r}
+library(sparklyr)
 master <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
 sc <- spark_connect(master)
 ```
+
+### Connection Tools
+
+You can view the Spark web UI via the [spark_web](reference/sparklyr/latest/spark_web.html) function, and view the Spark log via the [spark_log](reference/sparklyr/latest/spark_log.html) function:
+
+```{r}
+spark_web(sc)
+spark_log(sc)
+```
+
+You can disconnect from Spark using the [spark_disconnect](reference/sparklyr/latest/spark_disconnect.html) function:
+
+```{r}
+spark_disconnect(sc)
+```
+
 
 ## Configuration 
 

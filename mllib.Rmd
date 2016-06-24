@@ -1,5 +1,5 @@
 ---
-title: "Maching Learning with MLlib"
+title: "Machine Learning with MLlib"
 ---
 
 ```{r setup, include=FALSE}
@@ -8,28 +8,27 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-You can orchestrate machine learning algorithms in a Spark cluster via the [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) functions in **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
+You can orchestrate machine learning algorithms in a Spark cluster via the [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) functions in **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows, and easily build and tune your own machine learning pipelines within R.
 
-**sparklyr** functions that connect to the machine learning Spark APIs fall into three categories.
+**sparklyr** provides three families of functions that you might use within a machine learning pipeline within R:
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
 - Functions for manipulating Spark DataFrames (`sdf_*`)
 
-A typical machine learning pipeline with **sparklyr** might be composed of the following stages. Given a Spark DataFrame, you might need to:
+A typical machine learning pipeline with **sparklyr** might be composed of the following stages. To fit a model, you might need to:
 
 1. Perform SQL queries through the **sparklyr** [dplyr](dplyr.html) interface,
 2. Use the `sdf_*` and `ft_*` family of functions to generate new columns, or partition your data set,
 3. Choose an appropriate machine learning algorithm from the `ml_*` family of functions to model your data,
-4. Inspect and use your model fit to make further predictions on new data.
+4. Inspect the quality of your model fit, and use it to make predictions with new data.
 
-Let's walk through a motivating example to see how these pieces might come together. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
+Let's walk through a motivating example to see how these pieces might come together. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
 
 ```{r}
 library(sparklyr)
-library(ggplot2)
 library(dplyr)
 sc <- spark_connect("local", version = "1.6.1")
 mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
@@ -53,6 +52,7 @@ partitions <- mtcars_tbl %>%
 # fit a linear mdoel to the training dataset
 fit <- partitions$training %>%
   ml_linear_regression(response = "mpg", features = c("wt", "cyl"))
+print(fit)
 ```
 ```
 Call:
@@ -82,7 +82,7 @@ Coefficients:
 wt          -2.81846    0.96619 -2.9171 0.0331257 *  
 cyl         -0.92319    0.54639 -1.6896 0.1518998    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 R-Squared: 0.8274
 Root Mean Squared Error: 1.422
@@ -90,22 +90,32 @@ Root Mean Squared Error: 1.422
 
 The `summary()` suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
 
-Let's use our Spark model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption.
+Let's use our Spark model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We'll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
 
 ```{r}
 library(ggplot2)
 
+# compute predicted values on our test dataset
+predicted <- predict(fit, newdata = partitions$test)
+
+# extract the true 'mpg' values from our test dataset
+actual <- partitions$test %>%
+  select(mpg) %>%
+  collect() %>%
+  `[[`("mpg")
+
 # produce a data.frame housing our predicted + actual 'mpg' values
 data <- data.frame(
-  predicted = predict(fit, newdata = partitions$test),
-  actual    = sdf_collect(partitions$test)$mpg
+  predicted = predicted,
+  actual    = actual
 )
 
 # plot predicted vs. actual values
 ggplot(data, aes(x = actual, y = predicted)) +
+  geom_abline(lty = "dashed", col = "red") +
   geom_point() +
-  geom_abline(lty = "dotted", col = "red") +
   theme(plot.title = element_text(hjust = 0.5)) +
+  coord_fixed(ratio = 1) +
   labs(
     x = "Actual Fuel Consumption",
     y = "Predicted Fuel Consumption",
@@ -115,7 +125,9 @@ ggplot(data, aes(x = actual, y = predicted)) +
 
 ![](images/mtcars-regression.png)
 
-Our model appears to do a fairly good job of predicting a car's average fuel consumption.
+Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
+
+As you can see, we can easily and effectively combine dplyr data transformation pipelines with the MLlib modelling interface provided by Spark.
 
 ## Algorithms
 
@@ -138,7 +150,7 @@ Spark's machine learning library can be accessed from **sparklyr** through the `
 
 ## Transformers
 
-A model is often fit not on the columns of data within a dataset as-is, but instead on some transformation of those columns. Spark provides a large number of algorithms for transforming features in a Spark DataFrame, and **sparklyr** exposes these within the `ft_*` family of functions. These routines generally take one or more input columns and generate a new output column formed as a transformation of those columns.
+A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within in a Spark DataFrame, and **sparklyr** exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
 
 | Function | Description  |
 |----------------------------|---------------------------------------------|
@@ -155,14 +167,12 @@ A model is often fit not on the columns of data within a dataset as-is, but inst
 A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
 
 ```{r}
-spark_df <- ft_binarizer(
+ft_binarizer(
   mtcars_tbl,
   input_col = "mpg",
   output_col = "mpg20",
   threshold = 20
 )
-
-sdf_register(spark_df, "mtcars_mutated")
 ```
 ```
 Source:   query [?? x 12]
@@ -187,9 +197,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 
 ```{r, eval=FALSE}
 mtcars_tbl %>%
-  mutate(wt1000 = wt * 1000) %>%
-  sdf_mutate(cyl8 = ft_binarizer(cyl, 6)) %>%
-  sdf_register("mtcars_mutated")
+  sdf_mutate(cyl8 = ft_binarizer(cyl, threshold = 20))
 ```
 ```
 Source:   query [?? x 12]
@@ -209,16 +217,6 @@ Database: spark connection master=local app=sparklyr local=TRUE
 10  19.2     6 167.6   123  3.92 18.30     1     0     4     4  3440     0
 # ... with more rows
 ```
-
-It's important to understand that the `sdf_*` and `ft_*` family of functions return a lower-level Spark DataFrame wrapper object, rather than the `tbl_spark` that you might already be familiar with. These functions differ in their behavior from the `dplyr` interface in a few important ways:
-
-1. Operations on a `tbl_spark` (through the dplyr interface) operate entirely through the Spark SQL interface, while these functions often directly access the Spark DataFrame API;
-
-2. dplyr functions return their results lazily (the generated SQL is not evaluated until you explicitly `collect()` the result), while these functions eagerly generate new Spark DataFrames;
-
-3. A `tbl_spark` has a name in the underlying Spark SQL context, thereby allowing you to query that table in SQL queries; the lower-level Spark DataFrames returned do not have an associated table name.
-
-If you need to transform a Spark DataFrame back into a `tbl_spark` within a pipeline, you can use [sdf_register](reference/sparklyr/latest/sdf_register.html) to assign it a new name, and return that Spark DataFrame as a `tbl_spark`.
 
 ## Examples
 

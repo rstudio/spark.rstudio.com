@@ -38,7 +38,11 @@ To use spaklyr with a remote Spark cluster you should locate your R session on a
 
 The most straightforward way to run R within or near to the cluster is either a remote SSH session or via  [RStudio Server](https://www.rstudio.com/products/rstudio/).
 
-In cluster mode you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection.
+In cluster mode you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection. This would typically be done within the [Renviron.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html) configuration file. For example:
+
+```sh
+SPARK_HOME=/opt/spark/spark-1.6.1-bin-hadoop2.6
+```
 
 To connect, pass the address of the master node to [spark_connect](reference/sparklyr/latest/spark_connect.html), for example:
 
@@ -51,8 +55,8 @@ If you are running on EC2 using the Spark [EC2 deployment scripts](http://spark.
 
 ```{r}
 library(sparklyr)
-master <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
-sc <- spark_connect(master)
+cluster_url <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
+sc <- spark_connect(master = cluster_url)
 ```
 
 ### Connection Tools

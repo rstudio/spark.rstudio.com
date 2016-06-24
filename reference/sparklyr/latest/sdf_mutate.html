@@ -224,33 +224,6 @@ to mutate a Spark DataFrame.</p>
   
     </div>
 
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p><code>sdf_mutate()</code> differs from <code>mutate</code> in a number of important ways:</p>
-  
-      <p><ul>
-<li> <code>mutate</code> returns a <code>tbl_spark</code>, while <code>sdf_mutate</code> returns
-  a Spark DataFrame (represented by a <code>jobj</code>),</p>
-  
-      <p></li>
-<li> <code>mutate</code> works 'lazily' (the generated SQL is not evaluated until <code>collect</code>
-  is called), while <code>sdf_mutate</code> works 'eagerly' (the feature transformer, as well as
-  and pending SQL from a previous pipeline, is applied),</p>
-  
-      <p></li>
-<li> To transform the Spark DataFrame back to a <code>tbl_spark</code>, you should
-  use <code><a href='sdf_register.html'>sdf_register</a></code>.</p>
-  
-      <p></li>
-</ul></p>
-  
-      <p>Overall, this implies that if you wish to mix a <code>dplyr</code> pipeline with <code>sdf_mutate</code>,
-you should generally apply your <code>dplyr</code> pipeline first, then finalize your output with
-<code>sdf_mutate</code>. See <strong>Examples</strong> for an example of how this might be done.</p>
-  
-    </div>
-
     <div class="Transforming Spark DataFrames">
       <h2>Transforming Spark DataFrames</h2>
 
@@ -278,11 +251,6 @@ the <span style="R">R</span> level, these operations will only be executed when 
       
     <h2>See also</h2>
     
-Other Spark data frames: <code><a href='sdf_copy_to.html'>sdf_copy_to</a></code>,
-  <code><a href='sdf_partition.html'>sdf_partition</a></code>, <code><a href='sdf_predict.html'>sdf_predict</a></code>,
-  <code><a href='sdf_register.html'>sdf_register</a></code>, <code><a href='sdf_sample.html'>sdf_sample</a></code>,
-  <code><a href='sdf_sort.html'>sdf_sort</a></code>
-
 Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
   <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
   <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,

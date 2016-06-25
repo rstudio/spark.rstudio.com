@@ -23,6 +23,8 @@ A typical machine learning pipeline with **sparklyr** might be composed of the f
 3. Choose an appropriate machine learning algorithm from the `ml_*` family of functions to model your data,
 4. Inspect the quality of your model fit, and use it to make predictions with new data.
 
+### Simple Example {.toc-ignore}
+
 Let's walk through a motivating example to see how these pieces might come together. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
@@ -41,6 +43,8 @@ Now, let's perform some simple transformations -- we'll
 3. Partition the data into separate training and test data sets,
 4. Fit a model to our training data set,
 5. Evaluate our predictive performance on our test dataset.
+
+<div style="height: 10px;"></div>
 
 ```{r}
 # transform our data set, and then partition into 'training', 'test'
@@ -260,7 +264,8 @@ iris_tbl %>%
   select(Petal_Width, Petal_Length) %>%
   collect %>%
   ggplot(aes(Petal_Length, Petal_Width)) +
-    geom_point(data = model$centers, aes(Petal_Width, Petal_Length), size = 60, alpha = 0.1) +
+    geom_point(data = model$centers, aes(Petal_Width, Petal_Length), 
+               size = 60, alpha = 0.1) +
     geom_point(aes(Petal_Width, Petal_Length), size = 2, alpha = 0.5)
 ```
 

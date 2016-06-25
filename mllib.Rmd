@@ -371,9 +371,17 @@ mForest <- iris_tbl %>%
     num.trees = 20L
   )
 mPredict <- predict(mForest, iris_tbl)
-head(mPredict)
+iris_fit <- iris_tbl %>%
+  select(Species) %>%
+  collect %>%
+  mutate(fit = mPredict)
+table(iris_fit)
 ```
 ```
-[1] "setosa" "setosa" "setosa" "setosa" "setosa" "setosa"
+            fit
+Species      setosa versicolor virginica
+  setosa         50          0         0
+  versicolor      0         49         1
+  virginica       0          0        50
 ```
 

@@ -8,22 +8,43 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-You can orchestrate machine learning algorithms in a Spark cluster via the [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) functions in **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows, and easily build and tune your own machine learning pipelines within R.
+You can orchestrate machine learning algorithms in a Spark cluster via the [MLlib](http://spark.apache.org/docs/latest/mllib-guide.html) functions in sparklyr. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows, and easily build and tune your own machine learning pipelines within R.
 
-**sparklyr** provides three families of functions that you might use within a machine learning pipeline within R:
+sparklyr provides three families of functions that you might use within a machine learning pipeline within R:
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
 - Functions for manipulating Spark DataFrames (`sdf_*`)
 
-A typical machine learning pipeline with **sparklyr** might be composed of the following stages. To fit a model, you might need to:
+A typical machine learning pipeline with sparklyr might be composed of the following stages. To fit a model, you might need to:
 
-1. Perform SQL queries through the **sparklyr** [dplyr](dplyr.html) interface,
+1. Perform SQL queries through the sparklyr [dplyr](dplyr.html) interface,
 2. Use the `sdf_*` and `ft_*` family of functions to generate new columns, or partition your data set,
 3. Choose an appropriate machine learning algorithm from the `ml_*` family of functions to model your data,
 4. Inspect the quality of your model fit, and use it to make predictions with new data.
 
-Let's walk through a motivating example to see how these pieces might come together. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
+## Algorithms
+
+Spark's machine learning library can be accessed from sparklyr through the `ml_*` set of functions:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ml_kmeans`](reference/sparklyr/latest/ml_kmeans.html) | K-Means Clustering |
+| [`ml_linear_regression`](reference/sparklyr/latest/ml_linear_regression.html) | Linear Regression |
+| [`ml_logistic_regression`](reference/sparklyr/latest/ml_logistic_regression.html) | Logistic Regression |
+| [`ml_survival_regression`](reference/sparklyr/latest/ml_survival_regression.html) | Survival Regression |
+| [`ml_decision_tree`](reference/sparklyr/latest/ml_decision_tree.html) | Decision Trees |
+| [`ml_random_forest`](reference/sparklyr/latest/ml_random_forest.html) | Random Forests |
+| [`ml_gradient_boosted_trees`](reference/sparklyr/latest/ml_gradient_boosted_trees.html) | Gradient-Boosted Trees |
+| [`ml_pca`](reference/sparklyr/latest/ml_pca.html) | Principal Components Analysis |
+| [`ml_naive_bayes`](reference/sparklyr/latest/ml_naive_bayes.html) | Naive-Bayes |
+| [`ml_multilayer_perceptron`](reference/sparklyr/latest/ml_multilayer_perceptron.html) |  Multilayer Perceptron |
+| [`ml_lda`](reference/sparklyr/latest/ml_lda.html) | Latent Dirichlet Allocation |
+| [`ml_one_vs_rest`](reference/sparklyr/latest/ml_lda.html) | One vs Rest |
+
+### Algorithm Example {.toc-ignore}
+
+Let's walk through a simple example to demonstrate the use of MLlib algorithms within R. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
 
@@ -41,6 +62,8 @@ Now, let's perform some simple transformations -- we'll
 3. Partition the data into separate training and test data sets,
 4. Fit a model to our training data set,
 5. Evaluate our predictive performance on our test dataset.
+
+<div style="height: 10px;"></div>
 
 ```{r}
 # transform our data set, and then partition into 'training', 'test'
@@ -127,30 +150,12 @@ ggplot(data, aes(x = actual, y = predicted)) +
 
 Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
 
-As you can see, we can easily and effectively combine dplyr data transformation pipelines with the MLlib modelling interface provided by Spark.
+As you can see, we can easily and effectively combine dplyr data transformation pipelines with the MLlib modeling interface provided by Spark.
 
-## Algorithms
-
-Spark's machine learning library can be accessed from **sparklyr** through the `ml_*` set of functions:
-
-| Function | Description  |
-|----------------------------|---------------------------------------------|
-| [`ml_kmeans`](reference/sparklyr/latest/ml_kmeans.html) | K-Means Clustering |
-| [`ml_linear_regression`](reference/sparklyr/latest/ml_linear_regression.html) | Linear Regression |
-| [`ml_logistic_regression`](reference/sparklyr/latest/ml_logistic_regression.html) | Logistic Regression |
-| [`ml_survival_regression`](reference/sparklyr/latest/ml_survival_regression.html) | Survival Regression |
-| [`ml_decision_tree`](reference/sparklyr/latest/ml_decision_tree.html) | Decision Trees |
-| [`ml_random_forest`](reference/sparklyr/latest/ml_random_forest.html) | Random Forests |
-| [`ml_gradient_boosted_trees`](reference/sparklyr/latest/ml_gradient_boosted_trees.html) | Gradient-Boosted Trees |
-| [`ml_pca`](reference/sparklyr/latest/ml_pca.html) | Principal Components Analysis |
-| [`ml_naive_bayes`](reference/sparklyr/latest/ml_naive_bayes.html) | Naive-Bayes |
-| [`ml_multilayer_perceptron`](reference/sparklyr/latest/ml_multilayer_perceptron.html) |  Multilayer Perceptron |
-| [`ml_lda`](reference/sparklyr/latest/ml_lda.html) | Latent Dirichlet Allocation |
-| [`ml_one_vs_rest`](reference/sparklyr/latest/ml_lda.html) | One vs Rest |
 
 ## Transformers
 
-A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within in a Spark DataFrame, and **sparklyr** exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
+A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within in a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
 
 | Function | Description  |
 |----------------------------|---------------------------------------------|
@@ -164,7 +169,9 @@ A model is often fit not on a dataset as-is, but instead on some transformation 
 | [`ft_string_indexer`](reference/sparklyr/latest/ft_string_indexer.html) | Encodes a string column of labels to a column of label indices |
 | [`ft_vector_assembler`](reference/sparklyr/latest/ft_vector_assembler.html) | Combines a given list of columns into a single vector column |
 
-A simple example is the binarizer, which transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
+### Transformer Example {.toc-ignore}
+
+The binarizer transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
 
 ```{r}
 ft_binarizer(
@@ -260,7 +267,8 @@ iris_tbl %>%
   select(Petal_Width, Petal_Length) %>%
   collect %>%
   ggplot(aes(Petal_Length, Petal_Width)) +
-    geom_point(data = model$centers, aes(Petal_Width, Petal_Length), size = 60, alpha = 0.1) +
+    geom_point(data = model$centers, aes(Petal_Width, Petal_Length), 
+               size = 60, alpha = 0.1) +
     geom_point(aes(Petal_Width, Petal_Length), size = 2, alpha = 0.5)
 ```
 

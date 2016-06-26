@@ -196,30 +196,26 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Get the sparkapi dependencies for extension packages</h1>
+<h1>Read the shell file from the Spark R Backend</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>sparkapi_dependencies_from_extension(config, extension)</div>
-<div>sparkapi_dependencies_from_extensions(config, extensions)</div></code></pre>
+    <pre class="code"><code class="r"><div>read_shell_file(shell_file)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>config</dt>
-      <dd>R list containing configuration data</dd>
-      <dt>extension</dt>
-      <dd>Name of extension package</dd>
-      <dt>extensions</dt>
-      <dd>Names of extension packages.</dd>
+      <dt>shell_file</dt>
+      <dd>Shell file to read</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-List of objects of type <code>spark_dependency</code>.
+List with <code>backendPort</code>, <code>monitorPort</code>, and
+  <code>rLibraryPath</code>
 </dl></p>
   
     </div>
@@ -227,14 +223,14 @@ List of objects of type <code>spark_dependency</code>.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Call the <code>sparkapi_dependencies</code> function of the specified
-package to extract it's dependencies.</p>
+      <p>Read the shell file and extract the backend port, monitor port,
+and R library path.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>sparkapi_dependencies</li><li>sparkapi_dependencies_from_extension</li><li>sparkapi_dependencies_from_extensions</li>
+      <li>read_shell_file</li>
     </ul>
     <ul>
       <li>internal</li>

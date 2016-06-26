@@ -196,27 +196,28 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Get the Spark DataFrame associated with an object</h1>
+<h1>Get or set the current unknown error handler</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>sparkapi_dataframe(x, ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>unknown_error_handler(handler&nbsp;=&nbsp;NULL)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>x</dt>
-      <dd>Object to get DataFrame from</dd>
-      <dt>...</dt>
-      <dd>Reserved for future use</dd>
+      <dt>handler</dt>
+      <dd>A function which accepts a <code>spark_connection</code>
+and returns a single-element character vector. Pass <code>NULL</code>
+to read the current value (if any).</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-Reference to DataFrame
+The current handler if <code>NULL</code> is passed and the
+  previously installed handler when a new handler is passed.
 </dl></p>
   
     </div>
@@ -224,17 +225,17 @@ Reference to DataFrame
     <div class="Description">
       <h2>Description</h2>
 
-      <p>S3 method to get the Spark DataFrame associated with objects of
-various types.</p>
+      <p>Get or set the current unknown error handler. This function
+is called when the backend fails to report an error message.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>sparkapi_dataframe</li>
+      <li>unknown_error_handler</li>
     </ul>
     <ul>
-      
+      <li>internal</li>
     </ul> -->
       
         

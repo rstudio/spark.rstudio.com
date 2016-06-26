@@ -177,7 +177,7 @@ partitions <- mtcars_tbl %>%
   mutate(cyl8 = cyl == 8) %>%
   sdf_partition(training = 0.5, test = 0.5, seed = 1099)
 
-# fit a linear mdoel to the training dataset
+# fit a linear model to the training dataset
 fit <- partitions$training %>%
   ml_linear_regression(response = "mpg", features = c("wt", "cyl"))
 ```
@@ -209,7 +209,7 @@ Coefficients:
 wt          -2.81846    0.96619 -2.9171 0.0331257 *  
 cyl         -0.92319    0.54639 -1.6896 0.1518998    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 R-Squared: 0.8274
 Root Mean Squared Error: 1.422
@@ -230,7 +230,7 @@ library(sparkapi)
 count_lines <- function(sc, path) {
   sparkapi_spark_context(sc) %>% 
     sparkapi_invoke("textFile", path, 1L) %>% 
-      sparkapi_invoke("count")
+    sparkapi_invoke("count")
 }
 
 # write a CSV 

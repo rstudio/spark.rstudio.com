@@ -88,7 +88,7 @@ Coefficients:
 
 For linear regression models produced by Spark, we can use `summary()` to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.
 
-```{r, eval=FALSE}
+```{r}
 summary(fit)
 ```
 ```
@@ -202,7 +202,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 
 [sdf_mutate](reference/sparklyr/latest/sdf_mutate.html) is provided as a helper function, to allow you to use feature transformers within a pipeline. For example, the previous code snippet could have been written as:
 
-```{r, eval=FALSE}
+```{r}
 mtcars_tbl %>%
   sdf_mutate(mpg20 = ft_binarizer(mpg, threshold = 20))
 ```
@@ -229,7 +229,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 
 We will use the `iris` data set to examine a handful of learning altogithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
 
-```{r, eval=FALSE}
+```{r}
 library(sparklyr)
 library(ggplot2)
 library(dplyr)
@@ -256,7 +256,9 @@ Database: spark connection master=local app=sparklyr local=TRUE
 # ... with more rows
 ```
 
-### KMeans 
+### K-Means Clustering
+
+K-means clustering partitions points into `k` groups, such that the sum of squares from points to the assigned cluster centers is minimized.
 
 ```{r}
 model <- iris_tbl %>%

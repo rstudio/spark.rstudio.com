@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_read_csv(sc, name, path, repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_read_csv(sc, name, path, header&nbsp;=&nbsp;TRUE, delimiter&nbsp;=&nbsp;",", quote&nbsp;=&nbsp;"\"", escape&nbsp;=&nbsp;"\\", charset&nbsp;=&nbsp;"UTF-8", null_value&nbsp;=&nbsp;NULL, options&nbsp;=&nbsp;list(), repartition&nbsp;=&nbsp;0, memory&nbsp;=&nbsp;TRUE, overwrite&nbsp;=&nbsp;TRUE)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -212,6 +212,20 @@ $(document).ready(function () {
       <dd>Name of table</dd>
       <dt>path</dt>
       <dd>The path to the file. Needs to be accessible from the cluster. Supports: "hdfs://" or "s3n://"</dd>
+      <dt>header</dt>
+      <dd>Should the first row of data be used as a header? Defaults to <code>TRUE</code>.</dd>
+      <dt>delimiter</dt>
+      <dd>The character used to delimit each column, defaults to <code>,</code>.</dd>
+      <dt>quote</dt>
+      <dd>The character used as a quote, defaults to <code>"hdfs://"</code>.</dd>
+      <dt>escape</dt>
+      <dd>The chatacter used to escape other characters, defaults to <code>\</code>.</dd>
+      <dt>charset</dt>
+      <dd>The character set, defaults to <code>"UTF-8"</code>.</dd>
+      <dt>null_value</dt>
+      <dd>The character to use for default values, defaults to <code>NULL</code>.</dd>
+      <dt>options</dt>
+      <dd>A list of strings with additional options.</dd>
       <dt>repartition</dt>
       <dd>Total of partitions used to distribute table or 0 (default) to avoid partitioning</dd>
       <dt>memory</dt>

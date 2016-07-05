@@ -196,26 +196,29 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Read the shell file from the Spark R Backend</h1>
+<h1>Retrieves entries from the Spark log</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>read_shell_file(shell_file)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_log(sc, n&nbsp;=&nbsp;100)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>shell_file</dt>
-      <dd>Shell file to read</dd>
+      <dt>sc</dt>
+      <dd><code>spark_connection</code></dd>
+      <dt>n</dt>
+      <dd>Max number of log entries to retrieve (pass NULL to retrieve
+all lines of the log)</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-List with <code>backendPort</code>, <code>monitorPort</code>, and
-  <code>rLibraryPath</code>
+Character vector with last <code>n</code> lines of the Spark log
+  or for <code>spark_log_file</code> the full path to the log file.
 </dl></p>
   
     </div>
@@ -223,17 +226,16 @@ List with <code>backendPort</code>, <code>monitorPort</code>, and
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Read the shell file and extract the backend port, monitor port,
-and R library path.</p>
+      <p>Retrieves entries from the Spark log</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>read_shell_file</li>
+      <li>spark_log</li>
     </ul>
     <ul>
-      <li>internal</li>
+      
     </ul> -->
       
         

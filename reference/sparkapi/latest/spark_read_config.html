@@ -196,28 +196,31 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Get the spark dependencies for extension packages</h1>
+<h1>Read spark configuration values for a connection</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_dependencies_from_extension(extension)</div>
-<div>spark_dependencies_from_extensions(extensions)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_read_config(config, master, prefix&nbsp;=&nbsp;NULL)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>extension</dt>
-      <dd>Name of extension package</dd>
-      <dt>extensions</dt>
-      <dd>Names of extension packages.</dd>
+      <dt>config</dt>
+      <dd>List with configuration values</dd>
+      <dt>master</dt>
+      <dd>Master node</dd>
+      <dt>prefix</dt>
+      <dd>Optional prefix to read parameters for
+(e.g. <code>spark.context.</code>, <code>spark.sql.</code>, etc.)</dd>
     </dl>
     
     <div class="Value">
       <h2>Value</h2>
 
       <p><dl>
-List of objects of type <code>spark_dependency</code>.
+Named list of config parameters (note that if a prefix was
+ specified then the names will not include the prefix)
 </dl></p>
   
     </div>
@@ -225,17 +228,16 @@ List of objects of type <code>spark_dependency</code>.
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Call the <code>spark_dependencies</code> function of the specified
-package to extract it's dependencies.</p>
+      <p>Read spark configuration values for a connection</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>spark_dependencies</li><li>spark_dependencies_from_extension</li><li>spark_dependencies_from_extensions</li>
+      <li>spark_read_config</li>
     </ul>
     <ul>
-      <li>internal</li>
+      
     </ul> -->
       
         

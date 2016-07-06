@@ -20,9 +20,33 @@ The sparklyr package provides a [dplyr](dplyr.html) interface to Spark DataFrame
 
 The facilities used internally by sparklyr for its dplyr and MLlib interfaces are available to extension packages. This guide describes how you can use these tools to create your own custom R interfaces to Spark.
 
-To [sparkapi](https://github.com/rstudio/sparkapi) package provides an API which can be used to write extensions for the sparklyr package. Our hope is that this API will evolve into a common extension API shared with [SparkR](https://spark.apache.org/docs/latest/sparkr.html), enabling extension packages to work seamlessly with both sparklyr and SparkR.
+The [sparkapi](https://github.com/rstudio/sparkapi) package provides an API which can be used to write extensions for the sparklyr package. Our hope is that this API will evolve into a common extension API shared with [SparkR](https://spark.apache.org/docs/latest/sparkr.html), enabling extension packages to work seamlessly with both sparklyr and SparkR.
 
 Please also note that these APIs are preliminary and subject to review and modification as we work towards making them available in both sparklyr and SparkR. 
+
+### Example
+
+Here's an example of an extension function that calls the text file line counting function available via the SparkContext:
+
+```{r, eval=FALSE}
+library(sparkapi)
+count_lines <- function(sc, file) {
+  spark_context(sc) %>% 
+    invoke("textFile", file, 1L) %>% 
+      invoke("count")
+}
+```
+
+The `count_lines` function takes a `spark_connection` (`sc`) argument which enables it to obtain a reference to the `SparkContext` object, and in turn call the `textFile().count()` method.
+
+You can use this function with an existing sparklyr connection as follows:
+
+```{r, eval=FALSE}
+library(sparklyr)
+sc <- spark_connect(master = "local")
+count_lines(sc, "hdfs://path/data.csv")
+```
+
 
 ## Core Types
 
@@ -53,7 +77,7 @@ billionBigInteger <- invoke_new(sc, "java.math.BigInteger", "1000000000")
 billion <- invoke(billionBigInteger, "longValue")
 ```
 
-Note the `sc` argument: that's the `spark_connection` object which is provided by the front-end package (e.g. SparkR).
+Note the `sc` argument: that's the `spark_connection` object which is provided by the front-end package (e.g. sparklyr).
 
 The previous example can be re-written to be more compact and clear using [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) pipes: 
 
@@ -76,17 +100,17 @@ hypot <- sc %>%
 
 Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we'll describe the typical form of these functions as well as how to handle special types like Spark DataFrames. 
 
-Here's an example of a wrapper function for the the text file line counting function available from the SparkContext object:
+Here's the wrapper function for `textFile().count()` which we defined earlier:
 
-```{r}
-count_lines <- function(sc, path) {
+```{r, eval=FALSE}
+count_lines <- function(sc, file) {
   spark_context(sc) %>% 
-    invoke("textFile", path, as.integer(1)) %>% 
+    invoke("textFile", file, 1L) %>% 
       invoke("count")
 }
 ```
 
-The `count_lines` function takes a `spark_connection` (`sc`) argument which enables it to obtain a reference to the `SparkContext` object.
+The `count_lines` function takes a `spark_connection` (`sc`) argument which enables it to obtain a reference to the `SparkContext` object, and in turn call the `textFile().count()` method.
 
 The following functions are useful for implementing wrapper functions of various kinds:
 
@@ -150,11 +174,11 @@ spark_dependencies <- function(...) {
 
 The `...` argument is unused but nevertheless should be included to ensure compatibility if new arguments are added to `spark_dependencies` in the future.
 
-When users connect to a Spark cluster and want to use your extension package within their session they simply include the **sparkds** package in a list of extensions passed to e.g. `SparkR.init`:
+When users connect to a Spark cluster and want to use your extension package within their session they simply include the **sparkds** package in a list of extensions passed to e.g. `spark_connect`:
 
 ```{r, eval=FALSE}
-library(SparkR)
-sc <- sparkR.init(master = "local", extensions = c("sparkds"))
+library(sparklyr)
+sc <- spark_connect(master = "local", extensions = c("sparkds"))
 ```
 
 
@@ -162,7 +186,7 @@ When users connect to a Spark cluster and want to use your extension package wit
 
 ```{r, eval=FALSE}
 library(sparklyr)
-sc <- spark_connect(master = "local", version = "1.6.1", extensions = c("sparkds"))
+sc <- spark_connect(master = "local", extensions = c("sparkds"))
 ```
 
 ### CRAN 

@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_connect(master, app_name&nbsp;=&nbsp;"sparklyr", version&nbsp;=&nbsp;NULL, hadoop_version&nbsp;=&nbsp;NULL, extensions&nbsp;=&nbsp;NULL, config&nbsp;=&nbsp;spark_config())</div>
+    <pre class="code"><code class="r"><div>spark_connect(master, spark_home&nbsp;=&nbsp;Sys.getenv("SPARK_HOME"), app_name&nbsp;=&nbsp;"sparklyr", version&nbsp;=&nbsp;NULL, hadoop_version&nbsp;=&nbsp;NULL, extensions&nbsp;=&nbsp;NULL, config&nbsp;=&nbsp;spark_config())</div>
 <div>spark_connection_is_open(sc)</div></code></pre>
     
     <h2>Arguments</h2>
@@ -210,6 +210,10 @@ $(document).ready(function () {
       <dt>master</dt>
       <dd>Spark cluster url to connect to. Use <code>"local"</code> to connect to a local
 instance of Spark installed via <code><a href='spark_install.html'>spark_install</a></code>.</dd>
+      <dt>spark_home</dt>
+      <dd>Spark home directory (defaults to SPARK_HOME environment variable).
+If <code>SPARK_HOME</code> is defined it will be always be used unless the <code>version</code>
+paramater is specified to force the use of a locally installed version.</dd>
       <dt>app_name</dt>
       <dd>Application name to be used while running in the Spark cluster</dd>
       <dt>version</dt>

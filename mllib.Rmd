@@ -1,5 +1,5 @@
 ---
-title: "Machine Learning with MLlib"
+title: "Spark Machine Learning"
 ---
 
 ```{r setup, include=FALSE}
@@ -8,7 +8,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Overview
 
-sparklyr provides bindings to Spark's [Machine Learning Library](https://spark.apache.org/docs/latest/mllib-guide.html) for machine learning with Spark. In particular, sparklyr allows you to access the machine learning routines provided by the [spark.ml](https://spark.apache.org/docs/latest/ml-guide.html) package. Together with sparklyr's [dplyr](dplyr.html) interface, you can easily create and tune machine learning workflows on Spark, orchestrated entirely within R.
+**sparklyr** provides bindings to Spark's distributed [machine learning](https://spark.apache.org/docs/latest/mllib-guide.html) library. In particular, sparklyr allows you to access the machine learning routines provided by the [spark.ml](https://spark.apache.org/docs/latest/ml-guide.html) package. Together with sparklyr's [dplyr](dplyr.html) interface, you can easily create and tune machine learning workflows on Spark, orchestrated entirely within R.
 
 sparklyr provides three families of functions that you might use within a machine learning pipeline within R:
 
@@ -44,7 +44,7 @@ Spark's machine learning library can be accessed from sparklyr through the `ml_*
 
 ### Algorithm Example {.toc-ignore}
 
-Let's walk through a simple example to demonstrate the use of MLlib algorithms within R. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
+Let's walk through a simple example to demonstrate the use of Spark's machine learning algorithms within R. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
 
@@ -150,7 +150,7 @@ ggplot(data, aes(x = actual, y = predicted)) +
 
 Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
 
-As you can see, we can easily and effectively combine dplyr data transformation pipelines with the MLlib modeling interface provided by Spark.
+As you can see, we can easily and effectively combine dplyr data transformation pipelines with the machine learning algorithms provided by Spark.
 
 
 ## Transformers

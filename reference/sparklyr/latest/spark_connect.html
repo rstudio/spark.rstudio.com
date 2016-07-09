@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_connect(master, spark_home&nbsp;=&nbsp;Sys.getenv("SPARK_HOME"), app_name&nbsp;=&nbsp;"sparklyr", version&nbsp;=&nbsp;NULL, hadoop_version&nbsp;=&nbsp;NULL, extensions&nbsp;=&nbsp;NULL, config&nbsp;=&nbsp;spark_config())</div>
+    <pre class="code"><code class="r"><div>spark_connect(master, spark_home&nbsp;=&nbsp;Sys.getenv("SPARK_HOME"), app_name&nbsp;=&nbsp;"sparklyr", version&nbsp;=&nbsp;NULL, hadoop_version&nbsp;=&nbsp;NULL, config&nbsp;=&nbsp;spark_config(), extensions&nbsp;=&nbsp;sparkapi::registered_extensions())</div>
 <div>spark_connection_is_open(sc)</div></code></pre>
     
     <h2>Arguments</h2>
@@ -220,10 +220,11 @@ paramater is specified to force the use of a locally installed version.</dd>
       <dd>Version of the Spark (only applicable for local master)</dd>
       <dt>hadoop_version</dt>
       <dd>Version of Hadoop (only applicable for local master)</dd>
-      <dt>extensions</dt>
-      <dd>Extension packages to enable for this connection.</dd>
       <dt>config</dt>
       <dd>Configuration for connection (see <code><a href='spark_config.html'>spark_config</a> for details</code>).</dd>
+      <dt>extensions</dt>
+      <dd>Extension packages to enable for this connection. By default will
+enable all packages that previously called <code>sparkapi::register_extension</code>.</dd>
       <dt>sc</dt>
       <dd><code>spark_connection</code></dd>
     </dl>

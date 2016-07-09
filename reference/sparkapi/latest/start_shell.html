@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>start_shell(master, spark_home&nbsp;=&nbsp;Sys.getenv("SPARK_HOME"), app_name&nbsp;=&nbsp;"sparkapi", config&nbsp;=&nbsp;NULL, jars&nbsp;=&nbsp;NULL, packages&nbsp;=&nbsp;NULL, extensions&nbsp;=&nbsp;NULL, environment&nbsp;=&nbsp;NULL, shell_args&nbsp;=&nbsp;NULL)</div>
+    <pre class="code"><code class="r"><div>start_shell(master, spark_home&nbsp;=&nbsp;Sys.getenv("SPARK_HOME"), app_name&nbsp;=&nbsp;"sparkapi", config&nbsp;=&nbsp;list(), extensions&nbsp;=&nbsp;sparkapi::registered_extensions(), jars&nbsp;=&nbsp;NULL, packages&nbsp;=&nbsp;NULL, environment&nbsp;=&nbsp;NULL, shell_args&nbsp;=&nbsp;NULL)</div>
 <div>stop_shell(sc)</div></code></pre>
     
     <h2>Arguments</h2>
@@ -215,14 +215,14 @@ instance of Spark</dd>
       <dt>app_name</dt>
       <dd>Application name to be used while running in the Spark cluster</dd>
       <dt>config</dt>
-      <dd>Named character vector of spark.context.* options</dd>
+      <dd>Named character vector of spark.* options</dd>
+      <dt>extensions</dt>
+      <dd>Extension packages to include dependencies for
+(see <code><a href='spark_dependency.html'>spark_dependency</a></code>).</dd>
       <dt>jars</dt>
       <dd>Paths to Jar files to include</dd>
       <dt>packages</dt>
       <dd>Spark packages to include</dd>
-      <dt>extensions</dt>
-      <dd>Extension packages to include dependencies for
-(see <code><a href='spark_dependency.html'>spark_dependency</a></code>).</dd>
       <dt>environment</dt>
       <dd>Environment variables to set</dd>
       <dt>shell_args</dt>

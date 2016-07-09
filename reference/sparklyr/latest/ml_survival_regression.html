@@ -202,24 +202,33 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_survival_regression(x, response, features, intercept&nbsp;=&nbsp;TRUE, censor&nbsp;=&nbsp;"censor", ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_survival_regression(x, response, features, intercept&nbsp;=&nbsp;TRUE, censor&nbsp;=&nbsp;"censor", max.iter&nbsp;=&nbsp;100L, ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
-      <dd>An object convertable to a Spark DataFrame (typically, a <code>tbl_spark</code>).</dd>
+      <dd>An object coercable to a Spark DataFrame (typically, a
+<code>tbl_spark</code>).</dd>
       <dt>response</dt>
-      <dd>The name of the response vector.</dd>
+      <dd>The name of the response vector (as a length-one character
+vector), or a formula, giving a symbolic description of the model to be
+fitted. When <code>response</code> is a formula, it is used in preference to other
+parameters to set the <code>response</code>, <code>features</code>, and <code>intercept</code>
+parameters (if available). Currently, only simple linear combinations of
+existing parameters is supposed; e.g. <code>response ~ feature1 + feature2 + ...</code>.
+The intercept term can be omitted by using <code>- 1</code> in the model fit.</dd>
       <dt>features</dt>
-      <dd>The names of features (terms) to use in the model.</dd>
+      <dd>The name of features (terms) to use for the model fit.</dd>
       <dt>intercept</dt>
-      <dd>Fit the model with an intercept term?</dd>
+      <dd>Boolean; should the model be fit with an intercept term?</dd>
       <dt>censor</dt>
       <dd>The name of the vector that provides censoring information.
 This should be a numeric vector, with 0 marking uncensored data, and
 1 marking right-censored data.</dd>
+      <dt>max.iter</dt>
+      <dd>The maximum number of iterations to use.</dd>
       <dt>...</dt>
-      <dd>Other arguments passed on to methods.</dd>
+      <dd>Optional arguments; currently unused.</dd>
     </dl>
     
     <div class="Description">
@@ -241,6 +250,7 @@ failure time (AFT) model with potentially right-censored data.</p>
     <h2>See also</h2>
     
 Other Spark ML routines: <code><a href='ml_decision_tree.html'>ml_decision_tree</a></code>,
+  <code><a href='ml_generalized_linear_regression.html'>ml_generalized_linear_regression</a></code>,
   <code><a href='ml_gradient_boosted_trees.html'>ml_gradient_boosted_trees</a></code>,
   <code><a href='ml_kmeans.html'>ml_kmeans</a></code>, <code><a href='ml_lda.html'>ml_lda</a></code>,
   <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,

@@ -196,13 +196,13 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Spark ML -- Logistic Regression</h1>
+<h1>Spark ML -- Generalized Linear Regression</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_logistic_regression(x, response, features, intercept&nbsp;=&nbsp;TRUE, alpha&nbsp;=&nbsp;0, lambda&nbsp;=&nbsp;0, max.iter&nbsp;=&nbsp;100L, ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_generalized_linear_regression(x, response, features, intercept&nbsp;=&nbsp;TRUE, family&nbsp;=&nbsp;gaussian(link&nbsp;=&nbsp;"identity"), max.iter&nbsp;=&nbsp;100L, ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -221,10 +221,9 @@ The intercept term can be omitted by using <code>- 1</code> in the model fit.</d
       <dd>The name of features (terms) to use for the model fit.</dd>
       <dt>intercept</dt>
       <dd>Boolean; should the model be fit with an intercept term?</dd>
-      <dt>alpha, lambda</dt>
-      <dd>Parameters controlling loss function penalization (for e.g.
-lasso, elastic net, and ridge regression). See <strong>Details</strong> for more
-information.</dd>
+      <dt>family</dt>
+      <dd>The family / link function to use; analogous to those normally
+passed in to calls to <span style="R">R</span>'s own <code><a href='http://www.inside-r.org/r-doc/stats/glm'>glm</a></code>.</dd>
       <dt>max.iter</dt>
       <dd>The maximum number of iterations to use.</dd>
       <dt>...</dt>
@@ -234,28 +233,24 @@ information.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Perform logistic regression on a <code>spark_tbl</code>.</p>
+      <p>Perform generalized linear regression on a Spark DataFrame.</p>
   
     </div>
 
     <div class="Details">
       <h2>Details</h2>
 
-      <p>Spark implements for both $L1$ and $L2$ regularization in linear
-regression models. See the preamble in the
-<a href = 'http://spark.apache.org/docs/latest/ml-classification-regression.html'>Spark Classification and Regression</a>
-documentation for more details on how the loss function is parameterized.</p>
-  
-      <p>In particular, with <code>alpha</code> set to 1, the parameterization
-is equivalent to a <a href = 'https://en.wikipedia.org/wiki/Lasso_(statistics)'>lasso</a>
-model; if <code>alpha</code> is set to 0, the parameterization is equivalent to
-a <a href = 'https://en.wikipedia.org/wiki/Tikhonov_regularization'>ridge regression</a> model.</p>
+      <p>In contrast to <code><a href='ml_linear_regression.html'>ml_linear_regression</a>()</code> and 
+<code><a href='ml_logistic_regression.html'>ml_logistic_regression</a>()</code>, these routines do not allow you to
+tweak the loss function (e.g. for elastic net regression); however, the model
+fits returned by this routine are generally richer in regards to information
+provided for assessing the quality of fit.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>ml_logistic_regression</li>
+      <li>ml_generalized_linear_regression</li>
     </ul>
     <ul>
       
@@ -264,10 +259,10 @@ a <a href = 'https://en.wikipedia.org/wiki/Tikhonov_regularization'>ridge regres
     <h2>See also</h2>
     
 Other Spark ML routines: <code><a href='ml_decision_tree.html'>ml_decision_tree</a></code>,
-  <code><a href='ml_generalized_linear_regression.html'>ml_generalized_linear_regression</a></code>,
   <code><a href='ml_gradient_boosted_trees.html'>ml_gradient_boosted_trees</a></code>,
   <code><a href='ml_kmeans.html'>ml_kmeans</a></code>, <code><a href='ml_lda.html'>ml_lda</a></code>,
   <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
+  <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
   <code><a href='ml_multilayer_perceptron.html'>ml_multilayer_perceptron</a></code>,
   <code><a href='ml_naive_bayes.html'>ml_naive_bayes</a></code>,
   <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>, <code><a href='ml_pca.html'>ml_pca</a></code>,

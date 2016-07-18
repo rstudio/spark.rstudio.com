@@ -11,7 +11,7 @@ knitr::opts_chunk$set(eval = FALSE)
 There are two well supported deployment modes for **sparklyr**: 
 
 - Local --- Working on a local desktop typically with smaller/sampled datasets
-- Cluster --- Working directly within or alongside a Spark cluster.
+- Cluster --- Working directly within or alongside a Spark cluster ([standalone](http://spark.apache.org/docs/latest/spark-standalone.html), [YARN](http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/index.html), [Mesos](http://mesos.apache.org/), etc.)
 
 ### Local Deployment
 
@@ -49,6 +49,13 @@ To connect, pass the address of the master node to [spark_connect](reference/spa
 ```{r}
 library(sparklyr)
 sc <- spark_connect(master = "spark://local:7077")
+```
+
+For a [Hadoop YARN](http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/index.html) cluster, you can connect using the YARN master, for example:
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "yarn-client")
 ```
 
 If you are running on EC2 using the Spark [EC2 deployment scripts](http://spark.apache.org/docs/latest/ec2-scripts.html) then you can read the master from `/root/spark-ec2/cluster-url`, for example:

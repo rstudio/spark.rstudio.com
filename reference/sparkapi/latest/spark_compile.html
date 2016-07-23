@@ -196,71 +196,37 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Feature Transformation -- QuantileDiscretizer</h1>
+<h1>Compiles scala sources and packages into a jar file</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ft_quantile_discretizer(x, input_col&nbsp;=&nbsp;NULL, output_col&nbsp;=&nbsp;NULL, n_buckets&nbsp;=&nbsp;5)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_compile(name, spark_home)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>x</dt>
-      <dd>An object (usually a <code>spark_tbl</code>) coercable to a Spark DataFrame.</dd>
-      <dt>input_col</dt>
-      <dd>The name of the input column(s).</dd>
-      <dt>output_col</dt>
-      <dd>The name of the output column.</dd>
-      <dt>n_buckets</dt>
-      <dd>The number of buckets to use.</dd>
+      <dt>name</dt>
+      <dd>The name of the target jar</dd>
+      <dt>spark_home</dt>
+      <dd>Spark version</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Takes a column with continuous features and outputs a column with binned
-categorical features. The bin ranges are chosen by taking a sample of the
-data and dividing it into roughly equal parts. The lower and upper bin bounds
-will be -Infinity and +Infinity, covering all real values. This attempts to
-find numBuckets partitions based on a sample of the given input data, but it
-may find fewer depending on the data sample values.</p>
-  
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>Note that the result may be different every time you run it, since the sample
-strategy behind it is non-deterministic.</p>
+      <p>Compiles scala sources and packages into a jar file</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>ft_quantile_discretizer</li>
+      <li>spark_compile</li>
     </ul>
     <ul>
-      
+      <li>internal</li>
     </ul> -->
       
-    <h2>See also</h2>
-    
-See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
-  more information on the set of transformations available for DataFrame
-  columns in Spark.
-
-Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
-  <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
-  <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,
-  <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
-  <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
-  <code><a href='ft_one_hot_encoder.html'>ft_one_hot_encoder</a></code>,
-  <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
-  <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
-  <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
-  <code><a href='sdf_mutate.html'>sdf_mutate</a></code>
-
         
   </div>
 </div>

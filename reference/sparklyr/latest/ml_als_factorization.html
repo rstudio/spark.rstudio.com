@@ -196,82 +196,64 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Pre-process the Inputs to a Spark ML Routine</h1>
+<h1>Spark ML -- Alternating Least Squares (ALS) matrix factorization.</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_prepare_response_features_intercept(x&nbsp;=&nbsp;NULL, response, features, intercept, envir&nbsp;=&nbsp;parent.frame(), categorical.transformations&nbsp;=&nbsp;new.env(parent&nbsp;=&nbsp;emptyenv()))</div>
-<div>ml_prepare_features(x, features, envir&nbsp;=&nbsp;parent.frame())</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_als_factorization(x, rating.column&nbsp;=&nbsp;"rating", user.column&nbsp;=&nbsp;"user", item.column&nbsp;=&nbsp;"item", rank&nbsp;=&nbsp;10L, regularization.parameter&nbsp;=&nbsp;0.1, max.iter&nbsp;=&nbsp;10L, ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
       <dd>An object coercable to a Spark DataFrame (typically, a
 <code>tbl_spark</code>).</dd>
-      <dt>response</dt>
-      <dd>The name of the response vector (as a length-one character
-vector), or a formula, giving a symbolic description of the model to be
-fitted. When <code>response</code> is a formula, it is used in preference to other
-parameters to set the <code>response</code>, <code>features</code>, and <code>intercept</code>
-parameters (if available). Currently, only simple linear combinations of
-existing parameters is supposed; e.g. <code>response ~ feature1 + feature2 + ...</code>.
-The intercept term can be omitted by using <code>- 1</code> in the model fit.</dd>
-      <dt>features</dt>
-      <dd>The name of features (terms) to use for the model fit.</dd>
-      <dt>intercept</dt>
-      <dd>Boolean; should the model be fit with an intercept term?</dd>
-      <dt>envir</dt>
-      <dd>The <span style="R">R</span> environment in which the <code>response</code>, <code>features</code>
-and <code>intercept</code> bindings should be mutated. (Typically, the parent frame).</dd>
-      <dt>categorical.transformations</dt>
-      <dd>An <span style="R">R</span> environment used to record what
-categorical variables were binarized in this procedure. Categorical
-variables that included in the model formula will be transformed into
-binary variables, and the generated mappings will be stored in this
-environment.</dd>
+      <dt>rating.column</dt>
+      <dd>The name of the column containing ratings.</dd>
+      <dt>user.column</dt>
+      <dd>The name of the column containing user IDs.</dd>
+      <dt>item.column</dt>
+      <dd>The name of the column containing item IDs.</dd>
+      <dt>rank</dt>
+      <dd>Rank of the factorization.</dd>
+      <dt>regularization.parameter</dt>
+      <dd>The regularization parameter.</dd>
+      <dt>max.iter</dt>
+      <dd>The maximum number of iterations to use.</dd>
+      <dt>...</dt>
+      <dd>Optional arguments; currently unused.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Pre-process / normalize the inputs typically passed to a
-Spark ML routine.</p>
-  
-    </div>
-
-    <div class="Details">
-      <h2>Details</h2>
-
-      <p>Pre-processing of these inputs typically involves:</p>
-  
-      <p><ol>
-<li> Handling the case where <code>response</code> is itself a formula
-      describing the model to be fit, thereby extracting the names
-      of the <code>response</code> and <code>features</code> to be used,
-</li>
-<li> Splitting categorical features into dummy variables (so they
-      can easily be accommodated + specified in the underlying
-      Spark ML model fit),
-</li>
-<li> Mutating the associated variables <em>in the specified environment</em>.
-</li>
-</ol></p>
-  
-      <p>Please take heed of the last point, as while this is useful in practice,
-the behavior will be very surprising if you are not expecting it.</p>
+      <p>Perform alternating least squares matrix factorization on a Spark DataFrame.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>ml_prepare_features</li><li>ml_prepare_inputs</li><li>ml_prepare_response_features_intercept</li>
+      <li>ml_als_factorization</li>
     </ul>
     <ul>
       
     </ul> -->
       
+    <h2>See also</h2>
+    
+Other Spark ML routines: <code><a href='ml_decision_tree.html'>ml_decision_tree</a></code>,
+  <code><a href='ml_generalized_linear_regression.html'>ml_generalized_linear_regression</a></code>,
+  <code><a href='ml_gradient_boosted_trees.html'>ml_gradient_boosted_trees</a></code>,
+  <code><a href='ml_kmeans.html'>ml_kmeans</a></code>, <code><a href='ml_lda.html'>ml_lda</a></code>,
+  <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
+  <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
+  <code><a href='ml_multilayer_perceptron.html'>ml_multilayer_perceptron</a></code>,
+  <code><a href='ml_naive_bayes.html'>ml_naive_bayes</a></code>,
+  <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>, <code><a href='ml_pca.html'>ml_pca</a></code>,
+  <code><a href='ml_random_forest.html'>ml_random_forest</a></code>,
+  <code><a href='ml_survival_regression.html'>ml_survival_regression</a></code>
+
         
   </div>
 </div>

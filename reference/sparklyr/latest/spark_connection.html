@@ -196,77 +196,43 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Pre-process the Inputs to a Spark ML Routine</h1>
+<h1>Get the spark_connection associated with an object</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_prepare_response_features_intercept(x&nbsp;=&nbsp;NULL, response, features, intercept, envir&nbsp;=&nbsp;parent.frame(), categorical.transformations&nbsp;=&nbsp;new.env(parent&nbsp;=&nbsp;emptyenv()))</div>
-<div>ml_prepare_features(x, features, envir&nbsp;=&nbsp;parent.frame())</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_connection(x, ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
-      <dd>An object coercable to a Spark DataFrame (typically, a
-<code>tbl_spark</code>).</dd>
-      <dt>response</dt>
-      <dd>The name of the response vector (as a length-one character
-vector), or a formula, giving a symbolic description of the model to be
-fitted. When <code>response</code> is a formula, it is used in preference to other
-parameters to set the <code>response</code>, <code>features</code>, and <code>intercept</code>
-parameters (if available). Currently, only simple linear combinations of
-existing parameters is supposed; e.g. <code>response ~ feature1 + feature2 + ...</code>.
-The intercept term can be omitted by using <code>- 1</code> in the model fit.</dd>
-      <dt>features</dt>
-      <dd>The name of features (terms) to use for the model fit.</dd>
-      <dt>intercept</dt>
-      <dd>Boolean; should the model be fit with an intercept term?</dd>
-      <dt>envir</dt>
-      <dd>The <span style="R">R</span> environment in which the <code>response</code>, <code>features</code>
-and <code>intercept</code> bindings should be mutated. (Typically, the parent frame).</dd>
-      <dt>categorical.transformations</dt>
-      <dd>An <span style="R">R</span> environment used to record what
-categorical variables were binarized in this procedure. Categorical
-variables that included in the model formula will be transformed into
-binary variables, and the generated mappings will be stored in this
-environment.</dd>
+      <dd>Object to extract connection from</dd>
+      <dt>...</dt>
+      <dd>Reserved for future use</dd>
     </dl>
     
-    <div class="Description">
-      <h2>Description</h2>
+    <div class="Value">
+      <h2>Value</h2>
 
-      <p>Pre-process / normalize the inputs typically passed to a
-Spark ML routine.</p>
+      <p><dl>
+A <code>spark_connection</code> object that can be passed to
+  <code><a href='invoke.html'>invoke_new</a></code> and <code><a href='invoke.html'>invoke_static</a></code>.
+</dl></p>
   
     </div>
 
-    <div class="Details">
-      <h2>Details</h2>
+    <div class="Description">
+      <h2>Description</h2>
 
-      <p>Pre-processing of these inputs typically involves:</p>
-  
-      <p><ol>
-<li> Handling the case where <code>response</code> is itself a formula
-      describing the model to be fit, thereby extracting the names
-      of the <code>response</code> and <code>features</code> to be used,
-</li>
-<li> Splitting categorical features into dummy variables (so they
-      can easily be accommodated + specified in the underlying
-      Spark ML model fit),
-</li>
-<li> Mutating the associated variables <em>in the specified environment</em>.
-</li>
-</ol></p>
-  
-      <p>Please take heed of the last point, as while this is useful in practice,
-the behavior will be very surprising if you are not expecting it.</p>
+      <p>S3 method to get the spark_connection associated with objects of
+various types.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>ml_prepare_features</li><li>ml_prepare_inputs</li><li>ml_prepare_response_features_intercept</li>
+      <li>spark_connection</li>
     </ul>
     <ul>
       

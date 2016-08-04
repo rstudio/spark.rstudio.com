@@ -242,12 +242,12 @@ Spark machine learning supports a wide array of algorithms and feature transform
 
 ## Extensions
 
-The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages via the [sparkapi](https://github.com/rstudio/sparkapi) package. Since Spark is a general purpose cluster computing system there are many potential applications for extensions (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).
+The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages. Since Spark is a general purpose cluster computing system there are many potential applications for extensions (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).
 
 Here's a simple example that wraps a Spark text file line counting function with an R function:
 
 ```{r}
-library(sparkapi)
+library(sparklyr)
 
 # write a csv
 tempfile <- tempfile(fileext = ".csv")
@@ -257,7 +257,7 @@ write.csv(nycflights13::flights, tempfile, row.names = FALSE, na = "")
 count_lines <- function(sc, path) {
   spark_context(sc) %>% 
     invoke("textFile", path, 1L) %>% 
-      invoke("count")
+    invoke("count")
 }
 
 # call spark to count the lines in the csv

@@ -58,6 +58,22 @@ library(sparklyr)
 sc <- spark_connect(master = "yarn-client")
 ```
 
+or for more customized configuration:
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master="yarn",
+                    config = list(
+                      default = list(
+                        spark.submit.deployMode= "client",
+                        spark.executor.instances= 20, 
+                        spark.executor.memory= "2G",
+                        spark.executor.cores= 4,
+                        spark.driver.memory= "4G")))
+```
+
+
+
 If you are running on EC2 using the Spark [EC2 deployment scripts](http://spark.apache.org/docs/latest/ec2-scripts.html) then you can read the master from `/root/spark-ec2/cluster-url`, for example:
 
 ```{r}

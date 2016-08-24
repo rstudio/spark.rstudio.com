@@ -81,7 +81,7 @@ src_tbls(sc)
 
 ## Using dplyr
 
-We can new use all of the available dplyr verbs against the tables within the cluster. Here's a simple filtering example:
+We can now use all of the available dplyr verbs against the tables within the cluster. Here's a simple filtering example:
 
 ```{r}
 # filter by departure delay
@@ -115,7 +115,7 @@ delay <- flights_tbl %>%
   group_by(tailnum) %>%
   summarise(count = n(), dist = mean(distance), delay = mean(arr_delay)) %>%
   filter(count > 20, dist < 2000, !is.na(delay)) %>%
-  collect
+  collect()
 
 # plot delays
 library(ggplot2)
@@ -188,7 +188,7 @@ iris_preview
 
 You can orchestrate machine learning algorithms in a Spark cluster via the [machine learning](http://spark.apache.org/docs/latest/mllib-guide.html) functions within **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
 
-In this example we'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
+In this example we'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`) and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
 
 ```{r}
 # copy mtcars into spark
@@ -238,7 +238,7 @@ R-Squared: 0.8274
 Root Mean Squared Error: 1.422
 ```
 
-Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [Machine Learning](mllib.html) section.
+Spark machine learning supports a wide array of algorithms and feature transformations, and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [Machine Learning](mllib.html) section.
 
 ## Extensions
 

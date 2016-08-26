@@ -196,60 +196,49 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Spark ML -- Latent Dirichlet Allocation</h1>
+<h1>Save / Load a Spark DataFrame</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_lda(x, features&nbsp;=&nbsp;dplyr::tbl_vars(x), k&nbsp;=&nbsp;length(features), ml.options&nbsp;=&nbsp;ml_options(), ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>sdf_save_table(x, name, overwrite&nbsp;=&nbsp;FALSE, append&nbsp;=&nbsp;FALSE)</div>
+<div>sdf_load_table(sc, name)</div>
+<div>sdf_save_parquet(x, path, overwrite&nbsp;=&nbsp;FALSE, append&nbsp;=&nbsp;FALSE)</div>
+<div>sdf_load_parquet(sc, path)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
       <dt>x</dt>
       <dd>An object coercable to a Spark DataFrame (typically, a
 <code>tbl_spark</code>).</dd>
-      <dt>features</dt>
-      <dd>The name of features (terms) to use for the model fit.</dd>
-      <dt>k</dt>
-      <dd>The number of topics to estimate.</dd>
-      <dt>ml.options</dt>
-      <dd>Optional arguments, used to affect the model generated. See
-<code><a href='ml_options.html'>ml_options</a></code> for more details.</dd>
-      <dt>...</dt>
-      <dd>Optional arguments; currently unused.</dd>
+      <dt>name</dt>
+      <dd>The table name to assign to the saved Spark DataFrame.</dd>
+      <dt>overwrite</dt>
+      <dd>Boolean; overwrite a pre-existing table of the same name?</dd>
+      <dt>append</dt>
+      <dd>Boolean; append to a pre-existing table of the same name?</dd>
+      <dt>sc</dt>
+      <dd>A <code>spark_connection</code> object.</dd>
+      <dt>path</dt>
+      <dd>The path where the Spark DataFrame should be saved.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Fit a Latent Dirichlet Allocation (LDA) model to a Spark DataFrame.</p>
+      <p>Save / load a Spark DataFrame.</p>
   
     </div>
       </div>
   <div class="col-sm-4">
     <!-- <ul>
-      <li>ml_lda</li>
+      <li>sdf-saveload</li><li>sdf_load_parquet</li><li>sdf_load_table</li><li>sdf_save_parquet</li><li>sdf_save_table</li>
     </ul>
     <ul>
       
     </ul> -->
       
-    <h2>See also</h2>
-    
-Other Spark ML routines: <code><a href='ml_als_factorization.html'>ml_als_factorization</a></code>,
-  <code><a href='ml_decision_tree.html'>ml_decision_tree</a></code>,
-  <code><a href='ml_generalized_linear_regression.html'>ml_generalized_linear_regression</a></code>,
-  <code><a href='ml_gradient_boosted_trees.html'>ml_gradient_boosted_trees</a></code>,
-  <code><a href='ml_kmeans.html'>ml_kmeans</a></code>,
-  <code><a href='ml_linear_regression.html'>ml_linear_regression</a></code>,
-  <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
-  <code><a href='ml_multilayer_perceptron.html'>ml_multilayer_perceptron</a></code>,
-  <code><a href='ml_naive_bayes.html'>ml_naive_bayes</a></code>,
-  <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>, <code><a href='ml_pca.html'>ml_pca</a></code>,
-  <code><a href='ml_random_forest.html'>ml_random_forest</a></code>,
-  <code><a href='ml_survival_regression.html'>ml_survival_regression</a></code>
-
         
   </div>
 </div>

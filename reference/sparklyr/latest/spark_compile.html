@@ -196,26 +196,38 @@ $(document).ready(function () {
 
 
 <div class="row">
-<h1>Compiles scala sources and packages into a jar file</h1>
+<h1>Compile Scala sources into a Java Archive (jar)</h1>
 </div>
 
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>spark_compile(name, spark_home)</div></code></pre>
+    <pre class="code"><code class="r"><div>spark_compile(jar_name, spark_home&nbsp;=&nbsp;NULL, filter&nbsp;=&nbsp;NULL, scalac&nbsp;=&nbsp;NULL, jar&nbsp;=&nbsp;NULL)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
-      <dt>name</dt>
-      <dd>The name of the target jar</dd>
       <dt>spark_home</dt>
-      <dd>Spark version</dd>
+      <dd>The path to the Spark sources to be used
+alongside compilation.</dd>
+      <dt>filter</dt>
+      <dd>An optional function, used to filter out discovered <code>scala</code>
+files during compilation. This can be used to ensure that e.g. certain files
+are only compiled with certain versions of Spark, and so on.</dd>
+      <dt>scalac</dt>
+      <dd>The path to the <code>scalac</code> program to be used, for
+compilation of <code>scala</code> files.</dd>
+      <dt>jar</dt>
+      <dd>The path to the <code>jar</code> program to be used, for
+generating of the resulting <code>jar</code>.</dd>
+      <dt>name</dt>
+      <dd>The name to assign to the target <code>jar</code>.</dd>
     </dl>
     
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Compiles scala sources and packages into a jar file</p>
+      <p>Given a set of <code>scala</code> source files, compile them
+into a Java Archive (<code>jar</code>).</p>
   
     </div>
       </div>

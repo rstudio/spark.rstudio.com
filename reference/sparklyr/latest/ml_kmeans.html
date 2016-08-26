@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_kmeans(x, centers, max.iter&nbsp;=&nbsp;100, features&nbsp;=&nbsp;dplyr::tbl_vars(x), ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_kmeans(x, centers, iter.max&nbsp;=&nbsp;100, features&nbsp;=&nbsp;dplyr::tbl_vars(x), compute.cost&nbsp;=&nbsp;TRUE, tolerance&nbsp;=&nbsp;1e-04, ml.options&nbsp;=&nbsp;ml_options(), ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -211,18 +211,41 @@ $(document).ready(function () {
 <code>tbl_spark</code>).</dd>
       <dt>centers</dt>
       <dd>The number of cluster centers to compute.</dd>
-      <dt>max.iter</dt>
+      <dt>iter.max</dt>
       <dd>The maximum number of iterations to use.</dd>
       <dt>features</dt>
       <dd>The name of features (terms) to use for the model fit.</dd>
+      <dt>compute.cost</dt>
+      <dd>Whether to compute cost for <code>k-means</code> model using Spark's <a href = 'https://github.com/apache/spark/blob/master/mllib/src/main/scala/org/apache/spark/mllib/clustering/KMeansModel.scala#L84'>computeCost</a>.</dd>
+      <dt>tolerance</dt>
+      <dd>Param for the convergence tolerance for iterative algorithms.</dd>
+      <dt>ml.options</dt>
+      <dd>Optional arguments, used to affect the model generated. See
+<code><a href='ml_options.html'>ml_options</a></code> for more details.</dd>
       <dt>...</dt>
       <dd>Optional arguments; currently unused.</dd>
     </dl>
     
+    <div class="Value">
+      <h2>Value</h2>
+
+      <p><dl>
+<a href='ml_model.html'>ml_model</a> object of class <code>kmeans</code> with overloaded <code>print</code>, <code>fitted</code> and <code>predict</code> functions.
+</dl></p>
+  
+    </div>
+
     <div class="Description">
       <h2>Description</h2>
 
       <p>Perform k-means clustering on a Spark DataFrame.</p>
+  
+    </div>
+
+    <div class="References">
+      <h2>References</h2>
+
+      <p>Bahmani et al., Scalable K-Means++, VLDB 2012</p>
   
     </div>
       </div>

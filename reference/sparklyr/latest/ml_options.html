@@ -202,7 +202,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><div>ml_options(id.column&nbsp;=&nbsp;random_string("id"), response.column&nbsp;=&nbsp;random_string("response"), features.column&nbsp;=&nbsp;random_string("features"), only.model&nbsp;=&nbsp;FALSE, ...)</div></code></pre>
+    <pre class="code"><code class="r"><div>ml_options(id.column&nbsp;=&nbsp;random_string("id"), response.column&nbsp;=&nbsp;random_string("response"), features.column&nbsp;=&nbsp;random_string("features"), model.transform&nbsp;=&nbsp;NULL, only.model&nbsp;=&nbsp;FALSE, ...)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -212,6 +212,10 @@ $(document).ready(function () {
       <dd>The name to assign to the generated response column.</dd>
       <dt>features.column</dt>
       <dd>The name to assign to the generated features column.</dd>
+      <dt>model.transform</dt>
+      <dd>An optional <span style="R">R</span> function that accepts a Spark model
+and returns a Spark model. This can be used to supply optional Spark model
+fitting parameters not made available in the <code>sparklyr</code> APIs.</dd>
       <dt>only.model</dt>
       <dd>Boolean; should the Spark model object itself be returned
 without fitting the actual model? Useful for <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>.</dd>

@@ -18,7 +18,6 @@ thumbnails <- function(thumbs) {
   
   # capture arguments and setup rows to return
   numThumbs <- length(thumbs)
-  fullRows <- numThumbs / 3
   rows <- tagList()
   
   # add a row of thumbnails
@@ -26,20 +25,36 @@ thumbnails <- function(thumbs) {
     rows <<- tagAppendChild(rows, div(class = "row", thumbs[first:last]))
   }
   
-  # handle full rows
-  for (i in 1:fullRows) {
-    last <- i * 3
-    first <- last-2
-    addRow(first, last)
+  addSingleThumbnail <- function(){
+    rows <<- tagAppendChild(rows, div(class = "row", thumbs[1]))
   }
   
-  # check for leftovers
-  leftover <- numThumbs %% 3
-  if (leftover > 0) {
-    last <- numThumbs
-    first <- last - leftover + 1
-    addRow(first, last)
+  if(numThumbs < 2 ){
+    addSingleThumbnail()
+  }else if (numThumbs < 4){
+    addRow(1, numThumbs)
+  }else{
+    fullRows <- numThumbs / 3
+  
+    # handle full rows
+    for (i in 1:fullRows) {
+      last <- i * 3
+      first <- last-2
+      addRow(first, last)
+    }
+    
+    # check for leftovers
+    leftover <- numThumbs %% 3
+    if (leftover > 0) {
+      last <- numThumbs
+      first <- last - leftover + 1
+      addRow(first, last)
+    }
+    
+    
   }
+  
+  
   
   # return the rows!
   rows

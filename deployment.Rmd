@@ -20,7 +20,7 @@ Local mode is an excellent way to learn and experiment with Spark. Local mode al
 To work in local mode you should first install a version of Spark for local use. You can do this using the [spark_install](reference/sparklyr/latest/spark_install.html) function, for example:
 
 ```{r}
-sparklyr::spark_install(version = "1.6.1", hadoop_version = "2.6")
+sparklyr::spark_install(version = "2.0.0", hadoop_version = "2.6")
 ```
 
 To connect to the local Spark instance you pass "local" as the value of the Spark master node to [spark_connect](reference/sparklyr/latest/spark_connect.html):
@@ -34,14 +34,16 @@ For the local development scenario, see the [Configuration] section below for de
 
 ### Cluster Deployment
 
-To use spaklyr with a remote Spark cluster you should locate your R session on a machine that is either directly on one of the cluster nodes or is close to the cluster (for networking performance). In the case where R is not running directly on the cluster you should also ensure that the machine has a Spark version and configuration **identical** to that of the cluster nodes.
+A common deployment strategy is to submit your application from a gateway machine that is physically co-located with your worker machines (e.g. Master node in a standalone EC2 cluster). In this setup, client mode is appropriate. In client mode, the driver is launched directly within the spark-submit process which acts as a client to the cluster. The input and output of the application is attached to the console. Thus, this mode is especially suitable for applications that involve the REPL (e.g. Spark shell). For more information see [Submitting Applications](http://spark.apache.org/docs/latest/submitting-applications.html).
+
+To use spaklyr with a Spark cluster you should locate your R session on a machine that is either directly on one of the cluster nodes or is close to the cluster (for networking performance). In the case where R is not running directly on the cluster you should also ensure that the machine has a Spark version and configuration **identical** to that of the cluster nodes.
 
 The most straightforward way to run R within or near to the cluster is either a remote SSH session or via  [RStudio Server](https://www.rstudio.com/products/rstudio/).
 
 In cluster mode you use the version of Spark already deployed on the cluster node. This version is located via the `SPARK_HOME` environment variable, so you should be sure that this variable is correctly defined on your server before attempting a connection. This would typically be done within the [Renviron.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html) configuration file. For example:
 
 ```sh
-SPARK_HOME=/opt/spark/spark-1.6.1-bin-hadoop2.6
+SPARK_HOME=/opt/spark/spark-2.0.0-bin-hadoop2.6
 ```
 
 To connect, pass the address of the master node to [spark_connect](reference/sparklyr/latest/spark_connect.html), for example:
@@ -102,12 +104,6 @@ The `config.yml` file is in turn processed using the [config](https://github.com
 
 There are a number of options available to configure the behavior of the sparklyr package:
 
-| Option | Description  |
-|----------------------------|---------------------------------------------|
-| `sparklyr.defaultPackages`| Spark packages to automatically include within session (defaults to "com.databricks:spark-csv_2.11:1.3.0" and "com.amazonaws:aws-java-sdk-pom:1.10.34") |
-| `sparklyr.cores.local` | Number of cores to use when running in local mode (defaults to `parallel::detectCores`) |
-| `sparklyr.shell.*` | Command line parameters to pass to `spark-shell` (see the [Spark documentation](https://spark.apache.org/docs/latest/submitting-applications.html) for details on supported options) |
-
 For example, this configuration file sets the number of local cores to 4 and the amount of memory allocated for the Spark driver to 4GB:
 
 ```yaml
@@ -118,14 +114,40 @@ default:
 
 Note that the use of `default` will be explained below in [Multiple Profiles].
 
+#### Spark
+
+| Option | Description  |
+|----------------------------|---------------------------------------------|
+| `sparklyr.shell.*` | Command line parameters to pass to `spark-submit`. For example, `sparklyr.shell.executor-memory: 20G` configures `--executor-memory 20G` (see the [Spark documentation](https://spark.apache.org/docs/latest/submitting-applications.html) for details on supported options). |
+
+#### Runtime
+
+| Option | Description  |
+|----------------------------|---------------------------------------------|
+| `sparklyr.cores.local` | Number of cores to use when running in local mode (defaults to `parallel::detectCores`). |
+| `sparklyr.sparkui.url` | Configures the url to the Spark UI web interface when calling spark_web. |
+| `sparklyr.defaultPackages` | List of default Spark packages to install in the cluster (defaults to "com.databricks:spark-csv_2.11:1.3.0" and "com.amazonaws:aws-java-sdk-pom:1.10.34"). |
+| `sparklyr.sanitize.column.names` | Allows Spark to automatically rename column names to conform to Spark naming restrictions. |
+
+#### Diagnostics
+
+| Option | Description  |
+|----------------------------|---------------------------------------------|
+| `sparklyr.backend.threads` | Number of threads to use in the sparklyr backend to process incoming connections form the sparklyr client. |
+| `sparklyr.app.jar` | The application jar to be submitted in Spark submit. |
+| `sparklyr.ports.file` | Path to the ports file used to share connection information to the sparklyr backend. |
+| `sparklyr.ports.wait.seconds` | Number of seconds to wait while for the Spark connection to initialize. |
+| `sparklyr.verbose` | Provide additional feedback while performing operations. Currently used to communicate which column names are being sanitized in sparklyr.sanitize.column.names. |
+
+
 ### Spark Options
 
 You can also use `config.yml` to specify arbitrary Spark configuration properties:
 
 | Option | Description  |
 |---------------|----------------------------------------------------------|
-| `spark.*`| Arbitrary configuration properties (applied by creating a `SparkConf` containing the specified properties). See the [Spark Configuration](http://spark.apache.org/docs/latest/configuration.html) for documentation on available properties. |
-| `spark.sql.*`| Arbitrary configuration properties for Spark SQL (applied using SET). See the Spark [SQL Programming Guide](http://spark.apache.org/docs/latest/sql-programming-guide.html) for documentation on available properties. |
+| `spark.*` | Configuration settings for the Spark context (applied by creating a `SparkConf` containing the specified properties). For example, `spark.executor.memory: 1g` configures the memory available in each executor [Spark Configuration](see http://spark.apache.org/docs/latest/configuration.html#application-properties) for additional options. |
+| `spark.sql.*` | Configuration settings for the Spark SQL context (applied using SET). For instance, `spark.sql.shuffle.partitions` configures number of partitions to use while shuffling (see [SQL Programming Guide](http://spark.apache.org/docs/latest/sql-programming-guide.html#other-configuration-options) for additional options). |
 
 For example, this configuration file set a custom scratch directory for Spark and specifies 100 as the number of partitions to use when shuffling data for joins or aggregations:
 

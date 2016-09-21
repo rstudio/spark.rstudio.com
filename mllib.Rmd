@@ -10,18 +10,19 @@ knitr::opts_chunk$set(eval = FALSE)
 
 **sparklyr** provides bindings to Spark's distributed [machine learning](https://spark.apache.org/docs/latest/mllib-guide.html) library. In particular, sparklyr allows you to access the machine learning routines provided by the [spark.ml](https://spark.apache.org/docs/latest/ml-guide.html) package. Together with sparklyr's [dplyr](dplyr.html) interface, you can easily create and tune machine learning workflows on Spark, orchestrated entirely within R.
 
-sparklyr provides three families of functions that you might use within a machine learning pipeline within R:
+sparklyr provides three families of functions that you can use with Spark machine learning:
 
 - Machine learning algorithms for analyzing data (`ml_*`)
 - Feature transformers for manipulating individual features (`ft_*`)
 - Functions for manipulating Spark DataFrames (`sdf_*`)
 
-A typical machine learning pipeline with sparklyr might be composed of the following stages. To fit a model, you might need to:
+An analytic workflow with sparklyr might be composed of the following stages. For an example see [Example Workflow](#example-workflow).
 
 1. Perform SQL queries through the sparklyr [dplyr](dplyr.html) interface,
 2. Use the `sdf_*` and `ft_*` family of functions to generate new columns, or partition your data set,
 3. Choose an appropriate machine learning algorithm from the `ml_*` family of functions to model your data,
 4. Inspect the quality of your model fit, and use it to make predictions with new data.
+5. Collect the results for visualization and further analysis in R
 
 ## Algorithms
 
@@ -43,120 +44,23 @@ Spark's machine learning library can be accessed from sparklyr through the `ml_*
 | [`ml_lda`](reference/sparklyr/latest/ml_lda.html) | Latent Dirichlet Allocation |
 | [`ml_one_vs_rest`](reference/sparklyr/latest/ml_lda.html) | One vs Rest |
 
-### Algorithm Example {.toc-ignore}
+### Formulas {.toc-ignore}
 
-Let's walk through a simple example to demonstrate the use of Spark's machine learning algorithms within R. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
+The `ml_*` functions take the arguments `response` and `features`. But `features` can also be a formula with main effects (it currently does not accept interaction terms). The intercept term can be omitted by using `-1`.
 
-First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
-
-```{r}
-library(sparklyr)
-library(dplyr)
-sc <- spark_connect("local", version = "1.6.1")
-mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
+```{r, eval=FALSE}
+# Equivalent statements
+ml_linear_regression(z ~ -1 + x + y)
+ml_linear_regression(intercept = FALSE, response = "z", features = c("x", "y"))
 ```
 
-Now, let's perform some simple transformations -- we'll
+### Options {.toc-ignore}
 
-1. Remove all cars with horsepower less than 100,
-2. Produce a column encoding whether a car has 8 cylinders or not,
-3. Partition the data into separate training and test data sets,
-4. Fit a model to our training data set,
-5. Evaluate our predictive performance on our test dataset.
-
-<div style="height: 10px;"></div>
-
-```{r}
-# transform our data set, and then partition into 'training', 'test'
-partitions <- mtcars_tbl %>%
-  filter(hp >= 100) %>%
-  mutate(cyl8 = cyl == 8) %>%
-  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
-
-# fit a linear mdoel to the training dataset
-fit <- partitions$training %>%
-  ml_linear_regression(response = "mpg", features = c("wt", "cyl"))
-print(fit)
-```
-```
-Call:
-mpg ~ wt + cyl
-
-Coefficients:
-(Intercept)          wt         cyl 
-  33.499452   -2.818463   -0.923187 
-```
-
-For linear regression models produced by Spark, we can use `summary()` to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.
-
-```{r}
-summary(fit)
-```
-```
-Call:
-mpg ~ wt + cyl
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--1.752 -1.134 -0.499  1.296  2.282 
-
-Coefficients:
-            Estimate Std. Error t value  Pr(>|t|)    
-(Intercept) 33.49945    3.62256  9.2475 0.0002485 ***
-wt          -2.81846    0.96619 -2.9171 0.0331257 *  
-cyl         -0.92319    0.54639 -1.6896 0.1518998    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-R-Squared: 0.8274
-Root Mean Squared Error: 1.422
-```
-
-The `summary()` suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
-
-Let's use our Spark model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We'll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
-
-```{r}
-library(ggplot2)
-
-# compute predicted values on our test dataset
-predicted <- predict(fit, newdata = partitions$test)
-
-# extract the true 'mpg' values from our test dataset
-actual <- partitions$test %>%
-  select(mpg) %>%
-  collect() %>%
-  `[[`("mpg")
-
-# produce a data.frame housing our predicted + actual 'mpg' values
-data <- data.frame(
-  predicted = predicted,
-  actual    = actual
-)
-
-# plot predicted vs. actual values
-ggplot(data, aes(x = actual, y = predicted)) +
-  geom_abline(lty = "dashed", col = "red") +
-  geom_point() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_fixed(ratio = 1) +
-  labs(
-    x = "Actual Fuel Consumption",
-    y = "Predicted Fuel Consumption",
-    title = "Predicted vs. Actual Fuel Consumption"
-  )
-```
-
-![](images/mtcars-regression.png)
-
-Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
-
-As you can see, we can easily and effectively combine dplyr data transformation pipelines with the machine learning algorithms provided by Spark.
-
+The Spark model output can be modified with the `ml_options` argument in the `ml_*` functions. The `ml_options` is an *experts only* interface for tweaking the model output. For example, `model.transform` can be used to mutate the Spark model object before the fit is performed.
 
 ## Transformers
 
-A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
+A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), facilitating many common transformations of data within a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
 
 | Function | Description  |
 |----------------------------|---------------------------------------------|
@@ -170,61 +74,30 @@ A model is often fit not on a dataset as-is, but instead on some transformation 
 | [`ft_string_indexer`](reference/sparklyr/latest/ft_string_indexer.html) | Encodes a string column of labels to a column of label indices |
 | [`ft_vector_assembler`](reference/sparklyr/latest/ft_vector_assembler.html) | Combines a given list of columns into a single vector column |
 
-### Transformer Example {.toc-ignore}
 
-The binarizer transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
+## Utilities
 
-```{r}
-ft_binarizer(
-  mtcars_tbl,
-  input_col = "mpg",
-  output_col = "mpg20",
-  threshold = 20
-)
-```
-```
-Source:   query [?? x 12]
-Database: spark connection master=local app=sparklyr local=TRUE
+Functions for interacting with Spark ML model fits.
 
-     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb mpg20
-   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-1   21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4     1
-2   21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4     1
-3   22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1     1
-4   21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1     1
-5   18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2     0
-6   18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1     0
-7   14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4     0
-8   24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2     1
-9   22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2     1
-10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4     0
-# ... with more rows
-```
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ml_binary_classification_eval`](http://spark.rstudio.com/reference/sparklyr/latest/ml_binary_classification_eval.html) | Calculates the area under the curve for a binary classification model.
+| [`ml_classification_eval`](http://spark.rstudio.com/reference/sparklyr/latest/ml_classification_eval.html) | Calculates performance metrics (i.e. f1, precision, recall, weightedPrecision, weightedRecall, and accuracy) for binary and multiclass classification model.
+| [`ml_tree_feature_importance`](http://spark.rstudio.com/reference/sparklyr/latest/ml_tree_feature_importance.html) | Calculates variable importance for decision trees (i.e. decision trees, random forests, gradient boosted trees).
+| [`ml_saveload`](http://spark.rstudio.com/reference/sparklyr/latest/ml_saveload.html) | Save and load model fits. For use with scoring models across platforms (e.g. using a model as an estimator in a Spark application). *These functions are currently experimental and not yet ready for production use.*
 
-[sdf_mutate](reference/sparklyr/latest/sdf_mutate.html) is provided as a helper function, to allow you to use feature transformers within a pipeline. For example, the previous code snippet could have been written as:
+## Extensions
 
-```{r}
-mtcars_tbl %>%
-  sdf_mutate(mpg20 = ft_binarizer(mpg, threshold = 20))
-```
-```
-Source:   query [?? x 12]
-Database: spark connection master=local app=sparklyr local=TRUE
+Functions for creating custom wrappers to other Spark ML algorithms.
 
-     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb mpg20
-   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-1   21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4     1
-2   21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4     1
-3   22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1     1
-4   21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1     1
-5   18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2     0
-6   18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1     0
-7   14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4     0
-8   24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2     1
-9   22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2     1
-10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4     0
-# ... with more rows
-```
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ensure`](http://spark.rstudio.com/reference/sparklyr/latest/ensure.html) | Enforces Specific Structure for R Objects. |
+| [`ml_create_dummy_variables`](http://spark.rstudio.com/reference/sparklyr/latest/ml_create_dummy_variables.html) | Given a column in a Spark DataFrame, generate a new Spark DataFrame containing dummy variable columns. |
+| [`ml_model`](http://spark.rstudio.com/reference/sparklyr/latest/ml_model.html) | Creates an ML Model Object. |
+| [`ml_options`](http://spark.rstudio.com/reference/sparklyr/latest/ml_options.html) | Provides Options for Spark.ML Routines. |
+| [`ml_prepare_dataframe`](http://spark.rstudio.com/reference/sparklyr/latest/ml_prepare_dataframe.html) | Prepares a Spark DataFrame for Spark ML Routines. |
+| [`ml_prepare_response_features_intercept`](http://spark.rstudio.com/reference/sparklyr/latest/ml_prepare_inputs.html) | Pre-process / normalize the inputs typically passed to a Spark ML routine. |
 
 ## Examples
 
@@ -234,7 +107,7 @@ We will use the `iris` data set to examine a handful of learning algorithms and 
 library(sparklyr)
 library(ggplot2)
 library(dplyr)
-sc <- spark_connect("local", version = "1.6.1")
+sc <- spark_connect("local", version = "2.0.0")
 iris_tbl <- copy_to(sc, iris, "iris", overwrite = TRUE)
 iris_tbl
 ```
@@ -281,14 +154,15 @@ Cluster centers:
 
 ```{r}
 # predict the associated class
-predicted <- predict(kmeans_model)
-table(predicted, iris$Species)
+predicted <- sdf_predict(kmeans_model, iris_tbl) %>%
+  collect
+table(predicted$Species, predicted$prediction)
 ```
 ```
-predicted setosa versicolor virginica
-        0     50          0         0
-        1      0          2        46
-        2      0         48         4
+              0  1  2
+  setosa     50  0  0
+  versicolor  0  2 48
+  virginica   0 46  4
 ```
 
 ```{r}
@@ -320,7 +194,7 @@ Use Spark's [linear regression](http://spark.apache.org/docs/latest/ml-classific
 ```{r}
 lm_model <- iris_tbl %>%
   select(Petal_Width, Petal_Length) %>%
-  ml_linear_regression(response = "Petal_Length", features = c("Petal_Width"))
+  ml_linear_regression(Petal_Length ~ Petal_Width)
 
 iris_tbl %>%
   select(Petal_Width, Petal_Length) %>%
@@ -352,37 +226,36 @@ copy_to(sc, beaver, "beaver")
 beaver_tbl <- tbl(sc, "beaver")
 
 glm_model <- beaver_tbl %>%
-  mutate(response = as.numeric(activ == "Active")) %>%
-  ml_logistic_regression(response = "response", features = "temp")
+  mutate(binary_response = as.numeric(activ == "Active")) %>%
+  ml_logistic_regression(binary_response ~ temp)
 
 print(glm_model)
 ```
 ```
-Call: response ~ temp
+Source:   query [?? x 4]
+Database: spark connection master=local[4] app=sparklyr local=TRUE
+
+     day  time  temp      activ
+   <dbl> <dbl> <dbl>      <chr>
+1    307   930 36.58 Non-Active
+2    307   940 36.73 Non-Active
+3    307   950 36.93 Non-Active
+4    307  1000 37.15 Non-Active
+5    307  1010 37.23 Non-Active
+6    307  1020 37.24 Non-Active
+7    307  1030 37.24 Non-Active
+8    307  1040 36.90 Non-Active
+9    307  1050 36.95 Non-Active
+10   307  1100 36.89 Non-Active
+# ... with more rows
+Call: binary_response ~ temp
 
 Coefficients:
 (Intercept)        temp 
- -550.52331    14.69184 
+ -550.52331    14.69184  
 ```
 
-### Partitioning 
-
-Split a Spark DataFrame into training, test datasets.
-
-```{r}
-partitions <- tbl(sc, "iris") %>%
-  sdf_partition(training = 0.75, test = 0.25, seed = 1099)
-
-fit <- partitions$training %>%
-  ml_linear_regression(response = "Petal_Length", features = c("Petal_Width"))
-
-head(predict(fit, partitions$test))
-```
-```
- [1] 1.744571 1.521752 1.521752 1.521752 1.298933 1.521752
-```
-
-### Principal Components Analysis
+### PCA
 
 Use Spark's [Principal Components Analysis (PCA)](https://spark.apache.org/docs/latest/mllib-dimensionality-reduction.html) to perform dimensionality reduction. PCA is a statistical method to find a rotation such that the first coordinate has the largest variance possible, and each succeeding coordinate in turn has the largest variance possible.
 
@@ -406,30 +279,175 @@ Petal_Width  -0.35828920  0.07548102 -0.54583143  0.7536574
 
 ### Random Forest
 
-Use Spark's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or classification on a dataset.
+Use Spark's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or multiclass classification.
 
 ```{r}
 rf_model <- iris_tbl %>%
-  ml_random_forest(
-    response = "Species",
-    features = c("Petal_Length", "Petal_Width"),
-    max.bins = 32L,
-    max.depth = 5L,
-    num.trees = 20L
-  )
+  ml_random_forest(Species ~ Petal_Length + Petal_Width, type = "classification")
 
-rf_predict <- predict(rf_model, iris_tbl)
-iris_fit <- iris_tbl %>%
-  select(Species) %>%
-  collect %>%
-  mutate(fit = rf_predict)
-table(iris_fit)
+rf_predict <- sdf_predict(rf_model, iris_tbl) %>%
+  ft_string_indexer("Species", "Species_idx") %>%
+  collect
+
+table(rf_predict$Species_idx, rf_predict$prediction)
 ```
 ```
-            fit
-Species      setosa versicolor virginica
+     0  1  2
+  0 49  1  0
+  1  0 50  0
+  2  0  0 50
+```
+
+### SDF Partitioning 
+
+Split a Spark DataFrame into training, test datasets.
+
+```{r}
+partitions <- tbl(sc, "iris") %>%
+  sdf_partition(training = 0.75, test = 0.25, seed = 1099)
+
+fit <- partitions$training %>%
+  ml_linear_regression(Petal_Length ~ Petal_Width)
+
+estimate_mse <- function(df){
+  sdf_predict(fit, df) %>%
+  mutate(resid = Petal_Length - prediction) %>%
+  summarize(mse = mean(resid ^ 2)) %>%
+  collect
+}
+
+sapply(partitions, estimate_mse)
+```
+```
+$training.mse
+[1] 0.2374596
+
+$test.mse
+[1] 0.1898848
+```
+
+### FT String Indexing
+
+The binarizer transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
+
+```{r}
+ft_string2idx <- iris_tbl %>%
+  ft_string_indexer("Species", "Species_idx") %>%
+  ft_index_to_string("Species_idx", "Species_remap") %>%
+  collect
+
+table(ft_string2idx$Species, ft_string2idx$Species_remap)
+```
+```
+             setosa versicolor virginica
   setosa         50          0         0
-  versicolor      0         49         1
+  versicolor      0         50         0
   virginica       0          0        50
 ```
+
+### SDF Mutate
+
+[sdf_mutate](reference/sparklyr/latest/sdf_mutate.html) is provided as a helper function, to allow you to use feature transformers. For example, the previous code snippet could have been written as:
+
+```{r}
+ft_string2idx <- iris_tbl %>%
+  sdf_mutate(Species_idx = ft_string_indexer(Species)) %>%
+  sdf_mutate(Species_remap = ft_index_to_string(Species_idx)) %>%
+  collect
+  
+ft_string2idx %>%
+  select(Species, Species_idx, Species_remap) %>%
+  distinct
+```
+```
+# A tibble: 3 × 3
+     Species Species_idx Species_remap
+       <chr>       <dbl>         <chr>
+1     setosa           2        setosa
+2 versicolor           0    versicolor
+3  virginica           1     virginica
+```
+
+### Example Workflow
+
+Let's walk through a simple example to demonstrate the use of Spark's machine learning algorithms within R. We'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
+
+First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
+
+```{r}
+library(sparklyr)
+library(dplyr)
+library(ggplot2)
+sc <- spark_connect("local", version = "1.6.1")
+mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
+```
+
+Transform the data with Spark SQL, feature transformers, and DataFrame functions.
+
+1. Use Spark SQL to remove all cars with horsepower less than 100
+2. Use Spark feature transformers to bucket cars into two groups based on cylinders
+3. Use Spark DataFrame functions to partition the data into test and training
+
+Then fit a linear model using spark ML. Model MPG as a function of weight and cylinders.
+
+```{r}
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  sdf_mutate(cyl8 = ft_bucketizer(cyl, c(0,8,12))) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 888)
+
+# fit a linear mdoel to the training dataset
+fit <- partitions$training %>%
+  ml_linear_regression(mpg ~ wt + cyl)
+
+# summarize the model
+summary(fit)
+```
+```
+Call: ml_linear_regression(., mpg ~ wt + cyl)
+
+Deviance Residuals::
+    Min      1Q  Median      3Q     Max 
+-2.1746 -1.1377 -0.7085  1.6561  2.6651 
+
+Coefficients:
+            Estimate Std. Error t value  Pr(>|t|)    
+(Intercept) 40.72662    3.25025 12.5303 1.943e-07 ***
+wt          -1.75407    0.77645 -2.2591  0.047443 *  
+cyl         -2.33221    0.63791 -3.6560  0.004418 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-Squared: 0.8756
+Root Mean Squared Error: 1.618
+```
+
+The `summary()` suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
+
+Let's use our Spark model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We'll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
+
+```{r}
+# Score the data
+pred <- sdf_predict(fit, partitions$test) %>%
+  collect
+
+# Plot the predicted versus actual mpg
+ggplot(pred, aes(x = mpg, y = prediction)) +
+  geom_abline(lty = "dashed", col = "red") +
+  geom_point() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_fixed(ratio = 1) +
+  labs(
+    x = "Actual Fuel Consumption",
+    y = "Predicted Fuel Consumption",
+    title = "Predicted vs. Actual Fuel Consumption"
+  )
+```
+
+![](images/mtcars-regression.png)
+
+Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
+
+As you can see, we can easily and effectively combine feature transformers, machine learning algorithms, and Spark DataFrame functions into a complete analysis with Spark and R.
 

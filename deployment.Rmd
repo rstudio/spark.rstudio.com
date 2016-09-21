@@ -83,6 +83,20 @@ You can disconnect from Spark using the [spark_disconnect](reference/sparklyr/la
 spark_disconnect(sc)
 ```
 
+### Collect
+
+The `collect` function transfers data from Spark into R. The data are collected from a cluster environment and transfered into local R memory. In the process, all data is first transfered from executor nodes to the driver node. Therefore, the driver node must have enough memory to collect all the data.
+
+Collecting data on the driver node is relatively slow. The process also inflates the data as it moves from the executor nodes to the driver node. Caution should be used when collecting large data.
+
+The following parameters could be adjusted to avoid OutOfMemory and Timeout errors:
+
+* spark.executor.heartbeatInterval
+* spark.network.timeout
+* spark.driver.extraJavaOptions
+* spark.driver.memory
+* spark.yarn.driver.memoryOverhead
+* spark.driver.maxResultSize
 
 ## Configuration 
 
@@ -203,22 +217,7 @@ sc <- spark_connect()
 
 Note that the currently active configuration is determined via the value of `R_CONFIG_ACTIVE` environment variable. See the [config package documentation](https://github.com/rstudio/config) for additional details.
 
-## Collect
-
-The `collect` function transfers data from Spark into R. The data are collected from a cluster environment and transfered into local R memory. In the process, all data is first transfered from executor nodes to the driver node. Therefore, the driver node must have enough memory to collect all the data.
-
-Collecting data on the driver node is relatively slow. The process also inflates the data as it moves from the executor nodes to the driver node. Caution should be used when collecting large data.
-
-The following parameters could be adjusted to avoid OutOfMemory and Timeout errors:
-
-* spark.executor.heartbeatInterval
-* spark.network.timeout
-* spark.driver.extraJavaOptions
-* spark.driver.memory
-* spark.yarn.driver.memoryOverhead
-* spark.driver.maxResultSize
-
-## Tuning
+### Tuning
 
 In general, you will need to tune a Spark cluster for it to perform well. Spark applications tend to consume a lot of resources. There are many knobs to control the performance of Yarn and executor (i.e. worker) nodes in a cluster. Some of the parameters to pay attention to are as follows:
 
@@ -230,7 +229,7 @@ In general, you will need to tune a Spark cluster for it to perform well. Spark 
 * spark.executor.cores
 * spark.executor.instances (if is not enabled)
 
-### Example Config
+#### Example Config
 
 Here is an example spark configuration for an EMR cluster on AWS with 1 master and 2 worker nodes. Eache node has 8 vCPU and 61 GiB of memory. 
 
@@ -247,7 +246,7 @@ Here is an example spark configuration for an EMR cluster on AWS with 1 master a
 
 Configuration parameters can be set in the config R object or can be set in the `config.yml`. Alternatively, they can be set in the `spark-defaults.conf`.
 
-#### Configuration in R script
+##### Configuration in R script
 
 ```{r eval=FALSE}
 config <- spark_config()
@@ -256,7 +255,7 @@ config$spark.executor.memory <- "4G"
 sc <- spark_connect(master = "yarn-client", config = config, version = '2.0.0')
 ```
 
-#### Configuration in YAML script
+##### Configuration in YAML script
 
 ```yaml
 default:

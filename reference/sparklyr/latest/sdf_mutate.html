@@ -175,6 +175,9 @@ $(document).ready(function () {
 <li>
   <a href="../../../deployment.html">Deployment</a>
 </li>
+<li>
+  <a href="../../../examples.html">Examples</a>
+</li>
 <li class="active">
   <a href="index.html">Reference</a>
 </li>
@@ -202,9 +205,8 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><span class="functioncall"><a href='sdf_mutate.html'>sdf_mutate</a></span><span class="keyword">(</span><span class="symbol">.data</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span>
-
-<span class="functioncall"><a href='sdf_mutate.html'>sdf_mutate_</a></span><span class="keyword">(</span><span class="symbol">.data</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span> <span class="symbol">.dots</span><span class="keyword">)</span></code></pre>
+    <pre class="code"><code class="r"><div>sdf_mutate(.data, ...)</div>
+<div>sdf_mutate_(.data, ..., .dots)</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -220,7 +222,7 @@ be applied.</dd>
     <div class="Description">
       <h2>Description</h2>
 
-      <p>Use Spark&#39;s <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>feature transformers</a>
+      <p>Use Spark's <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>feature transformers</a>
 to mutate a Spark DataFrame.</p>
   
     </div>
@@ -232,33 +234,16 @@ to mutate a Spark DataFrame.</p>
   
       <p>The family of functions prefixed with <code>sdf_</code> generally access the Scala
 Spark DataFrame API directly, as opposed to the <code>dplyr</code> interface which
-uses Spark SQL. These functions will &#39;force&#39; any pending SQL in a
+uses Spark SQL. These functions will 'force' any pending SQL in a
 <code>dplyr</code> pipeline, such that the resulting <code>tbl_spark</code> object
-returned will no longer have the attached &#39;lazy&#39; SQL operations. Note that
+returned will no longer have the attached 'lazy' SQL operations. Note that
 the underlying Spark DataFrame <em>does</em> execute its operations lazily, so
 that even though the pending set of operations (currently) are not exposed at
 the <span style="R">R</span> level, these operations will only be executed when you explicitly
 <code>collect()</code> the table.</p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><span class="comment">## Not run: ------------------------------------</span>
-<span class="comment"># # using the 'beaver1' dataset, binarize the 'temp' column</span>
-<span class="comment"># data(beavers, package = "datasets")</span>
-<span class="comment"># beaver_tbl &lt;- copy_to(sc, beaver1, "beaver")</span>
-<span class="comment"># beaver_tbl %&gt;%</span>
-<span class="comment">#   mutate(squared = temp ^ 2) %&gt;%</span>
-<span class="comment">#   sdf_mutate(warm = ft_binarizer(squared, 1000)) %&gt;%</span>
-<span class="comment">#   sdf_register("mutated")</span>
-<span class="comment"># </span>
-<span class="comment"># # view our newly constructed tbl</span>
-<span class="comment"># head(beaver_tbl)</span>
-<span class="comment"># </span>
-<span class="comment"># # note that we have two separate tbls registered</span>
-<span class="comment"># dplyr::src_tbls(sc)</span>
-<span class="comment">## ---------------------------------------------</span></pre>
-  </div>
+      </div>
   <div class="col-sm-4">
     <!-- <ul>
       <li>sdf_mutate</li><li>sdf_mutate_</li>
@@ -268,7 +253,8 @@ the <span style="R">R</span> level, these operations will only be executed when 
     </ul> -->
       
     <h2>See also</h2>
-    See also,Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
+    
+Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
   <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
   <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,
   <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
@@ -278,6 +264,7 @@ the <span style="R">R</span> level, these operations will only be executed when 
   <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
   <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
   <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>
+
         
   </div>
 </div>

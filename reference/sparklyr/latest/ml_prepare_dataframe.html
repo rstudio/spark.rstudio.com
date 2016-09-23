@@ -175,6 +175,9 @@ $(document).ready(function () {
 <li>
   <a href="../../../deployment.html">Deployment</a>
 </li>
+<li>
+  <a href="../../../examples.html">Examples</a>
+</li>
 <li class="active">
   <a href="index.html">Reference</a>
 </li>
@@ -202,8 +205,7 @@ $(document).ready(function () {
 <div class="row">
   <div class="col-sm-8">
     <h2>Usage</h2>
-    <pre class="code"><code class="r"><span class="functioncall"><a href='ml_prepare_dataframe.html'>ml_prepare_dataframe</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="symbol">features</span><span class="keyword">,</span> <span class="argument">response</span>&nbsp;<span class="argument">=</span>&nbsp;NULL<span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">,</span>
-  <span class="argument">ml.options</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='ml_options.html'>ml_options</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="argument">envir</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/environment'>new.env</a></span><span class="keyword">(</span><span class="argument">parent</span>&nbsp;<span class="argument">=</span>&nbsp;<span class="functioncall"><a href='http://www.rdocumentation.org/packages/base/topics/environment'>emptyenv</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">)</span><span class="keyword">)</span></code></pre>
+    <pre class="code"><code class="r"><div>ml_prepare_dataframe(x, features, response&nbsp;=&nbsp;NULL, ..., ml.options&nbsp;=&nbsp;ml_options(), envir&nbsp;=&nbsp;new.env(parent&nbsp;=&nbsp;emptyenv()))</div></code></pre>
     
     <h2>Arguments</h2>
     <dl>
@@ -248,7 +250,7 @@ with metadata describing the transformations that have taken place.</dd>
         <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code> for strings),
   </li>
 <li> The <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code> is used to combine the
-        specified features into a single &#39;feature&#39; vector, suitable
+        specified features into a single 'feature' vector, suitable
         for use with Spark ML routines.
 </li>
 </ol></p>
@@ -265,25 +267,7 @@ will be populated with a set of variables:</p>
 </tr></table></p>
   
     </div>
-    
-    <h2 id="examples">Examples</h2>
-    <pre class="examples"><span class="comment">## Not run: ------------------------------------</span>
-<span class="comment"># # example of how 'ml_prepare_dataframe' might be used to invoke</span>
-<span class="comment"># # Spark's LinearRegression routine from the 'ml' package</span>
-<span class="comment"># envir &lt;- new.env(parent = emptyenv())</span>
-<span class="comment"># tdf &lt;- ml_prepare_dataframe(df, features, response, envir = envir)</span>
-<span class="comment"># </span>
-<span class="comment"># lr &lt;- invoke_new(</span>
-<span class="comment">#   sc,</span>
-<span class="comment">#   "org.apache.spark.ml.regression.LinearRegression"</span>
-<span class="comment"># )</span>
-<span class="comment"># </span>
-<span class="comment"># # use generated 'features', 'response' vector names in model fit</span>
-<span class="comment"># model &lt;- lr %&gt;%</span>
-<span class="comment">#   invoke("setFeaturesCol", envir$features) %&gt;%</span>
-<span class="comment">#   invoke("setLabelCol", envir$response)</span>
-<span class="comment">## ---------------------------------------------</span></pre>
-  </div>
+      </div>
   <div class="col-sm-4">
     <!-- <ul>
       <li>ml_prepare_dataframe</li>

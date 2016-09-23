@@ -1,0 +1,486 @@
+---
+title: "Sparking Water (H2O) Machine Learning"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+## Overview
+
+The **rsparkling** extension package provides bindings to H2O's distributed [machine learning](http://www.h2o.ai/product/algorithms/) algorithms via **sparklyr**. In particular, rsparkling allows you to access the machine learning routines provided by the [Sparkling Water](http://www.h2o.ai/product/sparkling-water/) package. 
+
+Together with sparklyr's [dplyr](dplyr.html) interface, you can easily create and tune H2O machine learning workflows on Spark, orchestrated entirely within R.
+
+rsparkling provides a few simple conversion functions that allow the user to transfer data between Spark DataFrames and H2O Frames.  Once the Spark DataFrames are available as H2O Frames, the **h2o** R interface can be used to train H2O machine learning algorithms on the data.
+
+A typical machine learning pipeline with rsparkling might be composed of the following stages. To fit a model, you might need to:
+
+1. Perform SQL queries through the sparklyr [dplyr](dplyr.html) interface,
+2. Use the `sdf_*` and `ft_*` family of functions to generate new columns, or partition your data set,
+3. Convert your training, validation and/or test data frames into H2O Frames using the `as_h2o_frame` function,
+3. Choose an appropriate H2O machine learning algorithm to model your data,
+4. Inspect the quality of your model fit, and use it to make predictions with new data.
+
+### Installing rsparkling
+
+The latest version of rsparking can be installed as follows:
+
+```{r, eval=FALSE}
+library(devtools)
+install_github("h2oai/sparkling-water", ref = "rsparkling", subdir = "/r/rsparkling")
+```
+
+
+## Algorithms
+
+Once the `H2OContext` is made available to Spark, all of the functions in the standard h2o R interface can be used with H2O Frames (converted from Spark DataFrames).  Here is a table of the available algorithms:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`h2o.glm`](reference/sparklyr/latest/ml_kmeans.html) | Generalized Linear Model |
+| [`h2o.deeplearning`](reference/sparklyr/latest/ml_linear_regression.html) | Multilayer Perceptron |
+| [`h2o.randomForest`](reference/sparklyr/latest/ml_logistic_regression.html) | Random Forest |
+| [`h2o.gbm`](reference/sparklyr/latest/ml_survival_regression.html) | Gradient Boosting Machine |
+| [`h2o.naiveBayes`](reference/sparklyr/latest/ml_generalized_linear_regression.html) | Naive-Bayes |
+| [`h2o.prcomp`](reference/sparklyr/latest/ml_pca.html) | Principal Components Analysis |
+| [`h2o.svd`](reference/sparklyr/latest/ml_pca.html) | Singular Value Decomposition |
+| [`h2o.glrm`](reference/sparklyr/latest/ml_pca.html) | Generalized Low Rank Model |
+| [`h2o.kmeans`](reference/sparklyr/latest/ml_pca.html) | K-Means Clustering |
+| [`h2o.anomaly`](reference/sparklyr/latest/ml_pca.html) | Anomaly Detection via Deep Learning Autoencoder |
+
+Additionally, the [h2oEnsemble](https://github.com/h2oai/h2o-3/tree/master/h2o-r/ensemble) R package can be used to generate Super Learner ensembles of H2O algorithms:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`h2o.ensemble`](reference/sparklyr/latest/ml_pca.html) | Super Learner / Stacking |
+| [`h2o.stack`](reference/sparklyr/latest/ml_pca.html) | Super Learner / Stacking |
+
+
+### Algorithm Example {.toc-ignore}
+
+Let's walk through a simple example to demonstrate the use of H2O's machine learning algorithms within R. We'll use [h2o.glm](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
+
+First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
+
+```{r}
+library(sparklyr)
+library(rsparkling)
+library(h2o)
+library(dplyr)
+
+sc <- spark_connect("local", version = "1.6.2")
+mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
+```
+
+Now, let's perform some simple transformations -- we'll
+
+1. Remove all cars with horsepower less than 100,
+2. Produce a column encoding whether a car has 8 cylinders or not,
+3. Partition the data into separate training and test data sets,
+4. Fit a model to our training data set,
+5. Evaluate our predictive performance on our test dataset.
+
+<div style="height: 10px;"></div>
+
+```{r}
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  mutate(cyl8 = cyl == 8) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
+```
+
+Now, we convert our training and test sets into H2O Frames using rpsparkling's conversion functions.  We have already split the data into training and test frames using dplyr.  
+
+```{r}
+training <- as_h2o_frame(partitions$training)
+test <- as_h2o_frame(partitions$test)
+```
+
+Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFile(as_h2o_frame(mtcars_tbl), 0.5)`) 
+
+
+```{r}
+# fit a linear model to the training dataset
+fit <- h2o.glm(x = c("wt", "cyl"), 
+               y = "mpg", 
+               training_frame = training,
+               lambda_search = TRUE)
+```
+
+
+
+
+For linear regression models produced by H2O, we can use either `print()` or `summary()` to learn a bit more about the quality of our fit.  The `summary()` method returns some extra information about scoring history and variable importances.
+
+```{r}
+print(fit)
+```
+```
+Model Details:
+==============
+
+H2ORegressionModel: glm
+Model ID:  GLM_model_R_1474576540794_2 
+GLM Model: summary
+    family     link
+1 gaussian identity
+                                regularization
+1 Elastic Net (alpha = 0.5, lambda = 0.08201 )
+                                                                lambda_search
+1 nlambda = 100, lambda.max = 8.2006, lambda.min = 0.08201, lambda.1se = -1.0
+  number_of_predictors_total
+1                          2
+  number_of_active_predictors
+1                           2
+  number_of_iterations training_frame
+1                    0   frame_rdd_57
+
+Coefficients: glm coefficients
+      names coefficients
+1 Intercept    36.390842
+2       cyl    -1.580152
+3        wt    -2.232329
+  standardized_coefficients
+1                 17.783333
+2                 -2.505999
+3                 -2.449461
+
+H2ORegressionMetrics: glm
+** Reported on training data. **
+
+MSE:  3.262896
+RMSE:  1.806349
+MAE:  1.411069
+RMSLE:  0.09689482
+Mean Residual Deviance :  3.262896
+R^2 :  0.865446
+Null Deviance :290.9967
+Null D.o.F. :11
+Residual Deviance :39.15475
+Residual D.o.F. :9
+AIC :56.24591
+```
+
+The output suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
+
+Let's use our H2O model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We'll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
+
+```{r}
+library(ggplot2)
+
+# compute predicted values on our test dataset
+pred <- h2o.predict(fit, newdata = test)
+# convert from H2O Frame to Spark DataFrame
+predicted <- as_spark_dataframe(pred, sc)
+
+# extract the true 'mpg' values from our test dataset
+actual <- partitions$test %>%
+  select(mpg) %>%
+  collect() %>%
+  `[[`("mpg")
+
+# produce a data.frame housing our predicted + actual 'mpg' values
+data <- data.frame(
+  predicted = predicted,
+  actual    = actual
+)
+# a bug in data.frame does not set colnames properly; reset here 
+names(data) <- c("predicted", "actual")
+
+# plot predicted vs. actual values
+ggplot(data, aes(x = actual, y = predicted)) +
+  geom_abline(lty = "dashed", col = "red") +
+  geom_point() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_fixed(ratio = 1) +
+  labs(
+    x = "Actual Fuel Consumption",
+    y = "Predicted Fuel Consumption",
+    title = "Predicted vs. Actual Fuel Consumption"
+  )
+```
+
+![](images/mtcars-regression.png)
+
+Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
+
+As you can see, we can easily and effectively combine dplyr data transformation pipelines with the machine learning algorithms provided by H2O's Sparkling Water.
+
+
+## Transformers
+
+A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`ft_binarizer`](reference/sparklyr/latest/ft_binarizer.html) | Threshold numerical features to binary (0/1) feature  |
+| [`ft_bucketizer`](reference/sparklyr/latest/ft_bucketizer.html) | Bucketizer transforms a column of continuous features to a column of feature buckets |
+| [`ft_discrete_cosine_transform`](reference/sparklyr/latest/ft_discrete_cosine_transform.html) | Transforms a length NN real-valued sequence in the time domain into another length NN real-valued sequence in the frequency domain |
+| [`ft_elementwise_product`](reference/sparklyr/latest/ft_elementwise_product.html) | Multiplies each input vector by a provided weight vector, using element-wise multiplication. |
+| [`ft_index_to_string`](reference/sparklyr/latest/ft_index_to_string.html) | Maps a column of label indices back to a column containing the original labels as strings |
+| [`ft_quantile_discretizer`](reference/sparklyr/latest/ft_quantile_discretizer.html) | Takes a column with continuous features and outputs a column with binned categorical features |
+| [`ft_sql_transformer`](reference/sparklyr/latest/ft_sql_transformer.html) | Implements the transformations which are defined by a SQL statement |
+| [`ft_string_indexer`](reference/sparklyr/latest/ft_string_indexer.html) | Encodes a string column of labels to a column of label indices |
+| [`ft_vector_assembler`](reference/sparklyr/latest/ft_vector_assembler.html) | Combines a given list of columns into a single vector column |
+
+### Transformer Example {.toc-ignore}
+
+The binarizer transforms a feature into 1's and 0's based on a threshold. Let's create a new column in our `mtcars` data set, `mpg20`, that encodes whether a car achieves more than 20 miles per gallon in fuel efficiency.
+
+```{r}
+ft_binarizer(
+  mtcars_tbl,
+  input_col = "mpg",
+  output_col = "mpg20",
+  threshold = 20
+)
+```
+```
+Source:   query [?? x 12]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb mpg20
+   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+1   21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4     1
+2   21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4     1
+3   22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1     1
+4   21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1     1
+5   18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2     0
+6   18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1     0
+7   14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4     0
+8   24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2     1
+9   22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2     1
+10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4     0
+# ... with more rows
+```
+
+[sdf_mutate](reference/sparklyr/latest/sdf_mutate.html) is provided as a helper function, to allow you to use feature transformers within a pipeline. For example, the previous code snippet could have been written as:
+
+```{r}
+mtcars_tbl %>%
+  sdf_mutate(mpg20 = ft_binarizer(mpg, threshold = 20))
+```
+```
+Source:   query [?? x 12]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb mpg20
+   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+1   21.0     6 160.0   110  3.90 2.620 16.46     0     1     4     4     1
+2   21.0     6 160.0   110  3.90 2.875 17.02     0     1     4     4     1
+3   22.8     4 108.0    93  3.85 2.320 18.61     1     1     4     1     1
+4   21.4     6 258.0   110  3.08 3.215 19.44     1     0     3     1     1
+5   18.7     8 360.0   175  3.15 3.440 17.02     0     0     3     2     0
+6   18.1     6 225.0   105  2.76 3.460 20.22     1     0     3     1     0
+7   14.3     8 360.0   245  3.21 3.570 15.84     0     0     3     4     0
+8   24.4     4 146.7    62  3.69 3.190 20.00     1     0     4     2     1
+9   22.8     4 140.8    95  3.92 3.150 22.90     1     0     4     2     1
+10  19.2     6 167.6   123  3.92 3.440 18.30     1     0     4     4     0
+# ... with more rows
+```
+
+## Examples
+
+We will use the `iris` data set to examine a handful of learning algorithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
+
+```{r}
+library(sparklyr)
+library(h2o)
+library(rsparkling)
+library(ggplot2)
+library(dplyr)
+sc <- spark_connect("local", version = "1.6.2")
+iris_tbl <- copy_to(sc, iris, "iris", overwrite = TRUE)
+iris_tbl
+```
+```
+Source:   query [?? x 5]
+Database: spark connection master=local app=sparklyr local=TRUE
+
+   Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+          <dbl>       <dbl>        <dbl>       <dbl>   <chr>
+1           5.1         3.5          1.4         0.2  setosa
+2           4.9         3.0          1.4         0.2  setosa
+3           4.7         3.2          1.3         0.2  setosa
+4           4.6         3.1          1.5         0.2  setosa
+5           5.0         3.6          1.4         0.2  setosa
+6           5.4         3.9          1.7         0.4  setosa
+7           4.6         3.4          1.4         0.3  setosa
+8           5.0         3.4          1.5         0.2  setosa
+9           4.4         2.9          1.4         0.2  setosa
+10          4.9         3.1          1.5         0.1  setosa
+# ... with more rows
+```
+Convert to an H2O Frame:
+```{r}
+iris_hf <- as_h2o_frame(iris_tbl)
+```
+
+### K-Means Clustering
+
+Use H2O's [K-means clustering](http://spark.apache.org/docs/latest/ml-clustering.html#k-means) to partition a dataset into groups. K-means clustering partitions points into `k` groups, such that the sum of squares from points to the assigned cluster centers is minimized.
+
+```{r}
+kmeans_model <- h2o.kmeans(training_frame = iris_hf, 
+                           x = 3:4,
+                           k = 3)
+```
+
+
+To look at particular metrics of the K-means model, we can use `h2o.centroid_stats()` and `h2o.centers()` or simply print out all the model metrics using `print(kmeans_model)`.
+
+```{r}
+# print the cluster centers
+h2o.centers(kmeans_model)
+```
+```
+  petal_length petal_width
+1     5.566667     2.05625
+2     1.462000     0.24600
+3     4.296154     1.32500
+```
+
+```{r}
+# print the centroid statistics
+h2o.centroid_stats(kmeans_model)
+```
+```
+Centroid Statistics: 
+  centroid     size within_cluster_sum_of_squares
+1        1 48.00000                       9.29317
+2        2 50.00000                       1.41087
+3        3 52.00000                       7.20274
+```
+
+
+### Logistic Regression
+
+Use H2O's [logistic regression](http://spark.apache.org/docs/latest/ml-classification-regression.html#logistic-regression) to perform logistic regression, modeling a binary outcome as a function of one or more explanatory variables.  In this example, we also perform 3-fold cross-validation and evaluate the performance of the model.
+
+```{r}
+# Prepare beaver dataset
+beaver <- beaver2
+beaver$activ <- factor(beaver$activ, labels = c("Non-Active", "Active"))
+beaver_hf <- as.h2o(beaver)
+
+y <- "activ"
+x <- setdiff(names(beaver_hf), y)
+glm_model <- h2o.glm(x = x, 
+                     y = y,
+                     training_frame = beaver_hf,
+                     family = "binomial",
+                     nfolds = 3)
+
+glm_perf <- h2o.performance(glm_model, xval = TRUE)
+```
+```
+H2OBinomialMetrics: glm
+** Reported on cross-validation data. **
+** 3-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
+
+MSE:  0.006652287
+RMSE:  0.08156155
+LogLoss:  0.02928157
+Mean Per-Class Error:  0
+AUC:  1
+Gini:  1
+R^2:  0.9717645
+Null Deviance:  132.9632
+Residual Deviance:  5.856313
+AIC:  13.85631
+
+Confusion Matrix for F1-optimal threshold:
+           Active Non-Active    Error    Rate
+Active         62          0 0.000000   =0/62
+Non-Active      0         38 0.000000   =0/38
+Totals         62         38 0.000000  =0/100
+
+Maximum Metrics: Maximum metrics at their respective thresholds
+                        metric threshold    value idx
+1                       max f1  0.330967 1.000000  37
+2                       max f2  0.330967 1.000000  37
+3                 max f0point5  0.330967 1.000000  37
+4                 max accuracy  0.330967 1.000000  37
+5                max precision  0.999998 1.000000   0
+6                   max recall  0.330967 1.000000  37
+7              max specificity  0.999998 1.000000   0
+8             max absolute_mcc  0.330967 1.000000  37
+9   max min_per_class_accuracy  0.330967 1.000000  37
+10 max mean_per_class_accuracy  0.330967 1.000000  37
+
+Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
+```
+
+
+### Principal Components Analysis
+
+Use H2O's [Principal Components Analysis (PCA)](https://spark.apache.org/docs/latest/mllib-dimensionality-reduction.html) to perform dimensionality reduction. PCA is a statistical method to find a rotation such that the first coordinate has the largest variance possible, and each succeeding coordinate in turn has the largest variance possible.
+
+```{r}
+pca_model <- h2o.prcomp(training_frame = iris_hf,
+                        x = 1:4,
+                        k = 4)
+print(pca_model)
+```
+```
+Model Details:
+==============
+
+H2ODimReductionModel: pca
+Model ID:  PCA_model_R_1474576540794_7 
+Importance of components: 
+                            pc1      pc2      pc3      pc4
+Standard deviation     7.861342 1.455041 0.283531 0.154411
+Proportion of Variance 0.965303 0.033069 0.001256 0.000372
+Cumulative Proportion  0.965303 0.998372 0.999628 1.000000
+
+
+H2ODimReductionMetrics: pca
+** Reported on training data. **
+```
+
+### Random Forest
+
+Use H2O's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or classification on a dataset.
+
+As usual, we define the response and predictor variables using the `x` and `y` arguments.  Since we'd like to do a classfication, we need to ensure that the response column is encoded as a factor (enum) column.
+
+```{r}
+y <- "Species"
+x <- c("Petal_Length", "Petal_Width")
+iris_hf[,y] <- as.factor(iris_hf[,y])
+```
+
+We can split the `iris_hf` H2O Frame into a train and test set (the split defaults to 75/25 train/test).
+```{r}
+splits <- h2o.splitFrame(iris_hf, seed = 1)
+```
+
+Then we can train a Random Forest model:
+```{r}
+rf_model <- h2o.randomForest(x = x, 
+                             y = y,
+                             training_frame = splits[[1]],
+                             validation_frame = splits[[2]],
+                             nbins = 32,
+                             max_depth = 5,
+                             ntrees = 20)
+
+```
+
+Since we passed a validation frame, the validation metrics will be calculated.  We can retreive individual metrics using functions such as `h2o.mse(rf_model, valid = TRUE)`.  The confusion matrix can be printed using the following:
+
+```{r}
+h2o.confusionMatrix(rf_model, valid = TRUE)
+```
+```
+Confusion Matrix: vertical: actual; across: predicted
+           setosa versicolor virginica  Error     Rate
+setosa          7          0         0 0.0000 =  0 / 7
+versicolor      0         13         0 0.0000 = 0 / 13
+virginica       0          1        10 0.0909 = 1 / 11
+Totals          7         14        10 0.0323 = 1 / 31
+```
+

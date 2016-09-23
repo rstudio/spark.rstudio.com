@@ -24,7 +24,7 @@ A typical machine learning pipeline with rsparkling might be composed of the fol
 
 ### Installing rsparkling {.toc-ignore}
 
-The latest version of rsparking can be installed as follows:
+The latest version of rsparkling can be installed as follows:
 
 ```{r, eval=FALSE}
 library(devtools)
@@ -91,7 +91,7 @@ partitions <- mtcars_tbl %>%
   sdf_partition(training = 0.5, test = 0.5, seed = 1099)
 ```
 
-Now, we convert our training and test sets into H2O Frames using rpsparkling's conversion functions.  We have already split the data into training and test frames using dplyr.  
+Now, we convert our training and test sets into H2O Frames using rsparkling conversion functions.  We have already split the data into training and test frames using dplyr.  
 
 ```{r}
 training <- as_h2o_frame(partitions$training)
@@ -112,7 +112,7 @@ fit <- h2o.glm(x = c("wt", "cyl"),
 
 
 
-For linear regression models produced by H2O, we can use either `print()` or `summary()` to learn a bit more about the quality of our fit.  The `summary()` method returns some extra information about scoring history and variable importances.
+For linear regression models produced by H2O, we can use either `print()` or `summary()` to learn a bit more about the quality of our fit.  The `summary()` method returns some extra information about scoring history and variable importance.
 
 ```{r}
 print(fit)
@@ -211,7 +211,7 @@ As you can see, we can easily and effectively combine dplyr data transformation 
 
 ## Transformers
 
-A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), faciliating many common transformations of data within a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
+A model is often fit not on a dataset as-is, but instead on some transformation of that dataset. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features.html), facilitating many common transformations of data within a Spark DataFrame, and sparklyr exposes these within the `ft_*` family of functions. These routines generally take one or more input columns, and generate a new output column formed as a transformation of those columns.
 
 | Function | Description  |
 |----------------------------|---------------------------------------------|
@@ -445,7 +445,7 @@ H2ODimReductionMetrics: pca
 
 Use H2O's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or classification on a dataset.
 
-As usual, we define the response and predictor variables using the `x` and `y` arguments.  Since we'd like to do a classfication, we need to ensure that the response column is encoded as a factor (enum) column.
+As usual, we define the response and predictor variables using the `x` and `y` arguments.  Since we'd like to do a classification, we need to ensure that the response column is encoded as a factor (enum) column.
 
 ```{r}
 y <- "Species"
@@ -470,7 +470,7 @@ rf_model <- h2o.randomForest(x = x,
 
 ```
 
-Since we passed a validation frame, the validation metrics will be calculated.  We can retreive individual metrics using functions such as `h2o.mse(rf_model, valid = TRUE)`.  The confusion matrix can be printed using the following:
+Since we passed a validation frame, the validation metrics will be calculated.  We can retrieve individual metrics using functions such as `h2o.mse(rf_model, valid = TRUE)`.  The confusion matrix can be printed using the following:
 
 ```{r}
 h2o.confusionMatrix(rf_model, valid = TRUE)

@@ -101,8 +101,8 @@ partitions <- mtcars_tbl %>%
 Now, we convert our training and test sets into H2O Frames using rsparkling conversion functions.  We have already split the data into training and test frames using dplyr.  
 
 ```{r}
-training <- as_h2o_frame(partitions$training)
-test <- as_h2o_frame(partitions$test)
+training <- as_h2o_frame(sc, partitions$training)
+test <- as_h2o_frame(sc, partitions$test)
 ```
 
 Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFile(as_h2o_frame(mtcars_tbl), 0.5)`) 
@@ -180,7 +180,7 @@ library(ggplot2)
 # compute predicted values on our test dataset
 pred <- h2o.predict(fit, newdata = test)
 # convert from H2O Frame to Spark DataFrame
-predicted <- as_spark_dataframe(pred, sc)
+predicted <- as_spark_dataframe(sc, pred)
 
 # extract the true 'mpg' values from our test dataset
 actual <- partitions$test %>%
@@ -267,7 +267,7 @@ Database: spark connection master=local app=sparklyr local=TRUE
 ```
 Convert to an H2O Frame:
 ```{r}
-iris_hf <- as_h2o_frame(iris_tbl)
+iris_hf <- as_h2o_frame(sc, iris_tbl)
 ```
 
 ### K-Means Clustering

@@ -19,7 +19,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 - Connect to [Spark](http://spark.apache.org/) from R --- the sparklyr package provides a complete [dplyr](https://github.com/hadley/dplyr) backend.
 - Filter and aggregate Spark datasets then bring them into R for analysis and visualization.
-- Use Spark's distributed [machine learning](http://spark.apache.org/docs/latest/mllib-guide.html) library from R.
+- Orchestrate distributed machine learning from R using either [Spark MLlib](mllib.html) or [H2O SparkingWater](h2o.html).
 - Create [extensions](extensions.html) that call the full Spark API and provide interfaces to Spark packages. 
 
 </div>
@@ -186,7 +186,9 @@ iris_preview
 
 ## Machine Learning
 
-You can orchestrate machine learning algorithms in a Spark cluster via the [machine learning](http://spark.apache.org/docs/latest/mllib-guide.html) functions within **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
+You can orchestrate machine learning algorithms in a Spark cluster via either [Spark MLlib](mllib.html) or via the [H2O Sparkling Water](h2o.html) extension package. Both provide a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows. 
+
+### Spark MLlib
 
 In this example we'll use [ml_linear_regression](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`) and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
 
@@ -238,7 +240,102 @@ R-Squared: 0.8274
 Root Mean Squared Error: 1.422
 ```
 
-Spark machine learning supports a wide array of algorithms and feature transformations, and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [Machine Learning](mllib.html) section.
+Spark machine learning supports a wide array of algorithms and feature transformations, and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [Spark MLlib](mllib.html) section.
+
+### H2O Sparkling Water
+
+Let's walk the same `mtcars` example, but in this case use H2O's machine learning algorithms via the [H2O Sparkling Water](h2o.html) extension. We'll use [h2o.glm](reference/sparklyr/latest/ml_linear_regression.html) to fit a linear regression model to the dataset. 
+
+First, we will load the various required packages, initialize a local Spark connection, copy the `mtcars` dataset into Spark, apply some transformations, then finally partition our data into separate training and test data sets:
+
+```{r}
+library(sparklyr)
+library(rsparkling)
+library(h2o)
+library(dplyr)
+
+# connect to spark
+sc <- spark_connect("local", version = "1.6.2")
+
+# copy mtcars dataset into spark
+mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
+
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  mutate(cyl8 = cyl == 8) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
+```
+
+Now, we convert our training and test sets into H2O Frames using rsparkling's data frame conversion functions:
+
+```{r}
+training <- as_h2o_frame(partitions$training)
+test <- as_h2o_frame(partitions$test)
+```
+
+Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFile(as_h2o_frame(mtcars_tbl), 0.5)`) 
+
+```{r}
+# fit a linear model to the training dataset
+fit <- h2o.glm(x = c("wt", "cyl"), 
+               y = "mpg", 
+               training_frame = training,
+               lambda_search = TRUE)
+```
+
+For linear regression models produced by H2O, we can use either `print()` or `summary()` to learn a bit more about the quality of our fit.  The `summary()` method returns some extra information about scoring history and variable importance.
+
+```{r}
+print(fit)
+```
+```
+Model Details:
+==============
+
+H2ORegressionModel: glm
+Model ID:  GLM_model_R_1474576540794_2 
+GLM Model: summary
+    family     link
+1 gaussian identity
+                                regularization
+1 Elastic Net (alpha = 0.5, lambda = 0.08201 )
+                                                                lambda_search
+1 nlambda = 100, lambda.max = 8.2006, lambda.min = 0.08201, lambda.1se = -1.0
+  number_of_predictors_total
+1                          2
+  number_of_active_predictors
+1                           2
+  number_of_iterations training_frame
+1                    0   frame_rdd_57
+
+Coefficients: glm coefficients
+      names coefficients
+1 Intercept    36.390842
+2       cyl    -1.580152
+3        wt    -2.232329
+  standardized_coefficients
+1                 17.783333
+2                 -2.505999
+3                 -2.449461
+
+H2ORegressionMetrics: glm
+** Reported on training data. **
+
+MSE:  3.262896
+RMSE:  1.806349
+MAE:  1.411069
+RMSLE:  0.09689482
+Mean Residual Deviance :  3.262896
+R^2 :  0.865446
+Null Deviance :290.9967
+Null D.o.F. :11
+Residual Deviance :39.15475
+Residual D.o.F. :9
+AIC :56.24591
+```
+
+H2O Sparking Water supports a wide array of algorithms, and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [H2O Sparking Water](h2o.html) section.
 
 ## Extensions
 

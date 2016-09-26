@@ -30,7 +30,7 @@ The **rsparkling** R package requires the **h2o** and **sparklyr** R packages to
 
 Today (Sept. 2016, the initial github release of rsparkling) you must use **h2o** R package version [3.10.0.6](http://h2o-release.s3.amazonaws.com/h2o/rel-turing/6/index.html#R) (H2O "Turing" release, build 6) and Spark 1.6, since that version of H2O is embedded in rsparkling.  This will be more flexible in the future.
 
-```r
+```{r, eval=FALSE}
 # Remove previous versions of h2o R package
 if ("package:h2o" %in% search()) detach("package:h2o", unload=TRUE)
 if ("h2o" %in% rownames(installed.packages())) remove.packages("h2o")
@@ -52,7 +52,7 @@ install.packages("h2o", type = "source",
 
 The latest stable version of **rsparkling** can be installed using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) as follows:
 
-```r
+```{r, eval = FALSE}
 library(devtools)
 devtools::install_github("h2oai/sparkling-water", subdir = "/r/rsparkling")
 ``` 
@@ -88,7 +88,7 @@ Let's walk through a simple example to demonstrate the use of H2O's machine lear
 
 Prior to starting this example, Spark must be installed (this only needs to be run once).
 
-```{r}
+```{r, eval=FALSE}
 library(sparklyr)
 spark_install(version = "1.6.2")
 ```
@@ -720,7 +720,7 @@ The more traditional method is to save a binary model file to disk using the `h2
 
 A binary model can be saved as follows:
 
-```{r}
+```{r, eval=FALSE}
 h2o.saveModel(my_model, path = "/Users/me/h2omodels")
 ```
 
@@ -730,7 +730,7 @@ One of the most valuable features of H2O is it's ability to export models as pur
 
 To generate the POJO for your model, use the following command:
 
-```{r}
+```{r, eval=FALSE}
 h2o.download_pojo(my_model, path = "/Users/me/h2omodels")
 ```
 

@@ -330,66 +330,6 @@ Centroid Statistics:
 ```
 
 
-### Logistic Regression
-
-Use H2O's [logistic regression](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) to perform logistic regression, modeling a binary outcome as a function of one or more explanatory variables.  In this example, we also perform 3-fold cross-validation and evaluate the performance of the model.
-
-```{r}
-# Prepare beaver dataset
-beaver <- beaver2
-beaver$activ <- factor(beaver$activ, labels = c("Non-Active", "Active"))
-beaver_hf <- as.h2o(beaver)  # Send data from R memory to H2O cluster
-
-y <- "activ"
-x <- setdiff(names(beaver_hf), y)
-glm_model <- h2o.glm(x = x, 
-                     y = y,
-                     training_frame = beaver_hf,
-                     family = "binomial",
-                     nfolds = 3,
-                     seed = 1)
-
-h2o.performance(glm_model, xval = TRUE)
-```
-```
-H2OBinomialMetrics: glm
-** Reported on cross-validation data. **
-** 3-fold cross-validation on training data (Metrics computed for combined holdout predictions) **
-
-MSE:  0.01005471
-RMSE:  0.1002732
-LogLoss:  0.03547554
-Mean Per-Class Error:  0
-AUC:  1
-Gini:  1
-R^2:  0.957323
-Null Deviance:  136.8121
-Residual Deviance:  7.095109
-AIC:  15.09511
-
-Confusion Matrix for F1-optimal threshold:
-           Active Non-Active    Error    Rate
-Active         62          0 0.000000   =0/62
-Non-Active      0         38 0.000000   =0/38
-Totals         62         38 0.000000  =0/100
-
-Maximum Metrics: Maximum metrics at their respective thresholds
-                        metric threshold    value idx
-1                       max f1  0.227019 1.000000  37
-2                       max f2  0.227019 1.000000  37
-3                 max f0point5  0.227019 1.000000  37
-4                 max accuracy  0.227019 1.000000  37
-5                max precision  0.999997 1.000000   0
-6                   max recall  0.227019 1.000000  37
-7              max specificity  0.999997 1.000000   0
-8             max absolute_mcc  0.227019 1.000000  37
-9   max min_per_class_accuracy  0.227019 1.000000  37
-10 max mean_per_class_accuracy  0.227019 1.000000  37
-
-Gains/Lift Table: Extract with `h2o.gainsLift(<model>, <data>)` or `h2o.gainsLift(<model>, valid=<T/F>, xval=<T/F>)`
-```
-
-
 ### PCA
 
 Use H2O's [Principal Components Analysis (PCA)](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/pca.html) to perform dimensionality reduction. PCA is a statistical method to find a rotation such that the first coordinate has the largest variance possible, and each succeeding coordinate in turn has the largest variance possible.
@@ -588,9 +528,6 @@ H2O's grid search capabilities currently supports traditional (Cartesian) grid s
 By default, `h2o.grid()` will train a Cartesian grid search -- meaning, all possible models in the specified grid. In this example, we will re-use the prostate data as an example dataset for a regression problem.
 
 ```{r}
-path <- system.file("extdata", "prostate.csv", 
-                    package = "h2o")
-prostate_hf <- h2o.importFile(path)
 splits <- h2o.splitFrame(prostate_hf, seed = 1)
 
 y <- "VOL"

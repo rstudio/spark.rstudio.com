@@ -1,0 +1,81 @@
+---
+title: "Spark Standalone Installation Guide"
+output:
+  html_document:
+
+    toc: yes
+    toc_float:
+      collapsed: no
+author: "Edgar Ruiz"
+date: "November 4, 2016"
+---
+
+## Installing Spark
+
+### Install Java 8
+
+```{}
+sudo apt-add-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+sudo apt-get install oracle-java8-set-default
+sudo apt-get update
+```
+
+### Download Spark
+
+Download and unpack a pre-compiled version of Spark.  Here's is the link to the [official Spark download page](http://spark.apache.org/downloads.html)
+
+```{}
+wget http://d3kbcqa49mib13.cloudfront.net/spark-2.0.1-bin-hadoop2.7.tgz
+tar -xvzf spark-2.0.1-bin-hadoop2.7.tgz
+cd spark-2.0.1-bin-hadoop2.7
+```
+
+## Installing RStudio Server
+
+Execute this section if you wish to have a server with RStudio Server installed and pre-configured.  Please check the [RStudio download page](https://www.rstudio.com/products/rstudio/download-server/) for the latest version
+
+### Install R
+
+```{}
+sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list'
+gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
+gpg -a --export E084DAB9 | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install r-base
+sudo apt-get install gdebi-core
+```
+
+### Install RStudio
+
+```{}
+wget https://download2.rstudio.org/rstudio-server-1.0.44-amd64.deb
+sudo gdebi rstudio-server-1.0.44-amd64.deb
+```
+
+### Install 'sparklyr' and 'tidyverse' dependencies
+
+```{}
+sudo apt-get -y install libcurl4-gnutls-dev
+sudo apt-get -y install libssl-dev
+sudo apt-get -y install libxml2-dev
+```
+
+### Add default user
+
+```{}
+sudo adduser rstudio
+```
+
+### Pre-load pacakges
+
+- Log into RStudio (port 8787)
+
+- Use 'rstudio-user'
+
+```{r, eval=FALSE}
+install.packages("sparklyr")
+install.packages("tidyverse")
+
+```

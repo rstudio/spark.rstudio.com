@@ -1,0 +1,119 @@
+---
+title: "Cloudera Quickstart Single Node v1"
+output:
+  html_document:
+    theme: spacelab
+    toc: yes
+    toc_float:
+      collapsed: no
+author: "Edgar Ruiz"
+date: "November 18, 2016"
+---
+## Use the existing AMI
+
+- Deploy a **t2.large** instance of the **docker-cdh-rsp-v1** located in the Oregon region (Use the **cdh-docker** Security Group)
+- SSH into the new instance
+- Run following commands
+```{}
+sudo docker start 7751e4aad8b1
+sudo docker attach 7751e4aad8b1
+```
+- Inside the docker container: 
+```{}
+[root@quickstart /]# sudo service rstudio-server start
+```
+
+### Logins and ports
+
+- HUE: port 8888 | user id: cloudera | password: cloudera
+- RSP: port 8787 | user id: edgar    | password: edgar
+- Spark History: port 18088
+
+### To shut down safely
+- Copy and paste this command and run
+```{}
+sudo service hue stop; sudo service impala-server stop; sudo service impala-catalog stop; sudo service impala-state-store stop; sudo service oozie stop; sudo service hiveserver2 stop; sudo service hive-webhcat-server stop; sudo service hive-metastore stop; sudo service flume-ng-agent stop;sudo service sqoop-metastore stop; sudo service sqoop2-server stop; sudo service hbase-solr-indexer stop;sudo service spark-worker stop; sudo service spark-history-server stop; sudo service spark-master stop; sudo service sentry-store stop; sudo service solr-server stop; sudo service hbase-thrift stop; sudo service hbase-rest stop; sudo service hbase-regionserver stop; sudo service hbase-master stop; sudo service hadoop-0.20-mapreduce-jobtrackerha stop ; sudo service hadoop-0.20-mapreduce-jobtracker stop ; sudo service hadoop-0.20-mapreduce-tasktracker stop; sudo service hadoop-mapreduce-historyserver stop;  sudo service hadoop-yarn-resourcemanager stop; sudo service hadoop-yarn-nodemanager stop; sudo service hadoop-httpfs stop; sudo service hadoop-hdfs-nfs3 stop; sudo service hadoop-hdfs-secondarynamenode stop; sudo service hadoop-hdfs-namenode stop; sudo service hadoop-hdfs-journalnode stop; sudo service hadoop-hdfs-datanode stop ; sudo service hadoop-kms-server stop; sudo service zookeeper-server stop;
+```
+- Type 'exit', still inside the container
+- In the EC2 terminal, type 'sudo docker ps' to confirm the container is stopped
+- Stop the EC2 instance in AWS
+
+## Installation
+
+These instructions are to create a instance from the ground up
+
+```{}
+sudo apt-get update
+
+sudo apt-get install apt-transport-https ca-certificates
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt-get update
+sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+sudo apt-get install docker-engine
+sudo service docker start
+```
+
+```{}
+sudo docker run hello-world
+```
+
+```{}
+sudo docker pull cloudera/quickstart:latest
+```
+ It’s a 4 gigabyte file!
+
+```{}
+sudo docker run --hostname=quickstart.cloudera --privileged=true -t -i -p 8888:8888 -p 18088:18088 -p 8787:8787 -p 7180:7180 -p 8088:8088 -p 3939:3939 -p 3838:3838 78d0c9c58dae /usr/bin/docker-quickstart
+
+sudo docker ps
+sudo docker attach [container ID]
+```
+
+```{}
+yum install wget
+
+sudo yum install R
+
+Server
+wget https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-1.0.118-x86_64.rpm
+sudo yum install --nogpgcheck rstudio-server-rhel-1.0.118-x86_64.rpm
+
+RSP
+wget https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-pro-1.0.118-x86_64.rpm
+sudo yum install --nogpgcheck rstudio-server-rhel-pro-1.0.118-x86_64.rpm
+
+
+yum install openssl-devel; yum install libcurl-devel; yum install libxml2-devel
+
+
+
+```
+
+```{}
+sudo adduser rstudio
+sudo passwd rstudio
+```
+
+```{}
+
+
+
+control+p control+q
+
+```
+
+- In RStudio
+
+```{r, eval=FALSE}
+
+install.packages("devtools")
+devtools::install_github("rstudio/sparklyr")
+install.packages("tidyverse")
+
+library(sparklyr)
+library(dplyr)
+library(readr)
+Sys.setenv(SPARK_HOME = '/usr/lib/spark')
+sc <- spark_connect(master = "yarn-client", version="1.6.0")
+```

@@ -1,27 +1,80 @@
 ---
-title: "Deployment Examples"
+title: "Deploying sparklyr"
 output:
   html_document:
-    toc: false
-    toc_float: false
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
 ---
 
 ```{r setup, include=FALSE}
 source("utils.R")
+library(htmltools)
+
+thumbnail <- function(title, img, href, caption = TRUE) {
+  div(class = "col-sm-6",
+      a(class = "thumbnail", title = title, href = href,
+        img(src = img),
+        div(class = ifelse(caption, "caption", ""),
+          ifelse(caption, title, ""), align="center")))}
+
 ```
 
-This page includes articles and descriptions to help use Sparklyr with a variety of Spark cluster configurations.
-
-## Spark Standalone
+The RStudio team would like to share with you some test deployment environments you can use to start your Spark journey.  Please note that these are meant to be guides for prototyping, so we are not able to offer support or debugging assistance.
 
 ```{r, echo=FALSE}
-examples("spark-standalone")
-```
+
+div(class = "col-sm-12",
+    img(src="images/architecture.png"))
+div(class = "col-sm-12", br())
+div(class = "col-sm-12", br())
+
+```      
 
 
-## YARN
+## YARN Client
 
 ```{r, echo=FALSE}
-examples("yarn")
+div(class = "col-sm-12", br())
 ```
 
+### Amazon's ERM
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","Use dplyr syntax to write Apache Spark SQL queries. Use select, where, group by, joins, and window functions in Apache Spark SQL.")
+thumbnail("EMR", "images/examples-emr/emrArchitecture.png", "examples-emr.html")
+```
+
+### Cloudera Express
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","You can use sparklyr to fit a wide variety of machine learning algorithms in Apache Spark. This analysis compares the performance of six classification models in Apache Spark on the Titanic data set.
+
+For the Titanic data, decision trees and random forests performed the best and had comparatively fast run times. See results for a detailed comparison.")
+thumbnail("Cloudera Express", "images/clusterDemo/manager-landing-page.png", "examples-cdh.html")
+```
+
+
+### Cloudera Quickstart
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example builds on Todd Schneiders analysis of NYC Taxi Data. The original postgres tables (200 GB) were transferred to S3 and then loaded into Hive tables on Amazon EMR. The analysis was conducted in an R Markdown notebook with sparklyr.")
+thumbnail("Cloudera Quickstart Docker", "images/clusterDemo/hue-metastore-1.png", "examples-docker.html")
+```
+
+
+
+
+## Stand Alone 
+
+```{r, echo=FALSE}
+div(class = "col-sm-12", br())
+```
+
+### Amazon's EC2
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example based on the NYC data analyzed in the Notebooks section")
+thumbnail("Stand-alone", "images/removeme.png", "examples-sa.html")
+```

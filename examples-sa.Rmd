@@ -6,11 +6,22 @@ output:
     toc: yes
     toc_float:
       collapsed: no
-author: "Edgar Ruiz"
-date: "November 4, 2016"
 ---
+## Overview
 
-## Installing Spark
+These instructions focus on the main steps needed to build and configure a Stand Alone Spark Cluster.  
+
+Here are the details of the EC2 instance we used for all servers:
+
+- **Type:** t2.medium
+- **OS:** Ubuntu 14 (Trusty)
+- **Disk space:** At least 20GB 
+- **Security group:** Consider opening the following ports: 8080 (Spark UI), 4040 (Spark Worker UI), 8088 (sparklyr UI), 8787 (RStudio)
+
+
+## Spark
+
+Perform the steps in this section on all of the servers that will be part of the cluster.
 
 ### Install Java 8
 
@@ -32,29 +43,54 @@ tar -xvzf spark-2.0.1-bin-hadoop2.7.tgz
 cd spark-2.0.1-bin-hadoop2.7
 ```
 
-## Installing RStudio Server
+**Tip**: After completing the instructions to this point, you may wish to consider creating an snapshot, or image, of your installation, so you can simply deploy as many identical instances as you need nodes in your cluster.  In Amazon, these are called AMIs, for information plese see the [User Guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html).
+
+### Start the Master node
+
+```{}
+sudo spark-2.0.0-bin-hadoop2.7/sbin/start-master.sh
+```
+
+### Start Worker nodes
+
+Start the slave service and close the terminal session. **Important**: Use dots not dashes as sepparators for the Spark Master node's address
+
+```{}
+sudo spark-2.0.0-bin-hadoop2.7/sbin/start-slave.sh spark://[Master node's IP address]:7077
+``` 
+
+## RStudio Server
 
 Execute this section if you wish to have a server with RStudio Server installed and pre-configured.  Please check the [RStudio download page](https://www.rstudio.com/products/rstudio/download-server/) for the latest version
 
 ### Install R
+
+In order to get the latest R core, we will need to update the source list in Ubuntu.
 
 ```{}
 sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list'
 gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
 gpg -a --export E084DAB9 | sudo apt-key add -
 sudo apt-get update
+```
+
+Now we can install R
+
+```{}
 sudo apt-get install r-base
 sudo apt-get install gdebi-core
 ```
 
 ### Install RStudio
 
+We will download and install 1.044 of RStudio Server.  To find the latest version, please visit the [RStudio website](https://www.rstudio.com/products/rstudio/download3/).  In order to get the enhanced integration with Spark, RStudio version 1.044 or later will be needed.
+
 ```{}
 wget https://download2.rstudio.org/rstudio-server-1.0.44-amd64.deb
 sudo gdebi rstudio-server-1.0.44-amd64.deb
 ```
 
-### Install 'sparklyr' and 'tidyverse' dependencies
+### Install dependencies
 
 ```{}
 sudo apt-get -y install libcurl4-gnutls-dev
@@ -65,7 +101,7 @@ sudo apt-get -y install libxml2-dev
 ### Add default user
 
 ```{}
-sudo adduser rstudio
+sudo adduser rstudio-user
 ```
 
 ### Pre-load pacakges
@@ -77,5 +113,28 @@ sudo adduser rstudio
 ```{r, eval=FALSE}
 install.packages("sparklyr")
 install.packages("tidyverse")
+```
+
+- Install Spark files
+
+```{r, eval=FALSE}
+spark_install("2.0.1")
+```
+
+### Connect to the Spark Master
+
+- Navigate to the Spark Master's UI, typically on port 8080 <img src="images/spark-master.png" class="screenshot" width=639 height=446/>
+
+- Note the **Spark Master URL**
+
+- Logon to RStudio 
+
+```{r, eval=FALSE}
+library(sparklyr)
+library(dplyr)
+
+spark_connect(master="[Spark Master URL]", 
+              version = "2.0.1", 
+              spark_home = spark_home_dir())
 
 ```

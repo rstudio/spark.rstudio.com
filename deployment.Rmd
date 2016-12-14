@@ -68,6 +68,26 @@ cluster_url <- system('cat /root/spark-ec2/cluster-url', intern=TRUE)
 sc <- spark_connect(master = cluster_url)
 ```
 
+
+### Livy Connections 
+
+[Livy](http://livy.io/), *"An Open Source REST Service for Apache Spark (Apache License)"* , is available starting in `sparklyr 0.5` as an **experimental** feature. Among many scenarios, this enables connections from the RStudio desktop to Apache Spark when Livy is available and correctly configured in the remote cluster.
+
+To work with Livy locally, `sparklyr` supports `livy_install()` which installs Livy in your local environment, this is similar to `spark_install()`. Since Livy is a service to enable remote connections into Apache Spark, the service needs to be started with `livy_service_start()`. Once the service is running, `spark_connect()` needs to reference the running service and use `method = "Livy"`, then `sparklyr` can be used as usual. A short example follows:
+
+```{r}
+livy_install()
+livy_service_start()
+
+sc <- spark_connect(master = "http://localhost:8998", method = "livy")
+copy_to(sc, iris)
+
+spark_disconnect(sc)
+livy_service_stop()
+```
+
+
+
 ### Connection Tools
 
 You can view the Spark web UI via the [spark_web](reference/sparklyr/latest/spark_web.html) function, and view the Spark log via the [spark_log](reference/sparklyr/latest/spark_log.html) function:
@@ -300,5 +320,3 @@ options(spark.install.dir = "/opt/spark")
 ```
 
 If this directory is read-only for ordinary users then RStudio will not offer installation of additional versions, which will help guide users to a version that is known to be compatible with versions of Spark deployed on clusters in the same organization.
-
-

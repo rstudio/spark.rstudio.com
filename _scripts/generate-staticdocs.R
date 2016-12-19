@@ -11,7 +11,7 @@ ensure_package <- function(source) {
   stop("failed to install / load package '", package, "'")
 }
 
-ensure_package("edgararuiz/pkgdown")
+ensure_package("hadley/staticdocs")
 ensure_package("rstudio/sparklyr")
 ensure_package("rstudio/htmltools")
 ensure_package("krlmlr/rprojroot")

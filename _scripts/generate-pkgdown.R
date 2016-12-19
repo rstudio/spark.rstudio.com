@@ -15,6 +15,8 @@ system(paste("git clone https://github.com/rstudio/sparklyr -b master", sparklyr
 file.copy(file.path(root,"_site.yml"), file.path(sparklyr_root,  "_pkgdown.yml"), overwrite = TRUE)
 file.remove(file.path(root,"_site/index.html"))
 
+
+
 #------- Creating the site
 setwd(sparklyr_root)
 if(file.exists("README.Rmd"))file.remove("README.Rmd")

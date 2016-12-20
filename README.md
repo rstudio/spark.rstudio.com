@@ -5,14 +5,12 @@ This repository contains all of the code and assets needed to build the spark.rs
 
 It combines [R Markdown Website](http://rmarkdown.rstudio.com/rmarkdown_websites.html) and [pkgdown](http://hadley.github.io/pkgdown/) to build create a comprehensive website that can be easily updated when new version of the package become available.
 
-There are two steps to re-build the full site: 
+To build the site, just run the following R script: ``_scripts/generate_site.R``. The script will perform the following operations:
 
-1. If you're on a relatively recent version of the RStudio IDE, you should see a `Build` tab when you oepn the RStudio project contained in this repo; clicking `Build Website` there will do everything you need.
+- Build the website using ``rmarkdown::render_site(encoding = 'UTF-8')``
+- Download the most recent package files from the ``master`` branch in GitHub
+- Use pkgdown to build the Reference index and pages, News and replaces the index.html file, directly in the ``_site`` folder.
 
-2. Run the generate-pkgdown.R script, located in the _scripts folder.  
-
-The finished site will be available in the _site folder.
-
-See `_site.yml` for high-level changes to things like the navbar or overall structure. Otherwise, edit the associated Rmd for the page you want to change.
+As of this version, the `_site.yml`file controls both the site and the pkgdown Reference index.  Future versions will separate the two so that the `_pkgdown.yml` file can exists inside the actual sparklyr package repository. 
 
 

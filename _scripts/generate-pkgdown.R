@@ -4,7 +4,7 @@ library(sparklyr)
 
 #----- Initializing main path variables
 root <- rprojroot::find_rstudio_root_file()
-sparklyr_root <- file.path(root, "sparklyr_github")
+sparklyr_root <- file.path(root, "_sparklyr_github")
 original_wd <- getwd()
 
 #------ Downloading a fresh copy of the code from github
@@ -21,7 +21,7 @@ file.remove(file.path(root,"_site/index.html"))
 setwd(sparklyr_root)
 if(file.exists("README.Rmd"))file.remove("README.Rmd")
 system(paste("cp -R ", file.path(sparklyr_root, "README_files"), file.path(root, "_site/")))
-build_site(path=file.path(root,"_site"))
+build_site(path=file.path(root,"_site"), examples = FALSE)
 setwd(original_wd)
 
 

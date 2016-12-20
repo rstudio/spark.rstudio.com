@@ -1,6 +1,6 @@
 devtools::install_github("edgararuiz/pkgdown")
 library(pkgdown)
-library(sparklyr)
+
 
 #----- Initializing main path variables
 root <- rprojroot::find_rstudio_root_file()

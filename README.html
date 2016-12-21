@@ -353,13 +353,28 @@ div.tocify {
 <h2>spark.rstudio.com</h2>
 <p>This repository contains all of the code and assets needed to build the spark.rstudio.com website.</p>
 <p>It combines <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html">R Markdown Website</a> and <a href="http://hadley.github.io/pkgdown/">pkgdown</a> to build create a comprehensive website that can be easily updated when new version of the package become available.</p>
-<p>To build the site, just run the following R script: <code>_scripts/generate_site.R</code>. The script will perform the following operations:</p>
+<p>To update the Home page, News and/or Reference sections, just run the following R script: <code>_scripts/pkgdown.R</code>. The script will perform the following operations:</p>
 <ul>
-<li>Build the website using <code>rmarkdown::render_site(encoding = 'UTF-8')</code></li>
 <li>Download the most recent package files from the <code>master</code> branch in GitHub</li>
-<li>Use pkgdown to build the Reference index and pages, News and replaces the index.html file, directly in the <code>_site</code> folder.</li>
+<li>Use pkgdown to build the Reference index and pages, News and replaces the index.html file, directly in the root folder.</li>
 </ul>
 <p>As of this version, the <code>_site.yml</code>file controls both the site and the pkgdown Reference index. Future versions will separate the two so that the <code>_pkgdown.yml</code> file can exists inside the actual sparklyr package repository.</p>
+<p>After the updates are made, perform a Pull Request to the Master branch. When the PR is approved, the following Jenkins job is activated: <a href="https://buildmaster.rstudioservices.com/job/spark.rstudio.com/" class="uri">https://buildmaster.rstudioservices.com/job/spark.rstudio.com/</a> Which does the following:</p>
+<ul>
+<li>Creates a clean Docker environment with R</li>
+<li><p>Runs the following script</p>
+<pre><code>#!/bin/bash
+
+# Install latest rmarkdown from GitHub
+sudo R -e 'install.packages(c(&quot;devtools&quot;,&quot;plyr&quot;,&quot;htmltools&quot;), repos=&quot;https://cran.rstudio.com&quot;)'
+sudo R -e 'devtools::install_github(&quot;rstudio/rmarkdown&quot;)'
+
+rm -rf _site
+
+# Build site
+R -e 'rmarkdown::render_site()' </code></pre></li>
+<li><p>The contents of the resulting <code>_site</code> folder is then copied to the S3 bucket that has the spark.rstudio.com files</p></li>
+</ul>
 </div>
 
 

@@ -1,76 +1,133 @@
 ---
-title: "sparklyr Examples"
+title: "Analyzing Data with sparklyr"
 output:
   html_document:
-    toc: false
-    toc_float: false
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
 ---
 
 ```{r setup, include=FALSE}
 source("utils.R")
+library(htmltools)
+
+thumbnail <- function(title, img, href, caption = TRUE) {
+  div(class = "col-sm-6",
+      a(class = "thumbnail", title = title, href = href,
+        img(src = img),
+        div(class = ifelse(caption, "caption", ""),
+          ifelse(caption, title, ""), align="center")))}
+
 ```
 
 The examples below showcase R applications and analysis performed using Sparklyr. You can see how to use dplyr and machine learning functions within [R Notebooks](http://rmarkdown.rstudio.com/r_notebooks.html), and create interactive dashboards with Spark connections using [flexdashboards](http://rmarkdown.rstudio.com/flexdashboard/index.html) and [Shiny Applications](http://shiny.rstudio.com).
 
-<br>
+```{r, echo=FALSE, eval=FALSE}
 
-## Analyzing 200 GB with Spark and R [![](images/examples/github-logo.png)](https://github.com/rstudio/sparkDemos/tree/master/prod/notebooks/taxi_demo)
+div(class="row",
+    div(class="span3", br()),
+    div(class = "span6",
+        includeScript("https://fast.wistia.com/embed/medias/0edmtnvb9d.jsonp" ),
+        includeScript("https://fast.wistia.com/assets/external/E-v1.js"),
+        div(class="wistia_responsive_padding"),
+        div( class="wistia_embed wistia_async_0edmtnvb9d videoFoam=true")),
+    div(class="span3", br())
+)
 
-This example builds on [Todd Schneiders analysis of NYC Taxi Data](https://github.com/toddwschneider/nyc-taxi-data). The original postgres tables (**200 GB**) were transferred to S3 and then loaded into Hive tables on Amazon EMR. The [analysis](https://github.com/rstudio/sparkDemos/blob/master/prod/notebooks/taxi_demo/taxiDemo.Rmd) was conducted in an R Markdown notebook with `sparklyr`. 
+# div(class = "col-sm-2", br())
+# div(class = "col-sm-8",
+#     includeScript("https://fast.wistia.com/embed/medias/0edmtnvb9d.jsonp" ),
+#     includeScript("https://fast.wistia.com/assets/external/E-v1.js"),
+#     div(class="wistia_responsive_padding"),
+#     div( class="wistia_embed wistia_async_0edmtnvb9d videoFoam=true"))
+# div(class = "col-sm-2", br())
 
-<!--html_preserve-->
+div(class = "col-sm-12", br())
+div(class = "col-sm-12", br())
 
-<div class="row">
+```      
 
-<div class="col-sm-1"></div>
-
-<div class="col-sm-6">
-  <script src="//fast.wistia.com/embed/medias/0edmtnvb9d.jsonp" async></script>
-  <script src="//fast.wistia.com/assets/external/E-v1.js" async></script>
-  <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
-    <div class="wistia_responsive_wrapper" style="height:236px;left:0;position:absolute;top:0;width:416px;">
-      <div class="wistia_embed wistia_async_0edmtnvb9d videoFoam=true" style="height:100%;width:100%">&nbsp;</div>
-    </div>
-  </div>
-</div>
-
-<div class="col-sm-4">
-<a class="thumbnail" title="Build Analytic Roll-Up in Spark" href="https://beta.rstudioconnect.com/content/1705/">
-<img src="images/examples/taxi-demo.png">
-<div class="caption">NYC Taxi Data - R Markdown Notebook</div>
-</a>
-</div>
-
-<div class="col-sm-1"></div>
-
-</div>
-
-
-<!--/html_preserve-->
-
-<br> 
 
 ## Notebooks [![](images/examples/github-logo.png)](https://github.com/rstudio/sparkDemos/tree/master/prod/notebooks)
 
 ```{r, echo=FALSE}
-examples("notebook")
+div(class = "col-sm-12", br())
 ```
 
-<br>
-
-## Dashboards [![](images/examples/github-logo.png)](https://github.com/rstudio/sparkDemos/tree/master/prod/dashboards)
-
+###Total US births
 
 ```{r, echo=FALSE}
-examples("dashboard")
+div(class = "col-sm-6","Use dplyr syntax to write Apache Spark SQL queries. Use select, where, group by, joins, and window functions in Apache Spark SQL.")
+thumbnail("Total US births", "images/babynames.png", "https://beta.rstudioconnect.com/content/1813/")
 ```
 
-<br>
+### ML classifiers
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","You can use sparklyr to fit a wide variety of machine learning algorithms in Apache Spark. This analysis compares the performance of six classification models in Apache Spark on the Titanic data set.
+
+For the Titanic data, decision trees and random forests performed the best and had comparatively fast run times. See results for a detailed comparison.")
+thumbnail("ML classifiers", "images/examples/ml_classification_titanic.png", "https://beta.rstudioconnect.com/content/1518/")
+```
+
+
+### One billion NYC taxi trips[![](images/examples/github-logo.png)](https://github.com/rstudio/sparkDemos/tree/master/prod/notebooks/taxi_demo)
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example builds on Todd Schneiders analysis of NYC Taxi Data. The original postgres tables (200 GB) were transferred to S3 and then loaded into Hive tables on Amazon EMR. The analysis was conducted in an R Markdown notebook with sparklyr.")
+thumbnail("One billion NYC taxi trips", "images/examples/taxi-notebook.png", "https://beta.rstudioconnect.com/content/1705/taxiDemo.nb.html")
+```
+
+
+## Dashboards 
+
+```{r, echo=FALSE}
+div(class = "col-sm-12", br())
+```
+
+### One billion NYC taxi trips
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example based on the NYC data analyzed in the Notebooks section")
+thumbnail("One billion NYC taxi trips", "images/examples/nycflights13-dash-spark.png", "http://sparkdemo.rstudio.com/dashboards/nycflights13-dash-spark")
+```
+
+### Diamonds explorer 
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This familiar example reads data into Spark using the parquet format. You can sample and filter the data in Spark then collect the results to be visualized.")
+thumbnail("Diamonds Explorer", "images/examples/diamonds-explorer.png", "http://sparkdemo.rstudio.com/dashboards/diamonds-explorer")
+```
+
 
 ## Shiny Applications [![](images/examples/github-logo.png)](https://github.com/rstudio/sparkDemos/tree/master/prod/apps)
 
 
 ```{r, echo=FALSE}
-examples("shiny")
+div(class = "col-sm-12", br())
 ```
+
+### ML Titanic Classification
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","You can use sparklyr to fit a wide variety of machine learning algorithms in Apache Spark. This analysis compares the performance of six classification models in Apache Spark on the Titanic data set.
+
+For the Titanic data, decision trees and random forests performed the best and had comparatively fast run times. See results for a detailed comparison.")
+thumbnail("ML Titanic Classification", "images/examples/titanic-app.png", "http://sparkdemo.rstudio.com/apps/titanic-classification/")
+```
+
+### Iris K-means clustering
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This familiar examples read data into Spark using the parquet format. You can cluster the data in Spark then collect the results to be visualized.")
+thumbnail("Iris K-means clustering", "images/examples/iris-k-means.png", "http://sparkdemo.rstudio.com/apps/iris-k-means")
+```
+
+### Time gained in flight
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","You can connect a Shiny app to a live spark context. This example uses Spark SQL and ML to create a look up table. You can use Shiny to filter the look up table and visualize the results.")
+thumbnail("Time gained in flight", "images/examples/nycflights13-app-spark.png", "http://sparkdemo.rstudio.com/apps/nycflights13-app-spark")
+```
+
 

@@ -1,4 +1,4 @@
-title: "sparklyr"
+name: "sparklyr"
 navbar:
   title: "sparklyr"
   type: inverse
@@ -9,18 +9,24 @@ navbar:
       href: dplyr.html
     - text: "ML"
       menu:
-        - text: "MLlib" 
+        - text: "Spark MLlib" 
           href: mllib.html
         - text: "H2O"
           href: h2o.html
     - text: "Extensions"
       href: extensions.html
     - text: "Deployment"
-      href: deployment.html
+      menu:
+        - text: "Configuration"
+          href: deployment.html
+        - text: "Deployment Examples"
+          href: deployment_examples.html                
     - text: "Examples"
       href: examples.html
     - text: "Reference"
-      href: reference/sparklyr/latest/index.html
+      href: reference/index.html
+    - text: "News"
+      href: news/index.html  
   right:
     - icon: fa-github fa-lg
       href: https://github.com/rstudio/sparklyr
@@ -35,3 +41,113 @@ output:
     include:
       after_body: footer.html
     css: styles.css
+templates:
+  params:
+    bootswatch: cosmo
+reference:
+  - title: Connecting to Spark
+    desc: Functions for installing Spark components and managing connections to Spark.
+    contents:
+    - spark_config
+    - spark_connect
+    - spark_disconnect
+    - spark_install
+    - spark_log
+    - spark_web
+  - title: Reading and Writing Data
+    desc: Functions for reading and writing Spark DataFrames.
+    contents:
+    - spark_read_csv
+    - spark_read_json
+    - spark_read_parquet
+    - spark_read_table
+    - spark_write_csv
+    - spark_write_json
+    - spark_write_parquet
+    - spark_write_table
+  - title: Spark Tables
+    desc: Functions for manipulating Spark Tables.
+    contents:
+    - tbl_cache
+    - tbl_uncache
+  - title: Spark DataFrames
+    desc: Functions for maniplulating Spark DataFrames.
+    contents:
+    - sdf_copy_to
+    - sdf_mutate
+    - sdf_partition
+    - sdf_predict
+    - sdf_read_column
+    - sdf_register
+    - sdf_sample
+    - sdf_sort
+    - sdf_with_unique_id
+  - title: Machine Learning Algorithms
+    desc: Functions for invoking machine learning algorithms.
+    contents:
+    - ml_als_factorization
+    - ml_decision_tree
+    - ml_generalized_linear_regression
+    - ml_gradient_boosted_trees
+    - ml_kmeans
+    - ml_lda
+    - ml_linear_regression
+    - ml_logistic_regression
+    - ml_multilayer_perceptron
+    - ml_naive_bayes
+    - ml_one_vs_rest
+    - ml_pca
+    - ml_random_forest
+    - ml_survival_regression
+  - title: Machine Learning Transformers
+    desc: Functions for transforming features in Spark DataFrames.
+    contents:
+    - ft_binarizer
+    - ft_bucketizer
+    - ft_discrete_cosine_transform
+    - ft_elementwise_product
+    - ft_index_to_string
+    - ft_one_hot_encoder
+    - ft_quantile_discretizer
+    - ft_sql_transformer
+    - ft_string_indexer
+    - ft_vector_assembler
+  - title: Machine Learning Utilities
+    desc: Functions for interacting with Spark ML model fits.
+    contents:
+    - ml_binary_classification_eval
+    - ml_classification_eval
+    - ml_tree_feature_importance
+    - ml_saveload
+  - title: Machine Learning Extensions
+    desc: Functions for creating custom wrappers to other Spark ML algorithms.
+    contents:
+    - ml_create_dummy_variables
+    - ml_model
+    - ml_options
+    - ml_prepare_dataframe
+    - ml_prepare_response_features_intercept
+  - title: Extensions API
+    desc: Functions for creating extensions to the sparklyr package.
+    contents:
+    - compile_package_jars
+    - connection_config
+    - find_scalac
+    - hive_context
+    - invoke
+    - java_context
+    - register_extension
+    - spark_compilation_spec
+    - spark_default_compilation_spec
+    - spark_connection
+    - spark_context
+    - spark_dataframe
+    - spark_dependency
+    - spark_jobj
+    - spark_session
+    - spark_version
+  - title: Livy
+    desc: Functions to use with the Livy method (Experimental).
+    contents:
+    - starts_with("livy_")
+

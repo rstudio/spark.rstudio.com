@@ -1,0 +1,68 @@
+---
+title: "Deploying sparklyr"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+source("utils.R")
+library(htmltools)
+
+thumbnail <- function(title, img, href, caption = TRUE) {
+  div(class = "col-sm-6",
+      a(class = "thumbnail", title = title, href = href,
+        img(src = img),
+        div(class = ifelse(caption, "caption", ""),
+          ifelse(caption, title, ""), align="center")))}
+
+```
+
+The RStudio team would like to share with you some test deployment environments you can use to start your Spark journey. <br><br>
+**Disclaimer:** Please note that these articles are meant as guides only, RStudio is not responsible for issues or charges incurred if used.
+
+```{r, echo=FALSE, eval=FALSE}
+
+div(class = "col-sm-12",
+    img(src="images/architecture.png"))
+div(class = "col-sm-12", br())
+div(class = "col-sm-12", br())
+
+```      
+
+
+## YARN Client
+
+```{r, echo=FALSE}
+div(class = "col-sm-12", br())
+```
+
+### Amazon's EMR
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example demonstrates a complete workflow using Hadoop and Hive with Amazon’s Elastic Map Reduce (EMR). We access our data with a Spark cluster, understand our data using sparklyr, and then communicate our insights via a flex dashboard.")
+thumbnail("EMR", "images/emr.png", "examples-emr.html")
+```
+
+### Cloudera Express
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","This example demonstrates a complete workflow using Hadoop and Hive with Cloudera (CDH). In addition to the workflow, we show these useful web tools: Cloudera Manager, HUE, and the Spark UI.")
+thumbnail("Cloudera Express", "images/manager-landing-page.png", "examples-cdh.html")
+```
+
+## Stand Alone 
+
+```{r, echo=FALSE}
+div(class = "col-sm-12", br())
+```
+
+### Amazon's EC2
+
+```{r, echo=FALSE}
+div(class = "col-sm-6","You can create a Spark cluster without Hadoop using Spark’s standalone mode. In this example will show you how to set up a standalone cluster in Amazon’s EC2.")
+thumbnail("Stand-alone", "images/spark-sa-setup.png", "examples-sa.html")
+```

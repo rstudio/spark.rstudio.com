@@ -32,7 +32,10 @@ setwd(original_wd)
 #-------- Copying the Readme.md dependencies and updating the html references in index.html
 system(paste("cp -R ", file.path(sparklyr_root, "README_files"), file.path(root, "home")))
 index_path <- readLines("home/index.html")
+header_line <- grep("</header>", index_path, ignore.case = TRUE)
+index_path <- index_path[c(header_line: length(index_path))]
 index_path <- gsub("README_FILES", "home/README_files", x=index_path, ignore.case = TRUE)
+index_path <- gsub("</header>", "", x=index_path, ignore.case = TRUE)
 write(index_path, file.path(root, "home", "index.html"))
 
 

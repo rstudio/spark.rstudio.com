@@ -123,7 +123,7 @@
     <p>Load a Spark Table into a Spark DataFrame.</p>
     
 
-    <pre><span class='fu'>spark_load_table</span>(<span class='no'>sc</span>, <span class='no'>name</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>repartition</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+    <pre><span class='fu'>spark_load_table</span>(<span class='no'>sc</span>, <span class='no'>name</span>, <span class='no'>path</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>repartition</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -132,6 +132,9 @@
       <dd>A <code>spark_connection</code>.</dd>
       <dt>name</dt>
       <dd>The name to assign to the newly generated table.</dd>
+      <dt>path</dt>
+      <dd>The path to the file. Needs to be accessible from the cluster.
+Supports the <samp>&quot;hdfs://&quot;</samp>, <samp>&quot;s3n://&quot;</samp> and <samp>&quot;file://&quot;</samp> protocols.</dd>
       <dt>options</dt>
       <dd>A list of strings with additional options. See <a href = 'http://spark.apache.org/docs/latest/sql-programming-guide.html#configuration'>http://spark.apache.org/docs/latest/sql-programming-guide.html#configuration</a>.</dd>
       <dt>repartition</dt>

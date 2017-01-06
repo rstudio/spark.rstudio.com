@@ -54,7 +54,7 @@ The latest stable version of **rsparkling** can be installed using [devtools](ht
 
 ```{r, eval = FALSE}
 library(devtools)
-devtools::install_github("h2oai/sparkling-water", subdir = "/r/rsparkling")
+devtools::install_github("h2oai/rsparkling", ref = "stable")
 ``` 
 
 ## Algorithms
@@ -86,11 +86,12 @@ Additionally, the [h2oEnsemble](https://github.com/h2oai/h2o-3/tree/master/h2o-r
 
 Let's walk through a simple example to demonstrate the use of H2O's machine learning algorithms within R. We'll use [h2o.glm](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
-Prior to starting this example, Spark must be installed (this only needs to be run once).
+Prior to starting this example, Spark must be installed (this only needs to be run once). Also, the same version of Sparkling Water should be installed.
 
 ```{r, eval=FALSE}
 library(sparklyr)
 spark_install(version = "1.6.2")
+options(rsparkling.sparklingwater.version = "1.6.2") # Use Sparkling Water 1.6.2 to match Spark version
 ```
 
 The call to `library(rsparkling)` will make the H2O functions available on the R search path and will also ensure that the dependencies required by the Sparkling Water package are included when we connect to Spark. 

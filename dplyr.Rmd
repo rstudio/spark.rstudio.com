@@ -46,7 +46,7 @@ library(sparklyr)
 library(dplyr)
 library(nycflights13)
 library(ggplot2)
-sc <- spark_connect()
+sc <- spark_connect(master="local")
 flights <- copy_to(sc, flights, "flights")
 airlines <- copy_to(sc, airlines, "airlines")
 src_tbls(sc)
@@ -438,7 +438,37 @@ tbl <- spark_read_parquet(sc, "data", "hdfs://hdfs.company.org:9000/hdfs-path/da
 
 You can also write data as CSV or JSON using the [spark_write_csv](reference/sparklyr/spark_write_csv.html) and [spark_write_json](reference/sparklyr/spark_write_json.html) functions.
 
+## Hive Functions
 
+Many of Hive's built-in functions (UDF) and built-in aggregate functions (UDAF) can be called inside dplyr's mutate and summarize.  The [Languange Reference UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF) page provides the list of available functions.
 
+The following example uses the **datediff**  and **current_date** Hive UDFs to figure the difference between the flight_date and the current system date:
 
+```{r}
+flights %>% 
+  mutate(flight_date = paste(year,month,day,sep="-"),
+         days_since = datediff(current_date(), flight_date)) %>%
+  group_by(flight_date,days_since) %>%
+  tally() %>%
+  arrange(-days_since)
+```
 
+```
+Source:   query [365 x 3]
+Database: spark connection master=local[8] app=sparklyr local=TRUE
+Groups: flight_date
+
+   flight_date days_since     n
+         <chr>      <int> <dbl>
+1     2013-1-1       1476   842
+2     2013-1-2       1475   943
+3     2013-1-3       1474   914
+4     2013-1-4       1473   915
+5     2013-1-5       1472   720
+6     2013-1-6       1471   832
+7     2013-1-7       1470   933
+8     2013-1-8       1469   899
+9     2013-1-9       1468   902
+10   2013-1-10       1467   932
+# ... with 355 more rows
+```

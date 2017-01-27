@@ -90,14 +90,26 @@
 <li>
   <a href="../examples.html">Examples</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
-</li>
-<li>
-  <a href="../images/sparklyr-cheatsheet.pdf">Cheatsheet</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Reference
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../reference/index.html">Function Reference</a>
+    </li>
+    <li>
+      <a href="../news/index.html">News</a>
+    </li>
+    <li>
+      <a href="../images/sparklyr-cheatsheet.pdf">Cheatsheet</a>
+    </li>
+    <li>
+      <a href="../other-resources.html">Additional Resources</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -127,7 +139,14 @@
     <div id="sparklyr-0-6-0-unreleased" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sparklyr-0-6-0-unreleased" class="anchor"> </a>Sparklyr 0.6.0 (UNRELEASED)</h1>
-<ul><li>Resolved issue in spark_save/load_table to support saving/loading data and added path parameter in spark_load_table for consistency with other functions.</li>
+<ul><li><p>Support collecting NullType as NA instead of list of NAs columns.</p></li>
+<li><p>Fixed warning while connecting with livy and improved 401 message.</p></li>
+<li><p>Fixed issue in spark_read_parquet and other read methods in which spark_normalize_path would not work in some platforms while loading data using custom protocols like s3n:// for Amazon S3.</p></li>
+<li><p>Implemented ft_count_vectorizer to be able to use ml_lda with ease.</p></li>
+<li><p>Added support for the sparklyr.ui.connections option which adds additional connection options into the new connections dialog. The rstudio.spark.connections option is now deprecated.</p></li>
+<li><p>Implemented the “new connection dialog” as a shiny app to be able to support newer versions of RStudio that deprecate current connections ui.</p></li>
+<li><p>Improved performance of sample_n and sample_frac by using TABLESAMPLE query.</p></li>
+<li><p>Resolved issue in spark_save/load_table to support saving/loading data and added path parameter in spark_load_table for consistency with other functions.</p></li>
 </ul></div>
     <div id="sparklyr-0-5-0" class="section level1">
 <h1 class="hasAnchor">

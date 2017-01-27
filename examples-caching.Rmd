@@ -15,7 +15,7 @@ By using a reproducible example, we will review some of the main configuration s
 ```{r, include=FALSE}
 library(htmltools)
 
-thumbnail <- function(title, img, href="", caption = TRUE, size = 6) {
+thumbnail <- function(title, img, href = "", caption = TRUE, size = 6) {
   div(class = paste("col-sm-",size, sep=""),
       a(class = "thumbnail", title = title, href = href,
         img(src = img),
@@ -47,14 +47,14 @@ library(dplyr)
 library(ggplot2)
 
 # Install Spark version 2
-spark_install(version="2.0.0")
+spark_install(version = "2.0.0")
 
 # Customize the connection configuration
 conf <- spark_config()
 conf$`sparklyr.shell.driver-memory` <- "16G"
 
 # Connect to Spark
-sc <- spark_connect(master="local", config = conf, version="2.0.0")
+sc <- spark_connect(master = "local", config = conf, version = "2.0.0")
 
 ```
 
@@ -63,7 +63,7 @@ sc <- spark_connect(master="local", config = conf, version="2.0.0")
 In the *spark_read_...* functions, the **memory** argument controls if the data will be loaded into memory as an RDD.  Setting it to **FALSE** means that Spark will essentially map the file, but not make a copy of it in memory.  This makes the **spark_read_csv** command run faster, but the trade off is that any data transformation operations will take much longer.
 
 ```{r, eval=FALSE}
-spark_read_csv(sc, "flights_spark_2008","2008.csv.bz2", memory = FALSE)
+spark_read_csv(sc, "flights_spark_2008", "2008.csv.bz2", memory = FALSE)
 ```
 
 In the RStudio IDE, the **flights_spark_2008** table now shows up in the Spark tab. 
@@ -95,7 +95,7 @@ flights_table <- tbl(sc,"flights_spark_2008") %>%
          DepDelay > 15 , DepDelay < 240,
          ArrDelay > -60 , ArrDelay < 360, 
          Gain = DepDelay - ArrDelay) %>%
-  filter(ArrDelay>0) %>%
+  filter(ArrDelay > 0) %>%
   select(Origin, Dest, UniqueCarrier, Distance, DepDelay, ArrDelay, Gain)
 ```
 
@@ -136,7 +136,7 @@ In the **Executors** page of the Spark Web UI, we can see that the Storage Memor
 The plan is to read the Flights 2007 file, combine it with the 2008 file and summarize the data without bringing either file fully into memory.
 
 ```{r, eval=FALSE}
-spark_read_csv(sc, "flights_spark_2007","2007.csv.bz2", memory = FALSE)
+spark_read_csv(sc, "flights_spark_2007" , "2007.csv.bz2", memory = FALSE)
 ```
 
 
@@ -145,8 +145,8 @@ spark_read_csv(sc, "flights_spark_2007","2007.csv.bz2", memory = FALSE)
 The **union** command is akin to the **bind_rows** dyplyr command.  It will allow us to append the 2007 file to the 2008 file, and as with the previous transform, this script will be evaluated lazily.
 
 ```{r, eval=FALSE}
-all_flights <- tbl(sc,"flights_spark_2008") %>%
-  union(tbl(sc,"flights_spark_2007")) %>%
+all_flights <- tbl(sc, "flights_spark_2008") %>%
+  union(tbl(sc, "flights_spark_2007")) %>%
   group_by(Year, Month) %>%
   tally()
 ```
@@ -171,11 +171,11 @@ all_flights <- all_flights %>%
 Now the smaller data set can be plotted 
 
 ```{r, eval=FALSE}
-ggplot(data=all_flights, aes(x=Month, y=n/1000, fill=factor(Year))) +
+ggplot(data = all_flights, aes(x = Month, y = n/1000, fill = factor(Year))) +
   geom_area(position = "dodge", alpha = 0.5) +
-  geom_line(alpha=0.4) +
-  scale_fill_brewer(palette="Dark2", name="Year") +
-  scale_x_continuous(breaks = 1:12, labels=c("J","F","M","A","M","J","J","A","S","O","N","D")) +
+  geom_line(alph a = 0.4) +
+  scale_fill_brewer(palette = "Dark2", name = "Year") +
+  scale_x_continuous(breaks = 1:12, labels = c("J","F","M","A","M","J","J","A","S","O","N","D")) +
   theme_light() +
   labs(y="Number of Flights (Thousands)", title = "Number of Flights Year-Over-Year")
 ```

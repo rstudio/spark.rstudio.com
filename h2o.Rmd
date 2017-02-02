@@ -1,9 +1,12 @@
 ---
 title: "Sparkling Water (H2O) Machine Learning"
+output:
+  github_document:
+    fig_width: 9
+    fig_height: 5
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+```{r setup, results='hide'}
 knitr::opts_chunk$set(warning = FALSE)
 ```
 
@@ -27,7 +30,7 @@ A typical machine learning pipeline with rsparkling might be composed of the fol
 
 First, make sure Spark is installed:
 
-```{r}
+```{r, message=FALSE}
 library(sparklyr)
 spark_install("1.6.2")
 ```
@@ -44,7 +47,7 @@ Then set the Sparkling Water version for rsparkling:
 options(rsparkling.sparklingwater.version = "1.6.8")
 ```
 
-While using Spark 2.0 use version `2.0.3` instead.
+While using Spark 2.0 use version 2.0.3 instead.
 
 ### Using H2O {.toc-ignore}
 
@@ -52,7 +55,7 @@ Now let's walk through a simple example to demonstrate the use of H2O's machine 
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.  
 
-```{r}
+```{r, message=FALSE}
 library(rsparkling)
 library(h2o)
 library(dplyr)
@@ -88,7 +91,7 @@ test <- as_h2o_frame(sc, partitions$test, strict_version_check = FALSE)
 
 Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFrame(as_h2o_frame(mtcars_tbl), 0.5)`) 
 
-```{r}
+```{r results='hide'}
 # fit a linear model to the training dataset
 glm_model <- h2o.glm(x = c("wt", "cyl"), 
                      y = "mpg", 
@@ -106,7 +109,7 @@ The output suggests that our model is a fairly good fit, and that both a cars we
 
 Let's use our H2O model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We'll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
 
-```{r}
+```{r, results='hide'}
 library(ggplot2)
 
 # compute predicted values on our test dataset
@@ -203,7 +206,7 @@ iris_hf <- as_h2o_frame(sc, iris_tbl, strict_version_check = FALSE)
 
 Use H2O's [K-means clustering](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/k-means.html) to partition a dataset into groups. K-means clustering partitions points into `k` groups, such that the sum of squares from points to the assigned cluster centers is minimized.
 
-```{r}
+```{r, results='hide'}
 kmeans_model <- h2o.kmeans(training_frame = iris_hf, 
                            x = 3:4,
                            k = 3,
@@ -227,7 +230,7 @@ h2o.centroid_stats(kmeans_model)
 
 Use H2O's [Principal Components Analysis (PCA)](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/pca.html) to perform dimensionality reduction. PCA is a statistical method to find a rotation such that the first coordinate has the largest variance possible, and each succeeding coordinate in turn has the largest variance possible.
 
-```{r}
+```{r, results='hide'}
 pca_model <- h2o.prcomp(training_frame = iris_hf,
                         x = 1:4,
                         k = 4,
@@ -253,7 +256,7 @@ splits <- h2o.splitFrame(iris_hf, seed = 1)
 ```
 
 Then we can train a Random Forest model:
-```{r}
+```{r, results='hide'}
 rf_model <- h2o.randomForest(x = x, 
                              y = y,
                              training_frame = splits[[1]],
@@ -282,7 +285,7 @@ h2o.varimp_plot(rf_model)
 The [Gradient Boosting Machine (GBM)](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/gbm.html) is one of H2O's most popular algorithms, as it works well on many types of data.  We will continue to use the iris dataset as an example for this problem. 
 
 Using the same dataset and `x` and `y` from above, we can train a GBM:
-```{r}
+```{r, results='hide'}
 gbm_model <- h2o.gbm(x = x, 
                      y = y,
                      training_frame = splits[[1]],
@@ -329,7 +332,7 @@ x <- setdiff(names(prostate_hf), c("ID", y))
 
 Now we can train a deep neural net.
 
-```{r}
+```{r, results='hide'}
 dl_fit <- h2o.deeplearning(x = x, y = y,
                            training_frame = splits[[1]],
                            epochs = 15,
@@ -381,7 +384,7 @@ x <- setdiff(names(prostate_hf), c("ID", y))
 
 After prepping the data, we define a grid and execute the grid search.
 
-```{r}
+```{r, results='hide'}
 # GBM hyperparamters
 gbm_params1 <- list(learn_rate = c(0.01, 0.1),
                     max_depth = c(3, 5, 9),
@@ -401,6 +404,9 @@ gbm_grid1 <- h2o.grid("gbm", x = x, y = y,
 gbm_gridperf1 <- h2o.getGrid(grid_id = "gbm_grid1", 
                              sort_by = "mse", 
                              decreasing = FALSE)
+```
+
+```{r}
 print(gbm_gridperf1)
 ```
 
@@ -410,7 +416,7 @@ H2O's Random Grid Search samples from the given parameter space until a set of c
 
 The example below is set to run fairly quickly -- increase `max_runtime_secs` or `max_models` to cover more of the hyperparameter space in your grid search.  Also, you can expand the hyperparameter space of each of the algorithms by modifying the definition of `hyper_param` below.
 
-```{r}
+```{r, results='hide'}
 # GBM hyperparamters
 gbm_params2 <- list(learn_rate = seq(0.01, 0.1, 0.01),
                     max_depth = seq(2, 10, 1),
@@ -469,7 +475,7 @@ h2o.download_pojo(my_model, path = "/Users/me/h2omodels")
 
 Finally, disconnect with:
 
-```{r}
+```{r, results='hide'}
 spark_disconnect_all()
 ```
 

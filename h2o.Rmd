@@ -4,6 +4,7 @@ title: "Sparkling Water (H2O) Machine Learning"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 ## Overview
@@ -24,87 +25,40 @@ A typical machine learning pipeline with rsparkling might be composed of the fol
 
 ## Installation {.toc-ignore}
 
-The **rsparkling** R package requires the **h2o** and **sparklyr** R packages to run.  The sparklyr package can be installed from CRAN and instructions for how to install the h2o and rsparkling packages follow below.
+First, make sure Spark is installed:
 
-### Install h2o
-
-Today (Sept. 2016, the initial github release of rsparkling) you must use **h2o** R package version [3.10.0.6](http://h2o-release.s3.amazonaws.com/h2o/rel-turing/6/index.html#R) (H2O "Turing" release, build 6) and Spark 1.6, since that version of H2O is embedded in rsparkling.  This will be more flexible in the future.
-
-```{r, eval=FALSE}
-# Remove previous versions of h2o R package
-if ("package:h2o" %in% search()) detach("package:h2o", unload=TRUE)
-if ("h2o" %in% rownames(installed.packages())) remove.packages("h2o")
-
-# Next, we download R package dependencies
-pkgs <- c("methods","statmod","stats","graphics",
-          "RCurl","jsonlite","tools","utils")
-for (pkg in pkgs) {
-    if (!(pkg %in% rownames(installed.packages()))) install.packages(pkg)
-}
-
-# Download h2o package version 3.10.0.6
-install.packages("h2o", type = "source", 
-                 repos = "http://h2o-release.s3.amazonaws.com/h2o/rel-turing/6/R")
-```
-
-
-### Install rsparkling
-
-The latest stable version of **rsparkling** can be installed using [devtools](https://cran.r-project.org/web/packages/devtools/index.html) as follows:
-
-```{r, eval = FALSE}
-library(devtools)
-devtools::install_github("h2oai/rsparkling", ref = "stable")
-``` 
-
-## Algorithms
-
-Once the `H2OContext` is made available to Spark (as demonstrated below), all of the functions in the standard h2o R interface can be used with H2O Frames (converted from Spark DataFrames).  Here is a table of the available algorithms:
-
-| Function | Description  |
-|----------------------------|---------------------------------------------|
-| [`h2o.glm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) | Generalized Linear Model |
-| [`h2o.deeplearning`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/deep-learning.html) | Multilayer Perceptron |
-| [`h2o.randomForest`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/drf.html) | Random Forest |
-| [`h2o.gbm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/gbm.html) | Gradient Boosting Machine |
-| [`h2o.naiveBayes`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/naive-bayes.html) | Naive-Bayes |
-| [`h2o.prcomp`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/pca.html) | Principal Components Analysis |
-| [`h2o.svd`](https://www.rdocumentation.org/packages/h2o/versions/3.8.3.3/topics/h2o.svd) | Singular Value Decomposition |
-| [`h2o.glrm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glrm.html) | Generalized Low Rank Model |
-| [`h2o.kmeans`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/k-means.html) | K-Means Clustering |
-| [`h2o.anomaly`](https://www.rdocumentation.org/packages/h2o/versions/3.8.3.3/topics/h2o.anomaly) | Anomaly Detection via Deep Learning Autoencoder |
-
-Additionally, the [h2oEnsemble](https://github.com/h2oai/h2o-3/tree/master/h2o-r/ensemble) R package can be used to generate Super Learner ensembles of H2O algorithms:
-
-| Function | Description  |
-|----------------------------|---------------------------------------------|
-| [`h2o.ensemble`](http://learn.h2o.ai/content/tutorials/ensembles-stacking/) | Super Learner / Stacking |
-| [`h2o.stack`](https://github.com/h2oai/h2o-3/blob/master/h2o-r/ensemble/demos/h2o_stack_documentation_example.R) | Super Learner / Stacking |
-
-
-### Algorithm Example {.toc-ignore}
-
-Let's walk through a simple example to demonstrate the use of H2O's machine learning algorithms within R. We'll use [h2o.glm](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
-
-Prior to starting this example, Spark must be installed (this only needs to be run once). Also, the same version of Sparkling Water should be installed.
-
-```{r, eval=FALSE}
+```{r}
 library(sparklyr)
-spark_install(version = "1.6.2")
-options(rsparkling.sparklingwater.version = "1.6.2") # Use Sparkling Water 1.6.2 to match Spark version
+spark_install("1.6.2")
 ```
 
-The call to `library(rsparkling)` will make the H2O functions available on the R search path and will also ensure that the dependencies required by the Sparkling Water package are included when we connect to Spark. 
+You can install the **rsparkling** package from CRAN as follows:
+
+```{r, eval=FALSE}
+install.packages("rsparkling")
+```
+
+Then set the Sparkling Water version for rsparkling:
+
+```{r}
+options(rsparkling.sparklingwater.version = "1.6.8")
+```
+
+While using Spark 2.0 use version `2.0.3` instead.
+
+### Using H2O {.toc-ignore}
+
+Now let's walk through a simple example to demonstrate the use of H2O's machine learning algorithms within R. We'll use [h2o.glm](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.  
 
 ```{r}
-library(sparklyr)
 library(rsparkling)
+library(h2o)
 library(dplyr)
 
 sc <- spark_connect("local", version = "1.6.2")
-mtcars_tbl <- copy_to(sc, mtcars, "mtcars", overwrite = TRUE)
+mtcars_tbl <- copy_to(sc, mtcars, "mtcars")
 ```
 
 Now, let's perform some simple transformations -- we'll
@@ -128,8 +82,8 @@ partitions <- mtcars_tbl %>%
 Now, we convert our training and test sets into H2O Frames using rsparkling conversion functions.  We have already split the data into training and test frames using dplyr.  
 
 ```{r}
-training <- as_h2o_frame(sc, partitions$training)
-test <- as_h2o_frame(sc, partitions$test)
+training <- as_h2o_frame(sc, partitions$training, strict_version_check = FALSE)
+test <- as_h2o_frame(sc, partitions$test, strict_version_check = FALSE)
 ```
 
 Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFrame(as_h2o_frame(mtcars_tbl), 0.5)`) 
@@ -147,51 +101,6 @@ For linear regression models produced by H2O, we can use either `print()` or `su
 ```{r}
 print(glm_model)
 ```
-```
-Model Details:
-==============
-
-H2ORegressionModel: glm
-Model ID:  GLM_model_R_1474576540794_2 
-GLM Model: summary
-    family     link
-1 gaussian identity
-                                regularization
-1 Elastic Net (alpha = 0.5, lambda = 0.08201 )
-                                                                lambda_search
-1 nlambda = 100, lambda.max = 8.2006, lambda.min = 0.08201, lambda.1se = -1.0
-  number_of_predictors_total
-1                          2
-  number_of_active_predictors
-1                           2
-  number_of_iterations training_frame
-1                    0   frame_rdd_57
-
-Coefficients: glm coefficients
-      names coefficients
-1 Intercept    36.390842
-2       cyl    -1.580152
-3        wt    -2.232329
-  standardized_coefficients
-1                 17.783333
-2                 -2.505999
-3                 -2.449461
-
-H2ORegressionMetrics: glm
-** Reported on training data. **
-
-MSE:  3.262896
-RMSE:  1.806349
-MAE:  1.411069
-RMSLE:  0.09689482
-Mean Residual Deviance :  3.262896
-R^2 :  0.865446
-Null Deviance :290.9967
-Null D.o.F. :11
-Residual Deviance :39.15475
-Residual D.o.F. :9
-AIC :56.24591
-```
 
 The output suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
 
@@ -203,7 +112,7 @@ library(ggplot2)
 # compute predicted values on our test dataset
 pred <- h2o.predict(glm_model, newdata = test)
 # convert from H2O Frame to Spark DataFrame
-predicted <- as_spark_dataframe(sc, pred)
+predicted <- as_spark_dataframe(sc, pred, strict_version_check = FALSE)
 
 # extract the true 'mpg' values from our test dataset
 actual <- partitions$test %>%
@@ -232,12 +141,33 @@ ggplot(data, aes(x = actual, y = predicted)) +
   )
 ```
 
-![](images/mtcars-regression.png)
-
 Although simple, our model appears to do a fairly good job of predicting a car's average fuel consumption.
 
 As you can see, we can easily and effectively combine dplyr data transformation pipelines with the machine learning algorithms provided by H2O's Sparkling Water.
 
+## Algorithms
+
+Once the `H2OContext` is made available to Spark (as demonstrated below), all of the functions in the standard h2o R interface can be used with H2O Frames (converted from Spark DataFrames).  Here is a table of the available algorithms:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`h2o.glm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) | Generalized Linear Model |
+| [`h2o.deeplearning`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/deep-learning.html) | Multilayer Perceptron |
+| [`h2o.randomForest`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/drf.html) | Random Forest |
+| [`h2o.gbm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/gbm.html) | Gradient Boosting Machine |
+| [`h2o.naiveBayes`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/naive-bayes.html) | Naive-Bayes |
+| [`h2o.prcomp`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/pca.html) | Principal Components Analysis |
+| [`h2o.svd`](https://www.rdocumentation.org/packages/h2o/versions/3.8.3.3/topics/h2o.svd) | Singular Value Decomposition |
+| [`h2o.glrm`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glrm.html) | Generalized Low Rank Model |
+| [`h2o.kmeans`](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/k-means.html) | K-Means Clustering |
+| [`h2o.anomaly`](https://www.rdocumentation.org/packages/h2o/versions/3.8.3.3/topics/h2o.anomaly) | Anomaly Detection via Deep Learning Autoencoder |
+
+Additionally, the [h2oEnsemble](https://github.com/h2oai/h2o-3/tree/master/h2o-r/ensemble) R package can be used to generate Super Learner ensembles of H2O algorithms:
+
+| Function | Description  |
+|----------------------------|---------------------------------------------|
+| [`h2o.ensemble`](http://learn.h2o.ai/content/tutorials/ensembles-stacking/) | Super Learner / Stacking |
+| [`h2o.stack`](https://github.com/h2oai/h2o-3/blob/master/h2o-r/ensemble/demos/h2o_stack_documentation_example.R) | Super Learner / Stacking |
 
 ## Transformers
 
@@ -255,42 +185,18 @@ A model is often fit not on a dataset as-is, but instead on some transformation 
 | [`ft_string_indexer`](reference/sparklyr/latest/ft_string_indexer.html) | Encodes a string column of labels to a column of label indices |
 | [`ft_vector_assembler`](reference/sparklyr/latest/ft_vector_assembler.html) | Combines a given list of columns into a single vector column |
 
-
-
-
 ## Examples
 
 We will use the `iris` data set to examine a handful of learning algorithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
 
 ```{r}
-library(rsparkling)
-library(ggplot2)
-library(dplyr)
-sc <- spark_connect("local", version = "1.6.2")
 iris_tbl <- copy_to(sc, iris, "iris", overwrite = TRUE)
 iris_tbl
 ```
-```
-Source:   query [?? x 5]
-Database: spark connection master=local app=sparklyr local=TRUE
 
-   Sepal_Length Sepal_Width Petal_Length Petal_Width Species
-          <dbl>       <dbl>        <dbl>       <dbl>   <chr>
-1           5.1         3.5          1.4         0.2  setosa
-2           4.9         3.0          1.4         0.2  setosa
-3           4.7         3.2          1.3         0.2  setosa
-4           4.6         3.1          1.5         0.2  setosa
-5           5.0         3.6          1.4         0.2  setosa
-6           5.4         3.9          1.7         0.4  setosa
-7           4.6         3.4          1.4         0.3  setosa
-8           5.0         3.4          1.5         0.2  setosa
-9           4.4         2.9          1.4         0.2  setosa
-10          4.9         3.1          1.5         0.1  setosa
-# ... with more rows
-```
 Convert to an H2O Frame:
 ```{r}
-iris_hf <- as_h2o_frame(sc, iris_tbl)
+iris_hf <- as_h2o_frame(sc, iris_tbl, strict_version_check = FALSE)
 ```
 
 ### K-Means Clustering
@@ -311,25 +217,11 @@ To look at particular metrics of the K-means model, we can use `h2o.centroid_sta
 # print the cluster centers
 h2o.centers(kmeans_model)
 ```
-```
-  petal_length petal_width
-1     1.462000     0.24600
-2     5.566667     2.05625
-3     4.296154     1.32500
-```
 
 ```{r}
 # print the centroid statistics
 h2o.centroid_stats(kmeans_model)
 ```
-```
-Centroid Statistics: 
-  centroid     size within_cluster_sum_of_squares
-1        1 50.00000                       1.41087
-2        2 48.00000                       9.29317
-3        3 52.00000                       7.20274
-```
-
 
 ### PCA
 
@@ -341,22 +233,6 @@ pca_model <- h2o.prcomp(training_frame = iris_hf,
                         k = 4,
                         seed = 1)
 print(pca_model)
-```
-```
-Model Details:
-==============
-
-H2ODimReductionModel: pca
-Model ID:  PCA_model_R_1474576540794_7 
-Importance of components: 
-                            pc1      pc2      pc3      pc4
-Standard deviation     7.861342 1.455041 0.283531 0.154411
-Proportion of Variance 0.965303 0.033069 0.001256 0.000372
-Cumulative Proportion  0.965303 0.998372 0.999628 1.000000
-
-
-H2ODimReductionMetrics: pca
-** Reported on training data. **
 ```
 
 ### Random Forest
@@ -394,23 +270,12 @@ Since we passed a validation frame, the validation metrics will be calculated.  
 ```{r}
 h2o.confusionMatrix(rf_model, valid = TRUE)
 ```
-```
-Confusion Matrix: vertical: actual; across: predicted
-           setosa versicolor virginica  Error     Rate
-setosa          7          0         0 0.0000 =  0 / 7
-versicolor      0         13         0 0.0000 = 0 / 13
-virginica       0          1        10 0.0909 = 1 / 11
-Totals          7         14        10 0.0323 = 1 / 31
-```
 
 To view the variable importance computed from an H2O model, you can use either the `h2o.varimp()` or `h2o.varimp_plot()` functions:
 
 ```{r}
 h2o.varimp_plot(rf_model)
 ```
-
-![](images/iris-h2o-rf-varimp.png)
-
 
 ### Gradient Boosting Machine
 
@@ -434,14 +299,6 @@ Since this is a multi-class problem, we may be interested in inspecting the conf
 ```{r}
 h2o.confusionMatrix(gbm_model, valid = TRUE)
 ```
-```
-Confusion Matrix: vertical: actual; across: predicted
-           setosa versicolor virginica  Error     Rate
-setosa          7          0         0 0.0000 =  0 / 7
-versicolor      0         13         0 0.0000 = 0 / 13
-virginica       0          1        10 0.0909 = 1 / 11
-Totals          7         14        10 0.0323 = 1 / 31
-```
 
 ### Deep Learning
 
@@ -454,24 +311,11 @@ path <- system.file("extdata", "prostate.csv", package = "h2o")
 prostate_df <- spark_read_csv(sc, "prostate", path)
 head(prostate_df)
 ```
-```
-Source:   query [?? x 9]
-Database: spark connection master=local[8] app=sparklyr local=TRUE
-
-     ID CAPSULE   AGE  RACE DPROS DCAPS   PSA   VOL GLEASON
-  <int>   <int> <int> <int> <int> <int> <dbl> <dbl>   <int>
-1     1       0    65     1     2     1   1.4   0.0       6
-2     2       0    72     1     3     2   6.7   0.0       7
-3     3       0    70     1     1     2   4.9   0.0       6
-4     4       0    76     2     2     1  51.2  20.0       7
-5     5       0    69     1     1     1  12.3  55.9       6
-6     6       1    71     1     3     2   3.3   0.0       8
-```
 
 Once we've done whatever data manipulation is required to run our model we'll get a reference to it as an h2o frame then split it into training and test sets using the `h2o.splitFrame` function:
 
 ```{r}
-prostate_hf <- as_h2o_frame(sc, prostate_df)
+prostate_hf <- as_h2o_frame(sc, prostate_df, strict_version_check = FALSE)
 splits <- h2o.splitFrame(prostate_hf, seed = 1)
 ```
 
@@ -511,7 +355,6 @@ Mean Residual Deviance :  255.8092
 ```
 Note that the above metrics are not reproducible when H2O's Deep Learning is run on multiple cores, however, the metrics should be fairly stable across repeat runs.
 
-
 ### Grid Search
 
 H2O's grid search capabilities currently supports traditional (Cartesian) grid search and random grid search.  Grid search in R provides the following capabilities:
@@ -536,7 +379,6 @@ y <- "VOL"
 x <- setdiff(names(prostate_hf), c("ID", y))
 ```
 
-
 After prepping the data, we define a grid and execute the grid search.
 
 ```{r}
@@ -560,50 +402,6 @@ gbm_gridperf1 <- h2o.getGrid(grid_id = "gbm_grid1",
                              sort_by = "mse", 
                              decreasing = FALSE)
 print(gbm_gridperf1)
-```
-
-```
-H2O Grid Details
-================
-
-Grid ID: gbm_grid 
-Used hyper parameters: 
-  -  col_sample_rate 
-  -  learn_rate 
-  -  max_depth 
-  -  sample_rate 
-Number of models: 36 
-Number of failed models: 0 
-
-Hyper-Parameter Search Summary: ordered by increasing mse
-  col_sample_rate learn_rate max_depth sample_rate
-1             1.0        0.1         9         1.0
-2             0.5        0.1         9         1.0
-3             1.0        0.1         9         0.8
-4             0.5        0.1         9         0.8
-5             1.0        0.1         5         0.8
-          model_ids                mse
-1 gbm_grid_model_35  88.10947523138782
-2 gbm_grid_model_34  102.3118989994892
-3 gbm_grid_model_17 103.50178587114236
-4 gbm_grid_model_16  126.4217260351778
-5 gbm_grid_model_11  149.6066650109763
-
----
-   col_sample_rate learn_rate max_depth sample_rate
-31             0.5       0.01         3         0.8
-32             0.2       0.01         5         1.0
-33             0.5       0.01         3         1.0
-34             0.2       0.01         5         0.8
-35             0.2       0.01         3         1.0
-36             0.2       0.01         3         0.8
-           model_ids                mse
-31  gbm_grid_model_1  324.8117304723162
-32 gbm_grid_model_24 325.10992525687294
-33 gbm_grid_model_19 325.27898443785045
-34  gbm_grid_model_6 329.36983845305735
-35 gbm_grid_model_18 338.54411936919456
-36  gbm_grid_model_0  339.7744828617712
 ```
 
 #### Random Grid Search
@@ -642,16 +440,8 @@ To get the best model, as measured by validation MSE, we simply grab the first r
 ```{r}
 gbm_gridperf2@summary_table[1,]
 ```
-```
-Hyper-Parameter Search Summary: ordered by increasing mse
-  col_sample_rate learn_rate max_depth sample_rate
-1             0.9       0.01         2         0.5
-           model_ids                mse
-1 gbm_grid4_model_36 243.67068252501582
-```
 
 In the examples above, we generated two different grids, specified by `grid_id`.  The first grid was called `grid_id = "gbm_grid1"` and the second was called `grid_id = "gbm_grid2"`.  However, if we are using the same dataset & algorithm in two grid searches, it probably makes more sense just to add the results of the second grid search to the first.  If you want to add models to an existing grid, rather than create a new one, you simply re-use the same `grid_id`.
-
 
 ## Exporting Models
 
@@ -675,6 +465,12 @@ To generate the POJO for your model, use the following command:
 
 ```{r, eval=FALSE}
 h2o.download_pojo(my_model, path = "/Users/me/h2omodels")
+```
+
+Finally, disconnect with:
+
+```{r}
+spark_disconnect_all()
 ```
 
 You can learn more about how to take H2O models to production in the [productionizing H2O models](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/productionizing.html) section of the H2O docs.

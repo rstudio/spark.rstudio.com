@@ -25,6 +25,13 @@ A typical machine learning pipeline with rsparkling might be composed of the fol
 Installation
 ------------
 
+First, make sure Spark is installed:
+
+``` r
+library(sparklyr)
+spark_install("1.6.2")
+```
+
 You can install the **rsparkling** package from CRAN as follows:
 
 ``` r
@@ -37,7 +44,7 @@ Then set the Sparkling Water version for rsparkling:
 options(rsparkling.sparklingwater.version = "1.6.8")
 ```
 
-For Spark `2.0.x` set `rsparkling.sparklingwater.version` to `2.0.3` instead.
+While using Spark 2.0 use version 2.0.3 instead.
 
 ### Using H2O
 
@@ -97,7 +104,7 @@ print(glm_model)
     ## ==============
     ## 
     ## H2ORegressionModel: glm
-    ## Model ID:  GLM_model_R_1486080847328_1 
+    ## Model ID:  GLM_model_R_1486081552565_1 
     ## GLM Model: summary
     ##     family     link                               regularization
     ## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.08201 )
@@ -475,11 +482,11 @@ h2o.performance(dl_fit, newdata = splits[[2]])
 
     ## H2ORegressionMetrics: deeplearning
     ## 
-    ## MSE:  259.8812
-    ## RMSE:  16.12083
-    ## MAE:  13.06391
-    ## RMSLE:  NaN
-    ## Mean Residual Deviance :  259.8812
+    ## MSE:  259.5443
+    ## RMSE:  16.11038
+    ## MAE:  13.12944
+    ## RMSLE:  1.97863
+    ## Mean Residual Deviance :  259.5443
 
     H2ORegressionMetrics: deeplearning
 
@@ -623,10 +630,10 @@ gbm_gridperf2@summary_table[1,]
 ```
 
     ## Hyper-Parameter Search Summary: ordered by increasing mse
-    ##   col_sample_rate learn_rate max_depth sample_rate          model_ids
-    ## 1             0.6       0.01         4         0.8 gbm_grid2_model_29
+    ##   col_sample_rate learn_rate max_depth sample_rate         model_ids
+    ## 1             0.2       0.01         3         1.0 gbm_grid2_model_3
     ##                 mse
-    ## 1 249.0057860773263
+    ## 1 248.1223608031158
 
 In the examples above, we generated two different grids, specified by `grid_id`. The first grid was called `grid_id = "gbm_grid1"` and the second was called `grid_id = "gbm_grid2"`. However, if we are using the same dataset & algorithm in two grid searches, it probably makes more sense just to add the results of the second grid search to the first. If you want to add models to an existing grid, rather than create a new one, you simply re-use the same `grid_id`.
 

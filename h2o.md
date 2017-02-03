@@ -1,10 +1,6 @@
 Sparkling Water (H2O) Machine Learning
 ================
 
-``` r
-knitr::opts_chunk$set(warning = FALSE)
-```
-
 Overview
 --------
 

@@ -1,5 +1,5 @@
 ---
-title: "Using Spark locally"
+title: "Understanding Spark Caching"
 output:
   html_document:
     toc: true
@@ -9,9 +9,8 @@ output:
 ---
 ## Introduction 
 
-**sparklyr** makes it easy to start using and learning **Spark**. The package enables the installation and interaction of a Spark locally in a single computer, including on  computers with the Microsoft Windows OS.  
+By using a reproducible example, we will review some of the main configuration settings, commands and command arguments that can be used that can help you get the best out of Spark's memory management options.
 
-This article focuses on some of the main configuration settings, commands and command arguments that can be used to optimize an analysis developed in **Spark** in the *local* mode.
 
 ```{r, include=FALSE}
 library(htmltools)
@@ -38,38 +37,34 @@ if(!file.exists("2007.csv.bz2"))
   {download.file("http://stat-computing.org/dataexpo/2009/2007.csv.bz2", "2007.csv.bz2")}
 ```
 
-### Install Spark Locally
+### Start a Spark session
 
-**sparklyr** can download the appropriate Spark files to run any supported version.  Version **2.0.0** will be used in this exercise.
+A local deployment will be used for this example.  
 
 ```{r, eval=FALSE}
 library(sparklyr)
 library(dplyr)
 library(ggplot2)
+
+# Install Spark version 2
 spark_install(version="2.0.0")
-```
 
-## Start Spark Session
-
-### On Windows
-
-If on a Microsoft Windows computer, set the Java Home prior to connecting.  The path may be different that the example below:
-
-```{r, eval=FALSE}
-java_path <- normalizePath('C:/Program Files/Java/jre1.8.0_66')
-Sys.setenv(JAVA_HOME=java_path)
-```
-
-### Main Configuration Setting
-
-In 'Local' mode, the main configuration we need to modify is the **sparklyr.shell.driver-memory**.  The amount of memory requested depends on the capacity of the computer, in this case 16 Gigabytes are being requested.
-
-```{r, eval=FALSE}
+# Customize the connection configuration
 conf <- spark_config()
 conf$`sparklyr.shell.driver-memory` <- "16G"
-##--- Tip: Specifying 'version' when connecting will reduce issues when multiple Spark versions are installed locally
+
+# Connect to Spark
 sc <- spark_connect(master="local", config = conf, version="2.0.0")
+
 ```
+
+## Driver Memory
+
+Access the Spark Web UI by clicking the **Spark UI button** in the **RStudio Spark tab**. Once there, in the **Executors** page we can see that the Storage Memory is at about half of the 16 gigabytes requested.  This is mainly because of a Spark setting called **spark.memory.fraction**, which reserves by default 40% of the memory requested.
+
+<center><a href="images/examples-local/drivers-1.png">
+  <img src="images/examples-local/drivers-1.png", width="1000px"/>
+</a></center>
 
 ## Spark Read
 
@@ -93,13 +88,7 @@ To access the Spark Web UI, click the Spark UI button in the RStudio Spark Tab. 
   <img src="images/examples-local/storage-1.png" , width="1000px"/>
 </a></center>
 
-### Where is the requested Driver Memory?
 
-In the **Executors** page we can see that the Storage Memory is at about half of the 16 gigabytes requested.  This is mainly because of a Spark setting called **spark.memory.fraction**, which reserves by default 40% of the memory requested.
-
-<center><a href="images/examples-local/drivers-1.png">
-  <img src="images/examples-local/drivers-1.png", width="1000px"/>
-</a></center>
 
 ## Loading Less Data into Memory
 
@@ -156,21 +145,20 @@ spark_read_csv(sc, "flights_spark_2007","2007.csv.bz2", memory = FALSE)
 
 ### Union and Transform
 
-The **union** command is akin to the **bind_rows**.  It will allow us to append the 2007 file to the 2008 file.  As with the previous transform, this script will be evaluated lazily.
+The **union** command is akin to the **bind_rows** dyplyr command.  It will allow us to append the 2007 file to the 2008 file, and as with the previous transform, this script will be evaluated lazily.
 
 ```{r, eval=FALSE}
 all_flights <- tbl(sc,"flights_spark_2008") %>%
   union(tbl(sc,"flights_spark_2007")) %>%
-  mutate(flight_date = paste(Year,Month,DayofMonth,sep="-"),
-         days_since = datediff(current_date(), flight_date)) %>%
-  group_by(flight_date,days_since) %>%
-  tally() %>%
-  arrange(-days_since) 
+  group_by(Year, Month) %>%
+  tally()
 ```
 
 ### Collect into R
 
-When receiving a **collect** command, Spark will execute the SQL statement and send the results back to R in a data frame.  In this case, R only loads 731 rows into a data frame called all_flights.
+When receiving a **collect** command, Spark will execute the SQL statement and send the results back to R in a data frame.  In this case, R only loads 24 observations into a data frame called *all_flights*.
+
+
 
 ```{r, eval=FALSE}
 all_flights <- all_flights %>%
@@ -186,10 +174,15 @@ all_flights <- all_flights %>%
 Now the smaller data set can be plotted 
 
 ```{r, eval=FALSE}
-ggplot(data=all_flights, aes(x=days_since, y=n)) +
-  geom_line()
+ggplot(data=all_flights, aes(x=Month, y=n/1000, fill=factor(Year))) +
+  geom_area(position = "dodge", alpha = 0.5) +
+  geom_line(alpha=0.4) +
+  scale_fill_brewer(palette="Dark2", name="Year") +
+  scale_x_continuous(breaks = 1:12, labels=c("J","F","M","A","M","J","J","A","S","O","N","D")) +
+  theme_light() +
+  labs(y="Number of Flights (Thousands)", title = "Number of Flights Year-Over-Year")
 ```
 
 <center><a href="images/examples-local/new-plot.png">
-  <img src="images/examples-local/new-plot.png", width="600px"/>
+  <img src="images/examples-local/new-plot.png", width="600"/>
 </a></center>

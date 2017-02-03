@@ -37,7 +37,8 @@ options(rsparkling.sparklingwater.version = "1.6.8")
 
 For Spark `2.0.x` set `rsparkling.sparklingwater.version` to `2.0.3` instead.
 
-### Using H2O
+Using H2O
+---------
 
 Now let's walk through a simple example to demonstrate the use of H2O's machine learning algorithms within R. We'll use [h2o.glm](http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html) to fit a linear regression model. Using the built-in `mtcars` dataset, we'll try to predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`).
 

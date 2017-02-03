@@ -25,13 +25,6 @@ A typical machine learning pipeline with rsparkling might be composed of the fol
 Installation
 ------------
 
-First, make sure Spark is installed:
-
-``` r
-library(sparklyr)
-spark_install("1.6.2")
-```
-
 You can install the **rsparkling** package from CRAN as follows:
 
 ``` r

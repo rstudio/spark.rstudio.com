@@ -29,13 +29,19 @@ You can install the **rsparkling** package from CRAN as follows:
 install.packages("rsparkling")
 ```
 
-Then set the Sparkling Water version for rsparkling:
+Then set the Sparkling Water version for rsparkling.  The value will depend on the Spark version that will be used:
 
+- For Spark version `1.6.x` set the Sparkling Water to version `1.6.8`: 
 ``` r
 options(rsparkling.sparklingwater.version = "1.6.8")
 ```
 
-For Spark `2.0.x` set `rsparkling.sparklingwater.version` to `2.0.3` instead.
+- For Spark version `2.0.x` set the Sparkling Water to version `2.0.3`:
+``` r
+options(rsparkling.sparklingwater.version = "2.0.3")
+```
+
+**Important: ** The `options` command needs to be passed before loading the library.  To see an example, please refer to the following section 'Using H2O'
 
 Using H2O
 ---------
@@ -45,11 +51,18 @@ Now let's walk through a simple example to demonstrate the use of H2O's machine 
 First, we will initialize a local Spark connection, and copy the `mtcars` dataset into Spark.
 
 ``` r
+# Because Spark version '1.6.2' will be used, set Sparkling Water to verion '1.6.8'  - See 'Installation' for more info
+options(rsparkling.sparklingwater.version = "1.6.8")
+
+# Load libraries
 library(rsparkling)
 library(h2o)
 library(dplyr)
 
+# Open the Spark connection
 sc <- spark_connect("local", version = "1.6.2")
+
+# Load mtcars to Spark memory
 mtcars_tbl <- copy_to(sc, mtcars, "mtcars")
 ```
 

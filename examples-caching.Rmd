@@ -1,18 +1,9 @@
 ---
 title: "Understanding Spark Caching"
-output:
+output: 
   html_document:
-    toc: true
     toc_depth: 3
-    toc_float:
-      collapsed: false
 ---
-## Introduction 
-
-Spark also supports pulling data sets into a cluster-wide in-memory cache. This is very useful when data is accessed repeatedly, such as when querying a small “hot” dataset or when running an iterative algorithm like random forests. Since operations in Spark are lazy, caching can help force computation. Sparklyr tools can be used to cache and uncache DataFrames. The Spark UI will tell you which DataFrames and what percentages are in memory.
-
-By using a reproducible example, we will review some of the main configuration settings, commands and command arguments that can be used that can help you get the best out of Spark's memory management options.
-
 
 ```{r, include=FALSE}
 library(htmltools)
@@ -25,6 +16,12 @@ thumbnail <- function(title, img, href = "", caption = TRUE, size = 6) {
           ifelse(caption, title, ""), align="center")))}
 
 ```
+## Introduction 
+
+Spark also supports pulling data sets into a cluster-wide in-memory cache. This is very useful when data is accessed repeatedly, such as when querying a small “hot” dataset or when running an iterative algorithm like random forests. Since operations in Spark are lazy, caching can help force computation. Sparklyr tools can be used to cache and uncache DataFrames. The Spark UI will tell you which DataFrames and what percentages are in memory.
+
+By using a reproducible example, we will review some of the main configuration settings, commands and command arguments that can be used that can help you get the best out of Spark's memory management options.
+
 
 ## Preparation
 

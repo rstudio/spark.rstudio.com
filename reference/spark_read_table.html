@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Feature Transformation -- OneHotEncoder — ft_one_hot_encoder • sparklyr</title>
+<title>Reads from a Spark Table into a Spark DataFrame. — spark_read_table • sparklyr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -131,51 +131,50 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Feature Transformation -- OneHotEncoder</h1>
+    <h1>Reads from a Spark Table into a Spark DataFrame.</h1>
     </div>
 
     
-    <p>One-hot encoding maps a column of label indices to a column of binary
-vectors, with at most a single one-value. This encoding allows algorithms
-which expect continuous features, such as Logistic Regression, to use
-categorical features.</p>
+    <p>Reads from a Spark Table into a Spark DataFrame.</p>
     
 
-    <pre><span class='fu'>ft_one_hot_encoder</span>(<span class='no'>x</span>, <span class='kw'>input.col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output.col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>drop.last</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre><span class='fu'>spark_read_table</span>(<span class='no'>sc</span>, <span class='no'>name</span>, <span class='no'>path</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>repartition</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>x</dt>
-      <dd>An object (usually a <code>spark_tbl</code>) coercable to a Spark DataFrame.</dd>
-      <dt>input.col</dt>
-      <dd>The name of the input column(s).</dd>
-      <dt>output.col</dt>
-      <dd>The name of the output column.</dd>
-      <dt>drop.last</dt>
-      <dd>Boolean; drop the last category?</dd>
-      <dt>...</dt>
-      <dd>Optional arguments; currently unused.</dd>
+      <dt>sc</dt>
+      <dd>A <code>spark_connection</code>.</dd>
+      <dt>name</dt>
+      <dd>The name to assign to the newly generated table.</dd>
+      <dt>path</dt>
+      <dd>The path to the file. Needs to be accessible from the cluster.
+Supports the <samp>&quot;hdfs://&quot;</samp>, <samp>&quot;s3n://&quot;</samp> and <samp>&quot;file://&quot;</samp> protocols.</dd>
+      <dt>options</dt>
+      <dd>A list of strings with additional options. See <a href = 'http://spark.apache.org/docs/latest/sql-programming-guide.html#configuration'>http://spark.apache.org/docs/latest/sql-programming-guide.html#configuration</a>.</dd>
+      <dt>repartition</dt>
+      <dd>The number of partitions used to distribute the
+generated table. Use 0 (the default) to avoid partitioning.</dd>
+      <dt>memory</dt>
+      <dd>Boolean; should the data be loaded eagerly into memory? (That
+is, should the table be cached?)</dd>
+      <dt>overwrite</dt>
+      <dd>Boolean; overwrite the table with the given name if it
+already exists?</dd>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>See <a href = 'http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
-  more information on the set of transformations available for DataFrame
-  columns in Spark.</p>
-    <p>Other feature transformation routines: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
-  <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
-  <code><a href='ft_count_vectorizer.html'>ft_count_vectorizer</a></code>,
-  <code><a href='ft_discrete_cosine_transform.html'>ft_discrete_cosine_transform</a></code>,
-  <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
-  <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
-  <code><a href='ft_quantile_discretizer.html'>ft_quantile_discretizer</a></code>,
-  <code><a href='ft_regex_tokenizer.html'>ft_regex_tokenizer</a></code>,
-  <code><a href='ft_sql_transformer.html'>ft_sql_transformer</a></code>,
-  <code><a href='ft_string_indexer.html'>ft_string_indexer</a></code>,
-  <code><a href='ft_tokenizer.html'>ft_tokenizer</a></code>,
-  <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
-  <code><a href='sdf_mutate.html'>sdf_mutate</a></code></p>
+    <p>Other Spark serialization routines: <code><a href='spark_load_table.html'>spark_load_table</a></code>,
+  <code><a href='spark_read_csv.html'>spark_read_csv</a></code>,
+  <code><a href='spark_read_jdbc.html'>spark_read_jdbc</a></code>,
+  <code><a href='spark_read_json.html'>spark_read_json</a></code>,
+  <code><a href='spark_read_parquet.html'>spark_read_parquet</a></code>,
+  <code><a href='spark_save_table.html'>spark_save_table</a></code>,
+  <code><a href='spark_write_csv.html'>spark_write_csv</a></code>,
+  <code><a href='spark_write_json.html'>spark_write_json</a></code>,
+  <code><a href='spark_write_parquet.html'>spark_write_parquet</a></code>,
+  <code><a href='spark_write_table.html'>spark_write_table</a></code></p>
     
 
   </div>

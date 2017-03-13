@@ -139,14 +139,26 @@
     <div id="sparklyr-0-6-0-unreleased" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sparklyr-0-6-0-unreleased" class="anchor"> </a>Sparklyr 0.6.0 (UNRELEASED)</h1>
-<ul><li><p>Support collecting NullType as NA instead of list of NAs columns.</p></li>
+<ul><li><p><code>sample_frac</code> takes a fraction instead of a percent to match <code>dplyr</code>.</p></li>
+<li><p>Improved performance of <code>spark_read_csv</code> reading remote data when <code>infer_schema = FALSE</code>.</p></li>
+<li><p>Added <code>spark_read_jdbc</code>. This function reads from a JDBC connection into a Spark DataFrame.</p></li>
+<li><p>Renamed <code>spark_load_table</code> and <code>spark_save_table</code> into <code>spark_read_table</code> and <code>spark_write_table</code> for consistency with existing <code>spark_read_*</code> and <code>spark_write_*</code> functions.</p></li>
+<li><p>Added <code>src_databases</code>. This function list all the available databases.</p></li>
+<li><p>Improved support in dplyr commands to handle multiple databases.</p></li>
+<li><p>Implemented new configuration checks to proactively report connection errors in Windows.</p></li>
+<li><p>While connecting to spark from Windows, setting the <code>sparklyr.verbose</code> option to <code>TRUE</code> prints detailed configuration steps.</p></li>
+<li><p>Added support to specify a vector of column names in <code>spark_read_csv</code> to specify column names without having to set the type of each column.</p></li>
+<li><p>Improved <code>copy_to</code>, <code>sdf_copy_to</code> and <code>dbWriteTable</code> performance under <code>yarn-client</code> mode.</p></li>
+<li><p>Added <code>tbl_change_tb()</code>. This function changes current database.</p></li>
+<li><p>Added <code><a href="../reference/sdf_pivot.html">sdf_pivot()</a></code>. This function provides a mechanism for constructing pivot tables, using Spark’s ‘groupBy’ + ‘pivot’ functionality, with a formula interface similar to that of <code>reshape2::dcast()</code>.</p></li>
+<li><p>Spark Null objects (objects of class NullType) discovered within numeric vectors are now collected as NAs, rather than lists of NAs.</p></li>
 <li><p>Fixed warning while connecting with livy and improved 401 message.</p></li>
-<li><p>Fixed issue in spark_read_parquet and other read methods in which spark_normalize_path would not work in some platforms while loading data using custom protocols like s3n:// for Amazon S3.</p></li>
-<li><p>Implemented ft_count_vectorizer to be able to use ml_lda with ease.</p></li>
-<li><p>Added support for the sparklyr.ui.connections option which adds additional connection options into the new connections dialog. The rstudio.spark.connections option is now deprecated.</p></li>
-<li><p>Implemented the “new connection dialog” as a shiny app to be able to support newer versions of RStudio that deprecate current connections ui.</p></li>
-<li><p>Improved performance of sample_n and sample_frac by using TABLESAMPLE query.</p></li>
-<li><p>Resolved issue in spark_save/load_table to support saving/loading data and added path parameter in spark_load_table for consistency with other functions.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/spark_read_parquet.html">spark_read_parquet()</a></code> and other read methods in which <code>spark_normalize_path()</code> would not work in some platforms while loading data using custom protocols like s3n:// for Amazon S3.</p></li>
+<li><p>Added <code><a href="../reference/ft_count_vectorizer.html">ft_count_vectorizer()</a></code>. This function can be used to transform columns of a Spark DataFrame so that they might be used as input to <code><a href="../reference/ml_lda.html">ml_lda()</a></code>. This should make it easier to invoke <code><a href="../reference/ml_lda.html">ml_lda()</a></code> on Spark data sets.</p></li>
+<li><p>Added support for the <code>sparklyr.ui.connections</code> option, which adds additional connection options into the new connections dialog. The <code>rstudio.spark.connections</code> option is now deprecated.</p></li>
+<li><p>Implemented the “new connection dialog” as a Shiny application to be able to support newer versions of RStudio that deprecate current connections ui.</p></li>
+<li><p>Improved performance of <code>sample_n()</code> and <code>sample_frac()</code> by using TABLESAMPLE query.</p></li>
+<li><p>Resolved issue in <code>spark_save()</code> / <code>load_table()</code> to support saving / loading data and added path parameter in <code><a href="../reference/spark_load_table.html">spark_load_table()</a></code> for consistency with other functions.</p></li>
 </ul></div>
     <div id="sparklyr-0-5-0" class="section level1">
 <h1 class="hasAnchor">

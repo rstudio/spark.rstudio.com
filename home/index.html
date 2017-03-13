@@ -173,7 +173,7 @@ fit &lt;-<span class="st"> </span>partitions$training %&gt;%
 <div id="reading-and-writing-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-and-writing-data" class="anchor"> </a>Reading and Writing Data</h2>
-<p>You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the lcoal filesystem of cluster nodes.</p>
+<p>You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the local filesystem of cluster nodes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp_csv &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".csv"</span>)
 temp_parquet &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".parquet"</span>)
 temp_json &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".json"</span>)
@@ -227,16 +227,16 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark_web.html">spark_web</a></span>(sc)</code></pre></div>
 <p>You can show the log using the <code>spark_log</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark_log.html">spark_log</a></span>(sc, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">## 16/12/19 13:43:42 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 91 (/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T//RtmpcsSFgF/file82259906243.csv MapPartitionsRDD[363] at textFile at NativeMethodAccessorImpl.java:-2)
-## 16/12/19 13:43:42 INFO TaskSchedulerImpl: Adding task set 91.0 with 1 tasks
-## 16/12/19 13:43:42 INFO TaskSetManager: Starting task 0.0 in stage 91.0 (TID 177, localhost, partition 0,PROCESS_LOCAL, 2429 bytes)
-## 16/12/19 13:43:42 INFO Executor: Running task 0.0 in stage 91.0 (TID 177)
-## 16/12/19 13:43:42 INFO HadoopRDD: Input split: file:/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T/RtmpcsSFgF/file82259906243.csv:0+33313106
-## 16/12/19 13:43:42 INFO Executor: Finished task 0.0 in stage 91.0 (TID 177). 2082 bytes result sent to driver
-## 16/12/19 13:43:42 INFO TaskSetManager: Finished task 0.0 in stage 91.0 (TID 177) in 119 ms on localhost (1/1)
-## 16/12/19 13:43:42 INFO DAGScheduler: ResultStage 91 (count at NativeMethodAccessorImpl.java:-2) finished in 0.119 s
-## 16/12/19 13:43:42 INFO TaskSchedulerImpl: Removed TaskSet 91.0, whose tasks have all completed, from pool 
-## 16/12/19 13:43:42 INFO DAGScheduler: Job 61 finished: count at NativeMethodAccessorImpl.java:-2, took 0.121816 s</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">## 17/02/03 15:34:17 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 91 (/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T//RtmpZqMbDE/file8f2b280ac4e5.csv MapPartitionsRDD[363] at textFile at NativeMethodAccessorImpl.java:-2)
+## 17/02/03 15:34:17 INFO TaskSchedulerImpl: Adding task set 91.0 with 1 tasks
+## 17/02/03 15:34:17 INFO TaskSetManager: Starting task 0.0 in stage 91.0 (TID 177, localhost, partition 0,PROCESS_LOCAL, 2430 bytes)
+## 17/02/03 15:34:17 INFO Executor: Running task 0.0 in stage 91.0 (TID 177)
+## 17/02/03 15:34:17 INFO HadoopRDD: Input split: file:/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T/RtmpZqMbDE/file8f2b280ac4e5.csv:0+33313106
+## 17/02/03 15:34:17 INFO Executor: Finished task 0.0 in stage 91.0 (TID 177). 2082 bytes result sent to driver
+## 17/02/03 15:34:17 INFO TaskSetManager: Finished task 0.0 in stage 91.0 (TID 177) in 116 ms on localhost (1/1)
+## 17/02/03 15:34:17 INFO DAGScheduler: ResultStage 91 (count at NativeMethodAccessorImpl.java:-2) finished in 0.117 s
+## 17/02/03 15:34:17 INFO TaskSchedulerImpl: Removed TaskSet 91.0, whose tasks have all completed, from pool 
+## 17/02/03 15:34:17 INFO DAGScheduler: Job 61 finished: count at NativeMethodAccessorImpl.java:-2, took 0.119612 s</code></pre></div>
 <p>Finally, we disconnect from Spark:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark-connections.html">spark_disconnect</a></span>(sc)</code></pre></div>
 </div>
@@ -254,6 +254,64 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 <p>The Spark DataFrame preview uses the standard RStudio data viewer:</p>
 <p><img src="home/README_files/images/spark-dataview.png" class="screenshot" width="639" height="446/"></p>
 <p>The RStudio IDE features for sparklyr are available now as part of the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+</div>
+<div id="using-h2o" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using-h2o" class="anchor"> </a>Using H2O</h2>
+<p><a href="https://cran.r-project.org/package=rsparkling">rsparkling</a> is a CRAN package from <a href="http://h2o.ai">H2O</a> that extends <a href="http://spark.rstudio.com">sparklyr</a> to provide an interface into <a href="https://github.com/h2oai/sparkling-water">Sparkling Water</a>. For instance, the following example installs, configures and runs <a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html">h2o.glm</a>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">rsparkling.sparklingwater.version =</span> <span class="st">"1.6.8"</span>)
+
+<span class="kw">library</span>(rsparkling)
+<span class="kw">library</span>(sparklyr)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(h2o)
+
+sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-connections.html">spark_connect</a></span>(<span class="dt">master =</span> <span class="st">"local"</span>, <span class="dt">version =</span> <span class="st">"1.6.2"</span>)
+mtcars_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/reexports.html">copy_to</a></span>(sc, mtcars, <span class="st">"mtcars"</span>)
+
+mtcars_h2o &lt;-<span class="st"> </span><span class="kw">as_h2o_frame</span>(sc, mtcars_tbl, <span class="dt">strict_version_check =</span> <span class="ot">FALSE</span>)
+
+mtcars_glm &lt;-<span class="st"> </span><span class="kw">h2o.glm</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="st">"wt"</span>, <span class="st">"cyl"</span>), 
+                      <span class="dt">y =</span> <span class="st">"mpg"</span>,
+                      <span class="dt">training_frame =</span> mtcars_h2o,
+                      <span class="dt">lambda_search =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars_glm</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">## Model Details:
+## ==============
+## 
+## H2ORegressionModel: glm
+## Model ID:  GLM_model_R_1486164877174_1 
+## GLM Model: summary
+##     family     link                              regularization
+## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.1013 )
+##                                                                lambda_search
+## 1 nlambda = 100, lambda.max = 10.132, lambda.min = 0.1013, lambda.1se = -1.0
+##   number_of_predictors_total number_of_active_predictors
+## 1                          2                           2
+##   number_of_iterations training_frame
+## 1                    0   frame_rdd_33
+## 
+## Coefficients: glm coefficients
+##       names coefficients standardized_coefficients
+## 1 Intercept    38.941654                 20.090625
+## 2       cyl    -1.468783                 -2.623132
+## 3        wt    -3.034558                 -2.969186
+## 
+## H2ORegressionMetrics: glm
+## ** Reported on training data. **
+## 
+## MSE:  6.017684
+## RMSE:  2.453097
+## MAE:  1.940985
+## RMSLE:  0.1114801
+## Mean Residual Deviance :  6.017684
+## R^2 :  0.8289895
+## Null Deviance :1126.047
+## Null D.o.F. :31
+## Residual Deviance :192.5659
+## Residual D.o.F. :29
+## AIC :156.2425</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark-connections.html">spark_disconnect</a></span>(sc)</code></pre></div>
 </div>
 <div id="connecting-through-livy" class="section level2">
 <h2 class="hasAnchor">

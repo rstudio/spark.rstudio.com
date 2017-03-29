@@ -1,4 +1,5 @@
 devtools::install_github("edgararuiz/pkgdown")
+#devtools::install_github("hadley/pkgdown")
 library(pkgdown)
 
 

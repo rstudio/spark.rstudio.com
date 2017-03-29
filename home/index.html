@@ -1,16 +1,19 @@
       <div class="row">
   <div class="contents col-md-9">
     <div id="sparklyr-r-interface-for-apache-spark" class="section level1">
-<div class="page-header"><h1 class="hasAnchor"><a href="#sparklyr-r-interface-for-apache-spark" class="anchor"> </a>sparklyr: R interface for Apache Spark</h1></div>
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#sparklyr-r-interface-for-apache-spark" class="anchor"></a>sparklyr: R interface for Apache Spark</h1></div>
 
 <p><img src="home/README_files/images/sparklyr-illustration.png" width="364" height="197" align="right"></p>
-<ul><li>Connect to <a href="http://spark.apache.org/">Spark</a> from R. The sparklyr package provides a <br> complete <a href="https://github.com/hadley/dplyr">dplyr</a> backend.</li>
+<ul>
+<li>Connect to <a href="http://spark.apache.org/">Spark</a> from R. The sparklyr package provides a <br> complete <a href="https://github.com/hadley/dplyr">dplyr</a> backend.</li>
 <li>Filter and aggregate Spark datasets then bring them into R for <br> analysis and visualization.</li>
-<li>Use Spark&rsquo;s distributed <a href="http://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> library from R.</li>
+<li>Use Spark’s distributed <a href="http://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> library from R.</li>
 <li>Create <a href="http://spark.rstudio.com/extensions.html">extensions</a> that call the full Spark API and provide <br> interfaces to Spark packages.</li>
-</ul><div id="installation" class="section level2">
+</ul>
+<div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"> </a>Installation</h2>
+<a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the <strong>sparklyr</strong> package from CRAN as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"sparklyr"</span>)</code></pre></div>
 <p>You should also install a local version of Spark for development purposes:</p>
@@ -22,8 +25,8 @@
 </div>
 <div id="connecting-to-spark" class="section level2">
 <h2 class="hasAnchor">
-<a href="#connecting-to-spark" class="anchor"> </a>Connecting to Spark</h2>
-<p>You can connect to both local instances of Spark as well as remote Spark clusters. Here we&rsquo;ll connect to a local instance of Spark via the <a href="http://spark.rstudio.com/reference/sparklyr/latest/spark_connect.html">spark_connect</a> function:</p>
+<a href="#connecting-to-spark" class="anchor"></a>Connecting to Spark</h2>
+<p>You can connect to both local instances of Spark as well as remote Spark clusters. Here we’ll connect to a local instance of Spark via the <a href="http://spark.rstudio.com/reference/sparklyr/latest/spark_connect.html">spark_connect</a> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sparklyr)
 sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-connections.html">spark_connect</a></span>(<span class="dt">master =</span> <span class="st">"local"</span>)</code></pre></div>
 <p>The returned Spark connection (<code>sc</code>) provides a remote dplyr data source to the Spark cluster.</p>
@@ -31,9 +34,9 @@ sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-conne
 </div>
 <div id="using-dplyr" class="section level2">
 <h2 class="hasAnchor">
-<a href="#using-dplyr" class="anchor"> </a>Using dplyr</h2>
+<a href="#using-dplyr" class="anchor"></a>Using dplyr</h2>
 <p>We can new use all of the available dplyr verbs against the tables within the cluster.</p>
-<p>We&rsquo;ll start by copying some datasets from R into the Spark cluster (note that you may need to install the nycflights13 and Lahman packages in order to execute this code):</p>
+<p>We’ll start by copying some datasets from R into the Spark cluster (note that you may need to install the nycflights13 and Lahman packages in order to execute this code):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">"nycflights13"</span>, <span class="st">"Lahman"</span>))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 iris_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/reexports.html">copy_to</a></span>(sc, iris)
@@ -41,7 +44,7 @@ flights_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/re
 batting_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/reexports.html">copy_to</a></span>(sc, Lahman::Batting, <span class="st">"batting"</span>)
 <span class="kw">src_tbls</span>(sc)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">## [1] "batting" "flights" "iris"</code></pre></div>
-<p>To start with here&rsquo;s a simple filtering example:</p>
+<p>To start with here’s a simple filtering example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># filter by departure delay and print the first few records</span>
 flights_tbl %&gt;%<span class="st"> </span><span class="kw">filter</span>(dep_delay ==<span class="st"> </span><span class="dv">2</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">## Source:   query [6,233 x 19]
@@ -80,7 +83,7 @@ flights_tbl %&gt;%<span class="st"> </span><span class="kw">filter</span>(dep_de
 <p><img src="home/README_files/figure-markdown_github/ggplot2-1.png"></p>
 <div id="window-functions" class="section level3">
 <h3 class="hasAnchor">
-<a href="#window-functions" class="anchor"> </a>Window Functions</h3>
+<a href="#window-functions" class="anchor"></a>Window Functions</h3>
 <p>dplyr <a href="https://CRAN.R-project.org/package=dplyr">window functions</a> are also supported, for example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">batting_tbl %&gt;%
 <span class="st">  </span><span class="kw">select</span>(playerID, yearID, teamID, G, AB:H) %&gt;%
@@ -109,8 +112,8 @@ flights_tbl %&gt;%<span class="st"> </span><span class="kw">filter</span>(dep_de
 </div>
 <div id="using-sql" class="section level2">
 <h2 class="hasAnchor">
-<a href="#using-sql" class="anchor"> </a>Using SQL</h2>
-<p>It&rsquo;s also possible to execute SQL queries directly against tables within a Spark cluster. The <code>spark_connection</code> object implements a <a href="https://github.com/rstats-db/DBI">DBI</a> interface for Spark, so you can use <code>dbGetQuery</code> to execute SQL and return the result as an R data frame:</p>
+<a href="#using-sql" class="anchor"></a>Using SQL</h2>
+<p>It’s also possible to execute SQL queries directly against tables within a Spark cluster. The <code>spark_connection</code> object implements a <a href="https://github.com/rstats-db/DBI">DBI</a> interface for Spark, so you can use <code>dbGetQuery</code> to execute SQL and return the result as an R data frame:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
 iris_preview &lt;-<span class="st"> </span><span class="kw">dbGetQuery</span>(sc, <span class="st">"SELECT * FROM iris LIMIT 10"</span>)
 iris_preview</code></pre></div>
@@ -128,9 +131,9 @@ iris_preview</code></pre></div>
 </div>
 <div id="machine-learning" class="section level2">
 <h2 class="hasAnchor">
-<a href="#machine-learning" class="anchor"> </a>Machine Learning</h2>
+<a href="#machine-learning" class="anchor"></a>Machine Learning</h2>
 <p>You can orchestrate machine learning algorithms in a Spark cluster via the <a href="http://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> functions within <strong>sparklyr</strong>. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows.</p>
-<p>Here&rsquo;s an example where we use <a href="http://spark.rstudio.com/reference/sparklyr/latest/ml_linear_regression.html">ml_linear_regression</a> to fit a linear regression model. We&rsquo;ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car&rsquo;s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We&rsquo;ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
+<p>Here’s an example where we use <a href="http://spark.rstudio.com/reference/sparklyr/latest/ml_linear_regression.html">ml_linear_regression</a> to fit a linear regression model. We’ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car’s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We’ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># copy mtcars into spark</span>
 mtcars_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/reexports.html">copy_to</a></span>(sc, mtcars)
 
@@ -168,11 +171,11 @@ fit &lt;-<span class="st"> </span>partitions$training %&gt;%
 ## 
 ## R-Squared: 0.8665
 ## Root Mean Squared Error: 1.799</code></pre></div>
-<p>Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it&rsquo;s easy to chain these functions together with dplyr pipelines. To learn more see the <a href="mllib.html">machine learning</a> section.</p>
+<p>Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it’s easy to chain these functions together with dplyr pipelines. To learn more see the <a href="mllib.html">machine learning</a> section.</p>
 </div>
 <div id="reading-and-writing-data" class="section level2">
 <h2 class="hasAnchor">
-<a href="#reading-and-writing-data" class="anchor"> </a>Reading and Writing Data</h2>
+<a href="#reading-and-writing-data" class="anchor"></a>Reading and Writing Data</h2>
 <p>You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the local filesystem of cluster nodes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp_csv &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".csv"</span>)
 temp_parquet &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".parquet"</span>)
@@ -193,9 +196,9 @@ iris_json_tbl &lt;-<span class="st"> </span><span class="kw"><a href="reference/
 </div>
 <div id="extensions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#extensions" class="anchor"> </a>Extensions</h2>
-<p>The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages. Since Spark is a general purpose cluster computing system there are many potential applications for extensions (e.g.&nbsp;interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).</p>
-<p>Here&rsquo;s a simple example that wraps a Spark text file line counting function with an R function:</p>
+<a href="#extensions" class="anchor"></a>Extensions</h2>
+<p>The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages. Since Spark is a general purpose cluster computing system there are many potential applications for extensions (e.g. interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).</p>
+<p>Here’s a simple example that wraps a Spark text file line counting function with an R function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># write a CSV </span>
 tempfile &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".csv"</span>)
 <span class="kw">write.csv</span>(nycflights13::flights, tempfile, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, <span class="dt">na =</span> <span class="st">""</span>)
@@ -214,7 +217,7 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 </div>
 <div id="table-utilities" class="section level2">
 <h2 class="hasAnchor">
-<a href="#table-utilities" class="anchor"> </a>Table Utilities</h2>
+<a href="#table-utilities" class="anchor"></a>Table Utilities</h2>
 <p>You can cache a table into memory with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/tbl_cache.html">tbl_cache</a></span>(sc, <span class="st">"batting"</span>)</code></pre></div>
 <p>and unload from memory using:</p>
@@ -222,7 +225,7 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 </div>
 <div id="connection-utilities" class="section level2">
 <h2 class="hasAnchor">
-<a href="#connection-utilities" class="anchor"> </a>Connection Utilities</h2>
+<a href="#connection-utilities" class="anchor"></a>Connection Utilities</h2>
 <p>You can view the Spark web console using the <code>spark_web</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark_web.html">spark_web</a></span>(sc)</code></pre></div>
 <p>You can show the log using the <code>spark_log</code> function:</p>
@@ -242,14 +245,16 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 </div>
 <div id="rstudio-ide" class="section level2">
 <h2 class="hasAnchor">
-<a href="#rstudio-ide" class="anchor"> </a>RStudio IDE</h2>
+<a href="#rstudio-ide" class="anchor"></a>RStudio IDE</h2>
 <p>The latest RStudio <a href="https://www.rstudio.com/products/rstudio/download/preview/">Preview Release</a> of the RStudio IDE includes integrated support for Spark and the sparklyr package, including tools for:</p>
-<ul><li>Creating and managing Spark connections</li>
+<ul>
+<li>Creating and managing Spark connections</li>
 <li>Browsing the tables and columns of Spark DataFrames</li>
 <li>Previewing the first 1,000 rows of Spark DataFrames</li>
-</ul><p>Once you&rsquo;ve installed the sparklyr package, you should find a new <strong>Spark</strong> pane within the IDE. This pane includes a <strong>New Connection</strong> dialog which can be used to make connections to local or remote Spark instances:</p>
+</ul>
+<p>Once you’ve installed the sparklyr package, you should find a new <strong>Spark</strong> pane within the IDE. This pane includes a <strong>New Connection</strong> dialog which can be used to make connections to local or remote Spark instances:</p>
 <p><img src="home/README_files/images/spark-connect.png" class="screenshot" width="639" height="447/"></p>
-<p>Once you&rsquo;ve connected to Spark you&rsquo;ll be able to browse the tables contained within the Spark cluster:</p>
+<p>Once you’ve connected to Spark you’ll be able to browse the tables contained within the Spark cluster:</p>
 <p><img src="home/README_files/images/spark-tab.png" class="screenshot" width="639" height="393/"></p>
 <p>The Spark DataFrame preview uses the standard RStudio data viewer:</p>
 <p><img src="home/README_files/images/spark-dataview.png" class="screenshot" width="639" height="446/"></p>
@@ -257,7 +262,7 @@ count_lines &lt;-<span class="st"> </span>function(sc, path) {
 </div>
 <div id="using-h2o" class="section level2">
 <h2 class="hasAnchor">
-<a href="#using-h2o" class="anchor"> </a>Using H2O</h2>
+<a href="#using-h2o" class="anchor"></a>Using H2O</h2>
 <p><a href="https://cran.r-project.org/package=rsparkling">rsparkling</a> is a CRAN package from <a href="http://h2o.ai">H2O</a> that extends <a href="http://spark.rstudio.com">sparklyr</a> to provide an interface into <a href="https://github.com/h2oai/sparkling-water">Sparkling Water</a>. For instance, the following example installs, configures and runs <a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html">h2o.glm</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">options</span>(<span class="dt">rsparkling.sparklingwater.version =</span> <span class="st">"1.6.8"</span>)
 
@@ -315,11 +320,11 @@ mtcars_glm &lt;-<span class="st"> </span><span class="kw">h2o.glm</span>(<span c
 </div>
 <div id="connecting-through-livy" class="section level2">
 <h2 class="hasAnchor">
-<a href="#connecting-through-livy" class="anchor"> </a>Connecting through Livy</h2>
+<a href="#connecting-through-livy" class="anchor"></a>Connecting through Livy</h2>
 <p><a href="https://github.com/cloudera/livy">Livy</a> enables remote connections to Apache Spark clusters. Connecting to Spark clusters through Livy is <strong>under experimental development</strong> in <code>sparklyr</code>. Please post any feedback or questions as a GitHub issue as needed.</p>
 <p>Before connecting to Livy, you will need the connection information to an existing service running Livy. Otherwise, to test <code>livy</code> in your local environment, you can install it and run it locally as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/livy_install.html">livy_install</a></span>()</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/livy_service_start.html">livy_service_start</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/livy_service.html">livy_service_start</a></span>()</code></pre></div>
 <p>To connect, use the Livy service address as <code>master</code> and <code>method = "livy"</code> in <code>spark_connect</code>. Once connection completes, use <code>sparklyr</code> as usual, for instance:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-connections.html">spark_connect</a></span>(<span class="dt">master =</span> <span class="st">"http://localhost:8998"</span>, <span class="dt">method =</span> <span class="st">"livy"</span>)
 <span class="kw"><a href="reference/reexports.html">copy_to</a></span>(sc, iris)</code></pre></div>
@@ -341,7 +346,7 @@ mtcars_glm &lt;-<span class="st"> </span><span class="kw">h2o.glm</span>(<span c
 ## # ... with 140 more rows</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/spark-connections.html">spark_disconnect</a></span>(sc)</code></pre></div>
 <p>Once you are done using <code>livy</code> locally, you should stop this service with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/livy_service_start.html">livy_service_stop</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/livy_service.html">livy_service_stop</a></span>()</code></pre></div>
 <p>To connect to remote <code>livy</code> clusters that support basic authentication connect as:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">config &lt;-<span class="st"> </span><span class="kw">livy_config_auth</span>(<span class="st">"&lt;username&gt;"</span>, <span class="st">"&lt;password"</span>&gt;)
 sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-connections.html">spark_connect</a></span>(<span class="dt">master =</span> <span class="st">"&lt;address&gt;"</span>, <span class="dt">method =</span> <span class="st">"livy"</span>, <span class="dt">config =</span> config)
@@ -351,20 +356,31 @@ sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-conne
   </div>
 
   <div class="col-md-3" id="sidebar">
-    <h2>Links</h2><ul class="list-unstyled"><li>Download from CRAN at <br><a href="https://cran.r-project.org/package=sparklyr">https://&#8203;cran.r-project.org/&#8203;package=sparklyr</a></li>
-<li>Report a bug at <br><a href="https://github.com/rstudio/sparklyr/issues">https://&#8203;github.com/&#8203;rstudio/&#8203;sparklyr/&#8203;issues</a></li>
-</ul><h2>License</h2>
+    <h2>Links</h2>
+<ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=sparklyr">https://​cran.r-project.org/​package=sparklyr</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/rstudio/sparklyr/issues">https://​github.com/​rstudio/​sparklyr/​issues</a>
+</li>
+</ul>
+<h2>License</h2>
 <p>Apache License 2.0 | file <a href="LICENSE">LICENSE</a></p>
-<h2>Developers</h2><ul class="list-unstyled"><li>Javier Luraschi <br><small class="roles"> Author, maintainer </small> </li>
+<h2>Developers</h2>
+<ul class="list-unstyled">
+<li>Javier Luraschi <br><small class="roles"> Author, maintainer </small> </li>
 <li>Kevin Ushey <br><small class="roles"> Author </small> </li>
 <li>JJ Allaire <br><small class="roles"> Author </small> </li>
-<li> The Apache Software Foundation <br><small class="roles"> Author, copyright&nbsp;holder </small> </li>
+<li> The Apache Software Foundation <br><small class="roles"> Author, copyright holder </small> </li>
 <li><a href="authors.html">All authors...</a></li>
-</ul><html><body><h2>Dev status</h2><ul class="list-unstyled"><li><a href="https://travis-ci.org/rstudio/sparklyr">
-  <img src="https://travis-ci.org/rstudio/sparklyr.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://cran.r-project.org/package=sparklyr">
-  <img src="https://www.r-pkg.org/badges/version/sparklyr" alt="CRAN_Status_Badge"></a></li>
-</ul></body></html></div>
+</ul>
+<div>
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/rstudio/sparklyr"><img src="https://travis-ci.org/rstudio/sparklyr.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://cran.r-project.org/package=sparklyr"><img src="https://www.r-pkg.org/badges/version/sparklyr" alt="CRAN_Status_Badge"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
@@ -376,6 +392,8 @@ sc &lt;-<span class="st"> </span><span class="kw"><a href="reference/spark-conne
   <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
 </div>
 
-      </footer></div>
+      </footer>
+</div>
 
-  </body></html>
+  </body>
+</html>

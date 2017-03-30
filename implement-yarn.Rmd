@@ -9,6 +9,10 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
+## Audience
+
+This article aims explain how to take advantage of Apache Spark inside organizations that have already implemented, or are in the process of implementing, a Hadoop based Big Data Lake.  
+
 ## Introduction
 
 We have noticed that the types of questions we field after a demo of sparklyr to our customers were more about high-level architecture than how the package works.  To answer those questions, we put together a set of slides that illustrate and discuss important concepts, to help customers see where Spark, R, and sparklyr fit in a Big Data Platform implementation.  In this article, we'll review those slides and provide a narrative that will help you better envision how you can take advantage of our products.
@@ -55,7 +59,7 @@ Here is an illustration of how R, RStudio, and sparklyr can be added to the YARN
 
 There are some important considerations to keep in mind when combining your Data Lake and R for large scale analytics:
 
-- Spark's Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a sparklyr extension like [H2O](https://github.com/h2oai/rsparkling), or collecting a sample of the data into R memory for modeling.
+- Spark's Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a sparklyr extension like [H2O](http://spark.rstudio.com/extensions.html), or collecting a sample of the data into R memory for modeling.
 
 - Spark does not have visualization functionality; currently, the best approach is to collect pre-calculated data into R for plotting.  A good way to drastically reduce the number of rows being brought back into memory is to push as much computation as possible to Spark, and return just the results to be plotted.  For example, the bins of a Histogram can be calculated in Spark, so that only the final bucket values would be returned to R for visualization.  Here is sample code for such a scenario: [sparkDemos/Histogram](https://github.com/rstudio/sparkDemos/blob/master/prod/presentations/cloudera/sqlvis_histogram.R)
 

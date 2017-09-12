@@ -1,0 +1,12 @@
+blogdown::html_page:
+  highlight: pygments
+  pandoc_args: ["-M", "highlighting-css=false"]
+  post_processor: > 
+    function(metadata, input_file, output_file, clean, verbose) {
+       require(rprojroot, quietly = TRUE)
+       website_root <- find_root_file(criterion = has_file("config.toml"))
+       source(file.path(website_root, "scripts", "autolink_post_processor.R"), local = TRUE)
+       autolink_post_processor(metadata, input_file, output_file, clean, verbose)
+    }
+   
+

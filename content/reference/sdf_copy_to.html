@@ -1,0 +1,95 @@
+---
+title: "Copy an Object into Spark"
+aliases:
+  - reference/sparklyr/latest/sdf_copy_to.html
+---
+
+    <div class="doc-page">
+
+    <div class="doc-page-index">
+    <ul data-gumshoe>
+    <li><a href="#arguments">Arguments</a></li>
+    
+    <li><a href="#advanced-usage">Advanced Usage</a></li>
+
+    <li><a href="#see-also">See also</a></li>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
+    </div>
+
+    <div class="doc-page-body">
+
+    
+    <p>Copy an object into Spark, and return an <span style="R">R</span> object wrapping the
+copied object (typically, a Spark DataFrame).</p>
+    
+
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sdf_copy_to</span>(<span class='no'>sc</span>, <span class='no'>x</span>, <span class='no'>name</span>, <span class='no'>memory</span>, <span class='no'>repartition</span>, <span class='no'>overwrite</span>, <span class='no'>...</span>)
+
+<span class='fu'>sdf_import</span>(<span class='no'>x</span>, <span class='no'>sc</span>, <span class='no'>name</span>, <span class='no'>memory</span>, <span class='no'>repartition</span>, <span class='no'>overwrite</span>, <span class='no'>...</span>)</code></pre></div>
+    
+    <h2 id="arguments">Arguments</h2>
+    <table class="ref-arguments">
+
+    <colgroup>
+      <col class="name" />
+      <col class="desc" />
+    </colgroup>
+
+    <tr>
+      <td>sc</td>
+      <td><p>The associated Spark connection.</p></td>
+    </tr>
+    <tr>
+      <td>x</td>
+      <td><p>An <span style="R">R</span> object from which a Spark DataFrame can be generated.</p></td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td><p>The name to assign to the copied table in Spark.</p></td>
+    </tr>
+    <tr>
+      <td>memory</td>
+      <td><p>Boolean; should the table be cached into memory?</p></td>
+    </tr>
+    <tr>
+      <td>repartition</td>
+      <td><p>The number of partitions to use when distributing the
+table across the Spark cluster. The default (0) can be used to avoid
+partitioning.</p></td>
+    </tr>
+    <tr>
+      <td>overwrite</td>
+      <td><p>Boolean; overwrite a pre-existing table with the name <code>name</code>
+if one already exists?</p></td>
+    </tr>
+    <tr>
+      <td>...</td>
+      <td><p>Optional arguments, passed to implementing methods.</p></td>
+    </tr>
+    </table>
+    
+    <h2 id="advanced-usage">Advanced Usage</h2>
+
+    
+    <p><code>sdf_copy_to</code> is an S3 generic that, by default, dispatches to
+<code>sdf_import</code>. Package authors that would like to implement
+<code>sdf_copy_to</code> for a custom object type can accomplish this by
+implementing the associated method on <code>sdf_import</code>.</p>
+    
+    <h2 id="see-also">See also</h2>
+
+    <p>Other Spark data frames: <code><a href='sdf_partition.html'>sdf_partition</a></code>,
+  <code><a href='sdf_register.html'>sdf_register</a></code>, <code><a href='sdf_sample.html'>sdf_sample</a></code>,
+  <code><a href='sdf_sort.html'>sdf_sort</a></code></p>
+    
+
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class='input'>
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"spark://HOST:PORT"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in spark_connect(master = "spark://HOST:PORT"): could not find function "spark_connect"</span></div><div class='input'><span class='fu'>sdf_copy_to</span>(<span class='no'>sc</span>, <span class='no'>iris</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sdf_copy_to(sc, iris): could not find function "sdf_copy_to"</span></div><div class='input'>
+</div></code></pre></div>
+    </div>
+
+    </div>
+

@@ -1,33 +1,53 @@
+# Instructions
 
-## spark.rstudio.com
+## Download latest sparklyr codeset
 
-This repository contains all of the code and assets needed to build the spark.rstudio.com website.
+1. Source the `build_site.R` script
+2. Run `copy_repo("rstudio/sparklyr")`
 
-It combines [R Markdown Website](http://rmarkdown.rstudio.com/rmarkdown_websites.html) and [pkgdown](http://hadley.github.io/pkgdown/) to build create a comprehensive website that can be easily updated when new version of the package become available.
+## New article
 
-To update the Home page, News and/or Reference sections, just run the following R script: ``_scripts/pkgdown.R``. The script will perform the following operations:
+1. Add article in the proper repo sub-folder, such as `vignettes`
+2. List the new article in the `_blogdown.yml` file
+3. Source the `build_site.R` script
+4. Run `rebuild_site()` 
 
-- Download the most recent package files from the ``master`` branch in GitHub
-- Use pkgdown to build the Reference index and pages, News and replaces the index.html file, directly in the root folder.
+## Update an article
 
-As of this version, the `_site.yml`file controls both the site and the pkgdown Reference index.  Future versions will separate the two so that the `_pkgdown.yml` file can exists inside the actual sparklyr package repository. 
+1. Make changes in the proper repo sub-folder, such as `vignettes`
+2. Delete the existing article in the **blogdown/content** folder or sub-folder inside it
+3. Source the `build_site.R` script
+4. Run `rebuild_site()` 
 
-After the updates are made, perform a Pull Request to the Master branch. When the PR is approved, the following Jenkins job is activated: https://buildmaster.rstudioservices.com/job/spark.rstudio.com/ Which does the following:
+## Use an `md` file as the source
 
-- Creates a clean Docker environment with R
-- Runs the following script
-```{}
-    #!/bin/bash
-    
-    # Install latest rmarkdown from GitHub
-    sudo R -e 'install.packages(c("devtools","plyr","htmltools"), repos="https://cran.rstudio.com")'
-    sudo R -e 'devtools::install_github("rstudio/rmarkdown")'
-    
-    rm -rf _site
-    
-    # Build site
-    R -e 'rmarkdown::render_site()' 
-```
-- The contents of the resulting ``_site`` folder is then copied to the S3 bucket that has the spark.rstudio.com files
+1. Change the working directory to the HOME directory
+2. Navigate to the `vignettes` folder and open the `.Rmd` file
+3. Change the article output to `md_output` or `github_document`
+4. Knit the `.Rmd` file 
+5. Set the working directory back to the repo
+6. List the new `.md` file in the `_blogdown.yml` file
+7. List the images folder in the `_blogodwn.yml` file, see the path pattern for other `.md` files in the `_blogdown.yml` file
+8. (Optional) Add article to the `config.toml`
+9. Source the `build_site.R` script
+10. Run `rebuild_site()` 
+
+## Updates to Reference
+
+1. List any new function in the `reference` section of the `_blogdown.yml` file
+3. Source the `build_site.R` script
+4. Run `process_reference(overwrite = TRUE))` 
+
+
+## Full refresh
+
+1. Source the `build_site.R` script
+2. Run `rebuild_site(overwrite = TRUE)`
+
+## Preview the site
+
+1. Run `blogdown::serve_site()`
+
+
 
 

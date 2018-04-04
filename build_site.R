@@ -54,23 +54,26 @@ site_reference <- function(overwrite = FALSE){
     as.character(yaml::as.yaml(reference)), 
     "_pkgdown.yml")
   
-  dir_copy(
-    source_path("man"),
-    target_path("man")
-  )
+  if(overwrite == TRUE){
+    dir_copy(
+      source_path("man"),
+      target_path("man")
+    )
+    
+    dir_copy(
+      source_path("man-roxygen"),
+      target_path("man-roxygen")
+    )
+    
+    file_copy(
+      source_path("DESCRIPTION"),
+      target_path("DESCRIPTION"),
+      overwrite = overwrite
+    )
+  }
+
   
-  dir_copy(
-    source_path("man-roxygen"),
-    target_path("man-roxygen")
-  )
-  
-  file_copy(
-    source_path("DESCRIPTION"),
-    target_path("DESCRIPTION"),
-    overwrite = overwrite
-  )
-  
-  
+  if(file_exists(target_path("content/reference"))) dir_delete(target_path("content/reference"))
   pkgdown::build_reference(path = target_path("content/reference"))
 }
 

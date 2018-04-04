@@ -1,5 +1,5 @@
 ---
-title: Introduction to ML Pipelines
+title: Introducing to ML Pipelines
 author: ''
 date: '2018-04-03'
 slug: introduction-to-ml-pipelines

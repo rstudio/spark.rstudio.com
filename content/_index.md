@@ -10,5 +10,10 @@ sparklyr: R interface for Apache Spark
 -   Use Spark's distributed [machine learning](http://spark.apache.org/docs/latest/mllib-guide.html) library from R.
 -   Create [extensions](http://spark.rstudio.com/extensions.html) that call the full Spark API and provide <br/> interfaces to Spark packages.
 
+<p align = "right">
+  <a href="getting-started" class="more" title="Read More...">Read more &rarr;</a>
+</p>
+
+
 # Blog 
 

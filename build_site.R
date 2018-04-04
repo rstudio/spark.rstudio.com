@@ -92,12 +92,6 @@ site_content <- function(overwrite = TRUE){
   target_files[!files] %>%
     dir_create()
   
-  file_copy(
-    source_files[files], 
-    target_files[files], 
-    overwrite = overwrite
-  )
-  
   existing <- file_exists(target_files)
   dir_delete(target_files[!files & existing])
   
@@ -109,6 +103,11 @@ site_content <- function(overwrite = TRUE){
       )
     })
   
+  file_copy(
+    source_files[files], 
+    target_files[files], 
+    overwrite = overwrite
+  )
   
   site$cleanup %>%
     map(~replace_text_folder(

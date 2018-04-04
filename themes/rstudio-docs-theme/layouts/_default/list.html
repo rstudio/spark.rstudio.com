@@ -8,6 +8,7 @@
 
 <div class="page documentation">
     <div class="side-menu" id="side-menu">
+      
     {{ $currentNode := .}}
     
   
@@ -28,31 +29,34 @@
           
 
     {{ end }}
+
     
     </div>
-    <div class="content">
-
-      <h1 class="content-header">{{ .Title }} {{ if .IsDraft }} (Draft){{ end }}</h1>
-
-      <div class="markdowned">
-      <div class="doc-page">
     
-      <div class="doc-page-index">
-      <ul id="gumshoe-container" data-gumshoe>
-      </ul>
-      </div>
-  
-      <div class="doc-page-body">  
-        {{ .Content }}
-        
-      </div>
-      </div>
-      </div>
+
+    
+     <div class="content">
       
+
+      <main>
+      
+      <div class="markdowned">
+      {{ .Content }}
+      </div>
+     
+      {{ range (where .Paginator.Pages "Section" "post") }}
+      {{ partial "blog-article" . }}
+      {{ end }}
+      
+      </main>
+        
       {{ partial "footer" .}}
       
     </div>
-</div>
+      
+    </div>
+
+
 
 </body>
 </html>

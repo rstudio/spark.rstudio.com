@@ -10,5 +10,6 @@ tags:
   - how-to
 ---
 
+We are very excited to announce that `sparklyr` recently added support for Spark ML Pipelines.
 
-
+For more background, and guide to how to use please refer to our new article: [Spark ML Pipelines](/guides/pipelines/)

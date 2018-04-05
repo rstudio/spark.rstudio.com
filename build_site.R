@@ -55,22 +55,32 @@ site_reference <- function(overwrite = FALSE){
     "_pkgdown.yml")
   
   if(overwrite == TRUE){
+    if(file_exists(target_path("man"))) dir_delete(target_path("man"))
+    if(file_exists(target_path("man-roxygen"))) dir_delete(target_path("man-roxygen"))
+    if(file_exists(target_path("DESCRIPTION"))) file_delete(target_path("DESCRIPTION"))
+    
+  }
+  
+  if(!file_exists(target_path("man"))){
     dir_copy(
       source_path("man"),
       target_path("man")
     )
-    
+  }
+  if(!file_exists(target_path("man-roxygen"))){
     dir_copy(
       source_path("man-roxygen"),
       target_path("man-roxygen")
     )
+  }
     
+  if(!file_exists(target_path("DESCRIPTION"))){
     file_copy(
       source_path("DESCRIPTION"),
-      target_path("DESCRIPTION"),
-      overwrite = overwrite
+      target_path("DESCRIPTION")
     )
   }
+  
 
   
   if(file_exists(target_path("content/reference"))) dir_delete(target_path("content/reference"))

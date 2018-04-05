@@ -1,5 +1,22 @@
 # Sparklyr 0.7.1 (UNRELEASED)
 
+- Livy now supports Kerberos authentication.
+
+- `invoke_static()` now supports calling Scala's package objects (#1384).
+
+- `spark_connection` and `spark_jobj` classes are now exported (#1374).
+
+- Fixed issue with `Date` type not roundtripping with `spark_apply() (#1376).
+
+- `spark_available_versions()` was changed to only return available Spark versions, Hadoop versions
+  can be still retrieved using `hadoop = TRUE`.
+
+- `spark_installed_versions()` was changed to retrieve the full path to the installation folder.
+
+- Fixed serialization issues most commonly hit while using `spark_apply()` with NAs (#1365, #1366).
+
+- `cbind()` and `sdf_bind_cols()` don't use NSE internally anymore and no longer output names of mismatched data frames on error (#1363).
+
 - Fixed data frame provided by `spark_apply()` to not provide characters not factors (#1313).
 
 - `ml_default_stop_words()` now returns English stop words by default (#1280).
@@ -10,7 +27,7 @@
 
 - Added support for `spark_apply()` under Livy connections.
 
-- Fixed regression blocking use of response-features syntax in some `ml_` functions (#1302).
+- Fixed regression blocking use of response-features syntax in some `ml_`functions (#1302).
 
 - Fixed file not found error in `spark_apply()` while working under low
   disk space.

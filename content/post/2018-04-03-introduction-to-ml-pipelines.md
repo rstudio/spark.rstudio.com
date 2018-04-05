@@ -1,10 +1,10 @@
 ---
 title: Introducing to ML Pipelines
 author: ''
-date: '2018-04-03'
+date: '2018-03-04'
 slug: introduction-to-ml-pipelines
 categories:
-  - education
+  - Announcement
 tags:
   - example
   - how-to

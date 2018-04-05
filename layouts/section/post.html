@@ -1,0 +1,32 @@
+{{ partial "head" . }}
+
+<div class="single-page">
+  {{ partial "nav" . }}
+</div>
+
+<div class="page documentation">
+    <div class="side-menu" id="side-menu">
+      {{ partial "blog-sidebar" . }}
+    </div>
+         <div class="content">
+      
+
+      <main>
+      
+      <div class="markdowned">
+      {{ .Content }}
+      </div>
+     
+      {{ range (where .Paginator.Pages "Section" "post") }}
+      {{ partial "blog-article" . }}
+      {{ end }}
+      
+      </main>
+        
+      {{ partial "footer" .}}
+      
+    </div>
+</div>
+
+</body>
+</html>

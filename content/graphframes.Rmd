@@ -1,0 +1,138 @@
+---
+title: "R interface for GraphFrames"
+output:
+  html_document:
+    toc_depth: 2
+    fig_width: 9
+    fig_height: 5
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+#knitr::opts_chunk$set(fig.path = "tools/readme/", dev = "png")
+```
+
+## Highlights
+
+- Support for [GraphFrames](https://graphframes.github.io/) which aims to provide the functionality of [GraphX](http://spark.apache.org/graphx/).
+- Perform graph algorithms like: [PageRank](https://graphframes.github.io/api/scala/index.html#org.graphframes.lib.PageRank), [ShortestPaths](https://graphframes.github.io/api/scala/index.html#org.graphframes.lib.ShortestPaths) and many [others](https://graphframes.github.io/api/scala/#package).
+- Designed to work with [sparklyr](https://spark.rstudio.com) and the [sparklyr extensions](http://spark.rstudio.com/extensions.html).
+
+
+## Installation
+
+To install from CRAN, run:
+```{r eval=FALSE}
+install.packages("graphframes")
+```
+
+For the development version, run:
+```{r eval=FALSE}
+devtools::install_github("rstudio/graphframes")
+```
+
+## Examples
+
+The examples make use of the `highschool` dataset from the `ggplot` package.
+
+### Create a GraphFrame
+
+The base for graph analyses in Spark, using `sparklyr`, will be a GraphFrame.  
+
+Open a new Spark connection using `sparklyr`, and copy the `highschool` data set
+
+```{r message=FALSE}
+library(graphframes)
+library(sparklyr)
+library(dplyr)
+
+sc <- spark_connect(master = "local", version = "2.1.0")
+
+highschool_tbl <- copy_to(sc, ggraph::highschool, "highschool")
+
+head(highschool_tbl)
+```
+
+The vertices table is be constructed using `dplyr`.  The variable name expected by the GraphFrame is **id**.
+
+```{r message=FALSE}
+
+from_tbl <- highschool_tbl %>% 
+  distinct(from) %>% 
+  transmute(id = from)
+
+to_tbl <- highschool_tbl %>% 
+  distinct(to) %>% 
+  transmute(id = to)
+  
+  
+vertices_tbl <- from_tbl %>%
+  sdf_bind_rows(to_tbl)
+
+head(vertices_tbl)
+```
+
+The edges table can also be created using `dplyr`. In order for the GraphFrame to work,  the **from** variable needs be renamed **src**, and the **to** variable **dst**.
+```{r message=FALSE}
+# Create a table with <source, destination> edges
+edges_tbl <- highschool_tbl %>% 
+  transmute(src = from, dst = to)
+```
+
+The `gf_graphframe()` function creates a new GraphFrame 
+```{r message=FALSE}
+gf_graphframe(vertices_tbl, edges_tbl) 
+```
+
+### Basic Page Rank
+
+We will calculate [PageRank](https://en.wikipedia.org/wiki/PageRank) over this dataset. The `gf_graphframe()` command can easily be piped into the `gf_pagerank()` function to execute the Page Rank.
+```{r message=FALSE}
+gf_graphframe(vertices_tbl, edges_tbl) %>%
+  gf_pagerank(reset_prob = 0.15, max_iter = 10L, source_id = "1")
+```
+
+
+Additionaly, one can calculate the degrees of vertices using `gf_degrees` as follows:
+
+```{r message=FALSE}
+gf_graphframe(vertices_tbl, edges_tbl) %>% 
+  gf_degrees()
+```
+
+### Visualizations
+
+In order to visualize large `graphframe`s, one can use `sample_n` and then use `ggraph` with `igraph` to visualize the graph as follows:
+
+```{r message=FALSE}
+library(ggraph)
+library(igraph)
+
+graph <- highschool_tbl %>%
+  sample_n(20) %>%
+  collect() %>%
+  graph_from_data_frame()
+
+ggraph(graph, layout = 'kk') + 
+    geom_edge_link(aes(colour = factor(year))) + 
+    geom_node_point() + 
+    ggtitle('An example')
+```
+
+
+## Additional functions
+
+Apart from calculating `PageRank` using `gf_pagerank`, the following functions are available: 
+
+- `gf_bfs()`: Breadth-first search (BFS).
+- `gf_connected_components()`: Connected components.
+- `gf_shortest_paths()`: Shortest paths algorithm.
+- `gf_scc()`: Strongly connected components.
+- `gf_triangle_count`: Computes the number of triangles passing through each vertex and others.
+
+
+```{r, include = FALSE}
+spark_disconnect(sc)
+```

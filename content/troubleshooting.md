@@ -1,5 +1,9 @@
 # Troubleshooting
 
+## Help with code debugging
+
+For general programming questions with `sparklyr`, please ask on [Stack Overflow](http://stackoverflow.com).  
+
 ## Code does not work after upgrading to the latest sparklyr version
 
 Please refer to the [NEWS](/news) section of the sparklyr package to find out if any of the updates listed may have changed the way your code needs to work. 

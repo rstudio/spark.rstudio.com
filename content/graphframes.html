@@ -1,0 +1,150 @@
+---
+title: "R interface for GraphFrames"
+output:
+  html_document:
+    toc_depth: 2
+    fig_width: 9
+    fig_height: 5
+---
+
+
+
+<div id="highlights" class="section level2">
+<h2>Highlights</h2>
+<ul>
+<li>Support for <a href="https://graphframes.github.io/">GraphFrames</a> which aims to provide the functionality of <a href="http://spark.apache.org/graphx/">GraphX</a>.</li>
+<li>Perform graph algorithms like: <a href="https://graphframes.github.io/api/scala/index.html#org.graphframes.lib.PageRank">PageRank</a>, <a href="https://graphframes.github.io/api/scala/index.html#org.graphframes.lib.ShortestPaths">ShortestPaths</a> and many <a href="https://graphframes.github.io/api/scala/#package">others</a>.</li>
+<li>Designed to work with <a href="https://spark.rstudio.com">sparklyr</a> and the <a href="http://spark.rstudio.com/extensions.html">sparklyr extensions</a>.</li>
+</ul>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>To install from CRAN, run:</p>
+<pre class="r"><code>install.packages(&quot;graphframes&quot;)</code></pre>
+<p>For the development version, run:</p>
+<pre class="r"><code>devtools::install_github(&quot;rstudio/graphframes&quot;)</code></pre>
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>The examples make use of the <code>highschool</code> dataset from the <code>ggplot</code> package.</p>
+<div id="create-a-graphframe" class="section level3">
+<h3>Create a GraphFrame</h3>
+<p>The base for graph analyses in Spark, using <code>sparklyr</code>, will be a GraphFrame.</p>
+<p>Open a new Spark connection using <code>sparklyr</code>, and copy the <code>highschool</code> data set</p>
+<pre class="r"><code>library(graphframes)
+library(sparklyr)
+library(dplyr)
+
+sc &lt;- spark_connect(master = &quot;local&quot;, version = &quot;2.1.0&quot;)
+
+highschool_tbl &lt;- copy_to(sc, ggraph::highschool, &quot;highschool&quot;)
+
+head(highschool_tbl)</code></pre>
+<pre><code>## # Source:   lazy query [?? x 3]
+## # Database: spark_connection
+##    from    to  year
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1    1.   14. 1957.
+## 2    1.   15. 1957.
+## 3    1.   21. 1957.
+## 4    1.   54. 1957.
+## 5    1.   55. 1957.
+## 6    2.   21. 1957.</code></pre>
+<p>The vertices table is be constructed using <code>dplyr</code>. The variable name expected by the GraphFrame is <strong>id</strong>.</p>
+<pre class="r"><code>from_tbl &lt;- highschool_tbl %&gt;% 
+  distinct(from) %&gt;% 
+  transmute(id = from)
+
+to_tbl &lt;- highschool_tbl %&gt;% 
+  distinct(to) %&gt;% 
+  transmute(id = to)
+  
+  
+vertices_tbl &lt;- from_tbl %&gt;%
+  sdf_bind_rows(to_tbl)
+
+head(vertices_tbl)</code></pre>
+<pre><code>## # Source:   lazy query [?? x 1]
+## # Database: spark_connection
+##      id
+##   &lt;dbl&gt;
+## 1    6.
+## 2    7.
+## 3   12.
+## 4   13.
+## 5   55.
+## 6   58.</code></pre>
+<p>The edges table can also be created using <code>dplyr</code>. In order for the GraphFrame to work, the <strong>from</strong> variable needs be renamed <strong>src</strong>, and the <strong>to</strong> variable <strong>dst</strong>.</p>
+<pre class="r"><code># Create a table with &lt;source, destination&gt; edges
+edges_tbl &lt;- highschool_tbl %&gt;% 
+  transmute(src = from, dst = to)</code></pre>
+<p>The <code>gf_graphframe()</code> function creates a new GraphFrame</p>
+<pre class="r"><code>gf_graphframe(vertices_tbl, edges_tbl) </code></pre>
+<pre><code>## GraphFrame
+## Vertices:
+##   $ id &lt;dbl&gt; 6, 7, 12, 13, 55, 58, 63, 41, 44, 48, 59, 1, 4, 17, 20, 22,...
+## Edges:
+##   $ src &lt;dbl&gt; 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 8...
+##   $ dst &lt;dbl&gt; 14, 15, 21, 54, 55, 21, 22, 9, 15, 5, 18, 19, 43, 19, 43, ...</code></pre>
+</div>
+<div id="basic-page-rank" class="section level3">
+<h3>Basic Page Rank</h3>
+<p>We will calculate <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a> over this dataset. The <code>gf_graphframe()</code> command can easily be piped into the <code>gf_pagerank()</code> function to execute the Page Rank.</p>
+<pre class="r"><code>gf_graphframe(vertices_tbl, edges_tbl) %&gt;%
+  gf_pagerank(reset_prob = 0.15, max_iter = 10L, source_id = &quot;1&quot;)</code></pre>
+<pre><code>## GraphFrame
+## Vertices:
+##   $ id       &lt;dbl&gt; 12, 12, 59, 59, 1, 1, 20, 20, 45, 45, 8, 8, 9, 9, 26,...
+##   $ pagerank &lt;dbl&gt; 1.216914e-02, 1.216914e-02, 1.151867e-03, 1.151867e-0...
+## Edges:
+##   $ src    &lt;dbl&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,...
+##   $ dst    &lt;dbl&gt; 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 22, 22,...
+##   $ weight &lt;dbl&gt; 0.02777778, 0.02777778, 0.02777778, 0.02777778, 0.02777...</code></pre>
+<p>Additionaly, one can calculate the degrees of vertices using <code>gf_degrees</code> as follows:</p>
+<pre class="r"><code>gf_graphframe(vertices_tbl, edges_tbl) %&gt;% 
+  gf_degrees()</code></pre>
+<pre><code>## # Source:   table&lt;sparklyr_tmp_27b034635ad&gt; [?? x 2]
+## # Database: spark_connection
+##       id degree
+##    &lt;dbl&gt;  &lt;int&gt;
+##  1   55.     25
+##  2    6.     10
+##  3   13.     16
+##  4    7.      6
+##  5   12.     11
+##  6   63.     21
+##  7   58.      8
+##  8   41.     19
+##  9   48.     15
+## 10   59.     11
+## # ... with more rows</code></pre>
+</div>
+<div id="visualizations" class="section level3">
+<h3>Visualizations</h3>
+<p>In order to visualize large <code>graphframe</code>s, one can use <code>sample_n</code> and then use <code>ggraph</code> with <code>igraph</code> to visualize the graph as follows:</p>
+<pre class="r"><code>library(ggraph)
+library(igraph)
+
+graph &lt;- highschool_tbl %&gt;%
+  sample_n(20) %&gt;%
+  collect() %&gt;%
+  graph_from_data_frame()
+
+ggraph(graph, layout = &#39;kk&#39;) + 
+    geom_edge_link(aes(colour = factor(year))) + 
+    geom_node_point() + 
+    ggtitle(&#39;An example&#39;)</code></pre>
+<p><img src="/graphframes_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+<div id="additional-functions" class="section level2">
+<h2>Additional functions</h2>
+<p>Apart from calculating <code>PageRank</code> using <code>gf_pagerank</code>, the following functions are available:</p>
+<ul>
+<li><code>gf_bfs()</code>: Breadth-first search (BFS).</li>
+<li><code>gf_connected_components()</code>: Connected components.</li>
+<li><code>gf_shortest_paths()</code>: Shortest paths algorithm.</li>
+<li><code>gf_scc()</code>: Strongly connected components.</li>
+<li><code>gf_triangle_count</code>: Computes the number of triangles passing through each vertex and others.</li>
+</ul>
+</div>

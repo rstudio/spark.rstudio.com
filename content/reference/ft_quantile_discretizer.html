@@ -2,7 +2,6 @@
 title: "Feature Transformation -- QuantileDiscretizer (Estimator)"
 aliases:
   - reference/sparklyr/latest/ft_quantile_discretizer.html
-  - reference/ft_quantile_discretizer.html
 ---
 
     <div class="doc-page">
@@ -30,8 +29,10 @@ aliases:
   quantiles.</p>
     
 
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_quantile_discretizer</span>(<span class='no'>x</span>, <span class='no'>input_col</span>, <span class='no'>output_col</span>, <span class='kw'>handle_invalid</span> <span class='kw'>=</span> <span class='st'>"error"</span>,
-  <span class='kw'>num_buckets</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>relative_error</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_quantile_discretizer</span>(<span class='no'>x</span>, <span class='kw'>input_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>num_buckets</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>input_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>num_buckets_array</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>handle_invalid</span> <span class='kw'>=</span> <span class='st'>"error"</span>,
+  <span class='kw'>relative_error</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"quantile_discretizer_"</span>), <span class='no'>...</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
@@ -55,15 +56,28 @@ aliases:
       <td><p>The name of the output column.</p></td>
     </tr>
     <tr>
+      <td>num_buckets</td>
+      <td><p>Number of buckets (quantiles, or categories) into which data
+points are grouped. Must be greater than or equal to 2.</p></td>
+    </tr>
+    <tr>
+      <td>input_cols</td>
+      <td><p>Names of input columns.</p></td>
+    </tr>
+    <tr>
+      <td>output_cols</td>
+      <td><p>Names of output columns.</p></td>
+    </tr>
+    <tr>
+      <td>num_buckets_array</td>
+      <td><p>Array of number of buckets (quantiles, or categories)
+into which data points are grouped. Each value must be greater than or equal to 2.</p></td>
+    </tr>
+    <tr>
       <td>handle_invalid</td>
       <td><p>(Spark 2.1.0+) Param for how to handle invalid entries. Options are
 'skip' (filter out rows with invalid values), 'error' (throw an error), or
 'keep' (keep invalid values in a special additional bucket). Default: "error"</p></td>
-    </tr>
-    <tr>
-      <td>num_buckets</td>
-      <td><p>Number of buckets (quantiles, or categories) into which data
-points are grouped. Must be greater than or equal to 2.</p></td>
     </tr>
     <tr>
       <td>relative_error</td>
@@ -140,6 +154,7 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   <code><a href='ft_chisq_selector.html'>ft_chisq_selector</a></code>,
   <code><a href='ft_count_vectorizer.html'>ft_count_vectorizer</a></code>, <code><a href='ft_dct.html'>ft_dct</a></code>,
   <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
+  <code>ft_feature_hasher</code>,
   <code><a href='ft_hashing_tf.html'>ft_hashing_tf</a></code>, <code><a href='ft_idf.html'>ft_idf</a></code>,
   <code><a href='ft_imputer.html'>ft_imputer</a></code>,
   <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,

@@ -2,7 +2,6 @@
 title: "Spark ML -- Generalized Linear Regression"
 aliases:
   - reference/sparklyr/latest/ml_generalized_linear_regression.html
-  - reference/ml_generalized_linear_regression.html
 ---
 
     <div class="doc-page">
@@ -26,10 +25,10 @@ aliases:
     
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_generalized_linear_regression</span>(<span class='no'>x</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"gaussian"</span>,
-  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fit_intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>link_power</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>link_prediction_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>25L</span>,
-  <span class='kw'>weight_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>solver</span> <span class='kw'>=</span> <span class='st'>"irls"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>variance_power</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
+  <span class='kw'>link</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fit_intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>offset_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>link_power</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>link_prediction_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>25L</span>, <span class='kw'>weight_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>solver</span> <span class='kw'>=</span> <span class='st'>"irls"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>variance_power</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
   <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
   <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"generalized_linear_regression_"</span>), <span class='no'>...</span>)</code></pre></div>
     
@@ -60,6 +59,10 @@ aliases:
     <tr>
       <td>fit_intercept</td>
       <td><p>Boolean; should the model be fit with an intercept term?</p></td>
+    </tr>
+    <tr>
+      <td>offset_col</td>
+      <td><p>Offset column name. If this is not set, we treat all instance offsets as 0.0. The feature specified as offset has a constant coefficient of 1.0.</p></td>
     </tr>
     <tr>
       <td>link_power</td>

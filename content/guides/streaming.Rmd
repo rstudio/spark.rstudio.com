@@ -1,0 +1,126 @@
+---
+title: "R interface for Spark Streaming"
+output:
+  html_document:
+    fig_width: 9
+    fig_height: 5
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+## Introduction
+
+As stated in the Spark's official site, [Spark Streaming]((https://spark.apache.org/streaming/)) makes it easy to build scalable fault-tolerant streaming applications. Because is part of the Spark API, it is possible to re-use query code that queries the current state of the stream, as well as joining the streaming data with historical data.  Please see [Spark's official documentation](https://spark.apache.org/docs/2.1.3/structured-streaming-programming-guide.html) for a deeper look into Spark Streaming. 
+
+## Scope of the `sparklyr` interface
+
+The `sparklyr` interface provides the following:
+
+- Ability to run [dplyr](/dplyr), SQL, [spark_apply()](/guides/distributed-r/), and [PipelineModels](/guides/pipelines/#introduction-to-ml-pipelines) against a stream
+- Read and write streams in multiple formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc
+- An out-of-the box graph visualization to monitor the stream
+- A new `reactiveSpark()` function, that allows Shiny apps to poll the contents of the stream
+ create Shiny apps that are able to read the contents of the stream
+
+## Interacting with a stream
+
+A good way of looking at the way how Spark streams update is as a three stage operation:
+
+1. **Input** - Spark reads the data inside a given folder. The folder is expected to contain multiple data files, with new files being created containing the most current stream data.
+1. **Processing** - Spark applies the desired operations on top of the data. These operations could be data manipulations (`dplyr`, SQL), data transformations (`sdf` operations, PipelineModel predictions), or native R manipulations (`spark_apply()`).
+1. **Output** - The results of processing the input files are saved in a different folder.
+
+In the same way all of the read and write operations in `sparklyr` for Spark Standalone, or in `sparklyr`'s local mode, the input and output folders are actual OS file system folders.  For Hadoop clusters, these will be folder locations inside the HDFS.
+
+## Example
+
+Here is a small script that can be used with a local master. The result should be to see the `stream_view()` app showing live the number of records processed for each iteration of test data being sent to the stream.  After the 50 iterations are complete, you can run the second code chunk to stop the job and close the Spark connection:
+
+```{r, eval = FALSE}
+library(dplyr)
+library(future)
+library(sparklyr)
+
+sc <- spark_connect(master = "local", spark_version = "2.3.0")
+
+if(file.exists("source")) unlink("source", TRUE)
+if(file.exists("source-out")) unlink("source-out", TRUE)
+
+stream_generate_test(iterations = 1)
+
+read_folder <- stream_read_csv(sc, "source") 
+
+write_output <- stream_write_csv(read_folder, "source-out")
+
+invisible(future(stream_generate_test(interval = 0.5)))
+
+stream_view(write_output)
+```
+
+```{r, eval = FALSE}
+stream_stop(write_output)
+spark_disconnect(sc)
+```
+
+### Code breakdown
+
+1. Open the Spark connection
+    ```{r, eval = FALSE}
+    library(sparklyr)
+    sc <- spark_connect(master = "local", spark_version = "2.3.0")
+    ```
+
+1. Optional step. This resets the input and output folders. It makes it easier to run the code multiple times in a clean manner.
+    ```{r, eval = FALSE}
+    if(file.exists("source")) unlink("source", TRUE)
+    if(file.exists("source-out")) unlink("source-out", TRUE)
+    ```
+
+1. Produces a single test file inside the "source" folder. This allows the "read" function to infer CSV file definition.
+    ```{r, eval = FALSE}
+    stream_generate_test(iterations = 1)
+    list.files("source")
+    ```
+
+    ```
+    [1] "stream_1.csv"
+    ```
+
+1. Points the stream reader to the folder where the streaming files will be placed.  Since it is primed with a single CSV file, it will use as the expected layout of subsequent files.
+    ```{r, eval = FALSE}
+    read_folder <- stream_read_csv(sc, "source")
+    ```
+
+1. **The output writer is what starts the streaming job**. It will start monitoring the input folder, and then write the new results in the "source-out" folder.  So as new records stream in, new files will be created in the "source-out" folder.  Since there are no operations on the incoming data at this time, the output files will have the same exact raw data as the input files.  The only difference is that the files and sub folders within "source-out" will be structured how Spark structures data folders. 
+    ```{r, eval = FALSE}
+    write_output <- stream_write_csv(read_folder, "source-out")
+    list.files("source-out")
+    ```
+    ```
+    [1] "_spark_metadata"                                     "checkpoint"
+    [3] "part-00000-1f29719a-2314-40e1-b93d-a647a3d57154-c000.csv"
+    ```
+    
+1. The test generation function defaults to 50 iterations.  In this case, the `interval` is set to half a second, meaning that the streaming will last for 25 seconds.  To run the tests "out-of-sync" with the current R session, in this example the test generator will run using the `future` package.  
+    ```{r, eval = FALSE}
+    library(future)
+    invisible(future(stream_generate_test(interval = 0.5)))
+    ```
+
+1. The `stream_view()` function can be used before the 50 tests are complete because of the use of the `future` package.  It will monitor the status of the job that `write_output` is pointing to and provide information on the amount of data coming into the "source" folder and going out into the "source-out" folder.
+    ```{r, eval = FALSE}
+    stream_view(write_output)
+    ```
+
+1. The monitor will continue to run even after the tests are complete.  To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session.
+    ```{r, eval = FALSE}
+    stream_stop(write_output)
+    spark_disconnect(sc)
+    ```
+
+
+
+
+

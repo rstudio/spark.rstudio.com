@@ -37,11 +37,10 @@ create Shiny apps that are able to read the contents of the stream</li>
 </ol>
 <p>In the same way all of the read and write operations in <code>sparklyr</code> for Spark Standalone, or in <code>sparklyr</code>’s local mode, the input and output folders are actual OS file system folders. For Hadoop clusters, these will be folder locations inside the HDFS.</p>
 </div>
-<div id="example" class="section level2">
-<h2>Example</h2>
-<p>Here is a small script that can be used with a local master. The result should be to see the <code>stream_view()</code> app showing live the number of records processed for each iteration of test data being sent to the stream. After the 50 iterations are complete, you can run the second code chunk to stop the job and close the Spark connection:</p>
-<pre class="r"><code>library(dplyr)
-library(future)
+<div id="example-1---inputoutput" class="section level2">
+<h2>Example 1 - Input/Output</h2>
+<p>The first intro example is a small script that can be used with a local master. The result should be to see the <code>stream_view()</code> app showing live the number of records processed for each iteration of test data being sent to the stream.</p>
+<pre class="r"><code>library(future)
 library(sparklyr)
 
 sc &lt;- spark_connect(master = &quot;local&quot;, spark_version = &quot;2.3.0&quot;)
@@ -50,11 +49,8 @@ if(file.exists(&quot;source&quot;)) unlink(&quot;source&quot;, TRUE)
 if(file.exists(&quot;source-out&quot;)) unlink(&quot;source-out&quot;, TRUE)
 
 stream_generate_test(iterations = 1)
-
 read_folder &lt;- stream_read_csv(sc, &quot;source&quot;) 
-
 write_output &lt;- stream_write_csv(read_folder, &quot;source-out&quot;)
-
 invisible(future(stream_generate_test(interval = 0.5)))
 
 stream_view(write_output)</code></pre>
@@ -78,21 +74,80 @@ if(file.exists(&quot;source-out&quot;)) unlink(&quot;source-out&quot;, TRUE)</co
 <pre class="r"><code>stream_generate_test(iterations = 1)
 list.files(&quot;source&quot;)</code></pre>
 <pre><code>[1] &quot;stream_1.csv&quot;</code></pre></li>
-<li><p>Points the stream reader to the folder where the streaming files will be placed. Since it is primed with a single CSV file, it will use as the expected layout of subsequent files.</p>
+<li><p>Points the stream reader to the folder where the streaming files will be placed. Since it is primed with a single CSV file, it will use as the expected layout of subsequent files. By default, <code>stream_read_csv()</code> creates a single integer variable data frame.</p>
 <pre class="r"><code>read_folder &lt;- stream_read_csv(sc, &quot;source&quot;)</code></pre></li>
 <li><p><strong>The output writer is what starts the streaming job</strong>. It will start monitoring the input folder, and then write the new results in the “source-out” folder. So as new records stream in, new files will be created in the “source-out” folder. Since there are no operations on the incoming data at this time, the output files will have the same exact raw data as the input files. The only difference is that the files and sub folders within “source-out” will be structured how Spark structures data folders.</p>
 <pre class="r"><code>write_output &lt;- stream_write_csv(read_folder, &quot;source-out&quot;)
 list.files(&quot;source-out&quot;)</code></pre>
 <pre><code>[1] &quot;_spark_metadata&quot;                                     &quot;checkpoint&quot;
 [3] &quot;part-00000-1f29719a-2314-40e1-b93d-a647a3d57154-c000.csv&quot;</code></pre></li>
-<li><p>The test generation function defaults to 50 iterations. In this case, the <code>interval</code> is set to half a second, meaning that the streaming will last for 25 seconds. To run the tests “out-of-sync” with the current R session, in this example the test generator will run using the <code>future</code> package.</p>
+<li><p>The test generation function will run 100 files every 0.2 seconds. To run the tests “out-of-sync” with the current R session, the <code>future</code> package is used.</p>
 <pre class="r"><code>library(future)
-invisible(future(stream_generate_test(interval = 0.5)))</code></pre></li>
+invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))</code></pre></li>
 <li><p>The <code>stream_view()</code> function can be used before the 50 tests are complete because of the use of the <code>future</code> package. It will monitor the status of the job that <code>write_output</code> is pointing to and provide information on the amount of data coming into the “source” folder and going out into the “source-out” folder.</p>
 <pre class="r"><code>stream_view(write_output)</code></pre></li>
 <li><p>The monitor will continue to run even after the tests are complete. To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session.</p>
 <pre class="r"><code>stream_stop(write_output)
 spark_disconnect(sc)</code></pre></li>
+</ol>
+</div>
+</div>
+<div id="example-2---processing" class="section level2">
+<h2>Example 2 - Processing</h2>
+<p>The second example builds on the first. It adds a processing step that manipulates the input data before saving it to the output folder. In this case, a new binary field is added indicating if the value from <code>x</code> is over 400 or not. This time, while run the second code chunk in this example a few times during the stream tests to see the aggregated values change.</p>
+<pre class="r"><code>library(future)
+library(sparklyr)
+library(dplyr, warn.conflicts = FALSE)
+
+sc &lt;- spark_connect(master = &quot;local&quot;, spark_version = &quot;2.3.0&quot;)
+
+if(file.exists(&quot;source&quot;)) unlink(&quot;source&quot;, TRUE)
+if(file.exists(&quot;source-out&quot;)) unlink(&quot;source-out&quot;, TRUE)
+
+stream_generate_test(iterations = 1)
+read_folder &lt;- stream_read_csv(sc, &quot;source&quot;) 
+
+process_stream &lt;- read_folder %&gt;%
+  mutate(x = as.double(x)) %&gt;%
+  ft_binarizer(
+    input_col = &quot;x&quot;,
+    output_col = &quot;over&quot;,
+    threshold = 400
+  )
+
+write_output &lt;- stream_write_csv(process_stream, &quot;source-out&quot;)
+invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))</code></pre>
+<p>Run this code a few times during the experiment:</p>
+<pre class="r"><code>spark_read_csv(sc, &quot;stream&quot;, &quot;source-out&quot;) %&gt;%
+  group_by(over) %&gt;%
+  tally()</code></pre>
+<p>The results would look similar to this. Tne <code>n</code> totals will increase as the experiment progresses.</p>
+<pre><code># Source:   lazy query [?? x 2]
+# Database: spark_connection
+   over     n
+  &lt;dbl&gt; &lt;dbl&gt;
+1     0 40215
+2     1 60006</code></pre>
+<p>Clean up after the experiment</p>
+<pre class="r"><code>stream_stop(write_output)
+spark_disconnect(sc)</code></pre>
+<div id="code-breakdown-1" class="section level3">
+<h3>Code breakdown</h3>
+<ol style="list-style-type: decimal">
+<li><p>The processing starts with the <code>read_folder</code> variable that contains the input stream. It coerces the integer field <code>x</code>, into a type double. This is becuase the next function, <code>ft_binarizer()</code> does not accept integers. The binarizer determines if <code>x</code> is over 400 or not. This is a good illustration of how <code>dplyr</code> can help simplify the manipulation needed during the processing stage.</p>
+<pre class="r"><code>process_stream &lt;- read_folder %&gt;%
+  mutate(x = as.double(x)) %&gt;%
+  ft_binarizer(
+    input_col = &quot;x&quot;,
+    output_col = &quot;over&quot;,
+    threshold = 400
+  )</code></pre></li>
+<li><p>The output now needs to write-out the processed data instead of the raw input data. Swap <code>read_folder</code> with <code>process_stream</code>.</p>
+<pre class="r"><code>write_output &lt;- stream_write_csv(process_stream, &quot;source-out&quot;)</code></pre></li>
+<li><p>The “source-out” folder can be treated as a if it was a single table within Spark. Using <code>spark_read_csv()</code>, the data can be mapped, but not brought into memory (<code>memory = FALSE</code>). This allows the current results to be further analyzed using regular <code>dplyr</code> commands.</p>
+<pre class="r"><code>spark_read_csv(sc, &quot;stream&quot;, &quot;source-out&quot;, memory = FALSE) %&gt;%
+  group_by(over) %&gt;%
+  tally()</code></pre></li>
 </ol>
 </div>
 </div>

@@ -1,10 +1,12 @@
 library(pkgdown)
-library(dplyr)
-library(purrr)
 library(stringr)
 library(crayon)
+library(dplyr)
+library(rlang)
+library(purrr)
 library(yaml)
 library(fs)
+
 
 root <-  function() rprojroot::find_rstudio_root_file()
 
@@ -184,5 +186,5 @@ copy_repo <- function(github_repo, package_folder = "repos"){
   system(paste0("git clone https://github.com/", github_repo, " -b master ", repo))
 }
 
-library(rlang)
+
 

@@ -19,7 +19,8 @@ As stated in the Spark's official site, [Spark Streaming]((https://spark.apache.
 The `sparklyr` interface provides the following:
 
 - Ability to run [dplyr](/dplyr), SQL, [spark_apply()](/guides/distributed-r/), and [PipelineModels](/guides/pipelines/#introduction-to-ml-pipelines) against a stream
-- Read and write streams in multiple formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc
+- Read in multiple formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc
+- Write stream results to Spark memory and the following file formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc
 - An out-of-the box graph visualization to monitor the stream
 - A new `reactiveSpark()` function, that allows Shiny apps to poll the contents of the stream
  create Shiny apps that are able to read the contents of the stream
@@ -151,12 +152,12 @@ invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
 
 Run this code a few times during the experiment:
 ```{r, eval = FALSE}
-spark_read_csv(sc, "stream", "source-out") %>%
+spark_read_csv(sc, "stream", "source-out", memory = FALSE) %>%
   group_by(over) %>%
   tally()
 ```
 
-The results would look similar to this.  Tne `n` totals will increase as the experiment progresses.
+The results would look similar to this.  The `n` totals will increase as the experiment progresses.
 
 ```
 # Source:   lazy query [?? x 2]
@@ -177,7 +178,7 @@ spark_disconnect(sc)
 ### Code breakdown
 
  
-1. The processing starts with the `read_folder` variable that contains the input stream.  It coerces the integer field `x`, into a type double.  This is becuase the next function, `ft_binarizer()` does not accept integers.  The binarizer determines if `x` is over 400 or not.  This is a good illustration of how `dplyr` can help simplify the manipulation needed during the processing stage.
+1. The processing starts with the `read_folder` variable that contains the input stream.  It coerces the integer field `x`, into a type double.  This is because the next function, `ft_binarizer()` does not accept integers.  The binarizer determines if `x` is over 400 or not.  This is a good illustration of how `dplyr` can help simplify the manipulation needed during the processing stage.
     ```{r, eval = FALSE}
     process_stream <- read_folder %>%
       mutate(x = as.double(x)) %>%
@@ -201,4 +202,71 @@ spark_disconnect(sc)
     ```
 
 
+## Example 3 - Aggregate in process and output to memory
 
+Another option is to save the results of the processing into a in-memory Spark table.  Unless intentionally saving it to disk, the table and its data will only exist while the Spark session is active. 
+
+The biggest advantage of using Spark memory as the target, is that it will allow for aggregation to happen during processing. This is an advantage because *aggregation is not allowed for any file output, expect Kafka, on the input/process stage*.  
+
+Using example 2 as the base, this example code will perform some aggregations to the current stream input and save only those summarized results into Spark memory:
+
+```{r, eval = FALSE}
+library(future)
+library(sparklyr)
+library(dplyr, warn.conflicts = FALSE)
+
+sc <- spark_connect(master = "local", spark_version = "2.3.0")
+
+if(file.exists("source")) unlink("source", TRUE)
+
+stream_generate_test(iterations = 1)
+read_folder <- stream_read_csv(sc, "source") 
+
+process_stream <- read_folder %>%
+  stream_watermark() %>%
+  group_by(timestamp) %>%
+  summarise(
+    max_x = max(x, na.rm = TRUE),
+    min_x = min(x, na.rm = TRUE),
+    count = n()
+  )
+
+write_output <- stream_write_memory(process_stream, name = "stream")
+
+invisible(future(stream_generate_test()))
+```
+
+Run this command a different times while the experiment is running:
+```{r, eval = FALSE}
+tbl(sc, "stream") 
+```
+
+Clean up after the experiment
+```{r, eval = FALSE}
+stream_stop(write_output)
+spark_disconnect(sc)
+```
+
+### Code breakdown
+
+1. The `stream_watermark()` functions add a new `timestamp` variable that is then used in the `group_by()` command.  This is required by Spark Stream to accept summarized results as output of the stream.  The second step is to simply decide what kinds of aggregations we need to perform.  In this case, a simply max, min and count are performed.  
+    ```{r, eval = FALSE}
+    process_stream <- read_folder %>%
+      stream_watermark() %>%
+      group_by(timestamp) %>%
+      summarise(
+        max_x = max(x, na.rm = TRUE),
+        min_x = min(x, na.rm = TRUE),
+        count = n()
+      )
+    ```
+
+1. The `spark_write_memory()` function is used to write the output to Spark memory.  The results will appear as a table of the Spark session with the name assigned in the `name` argument, in this case the name selected is: "stream".  
+    ```{r, eval = FALSE}
+    write_output <- stream_write_memory(process_stream, name = "stream")
+    ```
+s
+1. To query the current data in the "stream" table can be queried by using the `dplyr` `tbl()` command.
+    ```{r, eval = FALSE}
+    tbl(sc, "stream") 
+    ```

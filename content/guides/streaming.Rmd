@@ -265,8 +265,85 @@ spark_disconnect(sc)
     ```{r, eval = FALSE}
     write_output <- stream_write_memory(process_stream, name = "stream")
     ```
-s
+
 1. To query the current data in the "stream" table can be queried by using the `dplyr` `tbl()` command.
     ```{r, eval = FALSE}
     tbl(sc, "stream") 
     ```
+    
+## Example 4 - Shiny integration
+
+`sparklyr` provides a new Shiny function called `reactiveSpark()`.  It can take a Spark data frame, in this case the one created as a result of the stream processing, and then creates a Spark memory stream table, the same way a table is created in example 3.
+
+```{r, eval = FALSE}
+library(future)
+library(sparklyr)
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+
+sc <- spark_connect(master = "local", spark_version = "2.3.0")
+
+if(file.exists("source")) unlink("source", TRUE)
+if(file.exists("source-out")) unlink("source-out", TRUE)
+
+stream_generate_test(iterations = 1)
+read_folder <- stream_read_csv(sc, "source") 
+
+process_stream <- read_folder %>%
+  stream_watermark() %>%
+  group_by(timestamp) %>%
+  summarise(
+    max_x = max(x, na.rm = TRUE),
+    min_x = min(x, na.rm = TRUE),
+    count = n()
+  )
+
+invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
+
+library(shiny)
+ui <- function(){
+  tableOutput("table")
+}
+server <- function(input, output, session){
+  
+  ps <- reactiveSpark(process_stream)
+  
+  output$table <- renderTable({
+    ps() %>%
+      mutate(timestamp = as.character(timestamp)) 
+    })
+}
+runGadget(ui, server)
+```
+
+### Code breakdown
+
+1. Notice that there is no `stream_write_...` command.  The reason is that `reactiveSpark()` function contains the `stream_write_memory()` function.
+
+1. This very basic Shiny app simiply displays the output of a table in the `ui` section
+    ```{r, eval = FALSE}
+    library(shiny)
+        ui <- function(){
+          tableOutput("table")
+        }
+    ```
+
+1. In the `server` section, the `reactiveSpark()` function will update every time there's a change to the stream and return a data frame. The results are saved to a variable called `ps()` in this script.  Treat the `ps()` variable as a regular table that can be piped from, as shown in the example.  In this case, the `timestamp` variable is converted to string for to make it easier to read.
+    ```{r, eval = FALSE}
+    server <- function(input, output, session){
+      
+      ps <- reactiveSpark(process_stream)
+      
+      output$table <- renderTable({
+        ps() %>%
+          mutate(timestamp = as.character(timestamp)) 
+      })
+    }
+    ```
+
+1. Use `runGadget()` to display the Shiny app in the Viewer pane.  This is optional, the app can be run using normal Shiny run functions.
+
+    ```{r, eval = FALSE}
+    runGadget(ui, server)
+    ```
+

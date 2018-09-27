@@ -198,10 +198,74 @@ spark_disconnect(sc)</code></pre>
     count = n()
   )</code></pre></li>
 <li><p>The <code>spark_write_memory()</code> function is used to write the output to Spark memory. The results will appear as a table of the Spark session with the name assigned in the <code>name</code> argument, in this case the name selected is: “stream”.</p>
-<pre class="r"><code>write_output &lt;- stream_write_memory(process_stream, name = &quot;stream&quot;)</code></pre>
-s</li>
+<pre class="r"><code>write_output &lt;- stream_write_memory(process_stream, name = &quot;stream&quot;)</code></pre></li>
 <li><p>To query the current data in the “stream” table can be queried by using the <code>dplyr</code> <code>tbl()</code> command.</p>
 <pre class="r"><code>tbl(sc, &quot;stream&quot;) </code></pre></li>
+</ol>
+</div>
+</div>
+<div id="example-4---shiny-integration" class="section level2">
+<h2>Example 4 - Shiny integration</h2>
+<p><code>sparklyr</code> provides a new Shiny function called <code>reactiveSpark()</code>. It can take a Spark data frame, in this case the one created as a result of the stream processing, and then creates a Spark memory stream table, the same way a table is created in example 3.</p>
+<pre class="r"><code>library(future)
+library(sparklyr)
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+
+sc &lt;- spark_connect(master = &quot;local&quot;, spark_version = &quot;2.3.0&quot;)
+
+if(file.exists(&quot;source&quot;)) unlink(&quot;source&quot;, TRUE)
+if(file.exists(&quot;source-out&quot;)) unlink(&quot;source-out&quot;, TRUE)
+
+stream_generate_test(iterations = 1)
+read_folder &lt;- stream_read_csv(sc, &quot;source&quot;) 
+
+process_stream &lt;- read_folder %&gt;%
+  stream_watermark() %&gt;%
+  group_by(timestamp) %&gt;%
+  summarise(
+    max_x = max(x, na.rm = TRUE),
+    min_x = min(x, na.rm = TRUE),
+    count = n()
+  )
+
+invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
+
+library(shiny)
+ui &lt;- function(){
+  tableOutput(&quot;table&quot;)
+}
+server &lt;- function(input, output, session){
+  
+  ps &lt;- reactiveSpark(process_stream)
+  
+  output$table &lt;- renderTable({
+    ps() %&gt;%
+      mutate(timestamp = as.character(timestamp)) 
+    })
+}
+runGadget(ui, server)</code></pre>
+<div id="code-breakdown-3" class="section level3">
+<h3>Code breakdown</h3>
+<ol style="list-style-type: decimal">
+<li><p>Notice that there is no <code>stream_write_...</code> command. The reason is that <code>reactiveSpark()</code> function contains the <code>stream_write_memory()</code> function.</p></li>
+<li><p>This very basic Shiny app simiply displays the output of a table in the <code>ui</code> section</p>
+<pre class="r"><code>library(shiny)
+    ui &lt;- function(){
+      tableOutput(&quot;table&quot;)
+    }</code></pre></li>
+<li><p>In the <code>server</code> section, the <code>reactiveSpark()</code> function will update every time there’s a change to the stream and return a data frame. The results are saved to a variable called <code>ps()</code> in this script. Treat the <code>ps()</code> variable as a regular table that can be piped from, as shown in the example. In this case, the <code>timestamp</code> variable is converted to string for to make it easier to read.</p>
+<pre class="r"><code>server &lt;- function(input, output, session){
+
+  ps &lt;- reactiveSpark(process_stream)
+
+  output$table &lt;- renderTable({
+    ps() %&gt;%
+      mutate(timestamp = as.character(timestamp)) 
+  })
+}</code></pre></li>
+<li><p>Use <code>runGadget()</code> to display the Shiny app in the Viewer pane. This is optional, the app can be run using normal Shiny run functions.</p>
+<pre class="r"><code>runGadget(ui, server)</code></pre></li>
 </ol>
 </div>
 </div>

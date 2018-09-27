@@ -1,30 +1,19 @@
 ---
-title: "R interface for Spark Streaming"
-output:
-  html_document:
-    fig_width: 9
-    fig_height: 5
-    toc: true
-    toc_depth: 3
-    toc_float:
-      collapsed: false
+title: "Intro to Spark Streaming with sparklyr"
 ---
 
 
 
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
+<div id="the-sparklyr-interface" class="section level2">
+<h2>The <code>sparklyr</code> interface</h2>
 <p>As stated in the Spark’s official site, <a href="(https://spark.apache.org/streaming/)">Spark Streaming</a> makes it easy to build scalable fault-tolerant streaming applications. Because is part of the Spark API, it is possible to re-use query code that queries the current state of the stream, as well as joining the streaming data with historical data. Please see <a href="https://spark.apache.org/docs/2.1.3/structured-streaming-programming-guide.html">Spark’s official documentation</a> for a deeper look into Spark Streaming.</p>
-</div>
-<div id="scope-of-the-sparklyr-interface" class="section level2">
-<h2>Scope of the <code>sparklyr</code> interface</h2>
 <p>The <code>sparklyr</code> interface provides the following:</p>
 <ul>
 <li>Ability to run <a href="/dplyr">dplyr</a>, SQL, <a href="/guides/distributed-r/">spark_apply()</a>, and <a href="/guides/pipelines/#introduction-to-ml-pipelines">PipelineModels</a> against a stream</li>
 <li>Read in multiple formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc</li>
 <li>Write stream results to Spark memory and the following file formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc</li>
-<li>An out-of-the box graph visualization to monitor the stream</li>
-<li>A new <code>reactiveSpark()</code> function, that allows Shiny apps to poll the contents of the stream
+<li>An out-of-the box <a href="#example-1---inputoutput">graph visualization</a> to monitor the stream</li>
+<li>A new <a href="#example-4---shiny-integration">reactiveSpark()</a> function, that allows Shiny apps to poll the contents of the stream
 create Shiny apps that are able to read the contents of the stream</li>
 </ul>
 </div>
@@ -249,11 +238,12 @@ runGadget(ui, server)</code></pre>
 <h3>Code breakdown</h3>
 <ol style="list-style-type: decimal">
 <li><p>Notice that there is no <code>stream_write_...</code> command. The reason is that <code>reactiveSpark()</code> function contains the <code>stream_write_memory()</code> function.</p></li>
-<li><p>This very basic Shiny app simiply displays the output of a table in the <code>ui</code> section</p>
+<li><p>This very basic Shiny app simply displays the output of a table in the <code>ui</code> section</p>
 <pre class="r"><code>library(shiny)
-    ui &lt;- function(){
-      tableOutput(&quot;table&quot;)
-    }</code></pre></li>
+
+ui &lt;- function(){
+  tableOutput(&quot;table&quot;)
+}</code></pre></li>
 <li><p>In the <code>server</code> section, the <code>reactiveSpark()</code> function will update every time there’s a change to the stream and return a data frame. The results are saved to a variable called <code>ps()</code> in this script. Treat the <code>ps()</code> variable as a regular table that can be piped from, as shown in the example. In this case, the <code>timestamp</code> variable is converted to string for to make it easier to read.</p>
 <pre class="r"><code>server &lt;- function(input, output, session){
 
@@ -266,6 +256,83 @@ runGadget(ui, server)</code></pre>
 }</code></pre></li>
 <li><p>Use <code>runGadget()</code> to display the Shiny app in the Viewer pane. This is optional, the app can be run using normal Shiny run functions.</p>
 <pre class="r"><code>runGadget(ui, server)</code></pre></li>
+</ol>
+</div>
+</div>
+<div id="example-5---ml-pipeline-model" class="section level2">
+<h2>Example 5 - ML Pipeline Model</h2>
+<p>This example uses a fitted <a href="/guides/pipelines/">Pipeline Model</a> to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.</p>
+<pre class="r"><code>library(sparklyr)
+library(dplyr, warn.conflicts = FALSE)
+
+sc &lt;- spark_connect(master = &quot;local&quot;, spark_version = &quot;2.3.0&quot;)
+
+if(file.exists(&quot;source&quot;)) unlink(&quot;source&quot;, TRUE)
+if(file.exists(&quot;source-out&quot;)) unlink(&quot;source-out&quot;, TRUE)
+
+df &lt;- data.frame(x = rep(1:1000), y = rep(2:1001))
+
+stream_generate_test(df = df, iteration = 1)
+
+model_sample &lt;- spark_read_csv(sc, &quot;sample&quot;, &quot;source&quot;)
+
+pipeline &lt;- sc %&gt;%
+  ml_pipeline() %&gt;%
+  ft_r_formula(x ~ y) %&gt;%
+  ml_linear_regression()
+
+fitted_pipeline &lt;- ml_fit(pipeline, model_sample)
+
+ml_stream &lt;- stream_read_csv(
+    sc = sc, 
+    path = &quot;source&quot;, 
+    columns = c(x = &quot;integer&quot;, y = &quot;integer&quot;)
+  )  %&gt;%
+  ml_transform(fitted_pipeline, .)  %&gt;%
+  select(- features) %&gt;%
+  stream_write_csv(&quot;source-out&quot;)
+
+stream_generate_test(df = df, interval = 0.5)</code></pre>
+<pre class="r"><code>spark_read_csv(sc, &quot;stream&quot;, &quot;source-out&quot;, memory = FALSE) </code></pre>
+<pre><code># Source: spark&lt;stream&gt; [?? x 4]
+       x     y label prediction
+ * &lt;int&gt; &lt;int&gt; &lt;dbl&gt;      &lt;dbl&gt;
+ 1   276   277   276       276.
+ 2   277   278   277       277.
+ 3   278   279   278       278.
+ 4   279   280   279       279.
+ 5   280   281   280       280.
+ 6   281   282   281       281.
+ 7   282   283   282       282.
+ 8   283   284   283       283.
+ 9   284   285   284       284.
+10   285   286   285       285.
+# ... with more rows</code></pre>
+<pre class="r"><code>stream_stop(ml_stream)
+spark_disconnect(sc)</code></pre>
+<div id="code-breakdown-4" class="section level3">
+<h3>Code Breakdown</h3>
+<ol style="list-style-type: decimal">
+<li><p>Creates and fits a pipeline</p>
+<pre class="r"><code>df &lt;- data.frame(x = rep(1:1000), y = rep(2:1001))
+stream_generate_test(df = df, iteration = 1)
+model_sample &lt;- spark_read_csv(sc, &quot;sample&quot;, &quot;source&quot;)
+
+pipeline &lt;- sc %&gt;%
+  ml_pipeline() %&gt;%
+  ft_r_formula(x ~ y) %&gt;%
+  ml_linear_regression()
+
+fitted_pipeline &lt;- ml_fit(pipeline, model_sample)</code></pre></li>
+<li><p>This example pipelines the input, process and output in a single code segment. The <code>ml_transform()</code> function is used to create the predictions. Because the CSV format does not support <em>list</em> type fields, the <code>features</code> column is removed before the results are sent to the output.</p>
+<pre class="r"><code>ml_stream &lt;- stream_read_csv(
+    sc = sc, 
+    path = &quot;source&quot;, 
+    columns = c(x = &quot;integer&quot;, y = &quot;integer&quot;)
+  )  %&gt;%
+  ml_transform(fitted_pipeline, .)  %&gt;%
+  select(- features) %&gt;%
+  stream_write_csv(&quot;source-out&quot;)</code></pre></li>
 </ol>
 </div>
 </div>

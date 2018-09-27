@@ -45,6 +45,7 @@ site_reference <- function(overwrite = FALSE){
   
   if(file_exists(target_path("_pkgdown.yml"))) file_delete(target_path("_pkgdown.yml"))
   
+  
   reference <- yaml.load_file("_blogdown.yml")
   reference$template$path <- path(
     root(),
@@ -54,37 +55,67 @@ site_reference <- function(overwrite = FALSE){
     as.character(yaml::as.yaml(reference)), 
     "_pkgdown.yml")
   
+  pkg <- as_pkgdown()
+  
+  
+  
   if(overwrite == TRUE){
     if(file_exists(target_path("man"))) dir_delete(target_path("man"))
     if(file_exists(target_path("man-roxygen"))) dir_delete(target_path("man-roxygen"))
     if(file_exists(target_path("DESCRIPTION"))) file_delete(target_path("DESCRIPTION"))
-    
   }
-  
   if(!file_exists(target_path("man"))){
     dir_copy(
       source_path("man"),
       target_path("man")
     )
   }
+  
+  
+  pkg <- as_pkgdown()
+  
+  topics <- map(pkg$meta$reference, ~.x$contents) %>%
+    reduce(function(x, y) c(x, y)) 
+  
+  rds <- pkg$topics %>%
+    select(alias) %>%
+    pull() %>%
+    imap(~tibble(
+      rd = .y,
+      topics = .x
+    )) %>%
+    bind_rows()
+  
+  keep_rds <- topics %>%
+    map(~rds[rds$topics == .x, 1]) %>%
+    map(as.character) %>%
+    reduce(function(x, y) c(x, y)) 
+  
+  keep_files <- list.files("man") %>%
+    map(~{
+      x <- .x
+      !any(map_lgl(keep_rds, ~.x == x))
+    }) %>%
+    flatten() %>%
+    reduce(function(x, y) c(x, y)) 
+  
+  walk(list.files("man")[keep_files], ~unlink(file.path("man", .x)))
+  
   if(!file_exists(target_path("man-roxygen"))){
     dir_copy(
       source_path("man-roxygen"),
       target_path("man-roxygen")
     )
   }
-    
   if(!file_exists(target_path("DESCRIPTION"))){
     file_copy(
       source_path("DESCRIPTION"),
       target_path("DESCRIPTION")
     )
   }
-  
-
-  
   if(file_exists(target_path("content/reference"))) dir_delete(target_path("content/reference"))
-  pkgdown::build_reference(path = target_path("content/reference"))
+  pkgdown::build_reference()
+  replace_text("content/reference/index.html", ".html\">", "\">")
 }
 
 site_content <- function(overwrite = TRUE){
@@ -153,5 +184,5 @@ copy_repo <- function(github_repo, package_folder = "repos"){
   system(paste0("git clone https://github.com/", github_repo, " -b master ", repo))
 }
 
-
+library(rlang)
 

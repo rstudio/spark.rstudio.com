@@ -45,6 +45,8 @@ site_reset_public <- function(){
 
 site_reference <- function(overwrite = FALSE){
   
+  site_reset_public()
+  
   if(file_exists(target_path("_pkgdown.yml"))) file_delete(target_path("_pkgdown.yml"))
   
   
@@ -56,10 +58,6 @@ site_reference <- function(overwrite = FALSE){
   writeLines(
     as.character(yaml::as.yaml(reference)), 
     "_pkgdown.yml")
-  
-  pkg <- as_pkgdown()
-  
-  
   
   if(overwrite == TRUE){
     if(file_exists(target_path("man"))) dir_delete(target_path("man"))
@@ -73,6 +71,20 @@ site_reference <- function(overwrite = FALSE){
     )
   }
   
+  
+  if(!file_exists(target_path("man-roxygen"))){
+    dir_copy(
+      source_path("man-roxygen"),
+      target_path("man-roxygen")
+    )
+  }
+  if(!file_exists(target_path("DESCRIPTION"))){
+    file_copy(
+      source_path("DESCRIPTION"),
+      target_path("DESCRIPTION")
+    )
+  }
+  if(file_exists(target_path("content/reference"))) dir_delete(target_path("content/reference"))
   
   pkg <- as_pkgdown()
   
@@ -103,19 +115,7 @@ site_reference <- function(overwrite = FALSE){
   
   walk(list.files("man")[keep_files], ~unlink(file.path("man", .x)))
   
-  if(!file_exists(target_path("man-roxygen"))){
-    dir_copy(
-      source_path("man-roxygen"),
-      target_path("man-roxygen")
-    )
-  }
-  if(!file_exists(target_path("DESCRIPTION"))){
-    file_copy(
-      source_path("DESCRIPTION"),
-      target_path("DESCRIPTION")
-    )
-  }
-  if(file_exists(target_path("content/reference"))) dir_delete(target_path("content/reference"))
+  
   pkgdown::build_reference()
   replace_text("content/reference/index.html", ".html\">", "\">")
 }

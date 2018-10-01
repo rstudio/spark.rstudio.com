@@ -4,19 +4,21 @@ aliases:
   - reference/sparklyr/latest/ft_binarizer.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
     <li><a href="#value">Value</a></li>
 
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>Apply thresholding to a column, such that values less than or equal to the
@@ -64,7 +66,8 @@ compatibility with other modeling functions.</p>
     
     <h2 id="value">Value</h2>
 
-    <p>The object returned depends on the class of <code>x</code>.</p><ul>
+    <p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns a <code>ml_transformer</code>,
   a <code>ml_estimator</code>, or one of their subclasses. The object contains a pointer to
   a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose
@@ -78,14 +81,14 @@ compatibility with other modeling functions.</p>
     
     <h2 id="see-also">See also</h2>
 
-    <p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
+    <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
   more information on the set of transformations available for DataFrame
   columns in Spark.</p>
 <p>Other feature transformers: <code><a href='ft_bucketizer.html'>ft_bucketizer</a></code>,
   <code><a href='ft_chisq_selector.html'>ft_chisq_selector</a></code>,
   <code><a href='ft_count_vectorizer.html'>ft_count_vectorizer</a></code>, <code><a href='ft_dct.html'>ft_dct</a></code>,
   <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
-  <code>ft_feature_hasher</code>,
+  <code><a href='ft_feature_hasher.html'>ft_feature_hasher</a></code>,
   <code><a href='ft_hashing_tf.html'>ft_hashing_tf</a></code>, <code><a href='ft_idf.html'>ft_idf</a></code>,
   <code><a href='ft_imputer.html'>ft_imputer</a></code>,
   <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
@@ -105,10 +108,25 @@ compatibility with other modeling functions.</p>
   <code><a href='ft_tokenizer.html'>ft_tokenizer</a></code>,
   <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
   <code><a href='ft_vector_indexer.html'>ft_vector_indexer</a></code>,
-  <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p>
+  <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p></div>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
+<span class='no'>iris_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>iris</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris_tbl"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='no'>iris_tbl</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>ft_binarizer</span>(<span class='kw'>input_col</span>  <span class='kw'>=</span> <span class='st'>"Sepal_Length"</span>,
+               <span class='kw'>output_col</span> <span class='kw'>=</span> <span class='st'>"Sepal_Length_bin"</span>,
+               <span class='kw'>threshold</span>  <span class='kw'>=</span> <span class='fl'>5</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>Sepal_Length</span>, <span class='no'>Sepal_Length_bin</span>, <span class='no'>Species</span>)
+<span class='co'># }</span><div class='input'>
+</div></code></pre></div>
     </div>
 
     </div>
+
 

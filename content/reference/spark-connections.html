@@ -4,9 +4,9 @@ aliases:
   - reference/sparklyr/latest/spark-connections.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
         
@@ -14,22 +14,28 @@ aliases:
     </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>These routines allow you to manage your connections to Spark.</p>
     
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_connect</span>(<span class='no'>master</span>, <span class='kw'>spark_home</span> <span class='kw'>=</span> <span class='fu'>Sys.getenv</span>(<span class='st'>"SPARK_HOME"</span>),
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"shell"</span>, <span class='st'>"livy"</span>, <span class='st'>"databricks"</span>, <span class='st'>"test"</span>), <span class='kw'>app_name</span> <span class='kw'>=</span> <span class='st'>"sparklyr"</span>,
-  <span class='kw'>version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hadoop_version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='spark_config.html'>spark_config</a></span>(),
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"shell"</span>, <span class='st'>"livy"</span>, <span class='st'>"databricks"</span>, <span class='st'>"test"</span>),
+  <span class='kw'>app_name</span> <span class='kw'>=</span> <span class='st'>"sparklyr"</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hadoop_version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='spark_config.html'>spark_config</a></span>(),
   <span class='kw'>extensions</span> <span class='kw'>=</span> <span class='kw pkg'>sparklyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sparklyr/topics/register_extension'>registered_extensions</a></span>(), <span class='no'>...</span>)
 
 <span class='fu'>spark_connection_is_open</span>(<span class='no'>sc</span>)
 
 <span class='fu'>spark_disconnect</span>(<span class='no'>sc</span>, <span class='no'>...</span>)
 
-<span class='fu'>spark_disconnect_all</span>()</code></pre></div>
+<span class='fu'>spark_disconnect_all</span>()
+
+<span class='fu'>spark_submit</span>(<span class='no'>master</span>, <span class='no'>file</span>, <span class='kw'>spark_home</span> <span class='kw'>=</span> <span class='fu'>Sys.getenv</span>(<span class='st'>"SPARK_HOME"</span>),
+  <span class='kw'>app_name</span> <span class='kw'>=</span> <span class='st'>"sparklyr"</span>, <span class='kw'>version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hadoop_version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='spark_config.html'>spark_config</a></span>(),
+  <span class='kw'>extensions</span> <span class='kw'>=</span> <span class='kw pkg'>sparklyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sparklyr/topics/register_extension'>registered_extensions</a></span>(), <span class='no'>...</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
@@ -55,8 +61,10 @@ installed version.</p></td>
     </tr>
     <tr>
       <td>method</td>
-      <td><p>The method used to connect to Spark. Currently, only
-<code>"shell"</code> is supported.</p></td>
+      <td><p>The method used to connect to Spark. Default connection method
+is <code>"shell"</code> to connect using spark-submit, use <code>"livy"</code> to
+perform remote connections using HTTP, or <code>"databricks"</code> when using a
+Databricks clusters.</p></td>
     </tr>
     <tr>
       <td>app_name</td>
@@ -92,6 +100,10 @@ default, all packages enabled through the use of
       <td>sc</td>
       <td><p>A <code>spark_connection</code>.</p></td>
     </tr>
+    <tr>
+      <td>file</td>
+      <td><p>Path to R source file to submit for batch execution.</p></td>
+    </tr>
     </table>
     
 
@@ -103,4 +115,5 @@ default, all packages enabled through the use of
     </div>
 
     </div>
+
 

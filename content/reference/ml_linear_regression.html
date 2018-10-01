@@ -4,9 +4,9 @@ aliases:
   - reference/sparklyr/latest/ml_linear_regression.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
@@ -15,17 +15,19 @@ aliases:
     <li><a href="#details">Details</a></li>
 
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>Perform regression using linear regression.</p>
     
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_linear_regression</span>(<span class='no'>x</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fit_intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>elastic_net_param</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>100L</span>,
+  <span class='kw'>elastic_net_param</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>100</span>,
   <span class='kw'>weight_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>loss</span> <span class='kw'>=</span> <span class='st'>"squaredError"</span>, <span class='kw'>solver</span> <span class='kw'>=</span> <span class='st'>"auto"</span>,
   <span class='kw'>standardization</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>,
   <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
@@ -108,7 +110,8 @@ and "huber". Default: "squaredError"</p></td>
     
     <h2 id="value">Value</h2>
 
-    <p>The object returned depends on the class of <code>x</code>.</p><ul>
+    <p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_predictor</code> object. The object contains a pointer to
   a Spark <code>Predictor</code> object and can be used to compose
   <code>Pipeline</code> objects.</p></li>
@@ -130,7 +133,7 @@ and "huber". Default: "squaredError"</p></td>
     
     <h2 id="see-also">See also</h2>
 
-    <p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
+    <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
   more information on the set of supervised learning algorithms.</p>
 <p>Other ml algorithms: <code><a href='ml_aft_survival_regression.html'>ml_aft_survival_regression</a></code>,
   <code><a href='ml_decision_tree.html'>ml_decision_tree_classifier</a></code>,
@@ -142,10 +145,29 @@ and "huber". Default: "squaredError"</p></td>
   <code><a href='ml_multilayer_perceptron_classifier.html'>ml_multilayer_perceptron_classifier</a></code>,
   <code><a href='ml_naive_bayes.html'>ml_naive_bayes</a></code>,
   <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>,
-  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p>
+  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p></div>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
+<span class='no'>mtcars_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>mtcars</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"mtcars_tbl"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='no'>partitions</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_tbl</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='sdf_partition.html'>sdf_partition</a></span>(<span class='kw'>training</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1111</span>)
+
+<span class='no'>mtcars_training</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>training</span>
+<span class='no'>mtcars_test</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>test</span>
+
+<span class='no'>lm_model</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_training</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>ml_linear_regression</span>(<span class='no'>mpg</span> ~ <span class='no'>.</span>)
+
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf-transform-methods.html'>sdf_predict</a></span>(<span class='no'>mtcars_test</span>, <span class='no'>lm_model</span>)
+
+<span class='fu'><a href='ml_evaluator.html'>ml_regression_evaluator</a></span>(<span class='no'>pred</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"mpg"</span>)
+<span class='co'># }</span></code></pre></div>
     </div>
 
     </div>
+
 

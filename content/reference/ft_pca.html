@@ -1,12 +1,12 @@
 ---
-title: "Feature Tranformation -- PCA (Estimator)"
+title: "Feature Transformation -- PCA (Estimator)"
 aliases:
   - reference/sparklyr/latest/ft_pca.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
@@ -15,20 +15,22 @@ aliases:
     <li><a href="#details">Details</a></li>
 
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>PCA trains a model to project vectors to a lower dimensional space of the top k principal components.</p>
     
 
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_pca</span>(<span class='no'>x</span>, <span class='no'>input_col</span>, <span class='no'>output_col</span>, <span class='no'>k</span>, <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"pca_"</span>), <span class='no'>...</span>)
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_pca</span>(<span class='no'>x</span>, <span class='kw'>input_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"pca_"</span>), <span class='no'>...</span>)
 
-<span class='fu'>ml_pca</span>(<span class='no'>x</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='fu'>tbl_vars</span>(<span class='no'>x</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>features</span>), <span class='kw'>pc_prefix</span> <span class='kw'>=</span> <span class='st'>"PC"</span>,
-  <span class='no'>...</span>)</code></pre></div>
+<span class='fu'>ml_pca</span>(<span class='no'>x</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='fu'>tbl_vars</span>(<span class='no'>x</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'>length</span>(<span class='no'>features</span>),
+  <span class='kw'>pc_prefix</span> <span class='kw'>=</span> <span class='st'>"PC"</span>, <span class='no'>...</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
@@ -80,7 +82,8 @@ analysis. Defaults to all columns in <code>x</code>.</p></td>
     
     <h2 id="value">Value</h2>
 
-    <p>The object returned depends on the class of <code>x</code>.</p><ul>
+    <p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns a <code>ml_transformer</code>,
   a <code>ml_estimator</code>, or one of their subclasses. The object contains a pointer to
   a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose
@@ -102,13 +105,13 @@ analysis. Defaults to all columns in <code>x</code>.</p></td>
   transforming <code>x</code>.</p>
 <p>When <code>dataset</code> is not specified, the constructor returns a <code>ml_estimator</code>, and,
   in the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code> then
-  to obtain a transformer, which is then immediately used to transform <code>x</code>.
-    <code>ml_pca()</code> is a wrapper around <code>ft_pca()</code> that returns a
+  to obtain a transformer, which is then immediately used to transform <code>x</code>.</p>
+<p><code>ml_pca()</code> is a wrapper around <code>ft_pca()</code> that returns a
   <code>ml_model</code>.</p>
     
     <h2 id="see-also">See also</h2>
 
-    <p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
+    <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
   more information on the set of transformations available for DataFrame
   columns in Spark.</p>
 <p>Other feature transformers: <code><a href='ft_binarizer.html'>ft_binarizer</a></code>,
@@ -116,7 +119,7 @@ analysis. Defaults to all columns in <code>x</code>.</p></td>
   <code><a href='ft_chisq_selector.html'>ft_chisq_selector</a></code>,
   <code><a href='ft_count_vectorizer.html'>ft_count_vectorizer</a></code>, <code><a href='ft_dct.html'>ft_dct</a></code>,
   <code><a href='ft_elementwise_product.html'>ft_elementwise_product</a></code>,
-  <code>ft_feature_hasher</code>,
+  <code><a href='ft_feature_hasher.html'>ft_feature_hasher</a></code>,
   <code><a href='ft_hashing_tf.html'>ft_hashing_tf</a></code>, <code><a href='ft_idf.html'>ft_idf</a></code>,
   <code><a href='ft_imputer.html'>ft_imputer</a></code>,
   <code><a href='ft_index_to_string.html'>ft_index_to_string</a></code>,
@@ -136,10 +139,23 @@ analysis. Defaults to all columns in <code>x</code>.</p></td>
   <code><a href='ft_tokenizer.html'>ft_tokenizer</a></code>,
   <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
   <code><a href='ft_vector_indexer.html'>ft_vector_indexer</a></code>,
-  <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p>
+  <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p></div>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
+<span class='no'>iris_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>iris</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris_tbl"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='no'>iris_tbl</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(-<span class='no'>Species</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>ml_pca</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='co'># }</span><div class='input'>
+</div></code></pre></div>
     </div>
 
     </div>
+
 

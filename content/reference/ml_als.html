@@ -4,41 +4,45 @@ aliases:
   - reference/sparklyr/latest/ml_als.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
     <li><a href="#value">Value</a></li>
 
     <li><a href="#details">Details</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>Perform recommendation using Alternating Least Squares (ALS) matrix factorization.</p>
     
 
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_als</span>(<span class='no'>x</span>, <span class='kw'>rating_col</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>user_col</span> <span class='kw'>=</span> <span class='st'>"user"</span>, <span class='kw'>item_col</span> <span class='kw'>=</span> <span class='st'>"item"</span>,
-  <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>implicit_prefs</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>nonnegative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>num_user_blocks</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>num_item_blocks</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>checkpoint_interval</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>cold_start_strategy</span> <span class='kw'>=</span> <span class='st'>"nan"</span>,
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_als</span>(<span class='no'>x</span>, <span class='kw'>rating_col</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>user_col</span> <span class='kw'>=</span> <span class='st'>"user"</span>,
+  <span class='kw'>item_col</span> <span class='kw'>=</span> <span class='st'>"item"</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>implicit_prefs</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>nonnegative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>num_user_blocks</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>num_item_blocks</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>checkpoint_interval</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cold_start_strategy</span> <span class='kw'>=</span> <span class='st'>"nan"</span>,
   <span class='kw'>intermediate_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>,
-  <span class='kw'>final_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"als_"</span>), <span class='no'>...</span>)
+  <span class='kw'>final_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"als_"</span>),
+  <span class='no'>...</span>)
 
 <span class='fu'>ml_recommend</span>(<span class='no'>model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"items"</span>, <span class='st'>"users"</span>), <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
 <span class='fu'>ml_als_factorization</span>(<span class='no'>x</span>, <span class='kw'>rating_col</span> <span class='kw'>=</span> <span class='st'>"rating"</span>, <span class='kw'>user_col</span> <span class='kw'>=</span> <span class='st'>"user"</span>,
-  <span class='kw'>item_col</span> <span class='kw'>=</span> <span class='st'>"item"</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>item_col</span> <span class='kw'>=</span> <span class='st'>"item"</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>reg_param</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
   <span class='kw'>implicit_prefs</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>nonnegative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>num_user_blocks</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>num_item_blocks</span> <span class='kw'>=</span> <span class='fl'>10L</span>,
-  <span class='kw'>checkpoint_interval</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>cold_start_strategy</span> <span class='kw'>=</span> <span class='st'>"nan"</span>,
+  <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>num_user_blocks</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>num_item_blocks</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>checkpoint_interval</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>cold_start_strategy</span> <span class='kw'>=</span> <span class='st'>"nan"</span>,
   <span class='kw'>intermediate_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>,
-  <span class='kw'>final_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"als_"</span>), <span class='no'>...</span>)</code></pre></div>
+  <span class='kw'>final_storage_level</span> <span class='kw'>=</span> <span class='st'>"MEMORY_AND_DISK"</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"als_"</span>),
+  <span class='no'>...</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
@@ -139,9 +143,10 @@ E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults
 
     <p>ALS attempts to estimate the ratings matrix R as the product of two lower-rank matrices, X and Y, i.e. X * Yt = R. Typically these approximations are called 'factor' matrices. The general approach is iterative. During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix.</p>
 <p>This is a blocked implementation of the ALS factorization algorithm that groups the two sets of factors (referred to as "users" and "products") into blocks and reduces communication by only sending one copy of each user vector to each product block on each iteration, and only for the product blocks that need that user's feature vector. This is achieved by pre-computing some information about the ratings matrix to determine the "out-links" of each user (which blocks of products it will contribute to) and "in-link" information for each product (which of the feature vectors it receives from each user block it will depend on). This allows us to send only an array of feature vectors between each user block and product block, and have the product block find the users' ratings and update the products based on these messages.</p>
-<p>For implicit preference data, the algorithm used is based on "Collaborative Filtering for Implicit Feedback Datasets", available at <a href='http://dx.doi.org/10.1109/ICDM.2008.22'>http://dx.doi.org/10.1109/ICDM.2008.22</a>, adapted for the blocked approach used here.</p>
+<p>For implicit preference data, the algorithm used is based on "Collaborative Filtering for Implicit Feedback Datasets", available at <a href='https://doi.org/10.1109/ICDM.2008.22'>https://doi.org/10.1109/ICDM.2008.22</a>, adapted for the blocked approach used here.</p>
 <p>Essentially instead of finding the low-rank approximations to the rating matrix R, this finds the approximations for a preference matrix P where the elements of P are 1 if r is greater than 0 and 0 if r is less than or equal to 0. The ratings then act as 'confidence' values related to strength of indicated user preferences rather than explicit ratings given to items.</p>
-<p>The object returned depends on the class of <code>x</code>.</p><ul>
+<p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_als</code> recommender object, which is an Estimator.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with
   the recommender appended to the pipeline.</p></li>
@@ -153,11 +158,31 @@ E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults
     
     <h2 id="details">Details</h2>
 
-    <p><code>ml_recommend()</code> returns the top <code>n</code> users/items recommended for each item/user, for all items/users. The output has been transformed (exploded and separated) from the default Spark outputs to be more user friendly.
-    <code>ml_als_factorization()</code> is an alias for <code>ml_als()</code> for backwards compatibility.</p>
+    <p><code>ml_recommend()</code> returns the top <code>n</code> users/items recommended for each item/user, for all items/users. The output has been transformed (exploded and separated) from the default Spark outputs to be more user friendly.</p>
+<p><code>ml_als_factorization()</code> is an alias for <code>ml_als()</code> for backwards compatibility.</p>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>sparklyr</span>)
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
+
+<span class='no'>movies</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(
+  <span class='kw'>user</span>   <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>0</span>),
+  <span class='kw'>item</span>   <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>0</span>),
+  <span class='kw'>rating</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>4</span>, <span class='fl'>5</span>, <span class='fl'>4</span>)
+)
+<span class='no'>movies_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>movies</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'>ml_als</span>(<span class='no'>movies_tbl</span>)
+
+<span class='fu'><a href='ml-transform-methods.html'>ml_predict</a></span>(<span class='no'>model</span>, <span class='no'>movies_tbl</span>)
+
+<span class='fu'>ml_recommend</span>(<span class='no'>model</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"item"</span>, <span class='fl'>1</span>)
+<span class='co'># }</span><div class='input'>
+</div></code></pre></div>
     </div>
 
     </div>
+
 

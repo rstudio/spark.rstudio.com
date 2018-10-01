@@ -4,9 +4,9 @@ aliases:
   - reference/sparklyr/latest/ml_aft_survival_regression.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
@@ -18,24 +18,26 @@ aliases:
         </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>Fit a parametric survival regression model named accelerated failure time (AFT) model (see <a href='https://en.wikipedia.org/wiki/Accelerated_failure_time_model'>Accelerated failure time model (Wikipedia)</a>) based on the Weibull distribution of the survival time.</p>
     
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_aft_survival_regression</span>(<span class='no'>x</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>censor_col</span> <span class='kw'>=</span> <span class='st'>"censor"</span>,
-  <span class='kw'>quantile_probabilities</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>0.9</span>, <span class='fl'>0.95</span>,
+  <span class='kw'>quantile_probabilities</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>0.9</span>, <span class='fl'>0.95</span>,
   <span class='fl'>0.99</span>), <span class='kw'>fit_intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>100L</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
-  <span class='kw'>aggregation_depth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>quantiles_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>,
-  <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
+  <span class='kw'>aggregation_depth</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>quantiles_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
+  <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
   <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"aft_survival_regression_"</span>), <span class='no'>...</span>)
 
 <span class='fu'>ml_survival_regression</span>(<span class='no'>x</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>censor_col</span> <span class='kw'>=</span> <span class='st'>"censor"</span>,
-  <span class='kw'>quantile_probabilities</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>0.9</span>, <span class='fl'>0.95</span>,
+  <span class='kw'>quantile_probabilities</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>, <span class='fl'>0.05</span>, <span class='fl'>0.1</span>, <span class='fl'>0.25</span>, <span class='fl'>0.5</span>, <span class='fl'>0.75</span>, <span class='fl'>0.9</span>, <span class='fl'>0.95</span>,
   <span class='fl'>0.99</span>), <span class='kw'>fit_intercept</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>max_iter</span> <span class='kw'>=</span> <span class='fl'>100L</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
-  <span class='kw'>aggregation_depth</span> <span class='kw'>=</span> <span class='fl'>2L</span>, <span class='kw'>quantiles_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>,
-  <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>, <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
+  <span class='kw'>aggregation_depth</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>quantiles_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
+  <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>,
   <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"aft_survival_regression_"</span>), <span class='kw'>response</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>features</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</code></pre></div>
     
@@ -115,7 +117,8 @@ aliases:
     
     <h2 id="value">Value</h2>
 
-    <p>The object returned depends on the class of <code>x</code>.</p><ul>
+    <p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_predictor</code> object. The object contains a pointer to
   a Spark <code>Predictor</code> object and can be used to compose
   <code>Pipeline</code> objects.</p></li>
@@ -133,12 +136,12 @@ aliases:
     
     <h2 id="details">Details</h2>
 
-    <p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code>) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code>) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code>, <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <code><a href='ml-persistence.html'>ml_save</a></code> with <code>type = "pipeline"</code> to faciliate model refresh workflows.
-    <code>ml_survival_regression()</code> is an alias for <code>ml_aft_survival_regression()</code> for backwards compatibility.</p>
+    <p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code>) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code>) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code>, <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <code><a href='ml-persistence.html'>ml_save</a></code> with <code>type = "pipeline"</code> to faciliate model refresh workflows.</p>
+<p><code>ml_survival_regression()</code> is an alias for <code>ml_aft_survival_regression()</code> for backwards compatibility.</p>
     
     <h2 id="see-also">See also</h2>
 
-    <p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
+    <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
   more information on the set of supervised learning algorithms.</p>
 <p>Other ml algorithms: <code><a href='ml_decision_tree.html'>ml_decision_tree_classifier</a></code>,
   <code><a href='ml_gradient_boosted_trees.html'>ml_gbt_classifier</a></code>,
@@ -150,10 +153,11 @@ aliases:
   <code><a href='ml_multilayer_perceptron_classifier.html'>ml_multilayer_perceptron_classifier</a></code>,
   <code><a href='ml_naive_bayes.html'>ml_naive_bayes</a></code>,
   <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>,
-  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p>
+  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p></div>
     
 
     </div>
 
     </div>
+
 

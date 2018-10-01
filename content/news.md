@@ -1,49 +1,316 @@
-# Sparklyr 0.7.1 (UNRELEASED)
+# Sparklyr 0.9.1
 
-- Livy now supports Kerberos authentication.
+- Terminate streams when Shiny app terminates.
 
-- `invoke_static()` now supports calling Scala's package objects (#1384).
+- Fix `dplyr::collect()` with Spark streams and improve printing.
 
-- `spark_connection` and `spark_jobj` classes are now exported (#1374).
+- Fix regression in `sparklyr.sanitize.column.names.verbose` setting
+  which would cause verbose column renames.
+  
+- Fix to `stream_write_kafka()` and `stream_write_jdbc()`.
 
-- Fixed issue with `Date` type not roundtripping with `spark_apply() (#1376).
+# Sparklyr 0.9.0
 
-- `spark_available_versions()` was changed to only return available Spark versions, Hadoop versions
-  can be still retrieved using `hadoop = TRUE`.
+### Streaming
 
-- `spark_installed_versions()` was changed to retrieve the full path to the installation folder.
+- Support for `stream_read_*()` and `stream_write_*()` to read from and
+  to Spark structured streams.
+  
+- Support for `dplyr`, `sdf_sql()`, `spark_apply()` and scoring pipeline 
+  in Spark streams.
+  
+- Support for `reactiveSpark()` to create a `shiny` reactive over a Spark
+  stream.
+  
+- Support for convenience functions `stream_*()` to stop, change triggers,
+  print, generate test streams, etc.
 
-- Fixed serialization issues most commonly hit while using `spark_apply()` with NAs (#1365, #1366).
+### Monitoring
 
-- `cbind()` and `sdf_bind_cols()` don't use NSE internally anymore and no longer output names of mismatched data frames on error (#1363).
+- Support for interrupting long running operations and recover gracefully
+  using the same connection.
+  
+- Support cancelling Spark jobs by interrupting R session.
 
-- Fixed data frame provided by `spark_apply()` to not provide characters not factors (#1313).
+- Support for monitoring job progress within RStudio, required RStudio 1.2.
+
+- Progress reports can be turned off by setting `sparklyr.progress` to `FALSE`
+  in `spark_config()`.
+  
+### Kubernetes
+
+- Added config `sparklyr.gateway.routing` to avoid routing to ports since
+  Kubernetes clusters have unique spark masters.
+
+- Change backend ports to be choosen deterministically by searching for
+  free ports starting on `sparklyr.gateway.port` which default to `8880`. This
+  allows users to enable port forwarding with `kubectl port-forward`.
+  
+- Added support to set config `sparklyr.events.aftersubmit` to a function
+  that is called after `spark-submit` which can be used to automatically
+  configure port forwarding.
+  
+## Batches
+
+- Added support for `spark_submit()` to assist submitting non-interactive
+  Spark jobs.
+  
+### Spark ML
+
+- **(Breaking change)** The formula API for ML classification algorithms no longer indexes numeric labels, to avoid the confusion of `0` being mapped to `"1"` and vice versa. This means that if the largest numeric label is `N`, Spark will fit a `N+1`-class classification model, regardless of how many distinct labels there are in the provided training set (#1591).
+- Fix retrieval of coefficients in `ml_logistic_regression()` (@shabbybanks, #1596).
+- **(Breaking change)** For model objects, `lazy val` and `def` attributes have been converted to closures, so they are not evaluated at object instantiation (#1453).
+- Input and output column names are no longer required to construct pipeline objects to be consistent with Spark (#1513).
+- Vector attributes of pipeline stages are now printed correctly (#1618).
+- Deprecate various aliases favoring method names in Spark.
+  - `ml_binary_classification_eval()`
+  - `ml_classification_eval()`
+  - `ml_multilayer_perceptron()`
+  - `ml_survival_regression()`
+  - `ml_als_factorization()`
+- Deprecate incompatible signatures for `sdf_transform()` and `ml_transform()` families of methods; the former should take a `tbl_spark` as the first argument while the latter should take a model object as the first argument.
+- Input and output column names are no longer required to construct pipeline objects to be consistent with Spark (#1513).
+
+### Data
+
+- Implemented support for `DBI::db_explain()` (#1623).
+
+- Fixed for `timestamp` fields when using `copy_to()` (#1312, @yutannihilation).
+
+- Added support to read and write ORC files using `spark_read_orc()` and
+  `spark_write_orc()` (#1548).
+  
+### Livy
+
+- Fixed `must share the same src` error for `sdf_broadcast()` and other 
+  functions when using Livy connections.
+
+- Added support for logging `sparklyr` server events and logging sparklyr
+  invokes as comments in the Livy UI.
+
+- Added support to open the Livy UI from the connections viewer while
+  using RStudio.
+
+- Improve performance in Livy for long execution queries, fixed
+  `livy.session.command.timeout` and support for 
+  `livy.session.command.interval` to control max polling while waiting
+  for command response (#1538).
+
+- Fixed Livy version with MapR distributions.
+
+- Removed `install` column from `livy_available_versions()`.
+
+### Distributed R
+
+- Added `name` parameter to `spark_apply()` to optionally name resulting
+  table.
+
+- Fix to `spark_apply()` to retain column types when NAs are present (#1665).
+
+- `spark_apply()` now supports `rlang` anonymous functions. For example,
+  `sdf_len(sc, 3) %>% spark_apply(~.x+1)`.
+
+- Breaking Change: `spark_apply()` no longer defaults to the input
+  column names when the `columns` parameter is nos specified.
+
+- Support for reading column names from the R data frame
+  returned by `spark_apply()`.
+
+- Fix to support retrieving empty data frames in grouped
+  `spark_apply()` operations (#1505).
+
+- Added support for `sparklyr.apply.packages` to configure default
+  behavior for `spark_apply()` parameters (#1530).
+
+- Added support for `spark.r.libpaths` to configure package library in
+  `spark_apply()` (#1530).
+
+### Connections
+
+- Default to Spark 2.3.1 for installation and local connections (#1680).
+
+- `ml_load()` no longer keeps extraneous table views which was cluttering up the RStudio Connections pane (@randomgambit, #1549).
+
+- Avoid preparing windows environment in non-local connections.
+
+### Extensions
+
+- The `ensure_*` family of functions is deprecated in favor of [forge](https://github.com/rstudio/forge) which doesn't use NSE and provides more informative errors messages for debugging (#1514).
+
+- Support for `sparklyr.invoke.trace` and `sparklyr.invoke.trace.callstack` configuration
+  options to trace all `invoke()` calls.
+
+- Support to invoke methods with `char` types using single character strings (@lawremi, #1395).
+
+### Serialization
+
+- Fixed collection of `Date` types to support correct local JVM timezone to UTC ().
+
+### Documentation
+
+- Many new examples for `ft_binarizer()`, `ft_bucketizer()`, `ft_min_max_scaler`, `ft_max_abs_scaler()`, `ft_standard_scaler()`, `ml_kmeans()`, `ml_pca()`, `ml_bisecting_kmeans()`, `ml_gaussian_mixture()`, `ml_naive_bayes()`, `ml_decision_tree()`, `ml_random_forest()`, `ml_multilayer_perceptron_classifier()`, `ml_linear_regression()`, `ml_logistic_regression()`, `ml_gradient_boosted_trees()`, `ml_generalized_linear_regression()`, `ml_cross_validator()`, `ml_evaluator()`, `ml_clustering_evaluator()`, `ml_corr()`, `ml_chisquare_test()` and `sdf_pivot()` (@samuelmacedo83).
+
+### Broom
+  
+- Implemented `tidy()`, `augment()`, and `glance()` for
+`ml_naive_bayes()`, `ml_logistic_regression()`, `ml_decision_tree()`, `ml_random_forest()`, `ml_gradient_boosted_trees()`, `ml_bisecting_kmeans()`, `ml_kmeans()`and `ml_gaussian_mixture()` models (@samuelmacedo83)
+
+### Configuration
+
+- Deprecated configuration option `sparklyr.dplyr.compute.nocache`.
+
+- Added `spark_config_settings()` to list all `sparklyr` configuration settings and
+  describe them, cleaned all settings and grouped by area while maintaining support
+  for previous settings.
+
+- Static SQL configuration properties are now respected for Spark 2.3, and `spark.sql.catalogImplementation` defaults to `hive` to maintain Hive support (#1496, #415).
+
+- `spark_config()` values can now also be specified as `options()`.
+
+- Support for functions as values in entries to `spark_config()` to enable advanced
+  configuration workflows.
+
+# Sparklyr 0.8.4
+
+- Added support for `spark_session_config()` to modify spark session settings.
+
+- Added support for `sdf_debug_string()` to print execution plan for a Spark DataFrame.
+
+- Fixed DESCRIPTION file to include test packages as requested by CRAN.
+
+- Support for `sparklyr.spark-submit` as `config` entry to allow customizing the `spark-submit`
+  command.
+
+- Changed `spark_connect()` to give precedence to the `version` parameter over `SPARK_HOME_VERSION` and
+  other automatic version detection mechanisms, improved automatic version detection in Spark 2.X.
+  
+- Fixed `sdf_bind_rows()` with `dplyr 0.7.5` and prepend id column instead of appending it to match
+  behavior.
+
+- `broom::tidy()` for linear regression and generalized linear regression models now give correct results (#1501).
+
+# Sparklyr 0.8.3
+
+- Support for Spark 2.3 in local windows clusters (#1473).
+
+# Sparklyr 0.8.2
+
+- Support for resource managers using `https` in `yarn-cluster` mode (#1459).
+
+- Fixed regression for connections using Livy and Spark 1.6.X.
+
+# Sparklyr 0.8.1
+
+- Fixed regression for connections using `mode` with `databricks`.
+
+# Sparklyr 0.8.0
+
+### Spark ML
+
+- Added `ml_validation_metrics()` to extract validation metrics from cross validator and train split validator models.
+
+- `ml_transform()` now also takes a list of transformers, e.g. the result of `ml_stages()` on a `PipelineModel` (#1444).
+
+- Added `collect_sub_models` parameter to `ml_cross_validator()` and `ml_train_validation_split()` and helper function `ml_sub_models()` to allow inspecting models trained for each fold/parameter set (#1362).
+
+- Added `parallelism` parameter to `ml_cross_validator()` and `ml_train_validation_split()` to allow tuning in parallel (#1446).
+
+- Added support for `feature_subset_strategy` parameter in GBT algorithms (#1445).
+
+- Added `string_order_type` to `ft_string_indexer()` to allow control over how strings are indexed (#1443).
+
+- Added `ft_string_indexer_model()` constructor for the string indexer transformer (#1442).
+
+- Added `ml_feature_importances()` for extracing feature importances from tree-based models (#1436). `ml_tree_feature_importance()` is maintained as an alias.
+
+- Added `ml_vocabulary()` to extract vocabulary from count vectorizer model and `ml_topics_matrix()` to extract matrix from LDA model.
+
+- `ml_tree_feature_importance()` now works properly with decision tree classification models (#1401).
+
+- Added `ml_corr()` for calculating correlation matrices and `ml_chisquare_test()` for performing chi-square hypothesis testing (#1247).
+
+- `ml_save()` outputs message when model is successfully saved (#1348).
+
+- `ml_` routines no longer capture the calling expression (#1393).
+
+- Added support for `offset` argument in `ml_generalized_linear_regression()` (#1396).
+
+- Fixed regression blocking use of response-features syntax in some `ml_`functions (#1302).
+
+- Added support for Huber loss for linear regression (#1335).
+
+- `ft_bucketizer()` and `ft_quantile_discretizer()` now support
+  multiple input columns (#1338, #1339).
+  
+- Added `ft_feature_hasher()` (#1336).
+
+- Added `ml_clustering_evaluator()` (#1333).
 
 - `ml_default_stop_words()` now returns English stop words by default (#1280).
 
 - Support the `sdf_predict(ml_transformer, dataset)` signature with a deprecation warning. Also added a deprecation warning to the usage of `sdf_predict(ml_model, dataset)`. (#1287)
 
-- `sample_frac()` and `sample_n()` now work properly in nontrivial queries (#1299)
+- Fixed regression blocking use of `ml_kmeans()` in Spark 1.6.x.
+
+### Extensions
+
+- `invoke*()` method dispatch now supports `Char` and `Short` parameters. Also, `Long` parameters now allow numeric arguments, but integers are supported for backwards compatibility (#1395).
+
+- `invoke_static()` now supports calling Scala's package objects (#1384).
+
+- `spark_connection` and `spark_jobj` classes are now exported (#1374).
+
+### Distributed R
+
+- Added support for `profile` parameter in `spark_apply()` that collects a
+  profile to measure perpformance that can be rendered using the `profvis`
+  package.
 
 - Added support for `spark_apply()` under Livy connections.
 
-- Fixed regression blocking use of response-features syntax in some `ml_`functions (#1302).
-
 - Fixed file not found error in `spark_apply()` while working under low
   disk space.
-
-- Fixed regression blocking use of `ml_kmeans()` in Spark 1.6.x.
-
-- Fixed regression blocking use of `livy.session.start.timeout` parameter
-  in Livy connections.
 
 - Added support for `sparklyr.apply.options.rscript.before` to run a custom
   command before launching the R worker role.
 
 - Added support for `sparklyr.apply.options.vanilla` to be set to `FALSE`
   to avoid using `--vanilla` while launching R worker role.
+  
+- Fixed serialization issues most commonly hit while using `spark_apply()` with NAs (#1365, #1366).
 
-# Sparklyr 0.7
+- Fixed issue with dates or date-times not roundtripping with `spark_apply() (#1376).
+
+- Fixed data frame provided by `spark_apply()` to not provide characters not factors (#1313).
+
+### Miscellaneous
+
+- Fixed typo in `sparklyr.yarn.cluster.hostaddress.timeot` (#1318).
+
+- Fixed regression blocking use of `livy.session.start.timeout` parameter
+  in Livy connections.
+
+- Added support for Livy 0.4 and Livy 0.5.
+
+- Livy now supports Kerberos authentication.
+
+- Default to Spark 2.3.0 for installation and local connections (#1449).
+
+- `yarn-cluster` now supported by connecting with `master="yarn"` and
+  `config` entry `sparklyr.shell.deploy-mode` set to `cluster` (#1404).
+  
+- `sample_frac()` and `sample_n()` now work properly in nontrivial queries (#1299)
+
+- `sdf_copy_to()` no longer gives a spurious warning when user enters a multiline expression for `x` (#1386).
+
+- `spark_available_versions()` was changed to only return available Spark versions, Hadoop versions
+  can be still retrieved using `hadoop = TRUE`.
+
+- `spark_installed_versions()` was changed to retrieve the full path to the installation folder.
+
+- `cbind()` and `sdf_bind_cols()` don't use NSE internally anymore and no longer output names of mismatched data frames on error (#1363).
+
+# Sparklyr 0.7.0
 
 - Added support for Spark 2.2.1.
 

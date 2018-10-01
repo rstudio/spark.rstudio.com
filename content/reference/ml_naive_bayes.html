@@ -4,9 +4,9 @@ aliases:
   - reference/sparklyr/latest/ml_naive_bayes.html
 ---
 
-    <div class="doc-page">
+    <div>
 
-    <div class="doc-page-index">
+    <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
     
@@ -15,10 +15,12 @@ aliases:
     <li><a href="#details">Details</a></li>
 
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
-    <div class="doc-page-body">
+    <div>
 
     
     <p>Naive Bayes Classifiers. It supports Multinomial NB (see <a href='http://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html'>here</a>) which can handle finitely supported discrete data. For example, by converting documents into TF-IDF vectors, it can be used for document classification. By making every vector a binary (0/1) data, it can also be used as Bernoulli NB (see <a href='http://nlp.stanford.edu/IR-book/html/htmledition/the-bernoulli-model-1.html'>here</a>). The input feature values must be nonnegative.</p>
@@ -28,8 +30,8 @@ aliases:
   <span class='kw'>smoothing</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>thresholds</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>features_col</span> <span class='kw'>=</span> <span class='st'>"features"</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
   <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>, <span class='kw'>probability_col</span> <span class='kw'>=</span> <span class='st'>"probability"</span>,
-  <span class='kw'>raw_prediction_col</span> <span class='kw'>=</span> <span class='st'>"rawPrediction"</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"naive_bayes_"</span>),
-  <span class='no'>...</span>)</code></pre></div>
+  <span class='kw'>raw_prediction_col</span> <span class='kw'>=</span> <span class='st'>"rawPrediction"</span>,
+  <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"naive_bayes_"</span>), <span class='no'>...</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
@@ -96,7 +98,8 @@ and <code>"bernoulli"</code>. (default = <code>multinomial</code>)</p></td>
     
     <h2 id="value">Value</h2>
 
-    <p>The object returned depends on the class of <code>x</code>.</p><ul>
+    <p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_predictor</code> object. The object contains a pointer to
   a Spark <code>Predictor</code> object and can be used to compose
   <code>Pipeline</code> objects.</p></li>
@@ -118,7 +121,7 @@ and <code>"bernoulli"</code>. (default = <code>multinomial</code>)</p></td>
     
     <h2 id="see-also">See also</h2>
 
-    <p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
+    <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-classification-regression.html'>http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for
   more information on the set of supervised learning algorithms.</p>
 <p>Other ml algorithms: <code><a href='ml_aft_survival_regression.html'>ml_aft_survival_regression</a></code>,
   <code><a href='ml_decision_tree.html'>ml_decision_tree_classifier</a></code>,
@@ -130,10 +133,30 @@ and <code>"bernoulli"</code>. (default = <code>multinomial</code>)</p></td>
   <code><a href='ml_logistic_regression.html'>ml_logistic_regression</a></code>,
   <code><a href='ml_multilayer_perceptron_classifier.html'>ml_multilayer_perceptron_classifier</a></code>,
   <code><a href='ml_one_vs_rest.html'>ml_one_vs_rest</a></code>,
-  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p>
+  <code><a href='ml_random_forest.html'>ml_random_forest_classifier</a></code></p></div>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
+<span class='no'>iris_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>iris</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"iris_tbl"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='no'>partitions</span> <span class='kw'>&lt;-</span> <span class='no'>iris_tbl</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='sdf_partition.html'>sdf_partition</a></span>(<span class='kw'>training</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1111</span>)
+
+<span class='no'>iris_training</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>training</span>
+<span class='no'>iris_test</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>test</span>
+
+<span class='no'>nb_model</span> <span class='kw'>&lt;-</span> <span class='no'>iris_training</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>ml_naive_bayes</span>(<span class='no'>Species</span> ~ <span class='no'>.</span>)
+
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf-transform-methods.html'>sdf_predict</a></span>(<span class='no'>iris_test</span>, <span class='no'>nb_model</span>)
+
+<span class='fu'><a href='ml_evaluator.html'>ml_multiclass_classification_evaluator</a></span>(<span class='no'>pred</span>)
+<span class='co'># }</span><div class='input'>
+</div></code></pre></div>
     </div>
 
     </div>
+
 

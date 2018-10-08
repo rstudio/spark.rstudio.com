@@ -132,7 +132,7 @@ pipeline very modular.
 
     ## [1] "SELECT `dep_delay`, `sched_dep_time`, `month`, `day`, `distance`\nFROM (SELECT `year`, CONCAT(\"m\", `month`) AS `month`, CONCAT(\"d\", `day`) AS `day`, `dep_time`, `sched_dep_time`, `dep_delay`, `arr_time`, `sched_arr_time`, `arr_delay`, `carrier`, `flight`, `tailnum`, `origin`, `dest`, `air_time`, `distance`, `hour`, `minute`, `time_hour`\nFROM (SELECT *\nFROM `__THIS__`\nWHERE (NOT(((`dep_delay`) IS NULL)))) `bjbujfpqzq`) `axbwotqnbr`"
 
-### Ceating the Pipeline
+### Creating the Pipeline
 
 The following step will create a 5 stage pipeline:
 

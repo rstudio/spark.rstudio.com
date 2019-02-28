@@ -68,7 +68,7 @@ library(ggplot2)
 sc <- spark_connect(master="local")
 flights <- copy_to(sc, flights, "flights")
 airlines <- copy_to(sc, airlines, "airlines")
-src_tbls(sc)
+dplyr::src_tbls(sc)
 ```
 
     ## [1] "airlines" "flights"

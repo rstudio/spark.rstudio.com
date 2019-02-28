@@ -1,0 +1,122 @@
+---
+title: "Using Apache Arrow"
+output: 
+  html_document:
+    toc_depth: 3
+---
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><a href="https://arrow.apache.org/">Apache Arrow</a> is a cross-language development platform for in-memory data. Arrow is supported starting with <code>sparklyr 1.0.0</code> to improve performance when transferring data between Spark and R. You can find some performance benchmarks under:</p>
+<ul>
+<li><a href="https://blog.rstudio.com/2019/03/04/sparklyr-1-0/">sparklyr 1.0: Arrow, XGBoost, Broom and TFRecords</a>.</li>
+<li><a href="https://arrow.apache.org/blog/2019/01/25/r-spark-improvements/">Speeding up R and Apache Spark using Apache Arrow</a>.</li>
+</ul>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
+<p>Using Arrow from R requires installing:</p>
+<ul>
+<li><strong>The Arrow Runtime</strong>: Provides a cross-language runtime library.</li>
+<li><strong>The Arrow R Package</strong>: Provides support for using Arrow from R through an R package.</li>
+</ul>
+<div id="runtime" class="section level3">
+<h3>Runtime</h3>
+<div id="os-x" class="section level4">
+<h4>OS X</h4>
+<p>Installing from OS X requires <a href="https://brew.sh/">Homebrew</a> and executing from a terminal:</p>
+<pre><code>brew install apache-arrow</code></pre>
+</div>
+<div id="windows" class="section level4">
+<h4>Windows</h4>
+<p>Currently, installing Arrow in Windows requires <a href="https://conda.io/en/latest/">Conda</a> and executing from a terminal:</p>
+<pre><code>conda install arrow-cpp=0.12.* -c conda-forge
+conda install pyarrow=0.12.* -c conda-forge</code></pre>
+</div>
+<div id="linux" class="section level4">
+<h4>Linux</h4>
+<p>Please reference <a href="https://arrow.apache.org/install/">arrow.apache.org/install</a> when installing Arrow for Linux.</p>
+</div>
+</div>
+<div id="package" class="section level3">
+<h3>Package</h3>
+<p>As of this writing, the <code>arrow</code> R package is not yet available in CRAN; however, this package can be installed using the <code>remotes</code> package. First, install <code>remotes</code>:</p>
+<pre class="r"><code>install.packages(&quot;remotes&quot;)</code></pre>
+<p>Then install the R package from github as follows:</p>
+<pre class="r"><code>remotes::install_github(&quot;apache/arrow&quot;, subdir = &quot;r&quot;, ref = &quot;apache-arrow-0.12.0&quot;)</code></pre>
+<p>If you happen to have Arrow 0.11 installed, you will have to install</p>
+<pre class="r"><code>remotes::install_github(&quot;apache/arrow&quot;, subdir = &quot;r&quot;, ref = &quot;dc5df8f&quot;)</code></pre>
+</div>
+</div>
+<div id="use-cases" class="section level2">
+<h2>Use Cases</h2>
+<p>There are three main use cases for <code>arrow</code> in <code>sparklyr</code>:</p>
+<ul>
+<li><strong>Data Copying</strong>: When copying data with <code>copy_to()</code>, Arrow will be used.</li>
+<li><strong>Data Collection</strong>: Also, when collecting either, implicitly by printing datasets or explicitly calling <code>collect</code>.</li>
+<li><strong>R Transformations</strong>: When using <code>spark_apply()</code>, data will be transferred using Arrow when possible.</li>
+</ul>
+<p>To use <code>arrow</code> in <code>sparklyr</code> one simply needs to import this library:</p>
+<pre class="r"><code>library(arrow)</code></pre>
+<pre><code>Attaching package: ‘arrow’
+
+The following object is masked from ‘package:utils’:
+
+    timestamp
+
+The following objects are masked from ‘package:base’:
+
+    array, table</code></pre>
+</div>
+<div id="considerations" class="section level2">
+<h2>Considerations</h2>
+<div id="types" class="section level3">
+<h3>Types</h3>
+<p>Some data types are mapped to slightly different, one can argue more correct, types when using Arrow. For instance, consider collecting 64 bit integers in <code>sparklyr</code>:</p>
+<pre class="r"><code>library(sparklyr)
+
+sc &lt;- spark_connect(master = &quot;local&quot;)
+integer64 &lt;- sdf_len(sc, 2, type = &quot;integer64&quot;)
+integer64</code></pre>
+<pre><code># Source: spark&lt;?&gt; [?? x 1]
+     id
+  &lt;dbl&gt;
+1     1
+2     2</code></pre>
+<p>Notice that <code>sparklyr</code> collects 64 bit integers as <code>double</code>; however, using <code>arrow</code>:</p>
+<pre class="r"><code>library(arrow)
+integer64</code></pre>
+<pre><code># Source: spark&lt;?&gt; [?? x 1]
+  id             
+  &lt;S3: integer64&gt;
+1 1              
+2 2 </code></pre>
+<p>64 bit integers are now being collected as proper 64 bit integer using the <code>bit64</code> package.</p>
+</div>
+<div id="fallback" class="section level3">
+<h3>Fallback</h3>
+<p>The Arrow R package supports many data types; however, in cases where a type is unsupported, <code>sparklyr</code> will fallback to not using arrow and print a warning.</p>
+<pre class="r"><code>library(sparklyr.nested)
+library(sparklyr)
+library(dplyr)
+library(arrow)
+
+sc &lt;- spark_connect(master = &quot;local&quot;)
+cars &lt;- copy_to(sc, mtcars)
+
+sdf_nest(cars, hp) %&gt;%
+  group_by(cyl) %&gt;%
+  summarize(data = collect_list(data))</code></pre>
+<pre><code># Source: spark&lt;?&gt; [?? x 2]
+    cyl data       
+  &lt;dbl&gt; &lt;list&gt;     
+1     6 &lt;list [7]&gt; 
+2     4 &lt;list [11]&gt;
+3     8 &lt;list [14]&gt;
+Warning message:
+In arrow_enabled_object.spark_jobj(sdf) :
+  Arrow disabled due to columns: data</code></pre>
+</div>
+</div>

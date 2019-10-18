@@ -1,3 +1,7 @@
 # Instructions
 
-Run: `source("R/build_site.R")`
+Run: 
+```r
+  source("R/build_site.R")
+  update_site()
+```

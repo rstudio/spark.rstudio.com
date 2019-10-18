@@ -9,20 +9,15 @@ aliases:
     <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
-    
     <li><a href="#value">Value</a></li>
-
     <li><a href="#details">Details</a></li>
-    
     <li><a href="#examples">Examples</a></li>
     </ul>
     </div>
 
     <div>
 
-    
     <p>A set of functions to calculate performance metrics for prediction models. Also see the Spark ML Documentation <a href='https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package'>https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package</a></p>
-    
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ml_binary_classification_evaluator</span>(<span class='no'>x</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
   <span class='kw'>raw_prediction_col</span> <span class='kw'>=</span> <span class='st'>"rawPrediction"</span>, <span class='kw'>metric_name</span> <span class='kw'>=</span> <span class='st'>"areaUnderROC"</span>,
@@ -41,7 +36,7 @@ aliases:
 <span class='fu'>ml_regression_evaluator</span>(<span class='no'>x</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"label"</span>,
   <span class='kw'>prediction_col</span> <span class='kw'>=</span> <span class='st'>"prediction"</span>, <span class='kw'>metric_name</span> <span class='kw'>=</span> <span class='st'>"rmse"</span>,
   <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"regression_evaluator_"</span>), <span class='no'>...</span>)</code></pre></div>
-    
+
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
 
@@ -81,11 +76,10 @@ label or value NOT the scored probability. Column should be of type
 <code>Double</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 id="value">Value</h2>
 
     <p>The calculated performance metric</p>
-    
     <h2 id="details">Details</h2>
 
     <p>The following metrics are supported</p><ul>
@@ -94,17 +88,17 @@ label or value NOT the scored probability. Column should be of type
 <li><p>Regression: <code>rmse</code> (root mean squared error, default),
    <code>mse</code> (mean squared error), <code>r2</code>, or <code>mae</code> (mean absolute error.)</p></li>
 </ul>
-    <p><code>ml_binary_classification_eval()</code> is an alias for <code>ml_binary_classification_evaluator()</code> for backwards compatibility.</p>
+
+<p><code>ml_binary_classification_eval()</code> is an alias for <code>ml_binary_classification_evaluator()</code> for backwards compatibility.</p>
 <p><code>ml_classification_eval()</code> is an alias for <code>ml_multiclass_classification_evaluator()</code> for backwards compatibility.</p>
-    
 
     <h2 id="examples">Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='co'># NOT RUN {</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local"</span>)
 <span class='no'>mtcars_tbl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>mtcars</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"mtcars_tbl"</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='no'>partitions</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_tbl</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='sdf_partition.html'>sdf_partition</a></span>(<span class='kw'>training</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1111</span>)
+  <span class='fu'><a href='sdf_random_split.html'>sdf_random_split</a></span>(<span class='kw'>training</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1111</span>)
 
 <span class='no'>mtcars_training</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>training</span>
 <span class='no'>mtcars_test</span> <span class='kw'>&lt;-</span> <span class='no'>partitions</span>$<span class='no'>test</span>
@@ -113,7 +107,7 @@ label or value NOT the scored probability. Column should be of type
 <span class='no'>rf_model</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_training</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='ml_random_forest.html'>ml_random_forest</a></span>(<span class='no'>cyl</span> ~ <span class='no'>.</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"classification"</span>)
 
-<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf-transform-methods.html'>sdf_predict</a></span>(<span class='no'>mtcars_test</span>, <span class='no'>rf_model</span>)
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ml-transform-methods.html'>ml_predict</a></span>(<span class='no'>rf_model</span>, <span class='no'>mtcars_test</span>)
 
 <span class='fu'>ml_multiclass_classification_evaluator</span>(<span class='no'>pred</span>)
 
@@ -121,7 +115,7 @@ label or value NOT the scored probability. Column should be of type
 <span class='no'>rf_model</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_training</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='ml_random_forest.html'>ml_random_forest</a></span>(<span class='no'>cyl</span> ~ <span class='no'>.</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"regression"</span>)
 
-<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf-transform-methods.html'>sdf_predict</a></span>(<span class='no'>mtcars_test</span>, <span class='no'>rf_model</span>)
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ml-transform-methods.html'>ml_predict</a></span>(<span class='no'>rf_model</span>, <span class='no'>mtcars_test</span>)
 
 <span class='fu'>ml_regression_evaluator</span>(<span class='no'>pred</span>, <span class='kw'>label_col</span> <span class='kw'>=</span> <span class='st'>"cyl"</span>)
 
@@ -129,13 +123,15 @@ label or value NOT the scored probability. Column should be of type
 <span class='no'>rf_model</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars_training</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='ml_random_forest.html'>ml_random_forest</a></span>(<span class='no'>am</span> ~ <span class='no'>gear</span> + <span class='no'>carb</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"classification"</span>)
 
-<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf-transform-methods.html'>sdf_predict</a></span>(<span class='no'>mtcars_test</span>, <span class='no'>rf_model</span>)
+<span class='no'>pred</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ml-transform-methods.html'>ml_predict</a></span>(<span class='no'>rf_model</span>, <span class='no'>mtcars_test</span>)
 
 <span class='fu'>ml_binary_classification_evaluator</span>(<span class='no'>pred</span>)
-<span class='co'># }</span><div class='input'>
-</div></code></pre></div>
+}</div></code></pre></div>
+
     </div>
 
     </div>
+
+
 
 

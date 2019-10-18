@@ -9,32 +9,27 @@ aliases:
     <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
-    
     <li><a href="#value">Value</a></li>
-
     <li><a href="#details">Details</a></li>
-
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    </ul>
     </div>
 
     <div>
 
-    
     <p><code>ft_quantile_discretizer</code> takes a column with continuous features and outputs
   a column with binned categorical features. The number of bins can be
   set using the <code>num_buckets</code> parameter. It is possible that the number
   of buckets used will be smaller than this value, for example, if there
   are too few distinct values of the input to create enough distinct
   quantiles.</p>
-    
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_quantile_discretizer</span>(<span class='no'>x</span>, <span class='kw'>input_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>num_buckets</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>input_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_cols</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>num_buckets_array</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>handle_invalid</span> <span class='kw'>=</span> <span class='st'>"error"</span>,
-  <span class='kw'>relative_error</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"quantile_discretizer_"</span>), <span class='no'>...</span>)</code></pre></div>
-    
+  <span class='kw'>relative_error</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"quantile_discretizer_"</span>),
+  <span class='no'>...</span>)</code></pre></div>
+
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
 
@@ -87,11 +82,6 @@ org.apache.spark.sql.DataFrameStatFunctions.approxQuantile
 for description). Must be in the range [0, 1]. default: 0.001</p></td>
     </tr>
     <tr>
-      <td>dataset</td>
-      <td><p>(Optional) A <code>tbl_spark</code>. If provided, eagerly fit the (estimator)
-feature "transformer" against <code>dataset</code>. See details.</p></td>
-    </tr>
-    <tr>
       <td>uid</td>
       <td><p>A character string used to uniquely identify the feature transformer.</p></td>
     </tr>
@@ -100,7 +90,7 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
       <td><p>Optional arguments; currently unused.</p></td>
     </tr>
     </table>
-    
+
     <h2 id="value">Value</h2>
 
     <p>The object returned depends on the class of <code>x</code>.</p>
@@ -115,7 +105,6 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   immediately applied to the input <code>tbl_spark</code>, returning a <code>tbl_spark</code></p></li>
 </ul>
 
-    
     <h2 id="details">Details</h2>
 
     <p>NaN handling: null and NaN values will be ignored from the column
@@ -134,16 +123,8 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   bounds will be -Infinity and +Infinity, covering all real values.</p>
 <p>Note that the result may be different every time you run it, since the sample
   strategy behind it is non-deterministic.</p>
-<p>When <code>dataset</code> is provided for an estimator transformer, the function
-  internally calls <code><a href='ml-transform-methods.html'>ml_fit()</a></code> against <code>dataset</code>. Hence, the methods for
-  <code>spark_connection</code> and <code>ml_pipeline</code> will then return a <code>ml_transformer</code>
-  and a <code>ml_pipeline</code> with a <code>ml_transformer</code> appended, respectively. When
-  <code>x</code> is a <code>tbl_spark</code>, the estimator will be fit against <code>dataset</code> before
-  transforming <code>x</code>.</p>
-<p>When <code>dataset</code> is not specified, the constructor returns a <code>ml_estimator</code>, and,
-  in the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code> then
-  to obtain a transformer, which is then immediately used to transform <code>x</code>.</p>
-    
+<p>In the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code>
+  to obtain a transformer, which is then immediately used to transform <code>x</code>, returning a <code>tbl_spark</code>.</p>
     <h2 id="see-also">See also</h2>
 
     <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
@@ -163,6 +144,7 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   <code><a href='ft_max_abs_scaler.html'>ft_max_abs_scaler</a></code>,
   <code><a href='ft_min_max_scaler.html'>ft_min_max_scaler</a></code>, <code><a href='ft_ngram.html'>ft_ngram</a></code>,
   <code><a href='ft_normalizer.html'>ft_normalizer</a></code>,
+  <code><a href='ft_one_hot_encoder_estimator.html'>ft_one_hot_encoder_estimator</a></code>,
   <code><a href='ft_one_hot_encoder.html'>ft_one_hot_encoder</a></code>, <code><a href='ft_pca.html'>ft_pca</a></code>,
   <code><a href='ft_polynomial_expansion.html'>ft_polynomial_expansion</a></code>,
   <code><a href='ft_r_formula.html'>ft_r_formula</a></code>,
@@ -175,10 +157,12 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
   <code><a href='ft_vector_indexer.html'>ft_vector_indexer</a></code>,
   <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p></div>
-    
+
 
     </div>
 
     </div>
+
+
 
 

@@ -9,25 +9,21 @@ aliases:
     <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
-    
     <li><a href="#details">Details</a></li>
-
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    </ul>
     </div>
 
     <div>
 
-    
     <p>Read a tabular data file into a Spark DataFrame.</p>
-    
 
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_read_csv</span>(<span class='no'>sc</span>, <span class='no'>name</span>, <span class='no'>path</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>infer_schema</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>delimiter</span> <span class='kw'>=</span> <span class='st'>","</span>, <span class='kw'>quote</span> <span class='kw'>=</span> <span class='st'>"\""</span>,
-  <span class='kw'>escape</span> <span class='kw'>=</span> <span class='st'>"\\"</span>, <span class='kw'>charset</span> <span class='kw'>=</span> <span class='st'>"UTF-8"</span>, <span class='kw'>null_value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>repartition</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</code></pre></div>
-    
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_read_csv</span>(<span class='no'>sc</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>infer_schema</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>columns</span>), <span class='kw'>delimiter</span> <span class='kw'>=</span> <span class='st'>","</span>,
+  <span class='kw'>quote</span> <span class='kw'>=</span> <span class='st'>"\""</span>, <span class='kw'>escape</span> <span class='kw'>=</span> <span class='st'>"\\"</span>, <span class='kw'>charset</span> <span class='kw'>=</span> <span class='st'>"UTF-8"</span>,
+  <span class='kw'>null_value</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>options</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>repartition</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>memory</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</code></pre></div>
+
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
 
@@ -61,7 +57,7 @@ Defaults to <code>TRUE</code>.</p></td>
     <tr>
       <td>infer_schema</td>
       <td><p>Boolean; should column types be automatically inferred?
-Requires one extra pass over the data. Defaults to <code>TRUE</code>.</p></td>
+Requires one extra pass over the data. Defaults to <code><a href='https://rdrr.io/r/base/NULL.html'>is.null(columns)</a></code>.</p></td>
     </tr>
     <tr>
       <td>delimiter</td>
@@ -107,7 +103,7 @@ already exists?</p></td>
       <td><p>Optional arguments; currently unused.</p></td>
     </tr>
     </table>
-    
+
     <h2 id="details">Details</h2>
 
     <p>You can read data from HDFS (<code>hdfs://</code>), S3 (<code>s3a://</code>),
@@ -122,7 +118,6 @@ For instructions on how to configure <code>s3n://</code> check the hadoop docume
 <a href='https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authentication_properties'>s3n authentication properties</a></p>
 <p>When <code>header</code> is <code>FALSE</code>, the column names are generated with a
 <code>V</code> prefix; e.g. <code>V1, V2, ...</code>.</p>
-    
     <h2 id="see-also">See also</h2>
 
     <div class='dont-index'><p>Other Spark serialization routines: <code><a href='spark_load_table.html'>spark_load_table</a></code>,
@@ -143,10 +138,12 @@ For instructions on how to configure <code>s3n://</code> check the hadoop docume
   <code><a href='spark_write_source.html'>spark_write_source</a></code>,
   <code><a href='spark_write_table.html'>spark_write_table</a></code>,
   <code><a href='spark_write_text.html'>spark_write_text</a></code></p></div>
-    
+
 
     </div>
 
     </div>
+
+
 
 

@@ -9,27 +9,22 @@ aliases:
     <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
-    
     <li><a href="#value">Value</a></li>
-
     <li><a href="#details">Details</a></li>
-
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    </ul>
     </div>
 
     <div>
 
-    
     <p>Extracts a vocabulary from document collections.</p>
-    
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ft_count_vectorizer</span>(<span class='no'>x</span>, <span class='kw'>input_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output_col</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min_df</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>min_tf</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>vocab_size</span> <span class='kw'>=</span> <span class='fl'>2</span>^<span class='fl'>18</span>,
-  <span class='kw'>dataset</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"count_vectorizer_"</span>), <span class='no'>...</span>)
+  <span class='kw'>uid</span> <span class='kw'>=</span> <span class='fu'><a href='random_string.html'>random_string</a></span>(<span class='st'>"count_vectorizer_"</span>), <span class='no'>...</span>)
 
 <span class='fu'>ml_vocabulary</span>(<span class='no'>model</span>)</code></pre></div>
-    
+
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
 
@@ -81,11 +76,6 @@ the document's token count). Default: 1.</p></td>
 Default: <code>2^18</code>.</p></td>
     </tr>
     <tr>
-      <td>dataset</td>
-      <td><p>(Optional) A <code>tbl_spark</code>. If provided, eagerly fit the (estimator)
-feature "transformer" against <code>dataset</code>. See details.</p></td>
-    </tr>
-    <tr>
       <td>uid</td>
       <td><p>A character string used to uniquely identify the feature transformer.</p></td>
     </tr>
@@ -98,7 +88,7 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
       <td><p>A <code>ml_count_vectorizer_model</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 id="value">Value</h2>
 
     <p>The object returned depends on the class of <code>x</code>.</p>
@@ -114,19 +104,10 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
 </ul>
 
 <p><code>ml_vocabulary()</code> returns a vector of vocabulary built.</p>
-    
     <h2 id="details">Details</h2>
 
-    <p>When <code>dataset</code> is provided for an estimator transformer, the function
-  internally calls <code><a href='ml-transform-methods.html'>ml_fit()</a></code> against <code>dataset</code>. Hence, the methods for
-  <code>spark_connection</code> and <code>ml_pipeline</code> will then return a <code>ml_transformer</code>
-  and a <code>ml_pipeline</code> with a <code>ml_transformer</code> appended, respectively. When
-  <code>x</code> is a <code>tbl_spark</code>, the estimator will be fit against <code>dataset</code> before
-  transforming <code>x</code>.</p>
-<p>When <code>dataset</code> is not specified, the constructor returns a <code>ml_estimator</code>, and,
-  in the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code> then
-  to obtain a transformer, which is then immediately used to transform <code>x</code>.</p>
-    
+    <p>In the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code>
+  to obtain a transformer, which is then immediately used to transform <code>x</code>, returning a <code>tbl_spark</code>.</p>
     <h2 id="see-also">See also</h2>
 
     <div class='dont-index'><p>See <a href='http://spark.apache.org/docs/latest/ml-features.html'>http://spark.apache.org/docs/latest/ml-features.html</a> for
@@ -144,6 +125,7 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   <code><a href='ft_max_abs_scaler.html'>ft_max_abs_scaler</a></code>,
   <code><a href='ft_min_max_scaler.html'>ft_min_max_scaler</a></code>, <code><a href='ft_ngram.html'>ft_ngram</a></code>,
   <code><a href='ft_normalizer.html'>ft_normalizer</a></code>,
+  <code><a href='ft_one_hot_encoder_estimator.html'>ft_one_hot_encoder_estimator</a></code>,
   <code><a href='ft_one_hot_encoder.html'>ft_one_hot_encoder</a></code>, <code><a href='ft_pca.html'>ft_pca</a></code>,
   <code><a href='ft_polynomial_expansion.html'>ft_polynomial_expansion</a></code>,
   <code><a href='ft_quantile_discretizer.html'>ft_quantile_discretizer</a></code>,
@@ -157,10 +139,12 @@ feature "transformer" against <code>dataset</code>. See details.</p></td>
   <code><a href='ft_vector_assembler.html'>ft_vector_assembler</a></code>,
   <code><a href='ft_vector_indexer.html'>ft_vector_indexer</a></code>,
   <code><a href='ft_vector_slicer.html'>ft_vector_slicer</a></code>, <code><a href='ft_word2vec.html'>ft_word2vec</a></code></p></div>
-    
+
 
     </div>
 
     </div>
+
+
 
 

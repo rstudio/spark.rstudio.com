@@ -1,0 +1,125 @@
+---
+title: "Using Spark with AWS S3 buckets"
+output: 
+  html_document:
+    toc_depth: 3
+---
+
+
+
+<div id="aws-access-keys" class="section level2">
+<h2>AWS Access Keys</h2>
+<p>AWS Access Keys are needed to access S3 data. To learn how to setup a new keys, please review the AWS documentation: <a href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html" class="uri">http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html</a> .We then pass the keys to R via Environment Variables:</p>
+<pre class="r"><code>Sys.setenv(AWS_ACCESS_KEY_ID=&quot;[Your access key]&quot;)
+Sys.setenv(AWS_SECRET_ACCESS_KEY=&quot;[Your secret access key]&quot;)</code></pre>
+</div>
+<div id="connecting-to-spark" class="section level2">
+<h2>Connecting to Spark</h2>
+<p>There are four key settings needed to connect to Spark and use S3:</p>
+<ul>
+<li>A Hadoop-AWS package</li>
+<li>Executor memory (key but not critical)</li>
+<li>The master URL</li>
+<li>The Spark Home</li>
+</ul>
+<p>To connect to Spark, we first need to initialize a variable with the contents of sparklyr default config (<code>spark_config</code>) which we will then customize for our needs</p>
+<pre class="r"><code>library(sparklyr)
+
+conf &lt;- spark_config()</code></pre>
+<div id="hadoop-aws-package" class="section level3">
+<h3>Hadoop-AWS package:</h3>
+<p>A Spark connection can be enhanced by using packages, please note that these are not R packages. For example, there are packages that tells Spark how to read CSV files, Hadoop or Hadoop in AWS.</p>
+<p>In order to read S3 buckets, our Spark connection will need a package called <code>hadoop-aws</code>. If needed, multiple packages can be used. We experimented with many combinations of packages, and determined that for reading data in S3 we only need the one. The version we used, 2.7.3, refers to the latest Hadoop version, so as this article ages, please make sure to check this site to ensure that you are using the latest version: <a href="https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws" class="uri">https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws</a></p>
+<pre class="r"><code>conf$sparklyr.defaultPackages &lt;- &quot;org.apache.hadoop:hadoop-aws:2.7.3&quot;</code></pre>
+</div>
+<div id="executor-memory" class="section level3">
+<h3>Executor Memory</h3>
+<p>As mentioned above this setting <em>key but not critical</em>. There are two points worth highlighting about it is:</p>
+<ul>
+<li><p>The only performance related setting in a Spark Stand Alone cluster that can be tweaked, and in most cases because Spark defaults to a fraction of what is available, we then need to increase it by manually passing a value to that setting.</p></li>
+<li><p>If more than the available RAM is requested, then Spark will set the Cores to 0, thus rendering the session unusable.</p></li>
+</ul>
+<pre class="r"><code>conf$spark.executor.memory &lt;- &quot;14g&quot;</code></pre>
+</div>
+<div id="master-url-and-spark-home" class="section level3">
+<h3>Master URL and Spark home</h3>
+<p>There are three important points to mention when executing the spark_connect command:</p>
+<ol style="list-style-type: decimal">
+<li>The master will be the Spark Master’s URL. To find the URL, please see the Spark Cluster section.</li>
+<li>Point the Spark Home to the location where Spark was installed in this node</li>
+<li>Make sure to the conf variable as the value for the config argument</li>
+</ol>
+<pre class="r"><code>sc &lt;- spark_connect(master = &quot;spark://ip-172-30-1-5.us-west-2.compute.internal:7077&quot;, 
+                    spark_home = &quot;/home/ubuntu/spark-2.1.0-bin-hadoop2.7/&quot;,
+                    config =  conf)</code></pre>
+</div>
+</div>
+<div id="data-importwrangle-approach" class="section level2">
+<h2>Data Import/Wrangle approach</h2>
+<p>We experimented with multiple approaches. Most of the factors for settling on a recommended approach were made based on the speed of each step. The premise is that we would rather wait longer during Data Import, if it meant that we can much faster Register and Cache our data subsets during Data Wrangling, especially since we would expect to end up with many subsets as we explore and model.The selected combination was the second slowest during the Import stage, but the fastest when caching a subset, by a lot.</p>
+<p>In our tests, it took 72 seconds to read and cache the 29 columns of the 41 million rows of data, the slowest was 77 seconds. But when it comes to registering and caching a considerably sizable subset of 3 columns and almost all of the 41 million records, this approach was 17X faster than the second fastest approach. It took 1/3 of a second to register and cache the subset, the second fastest was 5 seconds.</p>
+<p>To implement this approach, we need to set three arguments in the <code>spark_csv_read()</code> step:</p>
+<ul>
+<li><code>memory</code></li>
+<li><code>infer_schema</code></li>
+<li><code>columns</code></li>
+</ul>
+<p>Again, this is a recommended approach. The columns argument is needed only if infer_schema is set to <code>FALSE.</code> When memory is set to <code>TRUE</code> it makes Spark load the entire dataset into memory, and setting infer_schema to FALSE prevents Spark from trying to figure out what the schema of the files are. By trying different combinations the memory and infer_schema arguments you may be able to find an approach that may better fits your needs.</p>
+<div id="reading-the-schema" class="section level3">
+<h3>Reading the schema</h3>
+<p>Surprisingly, another critical detail that can easily be overlooked is choosing the right <strong>s3 URI scheme</strong>. There are two options: <strong>s3n</strong> and <strong>s3a</strong>. In most examples and tutorials I found, there was no reason give of why or when to use which one. The article the finally clarified it was this one: <a href="https://wiki.apache.org/hadoop/AmazonS3" class="uri">https://wiki.apache.org/hadoop/AmazonS3</a></p>
+<p>The gist of it is that <strong>s3a</strong> is the recommended one going forward, especially for Hadoop versions 2.7 and above. This means that if we copy from older examples that used <em>Hadoop 2.6 we would more likely also used s3n</em> thus making data import much, much slower.</p>
+</div>
+</div>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>After the long introduction in the previous section, there is only one point to add about the following code chunk. If there are any <code>NA</code> values in numeric fields, then define the column as character and then convert it on later subsets using dplyr. The data import will fail if it finds any NA values on numeric fields. This is a small trade off in this approach because the next fastest one does not have this issue but is 17X slower at caching subsets.</p>
+<pre class="r"><code>flights &lt;- spark_read_csv(sc, &quot;flights_spark&quot;, 
+                          path =  &quot;s3a://flights-data/full&quot;, 
+                          memory = TRUE, 
+                          columns = list(
+                            Year = &quot;character&quot;,
+                            Month = &quot;character&quot;,
+                            DayofMonth = &quot;character&quot;,
+                            DayOfWeek = &quot;character&quot;,
+                            DepTime = &quot;character&quot;,
+                            CRSDepTime = &quot;character&quot;,
+                            ArrTime = &quot;character&quot;,
+                            CRSArrTime = &quot;character&quot;,
+                            UniqueCarrier = &quot;character&quot;,
+                            FlightNum = &quot;character&quot;,
+                            TailNum = &quot;character&quot;,
+                            ActualElapsedTime = &quot;character&quot;,
+                            CRSElapsedTime = &quot;character&quot;,
+                            AirTime = &quot;character&quot;,
+                            ArrDelay = &quot;character&quot;,
+                            DepDelay = &quot;character&quot;,
+                            Origin = &quot;character&quot;,
+                            Dest = &quot;character&quot;,
+                            Distance = &quot;character&quot;,
+                            TaxiIn = &quot;character&quot;,
+                            TaxiOut = &quot;character&quot;,
+                            Cancelled = &quot;character&quot;,
+                            CancellationCode = &quot;character&quot;,
+                            Diverted = &quot;character&quot;,
+                            CarrierDelay = &quot;character&quot;,
+                            WeatherDelay = &quot;character&quot;,
+                            NASDelay = &quot;character&quot;,
+                            SecurityDelay = &quot;character&quot;,
+                            LateAircraftDelay = &quot;character&quot;), 
+                         infer_schema = FALSE)</code></pre>
+</div>
+<div id="data-wrangle" class="section level2">
+<h2>Data Wrangle</h2>
+<p>There are a few points we need to highlight about the following simple dyplr code:</p>
+<p>Because there were NAs in the original fields, we have to mutate them to a number. Try coercing any variable as integer instead of numeric, this will save a lot of space when cached to Spark memory. The sdf_register command can be piped at the end of the code. After running the code, a new table will appear in the RStudio IDE’s Spark tab</p>
+<pre class="r"><code>tidy_flights &lt;- tbl(sc, &quot;flights_spark&quot;) %&gt;%
+  mutate(ArrDelay = as.integer(ArrDelay),
+         DepDelay = as.integer(DepDelay),
+         Distance = as.integer(Distance)) %&gt;%
+  filter(!is.na(ArrDelay)) %&gt;%
+  select(DepDelay, ArrDelay, Distance) %&gt;%
+  sdf_register(&quot;tidy_spark&quot;)</code></pre>
+<p>After we use <code>tbl_cache()</code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
+<pre class="r"><code>tbl_cache(sc, &quot;tidy_spark&quot;)</code></pre>
+</div>

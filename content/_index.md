@@ -1,6 +1,27 @@
 sparklyr: R interface for Apache Spark
 ================
 
+<table class="article-list">
+  <tr style="background-color: #F0F5FA;">
+    <td style="width: 100px; padding: 10px 10px 10px 10px;">
+      <img src="thumbs/mastering-spark-with-r.png" >
+    </td>
+    <td>
+      <a href="https://therinspark.com/">
+        <div style="height:100%;width:100%; font-size:20px; font-weight:400;">
+        Announcement
+        </div>
+        <div style="height:100%;width:100%; font-size:16px; font-weight:300;">
+          The new book is now available on-line and in print! 
+        </div>
+        <div style="height:100%;width:100%; font-size:16px; font-weight:300;">
+          Visit: <i>therinspark.com</i> for more info
+        </div>        
+      </a>
+    </td>
+  </tr>
+</table>
+
 <img src="tools/readme/sparklyr-v2.png" width=450 height=300 align="right"/>
 
 [![Build Status](https://travis-ci.org/rstudio/sparklyr.svg?branch=master)](https://travis-ci.org/rstudio/sparklyr) [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/sparklyr)](https://cran.r-project.org/package=sparklyr) [![codecov](https://codecov.io/gh/rstudio/sparklyr/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/sparklyr) [![Join the chat at https://gitter.im/rstudio/sparklyr](https://badges.gitter.im/rstudio/sparklyr.svg)](https://gitter.im/rstudio/sparklyr?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

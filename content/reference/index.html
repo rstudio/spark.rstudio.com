@@ -1,20 +1,19 @@
 ---
-title: ""
+title: "Development"
 menu:
   main:
-    name: "Reference"
-    weight: 100
+    name: "Development"
+    parent: "Reference"
 ---
-    <h1 class = "content-header">Function Reference test</h1>
+    <h1 class = "content-header">Function Reference</h1>
 
     <div class="doc-page">
 
     <div class="doc-page-index">
     <ul data-gumshoe>
       <li><a href="#section-spark-operations">Spark Operations</a></li>
-      <li><a href="#section-spark-data">Spark Data</a></li>
+      <li><a href="#section-read-write-data">Read/Write data</a></li>
       <li><a href="#section-spark-tables">Spark Tables</a></li>
-      <li><a href="#section-spark-dataframes">Spark DataFrames</a></li>
       <li><a href="#section-spark-machine-learning">Spark Machine Learning</a></li>
       <li><a href="#section-spark-feature-transformers">Spark Feature Transformers</a></li>
       <li><a href="#section-spark-machine-learning-utilities">Spark Machine Learning Utilities</a></li>
@@ -178,7 +177,7 @@ menu:
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-spark-data" class="hasAnchor"><a href="#section-spark-data" class="anchor"></a>Spark Data</h2>
+            <h2 id="section-read-write-data" class="hasAnchor"><a href="#section-read-write-data" class="anchor"></a>Read/Write data</h2>
             <p class="section-desc"></p>
           </th>
         </tr>
@@ -188,6 +187,13 @@ menu:
               <p><code><a href="spark_read_csv">spark_read_csv()</a></code> </p>
             </td>
             <td><p>Read a CSV file into a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_read_delta">spark_read_delta()</a></code> </p>
+            </td>
+            <td><p>Read from Delta Lake into a Spark DataFrame.</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -202,6 +208,20 @@ menu:
               <p><code><a href="spark_read_json">spark_read_json()</a></code> </p>
             </td>
             <td><p>Read a JSON file into a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_read_libsvm">spark_read_libsvm()</a></code> </p>
+            </td>
+            <td><p>Read libsvm file into a Spark DataFrame.</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_read_orc">spark_read_orc()</a></code> </p>
+            </td>
+            <td><p>Read a ORC file into a Spark DataFrame</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -227,13 +247,6 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="spark_read_orc">spark_read_orc()</a></code> </p>
-            </td>
-            <td><p>Read a ORC file into a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
               <p><code><a href="spark_read_text">spark_read_text()</a></code> </p>
             </td>
             <td><p>Read a Text file into a Spark DataFrame</p></td>
@@ -241,30 +254,16 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="spark_save_table">spark_save_table()</a></code> </p>
-            </td>
-            <td><p>Saves a Spark DataFrame as a Spark table</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="spark_write_orc">spark_write_orc()</a></code> </p>
-            </td>
-            <td><p>Write a Spark DataFrame to a ORC file</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="spark_write_text">spark_write_text()</a></code> </p>
-            </td>
-            <td><p>Write a Spark DataFrame to a Text file</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
               <p><code><a href="spark_write_csv">spark_write_csv()</a></code> </p>
             </td>
             <td><p>Write a Spark DataFrame to a CSV</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_write_delta">spark_write_delta()</a></code> </p>
+            </td>
+            <td><p>Writes a Spark DataFrame into Delta Lake</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -279,6 +278,13 @@ menu:
               <p><code><a href="spark_write_json">spark_write_json()</a></code> </p>
             </td>
             <td><p>Write a Spark DataFrame to a JSON file</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_write_orc">spark_write_orc()</a></code> </p>
+            </td>
+            <td><p>Write a Spark DataFrame to a ORC file</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -301,6 +307,13 @@ menu:
             </td>
             <td><p>Writes a Spark DataFrame into a Spark table</p></td>
           </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="spark_write_text">spark_write_text()</a></code> </p>
+            </td>
+            <td><p>Write a Spark DataFrame to a Text file</p></td>
+          </tr>
       </tbody>
       <tbody>
         <tr>
@@ -312,39 +325,17 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="src_databases">src_databases()</a></code> </p>
+              <p><code><a href="sdf-saveload">sdf_save_table()</a></code> <code><a href="sdf-saveload">sdf_load_table()</a></code> <code><a href="sdf-saveload">sdf_save_parquet()</a></code> <code><a href="sdf-saveload">sdf_load_parquet()</a></code> </p>
             </td>
-            <td><p>Show database list</p></td>
+            <td><p>Save / Load a Spark DataFrame</p></td>
           </tr>
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="tbl_cache">tbl_cache()</a></code> </p>
+              <p><code><a href="sdf-transform-methods">sdf_predict()</a></code> <code><a href="sdf-transform-methods">sdf_transform()</a></code> <code><a href="sdf-transform-methods">sdf_fit()</a></code> <code><a href="sdf-transform-methods">sdf_fit_and_transform()</a></code> </p>
             </td>
-            <td><p>Cache a Spark Table</p></td>
+            <td><p>Spark ML -- Transform, fit, and predict methods (sdf_ interface)</p></td>
           </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="tbl_change_db">tbl_change_db()</a></code> </p>
-            </td>
-            <td><p>Use specific database</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="tbl_uncache">tbl_uncache()</a></code> </p>
-            </td>
-            <td><p>Uncache a Spark Table</p></td>
-          </tr>
-      </tbody>
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-spark-dataframes" class="hasAnchor"><a href="#section-spark-dataframes" class="anchor"></a>Spark DataFrames</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
           <tr>
             <!--  -->
             <td width = "90%">
@@ -383,114 +374,16 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="sdf_copy_to">sdf_copy_to()</a></code> <code><a href="sdf_copy_to">sdf_import()</a></code> </p>
-            </td>
-            <td><p>Copy an Object into Spark</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_len">sdf_len()</a></code> </p>
-            </td>
-            <td><p>Create DataFrame for Length</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_num_partitions">sdf_num_partitions()</a></code> </p>
-            </td>
-            <td><p>Gets number of partitions of a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_random_split">sdf_random_split()</a></code> <code><a href="sdf_random_split">sdf_partition()</a></code> </p>
-            </td>
-            <td><p>Partition a Spark Dataframe</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_pivot">sdf_pivot()</a></code> </p>
-            </td>
-            <td><p>Pivot a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf-transform-methods">sdf_predict()</a></code> <code><a href="sdf-transform-methods">sdf_transform()</a></code> <code><a href="sdf-transform-methods">sdf_fit()</a></code> <code><a href="sdf-transform-methods">sdf_fit_and_transform()</a></code> </p>
-            </td>
-            <td><p>Spark ML -- Transform, fit, and predict methods (sdf_ interface)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_read_column">sdf_read_column()</a></code> </p>
-            </td>
-            <td><p>Read a Column from a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_register">sdf_register()</a></code> </p>
-            </td>
-            <td><p>Register a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_repartition">sdf_repartition()</a></code> </p>
-            </td>
-            <td><p>Repartition a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_residuals">sdf_residuals()</a></code> </p>
-            </td>
-            <td><p>Model Residuals</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_sample">sdf_sample()</a></code> </p>
-            </td>
-            <td><p>Randomly Sample Rows from a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_separate_column">sdf_separate_column()</a></code> </p>
-            </td>
-            <td><p>Separate a Vector Column into Scalar Columns</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_seq">sdf_seq()</a></code> </p>
-            </td>
-            <td><p>Create DataFrame for Range</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_sort">sdf_sort()</a></code> </p>
-            </td>
-            <td><p>Sort a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sdf_with_unique_id">sdf_with_unique_id()</a></code> </p>
-            </td>
-            <td><p>Add a Unique ID Column to a Spark DataFrame</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
               <p><code><a href="sdf_collect">sdf_collect()</a></code> </p>
             </td>
             <td><p>Collect a Spark DataFrame into R.</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_copy_to">sdf_copy_to()</a></code> <code><a href="sdf_copy_to">sdf_import()</a></code> </p>
+            </td>
+            <td><p>Copy an Object into Spark</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -537,9 +430,16 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
-              <p><code><a href="sdf-saveload">sdf_save_table()</a></code> <code><a href="sdf-saveload">sdf_load_table()</a></code> <code><a href="sdf-saveload">sdf_save_parquet()</a></code> <code><a href="sdf-saveload">sdf_load_parquet()</a></code> </p>
+              <p><code><a href="sdf_len">sdf_len()</a></code> </p>
             </td>
-            <td><p>Save / Load a Spark DataFrame</p></td>
+            <td><p>Create DataFrame for Length</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_num_partitions">sdf_num_partitions()</a></code> </p>
+            </td>
+            <td><p>Gets number of partitions of a Spark DataFrame</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -547,6 +447,13 @@ menu:
               <p><code><a href="sdf_persist">sdf_persist()</a></code> </p>
             </td>
             <td><p>Persist a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_pivot">sdf_pivot()</a></code> </p>
+            </td>
+            <td><p>Pivot a Spark DataFrame</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -565,9 +472,72 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
+              <p><code><a href="sdf_random_split">sdf_random_split()</a></code> <code><a href="sdf_random_split">sdf_partition()</a></code> </p>
+            </td>
+            <td><p>Partition a Spark Dataframe</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_read_column">sdf_read_column()</a></code> </p>
+            </td>
+            <td><p>Read a Column from a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_register">sdf_register()</a></code> </p>
+            </td>
+            <td><p>Register a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_repartition">sdf_repartition()</a></code> </p>
+            </td>
+            <td><p>Repartition a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_residuals">sdf_residuals()</a></code> </p>
+            </td>
+            <td><p>Model Residuals</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_sample">sdf_sample()</a></code> </p>
+            </td>
+            <td><p>Randomly Sample Rows from a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
               <p><code><a href="sdf_schema">sdf_schema()</a></code> </p>
             </td>
             <td><p>Read the Schema of a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_separate_column">sdf_separate_column()</a></code> </p>
+            </td>
+            <td><p>Separate a Vector Column into Scalar Columns</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_seq">sdf_seq()</a></code> </p>
+            </td>
+            <td><p>Create DataFrame for Range</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_sort">sdf_sort()</a></code> </p>
+            </td>
+            <td><p>Sort a Spark DataFrame</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -582,6 +552,13 @@ menu:
               <p><code><a href="sdf_with_sequential_id">sdf_with_sequential_id()</a></code> </p>
             </td>
             <td><p>Add a Sequential ID Column to a Spark DataFrame</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sdf_with_unique_id">sdf_with_unique_id()</a></code> </p>
+            </td>
+            <td><p>Add a Unique ID Column to a Spark DataFrame</p></td>
           </tr>
       </tbody>
       <tbody>
@@ -917,6 +894,13 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
+              <p><code><a href="ft_chisq_selector">ft_chisq_selector()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- ChiSqSelector (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
               <p><code><a href="ft_count_vectorizer">ft_count_vectorizer()</a></code> <code><a href="ft_count_vectorizer">ml_vocabulary()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- CountVectorizer (Estimator)</p></td>
@@ -934,76 +918,6 @@ menu:
               <p><code><a href="ft_elementwise_product">ft_elementwise_product()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- ElementwiseProduct (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_index_to_string">ft_index_to_string()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- IndexToString (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_one_hot_encoder">ft_one_hot_encoder()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- OneHotEncoder (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_quantile_discretizer">ft_quantile_discretizer()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- QuantileDiscretizer (Estimator)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="sql-transformer">ft_sql_transformer()</a></code> <code><a href="sql-transformer">ft_dplyr_transformer()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- SQLTransformer</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_string_indexer">ft_string_indexer()</a></code> <code><a href="ft_string_indexer">ml_labels()</a></code> <code><a href="ft_string_indexer">ft_string_indexer_model()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- StringIndexer (Estimator)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_vector_assembler">ft_vector_assembler()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- VectorAssembler (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_tokenizer">ft_tokenizer()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- Tokenizer (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_regex_tokenizer">ft_regex_tokenizer()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- RegexTokenizer (Transformer)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_lsh">ft_bucketed_random_projection_lsh()</a></code> <code><a href="ft_lsh">ft_minhash_lsh()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- LSH (Estimator)</p></td>
-          </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="ft_chisq_selector">ft_chisq_selector()</a></code> </p>
-            </td>
-            <td><p>Feature Transformation -- ChiSqSelector (Estimator)</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -1036,9 +950,30 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
+              <p><code><a href="ft_index_to_string">ft_index_to_string()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- IndexToString (Transformer)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
               <p><code><a href="ft_interaction">ft_interaction()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- Interaction (Transformer)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_lsh">ft_bucketed_random_projection_lsh()</a></code> <code><a href="ft_lsh">ft_minhash_lsh()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- LSH (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_lsh_utils">ml_approx_nearest_neighbors()</a></code> <code><a href="ft_lsh_utils">ml_approx_similarity_join()</a></code> </p>
+            </td>
+            <td><p>Utility functions for LSH models</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -1071,6 +1006,13 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
+              <p><code><a href="ft_one_hot_encoder">ft_one_hot_encoder()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- OneHotEncoder (Transformer)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
               <p><code><a href="ft_one_hot_encoder_estimator">ft_one_hot_encoder_estimator()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- OneHotEncoderEstimator (Estimator)</p></td>
@@ -1092,9 +1034,23 @@ menu:
           <tr>
             <!--  -->
             <td width = "90%">
+              <p><code><a href="ft_quantile_discretizer">ft_quantile_discretizer()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- QuantileDiscretizer (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
               <p><code><a href="ft_r_formula">ft_r_formula()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- RFormula (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_regex_tokenizer">ft_regex_tokenizer()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- RegexTokenizer (Transformer)</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -1109,6 +1065,27 @@ menu:
               <p><code><a href="ft_stop_words_remover">ft_stop_words_remover()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- StopWordsRemover (Transformer)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_string_indexer">ft_string_indexer()</a></code> <code><a href="ft_string_indexer">ml_labels()</a></code> <code><a href="ft_string_indexer">ft_string_indexer_model()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- StringIndexer (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_tokenizer">ft_tokenizer()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- Tokenizer (Transformer)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="ft_vector_assembler">ft_vector_assembler()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- VectorAssembler (Transformer)</p></td>
           </tr>
           <tr>
             <!--  -->
@@ -1130,6 +1107,13 @@ menu:
               <p><code><a href="ft_word2vec">ft_word2vec()</a></code> <code><a href="ft_word2vec">ml_find_synonyms()</a></code> </p>
             </td>
             <td><p>Feature Transformation -- Word2Vec (Estimator)</p></td>
+          </tr>
+          <tr>
+            <!--  -->
+            <td width = "90%">
+              <p><code><a href="sql-transformer">ft_sql_transformer()</a></code> <code><a href="sql-transformer">ft_dplyr_transformer()</a></code> </p>
+            </td>
+            <td><p>Feature Transformation -- SQLTransformer</p></td>
           </tr>
       </tbody>
       <tbody>
@@ -1317,13 +1301,6 @@ menu:
             <p class="section-desc"></p>
           </th>
         </tr>
-          <tr>
-            <!--  -->
-            <td width = "90%">
-              <p><code><a href="livy_install">livy_install()</a></code> <code><a href="livy_install">livy_available_versions()</a></code> <code><a href="livy_install">livy_install_dir()</a></code> <code><a href="livy_install">livy_installed_versions()</a></code> <code><a href="livy_install">livy_home_dir()</a></code> </p>
-            </td>
-            <td><p>Install Livy</p></td>
-          </tr>
           <tr>
             <!--  -->
             <td width = "90%">

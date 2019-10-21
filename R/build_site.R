@@ -33,13 +33,14 @@ root <-  function() rprojroot::find_rstudio_root_file()
 update_site <- function(repo = "rstudio/sparklyr") {
   if(dir_exists("repos")) dir_delete("repos")
   copy_repo(repo)
-  if(dir_exists("content/reference")) dir_delete("content/reference")
-  dir_copy("repos/sparklyr/docs/reference", "content/reference")
+  help_files <- dir_ls("content/reference", glob = "*.html")
+  if(length(help_files) > 0) file_delete(help_files)
+  new_files <- dir_ls("repos/sparklyr/docs/reference/")
+  file_copy(new_files, "content/reference")
   index_page <-  readLines("content/reference/index.html")
   wo_html <- purrr::map_chr(index_page, ~ gsub(".html\">", "\">", .x))
   writeLines(wo_html, "content/reference/index.html")
   blogdown::serve_site()
 }
-
 
 

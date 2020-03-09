@@ -13,7 +13,8 @@ params:
 ## Overview
 
 With this configuration, RStudio Server Pro is installed outside of the Spark
-cluster and connects to Spark remotely using Databricks Connect.
+cluster and allows users to connect to Spark remotely using
+[Databricks Connect](https://docs.databricks.com/dev-tools/databricks-connect.html).
 
 <img src="/images/deployment/databricks/rstudio-databricks-remote.png" width='800px' align='center'/>
 
@@ -35,32 +36,109 @@ Advantages:
 Limitations:
 
 - Cannot easily or efficiently load data from outside of the Spark cluster
+- Databricks Connect does not support structured streaming
+- Databricks Connect does not support running arbitrary code that is not a part
+  of a Spark job on the remote cluster
+- Databricks Connect does not support Scala, Python, and R APIs for Delta table
+  operations.
+- Databricks Connect does not support most utilities in Databricks Utilities.
+  However, `dbutils.fs` and `dbutils.secrets` are supported.
 
-## Configure RStudio Server Pro to connect to Databricks remotely
+## Requirements
 
-## Create a Databricks cluster
+- RStudio Server Pro
+- Java 8 installed on the server with RStudio Server Pro
+- Active Databricks cluster with a runtime version 5.5 and above
 
-In the Databricks console, create a new Databricks cluster.
+## Install Python
 
-## Use sparklyr
+The Databricks Connect client is provided as a Python library.
+
+Follow the steps to install Python on the server with RStudio Server Pro:
+
+https://docs.rstudio.com/resources/install-python/
+
+Note that you can either install Python for all users in a global location or
+for an individual user in your home directory.
+
+## Install Databricks Connect
+
+Run the following command to install Databricks Connect on the server with
+RStudio Server Pro:
+
+```
+pip install -U databricks-connect==6.3.*  # or a different version to match your Databricks cluster
+```
+
+Note that you can either install this library for all users in a global Python
+environment or for an individual user in their Python environment (e.g., using
+the `pip --user` option or installing into a conda environment or virtual
+environment).
+
+## Configure Databricks Connect
+
+To configure the Databricks Connect client, you can run the following command in
+a terminal when logged in as a user in RStudio Server Pro:
+
+```
+databricks-connect configure
+```
+
+In the prompts that follow, enter the following information:
+
+Item | Description | Example Value
+---- | ----------- | -------------
+Databricks Host | Base address of your Databricks console URL | `https://dbc-01234567-89ab.cloud.databricks.com`
+Databricks Token | User token generated from the Databricks Console under your "User Settings" | `dapi24g06bdd96f2700b09dd336d5444c1yz`
+Cluster ID | Cluster ID in the Databricks console under Advanced Options > Tags > `ClusterId` | `0308-033548-colt989`
+Org ID | Found in the `?o=orgId` portion of your Databricks Console URL | `8498623428173033`
+Port | The port that Databricks Connect connects to | `15001`
+
+After you've completed the configuration process for Databricks Connect, you can
+run the following command in a terminal to test the connectivity of Databricks
+Connect to your Databricks cluster:
+
+```
+databricks-connect test
+```
+
+## Install `sparklyr`
+
+Note: The functionality to use `sparklyr` with Databricks Connect is under
+active development.
+
+To use `sparklyr` with Databricks Connect, you can install the development
+version of `sparklyr`:
+
+```
+devtools::install_github("sparklyr/sparklyr")
+```
+
+## Use `sparklyr`
 
 To work with a remote Databricks cluster, you need to have a local installation
 of Spark that matches the version of Spark on the Databricks Cluster.
 
-You can install Spark by running the following command in the RStudio IDE:
-
-```
-sparklyr::spark_install()
-```
-
-`SPARK_HOME` must be set to the output of `databricks-connect get-spark-home`.
-
-Connect using the following:
+You can install Spark by running the following commands in the RStudio IDE:
 
 ```
 library(sparklyr)
+sparklyr::spark_install()
+```
 
-Sys.setenv(SPARK_HOME="<path-returned-by-databricks-connect-get-spark-home>")
+You can connect to the Databricks cluster by running the following commands in
+the RStudio IDE:
 
+```
+databricks_connect_spark_home <- system("databricks-connect get-spark-home", intern = TRUE)
+
+library(sparklyr)
+Sys.setenv(SPARK_HOME=databricks_connect_spark_home)
 sc <- spark_connect(master = "local", method = "databricks")
 ```
+
+## Additional information
+
+For more information on the setup, configuration, and limitations of Databricks
+Connect, refer to the
+[Databricks Connect page in the Databricks documentation](https://docs.databricks.com/dev-tools/databricks-connect.html).

@@ -20,11 +20,13 @@ and a Databricks cluster with Apache Spark.</p>
 <div id="best-practices" class="section level2">
 <h2>Best practices</h2>
 <ul>
-<li><strong>Connect to Spark remotely</strong> - Install RStudio Server Pro outside of the
-Databricks cluster and work with Spark remotely</li>
-<li><strong>Work across RStudio Team</strong> - Install RStudio Connect and RStudio Package
-Manager outside of the Databricks cluster so that they are not limited to the
-resources or ephemeral nature of Databricks clusters</li>
+<li><strong>Maintain separate installation environments</strong> - Install RStudio Server Pro,
+RStudio Connect, and RStudio Package Manager outside of the Databricks cluster
+so that they are not limited to the resources or ephemeral nature of
+Databricks clusters</li>
+<li><strong>Connect to Databricks remotely</strong> - Work with Databricks as a remote compute
+resource in RStudio Server Pro, similar to how you would connect remotely to
+external databases, data sources, and storage systems</li>
 <li><strong>Restrict workloads to interactive analysis</strong> - Only perform workloads
 related to exploratory or interactive analysis with Spark, then write the
 results to a database, file system, or cloud storage for more efficient
@@ -33,10 +35,6 @@ retrival in apps, reports, and APIs</li>
 computations and the associated overhead, Shiny apps that use Spark on the
 backend tend to have performance and runtime issues; consider reading the
 results from a database, file system, or cloud storage instead</li>
-<li><strong>Maintain a persisent installation</strong> - If you cannot work with Spark
-remotely, you should install RStudio Server Pro on the Driver node of a
-long-running, persistent Databricks cluster as opposed to a worker node or an
-ephemeral cluster</li>
 </ul>
 </div>
 <div id="options-for-using-rstudio-with-databricks" class="section level2">
@@ -60,29 +58,32 @@ cluster and allows users to connect to Spark remotely using
 involves simpler configuration, avoids resource contention, and allows RStudio
 Server Pro to connect to Databricks as well as other remote storage and compute
 resources.</p>
-<p><a href="/examples/databricks-cluster-remote">
-<img src="/images/deployment/databricks/rstudio-databricks-remote.png" width='800px' align='center'/>
-</a></p>
 <a href="/examples/databricks-cluster-remote">
 <h2>
 View steps for connecting to Databricks remotely
 </h2>
 <p></a></p>
+<p><a href="/examples/databricks-cluster-remote">
+<img src="/images/deployment/databricks/rstudio-databricks-remote.png" width='800px' align='center'/>
+</a></p>
 </div>
 <div id="option-2---working-inside-of-databricks" class="section level2">
 <h2>Option 2 - Working inside of Databricks</h2>
+<p>If you cannot work with Spark remotely, you should install RStudio Server Pro on
+the Driver node of a long-running, persistent Databricks cluster as opposed to a
+worker node or an ephemeral cluster.</p>
 <p>With this configuration, RStudio Server Pro is installed on the Spark driver
 node and allows users to work locally with Spark.</p>
 <p>This configuration can result in increased complexity, limited connectivity to
 other storage and compute sources, resource contention between RStudio Server
 Pro and Databricks, and maintenance concerns due to the ephemeral nature of
 Databricks clusters.</p>
-<p><a href="/examples/databricks-cluster-local">
-<img src="/images/deployment/databricks/rstudio-databricks-local.png" width='800px' align='center'/>
-</a></p>
 <a href="/examples/databricks-cluster-local">
 <h2>
 View steps for working inside of Databricks
 </h2>
 <p></a></p>
+<p><a href="/examples/databricks-cluster-local">
+<img src="/images/deployment/databricks/rstudio-databricks-local.png" width='800px' align='center'/>
+</a></p>
 </div>

@@ -29,7 +29,7 @@ resources.</p>
 <ul>
 <li>RStudio Server Pro will remain functional if Databricks clusters are
 terminated</li>
-<li>Provides the ability to comminicate with one or more Databricks clusters as a
+<li>Provides the ability to communicate with one or more Databricks clusters as a
 remote compute resource</li>
 <li>Avoids resource contention between RStudio Server Pro and Databricks</li>
 </ul>
@@ -47,18 +47,21 @@ However, <code>dbutils.fs</code> and <code>dbutils.secrets</code> are supported.
 <div id="requirements" class="section level2">
 <h2>Requirements</h2>
 <ul>
-<li>RStudio Server Pro</li>
-<li>Java 8 installed on the server with RStudio Server Pro</li>
-<li>Active Databricks cluster with a runtime version 5.5 and above</li>
+<li>RStudio Server Pro installed outside of the Databricks cluster</li>
+<li>Java 8 installed on the machine with RStudio Server Pro</li>
+<li>A running Databricks cluster with a runtime version 5.5 or above</li>
 </ul>
 </div>
 <div id="install-python" class="section level2">
 <h2>Install Python</h2>
-<p>The Databricks Connect client is provided as a Python library.</p>
-<p>Follow the steps to install Python on the server with RStudio Server Pro:</p>
-<p><a href="https://docs.rstudio.com/resources/install-python/" class="uri">https://docs.rstudio.com/resources/install-python/</a></p>
-<p>Note that you can either install Python for all users in a global location or
-for an individual user in your home directory.</p>
+<p>The Databricks Connect client is provided as a Python library. The minor version
+of your Python installation must be the same as the minor Python version of your
+Databricks cluster.</p>
+<p>Refer to the steps in the
+<a href="https://docs.rstudio.com/resources/install-python/">install Python section of the RStudio Documentation</a>
+to install Python on the same server where RStudio Server Pro is installed.</p>
+<p>Note that you can either install Python for all users in a global location (as
+an administrator) or in a home directory (as an end user).</p>
 </div>
 <div id="install-databricks-connect" class="section level2">
 <h2>Install Databricks Connect</h2>
@@ -66,9 +69,9 @@ for an individual user in your home directory.</p>
 RStudio Server Pro:</p>
 <pre><code>pip install -U databricks-connect==6.3.*  # or a different version to match your Databricks cluster</code></pre>
 <p>Note that you can either install this library for all users in a global Python
-environment or for an individual user in their Python environment (e.g., using
-the <code>pip --user</code> option or installing into a conda environment or virtual
-environment).</p>
+environment as an administrator or for an individual user in their Python
+environment (e.g., using the <code>pip --user</code> option or installing into a conda
+environment or virtual environment).</p>
 </div>
 <div id="configure-databricks-connect" class="section level2">
 <h2>Configure Databricks Connect</h2>

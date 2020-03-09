@@ -29,7 +29,7 @@ Advantages:
 
 - RStudio Server Pro will remain functional if Databricks clusters are
   terminated
-- Provides the ability to comminicate with one or more Databricks clusters as a
+- Provides the ability to communicate with one or more Databricks clusters as a
   remote compute resource
 - Avoids resource contention between RStudio Server Pro and Databricks
 
@@ -45,20 +45,22 @@ Limitations:
 
 ## Requirements
 
-- RStudio Server Pro
-- Java 8 installed on the server with RStudio Server Pro
-- Active Databricks cluster with a runtime version 5.5 and above
+- RStudio Server Pro installed outside of the Databricks cluster
+- Java 8 installed on the machine with RStudio Server Pro
+- A running Databricks cluster with a runtime version 5.5 or above
 
 ## Install Python
 
-The Databricks Connect client is provided as a Python library.
+The Databricks Connect client is provided as a Python library. The minor version
+of your Python installation must be the same as the minor Python version of your
+Databricks cluster.
 
-Follow the steps to install Python on the server with RStudio Server Pro:
+Refer to the steps in the
+[install Python section of the RStudio Documentation](https://docs.rstudio.com/resources/install-python/)
+to install Python on the same server where RStudio Server Pro is installed.
 
-https://docs.rstudio.com/resources/install-python/
-
-Note that you can either install Python for all users in a global location or
-for an individual user in your home directory.
+Note that you can either install Python for all users in a global location (as
+an administrator) or in a home directory (as an end user).
 
 ## Install Databricks Connect
 
@@ -70,9 +72,9 @@ pip install -U databricks-connect==6.3.*  # or a different version to match your
 ```
 
 Note that you can either install this library for all users in a global Python
-environment or for an individual user in their Python environment (e.g., using
-the `pip --user` option or installing into a conda environment or virtual
-environment).
+environment as an administrator or for an individual user in their Python
+environment (e.g., using the `pip --user` option or installing into a conda
+environment or virtual environment).
 
 ## Configure Databricks Connect
 

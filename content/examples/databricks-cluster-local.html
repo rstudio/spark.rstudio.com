@@ -16,7 +16,7 @@ params:
 <h2>Overview</h2>
 <p>If the recommended path of connecting to Spark remotely with Databricks Connect
 does not apply to your use case, then you can install RStudio Server Pro
-directly within a Databricks cluster.</p>
+directly within a Databricks cluster as described in the sections below.</p>
 <p>With this configuration, RStudio Server Pro is installed on the Spark driver
 node and allows users to work locally with Spark.</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local.png" width='800px' align='center'/></p>
@@ -33,6 +33,8 @@ Databricks clusters.</p>
 <ul>
 <li>Ability for users to connect <code>sparklyr</code> to Spark without configuring remote
 connectivity</li>
+<li>Provides a high-bandwidth connection between R and the Spark JVM processes
+because they are running on the same machine</li>
 <li>Can load data from the cluster directly into an R session since RStudio Server
 Pro is installed within the Databricks cluster</li>
 </ul>
@@ -138,4 +140,13 @@ Databricks cluster:</p>
 <pre><code>SparkR::sparkR.session()
 library(sparklyr)
 sc &lt;- spark_connect(method = &quot;databricks&quot;)</code></pre>
+</div>
+<div id="additional-information" class="section level2">
+<h2>Additional information</h2>
+<p>For more information on using RStudio Server Pro inside of Databricks, refer to
+the sections on
+<a href="https://docs.databricks.com/spark/latest/sparkr/rstudio.html">RStudio on Databricks (AWS)</a>
+or
+<a href="https://docs.microsoft.com/en-us/azure/databricks/spark/latest/sparkr/rstudio">RStudio on Databricks (Azure)</a>
+in the Databricks documentation.</p>
 </div>

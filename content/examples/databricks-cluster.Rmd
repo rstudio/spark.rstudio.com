@@ -17,27 +17,33 @@ and a Databricks cluster with Apache Spark.
 
 ## Best practices
 
-- **Remote connectivity** - Install RStudio Server Pro outside of the
+- **Connect to Spark remotely** - Install RStudio Server Pro outside of the
   Databricks cluster and work with Spark remotely
-- **RStudio Team** - Install RStudio Connect and RStudio Package Manager outside
-  of the Databricks cluster so that they are not limited to the resources or
-  ephemeral nature of a Databricks cluster
-- **Limit to interactive workloads** - Perform interactive analyses with Spark,
-  then write the results to a database, file storage, or cloud storage for more
-  efficient retrival
-- **Efficiently loading results** - Shiny apps that use Spark tend to have
-  performance issues, instead, consider reading the results from a database,
-  file storage, or cloud storage instead
-- **Persisent installation** - If you cannot work with Spark remotely, you
-  should install RStudio Server Pro on the Driver node of a persistent
-  Databricks cluster as opposed to a Worker node or an ephemeral cluster
+- **Work across RStudio Team** - Install RStudio Connect and RStudio Package
+  Manager outside of the Databricks cluster so that they are not limited to the
+  resources or ephemeral nature of Databricks clusters
+- **Restrict workloads to interactive analysis** - Only perform workloads
+  related to exploratory or interactive analysis with Spark, then write the
+  results to a database, file system, or cloud storage for more efficient
+  retrival in apps, reports, and APIs
+- **Load and query results efficiently** - Shiny apps that use Spark on the
+  backend tend to have performance and runtime issues; instead, consider reading
+  the results from a database, file system, or cloud storage instead
+- **Maintain a persisent installation** - If you cannot work with Spark
+  remotely, you should install RStudio Server Pro on the Driver node of a
+  long-running, persistent Databricks cluster as opposed to a worker node or an
+  ephemeral cluster
 
 ## Options for using RStudio with Databricks
 
 There are two different options for using `sparklyr` with Databricks:
 
-- Option 1 (Recommended option): [Connecting to Databricks remotely](#option-1---connecting-to-databricks-remotely)
-- Option 2 (Alternative option): [Working with Databricks locally](#option-2---working-with-databricks-locally)
+- Option 1:
+  [Connecting to Databricks remotely](#option-1---connecting-to-databricks-remotely)
+  (Recommended option)
+- Option 2:
+  [Working with Databricks locally](#option-2---working-with-databricks-locally)
+  (Alternative option)
 
 ### Option 1 - Connecting to Databricks remotely
 

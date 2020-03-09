@@ -105,10 +105,11 @@ databricks-connect test
 ## Install `sparklyr`
 
 Note: The functionality to use `sparklyr` with Databricks Connect is under
-active development.
+active development and is currently only available in the latest development
+version.
 
 To use `sparklyr` with Databricks Connect, you can install the development
-version of `sparklyr`:
+version of `sparklyr` by running the following R code:
 
 ```
 devtools::install_github("sparklyr/sparklyr")
@@ -119,15 +120,18 @@ devtools::install_github("sparklyr/sparklyr")
 To work with a remote Databricks cluster, you need to have a local installation
 of Spark that matches the version of Spark on the Databricks Cluster.
 
-You can install Spark by running the following commands in the RStudio IDE:
+You can install Spark by running the following R code:
 
 ```
 library(sparklyr)
 sparklyr::spark_install()
 ```
 
-You can connect to the Databricks cluster by running the following commands in
-the RStudio IDE:
+Note that the `SPARK_HOME` environment variable must be set to the output of
+the `databricks-connect get-spark-home` command.
+
+You can set the `SPARK_HOME ` environment variable and connect to the Databricks
+cluster by running the following R code:
 
 ```
 databricks_connect_spark_home <- system("databricks-connect get-spark-home", intern = TRUE)

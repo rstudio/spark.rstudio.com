@@ -132,15 +132,22 @@ version.</p>
 version of <code>sparklyr</code> by running the following R code:</p>
 <pre><code>devtools::install_github(&quot;sparklyr/sparklyr&quot;)</code></pre>
 </div>
-<div id="use-sparklyr" class="section level2">
-<h2>Use <code>sparklyr</code></h2>
+<div id="install-spark" class="section level2">
+<h2>Install Spark</h2>
 <p>To work with a remote Databricks cluster, you need to have a local installation
 of Spark that matches the version of Spark on the Databricks Cluster.</p>
 <p>You can install Spark by running the following R code:</p>
 <pre><code>library(sparklyr)
 sparklyr::spark_install()</code></pre>
-<p>Note that the <code>SPARK_HOME</code> environment variable must be set to the output of
-the <code>databricks-connect get-spark-home</code> command.</p>
+<p>You can specify the version of Spark to install along with other options. Refer
+to the
+<a href="https://spark.rstudio.com/reference/spark_install/"><code>spark_install()</code> options in the <code>sparklyr</code> reference documentation</a>
+for more information.</p>
+</div>
+<div id="use-sparklyr" class="section level2">
+<h2>Use <code>sparklyr</code></h2>
+<p>The <code>SPARK_HOME</code> environment variable must be set to the output of the
+<code>databricks-connect get-spark-home</code> command.</p>
 <p>You can set the <code>SPARK_HOME</code> environment variable and connect to the Databricks
 cluster by running the following R code:</p>
 <pre><code>databricks_connect_spark_home &lt;- system(&quot;databricks-connect get-spark-home&quot;, intern = TRUE)

@@ -14,8 +14,8 @@ params:
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This documentation demonstrates how to use <code>sparklyr</code> with a Databricks cluster
-along with RStudio Server Pro, RStudio Connect and RStudio Package Manager.</p>
+<p>This documentation demonstrates how to use <code>sparklyr</code> with RStudio Server Pro,
+RStudio Connect, and RStudio Package Manager to work with Databricks.</p>
 </div>
 <div id="best-practices" class="section level2">
 <h2>Best practices</h2>
@@ -27,11 +27,13 @@ Databricks clusters.</li>
 <li><strong>Connect to Databricks remotely</strong> - Work with Databricks as a remote compute
 resource in RStudio Server Pro, similar to how you would connect remotely to
 external databases, data sources, and storage systems. This can be
-accomplished using Databricks Connect for Spark as described in the
+accomplished using Databricks Connect as described in the
 <a href="#option-1---connecting-to-databricks-remotely">Connecting to Databricks remotely</a>
-section below, or by using the
+section below, the
 <a href="https://docs.rstudio.com/pro-drivers/">RStudio Professional Drivers</a> for Hive
-and Impala.</li>
+and Impala, or the JDBC/ODBC server in Databricks on
+<a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html">AWS</a> or
+<a href="https://docs.microsoft.com/en-us/azure/databricks/integrations/bi/jdbc-odbc-bi">Azure</a>.</li>
 <li><strong>Restrict workloads to interactive analysis</strong> - Only perform workloads
 related to exploratory or interactive analysis with Spark, then write the
 results to a database, file system, or cloud storage for more efficient
@@ -97,13 +99,20 @@ View steps for working inside of Databricks
 <h2>Using RStudio Connect with Databricks</h2>
 <p>The server environments in Databricks clusters are not permissive enough to
 support RStudio Connect or the process sandboxing mechanisms that it uses for
-published content. Therefore, the only supported configuration is to install
-RStudio Connect outside of the Databricks cluster.</p>
-<p>There are two options for using <code>sparklyr</code> and RStudio Connect with Databricks:</p>
+published content.</p>
+<p>Therefore, the only supported configuration is to install RStudio Connect
+outside of the Databricks cluster and connect to Databricks remotely.</p>
+<p>There are three options for using RStudio Connect with Databricks:</p>
 <ol style="list-style-type: decimal">
+<li>By accessing data via ODBC with the
+<a href="https://docs.rstudio.com/pro-drivers/">RStudio Professional Drivers</a> for
+Hive and Impala or the JDBC/ODBC server in Databricks on
+<a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html">AWS</a> or
+<a href="https://docs.microsoft.com/en-us/azure/databricks/integrations/bi/jdbc-odbc-bi">Azure</a>
+(Recommended Option)</li>
 <li>By connecting to Databricks remotely using
 <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>
-(Recommended Option)</li>
+(Alternative Option)</li>
 <li>By adding calls in your R code to create and run Databricks jobs
 <a href="https://github.com/RafiKurlansik/bricksteR/">via the Databricks REST API</a>
 (Alternative Option)</li>
@@ -112,7 +121,8 @@ RStudio Connect outside of the Databricks cluster.</p>
 <div id="using-rstudio-package-manager-with-databricks" class="section level2">
 <h2>Using RStudio Package Manager with Databricks</h2>
 <p>Whether RStudio Server Pro is installed outside of the Databricks cluster
-(Recommended Option) or within the Databricks cluster, you can install packages
-from repositories in RStudio Package Manager as long as HTTP/HTTPS network
-traffic is allowed from RStudio Server Pro to RStudio Package Manager.</p>
+(Recommended Option) or within the Databricks cluster (Alternative Option), you
+can install packages from repositories in RStudio Package Manager as long as
+HTTP/HTTPS network traffic is allowed from RStudio Server Pro to RStudio Package
+Manager.</p>
 </div>

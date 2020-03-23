@@ -139,18 +139,30 @@ for more information.
 
 ## Use `sparklyr`
 
-The `SPARK_HOME` environment variable must be set to the output of the
-`databricks-connect get-spark-home` command.
+In order to connect to Databricks using `sparklyr` and `databricks-connect`,
+`SPARK_HOME` must be set to the output of the `databricks-connect
+get-spark-home` command.
 
-You can set the `SPARK_HOME ` environment variable and connect to the Databricks
-cluster by running the following R code:
+You can set `SPARK_HOME` as an environment variable or directly within
+`spark_connect()`. The following R code demonstrates connecting to Databricks,
+copying some data into the cluster, summarizing that data using `sparklyr`, and
+disconnecting:
 
 ```
-databricks_connect_spark_home <- system("databricks-connect get-spark-home", intern = TRUE)
-
 library(sparklyr)
-Sys.setenv(SPARK_HOME=databricks_connect_spark_home)
-sc <- spark_connect(master = "local", method = "databricks")
+library(dplyr)
+
+databricks_connect_spark_home <- system("databricks-connect get-spark-home", intern = TRUE)
+sc <- spark_connect(method = "databricks", spark_home = databricks_connect_spark_home)
+
+cars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
+
+cars_tbl %>% 
+  group_by(cyl) %>% 
+  summarise(mean_mpg = mean(mpg, na.rm = TRUE),
+            mean_hp  = mean(hp, na.rm = TRUE))
+
+spark_disconnect(sc)
 ```
 
 ## Additional information

@@ -152,15 +152,26 @@ for more information.</p>
 </div>
 <div id="use-sparklyr" class="section level2">
 <h2>Use <code>sparklyr</code></h2>
-<p>The <code>SPARK_HOME</code> environment variable must be set to the output of the
-<code>databricks-connect get-spark-home</code> command.</p>
-<p>You can set the <code>SPARK_HOME</code> environment variable and connect to the Databricks
-cluster by running the following R code:</p>
-<pre><code>databricks_connect_spark_home &lt;- system(&quot;databricks-connect get-spark-home&quot;, intern = TRUE)
+<p>In order to connect to Databricks using <code>sparklyr</code> and <code>databricks-connect</code>,
+<code>SPARK_HOME</code> must be set to the output of the <code>databricks-connect get-spark-home</code> command.</p>
+<p>You can set <code>SPARK_HOME</code> as an environment variable or directly within
+<code>spark_connect()</code>. The following R code demonstrates connecting to Databricks,
+copying some data into the cluster, summarizing that data using <code>sparklyr</code>, and
+disconnecting:</p>
+<pre><code>library(sparklyr)
+library(dplyr)
 
-library(sparklyr)
-Sys.setenv(SPARK_HOME=databricks_connect_spark_home)
-sc &lt;- spark_connect(master = &quot;local&quot;, method = &quot;databricks&quot;)</code></pre>
+databricks_connect_spark_home &lt;- system(&quot;databricks-connect get-spark-home&quot;, intern = TRUE)
+sc &lt;- spark_connect(method = &quot;databricks&quot;, spark_home = databricks_connect_spark_home)
+
+cars_tbl &lt;- copy_to(sc, mtcars, overwrite = TRUE)
+
+cars_tbl %&gt;% 
+  group_by(cyl) %&gt;% 
+  summarise(mean_mpg = mean(mpg, na.rm = TRUE),
+            mean_hp  = mean(hp, na.rm = TRUE))
+
+spark_disconnect(sc)</code></pre>
 </div>
 <div id="additional-information" class="section level2">
 <h2>Additional information</h2>

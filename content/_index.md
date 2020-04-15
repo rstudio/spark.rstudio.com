@@ -244,7 +244,7 @@ summary(fit)
     ## R-Squared: 0.8274
     ## Root Mean Squared Error: 1.422
 
-Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [machine learning](mlib) section.
+Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [machine learning](/mlib) section.
 
 Reading and Writing Data
 ------------------------

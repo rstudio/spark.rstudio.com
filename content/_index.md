@@ -12,7 +12,7 @@ sparklyr: R interface for Apache Spark
         Announcement
         </div>
         <div style="height:100%;width:100%; font-size:16px; font-weight:300;">
-          The new book is now available on-line and in print! 
+          The new book is now available on-line and in print!
         </div>
         <div style="height:100%;width:100%; font-size:16px; font-weight:300;">
           Visit: <i>therinspark.com</i> for more info
@@ -121,7 +121,7 @@ flights_tbl %>% filter(dep_delay == 2)
 [Introduction to dplyr](https://CRAN.R-project.org/package=dplyr) provides additional dplyr examples you can try. For example, consider the last example from the tutorial which plots data on flight delays:
 
 ``` r
-delay <- flights_tbl %>% 
+delay <- flights_tbl %>%
   group_by(tailnum) %>%
   summarise(count = n(), dist = mean(distance), delay = mean(arr_delay)) %>%
   filter(count > 20, dist < 2000, !is.na(delay)) %>%
@@ -218,11 +218,11 @@ fit
 ```
 
     ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))  
-    ## 
+    ##
     ## Formula: mpg ~ wt + cyl
-    ## 
+    ##
     ## Coefficients:
-    ## (Intercept)          wt         cyl 
+    ## (Intercept)          wt         cyl
     ##   33.499452   -2.818463   -0.923187
 
 For linear regression models produced by Spark, we can use `summary()` to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.
@@ -232,19 +232,19 @@ summary(fit)
 ```
 
     ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))  
-    ## 
+    ##
     ## Deviance Residuals:
-    ##    Min     1Q Median     3Q    Max 
-    ## -1.752 -1.134 -0.499  1.296  2.282 
-    ## 
+    ##    Min     1Q Median     3Q    Max
+    ## -1.752 -1.134 -0.499  1.296  2.282
+    ##
     ## Coefficients:
-    ## (Intercept)          wt         cyl 
-    ##   33.499452   -2.818463   -0.923187 
-    ## 
+    ## (Intercept)          wt         cyl
+    ##   33.499452   -2.818463   -0.923187
+    ##
     ## R-Squared: 0.8274
     ## Root Mean Squared Error: 1.422
 
-Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [machine learning](mllib.html) section.
+Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [machine learning](mlib) section.
 
 Reading and Writing Data
 ------------------------
@@ -328,14 +328,14 @@ The facilities used internally by sparklyr for its dplyr and machine learning in
 Here's a simple example that wraps a Spark text file line counting function with an R function:
 
 ``` r
-# write a CSV 
+# write a CSV
 tempfile <- tempfile(fileext = ".csv")
 write.csv(nycflights13::flights, tempfile, row.names = FALSE, na = "")
 
 # define an R interface to Spark line counting
 count_lines <- function(sc, path) {
-  spark_context(sc) %>% 
-    invoke("textFile", path, 1L) %>% 
+  spark_context(sc) %>%
+    invoke("textFile", path, 1L) %>%
       invoke("count")
 }
 
@@ -384,7 +384,7 @@ spark_log(sc, n = 10)
     ## 17/11/09 15:55:18 INFO HadoopRDD: Input split: file:/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T/RtmpyR8oP9/file115c74b94924.csv:0+33313106
     ## 17/11/09 15:55:18 INFO Executor: Finished task 0.0 in stage 69.0 (TID 140). 832 bytes result sent to driver
     ## 17/11/09 15:55:18 INFO TaskSetManager: Finished task 0.0 in stage 69.0 (TID 140) in 126 ms on localhost (executor driver) (1/1)
-    ## 17/11/09 15:55:18 INFO TaskSchedulerImpl: Removed TaskSet 69.0, whose tasks have all completed, from pool 
+    ## 17/11/09 15:55:18 INFO TaskSchedulerImpl: Removed TaskSet 69.0, whose tasks have all completed, from pool
     ## 17/11/09 15:55:18 INFO DAGScheduler: ResultStage 69 (count at NativeMethodAccessorImpl.java:0) finished in 0.126 s
     ## 17/11/09 15:55:18 INFO DAGScheduler: Job 47 finished: count at NativeMethodAccessorImpl.java:0, took 0.131380 s
 
@@ -435,7 +435,7 @@ mtcars_tbl <- copy_to(sc, mtcars, "mtcars")
 
 mtcars_h2o <- as_h2o_frame(sc, mtcars_tbl, strict_version_check = FALSE)
 
-mtcars_glm <- h2o.glm(x = c("wt", "cyl"), 
+mtcars_glm <- h2o.glm(x = c("wt", "cyl"),
                       y = "mpg",
                       training_frame = mtcars_h2o,
                       lambda_search = TRUE)
@@ -447,9 +447,9 @@ mtcars_glm
 
     ## Model Details:
     ## ==============
-    ## 
+    ##
     ## H2ORegressionModel: glm
-    ## Model ID:  GLM_model_R_1510271749678_1 
+    ## Model ID:  GLM_model_R_1510271749678_1
     ## GLM Model: summary
     ##     family     link                              regularization
     ## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.1013 )
@@ -459,16 +459,16 @@ mtcars_glm
     ## 1                          2                           2
     ##   number_of_iterations                                training_frame
     ## 1                  100 frame_rdd_29_b907d4915799eac74fb1ea60ad594bbf
-    ## 
+    ##
     ## Coefficients: glm coefficients
     ##       names coefficients standardized_coefficients
     ## 1 Intercept    38.941654                 20.090625
     ## 2       cyl    -1.468783                 -2.623132
     ## 3        wt    -3.034558                 -2.969186
-    ## 
+    ##
     ## H2ORegressionMetrics: glm
     ## ** Reported on training data. **
-    ## 
+    ##
     ## MSE:  6.017684
     ## RMSE:  2.453097
     ## MAE:  1.940985

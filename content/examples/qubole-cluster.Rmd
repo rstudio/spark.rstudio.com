@@ -1,0 +1,64 @@
+---
+title: "Using RStudio Server Pro inside of Qubole"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float:
+      collapsed: false
+params:
+  width: 600
+---
+
+## Overview
+
+Qubole users can request [beta access to RStudio Server
+pro](https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html).
+This allows users to use [`sparklyr`](https://spark.rstudio.com/) to interact
+directly with Spark from within the Qubole cluster.
+
+<img src="/images/deployment/qubole/rstudio-qubole.png" width='800px' align='center'/>
+
+## Advantages and limitations
+
+Advantages:
+
+- Ability for users to connect `sparklyr` directly to Spark within Qubole
+- Provides a high-bandwidth connection between R and the Spark JVM processes
+  because they are running on the same machine
+- Can load data from the cluster directly into an R session since RStudio Server
+  Pro is installed within the Qubole cluster
+- A unique home directory for each user
+
+Limitations:
+
+- Persistent packages must be managed from the Environments page, not directly
+  from within RStudio
+- If users do not persist their code through version control or the Databricks
+  File System, then you risk losing user's work if the cluster is restarted or
+  terminated
+- RStudio Server Pro installed within a Qubole
+  cluster will be limited to the compute resources and lifecycle of that
+  particular Spark cluster
+- Non-Spark jobs will use CPU and RAM resources within the Qubole cluster
+
+## Access RStudio Server Pro
+
+Once Beta access has been enabled, RStudio Server Pro can be accessed from the cluster resources menu.
+
+<img src="/images/deployment/qubole/rstudio-qubole-resources.png" width='800px' align='center'/>
+
+## Use `sparklyr`
+
+Use the following R code to establish a connection from `sparklyr` to the
+Qubole cluster:
+
+```
+library(sparklyr)
+sc <- spark_connect(method = "qubole")
+```
+
+## Additional information
+
+For more information on using RStudio Server Pro inside of Qubole, refer to
+the [Qubole documentation](https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html).

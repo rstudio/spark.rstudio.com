@@ -414,12 +414,12 @@
 
 - Support for property expansion in `yarn-site.xml` (@lgongmsft, #1876).
 
-## Distributed R
+### Distributed R
 
 - The `memory` parameter in `spark_apply()` now defaults to `FALSE` when
   the `name` parameter is not specified.
 
-## Other
+### Other
 
 - Removed dreprecated `sdf_mutate()`.
 
@@ -577,7 +577,7 @@
   that is called after `spark-submit` which can be used to automatically
   configure port forwarding.
 
-## Batches
+### Batches
 
 - Added support for `spark_submit()` to assist submitting non-interactive
   Spark jobs.

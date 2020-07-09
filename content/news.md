@@ -1,3 +1,92 @@
+# Sparklyr 1.3.0.9000
+
+### Distributed R
+
+- Fixed a bug in ordering of parameters for a lamba expression when the lambda
+  expression passed to a `hof_*` method is specified with a R formula and the
+  lambda takes 2 parameters
+
+# Sparklyr 1.3.0
+
+### Spark ML
+
+- `ml_evaluate()` methods are implemented for ML clustering and classification models
+
+### Distributed R
+
+- Created helper methods to integrate Spark SQL higher-order functions with
+  `dplyr::mutate`
+
+- Implemented option to pass partition index as a named parameter to `spark_apply()`
+  transform function
+
+- Enabled transform function of `spark_apply()` to return nested lists
+
+- Added option to return R objects instead of Spark data frame rows from transform
+  function of `spark_apply`
+
+- `sdf_collect()` now supports fetching Spark data frame row-by-row rather than
+  column-by-column, and fetching rows using iterator instead of collecting all
+  rows into memory
+  
+- Support for `partition` when using barrier execution in `spark_apply` (#2454)
+
+### Connections
+
+- Sparklyr can now connect with Spark 2.4 built with Scala 2.12 using
+  `spark_connect(..., scala_version = "2.12")`
+
+- Hive integration can now be disabled by configuration in `spark_connect()` (#2465)
+
+- A JVM object reference counting bug affecting secondary Spark connections was fixed
+  (#2515)
+
+- Revised JObj envs initialization for Databricks connections (#2533)
+
+### Serialization
+
+- Timezones, if present in data, are correctly represented now in Arrow serialization
+
+- Embedded nul bytes are removed from strings when reading strings from Spark to R
+  (#2250)
+
+- Support to collect objectts of type `SeqWrapper` (#2441)
+
+### Data
+
+- Created helper methods to integrate Spark SQL higher-order functions with
+  `dplyr::mutate`
+
+- New `spark_read()` method to allow user-defined R functions to be run
+  on Spark workers to import data into a Spark data frame
+
+- `spark_write()` method is implemented allow user-defined functions to be run on
+  Spark workers to export data from a Spark data frame
+
+- Avro functionalities such as `spark_read_avro()`, `spark_write_avro()`,
+  `sdf_from_avro()`, and `sdf_to_avro()` are implemented and can be optionally
+  enabled with `spark_connect(..., package = "avro")`
+
+### Extensions
+
+- Fixed a bug where Spark package repositories specification was not honored by
+  `spark_dependency()`. The `repositories` parameter of `spark_dependency()` now
+  works as expected.
+
+### Misc
+
+- Fixed warnings for deprecated functions (#2431)
+
+- More test coverage for Databricks Connect and Databricks Notebook modes
+
+- Embedded R sources are now included as resources rather than as a Scala string
+  literal in `sparklyr-*.jar` files, so that they can be updated without
+  re-compilation of Scala source files
+
+- A mechanism is created to verify embedded sources in `sparklyr-*.jar` files
+  are in-sync with current R source files and this verification is now part of
+  the Github CI workflow for `sparklyr`
+
 # Sparklyr 1.2.0
 
 ### Distributed R
@@ -15,6 +104,14 @@
 
 - Fixed the issue of date or timestamp values representing the UNIX epoch
   (1970-01-01) being deserialized incorrectly into NAs
+
+- Better support for querying and deserializing Spark SQL struct columns when
+  working with Spark 2.4 or above
+
+- Add support in `copy_to()` for columns with nested lists (#2247).
+
+- Significantly improve `collect()` performance for columns with nested
+  lists (#2252).
 
 ### Connection
 
@@ -40,6 +137,8 @@
 - Removal of unneeded objects from JVM object tracker no longer blocks
   subsequent JVM method invocations
 
+- Add support for JDK11 for Spark 3 preview.
+
 ### Misc
 
 - Support for installing Spark 3.0 Preview 2.
@@ -55,19 +154,6 @@
   exported by mistake)
 
 - Fixed a bug in `summary()` of `ml_linear_regression`
-
-# Sparklyr 1.1.0.9001
-
-### Connection
-
-- Add support for JDK11 for Spark 3 preview.
-
-### Data
-
-- Add support in `copy_to()` for columns with nested lists (#2247).
-
-- Significantly improve `collect()` performance for columns with nested
-  lists (#2252).
 
 # Sparklyr 1.1.0
 

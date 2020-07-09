@@ -1,4 +1,93 @@
-# Sparklyr 1.2.0
+## Sparklyr 1.3.0.9000
+
+### Distributed R
+
+- Fixed a bug in ordering of parameters for a lamba expression when the lambda
+  expression passed to a `hof_*` method is specified with a R formula and the
+  lambda takes 2 parameters
+
+## Sparklyr 1.3.0
+
+### Spark ML
+
+- `ml_evaluate()` methods are implemented for ML clustering and classification models
+
+### Distributed R
+
+- Created helper methods to integrate Spark SQL higher-order functions with
+  `dplyr::mutate`
+
+- Implemented option to pass partition index as a named parameter to `spark_apply()`
+  transform function
+
+- Enabled transform function of `spark_apply()` to return nested lists
+
+- Added option to return R objects instead of Spark data frame rows from transform
+  function of `spark_apply`
+
+- `sdf_collect()` now supports fetching Spark data frame row-by-row rather than
+  column-by-column, and fetching rows using iterator instead of collecting all
+  rows into memory
+  
+- Support for `partition` when using barrier execution in `spark_apply` (#2454)
+
+### Connections
+
+- Sparklyr can now connect with Spark 2.4 built with Scala 2.12 using
+  `spark_connect(..., scala_version = "2.12")`
+
+- Hive integration can now be disabled by configuration in `spark_connect()` (#2465)
+
+- A JVM object reference counting bug affecting secondary Spark connections was fixed
+  (#2515)
+
+- Revised JObj envs initialization for Databricks connections (#2533)
+
+### Serialization
+
+- Timezones, if present in data, are correctly represented now in Arrow serialization
+
+- Embedded nul bytes are removed from strings when reading strings from Spark to R
+  (#2250)
+
+- Support to collect objectts of type `SeqWrapper` (#2441)
+
+### Data
+
+- Created helper methods to integrate Spark SQL higher-order functions with
+  `dplyr::mutate`
+
+- New `spark_read()` method to allow user-defined R functions to be run
+  on Spark workers to import data into a Spark data frame
+
+- `spark_write()` method is implemented allow user-defined functions to be run on
+  Spark workers to export data from a Spark data frame
+
+- Avro functionalities such as `spark_read_avro()`, `spark_write_avro()`,
+  `sdf_from_avro()`, and `sdf_to_avro()` are implemented and can be optionally
+  enabled with `spark_connect(..., package = "avro")`
+
+### Extensions
+
+- Fixed a bug where Spark package repositories specification was not honored by
+  `spark_dependency()`. The `repositories` parameter of `spark_dependency()` now
+  works as expected.
+
+### Misc
+
+- Fixed warnings for deprecated functions (#2431)
+
+- More test coverage for Databricks Connect and Databricks Notebook modes
+
+- Embedded R sources are now included as resources rather than as a Scala string
+  literal in `sparklyr-*.jar` files, so that they can be updated without
+  re-compilation of Scala source files
+
+- A mechanism is created to verify embedded sources in `sparklyr-*.jar` files
+  are in-sync with current R source files and this verification is now part of
+  the Github CI workflow for `sparklyr`
+
+## Sparklyr 1.2.0
 
 ### Distributed R
 
@@ -15,6 +104,14 @@
 
 - Fixed the issue of date or timestamp values representing the UNIX epoch
   (1970-01-01) being deserialized incorrectly into NAs
+
+- Better support for querying and deserializing Spark SQL struct columns when
+  working with Spark 2.4 or above
+
+- Add support in `copy_to()` for columns with nested lists (#2247).
+
+- Significantly improve `collect()` performance for columns with nested
+  lists (#2252).
 
 ### Connection
 
@@ -40,6 +137,8 @@
 - Removal of unneeded objects from JVM object tracker no longer blocks
   subsequent JVM method invocations
 
+- Add support for JDK11 for Spark 3 preview.
+
 ### Misc
 
 - Support for installing Spark 3.0 Preview 2.
@@ -56,20 +155,7 @@
 
 - Fixed a bug in `summary()` of `ml_linear_regression`
 
-# Sparklyr 1.1.0.9001
-
-### Connection
-
-- Add support for JDK11 for Spark 3 preview.
-
-### Data
-
-- Add support in `copy_to()` for columns with nested lists (#2247).
-
-- Significantly improve `collect()` performance for columns with nested
-  lists (#2252).
-
-# Sparklyr 1.1.0
+## Sparklyr 1.1.0
 
 ### Distributed R
 
@@ -99,11 +185,11 @@
 
 - Add config `sparklyr.livy.jar` to configure path or URL to sparklyr JAR.
 
-# Data
+### Data
 
 - Add support for `partition_by` when using `spark_write_delta()` (#2228).
 
-# Sparklyr 1.0.5
+## Sparklyr 1.0.5
 
 ### Serialization
 
@@ -136,13 +222,13 @@
 
 - Fix `curl_fetch_memory` error when using YARN Cluster mode (#2157).
 
-# Sparklyr 1.0.4
+## Sparklyr 1.0.4
 
 ### Arrow
 
 - Support for Apache Arrow 0.15 (@nealrichardson, #2132).
 
-# Sparklyr 1.0.3
+## Sparklyr 1.0.3
 
 ### Kuberenetes
 
@@ -160,7 +246,7 @@
 
 - Fix for Qubole connections for single user and multiple sessions (@vipul1409, #2128).
 
-# Sparklyr 1.0.2
+## Sparklyr 1.0.2
 
 ### Connections
 
@@ -195,7 +281,7 @@
 - The `spark_read_()` functions support loading data with named `path`
   but no explicit `name`.
 
-# Sparklyr 1.0.1
+## Sparklyr 1.0.1
 
 ### ML
 
@@ -245,7 +331,7 @@
 
 - Fix regression in `spark_config_kubernetes()` configuration helper.
 
-# Sparklyr 1.0.0
+## Sparklyr 1.0.0
 
 ### Arrow
 
@@ -328,12 +414,12 @@
 
 - Support for property expansion in `yarn-site.xml` (@lgongmsft, #1876).
 
-## Distributed R
+### Distributed R
 
 - The `memory` parameter in `spark_apply()` now defaults to `FALSE` when
   the `name` parameter is not specified.
 
-## Other
+### Other
 
 - Removed dreprecated `sdf_mutate()`.
 
@@ -354,7 +440,7 @@
 
  - Support for detecting Spark version using `spark-submit`.
 
-# Sparklyr 0.9.4
+## Sparklyr 0.9.4
 
 - Improved multiple streaming documentation examples (#1801, #1805, #1806).
 
@@ -366,7 +452,7 @@
 
 - Fix to `spark_read_kafka()` to remove unused `path`.
 
-# Sparklyr 0.9.3
+## Sparklyr 0.9.3
 
 - Fix to make `spark_config_kubernetes()` work with variable `jar`
   parameters.
@@ -400,7 +486,7 @@
 
 - Proactevely clean JVM objects when R object is deallocated.
 
-# Sparklyr 0.9.2
+## Sparklyr 0.9.2
 
 - Support for Spark 2.3.2.
 
@@ -415,7 +501,7 @@
 
 - Implemented `tidy()`, `augment()`, and `glance()` for `ml_linear_svc()`and `ml_pca()` models (@samuelmacedo83)
 
-# Sparklyr 0.9.2
+## Sparklyr 0.9.2
 
 - Support for Spark 2.3.2.
 
@@ -431,7 +517,7 @@
 
 - Support for launching Livy logs from connection pane.
 
-# Sparklyr 0.9.2
+## Sparklyr 0.9.2
 
 - Removed `overwrite` parameter in `spark_read_table()` (#1698).
 
@@ -439,7 +525,7 @@
 
 - Additional jar search paths under Spark 2.3.1 (#1694)
 
-# Sparklyr 0.9.1
+## Sparklyr 0.9.1
 
 - Terminate streams when Shiny app terminates.
 
@@ -450,7 +536,7 @@
 
 - Fix to `stream_write_kafka()` and `stream_write_jdbc()`.
 
-# Sparklyr 0.9.0
+## Sparklyr 0.9.0
 
 ### Streaming
 
@@ -491,7 +577,7 @@
   that is called after `spark-submit` which can be used to automatically
   configure port forwarding.
 
-## Batches
+### Batches
 
 - Added support for `spark_submit()` to assist submitting non-interactive
   Spark jobs.
@@ -610,7 +696,7 @@
 - Support for functions as values in entries to `spark_config()` to enable advanced
   configuration workflows.
 
-# Sparklyr 0.8.4
+## Sparklyr 0.8.4
 
 - Added support for `spark_session_config()` to modify spark session settings.
 
@@ -629,21 +715,21 @@
 
 - `broom::tidy()` for linear regression and generalized linear regression models now give correct results (#1501).
 
-# Sparklyr 0.8.3
+## Sparklyr 0.8.3
 
 - Support for Spark 2.3 in local windows clusters (#1473).
 
-# Sparklyr 0.8.2
+## Sparklyr 0.8.2
 
 - Support for resource managers using `https` in `yarn-cluster` mode (#1459).
 
 - Fixed regression for connections using Livy and Spark 1.6.X.
 
-# Sparklyr 0.8.1
+## Sparklyr 0.8.1
 
 - Fixed regression for connections using `mode` with `databricks`.
 
-# Sparklyr 0.8.0
+## Sparklyr 0.8.0
 
 ### Spark ML
 
@@ -750,7 +836,7 @@
 
 - `cbind()` and `sdf_bind_cols()` don't use NSE internally anymore and no longer output names of mismatched data frames on error (#1363).
 
-# Sparklyr 0.7.0
+## Sparklyr 0.7.0
 
 - Added support for Spark 2.2.1.
 
@@ -819,7 +905,7 @@ data frames.
 - Fixed collection of `DateType` and `TimestampTime` from `character` to
   proper `Date` and `POSIXct` types.
 
-# Sparklyr 0.6.4
+## Sparklyr 0.6.4
 
 - Added support for HTTPS for `yarn-cluster` which is activated by setting
   `yarn.http.policy` to `HTTPS_ONLY` in `yarn-site.xml`.
@@ -837,7 +923,7 @@ data frames.
   `sparklyr.yarn.cluster.lookup.username` and `sparklyr.yarn.cluster.lookup.byname`
   to control the new application lookup behavior.
 
-# Sparklyr 0.6.3
+## Sparklyr 0.6.3
 
 - Enabled support for Java 9 for clusters configured with
   Hadoop 2.8. Java 9 blocked on 'master=local' unless
@@ -949,12 +1035,12 @@ data frames.
 - Added support for additional livy session creation parameters using
   the `livy_config()` function.
 
-# Sparklyr 0.6.2
+## Sparklyr 0.6.2
 
 - Fix connection_spark_shinyapp() under RStudio 1.1 to avoid error while
   listing Spark installation options for the first time.
 
-# Sparklyr 0.6.1
+## Sparklyr 0.6.1
 
 - Fixed error in `spark_apply()` that may triggered when multiple CPUs
   are used in a single node due to race conditions while accesing the
@@ -980,7 +1066,7 @@ data frames.
 - Fixed `sparklyr 0.6` issue blocking concurrent `sparklyr` connections, which
  required to set `config$sparklyr.gateway.remote = FALSE` as workaround.
 
-# Sparklyr 0.6.0
+## Sparklyr 0.6.0
 
 ### Distributed R
 
@@ -1252,27 +1338,27 @@ data frames.
   data and added path parameter in `spark_load_table()` for consistency with
   other functions.
 
-# Sparklyr 0.5.5
+## Sparklyr 0.5.5
 
 - Implemented support for `connectionViewer` interface required in RStudio 1.1
   and `spark_connect` with `mode="databricks"`.
 
-# Sparklyr 0.5.4
+## Sparklyr 0.5.4
 
 - Implemented support for `dplyr 0.6` and Spark 2.1.x.
 
-# Sparklyr 0.5.3
+## Sparklyr 0.5.3
 
 - Implemented support for `DBI 0.6`.
 
-# Sparklyr 0.5.2
+## Sparklyr 0.5.2
 
 - Fix to `spark_connect` affecting Windows users and Spark 1.6.x.
 
 - Fix to Livy connections which would cause connections to fail while connection
   is on 'waiting' state.
 
-# Sparklyr 0.5.0
+## Sparklyr 0.5.0
 
 - Implemented basic authorization for Livy connections using
   `livy_config_auth()`.
@@ -1396,6 +1482,6 @@ data frames.
 - Added support for `n_distinct(...)` within the `dplyr` interface, based on
   call to Hive function `count(DISTINCT ...)`. (#220)
 
-# Sparklyr 0.4.0
+## Sparklyr 0.4.0
 
 - First release to CRAN.

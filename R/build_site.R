@@ -41,20 +41,17 @@ update_site <- function(repo = "rstudio/sparklyr") {
   new_files <- dir_ls("repos/sparklyr/docs/reference/")
   file_copy(new_files, "content/reference")
   
-  ## Delete index in reference to let hugo generate pages
-  unlink("content/reference/index.html")
-  
-  ## Copy NEWS
-  file_copy("repos/sparklyr/NEWS.md", "content/news.md", overwrite = TRUE)
-  
-  ## Update site
-  blogdown::serve_site()
+  ## Hugo does not generate reference articles when index exists
+  file_copy("repos/sparklyr/docs/reference/index.html", "content/reference.html")
+  unlink("repos/sparklyr/docs/reference/index.html")
   
   ## Fix reference index 
-  file_copy("repos/sparklyr/docs/reference/index.html", "content/reference")
   index_page <-  readLines("content/reference/index.html")
   wo_html <- purrr::map_chr(index_page, ~ gsub(".html\">", "\">", .x))
   writeLines(wo_html, "content/reference/index.html")
+  
+  ## Copy NEWS
+  file_copy("repos/sparklyr/NEWS.md", "content/news.md", overwrite = TRUE)
   
   ## Update site
   blogdown::serve_site()

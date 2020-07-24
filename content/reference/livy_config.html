@@ -28,6 +28,8 @@ aliases:
   <span class='kw'>password</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>negotiate</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>custom_headers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>`X-Requested-By`</span> <span class='kw'>=</span> <span class='st'>"sparklyr"</span>),
+  <span class='kw'>proxy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>curl_opts</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )</code></pre></div>
     
@@ -58,6 +60,16 @@ aliases:
     <tr>
       <td>custom_headers</td>
       <td><p>List of custom headers to append to http requests. Defaults to <code><a href='https://rdrr.io/r/base/list.html'>list("X-Requested-By" = "sparklyr")</a></code>.</p></td>
+    </tr>
+    <tr>
+      <td>proxy</td>
+      <td><p>Either NULL or a proxy specified by httr::use_proxy(). Defaults to NULL.</p></td>
+    </tr>
+    <tr>
+      <td>curl_opts</td>
+      <td><p>List of CURL options (e.g., verbose, connecttimeout, dns_cache_timeout, etc, see httr::httr_options() for a
+list of valid options) -- NOTE: these configurations are for libcurl only and separate from HTTP headers or Livy session
+parameters.</p></td>
     </tr>
     <tr>
       <td>...</td>

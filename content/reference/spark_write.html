@@ -18,7 +18,10 @@ aliases:
 
     
     <p>Run a custom R function on Spark worker to write a Spark DataFrame
-into file(s)</p>
+into file(s). If Spark's speculative execution feature is enabled (i.e.,
+`spark.speculation` is true), then each write task may be executed more than
+once and the user-defined writer function will need to ensure no concurrent
+writes happen to the same file path (e.g., by appending UUID to each file name).</p>
     
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_write</span>(<span class='no'>x</span>, <span class='no'>writer</span>, <span class='no'>paths</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</code></pre></div>

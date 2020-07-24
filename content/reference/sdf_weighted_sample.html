@@ -1,7 +1,7 @@
 ---
-title: "Sort a Spark DataFrame"
+title: "Perform Weighted Random Sampling on a Spark DataFrame"
 aliases:
-  - reference/sparklyr/latest/sdf_sort.html
+  - reference/sparklyr/latest/sdf_weighted_sample.html
 ---
 
     <div>
@@ -19,11 +19,15 @@ aliases:
     <div>
 
     
-    <p>Sort a Spark DataFrame by one or more columns, with each column
-sorted in ascending order.</p>
+    <p>Draw a random sample of rows (with or without replacement) from a Spark
+DataFrame
+If the sampling is done without replacement, then it will be conceptually
+equivalent to an iterative process such that in each step the probability of
+adding a row to the sample set is equal to its weight divided by summation of
+weights of all rows that are not in the sample set yet in that step.</p>
     
 
-    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sdf_sort</span>(<span class='no'>x</span>, <span class='no'>columns</span>)</code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>sdf_weighted_sample</span>(<span class='no'>x</span>, <span class='no'>weight_col</span>, <span class='no'>k</span>, <span class='kw'>replacement</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</code></pre></div>
     
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
@@ -38,8 +42,20 @@ sorted in ascending order.</p>
       <td><p>An object coercable to a Spark DataFrame.</p></td>
     </tr>
     <tr>
-      <td>columns</td>
-      <td><p>The column(s) to sort by.</p></td>
+      <td>weight_col</td>
+      <td><p>Name of the weight column</p></td>
+    </tr>
+    <tr>
+      <td>k</td>
+      <td><p>Sample set size</p></td>
+    </tr>
+    <tr>
+      <td>replacement</td>
+      <td><p>Whether to sample with replacement</p></td>
+    </tr>
+    <tr>
+      <td>seed</td>
+      <td><p>An (optional) integer seed</p></td>
     </tr>
     </table>
     
@@ -65,7 +81,7 @@ the <span style="R">R</span> level, these operations will only be executed when 
 <code><a href='sdf_random_split.html'>sdf_random_split</a>()</code>,
 <code><a href='sdf_register.html'>sdf_register</a>()</code>,
 <code><a href='sdf_sample.html'>sdf_sample</a>()</code>,
-<code>sdf_weighted_sample()</code></p></div>
+<code><a href='sdf_sort.html'>sdf_sort</a>()</code></p></div>
     
 
     </div>

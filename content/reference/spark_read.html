@@ -11,7 +11,9 @@ aliases:
     <li><a href="#arguments">Arguments</a></li>
     
     <li><a href="#see-also">See also</a></li>
-        </ul>
+    
+    <li><a href="#examples">Examples</a></li>
+    </ul>
     </div>
 
     <div>
@@ -91,6 +93,24 @@ inferred and resulting data frame can have arbitrary column names</p></td>
 <code><a href='spark_write_text.html'>spark_write_text</a>()</code></p></div>
     
 
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sparklyr</span>)
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(
+  <span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"yarn"</span>,
+  <span class='kw'>spark_home</span> <span class='kw'>=</span> <span class='st'>"~/spark/spark-2.4.5-bin-hadoop2.7"</span>
+)
+
+<span class='co'># This is a contrived example to show reader tasks will be distributed across</span>
+<span class='co'># all Spark worker nodes</span>
+<span class='fu'>spark_read</span>(
+  <span class='no'>sc</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"/dev/null"</span>, <span class='fl'>10</span>),
+  <span class='kw'>reader</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>path</span>) <span class='fu'><a href='https://rdrr.io/r/base/system.html'>system</a></span>(<span class='st'>"hostname"</span>, <span class='kw'>intern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>hostname</span> <span class='kw'>=</span> <span class='st'>"string"</span>)
+) <span class='kw'>%&gt;%</span> <span class='fu'><a href='sdf_collect.html'>sdf_collect</a></span>()
+}</div></code></pre></div>
     </div>
 
     </div>

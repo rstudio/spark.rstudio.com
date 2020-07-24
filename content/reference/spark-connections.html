@@ -31,6 +31,7 @@ aliases:
   <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='spark_config.html'>spark_config</a></span>(),
   <span class='kw'>extensions</span> <span class='kw'>=</span> <span class='kw pkg'>sparklyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sparklyr/man/register_extension.html'>registered_extensions</a></span>(),
   <span class='kw'>packages</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>scala_version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )
 
@@ -48,6 +49,7 @@ aliases:
   <span class='kw'>version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>config</span> <span class='kw'>=</span> <span class='fu'><a href='spark_config.html'>spark_config</a></span>(),
   <span class='kw'>extensions</span> <span class='kw'>=</span> <span class='kw pkg'>sparklyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sparklyr/man/register_extension.html'>registered_extensions</a></span>(),
+  <span class='kw'>scala_version</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
 )</code></pre></div>
     
@@ -109,6 +111,14 @@ default, all packages enabled through the use of
 <code>sparklyr.shell.packages</code> configuration option. Notice that the <code>version</code>
 parameter is used to choose the correct package, otherwise assumes the latest version
 is being used.</p></td>
+    </tr>
+    <tr>
+      <td>scala_version</td>
+      <td><p>Load the sparklyr jar file that is built with the version of
+Scala specified (this currently only makes sense for Spark 2.4, where sparklyr will
+by default assume Spark 2.4 on current host is built with Scala 2.11, and therefore
+`scala_version = '2.12'` is needed if sparklyr is connecting to Spark 2.4 built with
+Scala 2.12)</p></td>
     </tr>
     <tr>
       <td>...</td>

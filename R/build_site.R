@@ -5,12 +5,12 @@ library(fs)
 library(sparklyr)
 
 
-copy_repo <- function(github_repo = "rstudio/sparklyr", package_folder = "repos"){
-  pr <- str_split(github_repo, "/")
+copy_repo <- function(repo = "rstudio/sparklyr", branch = "master", package_folder = "repos"){
+  pr <- str_split(repo, "/")
   pr <- pr[[1]][2]
-  repo <- path(root(), package_folder, pr)
-  if(dir_exists(repo)) dir_delete(repo)
-  system(paste0("git clone https://github.com/", github_repo, " -b master ", repo))
+  repo_dir <- path(root(), package_folder, pr)
+  if(dir_exists(repo_dir)) dir_delete(repo_dir)
+  system(paste0("git clone https://github.com/", repo, " -b ", branch, " ", repo_dir))
 }
 
 missing_topics <- function(){
@@ -30,10 +30,10 @@ missing_topics <- function(){
 
 root <-  function() rprojroot::find_rstudio_root_file()
 
-update_site <- function(repo = "rstudio/sparklyr") {
+update_site <- function(repo = "rstudio/sparklyr", branch = "master") {
   ## Copy the repo
   if(dir_exists("repos")) dir_delete("repos")
-  copy_repo(repo)
+  copy_repo(repo = repo, branch = branch)
   ## Copy reference files
   help_files <- dir_ls("content/reference", glob = "*.html")
   if(length(help_files) > 0) file_delete(help_files)

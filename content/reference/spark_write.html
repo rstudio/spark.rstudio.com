@@ -1,0 +1,95 @@
+---
+title: "Write Spark DataFrame to file using a custom writer"
+aliases:
+  - reference/sparklyr/latest/spark_write.html
+---
+
+    <div>
+
+    <div>
+    <ul data-gumshoe>
+    <li><a href="#arguments">Arguments</a></li>
+        
+    <li><a href="#examples">Examples</a></li>
+    </ul>
+    </div>
+
+    <div>
+
+    
+    <p>Run a custom R function on Spark worker to write a Spark DataFrame
+into file(s)</p>
+    
+
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_write</span>(<span class='no'>x</span>, <span class='no'>writer</span>, <span class='no'>paths</span>, <span class='kw'>packages</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</code></pre></div>
+    
+    <h2 id="arguments">Arguments</h2>
+    <table class="ref-arguments">
+
+    <colgroup>
+      <col class="name" />
+      <col class="desc" />
+    </colgroup>
+
+    <tr>
+      <td>x</td>
+      <td><p>A Spark Dataframe to be saved into file(s)</p></td>
+    </tr>
+    <tr>
+      <td>writer</td>
+      <td><p>A writer function with the signature function(partition, path)
+where <code>partition</code> is a R dataframe containing all rows from one partition
+of the original Spark Dataframe <code>x</code> and path is a string specifying the
+file to write <code>partition</code> to</p></td>
+    </tr>
+    <tr>
+      <td>paths</td>
+      <td><p>A single destination path or a list of destination paths, each one
+specifying a location for a partition from <code>x</code> to be written to. If
+number of partition(s) in <code>x</code> is not equal to <code><a href='https://rdrr.io/r/base/length.html'>length(paths)</a></code> then
+<code>x</code> will be re-partitioned to contain <code><a href='https://rdrr.io/r/base/length.html'>length(paths)</a></code> partition(s)</p></td>
+    </tr>
+    <tr>
+      <td>packages</td>
+      <td><p>Boolean to distribute <code><a href='https://rdrr.io/r/base/libPaths.html'>.libPaths()</a></code> packages to each node,
+a list of packages to distribute, or a package bundle created with</p></td>
+    </tr>
+    </table>
+    
+
+    <h2 id="examples">Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sparklyr</span>)
+
+<span class='no'>sc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='spark-connections.html'>spark_connect</a></span>(<span class='kw'>master</span> <span class='kw'>=</span> <span class='st'>"local[3]"</span>)
+
+<span class='co'># copy some test data into a Spark Dataframe</span>
+<span class='no'>sdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sdf_copy_to.html'>sdf_copy_to</a></span>(<span class='no'>sc</span>, <span class='no'>iris</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># create a writer function</span>
+<span class='no'>writer</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>df</span>, <span class='no'>path</span>) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span>(<span class='no'>df</span>, <span class='no'>path</span>)
+}
+
+<span class='fu'>spark_write</span>(
+  <span class='no'>sdf</span>,
+  <span class='no'>writer</span>,
+  <span class='co'># re-partition sdf into 3 partitions and write them to 3 separate files</span>
+  <span class='kw'>paths</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"file:///tmp/file1"</span>, <span class='st'>"file:///tmp/file2"</span>, <span class='st'>"file:///tmp/file3"</span>),
+)
+
+<span class='fu'>spark_write</span>(
+  <span class='no'>sdf</span>,
+  <span class='no'>writer</span>,
+  <span class='co'># save all rows into a single file</span>
+  <span class='kw'>paths</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='st'>"file:///tmp/all_rows"</span>)
+)
+}</div></code></pre></div>
+    </div>
+
+    </div>
+
+
+
+

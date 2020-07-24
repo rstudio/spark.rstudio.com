@@ -9,14 +9,18 @@ aliases:
     <div>
     <ul data-gumshoe>
     <li><a href="#arguments">Arguments</a></li>
+    
     <li><a href="#configuration">Configuration</a></li>
+    
     <li><a href="#examples">Examples</a></li>
     </ul>
     </div>
 
     <div>
 
+    
     <p>Applies an R function to a Spark object (typically, a Spark DataFrame).</p>
+    
 
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>spark_apply</span>(
   <span class='no'>x</span>,
@@ -28,9 +32,11 @@ aliases:
   <span class='kw'>context</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>barrier</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fetch_result_as_sdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>partition_index_param</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='no'>...</span>
 )</code></pre></div>
-
+    
     <h2 id="arguments">Arguments</h2>
     <table class="ref-arguments">
 
@@ -104,11 +110,30 @@ specify the column types. The sample size is configurable using the
       <td><p>Optional to support Barrier Execution Mode in the scheduler.</p></td>
     </tr>
     <tr>
+      <td>fetch_result_as_sdf</td>
+      <td><p>Whether to return the transformed results in a Spark
+  Dataframe (defaults to <code>TRUE</code>). When set to <code>FALSE</code>, results will be
+  returned as a list of R objects instead.</p>
+<p>NOTE: <code>fetch_result_as_sdf</code> must be set to <code>FALSE</code> when the transformation
+  function being applied is returning R objects that cannot be stored in a Spark
+  Dataframe (e.g., complex numbers or any other R data type that does not have an
+  equivalent representation among Spark SQL data types).</p></td>
+    </tr>
+    <tr>
+      <td>partition_index_param</td>
+      <td><p>Optional if non-empty, then <code>f</code> also receives
+  the index of the partition being processed as a named argument with this name, in
+  addition to all positional argument(s) it will receive</p>
+<p>NOTE: when <code>fetch_result_as_sdf</code> is set to <code>FALSE</code>, object returned from the
+  transformation function also must be serializable by the <code><a href='https://rdrr.io/r/base/serialize.html'>base::serialize</a></code>
+  function in R.</p></td>
+    </tr>
+    <tr>
       <td>...</td>
       <td><p>Optional arguments; currently unused.</p></td>
     </tr>
     </table>
-
+    
     <h2 id="configuration">Configuration</h2>
 
     
@@ -121,6 +146,7 @@ worker node use the <code>sparklyr.apply.env.*</code> config, to launch workers
 without <code>--vanilla</code> use <code>sparklyr.apply.options.vanilla</code> set to
 <code>FALSE</code>, to run a custom script before launching Rscript use
 <code>sparklyr.apply.options.rscript.before</code>.</p>
+    
 
     <h2 id="examples">Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
@@ -136,7 +162,6 @@ without <code>--vanilla</code> use <code>sparklyr.apply.options.vanilla</code> s
   <span class='fu'>spark_apply</span>(<span class='no'>nrow</span>, <span class='kw'>barrier</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"integer"</span>)) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='collect.html'>collect</a></span>()
 }</div></code></pre></div>
-
     </div>
 
     </div>

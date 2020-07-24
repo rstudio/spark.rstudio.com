@@ -34,17 +34,28 @@ update_site <- function(repo = "rstudio/sparklyr") {
   ## Copy the repo
   if(dir_exists("repos")) dir_delete("repos")
   copy_repo(repo)
+  
   ## Copy reference files
   help_files <- dir_ls("content/reference", glob = "*.html")
   if(length(help_files) > 0) file_delete(help_files)
   new_files <- dir_ls("repos/sparklyr/docs/reference/")
   file_copy(new_files, "content/reference")
+  
+  ## Delete index in reference to let hugo generate pages
+  unlink("content/reference/index.html")
+  
+  ## Copy NEWS
+  file_copy("repos/sparklyr/NEWS.md", "content/news.md", overwrite = TRUE)
+  
+  ## Update site
+  blogdown::serve_site()
+  
   ## Fix reference index 
+  file_copy("repos/sparklyr/docs/reference/index.html", "content/reference")
   index_page <-  readLines("content/reference/index.html")
   wo_html <- purrr::map_chr(index_page, ~ gsub(".html\">", "\">", .x))
   writeLines(wo_html, "content/reference/index.html")
-  ## Copy NEWS
-  file_copy("repos/sparklyr/NEWS.md", "content/news.md", overwrite = TRUE)
+  
   ## Update site
   blogdown::serve_site()
 }

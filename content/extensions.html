@@ -18,8 +18,8 @@ aliases:
 <p>Here’s an example of an extension function that calls the text file line counting function available via the SparkContext:</p>
 <pre class="r"><code>library(sparklyr)
 count_lines &lt;- function(sc, file) {
-  spark_context(sc) %&gt;% 
-    invoke(&quot;textFile&quot;, file, 1L) %&gt;% 
+  spark_context(sc) %&gt;%
+    invoke(&quot;textFile&quot;, file, 1L) %&gt;%
     invoke(&quot;count&quot;)
 }</code></pre>
 <p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
@@ -141,12 +141,12 @@ count_lines(sc, &quot;hdfs://path/data.csv&quot;)</code></pre>
 billion &lt;- invoke(billionBigInteger, &quot;longValue&quot;)</code></pre>
 <p>Note the <code>sc</code> argument: that’s the <code>spark_connection</code> object which is provided by the front-end package (e.g. sparklyr).</p>
 <p>The previous example can be re-written to be more compact and clear using <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes:</p>
-<pre class="r"><code>billion &lt;- sc %&gt;% 
+<pre class="r"><code>billion &lt;- sc %&gt;%
   invoke_new(&quot;java.math.BigInteger&quot;, &quot;1000000000&quot;) %&gt;%
     invoke(&quot;longValue&quot;)</code></pre>
 <p>This syntax is similar to the method-chaining syntax often used with Scala code so is generally preferred.</p>
 <p>Calling a static method of a class is also straightforward. For example, to call the <code>Math::hypot()</code> static function you would use this code:</p>
-<pre class="r"><code>hypot &lt;- sc %&gt;% 
+<pre class="r"><code>hypot &lt;- sc %&gt;%
   invoke_static(&quot;java.lang.Math&quot;, &quot;hypot&quot;, 10, 20) </code></pre>
 </div>
 <div id="wrapper-functions" class="section level2">
@@ -154,8 +154,8 @@ billion &lt;- invoke(billionBigInteger, &quot;longValue&quot;)</code></pre>
 <p>Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we’ll describe the typical form of these functions as well as how to handle special types like Spark DataFrames.</p>
 <p>Here’s the wrapper function for <code>textFile().count()</code> which we defined earlier:</p>
 <pre class="r"><code>count_lines &lt;- function(sc, file) {
-  spark_context(sc) %&gt;% 
-    invoke(&quot;textFile&quot;, file, 1L) %&gt;% 
+  spark_context(sc) %&gt;%
+    invoke(&quot;textFile&quot;, file, 1L) %&gt;%
       invoke(&quot;count&quot;)
 }</code></pre>
 <p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
@@ -200,18 +200,18 @@ billion &lt;- invoke(billionBigInteger, &quot;longValue&quot;)</code></pre>
 </table>
 <p>The use of these functions is illustrated in this simple example:</p>
 <pre class="r"><code>analyze &lt;- function(x, features) {
-  
+
   # normalize whatever we were passed (e.g. a dplyr tbl) into a DataFrame
   df &lt;- spark_dataframe(x)
-  
+
   # get the underlying connection so we can create new objects
   sc &lt;- spark_connection(df)
-  
+
   # create an object to do the analysis and call its `analyze` and `summary`
   # methods (note that the df and features are passed to the analyze function)
-  summary &lt;- sc %&gt;%  
-    invoke_new(&quot;com.example.tools.Analyzer&quot;) %&gt;% 
-      invoke(&quot;analyze&quot;, df, features) %&gt;% 
+  summary &lt;- sc %&gt;%
+    invoke_new(&quot;com.example.tools.Analyzer&quot;) %&gt;%
+      invoke(&quot;analyze&quot;, df, features) %&gt;%
       invoke(&quot;summary&quot;)
 
   # return the results
@@ -247,7 +247,7 @@ billion &lt;- invoke(billionBigInteger, &quot;longValue&quot;)</code></pre>
   spark_dependency(
     jars = c(
       system.file(
-        sprintf(&quot;java/sparkds-%s-%s.jar&quot;, spark_version, scala_version), 
+        sprintf(&quot;java/sparkds-%s-%s.jar&quot;, spark_version, scala_version),
         package = &quot;sparkds&quot;
       )
     ),

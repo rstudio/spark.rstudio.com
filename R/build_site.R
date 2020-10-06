@@ -36,10 +36,29 @@ update_site <- function(repo = "rstudio/sparklyr") {
   copy_repo(repo)
 
   ## Copy reference files
-  if(dir_exists("static/reference")) dir_delete("static/reference")
-  dir.create("static/reference", recursive = TRUE)
-  new_files <- dir_ls("repos/sparklyr/docs/reference/")
-  file_copy(new_files, "static/reference")
+  static_dir <- "static"
+  dst_dir <- file.path(static_dir, "reference")
+  if(dir_exists(dst_dir)) dir_delete(dst_dir)
+  dir.create(dst_dir, recursive = TRUE)
+
+  src_dir <- file.path("repos", "sparklyr", "docs", "reference")
+  new_files <- dir_ls(src_dir)
+  file_copy(new_files, dst_dir)
+  pkgdown_css <- file.path(src_dir, "..", "pkgdown.css")
+  # hide the navbar header and make page-header fully visible
+  write(
+    c("\n",
+      ".navbar-toggle {",
+      "    visibility: hidden !important;",
+      "}",
+      ".page-header > h1 {",
+      "    margin-top: 60px !important;",
+      "}"
+    ),
+    file = pkgdown_css,
+    append = TRUE
+  )
+  file_copy(pkgdown_css, "static/", overwrite = TRUE)
 
   reference_page <-  readLines("static/reference/index.html")
   reference_page <- purrr::map_chr(reference_page, ~ gsub("<h1>Reference</h1>", "", .x))

@@ -10,7 +10,7 @@ copy_repo <- function(github_repo = "rstudio/sparklyr", package_folder = "repos"
   pr <- pr[[1]][2]
   repo <- path(root(), package_folder, pr)
   if(dir_exists(repo)) dir_delete(repo)
-  system(paste0("git clone https://github.com/", github_repo, " -b static_doc_reference ", repo))
+  system(paste0("git clone https://github.com/", github_repo, " -b main ", repo))
 }
 
 missing_topics <- function(){

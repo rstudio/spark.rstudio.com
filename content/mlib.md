@@ -173,8 +173,7 @@ Use Spark's [K-means clustering](http://spark.apache.org/docs/latest/ml-clusteri
 
 ``` r
 kmeans_model <- iris_tbl %>%
-  select(Petal_Width, Petal_Length) %>%
-  ml_kmeans(centers = 3)
+  ml_kmeans(k = 3, features = c("Petal_Length", "Petal_Width"))
 ```
 
     ## * No rows dropped by 'na.omit' call
@@ -196,7 +195,7 @@ kmeans_model
 
 ``` r
 # predict the associated class
-predicted <- sdf_predict(kmeans_model, iris_tbl) %>%
+predicted <- ml_predict(kmeans_model, iris_tbl) %>%
   collect
 table(predicted$Species, predicted$prediction)
 ```
@@ -209,7 +208,7 @@ table(predicted$Species, predicted$prediction)
 
 ``` r
 # plot cluster membership
-sdf_predict(kmeans_model) %>%
+ml_predict(kmeans_model) %>%
   collect() %>%
   ggplot(aes(Petal_Length, Petal_Width)) +
   geom_point(aes(Petal_Width, Petal_Length, col = factor(prediction + 1)),

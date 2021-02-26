@@ -87,7 +87,7 @@ library(dplyr)
 iris_tbl <- copy_to(sc, iris)
 flights_tbl <- copy_to(sc, nycflights13::flights, "flights")
 batting_tbl <- copy_to(sc, Lahman::Batting, "batting")
-src_tbls(sc)
+dplyr::src_tbls(sc)
 ```
 
     ## [1] "batting" "flights" "iris"
@@ -265,7 +265,7 @@ iris_parquet_tbl <- spark_read_parquet(sc, "iris_parquet", temp_parquet)
 spark_write_json(iris_tbl, temp_json)
 iris_json_tbl <- spark_read_json(sc, "iris_json", temp_json)
 
-src_tbls(sc)
+dplyr::src_tbls(sc)
 ```
 
     ## [1] "batting"      "flights"      "iris"         "iris_csv"    

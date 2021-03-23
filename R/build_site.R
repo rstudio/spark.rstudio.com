@@ -5,7 +5,7 @@ library(fs)
 library(sparklyr)
 
 
-copy_repo <- function(github_repo = "rstudio/sparklyr", package_folder = "repos"){
+copy_repo <- function(github_repo = "sparklyr/sparklyr", package_folder = "repos"){
   pr <- str_split(github_repo, "/")
   pr <- pr[[1]][2]
   repo <- path(root(), package_folder, pr)

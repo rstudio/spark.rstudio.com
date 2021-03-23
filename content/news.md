@@ -1,3 +1,114 @@
+# Sparklyr 1.6.1
+
+### Data
+
+- `sdf_distinct()` is implemented to be an R interface for `distinct()` operation
+  on Spark dataframes (NOTE: this is different from the `dplyr::distinct()`
+  operation, as `dplyr::distinct()` operation on a Spark dataframe now supports
+  `.keep_all = TRUE` and has more complex ordering requirements)
+
+- Fixed a problem of some expressions being evaluated twice in
+  `transmute.tbl_spark()` (see tidyverse/dbplyr#605)
+
+- `dbExistsTable()` now performs case insensitive comparison with table names to
+  be consistent with how table names are handled by Spark catalog API
+
+- Fixed a bug with `sql_query_save()` not overwriting a temp table with identical
+  name
+
+- Revised `sparklyr:::process_tbl_name()` to correctly handle inputs that are not
+  table names
+
+- Bug fix: `db_save_query.spark_connection()` should also cache the view it
+  created in Spark
+
+# Sparklyr 1.6.0
+
+### Data
+
+- Made `sparklyr` compatible with both dbplyr edition 1 and edition 2 APIs
+
+- Revised `sparklyr`'s integration with `dbplyr` API so that `dplyr::select()`,
+  `dplyr::mutate()`, and `dplyr::summarize()` verbs on Spark dataframes
+  involving `where()` predicates can be correctly translated to Spark SQL
+  (e.g., one can have `sdf %>% select(where(is.numeric))` and
+  `sdf %>% summarize(across(starts_with("Petal"), mean))`, etc)
+
+- Implemented `dplyr::if_all()` and `dplyr::if_any()` support for Spark
+  dataframes
+
+- Added support for `partition_by` option in `stream_write_*` methods
+
+- Fixed a bug with URI handling affecting all `spark_read_*` methods
+
+- Avoided repeated creations of SimpleDataFormat objects and setTimeZone calls
+  while collecting Data columns from a Spark dataframe
+
+- Schema specification for struct columns in `spark_read_*()` methods are now
+  supported (e.g.,
+  `spark_read_json(sc, path, columns = list(s = list(a = "integer, b = "double")))`
+  says expect a struct column named `s` with each element containing a field
+  named `a` and a field named `b`)
+
+- `sdf_quantile()` and `ft_quantile_discretizer()` now support approximation of
+  weighted quantiles using a modified version of the Greenwald-Khanna algorithm
+  that takes relative weight of each data point into consideration.
+
+- Fixed a problem of some expressions being evaluated twice in
+  `transmute.tbl_spark()` (see tidyverse/dbplyr#605)
+
+- Made `dplyr::distinct()` behavior for Spark dataframes configurable:
+  setting `options(sparklyr.dplyr_distinct.impl = "tbl_lazy)` will switch
+  `dplyr::distinct()` implementation to a basic one that only adds ‘DISTINCT’
+  clause to the current Spark SQL query, does not support the `.keep_all = TRUE`
+  option, and (3) does not have any ordering guarantee for the output.
+
+### Serialization
+
+- `spark_write_rds()` was implemented to support exporting all partitions of a
+  Spark dataframe in parallel into RDS (version 2) files. Such RDS files will be
+  written to the default file system of the Spark instance (i.e., local file if
+  the Spark instance is running locally, or a distributed file system such as
+  HDFS if the Spark instance is deployed over a cluster). The resulting RDS
+  files, once downloaded onto the local file system, should be deserialized into
+  R dataframes using `collect_from_rds()` (which calls `readRDS()` internally
+  and also performs some important post-processing steps to support timestamp
+  columns, date columns, and struct columns properly in R).
+
+- `copy_to()` can now import list columns of temporal values within a R
+  dataframe as arrays of Spark SQL date/timestamp types when working with Spark
+  3.0 or above
+
+- Fixed a bug with `copy_to()`'s handling of NA values in list columns of a R
+  dataframe
+
+- Spark map type will be collected as list instead of environment in R in order
+  to support empty string as key
+
+- Fixed a configuration-related bug in `sparklyr:::arrow_enabled()`
+
+- Implemented spark-apply-specific configuration option for Arrow max records
+  per batch, which can be different from the
+  `spark.sql.execution.arrow.maxRecordsPerBatch` value from Spark session config
+
+### Connections
+
+- Created convenience functions for working with Spark runtime configurations
+
+- Fixed buggy exit code from the `spark-submit` process launched by sparklyr
+
+### Spark ML
+
+- Implemented R interface for Power Iteration Clustering
+
+- The `handle_invalid` option is added to `ft_vector_indexer()` (supported by
+  Spark 2.3 or above)
+
+### Misc
+
+- Fixed a bug with `~` within some path components not being normalized in
+  `sparklyr::livy_install()`
+
 # Sparklyr 1.5.2
 
 ### Connections

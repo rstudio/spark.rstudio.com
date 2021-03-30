@@ -1,3 +1,18 @@
+# Sparklyr 1.7.0.9000
+
+### Data
+
+- Revised `tidyr::fill()` implementation to respect any 'ORDER BY' clause from
+  the input while ensuring the same 'ORDER BY' operation is never duplicated
+  twice in the generated Spark SQL query
+
+# Sparklyr 1.6.2
+
+### Data
+
+- A previous bug fix related to `dplyr::compute()` caching a Spark view needed
+  to be further revised to take effect with dbplyr backend API edition 2
+
 # Sparklyr 1.6.1
 
 ### Data

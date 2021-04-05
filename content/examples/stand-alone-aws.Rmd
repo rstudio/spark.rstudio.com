@@ -24,7 +24,7 @@ Here are the details of the EC2 instance, just deploy one at this point:
 
 - **Type:** t2.medium
 - **OS:** Ubuntu 16.04 LTS
-- **Disk space:** At least 20GB 
+- **Disk space:** At least 20GB
 - **Security group:** Open the following ports: 8080 (Spark UI), 4040 (Spark Worker UI), 8088 (sparklyr UI) and 8787 (RStudio).  Also open *All TCP* ports for the machines inside the security group.
 
 ## Spark
@@ -42,6 +42,13 @@ sudo apt-get install oracle-java8-set-default
 sudo apt-get update
 ```
 
+or alternatively, run
+```{}
+sudo apt install openjdk-8-jdk
+```
+
+to install Open JDK version 8.
+
 ### Download Spark
 
 - Download and unpack a pre-compiled version of Spark.  Here's is the link to the [official Spark download page](http://spark.apache.org/downloads.html)
@@ -55,7 +62,7 @@ cd spark-2.1.0-bin-hadoop2.7
 
 - We will create an image of the server.  In Amazon, these are called AMIs, for information please see the [User Guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html).
 
-- Launch 3 instances of the AMI 
+- Launch 3 instances of the AMI
 
 ## RStudio Server
 
@@ -118,7 +125,7 @@ sudo spark-2.1.0-bin-hadoop2.7/sbin/start-master.sh
 - Start the slave service. **Important**: Use dots not dashes as separators for the Spark Master node's address
 ```{}
 sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://[Master node's IP address]:7077
-``` 
+```
 sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://ip-172-30-1-94.us-west-2.compute.internal:7077
 - Close the terminal connection (optional)
 
@@ -138,7 +145,7 @@ install.packages("sparklyr")
 
 - Note the **Spark Master URL**
 
-- Logon to RStudio 
+- Logon to RStudio
 
 - Run the following code
 
@@ -151,7 +158,7 @@ conf <- spark_config()
 conf$spark.executor.memory <- "2GB"
 conf$spark.memory.fraction <- 0.9
 
-sc <- spark_connect(master="[Spark Master URL]", 
+sc <- spark_connect(master="[Spark Master URL]",
               version = "2.1.0",
               config = conf,
               spark_home = "/home/ubuntu/spark-2.1.0-bin-hadoop2.7/")

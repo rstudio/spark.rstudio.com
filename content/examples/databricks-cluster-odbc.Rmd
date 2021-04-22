@@ -1,0 +1,78 @@
+---
+title: "Using an ODBC connection with Databricks"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+params:
+  width: 600
+---
+
+## Overview
+
+This configuration details how to connect to Databricks using an ODBC
+connection. With this setup, R can connect to Databricks using the
+[`odbc`](https://github.com/r-dbi/odbc) and [`DBI`](https://dbi.r-dbi.org/) R
+packages. This type of configuration is the recommended approach for
+connecting to Databricks from RStudio Connect and can also be used from
+RStudio Server Pro.
+
+## Advantages and limitations
+
+Advantages:
+
+- ODBC connections tend to be more stable than Spark connections. This is
+especially beneficial for content published to RStudio Connect.
+- If code is developed using a Spark connection and `sparklyr`, it is easy to
+swap out the connection type for an ODBC connection and the remaining code
+will still run.
+- The Spark ODBC driver provided by Databricks was benchmarked against a
+native Spark connection and the performance of the two is very comparable.
+
+Limitations:
+- Not all Spark features and functions are available through an ODBC connection.
+
+## Driver installation
+
+[Download and install the Spark ODBC driver from
+Databricks](https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#step-1-download-and-install-a-jdbc-or-odbc-driver)
+  
+## Driver configuration
+
+[Create a DSN for Databricks](https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#configure-odbc-data-source-name-for-the-simba-odbc-driver).
+
+```
+[Databricks-Spark]
+Driver=Simba
+Server=<server-hostname>
+HOST=<server-hostname>
+PORT=<port>
+SparkServerType=3
+Schema=default
+ThriftTransport=2
+SSL=1
+AuthMech=3
+UID=token
+PWD=<personal-access-token>
+HTTPPath=<http-path>
+```
+
+## Connect to Databricks
+
+The connection can be tested from the command line using `isql -v
+Databricks-Spark` where `Databricks-Spark` is the DSN name for the
+connection. If that connects successfully, then the following code can be
+used to create a connection from an R session:
+
+```
+library(DBI)
+library(odbc)
+
+con <- dbConnect(odbc(), "Databricks-Spark")
+```
+
+## Additional information
+
+For more information about ODBC connections from R, please visit [db.rstudio.com](https://db.rstudio.com/).

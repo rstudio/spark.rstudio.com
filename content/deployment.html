@@ -1,7 +1,7 @@
 ---
 title: "Deployment and Configuration"
 aliases:
- /articles/deployment-overview.html 
+ /articles/deployment-overview.html
 ---
 
 
@@ -44,7 +44,7 @@ sc &lt;- spark_connect(master = cluster_url)</code></pre>
 <div id="livy-connections" class="section level3">
 <h3>Livy Connections</h3>
 <p><a href="http://livy.io/">Livy</a>, <em>“An Open Source REST Service for Apache Spark (Apache License)”</em> , is available starting in <code>sparklyr 0.5</code> as an <strong>experimental</strong> feature. Among many scenarios, this enables connections from the RStudio desktop to Apache Spark when Livy is available and correctly configured in the remote cluster.</p>
-<p>To work with Livy locally, <code>sparklyr</code> supports <code>livy_install()</code> which installs Livy in your local environment, this is similar to <code>spark_install()</code>. Since Livy is a service to enable remote connections into Apache Spark, the service needs to be started with <code>livy_service_start()</code>. Once the service is running, <code>spark_connect()</code> needs to reference the running service and use <code>method = &quot;Livy&quot;</code>, then <code>sparklyr</code> can be used as usual. A short example follows:</p>
+<p>To work with Livy locally, <code>sparklyr</code> supports <code>livy_install()</code> which installs Livy in your local environment, this is similar to <code>spark_install()</code>. Since Livy is a service to enable remote connections into Apache Spark, the service needs to be started with <code>livy_service_start()</code>. Once the service is running, <code>spark_connect()</code> needs to reference the running service and use <code>method = "Livy"</code>, then <code>sparklyr</code> can be used as usual. A short example follows:</p>
 <pre class="r"><code>livy_install()
 livy_service_start()
 
@@ -231,7 +231,7 @@ spark_log(sc)</code></pre>
 <pre class="yaml"><code>default:
   dataset: &quot;observations-dev.parquet&quot;
   sample-size: 10000
-  
+
 production:
   spark.memory.fraction: 0.9
   spark.rdd.compress: true
@@ -240,7 +240,7 @@ production:
 <p>You can also use this feature to specify distinct Spark master nodes for different environments, for example:</p>
 <pre class="yaml"><code>default:
   spark.master: &quot;local&quot;
-  
+
 production:
   spark.master: &quot;spark://local:7077&quot;</code></pre>
 <p>With this configuration, you can omit the <code>master</code> argument entirely from the call to <a href="/reference/spark-connections/">spark_connect</a>:</p>
@@ -327,7 +327,7 @@ sc &lt;- spark_connect(master = &quot;yarn-client&quot;, config = config, versio
 <div id="connection-options" class="section level3">
 <h3>Connection Options</h3>
 <p>The RStudio IDE Spark pane provides a <strong>New Connection</strong> dialog to assist in connecting with both local instances of Spark and Spark clusters:</p>
-<p><img src="images/deployment/overview/connect-to-spark.png" width=486 /></p>
+<p><img src="/images/deployment/overview/connect-to-spark.png" width=486 /></p>
 <p>You can configure which connection choices are presented using the <code>rstudio.spark.connections</code> option. By default, users are presented with possibility of both local and cluster connections, however, you can modify this behavior to present only one of these, or even a specific Spark master URL. Some commonly used combinations of connection choices include:</p>
 <table>
 <colgroup>
@@ -342,19 +342,19 @@ sc &lt;- spark_connect(master = &quot;yarn-client&quot;, config = config, versio
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>c(&quot;local&quot;, &quot;cluster&quot;)</code></td>
+<td><code>c("local", "cluster")</code></td>
 <td>Default. Present connections to both local and cluster Spark instances.</td>
 </tr>
 <tr class="even">
-<td><code>&quot;local&quot;</code></td>
+<td><code>"local"</code></td>
 <td>Present only connections to local Spark instances.</td>
 </tr>
 <tr class="odd">
-<td><code>&quot;spark://local:7077&quot;</code></td>
+<td><code>"spark://local:7077"</code></td>
 <td>Present only a connection to a specific Spark cluster.</td>
 </tr>
 <tr class="even">
-<td><code>c(&quot;spark://local:7077&quot;, &quot;cluster&quot;)</code></td>
+<td><code>c("spark://local:7077", "cluster")</code></td>
 <td>Present a connection to a specific Spark cluster and other clusters.</td>
 </tr>
 </tbody>
@@ -364,7 +364,7 @@ sc &lt;- spark_connect(master = &quot;yarn-client&quot;, config = config, versio
 </div>
 <div id="spark-installations" class="section level3">
 <h3>Spark Installations</h3>
-<p>If you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. <code>/opt/spark</code>) then designating it as the Spark installation directory.</p>
+<p>If you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. <code>/opt/spark</code>) then designating it as the Spark installation directory.</p>
 <p>For example, after installing one or more versions of Spark to <code>/opt/spark</code> you would add the following to <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html">Rprofile.site</a>:</p>
 <pre class="r"><code>options(spark.install.dir = &quot;/opt/spark&quot;)</code></pre>
 <p>If this directory is read-only for ordinary users then RStudio will not offer installation of additional versions, which will help guide users to a version that is known to be compatible with versions of Spark deployed on clusters in the same organization.</p>

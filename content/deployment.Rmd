@@ -1,7 +1,7 @@
 ---
 title: "Deployment and Configuration"
 aliases:
- /articles/deployment-overview.html 
+ /articles/deployment-overview.html
 ---
 
 ```{r setup, include = FALSE}
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Deployment
 
-There are two well supported deployment modes for **sparklyr**: 
+There are two well supported deployment modes for **sparklyr**:
 
 - Local --- Working on a local desktop typically with smaller/sampled datasets
 - Cluster --- Working directly within or alongside a Spark cluster ([standalone](http://spark.apache.org/docs/latest/spark-standalone.html), [YARN](http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/index.html), [Mesos](http://mesos.apache.org/), etc.)
@@ -71,7 +71,7 @@ sc <- spark_connect(master = cluster_url)
 ```
 
 
-### Livy Connections 
+### Livy Connections
 
 [Livy](http://livy.io/), *"An Open Source REST Service for Apache Spark (Apache License)"* , is available starting in `sparklyr 0.5` as an **experimental** feature. Among many scenarios, this enables connections from the RStudio desktop to Apache Spark when Livy is available and correctly configured in the remote cluster.
 
@@ -120,7 +120,7 @@ The following parameters could be adjusted to avoid OutOfMemory and Timeout erro
 * spark.yarn.driver.memoryOverhead
 * spark.driver.maxResultSize
 
-## Configuration 
+## Configuration
 
 This section describes the various options available for configuring both the behavior of the **sparklyr** package as well as the underlying Spark cluster. Creating multiple configuration profiles (e.g. development, test, production) is also covered.
 
@@ -213,7 +213,7 @@ For example, you might want to use a distinct datasets for development and testi
 default:
   dataset: "observations-dev.parquet"
   sample-size: 10000
-  
+
 production:
   spark.memory.fraction: 0.9
   spark.rdd.compress: true
@@ -226,7 +226,7 @@ You can also use this feature to specify distinct Spark master nodes for differe
 ```yaml
 default:
   spark.master: "local"
-  
+
 production:
   spark.master: "spark://local:7077"
 ```
@@ -253,7 +253,7 @@ In general, you will need to tune a Spark cluster for it to perform well. Spark 
 
 #### Example Config
 
-Here is an example spark configuration for an EMR cluster on AWS with 1 master and 2 worker nodes. Eache node has 8 vCPU and 61 GiB of memory. 
+Here is an example spark configuration for an EMR cluster on AWS with 1 master and 2 worker nodes. Eache node has 8 vCPU and 61 GiB of memory.
 
 | Parameter | Value  |
 |----------------------------|---------------------------------------------|
@@ -293,7 +293,7 @@ RStudio Server provides a web-based IDE interface to a remote R session, making 
 
 The RStudio IDE Spark pane provides a **New Connection** dialog to assist in connecting with both local instances of Spark and Spark clusters:
 
-<img src="images/deployment/overview/connect-to-spark.png" width=486 />
+<img src="/images/deployment/overview/connect-to-spark.png" width=486 />
 
 You can configure which connection choices are presented using the `rstudio.spark.connections` option. By default, users are presented with possibility of both local and cluster connections, however, you can modify this behavior to present only one of these, or even a specific Spark master URL. Some commonly used combinations of connection choices include:
 
@@ -313,7 +313,7 @@ options(rstudio.spark.connections = "spark://local:7077")
 
 ### Spark Installations
 
-If you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. `/opt/spark`) then designating it as the Spark installation directory. 
+If you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. `/opt/spark`) then designating it as the Spark installation directory.
 
 For example, after installing one or more versions of Spark to `/opt/spark` you would add the following to [Rprofile.site](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Startup.html):
 

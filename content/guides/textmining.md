@@ -8,18 +8,18 @@ This article focuses on a set of functions that can be used for text mining with
 For this example, there are two files that will be analyzed. They are both the full works of Sir Arthur Conan Doyle and Mark Twain. The files were downloaded from the [Gutenberg Project](https://www.gutenberg.org/) site via the `gutenbergr` package. Intentionally, no data cleanup was done to the files prior to this analysis. See the appendix below to see how the data was downloaded and prepared.
 
 ``` r
-readLines("arthur_doyle.txt", 10) 
+readLines("arthur_doyle.txt", 10)
 ```
 
-    ##  [1] "THE RETURN OF SHERLOCK HOLMES,"   
-    ##  [2] ""                                 
+    ##  [1] "THE RETURN OF SHERLOCK HOLMES,"
+    ##  [2] ""
     ##  [3] "A Collection of Holmes Adventures"
-    ##  [4] ""                                 
-    ##  [5] ""                                 
-    ##  [6] "by Sir Arthur Conan Doyle"        
-    ##  [7] ""                                 
-    ##  [8] ""                                 
-    ##  [9] ""                                 
+    ##  [4] ""
+    ##  [5] ""
+    ##  [6] "by Sir Arthur Conan Doyle"
+    ##  [7] ""
+    ##  [8] ""
+    ##  [9] ""
     ## [10] ""
 
 Data Import
@@ -45,13 +45,13 @@ The `spark_read_text()` is a new function which works like `readLines()` but for
 
 # Setting up the path to the file in a Windows OS laptop
 twain_path <- paste0("file:///", getwd(), "/mark_twain.txt")
-twain <-  spark_read_text(sc, "twain", twain_path) 
+twain <-  spark_read_text(sc, "twain", twain_path)
 ```
 
 ``` r
 # Imports Sir Arthur Conan Doyle's file
 doyle_path <- paste0("file:///", getwd(), "/arthur_doyle.txt")
-doyle <-  spark_read_text(sc, "doyle", doyle_path) 
+doyle <-  spark_read_text(sc, "doyle", doyle_path)
 ```
 
 Data transformation
@@ -81,11 +81,11 @@ all_words <- doyle %>%
 
 ### regexp\_replace
 
--   The Hive UDF, **regexp\_replace**, is used as a sort of `gsub()` that works inside Spark. In this case it is used to remove punctuation. The usual `[:punct:]` regular expression did not work well during development, so a custom list is provided. For more information, see the [Hive Functions](https://spark.rstudio.com/articles/guides-dplyr.html#hive-functions) section in the `dplyr` page.
+-   The Hive UDF, **regexp\_replace**, is used as a sort of `gsub()` that works inside Spark. In this case it is used to remove punctuation. The usual `[:punct:]` regular expression did not work well during development, so a custom list is provided. For more information, see the [Hive Functions](https://spark.rstudio.com/dplyr/#hive-functions) section in the `dplyr` page.
 
 ``` r
 all_words <- all_words %>%
-  mutate(line = regexp_replace(line, "[_\"\'():;,.!?\\-]", " ")) 
+  mutate(line = regexp_replace(line, "[_\"\'():;,.!?\\-]", " "))
 ```
 
 ### ft\_tokenizer()
@@ -139,7 +139,7 @@ all_words <- all_words %>%
   mutate(word = explode(wo_stop_words)) %>%
   select(word, author) %>%
   filter(nchar(word) > 2)
-  
+
 head(all_words, 4)
 ```
 
@@ -192,8 +192,8 @@ Data Analysis
 word_count <- all_words %>%
   group_by(author, word) %>%
   tally() %>%
-  arrange(desc(n)) 
-  
+  arrange(desc(n))
+
 word_count
 ```
 
@@ -249,7 +249,7 @@ doyle_unique %>%
   head(100) %>%
   collect() %>%
   with(wordcloud::wordcloud(
-    word, 
+    word,
     n,
     colors = c("#999999", "#E69F00", "#56B4E9","#56B4E9")))
 ```
@@ -286,21 +286,21 @@ twain %>%
   pull(line)
 ```
 
-    ##  [1] "late sherlock holmes, and yet discernible by a member of a race charged"  
-    ##  [2] "sherlock holmes."                                                         
-    ##  [3] "\"uncle sherlock! the mean luck of it!--that he should come just"         
+    ##  [1] "late sherlock holmes, and yet discernible by a member of a race charged"
+    ##  [2] "sherlock holmes."
+    ##  [3] "\"uncle sherlock! the mean luck of it!--that he should come just"
     ##  [4] "another trouble presented itself. \"uncle sherlock 'll be wanting to talk"
-    ##  [5] "flint buckner's cabin in the frosty gloom. they were sherlock holmes and" 
+    ##  [5] "flint buckner's cabin in the frosty gloom. they were sherlock holmes and"
     ##  [6] "\"uncle sherlock's got some work to do, gentlemen, that 'll keep him till"
-    ##  [7] "\"by george, he's just a duke, boys! three cheers for sherlock holmes,"   
-    ##  [8] "he brought sherlock holmes to the billiard-room, which was jammed with"   
-    ##  [9] "of interest was there--sherlock holmes. the miners stood silent and"      
-    ## [10] "the room; the chair was on it; sherlock holmes, stately, imposing,"       
-    ## [11] "\"you have hunted me around the world, sherlock holmes, yet god is my"    
-    ## [12] "\"if it's only sherlock holmes that's troubling you, you needn't worry"   
-    ## [13] "they sighed; then one said: \"we must bring sherlock holmes. he can be"   
-    ## [14] "i had small desire that sherlock holmes should hang for my deeds, as you" 
-    ## [15] "\"my name is sherlock holmes, and i have not been doing anything.\""      
+    ##  [7] "\"by george, he's just a duke, boys! three cheers for sherlock holmes,"
+    ##  [8] "he brought sherlock holmes to the billiard-room, which was jammed with"
+    ##  [9] "of interest was there--sherlock holmes. the miners stood silent and"
+    ## [10] "the room; the chair was on it; sherlock holmes, stately, imposing,"
+    ## [11] "\"you have hunted me around the world, sherlock holmes, yet god is my"
+    ## [12] "\"if it's only sherlock holmes that's troubling you, you needn't worry"
+    ## [13] "they sighed; then one said: \"we must bring sherlock holmes. he can be"
+    ## [14] "i had small desire that sherlock holmes should hang for my deeds, as you"
+    ## [15] "\"my name is sherlock holmes, and i have not been doing anything.\""
     ## [16] "late sherlock holmes, and yet discernible by a member of a race charged"
 
 ``` r

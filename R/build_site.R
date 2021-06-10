@@ -30,7 +30,7 @@ missing_topics <- function(){
 
 root <-  function() rprojroot::find_rstudio_root_file()
 
-update_site <- function(repo = "rstudio/sparklyr") {
+update_site <- function(repo = "sparklyr/sparklyr") {
   ## Copy the repo
   if(dir_exists("repos")) dir_delete("repos")
   copy_repo(repo)

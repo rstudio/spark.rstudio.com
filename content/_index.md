@@ -16,7 +16,7 @@ sparklyr: R interface for Apache Spark
         </div>
         <div style="height:100%;width:100%; font-size:16px; font-weight:300;">
           Visit: <i>therinspark.com</i> for more info
-        </div>        
+        </div>
       </a>
     </td>
   </tr>
@@ -60,7 +60,7 @@ If you use the RStudio IDE, you should also download the latest [preview release
 Connecting to Spark
 -------------------
 
-You can connect to both local instances of Spark as well as remote Spark clusters. Here we'll connect to a local instance of Spark via the [spark\_connect](http://spark.rstudio.com/reference/sparklyr/latest/spark_connect.html) function:
+You can connect to both local instances of Spark as well as remote Spark clusters. Here we'll connect to a local instance of Spark via the [spark\_connect](https://spark.rstudio.com/reference/spark-connections) function:
 
 ``` r
 library(sparklyr)
@@ -217,7 +217,7 @@ fit <- partitions$training %>%
 fit
 ```
 
-    ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))  
+    ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))
     ##
     ## Formula: mpg ~ wt + cyl
     ##
@@ -231,7 +231,7 @@ For linear regression models produced by Spark, we can use `summary()` to learn 
 summary(fit)
 ```
 
-    ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))  
+    ## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))
     ##
     ## Deviance Residuals:
     ##    Min     1Q Median     3Q    Max
@@ -268,7 +268,7 @@ iris_json_tbl <- spark_read_json(sc, "iris_json", temp_json)
 dplyr::src_tbls(sc)
 ```
 
-    ## [1] "batting"      "flights"      "iris"         "iris_csv"    
+    ## [1] "batting"      "flights"      "iris"         "iris_csv"
     ## [5] "iris_json"    "iris_parquet" "mtcars"
 
 Distributed R

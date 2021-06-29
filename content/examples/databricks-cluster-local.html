@@ -15,9 +15,9 @@ params:
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>If the recommended path of connecting to Spark remotely with Databricks Connect
-does not apply to your use case, then you can install RStudio Server Pro
+does not apply to your use case, then you can install RStudio Workbench
 directly within a Databricks cluster as described in the sections below.</p>
-<p>With this configuration, RStudio Server Pro is installed on the Spark driver
+<p>With this configuration, RStudio Workbench is installed on the Spark driver
 node and allows users to work locally with Spark using <code>sparklyr</code>.</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local.png" width='800px' align='center'/></p>
 <p>This configuration can result in increased complexity, limited connectivity to
@@ -41,15 +41,15 @@ Pro is installed within the Databricks cluster</li>
 <p>Limitations:</p>
 <ul>
 <li>If the Databricks cluster is restarted or terminated, then the instance of
-RStudio Server Pro will be terminated and its configuration will be lost</li>
+RStudio Workbench will be terminated and its configuration will be lost</li>
 <li>If users do not persist their code through version control or the Databricks
 File System, then you risk losing user’s work if the cluster is restarted or
 terminated</li>
-<li>RStudio Server Pro (and other RStudio products) installed within a Databricks
+<li>RStudio Workbench (and other RStudio products) installed within a Databricks
 cluster will be limited to the compute resources and lifecycle of that
 particular Spark cluster</li>
 <li>Non-Spark jobs will use CPU and RAM resources within the Databricks cluster</li>
-<li>Need to install one instance of RStudio Server Pro per Spark cluster that you
+<li>Need to install one instance of RStudio Workbench per Spark cluster that you
 want to run jobs on</li>
 </ul>
 </div>
@@ -63,9 +63,9 @@ want to run jobs on</li>
 </div>
 <div id="preparation" class="section level2">
 <h2>Preparation</h2>
-<p>The following steps walk through the process to install RStudio Server Pro
+<p>The following steps walk through the process to install RStudio Workbench
 on the Spark driver node within your Databricks cluster.</p>
-<p>The recommended method for installing RStudio Server Pro to the Spark driver
+<p>The recommended method for installing RStudio Workbench to the Spark driver
 node is via SSH. However, an alternative method is available if you are not able
 to access the Spark driver node via SSH.</p>
 </div>
@@ -77,10 +77,10 @@ configurations
 documentation</a>.</p>
 <p><strong>Note:</strong> If you are unable to configure SSH access or connect to the Spark
 driver node via SSH, then you can follow the steps in the <a href="https://docs.databricks.com/spark/latest/sparkr/rstudio.html#get-started-with-rstudio-server-pro">Get started with
-RStudio Server Pro section of the RStudio on Databricks
+RStudio Workbench section of the RStudio on Databricks
 documentation</a>
-to install RStudio Server Pro from a Databricks notebook, then skip to the
-<a href="#access-rstudio-server-pro">access RStudio Server Pro</a> section of this
+to install RStudio Workbench from a Databricks notebook, then skip to the
+<a href="#access-rstudio-server-pro">access RStudio Workbench</a> section of this
 documentation.</p>
 </div>
 <div id="connect-to-the-spark-driver-node-via-ssh" class="section level2">
@@ -93,15 +93,15 @@ Spark driver node, and <code>&lt;path-to-private-SSH-key&gt;</code> with the pat
 SSH key on your local machine.</p>
 </div>
 <div id="install-rstudio-server-pro-on-the-spark-driver-node" class="section level2">
-<h2>Install RStudio Server Pro on the Spark driver node</h2>
+<h2>Install RStudio Workbench on the Spark driver node</h2>
 <p>After you SSH into the Spark driver node, then you can follow the typical steps
 to
-<a href="https://docs.rstudio.com/rsp/installation/">install RStudio Server Pro in the RStudio documentation</a>.
+<a href="https://docs.rstudio.com/rsp/installation/">install RStudio Workbench in the RStudio documentation</a>.
 In the installation steps, you can select Ubuntu as the target Linux
 distribution.</p>
 </div>
 <div id="configure-rstudio-server-pro" class="section level2">
-<h2>Configure RStudio Server Pro</h2>
+<h2>Configure RStudio Workbench</h2>
 <p>The following configuration steps are required to be able to use RStudio Server
 Pro with Databricks.</p>
 <p>Add the following configuration lines to <code>/etc/rstudio/rserver.conf</code> to use
@@ -111,17 +111,17 @@ auth-proxy-user-header-rewrite=^(.*)$ $1
 auth-proxy-sign-in-url=&lt;domain&gt;/login.html
 admin-enabled=1</code></pre>
 <p>Add the following configuration line to <code>/etc/rstudio/rsession-profile</code> to set
-the <code>PATH</code> to be used with RStudio Server Pro:</p>
+the <code>PATH</code> to be used with RStudio Workbench:</p>
 <pre><code>export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH</code></pre>
 <p>Add the following configuration lines to <code>/etc/rstudio/rsession.conf</code> to
-configure sessions in RStudio Server Pro to work with Databricks:</p>
+configure sessions in RStudio Workbench to work with Databricks:</p>
 <pre><code>session-rprofile-on-resume-default=1
 allow-terminal-websockets=0</code></pre>
-<p>Restart RStudio Server Pro:</p>
+<p>Restart RStudio Workbench:</p>
 <pre><code>sudo rstudio-server restart</code></pre>
 </div>
 <div id="access-rstudio-server-pro" class="section level2">
-<h2>Access RStudio Server Pro</h2>
+<h2>Access RStudio Workbench</h2>
 <p>From the Databricks console, click on the Databricks cluster that you want to
 work with:</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local-1.png" width='800px' align='center'/></p>
@@ -129,16 +129,16 @@ work with:</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local-2.png" width='800px' align='center'/></p>
 <p>Click on the <code>Set up RStudio</code> button:</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local-3.png" width='800px' align='center'/></p>
-<p>To access RStudio Server Pro, click on the link to <code>Open RStudio</code>:</p>
+<p>To access RStudio Workbench, click on the link to <code>Open RStudio</code>:</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local-4.png" width='800px' align='center'/></p>
-<p>If you configured proxied authentication in RStudio Server Pro as described in
+<p>If you configured proxied authentication in RStudio Workbench as described in
 the previous section, then you do not need to use the username or password that
-is displayed. Instead, RStudio Server Pro will automatically login and start a
+is displayed. Instead, RStudio Workbench will automatically login and start a
 new RStudio session as your logged-in Databricks user:</p>
 <p><img src="/images/deployment/databricks/rstudio-databricks-local-5.png" width='800px' align='center'/></p>
-<p>Other users can access RStudio Server Pro from the Databricks console by
+<p>Other users can access RStudio Workbench from the Databricks console by
 following the same steps described above. You do not need to create those users
-in RStudio Server Pro or their home directory beforehand.</p>
+in RStudio Workbench or their home directory beforehand.</p>
 </div>
 <div id="configure-sparklyr" class="section level2">
 <h2>Configure <code>sparklyr</code></h2>
@@ -150,7 +150,7 @@ sc &lt;- spark_connect(method = &quot;databricks&quot;)</code></pre>
 </div>
 <div id="additional-information" class="section level2">
 <h2>Additional information</h2>
-<p>For more information on using RStudio Server Pro inside of Databricks, refer to
+<p>For more information on using RStudio Workbench inside of Databricks, refer to
 the sections on
 <a href="https://docs.databricks.com/spark/latest/sparkr/rstudio.html">RStudio on Databricks (AWS)</a>
 or

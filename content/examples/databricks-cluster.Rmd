@@ -13,7 +13,7 @@ params:
 ## Overview
 
 This documentation demonstrates how to use `sparklyr` with Apache Spark in
-Databricks along with RStudio Team, RStudio Server Pro, RStudio Connect, and
+Databricks along with RStudio Team, RStudio Workbench, RStudio Connect, and
 RStudio Package Manager.
 
 ## Using RStudio Team with Databricks
@@ -35,7 +35,7 @@ specific RStudio products to work with Databricks.
 
 ## Best practices for working with Databricks
 
-- **Maintain separate installation environments** - Install RStudio Server Pro,
+- **Maintain separate installation environments** - Install RStudio Workbench,
   RStudio Connect, and RStudio Package Manager outside of the Databricks cluster
   so that they are not limited to the compute resources or ephemeral nature of
   Databricks clusters.
@@ -57,9 +57,9 @@ specific RStudio products to work with Databricks.
   backend tend to have performance and runtime issues; consider reading the
   results from a database, file system, or cloud storage instead.
 
-## Using RStudio Server Pro with Databricks
+## Using RStudio Workbench with Databricks
 
-There are two options for using `sparklyr` and RStudio Server Pro with
+There are two options for using `sparklyr` and RStudio Workbench with
 Databricks:
 
 - Option 1:
@@ -71,13 +71,13 @@ Databricks:
 
 ### Option 1 - Connecting to Databricks remotely
 
-With this configuration, RStudio Server Pro is installed outside of the Spark
+With this configuration, RStudio Workbench is installed outside of the Spark
 cluster and allows users to connect to Spark remotely using `sparklyr` with
 [Databricks Connect](https://docs.databricks.com/dev-tools/databricks-connect.html).
 
 This is the recommended configuration because it targets separate environments,
 involves a typical configuration process, avoids resource contention, and allows
-RStudio Server Pro to connect to Databricks as well as other remote storage and
+RStudio Workbench to connect to Databricks as well as other remote storage and
 compute resources.
 
 <a href="/examples/databricks-cluster-remote">
@@ -90,11 +90,11 @@ compute resources.
 
 ### Option 2 - Working inside of Databricks
 
-If you cannot work with Spark remotely, you should install RStudio Server Pro on
+If you cannot work with Spark remotely, you should install RStudio Workbench on
 the Driver node of a long-running, persistent Databricks cluster as opposed to a
 worker node or an ephemeral cluster.
 
-With this configuration, RStudio Server Pro is installed on the Spark driver
+With this configuration, RStudio Workbench is installed on the Spark driver
 node and allows users to connect to Spark locally using `sparklyr`.
 
 This configuration can result in increased complexity, limited connectivity to
@@ -119,10 +119,10 @@ isolate published content.
 Therefore, the only supported configuration is to install RStudio Connect
 outside of the Databricks cluster and connect to Databricks remotely.
 
-Whether RStudio Server Pro is installed outside of the Databricks cluster
+Whether RStudio Workbench is installed outside of the Databricks cluster
 (Recommended Option) or within the Databricks cluster (Alternative Option), you
 can publish content to RStudio Connect as long as HTTP/HTTPS network traffic is
-allowed from RStudio Server Pro to RStudio Connect.
+allowed from RStudio Workbench to RStudio Connect.
 
 There are two options for using RStudio Connect with Databricks:
 
@@ -136,8 +136,8 @@ There are two options for using RStudio Connect with Databricks:
 
 ## Using RStudio Package Manager with Databricks
 
-Whether RStudio Server Pro is installed outside of the Databricks cluster
+Whether RStudio Workbench is installed outside of the Databricks cluster
 (Recommended Option) or within the Databricks cluster (Alternative Option), you
 can install packages from repositories in RStudio Package Manager as long as
-HTTP/HTTPS network traffic is allowed from RStudio Server Pro to RStudio Package
+HTTP/HTTPS network traffic is allowed from RStudio Workbench to RStudio Package
 Manager.

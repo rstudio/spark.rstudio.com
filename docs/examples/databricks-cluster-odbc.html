@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-(Local Development)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr – Using an ODBC connection with Databricks</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.min.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/clipboard.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <script src="../site_libs/quarto-html/quarto-html.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  
+  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+    <div class="container-fluid">
+  <a class="navbar-brand" href="../index.html">
+    sparklyr
+  </a>
+      <div>
+        <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;"><i class="bi"></i></a>
+      </div>
+      <form class="d-flex mb-0">
+  <input id="quarto-search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+  </div> <!-- /container-fluid -->
+</nav>
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline">Using an ODBC connection with Databricks</h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article">
+<div class="row flex-fill" id="quarto-content">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="me-lg-auto py-2 docked  overflow-scroll">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-3 px-3">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Using sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="usingsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/connections.html" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../troubleshooting.html" class="">Troubleshooting</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Guides</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="guides-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../dplyr.html" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../mlib.html" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/caching.html" class="">Understanding Caching</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../deployment.html" class="">Deployment Options</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/data-lakes.html" class="">Data Lakes</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/pipelines.html" class="">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/streaming.html" class="">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/arrow.html" class="">Apache Arrow</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Extend sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="extendsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/h2o.html" class="">Using H2O</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../graphframes.html" class="">Graph Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/mleap.html" class="">Production pipelines</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Deployment Examples</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="deploymentexamples-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../examples/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/yarn-cluster-emr.html" class="">YARN cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Reference</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="reference-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+        </ul>
+      </div>
+    </li>
+  </ul>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
+<li><a href="#driver-installation" class="nav-link" data-scroll-target="#driver-installation">Driver installation</a></li>
+<li><a href="#driver-configuration" class="nav-link" data-scroll-target="#driver-configuration">Driver configuration</a></li>
+<li><a href="#connect-to-databricks" class="nav-link" data-scroll-target="#connect-to-databricks">Connect to Databricks</a></li>
+<li><a href="#additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-0">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7">Using an ODBC connection with Databricks</h1>
+</header>
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This configuration details how to connect to Databricks using an ODBC connection. With this setup, R can connect to Databricks using the <a href="https://github.com/r-dbi/odbc"><code>odbc</code></a> and <a href="https://dbi.r-dbi.org/"><code>DBI</code></a> R packages. This type of configuration is the recommended approach for connecting to Databricks from RStudio Connect and can also be used from RStudio Workbench.</p>
+</section>
+<section id="advantages-and-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
+<p>Advantages:</p>
+<ul>
+<li>ODBC connections tend to be more stable than Spark connections. This is especially beneficial for content published to RStudio Connect.</li>
+<li>If code is developed using a Spark connection and <code>sparklyr</code>, it is easy to swap out the connection type for an ODBC connection and the remaining code will still run.</li>
+<li>The Spark ODBC driver provided by Databricks was benchmarked against a native Spark connection and the performance of the two is very comparable.</li>
+</ul>
+<p>Limitations: - Not all Spark features and functions are available through an ODBC connection.</p>
+</section>
+<section id="driver-installation" class="level2">
+<h2 class="anchored" data-anchor-id="driver-installation">Driver installation</h2>
+<p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#step-1-download-and-install-a-jdbc-or-odbc-driver">Download and install the Spark ODBC driver from Databricks</a></p>
+</section>
+<section id="driver-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="driver-configuration">Driver configuration</h2>
+<p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#configure-odbc-data-source-name-for-the-simba-odbc-driver">Create a DSN for Databricks</a>.</p>
+<pre><code>[Databricks-Spark]
+Driver=Simba
+Server=&lt;server-hostname&gt;
+HOST=&lt;server-hostname&gt;
+PORT=&lt;port&gt;
+SparkServerType=3
+Schema=default
+ThriftTransport=2
+SSL=1
+AuthMech=3
+UID=token
+PWD=&lt;personal-access-token&gt;
+HTTPPath=&lt;http-path&gt;</code></pre>
+</section>
+<section id="connect-to-databricks" class="level2">
+<h2 class="anchored" data-anchor-id="connect-to-databricks">Connect to Databricks</h2>
+<p>The connection can be tested from the command line using <code>isql -v Databricks-Spark</code> where <code>Databricks-Spark</code> is the DSN name for the connection. If that connects successfully, then the following code can be used to create a connection from an R session:</p>
+<pre><code>library(DBI)
+library(odbc)
+
+con &lt;- dbConnect(odbc(), "Databricks-Spark")</code></pre>
+</section>
+<section id="additional-information" class="level2">
+<h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
+<p>For more information about ODBC connections from R, please visit <a href="https://db.rstudio.com/">db.rstudio.com</a>.</p>
+<!-- -->
+</section>
+</main>
+<div class="page-navigation page-navigation-docked">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>

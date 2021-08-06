@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-(Local Development)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr – pipelines</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.min.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/clipboard.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <script src="../site_libs/quarto-html/quarto-html.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  
+  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+    <div class="container-fluid">
+  <a class="navbar-brand" href="../index.html">
+    sparklyr
+  </a>
+      <div>
+        <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;"><i class="bi"></i></a>
+      </div>
+      <form class="d-flex mb-0">
+  <input id="quarto-search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+  </div> <!-- /container-fluid -->
+</nav>
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline">(Untitled)</h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article">
+<div class="row flex-fill" id="quarto-content">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="me-lg-auto py-2 docked  overflow-scroll">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-3 px-3">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Using sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="usingsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/connections.html" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../troubleshooting.html" class="">Troubleshooting</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Guides</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="guides-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../dplyr.html" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../mlib.html" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/caching.html" class="">Understanding Caching</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../deployment.html" class="">Deployment Options</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/data-lakes.html" class="">Data Lakes</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/pipelines.html" class="active">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/streaming.html" class="">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/arrow.html" class="">Apache Arrow</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Extend sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="extendsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/h2o.html" class="">Using H2O</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../graphframes.html" class="">Graph Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/mleap.html" class="">Production pipelines</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Deployment Examples</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="deploymentexamples-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../examples/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/yarn-cluster-emr.html" class="">YARN cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../examples/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto ">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
+              <div class="me-auto  sidebar-section-item">Reference</div>
+            <div><i class="bi bi-chevron-right ms-2 "></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="reference-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+        </ul>
+      </div>
+    </li>
+  </ul>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#spark-ml-pipelines" class="nav-link active" data-scroll-target="#spark-ml-pipelines">Spark ML Pipelines</a>
+<ul class="collapse">
+<li><a href="#introduction-to-ml-pipelines" class="nav-link" data-scroll-target="#introduction-to-ml-pipelines">Introduction to ML Pipelines</a>
+<ul class="collapse">
+<li><a href="#taking-advantage-of-pipelines-and-pipelinemodels" class="nav-link" data-scroll-target="#taking-advantage-of-pipelines-and-pipelinemodels">Taking advantage of Pipelines and PipelineModels</a></li>
+</ul></li>
+<li><a href="#pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a>
+<ul class="collapse">
+<li><a href="#feature-transformers" class="nav-link" data-scroll-target="#feature-transformers">Feature Transformers</a></li>
+<li><a href="#ft_dplyr_transformer" class="nav-link" data-scroll-target="#ft_dplyr_transformer">ft_dplyr_transformer</a></li>
+<li><a href="#creating-the-pipeline" class="nav-link" data-scroll-target="#creating-the-pipeline">Creating the Pipeline</a></li>
+</ul></li>
+<li><a href="#pipelinemodel" class="nav-link" data-scroll-target="#pipelinemodel">PipelineModel</a></li>
+<li><a href="#save-the-pipelines-to-disk" class="nav-link" data-scroll-target="#save-the-pipelines-to-disk">Save the pipelines to disk</a></li>
+<li><a href="#use-an-existing-pipelinemodel" class="nav-link" data-scroll-target="#use-an-existing-pipelinemodel">Use an existing PipelineModel</a></li>
+<li><a href="#re-fit-an-existing-pipeline" class="nav-link" data-scroll-target="#re-fit-an-existing-pipeline">Re-fit an existing Pipeline</a></li>
+</ul></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-0">
+<main>
+
+<section id="spark-ml-pipelines" class="level1">
+<h1>Spark ML Pipelines</h1>
+<p>Spark’s <strong>ML Pipelines</strong> provide a way to easily combine multiple transformations and algorithms into a single workflow, or pipeline.</p>
+<p>For R users, the insights gathered during the interactive sessions with Spark can now be converted to a formal pipeline. This makes the hand-off from Data Scientists to Big Data Engineers a lot easier, this is because there should not be additional changes needed to be made by the later group.</p>
+<p>The final list of selected variables, data manipulation, feature transformations and modeling can be easily re-written into a <code>ml_pipeline()</code> object, saved, and ultimately placed into a Production environment. The <code>sparklyr</code> output of a saved Spark ML Pipeline object is in Scala code, which means that the code can be added to the scheduled Spark ML jobs, and without any dependencies in R.</p>
+<section id="introduction-to-ml-pipelines" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-ml-pipelines">Introduction to ML Pipelines</h2>
+<p>The official Apache Spark site contains a more complete overview of <a href="http://spark.apache.org/docs/latest/ml-pipeline.html">ML Pipelines</a>. This article will focus in introducing the basic concepts and steps to work with ML Pipelines via <code>sparklyr</code>.</p>
+<p>There are two important stages in building an ML Pipeline. The first one is creating a <strong>Pipeline</strong>. A good way to look at it, or call it, is as an <strong>“empty” pipeline</strong>. This step just builds the steps that the data will go through. This is the somewhat equivalent of doing this in R:</p>
+<pre><code>r_pipeline &lt;-  . %&gt;% mutate(cyl = paste0("c", cyl)) %&gt;% lm(am ~ cyl + mpg, data = .)
+r_pipeline
+
+## Functional sequence with the following components:
+## 
+##  1. mutate(., cyl = paste0("c", cyl))
+##  2. lm(am ~ cyl + mpg, data = .)
+## 
+## Use 'functions' to extract the individual functions.</code></pre>
+<p>The <code>r_pipeline</code> object has all the steps needed to transform and fit the model, but it has not yet transformed any data.</p>
+<p>The second step, is to pass data through the pipeline, which in turn will output a fitted model. That is called a <strong>PipelineModel</strong>. The <strong>PipelineModel</strong> can then be used to produce predictions.</p>
+<pre><code>r_model &lt;- r_pipeline(mtcars)
+r_model
+
+## 
+## Call:
+## lm(formula = am ~ cyl + mpg, data = .)
+## 
+## Coefficients:
+## (Intercept)        cylc6        cylc8          mpg  
+##    -0.54388      0.03124     -0.03313      0.04767</code></pre>
+<section id="taking-advantage-of-pipelines-and-pipelinemodels" class="level3">
+<h3 class="anchored" data-anchor-id="taking-advantage-of-pipelines-and-pipelinemodels">Taking advantage of Pipelines and PipelineModels</h3>
+<p>The two stage ML Pipeline approach produces two final data products:</p>
+<ul>
+<li><p>A <strong>PipelineModel</strong> that can be added to the daily Spark jobs which will produce new predictions for the incoming data, and again, with no R dependencies.</p></li>
+<li><p>A <strong>Pipeline</strong> that can be <strong>easily re-fitted</strong> on a regular interval, say every month. All that is needed is to pass a new sample to obtain the new coefficients.</p></li>
+</ul>
+</section>
+</section>
+<section id="pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
+<p>An additional goal of this article is that the reader can follow along, so the data, transformations and Spark connection in this example will be kept as easy to reproduce as possible.</p>
+<pre><code>library(nycflights13)
+library(sparklyr)
+library(dplyr)
+sc &lt;- spark_connect(master = "local", spark_version = "2.2.0")
+
+## * Using Spark: 2.2.0
+
+spark_flights &lt;- sdf_copy_to(sc, flights)</code></pre>
+<section id="feature-transformers" class="level3">
+<h3 class="anchored" data-anchor-id="feature-transformers">Feature Transformers</h3>
+<p>Pipelines make heavy use of <a href="http://spark.rstudio.com/reference/#section-spark-feature-transformers">Feature Transformers</a>. If new to Spark, and <code>sparklyr</code>, it would be good to review what these transformers do. These functions use the Spark API directly to transform the data, and may be faster at making the data manipulations that a <code>dplyr</code> (SQL) transformation.</p>
+<p>In <code>sparklyr</code> the <code>ft</code> functions are essentially are wrappers to original <a href="http://spark.apache.org/docs/latest/ml-features.html">Spark feature transformer</a>.</p>
+</section>
+<section id="ft_dplyr_transformer" class="level3">
+<h3 class="anchored" data-anchor-id="ft_dplyr_transformer">ft_dplyr_transformer</h3>
+<p>This example will start with <code>dplyr</code> transformations, which are ultimately SQL transformations, loaded into the <code>df</code> variable.</p>
+<p>In <code>sparklyr</code>, there is one feature transformer that is not available in Spark, <code>ft_dplyr_transformer()</code>. The goal of this function is to convert the <code>dplyr</code> code to a SQL Feature Transformer that can then be used in a Pipeline.</p>
+<pre><code>df &lt;- spark_flights %&gt;%
+  filter(!is.na(dep_delay)) %&gt;%
+  mutate(
+    month = paste0("m", month),
+    day = paste0("d", day)
+  ) %&gt;%
+  select(dep_delay, sched_dep_time, month, day, distance) </code></pre>
+<p>This is the resulting pipeline stage produced from the <code>dplyr</code> code:</p>
+<pre><code>ft_dplyr_transformer(sc, df)</code></pre>
+<p>Use the <code>ml_param()</code> function to extract the “statement” attribute. That attribute contains the finalized SQL statement. Notice that the <code>flights</code> table name has been replace with <code>__THIS__</code>. This allows the pipeline to accept different table names as its source, making the pipeline very modular.</p>
+<pre><code>ft_dplyr_transformer(sc, df) %&gt;%
+  ml_param("statement")
+
+## [1] "SELECT `dep_delay`, `sched_dep_time`, `month`, `day`, `distance`\nFROM (SELECT `year`, CONCAT(\"m\", `month`) AS `month`, CONCAT(\"d\", `day`) AS `day`, `dep_time`, `sched_dep_time`, `dep_delay`, `arr_time`, `sched_arr_time`, `arr_delay`, `carrier`, `flight`, `tailnum`, `origin`, `dest`, `air_time`, `distance`, `hour`, `minute`, `time_hour`\nFROM (SELECT *\nFROM `__THIS__`\nWHERE (NOT(((`dep_delay`) IS NULL)))) `bjbujfpqzq`) `axbwotqnbr`"</code></pre>
+</section>
+<section id="creating-the-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-pipeline">Creating the Pipeline</h3>
+<p>The following step will create a 5 stage pipeline:</p>
+<ol type="1">
+<li>SQL transformer - Resulting from the <code>ft_dplyr_transformer()</code> transformation</li>
+<li>Binarizer - To determine if the flight should be considered delay. The eventual outcome variable.</li>
+<li>Bucketizer - To split the day into specific hour buckets</li>
+<li>R Formula - To define the model’s formula</li>
+<li>Logistic Model</li>
+</ol>
+<!-- -->
+<pre><code>flights_pipeline &lt;- ml_pipeline(sc) %&gt;%
+  ft_dplyr_transformer(
+    tbl = df
+    ) %&gt;%
+  ft_binarizer(
+    input.col = "dep_delay",
+    output.col = "delayed",
+    threshold = 15
+  ) %&gt;%
+  ft_bucketizer(
+    input.col = "sched_dep_time",
+    output.col = "hours",
+    splits = c(400, 800, 1200, 1600, 2000, 2400)
+  )  %&gt;%
+  ft_r_formula(delayed ~ month + day + hours + distance) %&gt;% 
+  ml_logistic_regression()</code></pre>
+<p>Another nice feature for ML Pipelines in <code>sparklyr</code>, is the print-out. It makes it really easy to how each stage is setup:</p>
+<pre><code>flights_pipeline
+
+## Pipeline (Estimator) with 5 stages
+## &lt;pipeline_24044e4f2e21&gt; 
+##   Stages 
+##   |--1 SQLTransformer (Transformer)
+##   |    &lt;dplyr_transformer_2404e6a1b8e&gt; 
+##   |     (Parameters -- Column Names)
+##   |--2 Binarizer (Transformer)
+##   |    &lt;binarizer_24045c9227f2&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: dep_delay
+##   |      output_col: delayed
+##   |--3 Bucketizer (Transformer)
+##   |    &lt;bucketizer_240412366b1e&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: sched_dep_time
+##   |      output_col: hours
+##   |--4 RFormula (Estimator)
+##   |    &lt;r_formula_240442d75f00&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |     (Parameters)
+##   |      force_index_label: FALSE
+##   |      formula: delayed ~ month + day + hours + distance
+##   |--5 LogisticRegression (Estimator)
+##   |    &lt;logistic_regression_24044321ad0&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |      prediction_col: prediction
+##   |      probability_col: probability
+##   |      raw_prediction_col: rawPrediction
+##   |     (Parameters)
+##   |      aggregation_depth: 2
+##   |      elastic_net_param: 0
+##   |      family: auto
+##   |      fit_intercept: TRUE
+##   |      max_iter: 100
+##   |      reg_param: 0
+##   |      standardization: TRUE
+##   |      threshold: 0.5
+##   |      tol: 1e-06</code></pre>
+<p>Notice that there are no <em>coefficients</em> defined yet. That’s because no data has been actually processed. Even though <code>df</code> uses <code>spark_flights()</code>, recall that the final SQL transformer makes that name, so there’s no data to process yet.</p>
+</section>
+</section>
+<section id="pipelinemodel" class="level2">
+<h2 class="anchored" data-anchor-id="pipelinemodel">PipelineModel</h2>
+<p>A quick partition of the data is created for this exercise.</p>
+<pre><code>partitioned_flights &lt;- sdf_partition(
+  spark_flights,
+  training = 0.01,
+  testing = 0.01,
+  rest = 0.98
+)</code></pre>
+<p>The <code>ml_fit()</code> function produces the PipelineModel. The <code>training</code> partition of the <code>partitioned_flights</code> data is used to train the model:</p>
+<pre><code>fitted_pipeline &lt;- ml_fit(
+  flights_pipeline,
+  partitioned_flights$training
+)
+fitted_pipeline
+
+## PipelineModel (Transformer) with 5 stages
+## &lt;pipeline_24044e4f2e21&gt; 
+##   Stages 
+##   |--1 SQLTransformer (Transformer)
+##   |    &lt;dplyr_transformer_2404e6a1b8e&gt; 
+##   |     (Parameters -- Column Names)
+##   |--2 Binarizer (Transformer)
+##   |    &lt;binarizer_24045c9227f2&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: dep_delay
+##   |      output_col: delayed
+##   |--3 Bucketizer (Transformer)
+##   |    &lt;bucketizer_240412366b1e&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: sched_dep_time
+##   |      output_col: hours
+##   |--4 RFormulaModel (Transformer)
+##   |    &lt;r_formula_240442d75f00&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |     (Transformer Info)
+##   |      formula:  chr "delayed ~ month + day + hours + distance" 
+##   |--5 LogisticRegressionModel (Transformer)
+##   |    &lt;logistic_regression_24044321ad0&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |      prediction_col: prediction
+##   |      probability_col: probability
+##   |      raw_prediction_col: rawPrediction
+##   |     (Transformer Info)
+##   |      coefficient_matrix:  num [1, 1:43] 0.709 -0.3401 -0.0328 0.0543 -0.4774 ... 
+##   |      coefficients:  num [1:43] 0.709 -0.3401 -0.0328 0.0543 -0.4774 ... 
+##   |      intercept:  num -3.04 
+##   |      intercept_vector:  num -3.04 
+##   |      num_classes:  int 2 
+##   |      num_features:  int 43 
+##   |      threshold:  num 0.5</code></pre>
+<p>Notice that the print-out for the fitted pipeline now displays the model’s coefficients.</p>
+<p>The <code>ml_transform()</code> function can be used to run predictions, in other words it is used instead of <code>predict()</code> or <code>sdf_predict()</code>.</p>
+<pre><code>predictions &lt;- ml_transform(
+  fitted_pipeline,
+  partitioned_flights$testing
+)
+
+predictions %&gt;%
+  group_by(delayed, prediction) %&gt;%
+  tally()
+
+## # Source:   lazy query [?? x 3]
+## # Database: spark_connection
+## # Groups:   delayed
+##   delayed prediction     n
+##     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
+## 1      0.         1.   51.
+## 2      0.         0. 2599.
+## 3      1.         0.  666.
+## 4      1.         1.   69.</code></pre>
+</section>
+<section id="save-the-pipelines-to-disk" class="level2">
+<h2 class="anchored" data-anchor-id="save-the-pipelines-to-disk">Save the pipelines to disk</h2>
+<p>The <code>ml_save()</code> command can be used to save the Pipeline and PipelineModel to disk. The resulting output is a folder with the selected name, which contains all of the necessary Scala scripts:</p>
+<pre><code>ml_save(
+  flights_pipeline,
+  "flights_pipeline",
+  overwrite = TRUE
+)
+
+## NULL
+
+ml_save(
+  fitted_pipeline,
+  "flights_model",
+  overwrite = TRUE
+)
+
+## NULL</code></pre>
+</section>
+<section id="use-an-existing-pipelinemodel" class="level2">
+<h2 class="anchored" data-anchor-id="use-an-existing-pipelinemodel">Use an existing PipelineModel</h2>
+<p>The <code>ml_load()</code> command can be used to re-load Pipelines and PipelineModels. The saved ML Pipeline files can only be loaded into an open Spark session.</p>
+<pre><code>reloaded_model &lt;- ml_load(sc, "flights_model")</code></pre>
+<p>A simple query can be used as the table that will be used to make the new predictions. This of course, does not have to done in R, at this time the “flights_model” can be loaded into an independent Spark session outside of R.</p>
+<pre><code>new_df &lt;- spark_flights %&gt;%
+  filter(
+    month == 7,
+    day == 5
+  )
+
+ml_transform(reloaded_model, new_df) 
+
+## # Source:   table&lt;sparklyr_tmp_24041e052b5&gt; [?? x 12]
+## # Database: spark_connection
+##    dep_delay sched_dep_time month day   distance delayed hours features  
+##        &lt;dbl&gt;          &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
+##  1       39.           2359 m7    d5       1617.      1.    4. &lt;dbl [43]&gt;
+##  2      141.           2245 m7    d5       2475.      1.    4. &lt;dbl [43]&gt;
+##  3        0.            500 m7    d5        529.      0.    0. &lt;dbl [43]&gt;
+##  4       -5.            536 m7    d5       1400.      0.    0. &lt;dbl [43]&gt;
+##  5       -2.            540 m7    d5       1089.      0.    0. &lt;dbl [43]&gt;
+##  6       -7.            545 m7    d5       1416.      0.    0. &lt;dbl [43]&gt;
+##  7       -3.            545 m7    d5       1576.      0.    0. &lt;dbl [43]&gt;
+##  8       -7.            600 m7    d5       1076.      0.    0. &lt;dbl [43]&gt;
+##  9       -7.            600 m7    d5         96.      0.    0. &lt;dbl [43]&gt;
+## 10       -6.            600 m7    d5        937.      0.    0. &lt;dbl [43]&gt;
+## # ... with more rows, and 4 more variables: label &lt;dbl&gt;,
+## #   rawPrediction &lt;list&gt;, probability &lt;list&gt;, prediction &lt;dbl&gt;</code></pre>
+</section>
+<section id="re-fit-an-existing-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="re-fit-an-existing-pipeline">Re-fit an existing Pipeline</h2>
+<p>First, reload the pipeline into an open Spark session:</p>
+<pre><code>reloaded_pipeline &lt;- ml_load(sc, "flights_pipeline")</code></pre>
+<p>Use <code>ml_fit()</code> again to pass new data, in this case, <code>sample_frac()</code> is used instead of <code>sdf_partition()</code> to provide the new data. The idea being that the re-fitting would happen at a later date than when the model was initially fitted.</p>
+<pre><code>new_model &lt;-  ml_fit(reloaded_pipeline, sample_frac(spark_flights, 0.01))
+
+new_model
+
+## PipelineModel (Transformer) with 5 stages
+## &lt;pipeline_24044e4f2e21&gt; 
+##   Stages 
+##   |--1 SQLTransformer (Transformer)
+##   |    &lt;dplyr_transformer_2404e6a1b8e&gt; 
+##   |     (Parameters -- Column Names)
+##   |--2 Binarizer (Transformer)
+##   |    &lt;binarizer_24045c9227f2&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: dep_delay
+##   |      output_col: delayed
+##   |--3 Bucketizer (Transformer)
+##   |    &lt;bucketizer_240412366b1e&gt; 
+##   |     (Parameters -- Column Names)
+##   |      input_col: sched_dep_time
+##   |      output_col: hours
+##   |--4 RFormulaModel (Transformer)
+##   |    &lt;r_formula_240442d75f00&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |     (Transformer Info)
+##   |      formula:  chr "delayed ~ month + day + hours + distance" 
+##   |--5 LogisticRegressionModel (Transformer)
+##   |    &lt;logistic_regression_24044321ad0&gt; 
+##   |     (Parameters -- Column Names)
+##   |      features_col: features
+##   |      label_col: label
+##   |      prediction_col: prediction
+##   |      probability_col: probability
+##   |      raw_prediction_col: rawPrediction
+##   |     (Transformer Info)
+##   |      coefficient_matrix:  num [1, 1:43] 0.258 0.648 -0.317 0.36 -0.279 ... 
+##   |      coefficients:  num [1:43] 0.258 0.648 -0.317 0.36 -0.279 ... 
+##   |      intercept:  num -3.77 
+##   |      intercept_vector:  num -3.77 
+##   |      num_classes:  int 2 
+##   |      num_features:  int 43 
+##   |      threshold:  num 0.5</code></pre>
+<p>The new model can be saved using <code>ml_save()</code>. A new name is used in this case, but the same name as the existing PipelineModel to replace it.</p>
+<pre><code>ml_save(new_model, "new_flights_model", overwrite = TRUE)
+
+## NULL</code></pre>
+<p>Finally, this example is complete by closing the Spark session.</p>
+<pre><code>spark_disconnect(sc)</code></pre>
+<!-- -->
+</section>
+</section>
+</main>
+<div class="page-navigation page-navigation-docked">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>

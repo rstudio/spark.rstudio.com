@@ -1,0 +1,56 @@
+# `sdf_unnest_wider`
+
+Unnest wider
+
+
+## Description
+
+Flatten a struct column within a Spark dataframe into one or more columns,
+ similar what to tidyr::unnest_wider does to an R dataframe
+
+
+## Usage
+
+```r
+sdf_unnest_wider(
+  data,
+  col,
+  names_sep = NULL,
+  names_repair = "check_unique",
+  ptype = list(),
+  transform = list()
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     The Spark dataframe to be unnested
+`col`     |     The struct column to extract components from
+`names_sep`     |     If `NULL`, the default, the names will be left as is. If a string, the inner and outer names will be pasted together using `names_sep` as the delimiter.
+`names_repair`     |     Strategy for fixing duplicate column names (the semantic will be exactly identical to that of `.name_repair` option in [`tibble`](#tibble) )
+`ptype`     |     Optionally, supply an R data frame prototype for the output. Each column of the unnested result will be casted based on the Spark equivalent of the type of the column with the same name within `ptype`, e.g., if `ptype` has a column `x` of type `character`, then column `x` of the unnested result will be casted from its original SQL type to StringType.
+`transform`     |     Optionally, a named list of transformation functions applied to each component (e.g., list(`x = as.character`) to cast column `x` to String).
+
+
+## Examples
+
+```r
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "2.4.0")
+
+sdf <- copy_to(
+sc,
+tibble::tibble(
+x = 1:3,
+y = list(list(a = 1, b = 2), list(a = 3, b = 4), list(a = 5, b = 6))
+)
+)
+
+# flatten struct column 'y' into two separate columns 'y_a' and 'y_b'
+unnested <- sdf %>% sdf_unnest_wider(y, names_sep = "_")
+```
+
+

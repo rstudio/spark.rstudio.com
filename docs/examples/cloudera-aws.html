@@ -112,6 +112,7 @@
     'anonymizeIp': true,
   });
   </script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
@@ -264,20 +265,6 @@
       </div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto ">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
-              <div class="me-auto  sidebar-section-item">Reference</div>
-            <div><i class="bi bi-chevron-right ms-2 "></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="reference-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-        </ul>
-      </div>
-    </li>
-  </ul>
   </ul>
   </div>
 </nav>
@@ -342,7 +329,7 @@
 <section id="install-rstudio" class="level1">
 <h1>Install RStudio</h1>
 <p>The latest version of R is needed. In Ubuntu, the default core R is not the latest so we have to update the source list. We will also install a few other dependencies.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> sh <span class="at">-c</span> <span class="st">'echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" &gt;&gt; /etc/apt/sources.list'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--keyserver</span> keyserver.ubuntu.com <span class="at">--recv-key</span> 0x517166190x51716619e084dab9</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">-a</span> <span class="at">--export</span> 0x517166190x51716619e084dab9 <span class="kw">|</span> <span class="fu">sudo</span> apt-key add <span class="at">-</span></span>
@@ -353,18 +340,18 @@
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get <span class="at">-y</span> install libssl-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We will install the preview version of RStudio Server</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-1.0.40-amd64.deb</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> gdebi rstudio-server-1.0.49-amd64.deb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="create-and-configure-a-user" class="level3">
 <h3 class="anchored" data-anchor-id="create-and-configure-a-user">Create and configure a User</h3>
 <p>Create a user called <code>rstudio</code> that will perform the data analysis.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> adduser rstudio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To ease security restriction in this demo, we will add the new user to the default super group defined in the <strong>dfs.permissions.superusergroup</strong> setting in CDH</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd supergroup</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-a</span> <span class="at">-G</span> supergroup rstudio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -377,7 +364,7 @@
 <img src="images/deployment/cdh/sign-in-1.png" width="600/">
 </p>
 <p>Set the environment variable <code>SPARK_HOME</code> and then run <code>spark_connect</code>. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -406,7 +393,7 @@
 <section id="cache-the-tables-into-memory" class="level2">
 <h2 class="anchored" data-anchor-id="cache-the-tables-into-memory">Cache the tables into memory</h2>
 <p>Use <code>tbl_cache</code> to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cache flights Hive table into Spark</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">'flights'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">'flights'</span>)</span>
@@ -423,7 +410,7 @@
 <section id="create-a-model-data-set" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-model-data-set">Create a model data set</h2>
 <p>Filter the data to contain only the records to be used in the fitted model. Join carrier descriptions for reference. Create a new variable called <code>gain</code> which represents the amount of time gained (or lost) in flight.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter records and create target variable 'gain'</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model_data <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(arrdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(depdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
@@ -462,7 +449,7 @@ Database: spark connection master=yarn-client app=sparklyr local=FALSE
 <section id="train-a-linear-model" class="level2">
 <h2 class="anchored" data-anchor-id="train-a-linear-model">Train a linear model</h2>
 <p>Predict time gained or lost in flight as a function of distance, departure delay, and airline carrier.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Partition the data into training and validation sets</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>model_partition <span class="ot">&lt;-</span> model_data <span class="sc">%&gt;%</span> </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">train =</span> <span class="fl">0.8</span>, <span class="at">valid =</span> <span class="fl">0.2</span>, <span class="at">seed =</span> <span class="dv">5555</span>)</span>
@@ -514,7 +501,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <section id="assess-model-performance" class="level2">
 <h2 class="anchored" data-anchor-id="assess-model-performance">Assess model performance</h2>
 <p>Compare the model performance using the validation data.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average gains by predicted decile</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>model_deciles <span class="ot">&lt;-</span> <span class="fu">lapply</span>(model_partition, <span class="cf">function</span>(x) {</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_predict</span>(ml1, x) <span class="sc">%&gt;%</span></span>
@@ -545,7 +532,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <section id="visualize-predictions" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-predictions">Visualize predictions</h2>
 <p>Compare actual gains to predicted gains for an out of time sample.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select data from an out of time sample</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>data_2008 <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(arrdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(depdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
@@ -582,7 +569,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <section id="build-dashboard" class="level2">
 <h2 class="anchored" data-anchor-id="build-dashboard">Build dashboard</h2>
 <p>Aggregate the scored data by origin, destination, and airline. Save the aggregated data.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize by origin, destination, and carrier</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>summary_2008 <span class="ot">&lt;-</span> <span class="fu">sdf_predict</span>(ml1, data_2008) <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">carrier =</span> uniquecarrier, <span class="at">airline =</span> description) <span class="sc">%&gt;%</span></span>
@@ -611,7 +598,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <section id="appendix-a---data-files" class="level3">
 <h3 class="anchored" data-anchor-id="appendix-a---data-files">Appendix A - Data files</h3>
 <p>Run the following script to download data from the web onto your master node. Download the yearly flight data and the airlines lookup table.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make download directory</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /tmp/flights</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>

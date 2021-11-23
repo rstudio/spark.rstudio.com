@@ -112,6 +112,7 @@
     'anonymizeIp': true,
   });
   </script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
@@ -264,20 +265,6 @@
       </div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto ">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
-              <div class="me-auto  sidebar-section-item">Reference</div>
-            <div><i class="bi bi-chevron-right ms-2 "></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="reference-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-        </ul>
-      </div>
-    </li>
-  </ul>
   </ul>
   </div>
 </nav>
@@ -313,7 +300,7 @@
 <section id="examples" class="level3">
 <h3 class="anchored" data-anchor-id="examples">Examples</h3>
 <p>Here’s an example of an extension function that calls the text file line counting function available via the SparkContext:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r, eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>count_lines <span class="ot">&lt;-</span> <span class="cf">function</span>(sc, file) {</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span> </span>
@@ -323,7 +310,7 @@
 </div>
 <p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
 <p>You can use this function with an existing sparklyr connection as follows:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r, eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">count_lines</span>(sc, <span class="st">"hdfs://path/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -474,20 +461,20 @@
 </tbody>
 </table>
 <p>For example, to create a new instance of the <code>java.math.BigInteger</code> class and then call the <code>longValue()</code> method on it you would use code like this:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r" data-chunk.echo="false">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>billionBigInteger <span class="ot">&lt;-</span> <span class="fu">invoke_new</span>(sc, <span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>billion <span class="ot">&lt;-</span> <span class="fu">invoke</span>(billionBigInteger, <span class="st">"longValue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note the <code>sc</code> argument: that’s the <code>spark_connection</code> object which is provided by the front-end package (e.g.&nbsp;sparklyr).</p>
 <p>The previous example can be re-written to be more compact and clear using <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r" data-chunk.echo="false">
 <div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>billion <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke_new</span>(<span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"longValue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This syntax is similar to the method-chaining syntax often used with Scala code so is generally preferred.</p>
 <p>Calling a static method of a class is also straightforward. For example, to call the <code>Math::hypot()</code> static function you would use this code:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r" data-chunk.echo="false">
 <div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hypot <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke_static</span>(<span class="st">"java.lang.Math"</span>, <span class="st">"hypot"</span>, <span class="dv">10</span>, <span class="dv">20</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -496,7 +483,7 @@
 <h2 class="anchored" data-anchor-id="wrapper-functions">Wrapper Functions</h2>
 <p>Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we’ll describe the typical form of these functions as well as how to handle special types like Spark DataFrames.</p>
 <p>Here’s the wrapper function for <code>textFile().count()</code> which we defined earlier:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r, eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>count_lines <span class="ot">&lt;-</span> <span class="cf">function</span>(sc, file) {</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"textFile"</span>, file, 1L) <span class="sc">%&gt;%</span> </span>
@@ -544,7 +531,7 @@
 </tbody>
 </table>
 <p>The use of these functions is illustrated in this simple example:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r" data-chunk.echo="false">
 <div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>analyze <span class="ot">&lt;-</span> <span class="cf">function</span>(x, features) {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># normalize whatever we were passed (e.g. a dplyr tbl) into a DataFrame</span></span>
@@ -590,7 +577,7 @@
 </tbody>
 </table>
 <p>Your extension package can specify it’s dependencies by implementing a function named <code>spark_dependencies</code> within the package (this function should <em>not</em> be publicly exported). For example, let’s say you were creating an extension package named <strong>sparkds</strong> that needs to include a custom JAR as well as the Redshift and Apache Avro packages:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r" data-chunk.echo="false">
 <div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>spark_dependencies <span class="ot">&lt;-</span> <span class="cf">function</span>(spark_version, scala_version, ...) {</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_dependency</span>(</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">jars =</span> <span class="fu">c</span>(</span>
@@ -614,7 +601,7 @@
 <p>The <code>scala_version</code> argument is provided so that a single package can support multiple Scala compiler versions for it’s JARs and packages (currently Scala 1.6 downloadable binaries are compiled with Scala 2.10 and Scala 2.0 downloadable binaries are compiled with Scala 2.11).</p>
 <p>The <code>...</code> argument is unused but nevertheless should be included to ensure compatibility if new arguments are added to <code>spark_dependencies</code> in the future.</p>
 <p>The <code>.onLoad</code> function registers your extension package so that it’s <code>spark_dependencies</code> function will be automatically called when new connections to Spark are made via <code>spark_connect</code>:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r, eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparkds)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -622,7 +609,7 @@
 <section id="compiling-jars" class="level3">
 <h3 class="anchored" data-anchor-id="compiling-jars">Compiling JARs</h3>
 <p>The <strong>sparklyr</strong> package includes a utility function (<code>compile_package_jars</code>) that will automatically compile a JAR file from your Scala source code for the required permutations of Spark and Scala compiler versions. To use the function just invoke it from the root directory of your R package as follows:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r, eval= FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sparklyr<span class="sc">::</span><span class="fu">compile_package_jars</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that a prerequisite to calling <code>compile_package_jars</code> is the installation of the Scala 2.10 and 2.11 compilers to one of the following paths:</p>

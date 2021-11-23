@@ -112,6 +112,7 @@
     'anonymizeIp': true,
   });
   </script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
@@ -264,20 +265,6 @@
       </div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto ">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
-              <div class="me-auto  sidebar-section-item">Reference</div>
-            <div><i class="bi bi-chevron-right ms-2 "></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="reference-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-        </ul>
-      </div>
-    </li>
-  </ul>
   </ul>
   </div>
 </nav>
@@ -377,7 +364,7 @@
 <h3 class="anchored" data-anchor-id="connect-to-emr">Connect to EMR</h3>
 <p>The cluster page will give you details about your EMR cluster and instructions on connecting.</p>
 <p><img src="images/deployment/amazon-emr/awsClusterConnect.png" width="600/"></p>
-<p>Connect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome. ::: {.cell}</p>
+<p>Connect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome. ::: {.cell original.params.src=“bash eval=FALSE” chunk.echo=“false”}</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log in to master node</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-i</span> ~/spark-demo.pem hadoop@ec2-52-10-102-11.us-west-2.compute.amazonaws.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p>
@@ -386,13 +373,13 @@
 <section id="install-rstudio-server" class="level3">
 <h3 class="anchored" data-anchor-id="install-rstudio-server">Install RStudio Server</h3>
 <p>EMR uses Amazon Linux which is based on Centos. Update your master node and install dependencies that will be used by R packages.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> yum update</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> yum install libcurl-devel openssl-devel <span class="co"># used for devtools</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The installation of RStudio Server is easy. Download the <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview version</a> of RStudio and install on the master node.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install RStudio Server</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> /tmp https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-0.99.1266-x86_64.rpm</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> yum install <span class="at">--nogpgcheck</span> /tmp/rstudio-server-rhel-0.99.1266-x86_64.rpm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -401,7 +388,7 @@
 <section id="create-a-user" class="level3">
 <h3 class="anchored" data-anchor-id="create-a-user">Create a User</h3>
 <p>Create a user called <code>rstudio-user</code> that will perform the data analysis. Create a user directory for <code>rstudio-user</code> on HDFS with the <code>hadoop fs</code> command.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make User</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-m</span> rstudio-user</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> passwd rstudio-user</span>
@@ -418,7 +405,7 @@
 <section id="switch-user" class="level4">
 <h4 class="anchored" data-anchor-id="switch-user">Switch User</h4>
 <p>For data loading and analysis, make sure you are logged in as regular user.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create directories on hdfs for new user</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hadoop</span> fs <span class="at">-mkdir</span> /user/rstudio-user</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hadoop</span> fs <span class="at">-chmod</span> 777 /user/rstudio-user</span>
@@ -430,7 +417,7 @@
 <section id="download-data" class="level3">
 <h3 class="anchored" data-anchor-id="download-data">Download data</h3>
 <p>Run the following script to download data from the web onto your master node. Download the yearly flight data and the airlines lookup table.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make download directory</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /tmp/flights</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -454,7 +441,7 @@
 <section id="distribute-into-hdfs" class="level3">
 <h3 class="anchored" data-anchor-id="distribute-into-hdfs">Distribute into HDFS</h3>
 <p>Copy data into HDFS using the <code>hadoop fs</code> command.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy flight data to HDFS</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hadoop</span> fs <span class="at">-mkdir</span> /user/rstudio-user/flights/</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">hadoop</span> fs <span class="at">-put</span> /tmp/flights /user/rstudio-user/</span>
@@ -472,7 +459,7 @@
 <section id="create-hive-tables" class="level2">
 <h2 class="anchored" data-anchor-id="create-hive-tables">Create Hive tables</h2>
 <p>Launch Hive from the command line.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="bash eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Open Hive prompt</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">hive</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -570,7 +557,7 @@
 <img src="images/deployment/amazon-emr/rstudioLogin.png" width="600/">
 </p>
 <p>Set the environment variable <code>SPARK_HOME</code> and then run <code>spark_connect</code>. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to Spark</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -598,7 +585,7 @@
 <section id="cache-the-tables-into-memory" class="level2">
 <h2 class="anchored" data-anchor-id="cache-the-tables-into-memory">Cache the tables into memory</h2>
 <p>Use <code>tbl_cache</code> to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cache flights Hive table into Spark</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">'flights'</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">'flights'</span>)</span>
@@ -615,7 +602,7 @@
 <section id="create-a-model-data-set" class="level2">
 <h2 class="anchored" data-anchor-id="create-a-model-data-set">Create a model data set</h2>
 <p>Filter the data to contain only the records to be used in the fitted model. Join carrier descriptions for reference. Create a new variable called <code>gain</code> which represents the amount of time gained (or lost) in flight.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter records and create target variable 'gain'</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>model_data <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(arrdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(depdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
@@ -654,7 +641,7 @@ Database: spark connection master=yarn-client app=sparklyr local=FALSE
 <section id="train-a-linear-model" class="level2">
 <h2 class="anchored" data-anchor-id="train-a-linear-model">Train a linear model</h2>
 <p>Predict time gained or lost in flight as a function of distance, departure delay, and airline carrier.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Partition the data into training and validation sets</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model_partition <span class="ot">&lt;-</span> model_data <span class="sc">%&gt;%</span> </span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">train =</span> <span class="fl">0.8</span>, <span class="at">valid =</span> <span class="fl">0.2</span>, <span class="at">seed =</span> <span class="dv">5555</span>)</span>
@@ -706,7 +693,7 @@ Root Mean Squared Error: 17.74</code></pre>
 <section id="assess-model-performance" class="level2">
 <h2 class="anchored" data-anchor-id="assess-model-performance">Assess model performance</h2>
 <p>Compare the model performance using the validation data.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average gains by predicted decile</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model_deciles <span class="ot">&lt;-</span> <span class="fu">lapply</span>(model_partition, <span class="cf">function</span>(x) {</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_predict</span>(ml1, x) <span class="sc">%&gt;%</span></span>
@@ -737,7 +724,7 @@ Root Mean Squared Error: 17.74</code></pre>
 <section id="visualize-predictions" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-predictions">Visualize predictions</h2>
 <p>Compare actual gains to predicted gains for an out of time sample.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select data from an out of time sample</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>data_2008 <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(arrdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(depdelay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
@@ -774,7 +761,7 @@ Root Mean Squared Error: 17.74</code></pre>
 <section id="build-dashboard" class="level2">
 <h2 class="anchored" data-anchor-id="build-dashboard">Build dashboard</h2>
 <p>Aggregate the scored data by origin, destination, and airline. Save the aggregated data.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize by origin, destination, and carrier</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>summary_2008 <span class="ot">&lt;-</span> <span class="fu">sdf_predict</span>(ml1, data_2008) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">carrier =</span> uniquecarrier, <span class="at">airline =</span> description) <span class="sc">%&gt;%</span></span>

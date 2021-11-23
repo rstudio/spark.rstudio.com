@@ -1,0 +1,84 @@
+# `ml_bisecting_kmeans`
+
+Spark ML -- Bisecting K-Means Clustering
+
+
+## Description
+
+A bisecting k-means algorithm based on the paper "A comparison of document clustering techniques" by Steinbach, Karypis, and Kumar, with modification to fit Spark. The algorithm starts from a single cluster that contains all points. Iteratively it finds divisible clusters on the bottom level and bisects each of them using k-means, until there are k leaf clusters in total or no leaf clusters are divisible. The bisecting steps of clusters on the same level are grouped together to increase parallelism. If bisecting all divisible clusters on the bottom level would result more than k leaf clusters, larger clusters get higher priority.
+
+
+## Usage
+
+```r
+ml_bisecting_kmeans(
+  x,
+  formula = NULL,
+  k = 4,
+  max_iter = 20,
+  seed = NULL,
+  min_divisible_cluster_size = 1,
+  features_col = "features",
+  prediction_col = "prediction",
+  uid = random_string("bisecting_bisecting_kmeans_"),
+  ...
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
+`formula`     |     Used when `x` is a `tbl_spark` . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see [ft_r_formula](#ftrformula) for details.
+`k`     |     The number of clusters to create
+`max_iter`     |     The maximum number of iterations to use.
+`seed`     |     A random seed. Set this value if you need your results to be reproducible across repeated calls.
+`min_divisible_cluster_size`     |     The minimum number of points (if greater than or equal to 1.0) or the minimum proportion of points (if less than 1.0) of a divisible cluster (default: 1.0).
+`features_col`     |     Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by [`ft_r_formula`](#ftrformula) .
+`prediction_col`     |     Prediction column name.
+`uid`     |     A character string used to uniquely identify the ML estimator.
+`...`     |     Optional arguments, see Details.
+
+
+## Value
+
+The object returned depends on the class of `x` .
+ 
+   
+
+*   `spark_connection` : When `x` is a `spark_connection` , the function returns an instance of a `ml_estimator` object. The object contains a pointer to a Spark `Estimator` object and can be used to compose  `Pipeline` objects.   
+
+*   `ml_pipeline` : When `x` is a `ml_pipeline` , the function returns a `ml_pipeline` with the clustering estimator appended to the pipeline.   
+
+*   `tbl_spark` : When `x` is a `tbl_spark` , an estimator is constructed then immediately fit with the input `tbl_spark` , returning a clustering model.   
+
+*   `tbl_spark` , with `formula` or `features` specified: When `formula`  is specified, the input `tbl_spark` is first transformed using a  `RFormula` transformer before being fit by the estimator. The object returned in this case is a `ml_model` which is a wrapper of a `ml_pipeline_model` . This signature does not apply to `ml_lda()` .
+
+
+## Seealso
+
+See [http://spark.apache.org/docs/latest/ml-clustering.html](http://spark.apache.org/docs/latest/ml-clustering.html) for
+ more information on the set of clustering algorithms.
+ 
+ Other ml clustering algorithms:
+ [`ml_gaussian_mixture`](#mlgaussianmixture) ,
+ [`ml_kmeans`](#mlkmeans) ,
+ [`ml_lda`](#mllda)
+
+
+## Examples
+
+```r
+library(dplyr)
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+iris_tbl %>%
+select(-Species) %>%
+ml_bisecting_kmeans(k = 4, Species ~ .)
+```
+
+

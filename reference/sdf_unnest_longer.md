@@ -1,0 +1,72 @@
+# `sdf_unnest_longer`
+
+Unnest longer
+
+
+## Description
+
+Expand a struct column or an array column within a Spark dataframe into one
+ or more rows, similar what to tidyr::unnest_longer does to an R dataframe.
+ An index column, if included, will be 1-based if `col` is an array column.
+
+
+## Usage
+
+```r
+sdf_unnest_longer(
+  data,
+  col,
+  values_to = NULL,
+  indices_to = NULL,
+  include_indices = NULL,
+  names_repair = "check_unique",
+  ptype = list(),
+  transform = list()
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`data`     |     The Spark dataframe to be unnested
+`col`     |     The struct column to extract components from
+`values_to`     |     Name of column to store vector values. Defaults to `col`.
+`indices_to`     |     A string giving the name of column which will contain the inner names or position (if not named) of the values. Defaults to `col` with `_id` suffix
+`include_indices`     |     Whether to include an index column. An index column will be included by default if `col` is a struct column. It will also be included if `indices_to` is not `NULL`.
+`names_repair`     |     Strategy for fixing duplicate column names (the semantic will be exactly identical to that of `.name_repair` option in [`tibble`](#tibble) )
+`ptype`     |     Optionally, supply an R data frame prototype for the output. Each column of the unnested result will be casted based on the Spark equivalent of the type of the column with the same name within `ptype`, e.g., if `ptype` has a column `x` of type `character`, then column `x` of the unnested result will be casted from its original SQL type to StringType.
+`transform`     |     Optionally, a named list of transformation functions applied
+
+
+## Examples
+
+```r
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "2.4.0")
+
+# unnesting a struct column
+sdf <- copy_to(
+sc,
+tibble::tibble(
+x = 1:3,
+y = list(list(a = 1, b = 2), list(a = 3, b = 4), list(a = 5, b = 6))
+)
+)
+
+unnested <- sdf %>% sdf_unnest_longer(y, indices_to = "attr")
+
+# unnesting an array column
+sdf <- copy_to(
+sc,
+tibble::tibble(
+x = 1:3,
+y = list(1:10, 1:5, 1:2)
+)
+)
+
+unnested <- sdf %>% sdf_unnest_longer(y, indices_to = "array_idx")
+```
+
+

@@ -1,0 +1,38 @@
+# `jfloat`
+
+Instantiate a Java float type.
+
+
+## Description
+
+Instantiate a `java.lang.Float` object with the value specified.
+ NOTE: this method is useful when one has to invoke a Java/Scala method
+ requiring a float (instead of double) type for at least one of its
+ parameters.
+
+
+## Usage
+
+```r
+jfloat(sc, x)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`sc`     |     A `spark_connection` .
+`x`     |     A numeric value in R.
+
+
+## Examples
+
+```r
+sc <- spark_connect(master = "spark://HOST:PORT")
+
+jflt <- jfloat(sc, 1.23e-8)
+# jflt is now a reference to a java.lang.Float object
+```
+
+

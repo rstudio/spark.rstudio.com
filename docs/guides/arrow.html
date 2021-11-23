@@ -112,6 +112,7 @@
     'anonymizeIp': true,
   });
   </script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
@@ -264,20 +265,6 @@
       </div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto ">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
-              <div class="me-auto  sidebar-section-item">Reference</div>
-            <div><i class="bi bi-chevron-right ms-2 "></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="reference-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-        </ul>
-      </div>
-    </li>
-  </ul>
   </ul>
   </div>
 </nav>
@@ -324,7 +311,7 @@
 <li><strong>R Transformations</strong>: When using <code>spark_apply()</code>, data will be transferred using Arrow when possible.</li>
 </ul>
 <p>To use <code>arrow</code> in <code>sparklyr</code> one simply needs to import this library:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>Attaching package: ‘arrow’
@@ -342,7 +329,7 @@ The following objects are masked from ‘package:base’:
 <section id="types" class="level3">
 <h3 class="anchored" data-anchor-id="types">Types</h3>
 <p>Some data types are mapped to slightly different, one can argue more correct, types when using Arrow. For instance, consider collecting 64 bit integers in <code>sparklyr</code>:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
@@ -355,7 +342,7 @@ The following objects are masked from ‘package:base’:
 1     1
 2     2</code></pre>
 <p>Notice that <code>sparklyr</code> collects 64 bit integers as <code>double</code>; however, using <code>arrow</code>:</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>integer64</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -369,7 +356,7 @@ The following objects are masked from ‘package:base’:
 <section id="fallback" class="level3">
 <h3 class="anchored" data-anchor-id="fallback">Fallback</h3>
 <p>The Arrow R package supports many data types; however, in cases where a type is unsupported, <code>sparklyr</code> will fallback to not using arrow and print a warning.</p>
-<div class="cell">
+<div class="cell" data-original.params.src="r eval=FALSE" data-chunk.echo="false">
 <div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr.nested)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>

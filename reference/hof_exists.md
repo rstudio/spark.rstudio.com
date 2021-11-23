@@ -1,0 +1,31 @@
+# `hof_exists`
+
+Determine Whether Some Element Exists in an Array Column
+
+
+## Description
+
+Determines whether an element satisfying the given predicate exists in each array from
+ an array column
+ (this is essentially a dplyr wrapper for the
+ `exists(array<T>, function<T, Boolean>): Boolean` built-in Spark SQL function)
+
+
+## Usage
+
+```r
+hof_exists(x, pred, expr = NULL, dest_col = NULL, ...)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`x`     |     The Spark data frame to search
+`pred`     |     A boolean predicate
+`expr`     |     The array being searched (could be any SQL expression evaluating to an array)
+`dest_col`     |     Column to store the search result
+`...`     |     Additional params to dplyr::mutate
+
+

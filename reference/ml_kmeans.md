@@ -1,0 +1,100 @@
+# `ml_kmeans`
+
+Spark ML -- K-Means Clustering
+
+
+## Description
+
+K-means clustering with support for k-means|| initialization proposed by Bahmani et al.
+ Using `ml_kmeans()` with the formula interface requires Spark 2.0+.
+
+
+## Usage
+
+```r
+ml_kmeans(
+  x,
+  formula = NULL,
+  k = 2,
+  max_iter = 20,
+  tol = 1e-04,
+  init_steps = 2,
+  init_mode = "k-means||",
+  seed = NULL,
+  features_col = "features",
+  prediction_col = "prediction",
+  uid = random_string("kmeans_"),
+  ...
+)
+ml_compute_cost(model, dataset)
+ml_compute_silhouette_measure(
+  model,
+  dataset,
+  distance_measure = c("squaredEuclidean", "cosine")
+)
+```
+
+
+## Arguments
+
+Argument      |Description
+------------- |----------------
+`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
+`formula`     |     Used when `x` is a `tbl_spark` . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see [ft_r_formula](#ftrformula) for details.
+`k`     |     The number of clusters to create
+`max_iter`     |     The maximum number of iterations to use.
+`tol`     |     Param for the convergence tolerance for iterative algorithms.
+`init_steps`     |     Number of steps for the k-means|| initialization mode. This is an advanced setting -- the default of 2 is almost always enough. Must be > 0. Default: 2.
+`init_mode`     |     Initialization algorithm. This can be either "random" to choose random points as initial cluster centers, or "k-means||" to use a parallel variant of k-means++ (Bahmani et al., Scalable K-Means++, VLDB 2012). Default: k-means||.
+`seed`     |     A random seed. Set this value if you need your results to be reproducible across repeated calls.
+`features_col`     |     Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by [`ft_r_formula`](#ftrformula) .
+`prediction_col`     |     Prediction column name.
+`uid`     |     A character string used to uniquely identify the ML estimator.
+`...`     |     Optional arguments, see Details.
+`model`     |     A fitted K-means model returned by `ml_kmeans()`
+`dataset`     |     Dataset on which to calculate K-means cost
+`distance_measure`     |     Distance measure to apply when computing the Silhouette measure.
+
+
+## Value
+
+The object returned depends on the class of `x` .
+ 
+   
+
+*   `spark_connection` : When `x` is a `spark_connection` , the function returns an instance of a `ml_estimator` object. The object contains a pointer to a Spark `Estimator` object and can be used to compose  `Pipeline` objects.   
+
+*   `ml_pipeline` : When `x` is a `ml_pipeline` , the function returns a `ml_pipeline` with the clustering estimator appended to the pipeline.   
+
+*   `tbl_spark` : When `x` is a `tbl_spark` , an estimator is constructed then immediately fit with the input `tbl_spark` , returning a clustering model.   
+
+*   `tbl_spark` , with `formula` or `features` specified: When `formula`  is specified, the input `tbl_spark` is first transformed using a  `RFormula` transformer before being fit by the estimator. The object returned in this case is a `ml_model` which is a wrapper of a `ml_pipeline_model` . This signature does not apply to `ml_lda()` . 
+ 
+ `ml_compute_cost()` returns the K-means cost (sum of
+ squared distances of points to their nearest center) for the model
+ on the given data.
+ 
+ `ml_compute_silhouette_measure()` returns the Silhouette measure
+ of the clustering on the given data.
+
+
+## Seealso
+
+See [http://spark.apache.org/docs/latest/ml-clustering.html](http://spark.apache.org/docs/latest/ml-clustering.html) for
+ more information on the set of clustering algorithms.
+ 
+ Other ml clustering algorithms:
+ [`ml_bisecting_kmeans`](#mlbisectingkmeans) ,
+ [`ml_gaussian_mixture`](#mlgaussianmixture) ,
+ [`ml_lda`](#mllda)
+
+
+## Examples
+
+```r
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+ml_kmeans(iris_tbl, Species ~ .)
+```
+
+

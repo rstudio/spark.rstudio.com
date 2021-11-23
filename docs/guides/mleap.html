@@ -112,6 +112,7 @@
     'anonymizeIp': true,
   });
   </script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
@@ -264,20 +265,6 @@
       </div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto ">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#reference-collapse" aria-expanded="true">
-              <div class="me-auto  sidebar-section-item">Reference</div>
-            <div><i class="bi bi-chevron-right ms-2 "></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="reference-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-        </ul>
-      </div>
-    </li>
-  </ul>
   </ul>
   </div>
 </nav>
@@ -301,18 +288,18 @@
 <section id="install-mleap" class="level2">
 <h2 class="anchored" data-anchor-id="install-mleap">Install <code>mleap</code></h2>
 <p><strong>mleap</strong> can be installed from CRAN via</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-4_ac6a90f2a9712ee7af1502bcca680baf">
+<div class="cell" data-layout.align="center" data-original.params.src="r eval = FALSE" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-4_c1d2e2326ea508d1a75cfbf9c0427bdb">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"mleap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>or, for the latest development version from GitHub, using</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-6_7e2c6f9b6a11d266d8a12a73faeb2955">
+<div class="cell" data-layout.align="center" data-original.params.src="r eval = FALSE" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-6_f183ab4fb7b6cfe7e34e7644feaafed1">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/mleap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>Once <code>mleap</code> has been installed, we can install the external dependencies using:</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-8_083efd5043ce63300cf1c62958e2d7c0">
+<div class="cell" data-layout.align="center" data-original.params.src="r eval = FALSE" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-8_3becc4053c48ebf6884a0135eb8e9397">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mleap)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_mleap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -324,13 +311,13 @@
 <section id="create-an-mleap-bundle" class="level2">
 <h2 class="anchored" data-anchor-id="create-an-mleap-bundle">Create an MLeap Bundle</h2>
 <ol type="1">
-<li><p>Start Spark session using <code>sparklyr</code> ::: {.cell layout.align=“center” indent=” ” hash=“mleap_cache/html/unnamed-chunk-10_6b218b53bd6926b3708df1c7db144b42”}</p>
+<li><p>Start Spark session using <code>sparklyr</code> ::: {.cell layout.align=“center” indent=” ” original.params.src=“r, message = FALSE” chunk.echo=“false” hash=“mleap_cache/html/unnamed-chunk-10_1333a7d01e60752aa9c1dc08c17edcdb”}</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"2.2.0"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p></li>
 <li><p>Create a fit an ML Pipeline<br>
-::: {.cell layout.align=“center” indent=” ” hash=“mleap_cache/html/unnamed-chunk-12_1e4ed4fa2094d216e60462f07d90e840”}</p>
+::: {.cell layout.align=“center” indent=” ” original.params.src=“r, message = FALSE” chunk.echo=“false” hash=“mleap_cache/html/unnamed-chunk-12_8b4b2652d91ffedf2dc592e621abd0f7”}</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(<span class="st">"hp"</span>, <span class="st">"big_hp"</span>, <span class="at">threshold =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_vector_assembler</span>(<span class="fu">c</span>(<span class="st">"big_hp"</span>, <span class="st">"wt"</span>, <span class="st">"qsec"</span>), <span class="st">"features"</span>) <span class="sc">%&gt;%</span></span>
@@ -338,14 +325,14 @@
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>pipeline_model <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(pipeline, mtcars_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p></li>
-<li><p>A transformed data frame with the appropriate schema is required for exporting the Pipeline model ::: {.cell layout.align=“center” indent=” ” hash=“mleap_cache/html/unnamed-chunk-14_148c1a7a6ee96c5b8e5f26b4184849b7”}</p>
+<li><p>A transformed data frame with the appropriate schema is required for exporting the Pipeline model ::: {.cell layout.align=“center” indent=” ” original.params.src=“r” chunk.echo=“false” hash=“mleap_cache/html/unnamed-chunk-14_c08209be649dae090975e1898d0e5cfb”}</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>transformed_tbl <span class="ot">&lt;-</span> <span class="fu">ml_transform</span>(pipeline_model, mtcars_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p></li>
-<li><p>Export the model using the <code>ml_write_bundle()</code> function from <code>mleap</code> ::: {.cell layout.align=“center” indent=” ” hash=“mleap_cache/html/unnamed-chunk-16_5be0405b8bb053edbcae2da54f91e384”}</p>
+<li><p>Export the model using the <code>ml_write_bundle()</code> function from <code>mleap</code> ::: {.cell layout.align=“center” indent=” ” original.params.src=“r” chunk.echo=“false” hash=“mleap_cache/html/unnamed-chunk-16_5b711629a2ca1324be81c1a0670bbf36”}</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"mtcars_model.zip"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_write_bundle</span>(pipeline_model, transformed_tbl, model_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p></li>
-<li><p>Close Spark session ::: {.cell layout.align=“center” indent=” ” hash=“mleap_cache/html/unnamed-chunk-18_6de59248d113abe86fc5c757d94493b4”}</p>
+<li><p>Close Spark session ::: {.cell layout.align=“center” indent=” ” original.params.src=“r” chunk.echo=“false” hash=“mleap_cache/html/unnamed-chunk-18_f881e6a01a95776c75440d404ea196b8”}</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>:::</p></li>
 </ol>
@@ -354,16 +341,16 @@
 <section id="test-the-mleap-bundle" class="level2">
 <h2 class="anchored" data-anchor-id="test-the-mleap-bundle">Test the <code>mleap</code> bundle</h2>
 <p>The <code>mleap</code> package also provides R functions for testing that the saved models behave as expected. Here we load the previously saved model:</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-20_aac32bf7298b65cb1a94ed50a06bde70">
+<div class="cell" data-layout.align="center" data-original.params.src="r" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-20_6deec7c03e59960d545087b5e4f722c0">
 <div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">mleap_load_bundle</span>(model_path)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To retrieve the schema associated with the model use the <code>mleap_model_schema()</code> function</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-22_6a2c7d5ea818169896c67ee0365100a4">
+<div class="cell" data-layout.align="center" data-original.params.src="r" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-22_f8d8a7e16fe4052a52dba22c5700064b">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mleap_model_schema</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then, we create a new data frame to be scored, and make predictions using the model:</p>
-<div class="cell" data-layout.align="center" data-hash="mleap_cache/html/unnamed-chunk-24_756970f37de8d00aab57647010b53a36">
+<div class="cell" data-layout.align="center" data-original.params.src="r" data-chunk.echo="false" data-hash="mleap_cache/html/unnamed-chunk-24_69ede1d7c688c6c22e16f743ef25733c">
 <div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>qsec, <span class="sc">~</span>hp, <span class="sc">~</span>wt,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fl">16.2</span>,  <span class="dv">101</span>, <span class="fl">2.68</span>,</span>

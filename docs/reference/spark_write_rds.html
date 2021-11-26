@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_write_rds" class="nav-link active" data-scroll-target="#spark_write_rds"><code>spark_write_rds</code></a>
+<li><a href="#spark_write_rds" class="nav-link active" data-scroll-target="#spark_write_rds">spark_write_rds</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="spark_write_rds" class="level1">
-<h1><code>spark_write_rds</code></h1>
+<h1>spark_write_rds</h1>
 <p>Write Spark DataFrame to RDS files</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -298,10 +301,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -310,15 +309,16 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>A Spark DataFrame to be exported</td>
 </tr>
 <tr class="even">
-<td><code>dest_uri</code></td>
-<td>Can be a URI template containing ” partitionId ” (e.g., “hdfs://my_data_part_ partitionId .rds”) where ” partitionId ” will be substituted with ID of each partition using <code>glue</code>, or a list of URIs to be assigned to RDS output from all partitions (e.g., “hdfs://my_data_part_0.rds”, “hdfs://my_data_part_1.rds”, and so on) If working with a Spark instance running locally, then all URIs should be in “file://<local file="" path="">” form. Otherwise the scheme of the URI should reflect the underlying file system the Spark instance is working with (e.g., “hdfs://”). If the resulting list of URI(s) does not contain unique values, then it will be post-processed with <code>make.unique()</code> to ensure uniqueness.</local></td>
+<td>dest_uri</td>
+<td>Can be a URI template containing “partitionId” (e.g.,</td>
 </tr>
 </tbody>
 </table>
+<p>“hdfs://my_data_part_partitionId.rds”) where “partitionId” will be substituted with ID of each partition using <code>glue</code>, or a list of URIs to be assigned to RDS output from all partitions (e.g., “hdfs://my_data_part_0.rds”, “hdfs://my_data_part_1.rds”, and so on) If working with a Spark instance running locally, then all URIs should be in “file://<local file="" path="">” form. Otherwise the scheme of the URI should reflect the underlying file system the Spark instance is working with (e.g., “hdfs://”). If the resulting list of URI(s) does not contain unique values, then it will be post-processed with <code>make.unique()</code> to ensure uniqueness.</local></p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>

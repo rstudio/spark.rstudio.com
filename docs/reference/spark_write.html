@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_write" class="nav-link active" data-scroll-target="#spark_write"><code>spark_write</code></a>
+<li><a href="#spark_write" class="nav-link active" data-scroll-target="#spark_write">spark_write</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="spark_write" class="level1">
-<h1><code>spark_write</code></h1>
+<h1>spark_write</h1>
 <p>Write Spark DataFrame to file using a custom writer</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -298,10 +301,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -310,51 +309,46 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>A Spark Dataframe to be saved into file(s)</td>
 </tr>
 <tr class="even">
-<td><code>writer</code></td>
-<td>A writer function with the signature function(partition, path) where <code>partition</code> is a R dataframe containing all rows from one partition of the original Spark Dataframe <code>x</code> and path is a string specifying the file to write <code>partition</code> to</td>
-</tr>
-<tr class="odd">
-<td><code>paths</code></td>
-<td>A single destination path or a list of destination paths, each one specifying a location for a partition from <code>x</code> to be written to. If number of partition(s) in <code>x</code> is not equal to <code>length(paths)</code> then <code>x</code> will be re-partitioned to contain <code>length(paths)</code> partition(s)</td>
-</tr>
-<tr class="even">
-<td><code>packages</code></td>
-<td>Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with</td>
+<td>writer</td>
+<td>A writer function with the signature function(partition, path)</td>
 </tr>
 </tbody>
 </table>
+<p>where <code>partition</code> is a R dataframe containing all rows from one partition of the original Spark Dataframe <code>x</code> and path is a string specifying the file to write <code>partition</code> to paths | A single destination path or a list of destination paths, each one specifying a location for a partition from <code>x</code> to be written to. If number of partition(s) in <code>x</code> is not equal to <code>length(paths)</code> then <code>x</code> will be re-partitioned to contain <code>length(paths)</code> partition(s) packages | Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local[3]"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># copy some test data into a Spark Dataframe</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sdf <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create a writer function</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>writer <span class="ot">&lt;-</span> <span class="cf">function</span>(df, path) {</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df, path)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write</span>(</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>sdf,</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>writer,</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># re-partition sdf into 3 partitions and write them to 3 separate files</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">paths =</span> <span class="fu">list</span>(<span class="st">"file:///tmp/file1"</span>, <span class="st">"file:///tmp/file2"</span>, <span class="st">"file:///tmp/file3"</span>),</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write</span>(</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>sdf,</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>writer,</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># save all rows into a single file</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="at">paths =</span> <span class="fu">list</span>(<span class="st">"file:///tmp/all_rows"</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local[3]"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># copy some test data into a Spark Dataframe</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>sdf <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create a writer function</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>writer <span class="ot">&lt;-</span> <span class="cf">function</span>(df, path) {</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write.csv</span>(df, path)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write</span>(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  sdf,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  writer,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># re-partition sdf into 3 partitions and write them to 3 separate files</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">paths =</span> <span class="fu">list</span>(<span class="st">"file:///tmp/file1"</span>, <span class="st">"file:///tmp/file2"</span>, <span class="st">"file:///tmp/file3"</span>),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  sdf,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  writer,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># save all rows into a single file</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">paths =</span> <span class="fu">list</span>(<span class="st">"file:///tmp/all_rows"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

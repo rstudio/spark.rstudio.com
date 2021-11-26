@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#stream_render" class="nav-link active" data-scroll-target="#stream_render"><code>stream_render</code></a>
+<li><a href="#stream_render" class="nav-link active" data-scroll-target="#stream_render">stream_render</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="stream_render" class="level1">
-<h1><code>stream_render</code></h1>
+<h1>stream_render</h1>
 <p>Render Stream</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -298,10 +301,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -310,37 +309,31 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>stream</code></td>
+<td>stream</td>
 <td>The stream to render</td>
 </tr>
 <tr class="even">
-<td><code>collect</code></td>
-<td>The interval in seconds to collect data before rendering the ‘htmlwidget’.</td>
-</tr>
-<tr class="odd">
-<td><code>stats</code></td>
-<td>Optional stream statistics collected using <code>stream_stats()</code> , when specified, <code>stream</code> should be omitted.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Additional optional arguments.</td>
+<td>collect</td>
+<td>The interval in seconds to collect data before rendering the</td>
 </tr>
 </tbody>
 </table>
+<p>‘htmlwidget’. stats | Optional stream statistics collected using <code>stream_stats()</code>, when specified, <code>stream</code> should be omitted. … | Additional optional arguments.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"iris-in"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iris, <span class="st">"iris-in/iris.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"iris-in/"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_write_csv</span>(<span class="st">"iris-out/"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_render</span>(stream)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"iris-in"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iris, <span class="st">"iris-in/iris.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"iris-in/"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_write_csv</span>(<span class="st">"iris-out/"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_render</span>(stream)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

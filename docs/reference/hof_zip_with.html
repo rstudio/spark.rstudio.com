@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#hof_zip_with" class="nav-link active" data-scroll-target="#hof_zip_with"><code>hof_zip_with</code></a>
+<li><a href="#hof_zip_with" class="nav-link active" data-scroll-target="#hof_zip_with">hof_zip_with</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="hof_zip_with" class="level1">
-<h1><code>hof_zip_with</code></h1>
+<h1>hof_zip_with</h1>
 <p>Combines 2 Array Columns</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -298,10 +301,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -310,47 +309,38 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>The Spark data frame to process</td>
 </tr>
 <tr class="even">
-<td><code>func</code></td>
+<td>func</td>
 <td>Element-wise combining function to be applied</td>
 </tr>
 <tr class="odd">
-<td><code>dest_col</code></td>
-<td>Column to store the query result (default: the last column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>left</code></td>
-<td>Any expression evaluating to an array (default: the first column of the Spark data frame)</td>
-</tr>
-<tr class="odd">
-<td><code>right</code></td>
-<td>Any expression evaluating to an array (default: the second column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Additional params to dplyr::mutate</td>
+<td>dest_col</td>
+<td>Column to store the query result</td>
 </tr>
 </tbody>
 </table>
+<p>(default: the last column of the Spark data frame) left | Any expression evaluating to an array (default: the first column of the Spark data frame) right | Any expression evaluating to an array (default: the second column of the Spark data frame) … | Additional params to dplyr::mutate</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># compute element-wise products of 2 arrays from each row of `left` and `right`</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and store the resuling array in `res`</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sc,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">left =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">25</span>),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">right =</span> <span class="fu">list</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">res =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">hof_zip_with</span>(<span class="sc">~</span> .x <span class="sc">*</span> .y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># compute element-wise products of 2 arrays from each row of `left` and `right`</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># and store the resuling array in `res`</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  sc,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">left =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">25</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">right =</span> <span class="fu">list</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">res =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hof_zip_with</span>(<span class="sc">~</span> .x <span class="sc">*</span> .y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

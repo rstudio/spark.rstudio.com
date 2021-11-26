@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#registerdospark" class="nav-link active" data-scroll-target="#registerdospark"><code>registerDoSpark</code></a>
+<li><a href="#registerdospark" class="nav-link active" data-scroll-target="#registerdospark">registerDoSpark</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -286,7 +289,7 @@
 <main>
 
 <section id="registerdospark" class="level1">
-<h1><code>registerDoSpark</code></h1>
+<h1>registerDoSpark</h1>
 <p>Register a Parallel Backend</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -299,10 +302,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -311,19 +310,16 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>spark_conn</code></td>
+<td>spark_conn</td>
 <td>Spark connection to use</td>
 </tr>
 <tr class="even">
-<td><code>parallelism</code></td>
-<td>Level of parallelism to use for task execution (if unspecified, then it will take the value of <code>SparkContext.defaultParallelism()</code> which by default is the number of cores available to the <code>sparklyr</code> application)</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>additional options for sparklyr parallel backend (currently only the only valid option is nocompile = T, F )</td>
+<td>parallelism</td>
+<td>Level of parallelism to use for task execution</td>
 </tr>
 </tbody>
 </table>
+<p>(if unspecified, then it will take the value of <code>SparkContext.defaultParallelism()</code> which by default is the number of cores available to the <code>sparklyr</code> application) … | additional options for sparklyr parallel backend (currently only the only valid option is nocompile = T, F)</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
@@ -331,8 +327,10 @@
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoSpark</span>(sc, <span class="at">nocompile =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">registerDoSpark</span>(sc, <span class="at">nocompile =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

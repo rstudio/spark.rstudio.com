@@ -1,6 +1,9 @@
-# `spark_extension`
+# spark_extension
+
 
 Create Spark Extension
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Create Spark Extension
 Creates an R package ready to be used as an Spark extension.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 spark_extension(path)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`path`     |     Location where the extension will be created.
+path | Location where the extension will be created.
+
+
+
+
 
 

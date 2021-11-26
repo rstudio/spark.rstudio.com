@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_compilation_spec" class="nav-link active" data-scroll-target="#spark_compilation_spec"><code>spark_compilation_spec</code></a>
+<li><a href="#spark_compilation_spec" class="nav-link active" data-scroll-target="#spark_compilation_spec">spark_compilation_spec</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,11 +288,11 @@
 <main>
 
 <section id="spark_compilation_spec" class="level1">
-<h1><code>spark_compilation_spec</code></h1>
+<h1>spark_compilation_spec</h1>
 <p>Define a Spark Compilation Specification</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>For use with <a href="#compilepackagejars"><code>compile_package_jars</code></a> . The Spark compilation specification is used when compiling Spark extension Java Archives, and defines which versions of Spark, as well as which versions of Scala, should be used for compilation.</p>
+<p>For use with <code>compile_package_jars</code>. The Spark compilation specification is used when compiling Spark extension Java Archives, and defines which versions of Spark, as well as which versions of Scala, should be used for compilation.</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
@@ -307,10 +310,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -319,43 +318,16 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>spark_version</code></td>
-<td>The Spark version to build against. This can be left unset if the path to a suitable Spark home is supplied.</td>
-</tr>
-<tr class="even">
-<td><code>spark_home</code></td>
-<td>The path to a Spark home installation. This can be left unset if <code>spark_version</code> is supplied; in such a case, <code>sparklyr</code> will attempt to discover the associated Spark installation using <a href="#sparkhomedir"><code>spark_home_dir</code></a> .</td>
-</tr>
-<tr class="odd">
-<td><code>scalac_path</code></td>
-<td>The path to the <code>scalac</code> compiler to be used during compilation of your Spark extension. Note that you should ensure the version of <code>scalac</code> selected matches the version of <code>scalac</code> used with the version of Spark you are compiling against.</td>
-</tr>
-<tr class="even">
-<td><code>scala_filter</code></td>
-<td>An optional list() function that can be used to filter which <code>scala</code> files are used during compilation. This can be useful if you have auxiliary files that should only be included with certain versions of Spark.</td>
-</tr>
-<tr class="odd">
-<td><code>jar_name</code></td>
-<td>The name to be assigned to the generated <code>jar</code> .</td>
-</tr>
-<tr class="even">
-<td><code>jar_path</code></td>
-<td>The path to the <code>jar</code> tool to be used during compilation of your Spark extension.</td>
-</tr>
-<tr class="odd">
-<td><code>jar_dep</code></td>
-<td>An optional list of additional <code>jar</code> dependencies.</td>
-</tr>
-<tr class="even">
-<td><code>embedded_srcs</code></td>
-<td>Embedded source file(s) under <code>&lt;R package root&gt;/java</code> to be included in the root of the resulting jar file as resources</td>
+<td>spark_version</td>
+<td>The Spark version to build against. This can</td>
 </tr>
 </tbody>
 </table>
+<p>be left unset if the path to a suitable Spark home is supplied. spark_home | The path to a Spark home installation. This can be left unset if <code>spark_version</code> is supplied; in such a case, <code>sparklyr</code> will attempt to discover the associated Spark installation using <code>spark_home_dir</code>. scalac_path | The path to the <code>scalac</code> compiler to be used during compilation of your Spark extension. Note that you should ensure the version of <code>scalac</code> selected matches the version of <code>scalac</code> used with the version of Spark you are compiling against. scala_filter | An optional function that can be used to filter which <code>scala</code> files are used during compilation. This can be useful if you have auxiliary files that should only be included with certain versions of Spark. jar_name | The name to be assigned to the generated <code>jar</code>. jar_path | The path to the <code>jar</code> tool to be used during compilation of your Spark extension. jar_dep | An optional list of additional <code>jar</code> dependencies. embedded_srcs | Embedded source file(s) under <code>&lt;R package root&gt;/java</code> to be included in the root of the resulting jar file as resources</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
-<p>Most Spark extensions won’t need to define their own compilation specification, and can instead rely on the default behavior of <code>compile_package_jars</code> .</p>
+<p>Most Spark extensions won’t need to define their own compilation specification, and can instead rely on the default behavior of <code>compile_package_jars</code>.</p>
 <!-- -->
 </section>
 </section>

@@ -1,37 +1,58 @@
-# `spark_write`
+# spark_write
+
 
 Write Spark DataFrame to file using a custom writer
+
+
 
 
 ## Description
 
 Run a custom R function on Spark worker to write a Spark DataFrame
- into file(s). If Spark's speculative execution feature is enabled (i.e.,
- `spark.speculation` is true), then each write task may be executed more than
- once and the user-defined writer function will need to ensure no concurrent
- writes happen to the same file path (e.g., by appending UUID to each file name).
+into file(s). If Spark's speculative execution feature is enabled (i.e.,
+`spark.speculation` is true), then each write task may be executed more than
+once and the user-defined writer function will need to ensure no concurrent
+writes happen to the same file path (e.g., by appending UUID to each file name).
+
+
+
 
 
 ## Usage
-
 ```r
 spark_write(x, writer, paths, packages = NULL)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A Spark Dataframe to be saved into file(s)
-`writer`     |     A writer function with the signature function(partition, path) where `partition` is a R dataframe containing all rows from one partition of the original Spark Dataframe `x` and path is a string specifying the file to write `partition` to
-`paths`     |     A single destination path or a list of destination paths, each one specifying a location for a partition from `x` to be written to. If number of partition(s) in `x` is not equal to `length(paths)` then `x` will be re-partitioned to contain `length(paths)` partition(s)
-`packages`     |     Boolean to distribute `.libPaths()` packages to each node, a list of packages to distribute, or a package bundle created with
+x | A Spark Dataframe to be saved into file(s)
+writer | A writer function with the signature function(partition, path)
+where ``partition`` is a R dataframe containing all rows from one partition
+of the original Spark Dataframe ``x`` and path is a string specifying the
+file to write ``partition`` to
+paths | A single destination path or a list of destination paths, each one
+specifying a location for a partition from ``x`` to be written to. If
+number of partition(s) in ``x`` is not equal to ``length(paths)`` then
+``x`` will be re-partitioned to contain ``length(paths)`` partition(s)
+packages | Boolean to distribute ``.libPaths()`` packages to each node,
+a list of packages to distribute, or a package bundle created with
+
+
+
+
 
 
 ## Examples
 
 ```r
+
+
 library(sparklyr)
 
 sc <- spark_connect(master = "local[3]")
@@ -41,22 +62,26 @@ sdf <- sdf_copy_to(sc, iris, overwrite = TRUE)
 
 # create a writer function
 writer <- function(df, path) {
-write.csv(df, path)
+  write.csv(df, path)
 }
 
 spark_write(
-sdf,
-writer,
-# re-partition sdf into 3 partitions and write them to 3 separate files
-paths = list("file:///tmp/file1", "file:///tmp/file2", "file:///tmp/file3"),
+  sdf,
+  writer,
+  # re-partition sdf into 3 partitions and write them to 3 separate files
+  paths = list("file:///tmp/file1", "file:///tmp/file2", "file:///tmp/file3"),
 )
 
 spark_write(
-sdf,
-writer,
-# save all rows into a single file
-paths = list("file:///tmp/all_rows")
+  sdf,
+  writer,
+  # save all rows into a single file
+  paths = list("file:///tmp/all_rows")
 )
+
 ```
+
+
+
 
 

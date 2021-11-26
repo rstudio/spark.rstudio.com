@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#sdf_collect" class="nav-link active" data-scroll-target="#sdf_collect"><code>sdf_collect</code></a>
+<li><a href="#sdf_collect" class="nav-link active" data-scroll-target="#sdf_collect">sdf_collect</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -284,7 +287,7 @@
 <main>
 
 <section id="sdf_collect" class="level1">
-<h1><code>sdf_collect</code></h1>
+<h1>sdf_collect</h1>
 <p>Collect a Spark DataFrame into R.</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -297,10 +300,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -309,19 +308,20 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>object</code></td>
+<td>object</td>
 <td>Spark dataframe to collect</td>
 </tr>
 <tr class="even">
-<td><code>impl</code></td>
-<td>Which implementation to use while collecting Spark dataframe - row-wise: fetch the entire dataframe into memory and then process it row-by-row - row-wise-iter: iterate through the dataframe using RDD local iterator, processing one row at a time (hence reducing memory footprint) - column-wise: fetch the entire dataframe into memory and then process it column-by-column NOTE: (1) this will not apply to streaming or arrow use cases (2) this parameter will only affect implementation detail, and will not affect result of <code>sdf_collect</code>, and should only be set if performance profiling indicates any particular choice will be significantly better than the default choice (“row-wise”)</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Additional options.</td>
+<td>impl</td>
+<td>Which implementation to use while collecting Spark dataframe</td>
 </tr>
 </tbody>
 </table>
+<ul>
+<li>row-wise: fetch the entire dataframe into memory and then process it row-by-row</li>
+<li>row-wise-iter: iterate through the dataframe using RDD local iterator, processing one row at a time (hence reducing memory footprint)</li>
+<li>column-wise: fetch the entire dataframe into memory and then process it column-by-column NOTE: (1) this will not apply to streaming or arrow use cases (2) this parameter will only affect implementation detail, and will not affect result of <code>sdf_collect</code>, and should only be set if performance profiling indicates any particular choice will be significantly better than the default choice (“row-wise”) … | Additional options.</li>
+</ul>
 <!-- -->
 </section>
 </section>

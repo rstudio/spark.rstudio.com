@@ -1,6 +1,9 @@
-# `ml_default_stop_words`
+# ml_default_stop_words
+
 
 Default stop words
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Default stop words
 Loads the default stop words for the given language.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 ml_default_stop_words(
   sc,
@@ -21,21 +26,29 @@ ml_default_stop_words(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`sc`     |     A `spark_connection`
-`language`     |     A character string.
-`...`     |     Optional arguments; currently unused.
+sc | A ``spark_connection``
+language | A character string.
+... | Optional arguments; currently unused.
+
+
 
 
 ## Details
 
 Supported languages: danish, dutch, english, finnish, french,
- german, hungarian, italian, norwegian, portuguese, russian, spanish,
- swedish, turkish. Defaults to English. See [https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/](https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/) 
- for more details
+  german, hungarian, italian, norwegian, portuguese, russian, spanish,
+  swedish, turkish. Defaults to English. See https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/
+  for more details
+
+
+
 
 
 ## Value
@@ -43,8 +56,13 @@ Supported languages: danish, dutch, english, finnish, french,
 A list of stop words.
 
 
-## Seealso
 
-[`ft_stop_words_remover`](#ftstopwordsremover)
+
+
+
+## See Also
+
+`ft_stop_words_remover`
+
 
 

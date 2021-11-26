@@ -1,19 +1,26 @@
-# `ml_supervised_pipeline`
+# ml_supervised_pipeline
+
 
 Constructors for `ml_model` Objects
+
+
 
 
 ## Description
 
 Functions for developers writing extensions for Spark ML. These functions are constructors
- for `ml_model` objects that are returned when using the formula interface.
+  for `ml_model` objects that are returned when using the formula interface.
+
+
+
 
 
 ## Usage
-
 ```r
 ml_supervised_pipeline(predictor, dataset, formula, features_col, label_col)
+
 ml_clustering_pipeline(predictor, dataset, formula, features_col)
+
 ml_construct_model_supervised(
   constructor,
   predictor,
@@ -23,6 +30,7 @@ ml_construct_model_supervised(
   label_col,
   ...
 )
+
 ml_construct_model_clustering(
   constructor,
   predictor,
@@ -31,6 +39,7 @@ ml_construct_model_clustering(
   features_col,
   ...
 )
+
 new_ml_model_prediction(
   pipeline_model,
   formula,
@@ -40,7 +49,9 @@ new_ml_model_prediction(
   ...,
   class = character()
 )
+
 new_ml_model(pipeline_model, formula, dataset, ..., class = character())
+
 new_ml_model_classification(
   pipeline_model,
   formula,
@@ -51,6 +62,7 @@ new_ml_model_classification(
   ...,
   class = character()
 )
+
 new_ml_model_regression(
   pipeline_model,
   formula,
@@ -60,6 +72,7 @@ new_ml_model_regression(
   ...,
   class = character()
 )
+
 new_ml_model_clustering(
   pipeline_model,
   formula,
@@ -71,17 +84,24 @@ new_ml_model_clustering(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`predictor`     |     The pipeline stage corresponding to the ML algorithm.
-`dataset`     |     The training dataset.
-`formula`     |     The formula used for data preprocessing
-`features_col`     |     Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by [`ft_r_formula`](#ftrformula) .
-`label_col`     |     Label column name. The column should be a numeric column. Usually this column is output by [`ft_r_formula`](#ftrformula) .
-`constructor`     |     The constructor function for the `ml_model`.
-`pipeline_model`     |     The pipeline model object returned by `ml_supervised_pipeline()`.
-`class`     |     Name of the subclass.
+predictor | The pipeline stage corresponding to the ML algorithm.
+dataset | The training dataset.
+formula | The formula used for data preprocessing
+features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
+label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
+constructor | The constructor function for the `ml_model`.
+pipeline_model | The pipeline model object returned by `ml_supervised_pipeline()`.
+class | Name of the subclass.
+
+
+
+
 
 

@@ -1,6 +1,9 @@
-# `ml_standardize_formula`
+# ml_standardize_formula
+
 
 Standardize Formula Input for `ml_model`
+
+
 
 
 ## Description
@@ -8,19 +11,28 @@ Standardize Formula Input for `ml_model`
 Generates a formula string from user inputs, to be used in `ml_model` constructor.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 ml_standardize_formula(formula = NULL, response = NULL, features = NULL)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`formula`     |     The `formula` argument.
-`response`     |     The `response` argument.
-`features`     |     The `features` argument.
+formula | The `formula` argument.
+response | The `response` argument.
+features | The `features` argument.
+
+
+
+
 
 

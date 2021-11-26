@@ -1,56 +1,72 @@
-# `collect_from_rds`
+# collect_from_rds
+
 
 Collect Spark data serialized in RDS format into R
+
+
 
 
 ## Description
 
 Deserialize Spark data that is serialized using `spark_write_rds()` into a R
- dataframe.
+dataframe.
+
+
+
 
 
 ## Usage
-
 ```r
 collect_from_rds(path)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`path`     |     Path to a local RDS file that is produced by `spark_write_rds()` (RDS files stored in HDFS will need to be downloaded to local filesystem first (e.g., by running `hadoop fs -copyToLocal ...` or similar)
+path | Path to a local RDS file that is produced by `spark_write_rds()`
+(RDS files stored in HDFS will need to be downloaded to local filesystem
+first (e.g., by running `hadoop fs -copyToLocal ...` or similar)
 
 
-## Seealso
 
-Other Spark serialization routines:
- [`spark_load_table`](#sparkloadtable) ,
- [`spark_read_avro`](#sparkreadavro) ,
- [`spark_read_binary`](#sparkreadbinary) ,
- [`spark_read_csv`](#sparkreadcsv) ,
- [`spark_read_delta`](#sparkreaddelta) ,
- [`spark_read_image`](#sparkreadimage) ,
- [`spark_read_jdbc`](#sparkreadjdbc) ,
- [`spark_read_json`](#sparkreadjson) ,
- [`spark_read_libsvm`](#sparkreadlibsvm) ,
- [`spark_read_orc`](#sparkreadorc) ,
- [`spark_read_parquet`](#sparkreadparquet) ,
- [`spark_read_source`](#sparkreadsource) ,
- [`spark_read_table`](#sparkreadtable) ,
- [`spark_read_text`](#sparkreadtext) ,
- [`spark_read`](#sparkread) ,
- [`spark_save_table`](#sparksavetable) ,
- [`spark_write_avro`](#sparkwriteavro) ,
- [`spark_write_csv`](#sparkwritecsv) ,
- [`spark_write_delta`](#sparkwritedelta) ,
- [`spark_write_jdbc`](#sparkwritejdbc) ,
- [`spark_write_json`](#sparkwritejson) ,
- [`spark_write_orc`](#sparkwriteorc) ,
- [`spark_write_parquet`](#sparkwriteparquet) ,
- [`spark_write_source`](#sparkwritesource) ,
- [`spark_write_table`](#sparkwritetable) ,
- [`spark_write_text`](#sparkwritetext)
+
+
+
+
+## See Also
+
+Other Spark serialization routines: 
+`spark_load_table()`,
+`spark_read_avro()`,
+`spark_read_binary()`,
+`spark_read_csv()`,
+`spark_read_delta()`,
+`spark_read_image()`,
+`spark_read_jdbc()`,
+`spark_read_json()`,
+`spark_read_libsvm()`,
+`spark_read_orc()`,
+`spark_read_parquet()`,
+`spark_read_source()`,
+`spark_read_table()`,
+`spark_read_text()`,
+`spark_read()`,
+`spark_save_table()`,
+`spark_write_avro()`,
+`spark_write_csv()`,
+`spark_write_delta()`,
+`spark_write_jdbc()`,
+`spark_write_json()`,
+`spark_write_orc()`,
+`spark_write_parquet()`,
+`spark_write_source()`,
+`spark_write_table()`,
+`spark_write_text()`
+
 
 

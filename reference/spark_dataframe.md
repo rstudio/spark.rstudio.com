@@ -1,32 +1,46 @@
-# `spark_dataframe`
+# spark_dataframe
+
 
 Retrieve a Spark DataFrame
+
+
 
 
 ## Description
 
 This S3 generic is used to access a Spark DataFrame object (as a Java
- object reference) from an list() object.
+object reference) from an  object.
+
+
+
 
 
 ## Usage
-
 ```r
 spark_dataframe(x, ...)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     An list() object wrapping, or containing, a Spark DataFrame.
-`...`     |     Optional arguments; currently unused.
+x | An  object wrapping, or containing, a Spark DataFrame.
+... | Optional arguments; currently unused.
+
+
+
 
 
 ## Value
 
-A [`spark_jobj`](#sparkjobj) representing a Java object reference
- to a Spark DataFrame.
+A `spark_jobj` representing a Java object reference
+  to a Spark DataFrame.
+
+
+
 
 

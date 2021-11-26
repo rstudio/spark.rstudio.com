@@ -1,29 +1,42 @@
-# `spark_log`
+# spark_log
+
 
 View Entries in the Spark Log
+
+
 
 
 ## Description
 
 View the most recent entries in the Spark log. This can be useful when
- inspecting output / errors produced by Spark during the invocation of
- various commands.
+inspecting output / errors produced by Spark during the invocation of
+various commands.
+
+
+
 
 
 ## Usage
-
 ```r
 spark_log(sc, n = 100, filter = NULL, ...)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`sc`     |     A `spark_connection` .
-`n`     |     The max number of log entries to retrieve. Use `NULL` to retrieve all entries within the log.
-`filter`     |     Character string to filter log entries.
-`...`     |     Optional arguments; currently unused.
+sc | A ``spark_connection``.
+n | The max number of log entries to retrieve. Use ``NULL`` to
+retrieve all entries within the log.
+filter | Character string to filter log entries.
+... | Optional arguments; currently unused.
+
+
+
+
 
 

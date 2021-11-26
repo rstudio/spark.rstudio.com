@@ -1,10 +1,19 @@
-# `%>%`
+# %>%
+
 
 Pipe operator
 
 
+
+
 ## Description
 
-See [`%>%`](#%>%) for more details.
+See `%>%` for more details.
+
+
+
+
+
+
 
 

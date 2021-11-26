@@ -1,6 +1,9 @@
-# `ml_generalized_linear_regression`
+# ml_generalized_linear_regression
+
 
 Spark ML -- Generalized Linear Regression
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Spark ML -- Generalized Linear Regression
 Perform regression using Generalized Linear Model (GLM).
 
 
-## Usage
 
+
+
+## Usage
 ```r
 ml_generalized_linear_regression(
   x,
@@ -35,93 +40,99 @@ ml_generalized_linear_regression(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
-`formula`     |     Used when `x` is a `tbl_spark` . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see [ft_r_formula](#ftrformula) for details.
-`family`     |     Name of family which is a description of the error distribution to be used in the model. Supported options: "gaussian", "binomial", "poisson", "gamma" and "tweedie". Default is "gaussian".
-`link`     |     Name of link function which provides the relationship between the linear predictor and the mean of the distribution function. See for supported link functions.
-`fit_intercept`     |     Boolean; should the model be fit with an intercept term?
-`offset_col`     |     Offset column name. If this is not set, we treat all instance offsets as 0.0. The feature specified as offset has a constant coefficient of 1.0.
-`link_power`     |     Index in the power link function. Only applicable to the Tweedie family. Note that link power 0, 1, -1 or 0.5 corresponds to the Log, Identity, Inverse or Sqrt link, respectively. When not set, this value defaults to 1 - variancePower, which matches the R "statmod" package.
-`link_prediction_col`     |     Link prediction (linear predictor) column name. Default is not set, which means we do not output link prediction.
-`reg_param`     |     Regularization parameter (aka lambda)
-`max_iter`     |     The maximum number of iterations to use.
-`weight_col`     |     The name of the column to use as weights for the model fit.
-`solver`     |     Solver algorithm for optimization.
-`tol`     |     Param for the convergence tolerance for iterative algorithms.
-`variance_power`     |     Power in the variance function of the Tweedie distribution which provides the relationship between the variance and mean of the distribution. Only applicable to the Tweedie family. (see [Tweedie Distribution (Wikipedia)](https://en.wikipedia.org/wiki/Tweedie_distribution) ) Supported values: 0 and [1, Inf). Note that variance power 0, 1, or 2 corresponds to the Gaussian, Poisson or Gamma family, respectively.
-`features_col`     |     Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by [`ft_r_formula`](#ftrformula) .
-`label_col`     |     Label column name. The column should be a numeric column. Usually this column is output by [`ft_r_formula`](#ftrformula) .
-`prediction_col`     |     Prediction column name.
-`uid`     |     A character string used to uniquely identify the ML estimator.
-`...`     |     Optional arguments; see Details.
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
+family | Name of family which is a description of the error distribution to be used in the model. Supported options: "gaussian", "binomial", "poisson", "gamma" and "tweedie". Default is "gaussian".
+link | Name of link function which provides the relationship between the linear predictor and the mean of the distribution function. See for supported link functions.
+fit_intercept | Boolean; should the model be fit with an intercept term?
+offset_col | Offset column name. If this is not set, we treat all instance offsets as 0.0. The feature specified as offset has a constant coefficient of 1.0.
+link_power | Index in the power link function. Only applicable to the Tweedie family. Note that link power 0, 1, -1 or 0.5 corresponds to the Log, Identity, Inverse or Sqrt link, respectively. When not set, this value defaults to 1 - variancePower, which matches the R "statmod" package.
+link_prediction_col | Link prediction (linear predictor) column name. Default is not set, which means we do not output link prediction.
+reg_param | Regularization parameter (aka lambda)
+max_iter | The maximum number of iterations to use.
+weight_col | The name of the column to use as weights for the model fit.
+solver | Solver algorithm for optimization.
+tol | Param for the convergence tolerance for iterative algorithms.
+variance_power | Power in the variance function of the Tweedie distribution which provides the relationship between the variance and mean of the distribution. Only applicable to the Tweedie family. (see https://en.wikipedia.org/wiki/Tweedie_distributionTweedie Distribution (Wikipedia)) Supported values: 0 and [1, Inf). Note that variance power 0, 1, or 2 corresponds to the Gaussian, Poisson or Gamma family, respectively.
+features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
+label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
+prediction_col | Prediction column name.
+uid | A character string used to uniquely identify the ML estimator.
+... | Optional arguments; see Details.
+
+
 
 
 ## Details
 
-When `x` is a `tbl_spark` and `formula` (alternatively, `response` and `features` ) is specified, the function returns a `ml_model` object wrapping a `ml_pipeline_model` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument `predicted_label_col` (defaults to `"predicted_label"` ) can be used to specify the name of the predicted label column. In addition to the fitted `ml_pipeline_model` , `ml_model` objects also contain a `ml_pipeline` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by [`ml_save`](#mlsave) with `type = "pipeline"` to faciliate model refresh workflows.
- 
- Valid link functions for each family is listed below. The first link function of each family is the default one.
+When ``x`` is a ``tbl_spark`` and ``formula`` (alternatively, ``response`` and ``features``) is specified, the function returns a ``ml_model`` object wrapping a ``ml_pipeline_model`` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument ``predicted_label_col`` (defaults to ``"predicted_label"``) can be used to specify the name of the predicted label column. In addition to the fitted ``ml_pipeline_model``, ``ml_model`` objects also contain a ``ml_pipeline`` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with ``type = "pipeline"`` to faciliate model refresh workflows.
+
+Valid link functions for each family is listed below. The first link function of each family is the default one.
+  
+    
+*  gaussian: "identity", "log", "inverse"
+    
+*  binomial: "logit", "probit", "loglog"
+    
+*  poisson: "log", "identity", "sqrt"
+    
+*  gamma: "inverse", "identity", "log"
+    
+*  tweedie: power link function specified through `link_power`. The default link power in the tweedie family is `1 - variance_power`.
     
 
-*  gaussian: "identity", "log", "inverse"  
 
-*  binomial: "logit", "probit", "loglog"  
 
-*  poisson: "log", "identity", "sqrt"  
-
-*  gamma: "inverse", "identity", "log"  
-
-*  tweedie: power link function specified through `link_power` . The default link power in the tweedie family is `1 - variance_power` .
 
 
 ## Value
 
-The object returned depends on the class of `x` .
- 
-   
-
-*   `spark_connection` : When `x` is a `spark_connection` , the function returns an instance of a `ml_estimator` object. The object contains a pointer to a Spark `Predictor` object and can be used to compose  `Pipeline` objects.   
-
-*   `ml_pipeline` : When `x` is a `ml_pipeline` , the function returns a `ml_pipeline` with the predictor appended to the pipeline.   
-
-*   `tbl_spark` : When `x` is a `tbl_spark` , a predictor is constructed then immediately fit with the input `tbl_spark` , returning a prediction model.   
-
-*   `tbl_spark` , with `formula` : specified When `formula`  is specified, the input `tbl_spark` is first transformed using a  `RFormula` transformer before being fit by the predictor. The object returned in this case is a `ml_model` which is a wrapper of a `ml_pipeline_model` .
+The object returned depends on the class of ``x``.
 
 
-## Seealso
+  
+*  `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to
+  a Spark `Predictor` object and can be used to compose
+  `Pipeline` objects.
 
-See [http://spark.apache.org/docs/latest/ml-classification-regression.html](http://spark.apache.org/docs/latest/ml-classification-regression.html) for
- more information on the set of supervised learning algorithms.
- 
- Other ml algorithms:
- [`ml_aft_survival_regression`](#mlaftsurvivalregression) ,
- [`ml_decision_tree_classifier`](#mldecisiontreeclassifier) ,
- [`ml_gbt_classifier`](#mlgbtclassifier) ,
- [`ml_isotonic_regression`](#mlisotonicregression) ,
- [`ml_linear_regression`](#mllinearregression) ,
- [`ml_linear_svc`](#mllinearsvc) ,
- [`ml_logistic_regression`](#mllogisticregression) ,
- [`ml_multilayer_perceptron_classifier`](#mlmultilayerperceptronclassifier) ,
- [`ml_naive_bayes`](#mlnaivebayes) ,
- [`ml_one_vs_rest`](#mlonevsrest) ,
- [`ml_random_forest_classifier`](#mlrandomforestclassifier)
+  
+*  `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with
+  the predictor appended to the pipeline.
+
+  
+*  `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then
+  immediately fit with the input `tbl_spark`, returning a prediction model.
+
+  
+*  `tbl_spark`, with `formula`: specified When `formula`
+    is specified, the input `tbl_spark` is first transformed using a
+    `RFormula` transformer before being fit by
+    the predictor. The object returned in this case is a `ml_model` which is a
+    wrapper of a `ml_pipeline_model`.
+
+
+
+
 
 
 ## Examples
 
 ```r
+
 library(sparklyr)
 
 sc <- spark_connect(master = "local")
 mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE)
 
 partitions <- mtcars_tbl %>%
-sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
 
 mtcars_training <- partitions$training
 mtcars_test <- partitions$test
@@ -134,17 +145,42 @@ family_link <- data.frame(family_link, rmse = 0)
 
 # Train the models
 for (i in seq_len(nrow(family_link))) {
-glm_model <- mtcars_training %>%
-ml_generalized_linear_regression(mpg ~ .,
-family = family_link[i, 1],
-link = family_link[i, 2]
-)
+  glm_model <- mtcars_training %>%
+    ml_generalized_linear_regression(mpg ~ .,
+      family = family_link[i, 1],
+      link = family_link[i, 2]
+    )
 
-pred <- ml_predict(glm_model, mtcars_test)
-family_link[i, 3] <- ml_regression_evaluator(pred, label_col = "mpg")
+  pred <- ml_predict(glm_model, mtcars_test)
+  family_link[i, 3] <- ml_regression_evaluator(pred, label_col = "mpg")
 }
 
 family_link
+
 ```
+
+
+
+
+
+
+## See Also
+
+See http://spark.apache.org/docs/latest/ml-classification-regression.html for
+  more information on the set of supervised learning algorithms.
+
+Other ml algorithms: 
+`ml_aft_survival_regression()`,
+`ml_decision_tree_classifier()`,
+`ml_gbt_classifier()`,
+`ml_isotonic_regression()`,
+`ml_linear_regression()`,
+`ml_linear_svc()`,
+`ml_logistic_regression()`,
+`ml_multilayer_perceptron_classifier()`,
+`ml_naive_bayes()`,
+`ml_one_vs_rest()`,
+`ml_random_forest_classifier()`
+
 
 

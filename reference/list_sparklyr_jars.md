@@ -1,6 +1,9 @@
-# `list_sparklyr_jars`
+# list_sparklyr_jars
+
 
 list all sparklyr-*.jar files that have been built
+
+
 
 
 ## Description
@@ -8,10 +11,16 @@ list all sparklyr-*.jar files that have been built
 list all sparklyr-*.jar files that have been built
 
 
-## Usage
 
+
+
+## Usage
 ```r
 list_sparklyr_jars()
 ```
+
+
+
+
 
 

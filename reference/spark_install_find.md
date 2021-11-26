@@ -1,6 +1,9 @@
-# `spark_install_find`
+# spark_install_find
+
 
 Find a given Spark installation by version.
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Find a given Spark installation by version.
 Find a given Spark installation by version.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 spark_install_find(
   version = NULL,
@@ -21,14 +26,21 @@ spark_install_find(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`version`     |     Version of Spark to install. See `spark_available_versions` for a list of supported versions
-`hadoop_version`     |     Version of Hadoop to install. See `spark_available_versions` for a list of supported versions
-`installed_only`     |     Search only the locally installed versions?
-`latest`     |     Check for latest version?
-`hint`     |     On failure should the installation code be provided?
+version | Version of Spark to install. See ``spark_available_versions`` for a list of supported versions
+hadoop_version | Version of Hadoop to install. See ``spark_available_versions`` for a list of supported versions
+installed_only | Search only the locally installed versions?
+latest | Check for latest version?
+hint | On failure should the installation code be provided?
+
+
+
+
 
 

@@ -1,6 +1,9 @@
-# `ml_survival_regression_tidiers`
+# ml_survival_regression_tidiers
+
 
 Tidying methods for Spark ML Survival Regression
+
+
 
 
 ## Description
@@ -8,21 +11,32 @@ Tidying methods for Spark ML Survival Regression
 These methods summarize the results of Spark ML models into tidy forms.
 
 
+
+
+
 ## Usage
 
-```r
-list(list("tidy"), list("ml_model_aft_survival_regression"))(x, ...)
-list(list("augment"), list("ml_model_aft_survival_regression"))(x, newdata = NULL, ...)
-list(list("glance"), list("ml_model_aft_survival_regression"))(x, ...)
-```
+tidyml_model_aft_survival_regression(x, ...)
+
+augmentml_model_aft_survival_regression(x, newdata = NULL, ...)
+
+glanceml_model_aft_survival_regression(x, ...)
+
+
+
 
 
 ## Arguments
 
+
 Argument      |Description
 ------------- |----------------
-`x`     |     a Spark ML model.
-`...`     |     extra arguments (not used.)
-`newdata`     |     a tbl_spark of new data to use for prediction.
+x | a Spark ML model.
+... | extra arguments (not used.)
+newdata | a tbl_spark of new data to use for prediction.
+
+
+
+
 
 

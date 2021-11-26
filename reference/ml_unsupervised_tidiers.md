@@ -1,6 +1,9 @@
-# `ml_unsupervised_tidiers`
+# ml_unsupervised_tidiers
+
 
 Tidying methods for Spark ML unsupervised models
+
+
 
 
 ## Description
@@ -8,27 +11,44 @@ Tidying methods for Spark ML unsupervised models
 These methods summarize the results of Spark ML models into tidy forms.
 
 
+
+
+
 ## Usage
 
-```r
-list(list("tidy"), list("ml_model_kmeans"))(x, ...)
-list(list("augment"), list("ml_model_kmeans"))(x, newdata = NULL, ...)
-list(list("glance"), list("ml_model_kmeans"))(x, ...)
-list(list("tidy"), list("ml_model_bisecting_kmeans"))(x, ...)
-list(list("augment"), list("ml_model_bisecting_kmeans"))(x, newdata = NULL, ...)
-list(list("glance"), list("ml_model_bisecting_kmeans"))(x, ...)
-list(list("tidy"), list("ml_model_gaussian_mixture"))(x, ...)
-list(list("augment"), list("ml_model_gaussian_mixture"))(x, newdata = NULL, ...)
-list(list("glance"), list("ml_model_gaussian_mixture"))(x, ...)
-```
+tidyml_model_kmeans(x, ...)
+
+augmentml_model_kmeans(x, newdata = NULL, ...)
+
+glanceml_model_kmeans(x, ...)
+
+tidyml_model_bisecting_kmeans(x, ...)
+
+augmentml_model_bisecting_kmeans(x, newdata = NULL, ...)
+
+glanceml_model_bisecting_kmeans(x, ...)
+
+tidyml_model_gaussian_mixture(x, ...)
+
+augmentml_model_gaussian_mixture(x, newdata = NULL, ...)
+
+glanceml_model_gaussian_mixture(x, ...)
+
+
+
 
 
 ## Arguments
 
+
 Argument      |Description
 ------------- |----------------
-`x`     |     a Spark ML model.
-`...`     |     extra arguments (not used.)
-`newdata`     |     a tbl_spark of new data to use for prediction.
+x | a Spark ML model.
+... | extra arguments (not used.)
+newdata | a tbl_spark of new data to use for prediction.
+
+
+
+
 
 

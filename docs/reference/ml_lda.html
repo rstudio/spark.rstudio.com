@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,15 +275,15 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ml_lda" class="nav-link active" data-scroll-target="#ml_lda"><code>ml_lda</code></a>
+<li><a href="#ml_lda" class="nav-link active" data-scroll-target="#ml_lda">ml_lda</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -288,7 +291,7 @@
 <main>
 
 <section id="ml_lda" class="level1">
-<h1><code>ml_lda</code></h1>
+<h1>ml_lda</h1>
 <p>Spark ML – Latent Dirichlet Allocation</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -316,10 +319,14 @@
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="fu">random_string</span>(<span class="st">"lda_"</span>),</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ...</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_describe_topics</span>(model, <span class="at">max_terms_per_topic =</span> <span class="dv">10</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_likelihood</span>(model, dataset)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_perplexity</span>(model, dataset)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_topics_matrix</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_describe_topics</span>(model, <span class="at">max_terms_per_topic =</span> <span class="dv">10</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_likelihood</span>(model, dataset)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_perplexity</span>(model, dataset)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_topics_matrix</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -336,91 +343,44 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>formula</code></td>
-<td>Used when <code>x</code> is a <code>tbl_spark</code> . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see <a href="#ftrformula">ft_r_formula</a> for details.</td>
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
 </tr>
 <tr class="odd">
-<td><code>k</code></td>
+<td>k</td>
 <td>The number of clusters to create</td>
 </tr>
 <tr class="even">
-<td><code>max_iter</code></td>
+<td>max_iter</td>
 <td>The maximum number of iterations to use.</td>
 </tr>
 <tr class="odd">
-<td><code>doc_concentration</code></td>
+<td>doc_concentration</td>
 <td>Concentration parameter (commonly named “alpha”) for the prior placed on documents’ distributions over topics (“theta”). See details.</td>
 </tr>
 <tr class="even">
-<td><code>topic_concentration</code></td>
+<td>topic_concentration</td>
 <td>Concentration parameter (commonly named “beta” or “eta”) for the prior placed on topics’ distributions over terms.</td>
 </tr>
 <tr class="odd">
-<td><code>subsampling_rate</code></td>
+<td>subsampling_rate</td>
 <td>(For Online optimizer only) Fraction of the corpus to be sampled and used in each iteration of mini-batch gradient descent, in range (0, 1]. Note that this should be adjusted in synch with <code>max_iter</code> so the entire corpus is used. Specifically, set both so that maxIterations * miniBatchFraction greater than or equal to 1.</td>
 </tr>
 <tr class="even">
-<td><code>optimizer</code></td>
+<td>optimizer</td>
 <td>Optimizer or inference algorithm used to estimate the LDA model. Supported: “online” for Online Variational Bayes (default) and “em” for Expectation-Maximization.</td>
 </tr>
 <tr class="odd">
-<td><code>checkpoint_interval</code></td>
-<td>Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.</td>
-</tr>
-<tr class="even">
-<td><code>keep_last_checkpoint</code></td>
-<td>(Spark 2.0.0+) (For EM optimizer only) If using checkpointing, this indicates whether to keep the last checkpoint. If <code>FALSE</code> , then the checkpoint will be deleted. Deleting the checkpoint can cause failures if a data partition is lost, so set this bit with care. Note that checkpoints will be cleaned up via reference counting, regardless.</td>
-</tr>
-<tr class="odd">
-<td><code>learning_decay</code></td>
-<td>(For Online optimizer only) Learning rate, set as an exponential decay rate. This should be between (0.5, 1.0] to guarantee asymptotic convergence. This is called “kappa” in the Online LDA paper (Hoffman et al., 2010). Default: 0.51, based on Hoffman et al.</td>
-</tr>
-<tr class="even">
-<td><code>learning_offset</code></td>
-<td>(For Online optimizer only) A (positive) learning parameter that downweights early iterations. Larger values make early iterations count less. This is called “tau0” in the Online LDA paper (Hoffman et al., 2010) Default: 1024, following Hoffman et al.</td>
-</tr>
-<tr class="odd">
-<td><code>optimize_doc_concentration</code></td>
-<td>(For Online optimizer only) Indicates whether the <code>doc_concentration</code> (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: <code>FALSE</code></td>
-</tr>
-<tr class="even">
-<td><code>seed</code></td>
-<td>A random seed. Set this value if you need your results to be reproducible across repeated calls.</td>
-</tr>
-<tr class="odd">
-<td><code>features_col</code></td>
-<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <a href="#ftrformula"><code>ft_r_formula</code></a> .</td>
-</tr>
-<tr class="even">
-<td><code>topic_distribution_col</code></td>
-<td>Output column with estimates of the topic mixture distribution for each document (often called “theta” in the literature). Returns a vector of zeros for an empty document.</td>
-</tr>
-<tr class="odd">
-<td><code>uid</code></td>
-<td>A character string used to uniquely identify the ML estimator.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Optional arguments, see Details.</td>
-</tr>
-<tr class="odd">
-<td><code>model</code></td>
-<td>A fitted LDA model returned by <code>ml_lda()</code> .</td>
-</tr>
-<tr class="even">
-<td><code>max_terms_per_topic</code></td>
-<td>Maximum number of terms to collect for each topic. Default value of 10.</td>
-</tr>
-<tr class="odd">
-<td><code>dataset</code></td>
-<td>test corpus to use for calculating log likelihood or log perplexity</td>
+<td>checkpoint_interval</td>
+<td>Set checkpoint interval (&gt;= 1) or disable checkpoint (-1).</td>
 </tr>
 </tbody>
 </table>
+<p>E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. keep_last_checkpoint | (Spark 2.0.0+) (For EM optimizer only) If using checkpointing, this indicates whether to keep the last checkpoint. If <code>FALSE</code>, then the checkpoint will be deleted. Deleting the checkpoint can cause failures if a data partition is lost, so set this bit with care. Note that checkpoints will be cleaned up via reference counting, regardless. learning_decay | (For Online optimizer only) Learning rate, set as an exponential decay rate. This should be between (0.5, 1.0] to guarantee asymptotic convergence. This is called “kappa” in the Online LDA paper (Hoffman et al., 2010). Default: 0.51, based on Hoffman et al. learning_offset | (For Online optimizer only) A (positive) learning parameter that downweights early iterations. Larger values make early iterations count less. This is called “tau0” in the Online LDA paper (Hoffman et al., 2010) Default: 1024, following Hoffman et al. optimize_doc_concentration | (For Online optimizer only) Indicates whether the <code>doc_concentration</code> (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: <code>FALSE</code> seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called “theta” in the literature). Returns a vector of zeros for an empty document. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted LDA model returned by <code>ml_lda()</code>. max_terms_per_topic | Maximum number of terms to collect for each topic. Default value of 10. dataset | test corpus to use for calculating log likelihood or log perplexity</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
@@ -433,56 +393,57 @@
 <li><p>“document”: one piece of text, corresponding to one row in the input data</p></li>
 </ul>
 <p>Original LDA paper (journal version): Blei, Ng, and Jordan. “Latent Dirichlet Allocation.” JMLR, 2003.</p>
-<p>Input data ( <code>features_col</code> ): LDA is given a collection of documents as input data, via the <code>features_col</code> parameter. Each document is specified as a Vector of length <code>vocab_size</code> , where each entry is the count for the corresponding term (word) in the document. Feature transformers such as <a href="#fttokenizer"><code>ft_tokenizer</code></a> and <a href="#ftcountvectorizer"><code>ft_count_vectorizer</code></a> can be useful for converting text to word count vectors</p>
+<p>Input data (<code>features_col</code>): LDA is given a collection of documents as input data, via the <code>features_col</code> parameter. Each document is specified as a Vector of length <code>vocab_size</code>, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as <code>ft_tokenizer</code> and <code>ft_count_vectorizer</code> can be useful for converting text to word count vectors</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The object returned depends on the class of <code>x</code> .</p>
+<p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
-<li><p><code>spark_connection</code> : When <code>x</code> is a <code>spark_connection</code> , the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
-<li><p><code>ml_pipeline</code> : When <code>x</code> is a <code>ml_pipeline</code> , the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
-<li><p><code>tbl_spark</code> : When <code>x</code> is a <code>tbl_spark</code> , an estimator is constructed then immediately fit with the input <code>tbl_spark</code> , returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code> , with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code> . This signature does not apply to <code>ml_lda()</code> .</p></li>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code>ml_lda()</code>.</p></li>
 </ul>
 <p><code>ml_describe_topics</code> returns a DataFrame with topics and their top-weighted terms.</p>
 <p><code>ml_log_likelihood</code> calculates a lower bound on the log likelihood of the entire corpus</p>
 </section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>See <a href="http://spark.apache.org/docs/latest/ml-clustering.html">http://spark.apache.org/docs/latest/ml-clustering.html</a> for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <a href="#mlbisectingkmeans"><code>ml_bisecting_kmeans</code></a> , <a href="#mlgaussianmixture"><code>ml_gaussian_mixture</code></a> , <a href="#mlkmeans"><code>ml_kmeans</code></a></p>
-</section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>lines_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">austen_books</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>), ],</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">name =</span> <span class="st">"lines_tbl"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># transform the data in a tidy form</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>lines_tbl_tidy <span class="ot">&lt;-</span> lines_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_tokenizer</span>(</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">input_col =</span> <span class="st">"text"</span>,</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">output_col =</span> <span class="st">"word_list"</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_stop_words_remover</span>(</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="at">input_col =</span> <span class="st">"word_list"</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="at">output_col =</span> <span class="st">"wo_stop_words"</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">explode</span>(wo_stop_words)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(text <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(text, book)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>lda_model <span class="ot">&lt;-</span> lines_tbl_tidy <span class="sc">%&gt;%</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_lda</span>(<span class="sc">~</span>text, <span class="at">k =</span> <span class="dv">4</span>)</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># vocabulary and topics</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lda_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>lines_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">austen_books</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>), ],</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"lines_tbl"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># transform the data in a tidy form</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>lines_tbl_tidy <span class="ot">&lt;-</span> lines_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"text"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>(</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">explode</span>(wo_stop_words)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(text <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, book)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>lda_model <span class="ot">&lt;-</span> lines_tbl_tidy <span class="sc">%&gt;%</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_lda</span>(<span class="sc">~</span>text, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># vocabulary and topics</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lda_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
+<p>Other ml clustering algorithms: <code>ml_bisecting_kmeans()</code>, <code>ml_gaussian_mixture()</code>, <code>ml_kmeans()</code></p>
 <!-- -->
 </section>
 </section>

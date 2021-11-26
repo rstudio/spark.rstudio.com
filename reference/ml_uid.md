@@ -1,6 +1,9 @@
-# `ml_uid`
+# ml_uid
+
 
 Spark ML -- UID
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Spark ML -- UID
 Extracts the UID of an ML object.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 ml_uid(x)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A Spark ML object
+x | A Spark ML object
+
+
+
+
 
 

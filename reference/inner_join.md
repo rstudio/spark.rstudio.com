@@ -1,10 +1,19 @@
-# `inner_join`
+# inner_join
+
 
 Inner join
 
 
+
+
 ## Description
 
-See [`inner_join`](#innerjoin) for more details.
+See `inner_join` for more details.
+
+
+
+
+
+
 
 

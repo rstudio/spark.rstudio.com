@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#hof_map_zip_with" class="nav-link active" data-scroll-target="#hof_map_zip_with"><code>hof_map_zip_with</code></a>
+<li><a href="#hof_map_zip_with" class="nav-link active" data-scroll-target="#hof_map_zip_with">hof_map_zip_with</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="hof_map_zip_with" class="level1">
-<h1><code>hof_map_zip_with</code></h1>
+<h1>hof_map_zip_with</h1>
 <p>Merges two maps into one</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -310,57 +313,44 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>The Spark data frame to be processed</td>
 </tr>
 <tr class="even">
-<td><code>func</code></td>
-<td>The function to apply (it should take (key, value1, value2) as arguments, where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map</td>
-</tr>
-<tr class="odd">
-<td><code>dest_col</code></td>
-<td>Column to store the query result (default: the last column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>map1</code></td>
-<td>The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame)</td>
-</tr>
-<tr class="odd">
-<td><code>map2</code></td>
-<td>The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Additional params to dplyr::mutate</td>
+<td>func</td>
+<td>The function to apply (it should take (key, value1, value2) as arguments,</td>
 </tr>
 </tbody>
 </table>
+<p>where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map dest_col | Column to store the query result (default: the last column of the Spark data frame) map1 | The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame) map2 | The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame) … | Additional params to dplyr::mutate</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.0.0"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create a Spark dataframe with 2 columns of type MAP&lt;STRING, INT&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>two_maps_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sc,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">m1 =</span> <span class="fu">c</span>(<span class="st">"{</span><span class="sc">\"</span><span class="st">1</span><span class="sc">\"</span><span class="st">:2,</span><span class="sc">\"</span><span class="st">3</span><span class="sc">\"</span><span class="st">:4,</span><span class="sc">\"</span><span class="st">5</span><span class="sc">\"</span><span class="st">:6}"</span>, <span class="st">"{</span><span class="sc">\"</span><span class="st">2</span><span class="sc">\"</span><span class="st">:1,</span><span class="sc">\"</span><span class="st">4</span><span class="sc">\"</span><span class="st">:3,</span><span class="sc">\"</span><span class="st">6</span><span class="sc">\"</span><span class="st">:5}"</span>),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">m2 =</span> <span class="fu">c</span>(<span class="st">"{</span><span class="sc">\"</span><span class="st">1</span><span class="sc">\"</span><span class="st">:1,</span><span class="sc">\"</span><span class="st">3</span><span class="sc">\"</span><span class="st">:3,</span><span class="sc">\"</span><span class="st">5</span><span class="sc">\"</span><span class="st">:5}"</span>, <span class="st">"{</span><span class="sc">\"</span><span class="st">2</span><span class="sc">\"</span><span class="st">:2,</span><span class="sc">\"</span><span class="st">4</span><span class="sc">\"</span><span class="st">:4,</span><span class="sc">\"</span><span class="st">6</span><span class="sc">\"</span><span class="st">:6}"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">m1 =</span> <span class="fu">from_json</span>(m1, <span class="st">"MAP&lt;STRING, INT&gt;"</span>),</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">m2 =</span> <span class="fu">from_json</span>(m2, <span class="st">"MAP&lt;STRING, INT&gt;"</span>))</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># create a 3rd column containing MAP&lt;STRING, INT&gt; values derived from the</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># first 2 columns</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>transformed_two_maps_tbl <span class="ot">&lt;-</span> two_maps_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">hof_map_zip_with</span>(</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="at">func =</span> .(k, v1, v2) <span class="sc">%-&gt;%</span> (<span class="fu">CONCAT</span>(k, <span class="st">"_"</span>, v1, <span class="st">"_"</span>, v2)),</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="at">dest_col =</span> m3</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.0.0"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create a Spark dataframe with 2 columns of type MAP&lt;STRING, INT&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>two_maps_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  sc,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">m1 =</span> <span class="fu">c</span>(<span class="st">"{</span><span class="sc">\"</span><span class="st">1</span><span class="sc">\"</span><span class="st">:2,</span><span class="sc">\"</span><span class="st">3</span><span class="sc">\"</span><span class="st">:4,</span><span class="sc">\"</span><span class="st">5</span><span class="sc">\"</span><span class="st">:6}"</span>, <span class="st">"{</span><span class="sc">\"</span><span class="st">2</span><span class="sc">\"</span><span class="st">:1,</span><span class="sc">\"</span><span class="st">4</span><span class="sc">\"</span><span class="st">:3,</span><span class="sc">\"</span><span class="st">6</span><span class="sc">\"</span><span class="st">:5}"</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">m2 =</span> <span class="fu">c</span>(<span class="st">"{</span><span class="sc">\"</span><span class="st">1</span><span class="sc">\"</span><span class="st">:1,</span><span class="sc">\"</span><span class="st">3</span><span class="sc">\"</span><span class="st">:3,</span><span class="sc">\"</span><span class="st">5</span><span class="sc">\"</span><span class="st">:5}"</span>, <span class="st">"{</span><span class="sc">\"</span><span class="st">2</span><span class="sc">\"</span><span class="st">:2,</span><span class="sc">\"</span><span class="st">4</span><span class="sc">\"</span><span class="st">:4,</span><span class="sc">\"</span><span class="st">6</span><span class="sc">\"</span><span class="st">:6}"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">m1 =</span> <span class="fu">from_json</span>(m1, <span class="st">"MAP&lt;STRING, INT&gt;"</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">m2 =</span> <span class="fu">from_json</span>(m2, <span class="st">"MAP&lt;STRING, INT&gt;"</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># create a 3rd column containing MAP&lt;STRING, INT&gt; values derived from the</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># first 2 columns</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>transformed_two_maps_tbl <span class="ot">&lt;-</span> two_maps_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hof_map_zip_with</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">func =</span> .(k, v1, v2) <span class="sc">%-&gt;%</span> (<span class="fu">CONCAT</span>(k, <span class="st">"_"</span>, v1, <span class="st">"_"</span>, v2)),</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">dest_col =</span> m3</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

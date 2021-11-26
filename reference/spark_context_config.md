@@ -1,6 +1,9 @@
-# `spark_context_config`
+# spark_context_config
+
 
 Runtime configuration interface for the Spark Context.
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Runtime configuration interface for the Spark Context.
 Retrieves the runtime configuration interface for the Spark Context.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 spark_context_config(sc)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`sc`     |     A `spark_connection` .
+sc | A ``spark_connection``.
+
+
+
+
 
 

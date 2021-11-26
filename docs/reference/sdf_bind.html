@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#sdf_bind" class="nav-link active" data-scroll-target="#sdf_bind"><code>sdf_bind</code></a>
+<li><a href="#sdf_bind" class="nav-link active" data-scroll-target="#sdf_bind">sdf_bind</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -286,7 +289,7 @@
 <main>
 
 <section id="sdf_bind" class="level1">
-<h1><code>sdf_bind</code></h1>
+<h1>sdf_bind</h1>
 <p>Bind multiple Spark DataFrames by row and column</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -295,15 +298,12 @@
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_bind_rows</span>(..., <span class="at">id =</span> <span class="cn">NULL</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_bind_cols</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_bind_cols</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -312,15 +312,15 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>...</code></td>
-<td>Spark tbls to combine. Each argument can either be a Spark DataFrame or a list of Spark DataFrames When row-binding, columns are matched by name, and any missing columns with be filled with NA. When column-binding, rows are matched by position, so all data frames must have the same number of rows.</td>
-</tr>
-<tr class="even">
-<td><code>id</code></td>
-<td>Data frame identifier. When <code>id</code> is supplied, a new column of identifiers is created to link each row to its original Spark DataFrame. The labels are taken from the named arguments to <code>sdf_bind_rows()</code> . When a list of Spark DataFrames is supplied, the labels are taken from the names of the list. If no names are found a numeric sequence is used instead.</td>
+<td>…</td>
+<td>Spark tbls to combine.</td>
 </tr>
 </tbody>
 </table>
+<p>Each argument can either be a Spark DataFrame or a list of Spark DataFrames</p>
+<p>When row-binding, columns are matched by name, and any missing columns with be filled with NA.</p>
+<p>When column-binding, rows are matched by position, so all data frames must have the same number of rows. id | Data frame identifier.</p>
+<p>When <code>id</code> is supplied, a new column of identifiers is created to link each row to its original Spark DataFrame. The labels are taken from the named arguments to <code>sdf_bind_rows()</code>. When a list of Spark DataFrames is supplied, the labels are taken from the names of the list. If no names are found a numeric sequence is used instead.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>

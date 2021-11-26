@@ -1,6 +1,9 @@
-# `sdf_is_streaming`
+# sdf_is_streaming
+
 
 Spark DataFrame is Streaming
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Spark DataFrame is Streaming
 Is the given Spark DataFrame a streaming data?
 
 
-## Usage
 
+
+
+## Usage
 ```r
 sdf_is_streaming(x)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+
+
+
+
 
 

@@ -1,6 +1,9 @@
-# `stream_view`
+# stream_view
+
 
 View Stream
+
+
 
 
 ## Description
@@ -8,24 +11,34 @@ View Stream
 Opens a Shiny gadget to visualize the given stream.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 stream_view(stream, ...)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`stream`     |     The stream to visualize.
-`...`     |     Additional optional arguments.
+stream | The stream to visualize.
+... | Additional optional arguments.
+
+
+
+
 
 
 ## Examples
 
 ```r
+
 library(sparklyr)
 sc <- spark_connect(master = "local")
 
@@ -33,9 +46,12 @@ dir.create("iris-in")
 write.csv(iris, "iris-in/iris.csv", row.names = FALSE)
 
 stream_read_csv(sc, "iris-in/") %>%
-stream_write_csv("iris-out/") %>%
-stream_view() %>%
-stream_stop()
+  stream_write_csv("iris-out/") %>%
+  stream_view() %>%
+  stream_stop()
+
 ```
+
+
 
 

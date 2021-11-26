@@ -1,6 +1,9 @@
-# `spark_read_csv`
+# spark_read_csv
+
 
 Read a CSV file into a Spark DataFrame
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Read a CSV file into a Spark DataFrame
 Read a tabular data file into a Spark DataFrame.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 spark_read_csv(
   sc,
@@ -32,74 +37,96 @@ spark_read_csv(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`sc`     |     A `spark_connection` .
-`name`     |     The name to assign to the newly generated table.
-`path`     |     The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://" , "s3a://" and "file://" protocols.
-`header`     |     Boolean; should the first row of data be used as a header? Defaults to `TRUE` .
-`columns`     |     A vector of column names or a named vector of column types. If specified, the elements can be `"binary"` for `BinaryType` , `"boolean"` for `BooleanType` , `"byte"` for `ByteType` , `"integer"` for `IntegerType` , `"integer64"` for `LongType` , `"double"` for `DoubleType` , `"character"` for `StringType` , `"timestamp"` for `TimestampType` and `"date"` for `DateType` .
-`infer_schema`     |     Boolean; should column types be automatically inferred? Requires one extra pass over the data. Defaults to `is.null(columns)` .
-`delimiter`     |     The character used to delimit each column. Defaults to ',' .
-`quote`     |     The character used as a quote. Defaults to '"' .
-`escape`     |     The character used to escape other characters. Defaults to '\' .
-`charset`     |     The character set. Defaults to "UTF-8" .
-`null_value`     |     The character to use for null, or missing, values. Defaults to `NULL` .
-`options`     |     A list of strings with additional options.
-`repartition`     |     The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
-`memory`     |     Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
-`overwrite`     |     Boolean; overwrite the table with the given name if it already exists?
-`...`     |     Optional arguments; currently unused.
+sc | A ``spark_connection``.
+name | The name to assign to the newly generated table.
+path | The path to the file. Needs to be accessible from the cluster.
+Supports the "hdfs://", "s3a://" and "file://" protocols.
+header | Boolean; should the first row of data be used as a header?
+Defaults to ``TRUE``.
+columns | A vector of column names or a named vector of column types.
+If specified, the elements can be ``"binary"`` for ``BinaryType``,
+``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``,
+``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``,
+``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``,
+``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
+infer_schema | Boolean; should column types be automatically inferred?
+Requires one extra pass over the data. Defaults to ``is.null(columns)``.
+delimiter | The character used to delimit each column. Defaults to ','.
+quote | The character used as a quote. Defaults to '"'.
+escape | The character used to escape other characters. Defaults to '\'.
+charset | The character set. Defaults to "UTF-8".
+null_value | The character to use for null, or missing, values. Defaults to ``NULL``.
+options | A list of strings with additional options.
+repartition | The number of partitions used to distribute the
+generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That
+is, should the table be cached?)
+overwrite | Boolean; overwrite the table with the given name if it
+already exists?
+... | Optional arguments; currently unused.
+
+
 
 
 ## Details
 
-You can read data from HDFS ( `hdfs://` ), S3 ( `s3a://` ),
- as well as the local file system ( `file://` ).
- 
- If you are reading from a secure S3 bucket be sure to set the following in your spark-defaults.conf
- `spark.hadoop.fs.s3a.access.key` , `spark.hadoop.fs.s3a.secret.key` or any of the methods outlined in the aws-sdk
- documentation [Working with AWS credentials](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html) 
- In order to work with the newer `s3a://` protocol also set the values for `spark.hadoop.fs.s3a.impl` and `spark.hadoop.fs.s3a.endpoint ` .
- In addition, to support v4 of the S3 api be sure to pass the `-Dcom.amazonaws.services.s3.enableV4` driver options
- for the config key `spark.driver.extraJavaOptions ` 
- For instructions on how to configure `s3n://` check the hadoop documentation:
- [s3n authentication properties](https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authentication_properties) 
- 
- When `header` is `FALSE` , the column names are generated with a
- `V` prefix; e.g. `V1, V2, ...` .
+You can read data from HDFS (``hdfs://``), S3 (``s3a://``),
+  as well as the local file system (``file://``).
+
+If you are reading from a secure S3 bucket be sure to set the following in your spark-defaults.conf
+``spark.hadoop.fs.s3a.access.key``, ``spark.hadoop.fs.s3a.secret.key`` or any of the methods outlined in the aws-sdk
+documentation https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.htmlWorking with AWS credentials
+In order to work with the newer ``s3a://`` protocol also set the values for ``spark.hadoop.fs.s3a.impl`` and ``spark.hadoop.fs.s3a.endpoint ``.
+In addition, to support v4 of the S3 api be sure to pass the ``-Dcom.amazonaws.services.s3.enableV4`` driver options
+for the config key ``spark.driver.extraJavaOptions ``
+For instructions on how to configure ``s3n://`` check the hadoop documentation:
+https://hadoop.apache.org/docs/stable/hadoop-aws/tools/hadoop-aws/index.html#Authentication_propertiess3n authentication properties
+
+When ``header`` is ``FALSE``, the column names are generated with a
+``V`` prefix; e.g. ``V1, V2, ...``.
 
 
-## Seealso
 
-Other Spark serialization routines:
- [`collect_from_rds`](#collectfromrds) ,
- [`spark_load_table`](#sparkloadtable) ,
- [`spark_read_avro`](#sparkreadavro) ,
- [`spark_read_binary`](#sparkreadbinary) ,
- [`spark_read_delta`](#sparkreaddelta) ,
- [`spark_read_image`](#sparkreadimage) ,
- [`spark_read_jdbc`](#sparkreadjdbc) ,
- [`spark_read_json`](#sparkreadjson) ,
- [`spark_read_libsvm`](#sparkreadlibsvm) ,
- [`spark_read_orc`](#sparkreadorc) ,
- [`spark_read_parquet`](#sparkreadparquet) ,
- [`spark_read_source`](#sparkreadsource) ,
- [`spark_read_table`](#sparkreadtable) ,
- [`spark_read_text`](#sparkreadtext) ,
- [`spark_read`](#sparkread) ,
- [`spark_save_table`](#sparksavetable) ,
- [`spark_write_avro`](#sparkwriteavro) ,
- [`spark_write_csv`](#sparkwritecsv) ,
- [`spark_write_delta`](#sparkwritedelta) ,
- [`spark_write_jdbc`](#sparkwritejdbc) ,
- [`spark_write_json`](#sparkwritejson) ,
- [`spark_write_orc`](#sparkwriteorc) ,
- [`spark_write_parquet`](#sparkwriteparquet) ,
- [`spark_write_source`](#sparkwritesource) ,
- [`spark_write_table`](#sparkwritetable) ,
- [`spark_write_text`](#sparkwritetext)
+
+
+
+
+## See Also
+
+Other Spark serialization routines: 
+`collect_from_rds()`,
+`spark_load_table()`,
+`spark_read_avro()`,
+`spark_read_binary()`,
+`spark_read_delta()`,
+`spark_read_image()`,
+`spark_read_jdbc()`,
+`spark_read_json()`,
+`spark_read_libsvm()`,
+`spark_read_orc()`,
+`spark_read_parquet()`,
+`spark_read_source()`,
+`spark_read_table()`,
+`spark_read_text()`,
+`spark_read()`,
+`spark_save_table()`,
+`spark_write_avro()`,
+`spark_write_csv()`,
+`spark_write_delta()`,
+`spark_write_jdbc()`,
+`spark_write_json()`,
+`spark_write_orc()`,
+`spark_write_parquet()`,
+`spark_write_source()`,
+`spark_write_table()`,
+`spark_write_text()`
+
 
 

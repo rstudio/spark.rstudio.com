@@ -1,6 +1,9 @@
-# `sdf_broadcast`
+# sdf_broadcast
+
 
 Broadcast hint
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Broadcast hint
 Used to force broadcast hash joins.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 sdf_broadcast(x)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+
+
+
+
 
 

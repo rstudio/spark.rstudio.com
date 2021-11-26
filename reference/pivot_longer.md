@@ -1,10 +1,19 @@
-# `pivot_longer`
+# pivot_longer
+
 
 Pivot longer
 
 
+
+
 ## Description
 
-See [`pivot_longer`](#pivotlonger) for more details.
+See `pivot_longer` for more details.
+
+
+
+
+
+
 
 

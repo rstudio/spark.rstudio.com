@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,14 +275,14 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ft_quantile_discretizer" class="nav-link active" data-scroll-target="#ft_quantile_discretizer"><code>ft_quantile_discretizer</code></a>
+<li><a href="#ft_quantile_discretizer" class="nav-link active" data-scroll-target="#ft_quantile_discretizer">ft_quantile_discretizer</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -287,7 +290,7 @@
 <main>
 
 <section id="ft_quantile_discretizer" class="level1">
-<h1><code>ft_quantile_discretizer</code></h1>
+<h1>ft_quantile_discretizer</h1>
 <p>Feature Transformation – QuantileDiscretizer (Estimator)</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -313,10 +316,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -325,77 +324,46 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>input_col</code></td>
+<td>input_col</td>
 <td>The name of the input column.</td>
 </tr>
 <tr class="odd">
-<td><code>output_col</code></td>
+<td>output_col</td>
 <td>The name of the output column.</td>
 </tr>
 <tr class="even">
-<td><code>num_buckets</code></td>
-<td>Number of buckets (quantiles, or categories) into which data points are grouped. Must be greater than or equal to 2.</td>
-</tr>
-<tr class="odd">
-<td><code>input_cols</code></td>
-<td>Names of input columns.</td>
-</tr>
-<tr class="even">
-<td><code>output_cols</code></td>
-<td>Names of output columns.</td>
-</tr>
-<tr class="odd">
-<td><code>num_buckets_array</code></td>
-<td>Array of number of buckets (quantiles, or categories) into which data points are grouped. Each value must be greater than or equal to 2.</td>
-</tr>
-<tr class="even">
-<td><code>handle_invalid</code></td>
-<td>(Spark 2.1.0+) Param for how to handle invalid entries. Options are ‘skip’ (filter out rows with invalid values), ‘error’ (throw an error), or ‘keep’ (keep invalid values in a special additional bucket). Default: “error”</td>
-</tr>
-<tr class="odd">
-<td><code>relative_error</code></td>
-<td>(Spark 2.0.0+) Relative error (see documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile <a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctions">here</a> for description). Must be in the range [0, 1]. default: 0.001</td>
-</tr>
-<tr class="even">
-<td><code>uid</code></td>
-<td>A character string used to uniquely identify the feature transformer.</td>
-</tr>
-<tr class="odd">
-<td><code>weight_column</code></td>
-<td>If not NULL, then a generalized version of the Greenwald-Khanna algorithm will be run to compute weighted percentiles, with each input having a relative weight specified by the corresponding value in <code>weight_column</code>. The weights can be considered as relative frequencies of sample inputs.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Optional arguments; currently unused.</td>
+<td>num_buckets</td>
+<td>Number of buckets (quantiles, or categories) into which data</td>
 </tr>
 </tbody>
 </table>
+<p>points are grouped. Must be greater than or equal to 2. input_cols | Names of input columns. output_cols | Names of output columns. num_buckets_array | Array of number of buckets (quantiles, or categories) into which data points are grouped. Each value must be greater than or equal to 2. handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are ‘skip’ (filter out rows with invalid values), ‘error’ (throw an error), or ‘keep’ (keep invalid values in a special additional bucket). Default: “error” relative_error | (Spark 2.0.0+) Relative error (see documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctionshere for description). Must be in the range [0, 1]. default: 0.001 uid | A character string used to uniquely identify the feature transformer. weight_column | If not NULL, then a generalized version of the Greenwald-Khanna algorithm will be run to compute weighted percentiles, with each input having a relative weight specified by the corresponding value in <code>weight_column</code>. The weights can be considered as relative frequencies of sample inputs. … | Optional arguments; currently unused.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>NaN handling: null and NaN values will be ignored from the column during <code>QuantileDiscretizer</code> fitting. This will produce a <code>Bucketizer</code> model for making predictions. During the transformation, <code>Bucketizer</code> will raise an error when it finds NaN values in the dataset, but the user can also choose to either keep or remove NaN values within the dataset by setting <code>handle_invalid</code> If the user chooses to keep NaN values, they will be handled specially and placed into their own bucket, for example, if 4 buckets are used, then non-NaN data will be put into buckets[0-3], but NaNs will be counted in a special bucket[4].</p>
-<p>Algorithm: The bin ranges are chosen using an approximate algorithm (see the documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile <a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctions">here</a> for a detailed description). The precision of the approximation can be controlled with the <code>relative_error</code> parameter. The lower and upper bin bounds will be -Infinity and +Infinity, covering all real values.</p>
+<p>Algorithm: The bin ranges are chosen using an approximate algorithm (see the documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctionshere for a detailed description). The precision of the approximation can be controlled with the <code>relative_error</code> parameter. The lower and upper bin bounds will be -Infinity and +Infinity, covering all real values.</p>
 <p>Note that the result may be different every time you run it, since the sample strategy behind it is non-deterministic.</p>
-<p>In the case where <code>x</code> is a <code>tbl_spark</code> , the estimator fits against <code>x</code> to obtain a transformer, which is then immediately used to transform <code>x</code> , returning a <code>tbl_spark</code> .</p>
+<p>In the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code> to obtain a transformer, which is then immediately used to transform <code>x</code>, returning a <code>tbl_spark</code>.</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The object returned depends on the class of <code>x</code> .</p>
+<p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
-<li><p><code>spark_connection</code> : When <code>x</code> is a <code>spark_connection</code> , the function returns a <code>ml_transformer</code> , a <code>ml_estimator</code> , or one of their subclasses. The object contains a pointer to a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
-<li><p><code>ml_pipeline</code> : When <code>x</code> is a <code>ml_pipeline</code> , the function returns a <code>ml_pipeline</code> with the transformer or estimator appended to the pipeline.</p></li>
-<li><p><code>tbl_spark</code> : When <code>x</code> is a <code>tbl_spark</code> , a transformer is constructed then immediately applied to the input <code>tbl_spark</code> , returning a <code>tbl_spark</code></p></li>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns a <code>ml_transformer</code>, a <code>ml_estimator</code>, or one of their subclasses. The object contains a pointer to a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the transformer or estimator appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a transformer is constructed then immediately applied to the input <code>tbl_spark</code>, returning a <code>tbl_spark</code></p></li>
 </ul>
 </section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>See <a href="http://spark.apache.org/docs/latest/ml-features.html">http://spark.apache.org/docs/latest/ml-features.html</a> for more information on the set of transformations available for DataFrame columns in Spark.</p>
-<p><a href="#ftbucketizer"><code>ft_bucketizer</code></a></p>
-<p>Other feature transformers: <a href="#ftbinarizer"><code>ft_binarizer</code></a> , <a href="#ftbucketizer"><code>ft_bucketizer</code></a> , <a href="#ftchisqselector"><code>ft_chisq_selector</code></a> , <a href="#ftcountvectorizer"><code>ft_count_vectorizer</code></a> , <a href="#ftdct"><code>ft_dct</code></a> , <a href="#ftelementwiseproduct"><code>ft_elementwise_product</code></a> , <a href="#ftfeaturehasher"><code>ft_feature_hasher</code></a> , <a href="#fthashingtf"><code>ft_hashing_tf</code></a> , <a href="#ftidf"><code>ft_idf</code></a> , <a href="#ftimputer"><code>ft_imputer</code></a> , <a href="#ftindextostring"><code>ft_index_to_string</code></a> , <a href="#ftinteraction"><code>ft_interaction</code></a> , <a href="#ftlsh"><code>ft_lsh</code></a> , <a href="#ftmaxabsscaler"><code>ft_max_abs_scaler</code></a> , <a href="#ftminmaxscaler"><code>ft_min_max_scaler</code></a> , <a href="#ftngram"><code>ft_ngram</code></a> , <a href="#ftnormalizer"><code>ft_normalizer</code></a> , <a href="#ftonehotencoderestimator"><code>ft_one_hot_encoder_estimator</code></a> , <a href="#ftonehotencoder"><code>ft_one_hot_encoder</code></a> , <a href="#ftpca"><code>ft_pca</code></a> , <a href="#ftpolynomialexpansion"><code>ft_polynomial_expansion</code></a> , <a href="#ftrformula"><code>ft_r_formula</code></a> , <a href="#ftregextokenizer"><code>ft_regex_tokenizer</code></a> , <a href="#ftrobustscaler"><code>ft_robust_scaler</code></a> , <a href="#ftsqltransformer"><code>ft_sql_transformer</code></a> , <a href="#ftstandardscaler"><code>ft_standard_scaler</code></a> , <a href="#ftstopwordsremover"><code>ft_stop_words_remover</code></a> , <a href="#ftstringindexer"><code>ft_string_indexer</code></a> , <a href="#fttokenizer"><code>ft_tokenizer</code></a> , <a href="#ftvectorassembler"><code>ft_vector_assembler</code></a> , <a href="#ftvectorindexer"><code>ft_vector_indexer</code></a> , <a href="#ftvectorslicer"><code>ft_vector_slicer</code></a> , <a href="#ftword2vec"><code>ft_word2vec</code></a></p>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-features.html for more information on the set of transformations available for DataFrame columns in Spark.</p>
+<p><code>ft_bucketizer</code></p>
+<p>Other feature transformers: <code>ft_binarizer()</code>, <code>ft_bucketizer()</code>, <code>ft_chisq_selector()</code>, <code>ft_count_vectorizer()</code>, <code>ft_dct()</code>, <code>ft_elementwise_product()</code>, <code>ft_feature_hasher()</code>, <code>ft_hashing_tf()</code>, <code>ft_idf()</code>, <code>ft_imputer()</code>, <code>ft_index_to_string()</code>, <code>ft_interaction()</code>, <code>ft_lsh</code>, <code>ft_max_abs_scaler()</code>, <code>ft_min_max_scaler()</code>, <code>ft_ngram()</code>, <code>ft_normalizer()</code>, <code>ft_one_hot_encoder_estimator()</code>, <code>ft_one_hot_encoder()</code>, <code>ft_pca()</code>, <code>ft_polynomial_expansion()</code>, <code>ft_r_formula()</code>, <code>ft_regex_tokenizer()</code>, <code>ft_robust_scaler()</code>, <code>ft_sql_transformer()</code>, <code>ft_standard_scaler()</code>, <code>ft_stop_words_remover()</code>, <code>ft_string_indexer()</code>, <code>ft_tokenizer()</code>, <code>ft_vector_assembler()</code>, <code>ft_vector_indexer()</code>, <code>ft_vector_slicer()</code>, <code>ft_word2vec()</code></p>
 <!-- -->
 </section>
 </section>

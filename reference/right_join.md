@@ -1,10 +1,19 @@
-# `right_join`
+# right_join
+
 
 Right join
 
 
+
+
 ## Description
 
-See [`right_join`](#rightjoin) for more details.
+See `right_join` for more details.
+
+
+
+
+
+
 
 

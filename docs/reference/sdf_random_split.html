@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,15 +275,15 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#sdf_random_split" class="nav-link active" data-scroll-target="#sdf_random_split"><code>sdf_random_split</code></a>
+<li><a href="#sdf_random_split" class="nav-link active" data-scroll-target="#sdf_random_split">sdf_random_split</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -288,7 +291,7 @@
 <main>
 
 <section id="sdf_random_split" class="level1">
-<h1><code>sdf_random_split</code></h1>
+<h1>sdf_random_split</h1>
 <p>Partition a Spark Dataframe</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -302,15 +305,12 @@
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="cn">NULL</span>,</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="fu">sample</span>(.Machine<span class="sc">$</span>integer.max, <span class="dv">1</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_partition</span>(x, ..., <span class="at">weights =</span> <span class="cn">NULL</span>, <span class="at">seed =</span> <span class="fu">sample</span>(.Machine<span class="sc">$</span>integer.max, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_partition</span>(x, ..., <span class="at">weights =</span> <span class="cn">NULL</span>, <span class="at">seed =</span> <span class="fu">sample</span>(.Machine<span class="sc">$</span>integer.max, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -319,23 +319,16 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>An object coercable to a Spark DataFrame.</td>
 </tr>
 <tr class="even">
-<td><code>...</code></td>
-<td>Named parameters, mapping table names to weights. The weights will be normalized such that they sum to 1.</td>
-</tr>
-<tr class="odd">
-<td><code>weights</code></td>
-<td>An alternate mechanism for supplying weights – when specified, this takes precedence over the <code>...</code> arguments.</td>
-</tr>
-<tr class="even">
-<td><code>seed</code></td>
-<td>Random seed to use for randomly partitioning the dataset. Set this if you want your partitioning to be reproducible on repeated runs.</td>
+<td>…</td>
+<td>Named parameters, mapping table names to weights. The weights</td>
 </tr>
 </tbody>
 </table>
+<p>will be normalized such that they sum to 1. weights | An alternate mechanism for supplying weights – when specified, this takes precedence over the <code>...</code> arguments. seed | Random seed to use for randomly partitioning the dataset. Set this if you want your partitioning to be reproducible on repeated runs.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
@@ -345,26 +338,27 @@
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>An list() <code>list</code> of <code>tbl_spark</code> s.</p>
-</section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>Other Spark data frames: <a href="#sdfcopyto"><code>sdf_copy_to</code></a> , <a href="#sdfdistinct"><code>sdf_distinct</code></a> , <a href="#sdfregister"><code>sdf_register</code></a> , <a href="#sdfsample"><code>sdf_sample</code></a> , <a href="#sdfsort"><code>sdf_sort</code></a> , <a href="#sdfweightedsample"><code>sdf_weighted_sample</code></a></p>
+<p>An <code>list</code> of <code>tbl_spark</code>s.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly partition data into a 'training' and 'test'</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset, with 60% of the observations assigned to the</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 'training' dataset, and 40% assigned to the 'test' dataset</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(diamonds, <span class="at">package =</span> <span class="st">"ggplot2"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>diamonds_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, diamonds, <span class="st">"diamonds"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> diamonds_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.6</span>, <span class="at">test =</span> <span class="fl">0.4</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(partitions)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># alternate way of specifying weights</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">training =</span> <span class="fl">0.6</span>, <span class="at">test =</span> <span class="fl">0.4</span>)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>diamonds_tbl <span class="sc">%&gt;%</span> <span class="fu">sdf_random_split</span>(<span class="at">weights =</span> weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># randomly partition data into a 'training' and 'test'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset, with 60% of the observations assigned to the</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 'training' dataset, and 40% assigned to the 'test' dataset</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(diamonds, <span class="at">package =</span> <span class="st">"ggplot2"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>diamonds_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, diamonds, <span class="st">"diamonds"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> diamonds_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.6</span>, <span class="at">test =</span> <span class="fl">0.4</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(partitions)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># alternate way of specifying weights</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">training =</span> <span class="fl">0.6</span>, <span class="at">test =</span> <span class="fl">0.4</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>diamonds_tbl <span class="sc">%&gt;%</span> <span class="fu">sdf_random_split</span>(<span class="at">weights =</span> weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>Other Spark data frames: <code>sdf_copy_to()</code>, <code>sdf_distinct()</code>, <code>sdf_register()</code>, <code>sdf_sample()</code>, <code>sdf_sort()</code>, <code>sdf_weighted_sample()</code></p>
 <!-- -->
 </section>
 </section>

@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,13 +275,13 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#stream_read_parquet" class="nav-link active" data-scroll-target="#stream_read_parquet"><code>stream_read_parquet</code></a>
+<li><a href="#stream_read_parquet" class="nav-link active" data-scroll-target="#stream_read_parquet">stream_read_parquet</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -286,7 +289,7 @@
 <main>
 
 <section id="stream_read_parquet" class="level1">
-<h1><code>stream_read_parquet</code></h1>
+<h1>stream_read_parquet</h1>
 <p>Read Parquet Stream</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -306,10 +309,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -318,45 +317,32 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>sc</code></td>
-<td>A <code>spark_connection</code> .</td>
+<td>sc</td>
+<td>A <code>spark_connection</code>.</td>
 </tr>
 <tr class="even">
-<td><code>path</code></td>
-<td>The path to the file. Needs to be accessible from the cluster. Supports the “hdfs://” , “s3a://” and “file://” protocols.</td>
-</tr>
-<tr class="odd">
-<td><code>name</code></td>
-<td>The name to assign to the newly generated stream.</td>
-</tr>
-<tr class="even">
-<td><code>columns</code></td>
-<td>A vector of column names or a named vector of column types. If specified, the elements can be <code>"binary"</code> for <code>BinaryType</code> , <code>"boolean"</code> for <code>BooleanType</code> , <code>"byte"</code> for <code>ByteType</code> , <code>"integer"</code> for <code>IntegerType</code> , <code>"integer64"</code> for <code>LongType</code> , <code>"double"</code> for <code>DoubleType</code> , <code>"character"</code> for <code>StringType</code> , <code>"timestamp"</code> for <code>TimestampType</code> and <code>"date"</code> for <code>DateType</code> .</td>
-</tr>
-<tr class="odd">
-<td><code>options</code></td>
-<td>A list of strings with additional options.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Optional arguments; currently unused.</td>
+<td>path</td>
+<td>The path to the file. Needs to be accessible from the cluster.</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>Other Spark stream serialization: <a href="#streamreadcsv"><code>stream_read_csv</code></a> , <a href="#streamreaddelta"><code>stream_read_delta</code></a> , <a href="#streamreadjson"><code>stream_read_json</code></a> , <a href="#streamreadkafka"><code>stream_read_kafka</code></a> , <a href="#streamreadorc"><code>stream_read_orc</code></a> , <a href="#streamreadsocket"><code>stream_read_socket</code></a> , <a href="#streamreadtext"><code>stream_read_text</code></a> , <a href="#streamwriteconsole"><code>stream_write_console</code></a> , <a href="#streamwritecsv"><code>stream_write_csv</code></a> , <a href="#streamwritedelta"><code>stream_write_delta</code></a> , <a href="#streamwritejson"><code>stream_write_json</code></a> , <a href="#streamwritekafka"><code>stream_write_kafka</code></a> , <a href="#streamwritememory"><code>stream_write_memory</code></a> , <a href="#streamwriteorc"><code>stream_write_orc</code></a> , <a href="#streamwriteparquet"><code>stream_write_parquet</code></a> , <a href="#streamwritetext"><code>stream_write_text</code></a></p>
+<p>Supports the “hdfs://”, “s3a://” and “file://” protocols. name | The name to assign to the newly generated stream. columns | A vector of column names or a named vector of column types. If specified, the elements can be <code>"binary"</code> for <code>BinaryType</code>, <code>"boolean"</code> for <code>BooleanType</code>, <code>"byte"</code> for <code>ByteType</code>, <code>"integer"</code> for <code>IntegerType</code>, <code>"integer64"</code> for <code>LongType</code>, <code>"double"</code> for <code>DoubleType</code>, <code>"character"</code> for <code>StringType</code>, <code>"timestamp"</code> for <code>TimestampType</code> and <code>"date"</code> for <code>DateType</code>. options | A list of strings with additional options. … | Optional arguments; currently unused.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">spark_write_parquet</span>(<span class="st">"parquet-in"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_parquet</span>(sc, <span class="st">"parquet-in"</span>) <span class="sc">%&gt;%</span> <span class="fu">stream_write_parquet</span>(<span class="st">"parquet-out"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">spark_write_parquet</span>(<span class="st">"parquet-in"</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_parquet</span>(sc, <span class="st">"parquet-in"</span>) <span class="sc">%&gt;%</span> <span class="fu">stream_write_parquet</span>(<span class="st">"parquet-out"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>Other Spark stream serialization: <code>stream_read_csv()</code>, <code>stream_read_delta()</code>, <code>stream_read_json()</code>, <code>stream_read_kafka()</code>, <code>stream_read_orc()</code>, <code>stream_read_socket()</code>, <code>stream_read_text()</code>, <code>stream_write_console()</code>, <code>stream_write_csv()</code>, <code>stream_write_delta()</code>, <code>stream_write_json()</code>, <code>stream_write_kafka()</code>, <code>stream_write_memory()</code>, <code>stream_write_orc()</code>, <code>stream_write_parquet()</code>, <code>stream_write_text()</code></p>
 <!-- -->
 </section>
 </section>

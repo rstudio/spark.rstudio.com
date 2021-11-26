@@ -1,6 +1,9 @@
-# `stream_stop`
+# stream_stop
+
 
 Stops a Spark Stream
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Stops a Spark Stream
 Stops processing data from a Spark stream.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 stream_stop(stream)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`stream`     |     The spark stream object to be stopped.
+stream | The spark stream object to be stopped.
+
+
+
+
 
 

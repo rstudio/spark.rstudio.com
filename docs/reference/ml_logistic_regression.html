@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,15 +275,15 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ml_logistic_regression" class="nav-link active" data-scroll-target="#ml_logistic_regression"><code>ml_logistic_regression</code></a>
+<li><a href="#ml_logistic_regression" class="nav-link active" data-scroll-target="#ml_logistic_regression">ml_logistic_regression</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -288,7 +291,7 @@
 <main>
 
 <section id="ml_logistic_regression" class="level1">
-<h1><code>ml_logistic_regression</code></h1>
+<h1>ml_logistic_regression</h1>
 <p>Spark ML – Logistic Regression</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -337,136 +340,94 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>formula</code></td>
-<td>Used when <code>x</code> is a <code>tbl_spark</code> . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see <a href="#ftrformula">ft_r_formula</a> for details.</td>
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
 </tr>
 <tr class="odd">
-<td><code>fit_intercept</code></td>
+<td>fit_intercept</td>
 <td>Boolean; should the model be fit with an intercept term?</td>
 </tr>
 <tr class="even">
-<td><code>elastic_net_param</code></td>
+<td>elastic_net_param</td>
 <td>ElasticNet mixing parameter, in range [0, 1]. For alpha = 0, the penalty is an L2 penalty. For alpha = 1, it is an L1 penalty.</td>
 </tr>
 <tr class="odd">
-<td><code>reg_param</code></td>
+<td>reg_param</td>
 <td>Regularization parameter (aka lambda)</td>
 </tr>
 <tr class="even">
-<td><code>max_iter</code></td>
+<td>max_iter</td>
 <td>The maximum number of iterations to use.</td>
 </tr>
 <tr class="odd">
-<td><code>threshold</code></td>
+<td>threshold</td>
 <td>in binary classification prediction, in range [0, 1].</td>
 </tr>
 <tr class="even">
-<td><code>thresholds</code></td>
+<td>thresholds</td>
 <td>Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values &gt; 0 excepting that at most one value may be 0. The class with largest value <code>p/t</code> is predicted, where <code>p</code> is the original probability of that class and <code>t</code> is the class’s threshold.</td>
 </tr>
 <tr class="odd">
-<td><code>tol</code></td>
+<td>tol</td>
 <td>Param for the convergence tolerance for iterative algorithms.</td>
 </tr>
 <tr class="even">
-<td><code>weight_col</code></td>
+<td>weight_col</td>
 <td>The name of the column to use as weights for the model fit.</td>
 </tr>
 <tr class="odd">
-<td><code>aggregation_depth</code></td>
+<td>aggregation_depth</td>
 <td>(Spark 2.1.0+) Suggested depth for treeAggregate (&gt;= 2).</td>
 </tr>
 <tr class="even">
-<td><code>lower_bounds_on_coefficients</code></td>
-<td>(Spark 2.2.0+) Lower bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.</td>
-</tr>
-<tr class="odd">
-<td><code>lower_bounds_on_intercepts</code></td>
-<td>(Spark 2.2.0+) Lower bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.</td>
-</tr>
-<tr class="even">
-<td><code>upper_bounds_on_coefficients</code></td>
-<td>(Spark 2.2.0+) Upper bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.</td>
-</tr>
-<tr class="odd">
-<td><code>upper_bounds_on_intercepts</code></td>
-<td>(Spark 2.2.0+) Upper bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.</td>
-</tr>
-<tr class="even">
-<td><code>features_col</code></td>
-<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <a href="#ftrformula"><code>ft_r_formula</code></a> .</td>
-</tr>
-<tr class="odd">
-<td><code>label_col</code></td>
-<td>Label column name. The column should be a numeric column. Usually this column is output by <a href="#ftrformula"><code>ft_r_formula</code></a> .</td>
-</tr>
-<tr class="even">
-<td><code>family</code></td>
-<td>(Spark 2.1.0+) Param for the name of family which is a description of the label distribution to be used in the model. Supported options: “auto”, “binomial”, and “multinomial.”</td>
-</tr>
-<tr class="odd">
-<td><code>prediction_col</code></td>
-<td>Prediction column name.</td>
-</tr>
-<tr class="even">
-<td><code>probability_col</code></td>
-<td>Column name for predicted class conditional probabilities.</td>
-</tr>
-<tr class="odd">
-<td><code>raw_prediction_col</code></td>
-<td>Raw prediction (a.k.a. confidence) column name.</td>
-</tr>
-<tr class="even">
-<td><code>uid</code></td>
-<td>A character string used to uniquely identify the ML estimator.</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Optional arguments; see Details.</td>
+<td>lower_bounds_on_coefficients</td>
+<td>(Spark 2.2.0+) Lower bounds on coefficients if fitting under bound constrained optimization.</td>
 </tr>
 </tbody>
 </table>
+<p>The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression. lower_bounds_on_intercepts | (Spark 2.2.0+) Lower bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression. upper_bounds_on_coefficients | (Spark 2.2.0+) Upper bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression. upper_bounds_on_intercepts | (Spark 2.2.0+) Upper bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. label_col | Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>. family | (Spark 2.1.0+) Param for the name of family which is a description of the label distribution to be used in the model. Supported options: “auto”, “binomial”, and “multinomial.” prediction_col | Prediction column name. probability_col | Column name for predicted class conditional probabilities. raw_prediction_col | Raw prediction (a.k.a. confidence) column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; see Details.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
-<p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code> ) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code> ) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code> , <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <a href="#mlsave"><code>ml_save</code></a> with <code>type = "pipeline"</code> to faciliate model refresh workflows.</p>
+<p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code>) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code>) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code>, <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <code>ml_save</code> with <code>type = "pipeline"</code> to faciliate model refresh workflows.</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The object returned depends on the class of <code>x</code> .</p>
+<p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
-<li><p><code>spark_connection</code> : When <code>x</code> is a <code>spark_connection</code> , the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Predictor</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
-<li><p><code>ml_pipeline</code> : When <code>x</code> is a <code>ml_pipeline</code> , the function returns a <code>ml_pipeline</code> with the predictor appended to the pipeline.</p></li>
-<li><p><code>tbl_spark</code> : When <code>x</code> is a <code>tbl_spark</code> , a predictor is constructed then immediately fit with the input <code>tbl_spark</code> , returning a prediction model.</p></li>
-<li><p><code>tbl_spark</code> , with <code>formula</code> : specified When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the predictor. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code> .</p></li>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Predictor</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the predictor appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a predictor is constructed then immediately fit with the input <code>tbl_spark</code>, returning a prediction model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code>: specified When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the predictor. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>.</p></li>
 </ul>
-</section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>See <a href="http://spark.apache.org/docs/latest/ml-classification-regression.html">http://spark.apache.org/docs/latest/ml-classification-regression.html</a> for more information on the set of supervised learning algorithms.</p>
-<p>Other ml algorithms: <a href="#mlaftsurvivalregression"><code>ml_aft_survival_regression</code></a> , <a href="#mldecisiontreeclassifier"><code>ml_decision_tree_classifier</code></a> , <a href="#mlgbtclassifier"><code>ml_gbt_classifier</code></a> , <a href="#mlgeneralizedlinearregression"><code>ml_generalized_linear_regression</code></a> , <a href="#mlisotonicregression"><code>ml_isotonic_regression</code></a> , <a href="#mllinearregression"><code>ml_linear_regression</code></a> , <a href="#mllinearsvc"><code>ml_linear_svc</code></a> , <a href="#mlmultilayerperceptronclassifier"><code>ml_multilayer_perceptron_classifier</code></a> , <a href="#mlnaivebayes"><code>ml_naive_bayes</code></a> , <a href="#mlonevsrest"><code>ml_one_vs_rest</code></a> , <a href="#mlrandomforestclassifier"><code>ml_random_forest_classifier</code></a></p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, mtcars, <span class="at">name =</span> <span class="st">"mtcars_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> mtcars_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.7</span>, <span class="at">test =</span> <span class="fl">0.3</span>, <span class="at">seed =</span> <span class="dv">1111</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>mtcars_training <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>mtcars_test <span class="ot">&lt;-</span> partitions<span class="sc">$</span>test</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>lr_model <span class="ot">&lt;-</span> mtcars_training <span class="sc">%&gt;%</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_logistic_regression</span>(am <span class="sc">~</span> gear <span class="sc">+</span> carb)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(lr_model, mtcars_test)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_binary_classification_evaluator</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, mtcars, <span class="at">name =</span> <span class="st">"mtcars_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> mtcars_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.7</span>, <span class="at">test =</span> <span class="fl">0.3</span>, <span class="at">seed =</span> <span class="dv">1111</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>mtcars_training <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>mtcars_test <span class="ot">&lt;-</span> partitions<span class="sc">$</span>test</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>lr_model <span class="ot">&lt;-</span> mtcars_training <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>(am <span class="sc">~</span> gear <span class="sc">+</span> carb)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(lr_model, mtcars_test)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_binary_classification_evaluator</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-classification-regression.html for more information on the set of supervised learning algorithms.</p>
+<p>Other ml algorithms: <code>ml_aft_survival_regression()</code>, <code>ml_decision_tree_classifier()</code>, <code>ml_gbt_classifier()</code>, <code>ml_generalized_linear_regression()</code>, <code>ml_isotonic_regression()</code>, <code>ml_linear_regression()</code>, <code>ml_linear_svc()</code>, <code>ml_multilayer_perceptron_classifier()</code>, <code>ml_naive_bayes()</code>, <code>ml_one_vs_rest()</code>, <code>ml_random_forest_classifier()</code></p>
 <!-- -->
 </section>
 </section>

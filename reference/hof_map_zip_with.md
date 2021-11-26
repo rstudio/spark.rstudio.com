@@ -1,61 +1,85 @@
-# `hof_map_zip_with`
+# hof_map_zip_with
+
 
 Merges two maps into one
+
+
 
 
 ## Description
 
 Merges two maps into a single map by applying the function specified to pairs of
- values with the same key
- (this is essentially a dplyr wrapper to the `map_zip_with(map1, map2, func)` higher-
- order function, which is supported since Spark 3.0)
+values with the same key
+(this is essentially a dplyr wrapper to the `map_zip_with(map1, map2, func)` higher-
+order function, which is supported since Spark 3.0)
+
+
+
 
 
 ## Usage
-
 ```r
 hof_map_zip_with(x, func, dest_col = NULL, map1 = NULL, map2 = NULL, ...)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     The Spark data frame to be processed
-`func`     |     The function to apply (it should take (key, value1, value2) as arguments, where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map
-`dest_col`     |     Column to store the query result (default: the last column of the Spark data frame)
-`map1`     |     The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame)
-`map2`     |     The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame)
-`...`     |     Additional params to dplyr::mutate
+x | The Spark data frame to be processed
+func | The function to apply (it should take (key, value1, value2) as arguments,
+where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value
+pair present in map2, and return a transformed value associated with key in the
+resulting map
+dest_col | Column to store the query result
+(default: the last column of the Spark data frame)
+map1 | The first map being merged, could be any SQL expression evaluating to a
+map (default: the first column of the Spark data frame)
+map2 | The second map being merged, could be any SQL expression evaluating to a
+map (default: the second column of the Spark data frame)
+... | Additional params to dplyr::mutate
+
+
+
+
 
 
 ## Examples
 
 ```r
+
+
 library(sparklyr)
 sc <- spark_connect(master = "local", version = "3.0.0")
 
 # create a Spark dataframe with 2 columns of type MAP<STRING, INT>
 two_maps_tbl <- sdf_copy_to(
-sc,
-tibble::tibble(
-m1 = c("{\"1\":2,\"3\":4,\"5\":6}", "{\"2\":1,\"4\":3,\"6\":5}"),
-m2 = c("{\"1\":1,\"3\":3,\"5\":5}", "{\"2\":2,\"4\":4,\"6\":6}")
-),
-overwrite = TRUE
+  sc,
+  tibble::tibble(
+    m1 = c("{\"1\":2,\"3\":4,\"5\":6}", "{\"2\":1,\"4\":3,\"6\":5}"),
+    m2 = c("{\"1\":1,\"3\":3,\"5\":5}", "{\"2\":2,\"4\":4,\"6\":6}")
+  ),
+  overwrite = TRUE
 ) %>%
-dplyr::mutate(m1 = from_json(m1, "MAP<STRING, INT>"),
-m2 = from_json(m2, "MAP<STRING, INT>"))
+  dplyr::mutate(m1 = from_json(m1, "MAP<STRING, INT>"),
+                m2 = from_json(m2, "MAP<STRING, INT>"))
 
 # create a 3rd column containing MAP<STRING, INT> values derived from the
 # first 2 columns
 
 transformed_two_maps_tbl <- two_maps_tbl %>%
-hof_map_zip_with(
-func = .(k, v1, v2) %->% (CONCAT(k, "_", v1, "_", v2)),
-dest_col = m3
-)
+  hof_map_zip_with(
+    func = .(k, v1, v2) %->% (CONCAT(k, "_", v1, "_", v2)),
+    dest_col = m3
+  )
+
 ```
+
+
+
 
 

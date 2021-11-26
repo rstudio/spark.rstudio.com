@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#hof_aggregate" class="nav-link active" data-scroll-target="#hof_aggregate"><code>hof_aggregate</code></a>
+<li><a href="#hof_aggregate" class="nav-link active" data-scroll-target="#hof_aggregate">hof_aggregate</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="hof_aggregate" class="level1">
-<h1><code>hof_aggregate</code></h1>
+<h1>hof_aggregate</h1>
 <p>Apply Aggregate Function to Array Column</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -318,48 +321,43 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>The Spark data frame to run aggregation on</td>
 </tr>
 <tr class="even">
-<td><code>start</code></td>
+<td>start</td>
 <td>The starting value of the aggregation</td>
 </tr>
 <tr class="odd">
-<td><code>merge</code></td>
+<td>merge</td>
 <td>The aggregation function</td>
 </tr>
 <tr class="even">
-<td><code>finish</code></td>
+<td>finish</td>
 <td>Optional param specifying a transformation to apply on the final value of the aggregation</td>
 </tr>
 <tr class="odd">
-<td><code>expr</code></td>
-<td>The array being aggregated, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>dest_col</code></td>
-<td>Column to store the aggregated result (default: expr)</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Additional params to dplyr::mutate</td>
+<td>expr</td>
+<td>The array being aggregated, could be any SQL expression evaluating to an array</td>
 </tr>
 </tbody>
 </table>
+<p>(default: the last column of the Spark data frame) dest_col | Column to store the aggregated result (default: expr) … | Additional params to dplyr::mutate</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># concatenates all numbers of each array in `array_column` and add parentheses</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># around the resulting string</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">array_column =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">25</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hof_aggregate</span>(</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">start =</span> <span class="st">""</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">merge =</span> <span class="sc">~</span> <span class="fu">CONCAT</span>(.y, .x),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">finish =</span> <span class="sc">~</span> <span class="fu">CONCAT</span>(<span class="st">"("</span>, .x, <span class="st">")"</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># concatenates all numbers of each array in `array_column` and add parentheses</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># around the resulting string</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">array_column =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">25</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hof_aggregate</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">start =</span> <span class="st">""</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">merge =</span> <span class="sc">~</span> <span class="fu">CONCAT</span>(.y, .x),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">finish =</span> <span class="sc">~</span> <span class="fu">CONCAT</span>(<span class="st">"("</span>, .x, <span class="st">")"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

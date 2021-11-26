@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_config_kubernetes" class="nav-link active" data-scroll-target="#spark_config_kubernetes"><code>spark_config_kubernetes</code></a>
+<li><a href="#spark_config_kubernetes" class="nav-link active" data-scroll-target="#spark_config_kubernetes">spark_config_kubernetes</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -284,11 +287,11 @@
 <main>
 
 <section id="spark_config_kubernetes" class="level1">
-<h1><code>spark_config_kubernetes</code></h1>
+<h1>spark_config_kubernetes</h1>
 <p>Kubernetes Configuration</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Convenience function to initialize a Kubernetes configuration instead of <code>spark_config()</code> , exposes common properties to set in Kubernetes clusters.</p>
+<p>Convenience function to initialize a Kubernetes configuration instead of <code>spark_config()</code>, exposes common properties to set in Kubernetes clusters.</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
@@ -323,59 +326,20 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>master</code></td>
-<td>Kubernetes url to connect to, found by running <code>kubectl cluster-info</code> .</td>
+<td>master</td>
+<td>Kubernetes url to connect to, found by running <code>kubectl cluster-info</code>.</td>
 </tr>
 <tr class="even">
-<td><code>version</code></td>
+<td>version</td>
 <td>The version of Spark being used.</td>
 </tr>
 <tr class="odd">
-<td><code>image</code></td>
-<td>Container image to use to launch Spark and sparklyr. Also known as <code>spark.kubernetes.container.image</code> .</td>
-</tr>
-<tr class="even">
-<td><code>driver</code></td>
-<td>Name of the driver pod. If not set, the driver pod name is set to “sparklyr” suffixed by id to avoid name conflicts. Also known as <code>spark.kubernetes.driver.pod.name</code> .</td>
-</tr>
-<tr class="odd">
-<td><code>account</code></td>
-<td>Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as <code>spark.kubernetes.authenticate.driver.serviceAccountName</code> .</td>
-</tr>
-<tr class="even">
-<td><code>jars</code></td>
-<td>Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running <code>system.file("java/", package = "sparklyr")</code> .</td>
-</tr>
-<tr class="odd">
-<td><code>forward</code></td>
-<td>Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to <code>TRUE</code> which runs <code>kubectl port-forward</code> and <code>pkill kubectl</code> on disconnection.</td>
-</tr>
-<tr class="even">
-<td><code>executors</code></td>
-<td>Number of executors to request while connecting.</td>
-</tr>
-<tr class="odd">
-<td><code>conf</code></td>
-<td>A named list of additional entries to add to <code>sparklyr.shell.conf</code> .</td>
-</tr>
-<tr class="even">
-<td><code>timeout</code></td>
-<td>Total seconds to wait before giving up on connection.</td>
-</tr>
-<tr class="odd">
-<td><code>ports</code></td>
-<td>Ports to forward using kubectl.</td>
-</tr>
-<tr class="even">
-<td><code>fix_config</code></td>
-<td>Should the spark-defaults.conf get fixed? <code>TRUE</code> for Windows.</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Additional parameters, currently not in use.</td>
+<td>image</td>
+<td>Container image to use to launch Spark and sparklyr. Also known</td>
 </tr>
 </tbody>
 </table>
+<p>as <code>spark.kubernetes.container.image</code>. driver | Name of the driver pod. If not set, the driver pod name is set to “sparklyr” suffixed by id to avoid name conflicts. Also known as <code>spark.kubernetes.driver.pod.name</code>. account | Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as <code>spark.kubernetes.authenticate.driver.serviceAccountName</code>. jars | Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running <code>system.file("java/", package = "sparklyr")</code>. forward | Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to <code>TRUE</code> which runs <code>kubectl port-forward</code> and <code>pkill kubectl</code> on disconnection. executors | Number of executors to request while connecting. conf | A named list of additional entries to add to <code>sparklyr.shell.conf</code>. timeout | Total seconds to wait before giving up on connection. ports | Ports to forward using kubectl. fix_config | Should the spark-defaults.conf get fixed? <code>TRUE</code> for Windows. … | Additional parameters, currently not in use.</p>
 <!-- -->
 </section>
 </section>

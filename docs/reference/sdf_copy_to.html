@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,13 +275,13 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#sdf_copy_to" class="nav-link active" data-scroll-target="#sdf_copy_to"><code>sdf_copy_to</code></a>
+<li><a href="#sdf_copy_to" class="nav-link active" data-scroll-target="#sdf_copy_to">sdf_copy_to</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -286,24 +289,21 @@
 <main>
 
 <section id="sdf_copy_to" class="level1">
-<h1><code>sdf_copy_to</code></h1>
+<h1>sdf_copy_to</h1>
 <p>Copy an Object into Spark</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Copy an object into Spark, and return an list() object wrapping the copied object (typically, a Spark DataFrame).</p>
+<p>Copy an object into Spark, and return an object wrapping the copied object (typically, a Spark DataFrame).</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_copy_to</span>(sc, x, name, memory, repartition, overwrite, struct_columns, ...)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_import</span>(x, sc, name, memory, repartition, overwrite, struct_columns, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_import</span>(x, sc, name, memory, repartition, overwrite, struct_columns, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -312,48 +312,38 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>sc</code></td>
+<td>sc</td>
 <td>The associated Spark connection.</td>
 </tr>
 <tr class="even">
-<td><code>x</code></td>
-<td>An list() object from which a Spark DataFrame can be generated.</td>
+<td>x</td>
+<td>An object from which a Spark DataFrame can be generated.</td>
 </tr>
 <tr class="odd">
-<td><code>name</code></td>
+<td>name</td>
 <td>The name to assign to the copied table in Spark.</td>
 </tr>
 <tr class="even">
-<td><code>memory</code></td>
+<td>memory</td>
 <td>Boolean; should the table be cached into memory?</td>
 </tr>
 <tr class="odd">
-<td><code>repartition</code></td>
-<td>The number of partitions to use when distributing the table across the Spark cluster. The default (0) can be used to avoid partitioning.</td>
-</tr>
-<tr class="even">
-<td><code>overwrite</code></td>
-<td>Boolean; overwrite a pre-existing table with the name <code>name</code> if one already exists?</td>
-</tr>
-<tr class="odd">
-<td><code>struct_columns</code></td>
-<td>(only supported with Spark 2.4.0 or higher) A list of columns from the source data frame that should be converted to Spark SQL StructType columns. The source columns can contain either json strings or nested lists. All rows within each source column should have identical schemas (because otherwise the conversion result will contain unexpected null values or missing values as Spark currently does not support schema discovery on individual rows within a struct column).</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Optional arguments, passed to implementing methods.</td>
+<td>repartition</td>
+<td>The number of partitions to use when distributing the</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>Other Spark data frames: <a href="#sdfdistinct"><code>sdf_distinct</code></a> , <a href="#sdfrandomsplit"><code>sdf_random_split</code></a> , <a href="#sdfregister"><code>sdf_register</code></a> , <a href="#sdfsample"><code>sdf_sample</code></a> , <a href="#sdfsort"><code>sdf_sort</code></a> , <a href="#sdfweightedsample"><code>sdf_weighted_sample</code></a></p>
+<p>table across the Spark cluster. The default (0) can be used to avoid partitioning. overwrite | Boolean; overwrite a pre-existing table with the name <code>name</code> if one already exists? struct_columns | (only supported with Spark 2.4.0 or higher) A list of columns from the source data frame that should be converted to Spark SQL StructType columns. The source columns can contain either json strings or nested lists. All rows within each source column should have identical schemas (because otherwise the conversion result will contain unexpected null values or missing values as Spark currently does not support schema discovery on individual rows within a struct column). … | Optional arguments, passed to implementing methods.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"spark://HOST:PORT"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"spark://HOST:PORT"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>Other Spark data frames: <code>sdf_distinct()</code>, <code>sdf_random_split()</code>, <code>sdf_register()</code>, <code>sdf_sample()</code>, <code>sdf_sort()</code>, <code>sdf_weighted_sample()</code></p>
 <!-- -->
 </section>
 </section>

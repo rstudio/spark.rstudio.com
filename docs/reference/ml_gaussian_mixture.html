@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,14 +275,14 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ml_gaussian_mixture" class="nav-link active" data-scroll-target="#ml_gaussian_mixture"><code>ml_gaussian_mixture</code></a>
+<li><a href="#ml_gaussian_mixture" class="nav-link active" data-scroll-target="#ml_gaussian_mixture">ml_gaussian_mixture</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -287,11 +290,11 @@
 <main>
 
 <section id="ml_gaussian_mixture" class="level1">
-<h1><code>ml_gaussian_mixture</code></h1>
+<h1>ml_gaussian_mixture</h1>
 <p>Spark ML – Gaussian Mixture clustering.</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>This class performs expectation maximization for multivariate Gaussian Mixture Models (GMMs). A GMM represents a composite distribution of independent Gaussian distributions with associated “mixing” weights specifying each’s contribution to the composite. Given a set of sample points, this class will maximize the log-likelihood for a mixture of k Gaussians, iterating until the log-likelihood changes by less than <code>tol</code> , or until it has reached the max number of iterations. While this process is generally guaranteed to converge, it is not guaranteed to find a global optimum.</p>
+<p>This class performs expectation maximization for multivariate Gaussian Mixture Models (GMMs). A GMM represents a composite distribution of independent Gaussian distributions with associated “mixing” weights specifying each’s contribution to the composite. Given a set of sample points, this class will maximize the log-likelihood for a mixture of k Gaussians, iterating until the log-likelihood changes by less than <code>tol</code>, or until it has reached the max number of iterations. While this process is generally guaranteed to converge, it is not guaranteed to find a global optimum.</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
@@ -324,75 +327,57 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>formula</code></td>
-<td>Used when <code>x</code> is a <code>tbl_spark</code> . R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see <a href="#ftrformula">ft_r_formula</a> for details.</td>
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
 </tr>
 <tr class="odd">
-<td><code>k</code></td>
+<td>k</td>
 <td>The number of clusters to create</td>
 </tr>
 <tr class="even">
-<td><code>max_iter</code></td>
+<td>max_iter</td>
 <td>The maximum number of iterations to use.</td>
 </tr>
 <tr class="odd">
-<td><code>tol</code></td>
+<td>tol</td>
 <td>Param for the convergence tolerance for iterative algorithms.</td>
 </tr>
 <tr class="even">
-<td><code>seed</code></td>
-<td>A random seed. Set this value if you need your results to be reproducible across repeated calls.</td>
-</tr>
-<tr class="odd">
-<td><code>features_col</code></td>
-<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <a href="#ftrformula"><code>ft_r_formula</code></a> .</td>
-</tr>
-<tr class="even">
-<td><code>prediction_col</code></td>
-<td>Prediction column name.</td>
-</tr>
-<tr class="odd">
-<td><code>probability_col</code></td>
-<td>Column name for predicted class conditional probabilities. Note: Not all models output well-calibrated probability estimates! These probabilities should be treated as confidences, not precise probabilities.</td>
-</tr>
-<tr class="even">
-<td><code>uid</code></td>
-<td>A character string used to uniquely identify the ML estimator.</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Optional arguments, see Details.</td>
+<td>seed</td>
+<td>A random seed. Set this value if you need your results to be</td>
 </tr>
 </tbody>
 </table>
+<p>reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. probability_col | Column name for predicted class conditional probabilities. Note: Not all models output well-calibrated probability estimates! These probabilities should be treated as confidences, not precise probabilities. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details.</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The object returned depends on the class of <code>x</code> .</p>
+<p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
-<li><p><code>spark_connection</code> : When <code>x</code> is a <code>spark_connection</code> , the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
-<li><p><code>ml_pipeline</code> : When <code>x</code> is a <code>ml_pipeline</code> , the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
-<li><p><code>tbl_spark</code> : When <code>x</code> is a <code>tbl_spark</code> , an estimator is constructed then immediately fit with the input <code>tbl_spark</code> , returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code> , with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code> . This signature does not apply to <code>ml_lda()</code> .</p></li>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code>ml_lda()</code>.</p></li>
 </ul>
-</section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>See <a href="http://spark.apache.org/docs/latest/ml-clustering.html">http://spark.apache.org/docs/latest/ml-clustering.html</a> for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <a href="#mlbisectingkmeans"><code>ml_bisecting_kmeans</code></a> , <a href="#mlkmeans"><code>ml_kmeans</code></a> , <a href="#mllda"><code>ml_lda</code></a></p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>gmm_model <span class="ot">&lt;-</span> <span class="fu">ml_gaussian_mixture</span>(iris_tbl, Species <span class="sc">~</span> .)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sdf_predict</span>(iris_tbl, gmm_model)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gmm_model <span class="ot">&lt;-</span> <span class="fu">ml_gaussian_mixture</span>(iris_tbl, Species <span class="sc">~</span> .)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sdf_predict</span>(iris_tbl, gmm_model)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
+<p>Other ml clustering algorithms: <code>ml_bisecting_kmeans()</code>, <code>ml_kmeans()</code>, <code>ml_lda()</code></p>
 <!-- -->
 </section>
 </section>

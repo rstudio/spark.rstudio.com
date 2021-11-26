@@ -1,6 +1,9 @@
-# `stream_id`
+# stream_id
+
 
 Spark Stream's Identifier
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Spark Stream's Identifier
 Retrieves the identifier of the Spark stream.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 stream_id(stream)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`stream`     |     The spark stream object.
+stream | The spark stream object.
+
+
+
+
 
 

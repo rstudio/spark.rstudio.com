@@ -1,6 +1,9 @@
-# `stream_generate_test`
+# stream_generate_test
+
 
 Generate Test Stream
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Generate Test Stream
 Generates a local test stream, useful when testing streams locally.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 stream_generate_test(
   df = rep(1:1000),
@@ -21,19 +26,34 @@ stream_generate_test(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`df`     |     The data frame used as a source of rows to the stream, will be cast to data frame if needed. Defaults to a sequence of one thousand entries.
-`path`     |     Path to save stream of files to, defaults to `"source"` .
-`distribution`     |     The distribution of rows to use over each iteration, defaults to a binomial distribution. The stream will cycle through the distribution if needed.
-`iterations`     |     Number of iterations to execute before stopping, defaults to fifty.
-`interval`     |     The inverval in seconds use to write the stream, defaults to one second.
+df | The data frame used as a source of rows to the stream, will
+be cast to data frame if needed. Defaults to a sequence of one thousand
+entries.
+path | Path to save stream of files to, defaults to ``"source"``.
+distribution | The distribution of rows to use over each iteration,
+defaults to a binomial distribution. The stream will cycle through the
+distribution if needed.
+iterations | Number of iterations to execute before stopping, defaults
+to fifty.
+interval | The inverval in seconds use to write the stream, defaults
+to one second.
+
+
 
 
 ## Details
 
-This function requires the `callr` package to be installed.
+This function requires the ``callr`` package to be installed.
+
+
+
+
 
 

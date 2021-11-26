@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#hof_transform_keys" class="nav-link active" data-scroll-target="#hof_transform_keys"><code>hof_transform_keys</code></a>
+<li><a href="#hof_transform_keys" class="nav-link active" data-scroll-target="#hof_transform_keys">hof_transform_keys</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="hof_transform_keys" class="level1">
-<h1><code>hof_transform_keys</code></h1>
+<h1>hof_transform_keys</h1>
 <p>Transforms keys of a map</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -298,10 +301,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -310,34 +309,25 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
+<td>x</td>
 <td>The Spark data frame to be processed</td>
 </tr>
 <tr class="even">
-<td><code>func</code></td>
-<td>The transformation function to apply (it should take (key, value) as arguments and return a transformed key)</td>
-</tr>
-<tr class="odd">
-<td><code>expr</code></td>
-<td>The map being transformed, could be any SQL expression evaluating to a map (default: the last column of the Spark data frame)</td>
-</tr>
-<tr class="even">
-<td><code>dest_col</code></td>
-<td>Column to store the transformed result (default: expr)</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Additional params to dplyr::mutate</td>
+<td>func</td>
+<td>The transformation function to apply (it should take (key, value) as</td>
 </tr>
 </tbody>
 </table>
+<p>arguments and return a transformed key) expr | The map being transformed, could be any SQL expression evaluating to a map (default: the last column of the Spark data frame) dest_col | Column to store the transformed result (default: expr) … | Additional params to dplyr::mutate</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.0.0"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sdf <span class="ot">&lt;-</span> <span class="fu">sdf_len</span>(sc, <span class="dv">1</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">map</span>(<span class="st">"a"</span>, 0L, <span class="st">"b"</span>, 2L, <span class="st">"c"</span>, <span class="sc">-</span>1L))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>transformed_sdf <span class="ot">&lt;-</span> sdf <span class="sc">%&gt;%</span> <span class="fu">hof_transform_keys</span>(<span class="sc">~</span> <span class="fu">CONCAT</span>(.x, <span class="st">" == "</span>, .y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.0.0"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sdf <span class="ot">&lt;-</span> <span class="fu">sdf_len</span>(sc, <span class="dv">1</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">map</span>(<span class="st">"a"</span>, 0L, <span class="st">"b"</span>, 2L, <span class="st">"c"</span>, <span class="sc">-</span>1L))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>transformed_sdf <span class="ot">&lt;-</span> sdf <span class="sc">%&gt;%</span> <span class="fu">hof_transform_keys</span>(<span class="sc">~</span> <span class="fu">CONCAT</span>(.x, <span class="st">" == "</span>, .y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

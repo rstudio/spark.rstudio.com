@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#sdf_quantile" class="nav-link active" data-scroll-target="#sdf_quantile"><code>sdf_quantile</code></a>
+<li><a href="#sdf_quantile" class="nav-link active" data-scroll-target="#sdf_quantile">sdf_quantile</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -284,7 +287,7 @@
 <main>
 
 <section id="sdf_quantile" class="level1">
-<h1><code>sdf_quantile</code></h1>
+<h1>sdf_quantile</h1>
 <p>Compute (Approximate) Quantiles with a Spark DataFrame</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -303,10 +306,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -315,27 +314,16 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>column</code></td>
-<td>The column(s) for which quantiles should be computed. Multiple columns are only supported in Spark 2.0+.</td>
-</tr>
-<tr class="odd">
-<td><code>probabilities</code></td>
-<td>A numeric vector of probabilities, for which quantiles should be computed.</td>
-</tr>
-<tr class="even">
-<td><code>relative.error</code></td>
-<td>The maximal possible difference between the actual percentile of a result and its expected percentile (e.g., if <code>relative.error</code> is 0.01 and <code>probabilities</code> is 0.95, then any value between the 94th and 96th percentile will be considered an acceptable approximation).</td>
-</tr>
-<tr class="odd">
-<td><code>weight.column</code></td>
-<td>If not NULL, then a generalized version of the Greenwald- Khanna algorithm will be run to compute weighted percentiles, with each sample from <code>column</code> having a relative weight specified by the corresponding value in <code>weight.column</code>. The weights can be considered as relative frequencies of sample data points.</td>
+<td>column</td>
+<td>The column(s) for which quantiles should be computed.</td>
 </tr>
 </tbody>
 </table>
+<p>Multiple columns are only supported in Spark 2.0+. probabilities | A numeric vector of probabilities, for which quantiles should be computed. relative.error | The maximal possible difference between the actual percentile of a result and its expected percentile (e.g., if <code>relative.error</code> is 0.01 and <code>probabilities</code> is 0.95, then any value between the 94th and 96th percentile will be considered an acceptable approximation). weight.column | If not NULL, then a generalized version of the Greenwald- Khanna algorithm will be run to compute weighted percentiles, with each sample from <code>column</code> having a relative weight specified by the corresponding value in <code>weight.column</code>. The weights can be considered as relative frequencies of sample data points.</p>
 <!-- -->
 </section>
 </section>

@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#livy_config" class="nav-link active" data-scroll-target="#livy_config"><code>livy_config</code></a>
+<li><a href="#livy_config" class="nav-link active" data-scroll-target="#livy_config">livy_config</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -286,7 +289,7 @@
 <main>
 
 <section id="livy_config" class="level1">
-<h1><code>livy_config</code></h1>
+<h1>livy_config</h1>
 <p>Create a Spark Configuration for Livy</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -320,46 +323,59 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>config</code></td>
+<td>config</td>
 <td>Optional base configuration</td>
 </tr>
 <tr class="even">
-<td><code>username</code></td>
+<td>username</td>
 <td>The username to use in the Authorization header</td>
 </tr>
 <tr class="odd">
-<td><code>password</code></td>
+<td>password</td>
 <td>The password to use in the Authorization header</td>
 </tr>
 <tr class="even">
-<td><code>negotiate</code></td>
+<td>negotiate</td>
 <td>Whether to use gssnegotiate method or not</td>
 </tr>
 <tr class="odd">
-<td><code>custom_headers</code></td>
-<td>List of custom headers to append to http requests. Defaults to <code>list("X-Requested-By" = "sparklyr")</code> .</td>
+<td>custom_headers</td>
+<td>List of custom headers to append to http requests. Defaults to <code>list("X-Requested-By" = "sparklyr")</code>.</td>
 </tr>
 <tr class="even">
-<td><code>proxy</code></td>
+<td>proxy</td>
 <td>Either NULL or a proxy specified by httr::use_proxy(). Defaults to NULL.</td>
 </tr>
 <tr class="odd">
-<td><code>curl_opts</code></td>
-<td>List of CURL options (e.g., verbose, connecttimeout, dns_cache_timeout, etc, see httr::httr_options() for a list of valid options) – NOTE: these configurations are for libcurl only and separate from HTTP headers or Livy session parameters.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>additional Livy session parameters</td>
+<td>curl_opts</td>
+<td>List of CURL options (e.g., verbose, connecttimeout, dns_cache_timeout, etc, see httr::httr_options() for a</td>
 </tr>
 </tbody>
 </table>
+<p>list of valid options) – NOTE: these configurations are for libcurl only and separate from HTTP headers or Livy session parameters. … | additional Livy session parameters</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>Extends a Spark <code>spark_config()</code> configuration with settings for Livy. For instance, <code>username</code> and <code>password</code> define the basic authentication settings for a Livy session.</p>
 <p>The default value of <code>"custom_headers"</code> is set to <code>list("X-Requested-By" = "sparklyr")</code> in order to facilitate connection to Livy servers with CSRF protection enabled.</p>
-<p>Additional parameters for Livy sessions are: list(“”, ” “, list(list(list(”proxy_user”)), list(“User to impersonate when starting the session”)), “”, ” “, list(list(list(”jars”)), list(“jars to be used in this session”)), “”, ” “, list(list(list(”py_files”)), list(“Python files to be used in this session”)), “”, ” “, list(list(list(”files”)), list(“files to be used in this session”)), “”, ” “, list(list(list(”driver_memory”)), list(“Amount of memory to use for the driver process”)), “”, ” “, list(list(list(”driver_cores”)), list(“Number of cores to use for the driver process”)), “”, ” “, list(list(list(”executor_memory”)), list(“Amount of memory to use per executor process”)), “”, ” “, list(list(list(”executor_cores”)), list(“Number of cores to use for each executor”)), “”, ” “, list(list(list(”num_executors”)), list(“Number of executors to launch for this session”)), “”, ” “, list(list(list(”archives”)), list(“Archives to be used in this session”)), “”, ” “, list(list(list(”queue”)), list(“The name of the YARN queue to which submitted”)), “”, ” “, list(list(list(”name”)), list(“The name of this session”)), “”, ” “, list(list(list(”heartbeat_timeout”)), list(“Timeout in seconds to which session be orphaned”)), “”, ” “, list(list(list(”conf”)), list(“Spark configuration properties (Map of key=value)”)), “”)</p>
-<p>Note that <code>queue</code> is supported only by version 0.4.0 of Livy or newer. If you are using the older one, specify queue via <code>config</code> (e.g. <code>config = spark_config(spark.yarn.queue = "my_queue")</code> ).</p>
+<p>Additional parameters for Livy sessions are:</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<p>Note that <code>queue</code> is supported only by version 0.4.0 of Livy or newer. If you are using the older one, specify queue via <code>config</code> (e.g. <code>config = spark_config(spark.yarn.queue = "my_queue")</code>).</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>

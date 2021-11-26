@@ -1,6 +1,9 @@
-# `stream_write_delta`
+# stream_write_delta
+
 
 Write Delta Stream
+
+
 
 
 ## Description
@@ -8,8 +11,10 @@ Write Delta Stream
 Writes a Spark dataframe stream into a Delta Lake table.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 stream_write_delta(
   x,
@@ -23,49 +28,42 @@ stream_write_delta(
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A Spark DataFrame or dplyr operation
-`path`     |     The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://" , "s3a://" and "file://" protocols.
-`mode`     |     Specifies how data is written to a streaming sink. Valid values are `"append"` , `"complete"` or `"update"` .
-`checkpoint`     |     The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance.
-`options`     |     A list of strings with additional options.
-`partition_by`     |     Partitions the output by the given list of columns.
-`...`     |     Optional arguments; currently unused.
+x | A Spark DataFrame or dplyr operation
+path | The path to the file. Needs to be accessible from the cluster.
+Supports the "hdfs://", "s3a://" and "file://" protocols.
+mode | Specifies how data is written to a streaming sink. Valid values are
+``"append"``, ``"complete"`` or ``"update"``.
+checkpoint | The location where the system will write all the checkpoint
+information to guarantee end-to-end fault-tolerance.
+options | A list of strings with additional options.
+partition_by | Partitions the output by the given list of columns.
+... | Optional arguments; currently unused.
+
+
 
 
 ## Details
 
 Please note that Delta Lake requires installing the appropriate
- package by setting the `packages` parameter to `"delta"` in `spark_connect()`
+package by setting the ``packages`` parameter to ``"delta"`` in ``spark_connect()``
 
 
-## Seealso
 
-Other Spark stream serialization:
- [`stream_read_csv`](#streamreadcsv) ,
- [`stream_read_delta`](#streamreaddelta) ,
- [`stream_read_json`](#streamreadjson) ,
- [`stream_read_kafka`](#streamreadkafka) ,
- [`stream_read_orc`](#streamreadorc) ,
- [`stream_read_parquet`](#streamreadparquet) ,
- [`stream_read_socket`](#streamreadsocket) ,
- [`stream_read_text`](#streamreadtext) ,
- [`stream_write_console`](#streamwriteconsole) ,
- [`stream_write_csv`](#streamwritecsv) ,
- [`stream_write_json`](#streamwritejson) ,
- [`stream_write_kafka`](#streamwritekafka) ,
- [`stream_write_memory`](#streamwritememory) ,
- [`stream_write_orc`](#streamwriteorc) ,
- [`stream_write_parquet`](#streamwriteparquet) ,
- [`stream_write_text`](#streamwritetext)
+
 
 
 ## Examples
 
 ```r
+
+
 library(sparklyr)
 sc <- spark_connect(master = "local", version = "2.4.0", packages = "delta")
 
@@ -77,6 +75,33 @@ text_path <- file.path("file://", getwd(), "text-in")
 stream <- stream_read_text(sc, text_path) %>% stream_write_delta(path = "delta-test")
 
 stream_stop(stream)
+
 ```
+
+
+
+
+
+
+## See Also
+
+Other Spark stream serialization: 
+`stream_read_csv()`,
+`stream_read_delta()`,
+`stream_read_json()`,
+`stream_read_kafka()`,
+`stream_read_orc()`,
+`stream_read_parquet()`,
+`stream_read_socket()`,
+`stream_read_text()`,
+`stream_write_console()`,
+`stream_write_csv()`,
+`stream_write_json()`,
+`stream_write_kafka()`,
+`stream_write_memory()`,
+`stream_write_orc()`,
+`stream_write_parquet()`,
+`stream_write_text()`
+
 
 

@@ -1,6 +1,9 @@
-# `spark_install_sync`
+# spark_install_sync
+
 
 helper function to sync sparkinstall project to sparklyr
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ helper function to sync sparkinstall project to sparklyr
 See: https://github.com/rstudio/spark-install
 
 
-## Usage
 
+
+
+## Usage
 ```r
 spark_install_sync(project_path)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`project_path`     |     The path to the sparkinstall project
+project_path | The path to the sparkinstall project
+
+
+
+
 
 

@@ -1,30 +1,42 @@
-# `sdf_with_unique_id`
+# sdf_with_unique_id
+
 
 Add a Unique ID Column to a Spark DataFrame
+
+
 
 
 ## Description
 
 Add a unique ID column to a Spark DataFrame. The Spark
- `monotonicallyIncreasingId` function is used to produce these and is
- guaranteed to produce unique, monotonically increasing ids; however, there
- is no guarantee that these IDs will be sequential. The table is persisted
- immediately after the column is generated, to ensure that the column is
- stable -- otherwise, it can differ across new computations.
+``monotonicallyIncreasingId`` function is used to produce these and is
+guaranteed to produce unique, monotonically increasing ids; however, there
+is no guarantee that these IDs will be sequential. The table is persisted
+immediately after the column is generated, to ensure that the column is
+stable -- otherwise, it can differ across new computations.
+
+
+
 
 
 ## Usage
-
 ```r
 sdf_with_unique_id(x, id = "id")
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`x`     |     A `spark_connection` , `ml_pipeline` , or a `tbl_spark` .
-`id`     |     The name of the column to host the generated IDs.
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+id | The name of the column to host the generated IDs.
+
+
+
+
 
 

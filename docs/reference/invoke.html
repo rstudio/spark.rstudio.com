@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#invoke" class="nav-link active" data-scroll-target="#invoke"><code>invoke</code></a>
+<li><a href="#invoke" class="nav-link active" data-scroll-target="#invoke">invoke</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -286,17 +289,19 @@
 <main>
 
 <section id="invoke" class="level1">
-<h1><code>invoke</code></h1>
+<h1>invoke</h1>
 <p>Invoke a Method on a JVM Object</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from list() .</p>
+<p>Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from .</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke</span>(jobj, method, ...)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke_static</span>(sc, class, method, ...)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke_new</span>(sc, class, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke_static</span>(sc, class, method, ...)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke_new</span>(sc, class, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -313,23 +318,23 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>jobj</code></td>
-<td>An list() object acting as a Java object reference (typically, a <code>spark_jobj</code> ).</td>
+<td>jobj</td>
+<td>An object acting as a Java object reference (typically, a <code>spark_jobj</code>).</td>
 </tr>
 <tr class="even">
-<td><code>method</code></td>
+<td>method</td>
 <td>The name of the method to be invoked.</td>
 </tr>
 <tr class="odd">
-<td><code>...</code></td>
+<td>…</td>
 <td>Optional arguments, currently unused.</td>
 </tr>
 <tr class="even">
-<td><code>sc</code></td>
-<td>A <code>spark_connection</code> .</td>
+<td>sc</td>
+<td>A <code>spark_connection</code>.</td>
 </tr>
 <tr class="odd">
-<td><code>class</code></td>
+<td>class</td>
 <td>The name of the Java class whose methods should be invoked.</td>
 </tr>
 </tbody>
@@ -338,14 +343,15 @@
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>Use each of these functions in the following scenarios:</p>
-<p>list(list(“lll”), list(“”, list(“invoke”), ” “, list(),” Execute a method on a Java object reference (typically, a “, list(”spark_jobj”), “).”, list(), “”, list(“invoke_static”), ” “, list(),” Execute a static method associated with a Java class. “, list(),”“, list(”invoke_new”), ” “, list(),” Invoke a constructor associated with a Java class. “, list(),”“))</p>
+<p>lll invoke Execute a method on a Java object reference (typically, a spark_jobj). invoke_static Execute a static method associated with a Java class. invoke_new Invoke a constructor associated with a Java class.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"spark://HOST:PORT"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke</span>(<span class="st">"textFile"</span>, <span class="st">"file.csv"</span>, 1L) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">invoke</span>(<span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"spark://HOST:PORT"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke</span>(<span class="st">"textFile"</span>, <span class="st">"file.csv"</span>, 1L) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke</span>(<span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

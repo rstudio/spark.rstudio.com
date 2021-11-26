@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ml_clustering_evaluator" class="nav-link active" data-scroll-target="#ml_clustering_evaluator"><code>ml_clustering_evaluator</code></a>
+<li><a href="#ml_clustering_evaluator" class="nav-link active" data-scroll-target="#ml_clustering_evaluator">ml_clustering_evaluator</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -286,7 +289,7 @@
 <main>
 
 <section id="ml_clustering_evaluator" class="level1">
-<h1><code>ml_clustering_evaluator</code></h1>
+<h1>ml_clustering_evaluator</h1>
 <p>Spark ML - Clustering Evaluator</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -318,27 +321,27 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> object or a <code>tbl_spark</code> containing label and prediction columns. The latter should be the output of <a href="#sdfpredict"><code>sdf_predict</code></a> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code> object or a <code>tbl_spark</code> containing label and prediction columns. The latter should be the output of <code>sdf_predict</code>.</td>
 </tr>
 <tr class="even">
-<td><code>features_col</code></td>
+<td>features_col</td>
 <td>Name of features column.</td>
 </tr>
 <tr class="odd">
-<td><code>prediction_col</code></td>
+<td>prediction_col</td>
 <td>Name of the prediction column.</td>
 </tr>
 <tr class="even">
-<td><code>metric_name</code></td>
+<td>metric_name</td>
 <td>The performance metric. Currently supports “silhouette”.</td>
 </tr>
 <tr class="odd">
-<td><code>uid</code></td>
+<td>uid</td>
 <td>A character string used to uniquely identify the ML estimator.</td>
 </tr>
 <tr class="even">
-<td><code>...</code></td>
+<td>…</td>
 <td>Optional arguments; currently unused.</td>
 </tr>
 </tbody>
@@ -350,31 +353,32 @@
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> iris_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.7</span>, <span class="at">test =</span> <span class="fl">0.3</span>, <span class="at">seed =</span> <span class="dv">1111</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>iris_training <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>iris_test <span class="ot">&lt;-</span> partitions<span class="sc">$</span>test</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> Species <span class="sc">~</span> .</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the models</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">ml_kmeans</span>(iris_training, <span class="at">formula =</span> formula)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>b_kmeans_model <span class="ot">&lt;-</span> <span class="fu">ml_bisecting_kmeans</span>(iris_training, <span class="at">formula =</span> formula)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>gmm_model <span class="ot">&lt;-</span> <span class="fu">ml_gaussian_mixture</span>(iris_training, <span class="at">formula =</span> formula)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>pred_kmeans <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(kmeans_model, iris_test)</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>pred_b_kmeans <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(b_kmeans_model, iris_test)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>pred_gmm <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(gmm_model, iris_test)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_kmeans)</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_b_kmeans)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_gmm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> iris_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_random_split</span>(<span class="at">training =</span> <span class="fl">0.7</span>, <span class="at">test =</span> <span class="fl">0.3</span>, <span class="at">seed =</span> <span class="dv">1111</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>iris_training <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>iris_test <span class="ot">&lt;-</span> partitions<span class="sc">$</span>test</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> Species <span class="sc">~</span> .</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the models</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="ot">&lt;-</span> <span class="fu">ml_kmeans</span>(iris_training, <span class="at">formula =</span> formula)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>b_kmeans_model <span class="ot">&lt;-</span> <span class="fu">ml_bisecting_kmeans</span>(iris_training, <span class="at">formula =</span> formula)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>gmm_model <span class="ot">&lt;-</span> <span class="fu">ml_gaussian_mixture</span>(iris_training, <span class="at">formula =</span> formula)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>pred_kmeans <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(kmeans_model, iris_test)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>pred_b_kmeans <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(b_kmeans_model, iris_test)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>pred_gmm <span class="ot">&lt;-</span> <span class="fu">ml_predict</span>(gmm_model, iris_test)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_kmeans)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_b_kmeans)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_clustering_evaluator</span>(pred_gmm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

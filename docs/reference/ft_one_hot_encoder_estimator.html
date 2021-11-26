@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,14 +275,14 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#ft_one_hot_encoder_estimator" class="nav-link active" data-scroll-target="#ft_one_hot_encoder_estimator"><code>ft_one_hot_encoder_estimator</code></a>
+<li><a href="#ft_one_hot_encoder_estimator" class="nav-link active" data-scroll-target="#ft_one_hot_encoder_estimator">ft_one_hot_encoder_estimator</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
 <li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
-<li><a href="#seealso" class="nav-link" data-scroll-target="#seealso">Seealso</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
 </ul></li>
 </ul>
 </nav></div>
@@ -287,7 +290,7 @@
 <main>
 
 <section id="ft_one_hot_encoder_estimator" class="level1">
-<h1><code>ft_one_hot_encoder_estimator</code></h1>
+<h1>ft_one_hot_encoder_estimator</h1>
 <p>Feature Transformation – OneHotEncoderEstimator (Estimator)</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -320,53 +323,42 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>A <code>spark_connection</code> , <code>ml_pipeline</code> , or a <code>tbl_spark</code> .</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td><code>input_cols</code></td>
+<td>input_cols</td>
 <td>Names of input columns.</td>
 </tr>
 <tr class="odd">
-<td><code>output_cols</code></td>
+<td>output_cols</td>
 <td>Names of output columns.</td>
 </tr>
 <tr class="even">
-<td><code>handle_invalid</code></td>
-<td>(Spark 2.1.0+) Param for how to handle invalid entries. Options are ‘skip’ (filter out rows with invalid values), ‘error’ (throw an error), or ‘keep’ (keep invalid values in a special additional bucket). Default: “error”</td>
-</tr>
-<tr class="odd">
-<td><code>drop_last</code></td>
-<td>Whether to drop the last category. Defaults to <code>TRUE</code> .</td>
-</tr>
-<tr class="even">
-<td><code>uid</code></td>
-<td>A character string used to uniquely identify the feature transformer.</td>
-</tr>
-<tr class="odd">
-<td><code>...</code></td>
-<td>Optional arguments; currently unused.</td>
+<td>handle_invalid</td>
+<td>(Spark 2.1.0+) Param for how to handle invalid entries. Options are</td>
 </tr>
 </tbody>
 </table>
+<p>‘skip’ (filter out rows with invalid values), ‘error’ (throw an error), or ‘keep’ (keep invalid values in a special additional bucket). Default: “error” drop_last | Whether to drop the last category. Defaults to <code>TRUE</code>. uid | A character string used to uniquely identify the feature transformer. … | Optional arguments; currently unused.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
-<p>In the case where <code>x</code> is a <code>tbl_spark</code> , the estimator fits against <code>x</code> to obtain a transformer, which is then immediately used to transform <code>x</code> , returning a <code>tbl_spark</code> .</p>
+<p>In the case where <code>x</code> is a <code>tbl_spark</code>, the estimator fits against <code>x</code> to obtain a transformer, which is then immediately used to transform <code>x</code>, returning a <code>tbl_spark</code>.</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The object returned depends on the class of <code>x</code> .</p>
+<p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
-<li><p><code>spark_connection</code> : When <code>x</code> is a <code>spark_connection</code> , the function returns a <code>ml_transformer</code> , a <code>ml_estimator</code> , or one of their subclasses. The object contains a pointer to a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
-<li><p><code>ml_pipeline</code> : When <code>x</code> is a <code>ml_pipeline</code> , the function returns a <code>ml_pipeline</code> with the transformer or estimator appended to the pipeline.</p></li>
-<li><p><code>tbl_spark</code> : When <code>x</code> is a <code>tbl_spark</code> , a transformer is constructed then immediately applied to the input <code>tbl_spark</code> , returning a <code>tbl_spark</code></p></li>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns a <code>ml_transformer</code>, a <code>ml_estimator</code>, or one of their subclasses. The object contains a pointer to a Spark <code>Transformer</code> or <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the transformer or estimator appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a transformer is constructed then immediately applied to the input <code>tbl_spark</code>, returning a <code>tbl_spark</code></p></li>
 </ul>
 </section>
-<section id="seealso" class="level2">
-<h2 class="anchored" data-anchor-id="seealso">Seealso</h2>
-<p>See <a href="http://spark.apache.org/docs/latest/ml-features.html">http://spark.apache.org/docs/latest/ml-features.html</a> for more information on the set of transformations available for DataFrame columns in Spark.</p>
-<p>Other feature transformers: <a href="#ftbinarizer"><code>ft_binarizer</code></a> , <a href="#ftbucketizer"><code>ft_bucketizer</code></a> , <a href="#ftchisqselector"><code>ft_chisq_selector</code></a> , <a href="#ftcountvectorizer"><code>ft_count_vectorizer</code></a> , <a href="#ftdct"><code>ft_dct</code></a> , <a href="#ftelementwiseproduct"><code>ft_elementwise_product</code></a> , <a href="#ftfeaturehasher"><code>ft_feature_hasher</code></a> , <a href="#fthashingtf"><code>ft_hashing_tf</code></a> , <a href="#ftidf"><code>ft_idf</code></a> , <a href="#ftimputer"><code>ft_imputer</code></a> , <a href="#ftindextostring"><code>ft_index_to_string</code></a> , <a href="#ftinteraction"><code>ft_interaction</code></a> , <a href="#ftlsh"><code>ft_lsh</code></a> , <a href="#ftmaxabsscaler"><code>ft_max_abs_scaler</code></a> , <a href="#ftminmaxscaler"><code>ft_min_max_scaler</code></a> , <a href="#ftngram"><code>ft_ngram</code></a> , <a href="#ftnormalizer"><code>ft_normalizer</code></a> , <a href="#ftonehotencoder"><code>ft_one_hot_encoder</code></a> , <a href="#ftpca"><code>ft_pca</code></a> , <a href="#ftpolynomialexpansion"><code>ft_polynomial_expansion</code></a> , <a href="#ftquantilediscretizer"><code>ft_quantile_discretizer</code></a> , <a href="#ftrformula"><code>ft_r_formula</code></a> , <a href="#ftregextokenizer"><code>ft_regex_tokenizer</code></a> , <a href="#ftrobustscaler"><code>ft_robust_scaler</code></a> , <a href="#ftsqltransformer"><code>ft_sql_transformer</code></a> , <a href="#ftstandardscaler"><code>ft_standard_scaler</code></a> , <a href="#ftstopwordsremover"><code>ft_stop_words_remover</code></a> , <a href="#ftstringindexer"><code>ft_string_indexer</code></a> , <a href="#fttokenizer"><code>ft_tokenizer</code></a> , <a href="#ftvectorassembler"><code>ft_vector_assembler</code></a> , <a href="#ftvectorindexer"><code>ft_vector_indexer</code></a> , <a href="#ftvectorslicer"><code>ft_vector_slicer</code></a> , <a href="#ftword2vec"><code>ft_word2vec</code></a></p>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-features.html for more information on the set of transformations available for DataFrame columns in Spark.</p>
+<p>Other feature transformers: <code>ft_binarizer()</code>, <code>ft_bucketizer()</code>, <code>ft_chisq_selector()</code>, <code>ft_count_vectorizer()</code>, <code>ft_dct()</code>, <code>ft_elementwise_product()</code>, <code>ft_feature_hasher()</code>, <code>ft_hashing_tf()</code>, <code>ft_idf()</code>, <code>ft_imputer()</code>, <code>ft_index_to_string()</code>, <code>ft_interaction()</code>, <code>ft_lsh</code>, <code>ft_max_abs_scaler()</code>, <code>ft_min_max_scaler()</code>, <code>ft_ngram()</code>, <code>ft_normalizer()</code>, <code>ft_one_hot_encoder()</code>, <code>ft_pca()</code>, <code>ft_polynomial_expansion()</code>, <code>ft_quantile_discretizer()</code>, <code>ft_r_formula()</code>, <code>ft_regex_tokenizer()</code>, <code>ft_robust_scaler()</code>, <code>ft_sql_transformer()</code>, <code>ft_standard_scaler()</code>, <code>ft_stop_words_remover()</code>, <code>ft_string_indexer()</code>, <code>ft_tokenizer()</code>, <code>ft_vector_assembler()</code>, <code>ft_vector_indexer()</code>, <code>ft_vector_slicer()</code>, <code>ft_word2vec()</code></p>
 <!-- -->
 </section>
 </section>

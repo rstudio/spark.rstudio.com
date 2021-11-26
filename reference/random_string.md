@@ -1,6 +1,9 @@
-# `random_string`
+# random_string
+
 
 Random string generation
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Random string generation
 Generate a random string with a given prefix.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 random_string(prefix = "table")
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`prefix`     |     A length-one character vector.
+prefix | A length-one character vector.
+
+
+
+
 
 

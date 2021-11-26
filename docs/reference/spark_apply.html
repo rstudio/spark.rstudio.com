@@ -265,6 +265,9 @@
       </div>
     </li>
   </ul>
+      <li class="sidebar-item">
+  <a href="../reference/" class="">Reference</a>
+</li>
   </ul>
   </div>
 </nav>
@@ -272,7 +275,7 @@
   <div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_apply" class="nav-link active" data-scroll-target="#spark_apply"><code>spark_apply</code></a>
+<li><a href="#spark_apply" class="nav-link active" data-scroll-target="#spark_apply">spark_apply</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -285,7 +288,7 @@
 <main>
 
 <section id="spark_apply" class="level1">
-<h1><code>spark_apply</code></h1>
+<h1>spark_apply</h1>
 <p>Apply an R Function in Spark</p>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
@@ -313,10 +316,6 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
-<colgroup>
-<col style="width: 44%">
-<col style="width: 55%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -325,76 +324,38 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>x</code></td>
-<td>An object (usually a <code>spark_tbl</code> ) coercable to a Spark DataFrame.</td>
+<td>x</td>
+<td>An object (usually a <code>spark_tbl</code>) coercable to a Spark DataFrame.</td>
 </tr>
 <tr class="even">
-<td><code>f</code></td>
-<td>A function that transforms a data frame partition into a data frame. The function <code>f</code> has signature <code>f(df, context, group1, group2, ...)</code> where <code>df</code> is a data frame with the data to be processed, <code>context</code> is an optional object passed as the <code>context</code> parameter and <code>group1</code> to <code>groupN</code> contain the values of the <code>group_by</code> values. When <code>group_by</code> is not specified, <code>f</code> takes only one argument. Can also be an <code>rlang</code> anonymous function. For example, as <code>~ .x + 1</code> to define an expression that adds one to the given <code>.x</code> data frame.</td>
-</tr>
-<tr class="odd">
-<td><code>columns</code></td>
-<td>A vector of column names or a named vector of column types for the transformed object. When not specified, a sample of 10 rows is taken to infer out the output columns automatically, to avoid this performance penalty, specify the column types. The sample size is configurable using the <code>sparklyr.apply.schema.infer</code> configuration option.</td>
-</tr>
-<tr class="even">
-<td><code>memory</code></td>
-<td>Boolean; should the table be cached into memory?</td>
-</tr>
-<tr class="odd">
-<td><code>group_by</code></td>
-<td>Column name used to group by data frame partitions.</td>
-</tr>
-<tr class="even">
-<td><code>packages</code></td>
-<td>Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with <code>spark_apply_bundle()</code> . Defaults to <code>TRUE</code> or the <code>sparklyr.apply.packages</code> value set in <code>spark_config()</code> . For clusters using Yarn cluster mode, <code>packages</code> can point to a package bundle created using <code>spark_apply_bundle()</code> and made available as a Spark file using <code>config$sparklyr.shell.files</code> . For clusters using Livy, packages can be manually installed on the driver node. For offline clusters where <code>available.packages()</code> is not available, manually download the packages database from https://cran.r-project.org/web/packages/packages.rds and set <code>Sys.setenv(sparklyr.apply.packagesdb = "&lt;pathl-to-rds&gt;")</code> . Otherwise, all packages will be used by default. For clusters where R packages already installed in every worker node, the <code>spark.r.libpaths</code> config entry can be set in <code>spark_config()</code> to the local packages library. To specify multiple paths collapse them (without spaces) with a comma delimiter (e.g., <code>"/lib/path/one,/lib/path/two"</code> ).</td>
-</tr>
-<tr class="odd">
-<td><code>context</code></td>
-<td>Optional object to be serialized and passed back to <code>f()</code> .</td>
-</tr>
-<tr class="even">
-<td><code>name</code></td>
-<td>Optional table name while registering the resulting data frame.</td>
-</tr>
-<tr class="odd">
-<td><code>barrier</code></td>
-<td>Optional to support Barrier Execution Mode in the scheduler.</td>
-</tr>
-<tr class="even">
-<td><code>fetch_result_as_sdf</code></td>
-<td>Whether to return the transformed results in a Spark Dataframe (defaults to <code>TRUE</code> ). When set to <code>FALSE</code> , results will be returned as a list of R objects instead. NOTE: <code>fetch_result_as_sdf</code> must be set to <code>FALSE</code> when the transformation function being applied is returning R objects that cannot be stored in a Spark Dataframe (e.g., complex numbers or any other R data type that does not have an equivalent representation among Spark SQL data types).</td>
-</tr>
-<tr class="odd">
-<td><code>partition_index_param</code></td>
-<td>Optional if non-empty, then <code>f</code> also receives the index of the partition being processed as a named argument with this name, in addition to all positional argument(s) it will receive NOTE: when <code>fetch_result_as_sdf</code> is set to <code>FALSE</code> , object returned from the transformation function also must be serializable by the <code>base::serialize</code> function in R.</td>
-</tr>
-<tr class="even">
-<td><code>arrow_max_records_per_batch</code></td>
-<td>Maximum size of each Arrow record batch, ignored if Arrow serialization is not enabled.</td>
-</tr>
-<tr class="odd">
-<td><code>auto_deps</code></td>
-<td>[Experimental] Whether to infer all required R packages by examining the closure <code>f()</code> and only distribute required R and their transitive dependencies to Spark worker nodes (default: FALSE). NOTE: this option will only take effect if <code>packages</code> is set to <code>TRUE</code> or is a character vector of R package names. If <code>packages</code> is a character vector of R package names, then both the set of packages specified by <code>packages</code> and the set of inferred packages will be distributed to Spark workers.</td>
-</tr>
-<tr class="even">
-<td><code>...</code></td>
-<td>Optional arguments; currently unused.</td>
+<td>f</td>
+<td>A function that transforms a data frame partition into a data frame.</td>
 </tr>
 </tbody>
 </table>
+<p>The function <code>f</code> has signature <code>f(df, context, group1, group2, ...)</code> where <code>df</code> is a data frame with the data to be processed, <code>context</code> is an optional object passed as the <code>context</code> parameter and <code>group1</code> to <code>groupN</code> contain the values of the <code>group_by</code> values. When <code>group_by</code> is not specified, <code>f</code> takes only one argument.</p>
+<p>Can also be an <code>rlang</code> anonymous function. For example, as <code>~ .x + 1</code> to define an expression that adds one to the given <code>.x</code> data frame. columns | A vector of column names or a named vector of column types for the transformed object. When not specified, a sample of 10 rows is taken to infer out the output columns automatically, to avoid this performance penalty, specify the column types. The sample size is configurable using the <code>sparklyr.apply.schema.infer</code> configuration option. memory | Boolean; should the table be cached into memory? group_by | Column name used to group by data frame partitions. packages | Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with <code>spark_apply_bundle()</code>.</p>
+<p>Defaults to <code>TRUE</code> or the <code>sparklyr.apply.packages</code> value set in <code>spark_config()</code>.</p>
+<p>For clusters using Yarn cluster mode, <code>packages</code> can point to a package bundle created using <code>spark_apply_bundle()</code> and made available as a Spark file using <code>config$sparklyr.shell.files</code>. For clusters using Livy, packages can be manually installed on the driver node.</p>
+<p>For offline clusters where <code>available.packages()</code> is not available, manually download the packages database from https://cran.r-project.org/web/packages/packages.rds and set <code>Sys.setenv(sparklyr.apply.packagesdb = "&lt;pathl-to-rds&gt;")</code>. Otherwise, all packages will be used by default.</p>
+<p>For clusters where R packages already installed in every worker node, the <code>spark.r.libpaths</code> config entry can be set in <code>spark_config()</code> to the local packages library. To specify multiple paths collapse them (without spaces) with a comma delimiter (e.g., <code>"/lib/path/one,/lib/path/two"</code>). context | Optional object to be serialized and passed back to <code>f()</code>. name | Optional table name while registering the resulting data frame. barrier | Optional to support Barrier Execution Mode in the scheduler. fetch_result_as_sdf | Whether to return the transformed results in a Spark Dataframe (defaults to <code>TRUE</code>). When set to <code>FALSE</code>, results will be returned as a list of R objects instead.</p>
+<p>NOTE: <code>fetch_result_as_sdf</code> must be set to <code>FALSE</code> when the transformation function being applied is returning R objects that cannot be stored in a Spark Dataframe (e.g., complex numbers or any other R data type that does not have an equivalent representation among Spark SQL data types). partition_index_param | Optional if non-empty, then <code>f</code> also receives the index of the partition being processed as a named argument with this name, in addition to all positional argument(s) it will receive</p>
+<p>NOTE: when <code>fetch_result_as_sdf</code> is set to <code>FALSE</code>, object returned from the transformation function also must be serializable by the <code>base::serialize</code> function in R. arrow_max_records_per_batch | Maximum size of each Arrow record batch, ignored if Arrow serialization is not enabled. auto_deps | [Experimental] Whether to infer all required R packages by examining the closure <code>f()</code> and only distribute required R and their transitive dependencies to Spark worker nodes (default: FALSE). NOTE: this option will only take effect if <code>packages</code> is set to <code>TRUE</code> or is a character vector of R package names. If <code>packages</code> is a character vector of R package names, then both the set of packages specified by <code>packages</code> and the set of inferred packages will be distributed to Spark workers. … | Optional arguments; currently unused.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local[3]"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># creates an Spark data frame with 10 elements then multiply times 10 in R</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">spark_apply</span>(<span class="cf">function</span>(df) df <span class="sc">*</span> <span class="dv">10</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># using barrier mode</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">3</span>, <span class="at">repartition =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(nrow, <span class="at">barrier =</span> <span class="cn">TRUE</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="at">id =</span> <span class="st">"integer"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local[3]"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># creates an Spark data frame with 10 elements then multiply times 10 in R</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">10</span>) <span class="sc">%&gt;%</span> <span class="fu">spark_apply</span>(<span class="cf">function</span>(df) df <span class="sc">*</span> <span class="dv">10</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># using barrier mode</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_len</span>(sc, <span class="dv">3</span>, <span class="at">repartition =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_apply</span>(nrow, <span class="at">barrier =</span> <span class="cn">TRUE</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="at">id =</span> <span class="st">"integer"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <!-- -->
 </section>
 </section>

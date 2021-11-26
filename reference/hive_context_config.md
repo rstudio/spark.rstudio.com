@@ -1,6 +1,9 @@
-# `hive_context_config`
+# hive_context_config
+
 
 Runtime configuration interface for Hive
+
+
 
 
 ## Description
@@ -8,17 +11,26 @@ Runtime configuration interface for Hive
 Retrieves the runtime configuration interface for Hive.
 
 
-## Usage
 
+
+
+## Usage
 ```r
 hive_context_config(sc)
 ```
 
 
+
+
 ## Arguments
+
 
 Argument      |Description
 ------------- |----------------
-`sc`     |     A `spark_connection` .
+sc | A ``spark_connection``.
+
+
+
+
 
 

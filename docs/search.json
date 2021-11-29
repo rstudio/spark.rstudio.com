@@ -10365,5 +10365,236 @@
     "title": "Deployment and Configuration",
     "section": "RStudio Server",
     "text": "RStudio Server\nRStudio Server provides a web-based IDE interface to a remote R session, making it ideal for use as a front-end to a Spark cluster. This section covers some additional configuration options that are useful for RStudio Server.\nConnection Options\nThe RStudio IDE Spark pane provides a New Connection dialog to assist in connecting with both local instances of Spark and Spark clusters:\n\nYou can configure which connection choices are presented using the rstudio.spark.connections option. By default, users are presented with possibility of both local and cluster connections, however, you can modify this behavior to present only one of these, or even a specific Spark master URL. Some commonly used combinations of connection choices include:\n\n\n\n\n\n\nValue\nDescription\n\n\n\nc(\"local\", \"cluster\")\nDefault. Present connections to both local and cluster Spark instances.\n\n\n\"local\"\nPresent only connections to local Spark instances.\n\n\n\"spark://local:7077\"\nPresent only a connection to a specific Spark cluster.\n\n\nc(\"spark://local:7077\", \"cluster\")\nPresent a connection to a specific Spark cluster and other clusters.\n\n\n\nThis option should generally be set within Rprofile.site. For example:\n\noptions(rstudio.spark.connections = \"spark://local:7077\")\n\nSpark Installations\nIf you are running within local mode (as opposed to cluster mode) you may want to provide pre-installed Spark version(s) to be shared by all users of the server. You can do this by installing Spark versions within a shared directory (e.g. /opt/spark) then designating it as the Spark installation directory.\nFor example, after installing one or more versions of Spark to /opt/spark you would add the following to Rprofile.site:\n\noptions(spark.install.dir = \"/opt/spark\")\n\nIf this directory is read-only for ordinary users then RStudio will not offer installation of additional versions, which will help guide users to a version that is known to be compatible with versions of Spark deployed on clusters in the same organization."
+  },
+  {
+    "objectID": "mleap/readme.html#getting-started",
+    "href": "mleap/readme.html#getting-started",
+    "title": "sparklyr",
+    "section": "Getting started",
+    "text": "Getting started\nmleap can be installed from CRAN via\ninstall.packages(\"mleap\")\nor, for the latest development version from GitHub, using\ndevtools::install_github(\"rstudio/mleap\")\nOnce mleap has been installed, we can install the external dependencies using\nlibrary(mleap)\ninstall_maven()\n# Alternatively, if you already have Maven installed, you can \n#  set options(maven.home = \"path/to/maven\")\ninstall_mleap()\nWe can now export Spark ML pipelines from sparklyr.\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\", version = \"2.4.0\")\nmtcars_tbl <- sdf_copy_to(sc, mtcars, overwrite = TRUE)\n\n# Create a pipeline and fit it\npipeline <- ml_pipeline(sc) %>%\n  ft_binarizer(\"hp\", \"big_hp\", threshold = 100) %>%\n  ft_vector_assembler(c(\"big_hp\", \"wt\", \"qsec\"), \"features\") %>%\n  ml_gbt_regressor(label_col = \"mpg\")\npipeline_model <- ml_fit(pipeline, mtcars_tbl)\n\n# Export model\nmodel_path <- file.path(tempdir(), \"mtcars_model.zip\")\nml_write_bundle(pipeline_model, sample_input = mtcars_tbl, path = model_path)\n\n# Disconnect from Spark\nspark_disconnect(sc)\n## NULL\nAt this point, we can share mtcars_model.zip with our deployment/implementation engineers, and they would be able to embed the model in another application. See the MLeap docs for details.\nWe also provide R functions for testing that the saved models behave as expected. Here we load the previously saved model:\nmodel <- mleap_load_bundle(model_path)\nmodel\n## MLeap Transformer\n## <7e2f61ed-154b-4c9e-9926-85fa326d69ef> \n##   Name: pipeline_c1754f374a53 \n##   Format: json \n##   MLeap Version: 0.14.0\nWe can retrieve the schema associated with the model:\nmleap_model_schema(model)\n## # A tibble: 6 x 5\n##   name       type   nullable dimension io    \n##   <chr>      <chr>  <lgl>    <chr>     <chr> \n## 1 qsec       double TRUE     <NA>      input \n## 2 hp         double FALSE    <NA>      input \n## 3 wt         double TRUE     <NA>      input \n## 4 big_hp     double FALSE    <NA>      output\n## 5 features   double TRUE     (3)       output\n## 6 prediction double FALSE    <NA>      output\nThen, we create a new data frame to be scored, and make predictions using our model:\nnewdata <- tibble::tribble(\n  ~qsec, ~hp, ~wt,\n  16.2,  101, 2.68,\n  18.1,  99,  3.08\n)\n\n# Transform the data frame\ntransformed_df <- mleap_transform(model, newdata)\ndplyr::glimpse(transformed_df)\n## Observations: 2\n## Variables: 6\n## $ qsec       <dbl> 16.2, 18.1\n## $ hp         <dbl> 101, 99\n## $ wt         <dbl> 2.68, 3.08\n## $ big_hp     <dbl> 1, 0\n## $ features   <list> [[[1, 2.68, 16.2], [3]], [[0, 3.08, 18.1], [3]]]\n## $ prediction <dbl> 21.00084, 20.56445"
+  },
+  {
+    "objectID": "mleap/reference/mleap_installed_versions.html#description",
+    "href": "mleap/reference/mleap_installed_versions.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nFind existing MLeap installations"
+  },
+  {
+    "objectID": "mleap/reference/mleap_installed_versions.html#usage",
+    "href": "mleap/reference/mleap_installed_versions.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nmleap_installed_versions()"
+  },
+  {
+    "objectID": "mleap/reference/mleap_installed_versions.html#value",
+    "href": "mleap/reference/mleap_installed_versions.html#value",
+    "title": "sparklyr",
+    "section": "Value",
+    "text": "Value\nA data frame of MLeap Runtime installation versions and their locations."
+  },
+  {
+    "objectID": "mleap/reference/install_mleap.html#description",
+    "href": "mleap/reference/install_mleap.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nInstall MLeap runtime"
+  },
+  {
+    "objectID": "mleap/reference/install_mleap.html#usage",
+    "href": "mleap/reference/install_mleap.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ninstall_mleap(dir = NULL, version = NULL, use_temp_cache = TRUE)"
+  },
+  {
+    "objectID": "mleap/reference/install_mleap.html#arguments",
+    "href": "mleap/reference/install_mleap.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\n\n\n\n\nArgument\nDescription\n\n\n\n\ndir\n(Optional) Directory to save the jars\n\n\nversion\nVersion of MLeap to install, defaults to the latest version tested with this package.\n\n\nuse_temp_cache\nWhether to use a temporary Maven cache directory for downloading.\n\n\n\nSetting this to TRUE prevents Maven from creating a persistent .m2/ directory. Defaults to TRUE."
+  },
+  {
+    "objectID": "mleap/reference/install_mleap.html#examples",
+    "href": "mleap/reference/install_mleap.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ninstall_mleap()"
+  },
+  {
+    "objectID": "mleap/reference/install_maven.html#description",
+    "href": "mleap/reference/install_maven.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nThis function installs Apache Maven."
+  },
+  {
+    "objectID": "mleap/reference/install_maven.html#usage",
+    "href": "mleap/reference/install_maven.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ninstall_maven(dir = NULL, version = NULL)"
+  },
+  {
+    "objectID": "mleap/reference/install_maven.html#arguments",
+    "href": "mleap/reference/install_maven.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\ndir\n(Optional) Directory to install maven in.\n\n\n\nDefaults to maven/ under user’s home directory. version | Version of Maven to install, defaults to the latest version tested with this package."
+  },
+  {
+    "objectID": "mleap/reference/install_maven.html#examples",
+    "href": "mleap/reference/install_maven.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ninstall_maven()"
+  },
+  {
+    "objectID": "mleap/reference/ml_write_bundle.html#description",
+    "href": "mleap/reference/ml_write_bundle.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nThis functions serializes a Spark pipeline model into an MLeap bundle."
+  },
+  {
+    "objectID": "mleap/reference/ml_write_bundle.html#usage",
+    "href": "mleap/reference/ml_write_bundle.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nml_write_bundle(x, sample_input, path, overwrite = FALSE)"
+  },
+  {
+    "objectID": "mleap/reference/ml_write_bundle.html#arguments",
+    "href": "mleap/reference/ml_write_bundle.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nA Spark pipeline model object.\n\n\nsample_input\nA sample input Spark DataFrame with the expected schema.\n\n\npath\nWhere to save the bundle.\n\n\noverwrite\nWhether to overwrite an existing file, defaults to FALSE."
+  },
+  {
+    "objectID": "mleap/reference/ml_write_bundle.html#examples",
+    "href": "mleap/reference/ml_write_bundle.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\")\nmtcars_tbl <- sdf_copy_to(sc, mtcars, overwrite = TRUE)\npipeline <- ml_pipeline(sc) %>%\n  ft_binarizer(\"hp\", \"big_hp\", threshold = 100) %>%\n  ft_vector_assembler(c(\"big_hp\", \"wt\", \"qsec\"), \"features\") %>%\n  ml_gbt_regressor(label_col = \"mpg\")\npipeline_model <- ml_fit(pipeline, mtcars_tbl)\nmodel_path <- file.path(tempdir(), \"mtcars_model.zip\")\nml_write_bundle(pipeline_model, \n                mtcars_tbl,\n                model_path,\n                overwrite = TRUE)"
+  },
+  {
+    "objectID": "mleap/reference/mleap_transform.html#description",
+    "href": "mleap/reference/mleap_transform.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nThis functions transforms an R data frame using an MLeap model."
+  },
+  {
+    "objectID": "mleap/reference/mleap_transform.html#usage",
+    "href": "mleap/reference/mleap_transform.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nmleap_transform(model, data)"
+  },
+  {
+    "objectID": "mleap/reference/mleap_transform.html#arguments",
+    "href": "mleap/reference/mleap_transform.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nmodel\nAn MLeap model object, obtained by mleap_load_bundle().\n\n\ndata\nAn R data frame."
+  },
+  {
+    "objectID": "mleap/reference/mleap_transform.html#value",
+    "href": "mleap/reference/mleap_transform.html#value",
+    "title": "sparklyr",
+    "section": "Value",
+    "text": "Value\nA transformed data frame."
+  },
+  {
+    "objectID": "mleap/reference/mleap_transform.html#see-also",
+    "href": "mleap/reference/mleap_transform.html#see-also",
+    "title": "sparklyr",
+    "section": "See Also",
+    "text": "See Also\n[mleap_load_bundle()]"
+  },
+  {
+    "objectID": "mleap/reference/mleap_load_bundle.html#description",
+    "href": "mleap/reference/mleap_load_bundle.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nLoads an MLeap bundle"
+  },
+  {
+    "objectID": "mleap/reference/mleap_load_bundle.html#usage",
+    "href": "mleap/reference/mleap_load_bundle.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nmleap_load_bundle(path)"
+  },
+  {
+    "objectID": "mleap/reference/mleap_load_bundle.html#arguments",
+    "href": "mleap/reference/mleap_load_bundle.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\npath\nPath to the exported bundle zip file."
+  },
+  {
+    "objectID": "mleap/reference/mleap_load_bundle.html#value",
+    "href": "mleap/reference/mleap_load_bundle.html#value",
+    "title": "sparklyr",
+    "section": "Value",
+    "text": "Value\nAn MLeap model object."
+  },
+  {
+    "objectID": "mleap/reference/mleap_model_schema.html#description",
+    "href": "mleap/reference/mleap_model_schema.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nReturns the schema of an MLeap transformer."
+  },
+  {
+    "objectID": "mleap/reference/mleap_model_schema.html#usage",
+    "href": "mleap/reference/mleap_model_schema.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nmleap_model_schema(x)"
+  },
+  {
+    "objectID": "mleap/reference/mleap_model_schema.html#arguments",
+    "href": "mleap/reference/mleap_model_schema.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn MLeap model object."
+  },
+  {
+    "objectID": "mleap/reference/mleap_model_schema.html#value",
+    "href": "mleap/reference/mleap_model_schema.html#value",
+    "title": "sparklyr",
+    "section": "Value",
+    "text": "Value\nA data frame of the model schema."
+  },
+  {
+    "objectID": "mleap/index.html#getting-started",
+    "href": "mleap/index.html#getting-started",
+    "title": "sparklyr",
+    "section": "Getting started",
+    "text": "Getting started\nmleap can be installed from CRAN via\ninstall.packages(\"mleap\")\nor, for the latest development version from GitHub, using\ndevtools::install_github(\"rstudio/mleap\")\nOnce mleap has been installed, we can install the external dependencies using\nlibrary(mleap)\ninstall_maven()\n# Alternatively, if you already have Maven installed, you can \n#  set options(maven.home = \"path/to/maven\")\ninstall_mleap()\nWe can now export Spark ML pipelines from sparklyr.\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\", version = \"2.4.0\")\nmtcars_tbl <- sdf_copy_to(sc, mtcars, overwrite = TRUE)\n\n# Create a pipeline and fit it\npipeline <- ml_pipeline(sc) %>%\n  ft_binarizer(\"hp\", \"big_hp\", threshold = 100) %>%\n  ft_vector_assembler(c(\"big_hp\", \"wt\", \"qsec\"), \"features\") %>%\n  ml_gbt_regressor(label_col = \"mpg\")\npipeline_model <- ml_fit(pipeline, mtcars_tbl)\n\n# Export model\nmodel_path <- file.path(tempdir(), \"mtcars_model.zip\")\nml_write_bundle(pipeline_model, sample_input = mtcars_tbl, path = model_path)\n\n# Disconnect from Spark\nspark_disconnect(sc)\n## NULL\nAt this point, we can share mtcars_model.zip with our deployment/implementation engineers, and they would be able to embed the model in another application. See the MLeap docs for details.\nWe also provide R functions for testing that the saved models behave as expected. Here we load the previously saved model:\nmodel <- mleap_load_bundle(model_path)\nmodel\n## MLeap Transformer\n## <7e2f61ed-154b-4c9e-9926-85fa326d69ef> \n##   Name: pipeline_c1754f374a53 \n##   Format: json \n##   MLeap Version: 0.14.0\nWe can retrieve the schema associated with the model:\nmleap_model_schema(model)\n## # A tibble: 6 x 5\n##   name       type   nullable dimension io    \n##   <chr>      <chr>  <lgl>    <chr>     <chr> \n## 1 qsec       double TRUE     <NA>      input \n## 2 hp         double FALSE    <NA>      input \n## 3 wt         double TRUE     <NA>      input \n## 4 big_hp     double FALSE    <NA>      output\n## 5 features   double TRUE     (3)       output\n## 6 prediction double FALSE    <NA>      output\nThen, we create a new data frame to be scored, and make predictions using our model:\nnewdata <- tibble::tribble(\n  ~qsec, ~hp, ~wt,\n  16.2,  101, 2.68,\n  18.1,  99,  3.08\n)\n\n# Transform the data frame\ntransformed_df <- mleap_transform(model, newdata)\ndplyr::glimpse(transformed_df)\n## Observations: 2\n## Variables: 6\n## $ qsec       <dbl> 16.2, 18.1\n## $ hp         <dbl> 101, 99\n## $ wt         <dbl> 2.68, 3.08\n## $ big_hp     <dbl> 1, 0\n## $ features   <list> [[[1, 2.68, 16.2], [3]], [[0, 3.08, 18.1], [3]]]\n## $ prediction <dbl> 21.00084, 20.56445"
+  },
+  {
+    "objectID": "mleap/reference/index.html",
+    "href": "mleap/reference/index.html",
+    "title": "sparklyr",
+    "section": "",
+    "text": "Function(s)\nDescription\n\n\n\n\ninstall_maven()\nInstall Maven\n\n\ninstall_mleap()\nInstall MLeap runtime\n\n\nml_write_bundle()\nExport a Spark pipeline for serving\n\n\nmleap_installed_versions()\nFind existing MLeap installations\n\n\nmleap_load_bundle()\nLoads an MLeap bundle\n\n\nmleap_model_schema()\nMLeap model schema\n\n\nmleap_transform()\nTransform data using an MLeap model"
+  },
+  {
+    "objectID": "mleap/reference/index.html#section",
+    "href": "mleap/reference/index.html#section",
+    "title": "sparklyr",
+    "section": "",
+    "text": "Function(s)\nDescription\n\n\n\n\ninstall_maven()\nInstall Maven\n\n\ninstall_mleap()\nInstall MLeap runtime\n\n\nml_write_bundle()\nExport a Spark pipeline for serving\n\n\nmleap_installed_versions()\nFind existing MLeap installations\n\n\nmleap_load_bundle()\nLoads an MLeap bundle\n\n\nmleap_model_schema()\nMLeap model schema\n\n\nmleap_transform()\nTransform data using an MLeap model"
+  },
+  {
+    "objectID": "mleap/news.html",
+    "href": "mleap/news.html",
+    "title": "sparklyr",
+    "section": "",
+    "text": "mleap 1.0.0\n\nBreaking change: ml_write_bundle() now takes the sample_input instead of dataset.\nSupport for Spark 2.4 and MLeap 0.14.\nInteger inputs are now supported (#36).\n\n\n\nmleap 0.1.3\n\nSupport MLeap 0.12.0.\n\n\n\nmleap 0.1.2\n\nSupport MLeap 0.10.1 and Spark 2.3.0.\n\n\n\nmleap 0.1.1\n\nAllow heterogenous inputs (numeric and character) in mleap_transform() (#16)."
   }
 ]

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-99.9.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script>
+  
+  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="docked">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">sparklyr</span>
+  </a>
+          <div class="ms-auto">
+            <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+          </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">(Untitled)</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Using sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="usingsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="./guides/connections.html" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./troubleshooting.html" class="">Troubleshooting</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Guides</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="guides-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="./dplyr.html" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./mlib.html" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/caching.html" class="">Understanding Caching</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./deployment.html" class="">Deployment Options</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/data-lakes.html" class="">Data Lakes</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/pipelines.html" class="">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/streaming.html" class="">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/arrow.html" class="">Apache Arrow</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Extend sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="extendsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="./guides/h2o.html" class="">Using H2O</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./graphframes.html" class="">Graph Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./guides/mleap.html" class="">Production pipelines</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Deployment Examples</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="deploymentexamples-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="./examples/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./examples/yarn-cluster-emr.html" class="">YARN cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./examples/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./examples/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="./examples/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <li class="sidebar-item">
+  <a href="./reference/" class="">Reference</a>
+</li>
+  </ul>
+  </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#sparklyr-r-interface-for-apache-spark" class="nav-link active" data-scroll-target="#sparklyr-r-interface-for-apache-spark">sparklyr: R interface for Apache Spark</a>
+<ul class="collapse">
+<li><a href="#installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+<li><a href="#connecting-to-spark" class="nav-link" data-scroll-target="#connecting-to-spark">Connecting to Spark</a></li>
+<li><a href="#using-dplyr" class="nav-link" data-scroll-target="#using-dplyr">Using dplyr</a>
+<ul class="collapse">
+<li><a href="#window-functions" class="nav-link" data-scroll-target="#window-functions">Window Functions</a></li>
+</ul></li>
+<li><a href="#using-sql" class="nav-link" data-scroll-target="#using-sql">Using SQL</a></li>
+<li><a href="#machine-learning" class="nav-link" data-scroll-target="#machine-learning">Machine Learning</a></li>
+<li><a href="#reading-and-writing-data" class="nav-link" data-scroll-target="#reading-and-writing-data">Reading and Writing Data</a></li>
+<li><a href="#distributed-r" class="nav-link" data-scroll-target="#distributed-r">Distributed R</a></li>
+<li><a href="#extensions" class="nav-link" data-scroll-target="#extensions">Extensions</a></li>
+<li><a href="#table-utilities" class="nav-link" data-scroll-target="#table-utilities">Table Utilities</a></li>
+<li><a href="#connection-utilities" class="nav-link" data-scroll-target="#connection-utilities">Connection Utilities</a></li>
+<li><a href="#rstudio-ide" class="nav-link" data-scroll-target="#rstudio-ide">RStudio IDE</a></li>
+<li><a href="#using-h2o" class="nav-link" data-scroll-target="#using-h2o">Using H2O</a></li>
+<li><a href="#connecting-through-livy" class="nav-link" data-scroll-target="#connecting-through-livy">Connecting through Livy</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content">
+
+<section id="sparklyr-r-interface-for-apache-spark" class="level1">
+<h1>sparklyr: R interface for Apache Spark</h1>
+<p><img src="tools/readme/sparklyr-v2.png" width="450" height="300" align="right"></p>
+<p><a href="https://travis-ci.org/rstudio/sparklyr"><img src="https://travis-ci.org/rstudio/sparklyr.svg?branch=master" class="img-fluid" alt="Build Status"></a> <a href="https://cran.r-project.org/package=sparklyr"><img src="https://www.r-pkg.org/badges/version/sparklyr" class="img-fluid" alt="CRAN_Status_Badge"></a> <a href="https://codecov.io/gh/rstudio/sparklyr"><img src="https://codecov.io/gh/rstudio/sparklyr/branch/master/graph/badge.svg" class="img-fluid" alt="codecov"></a> <a href="https://gitter.im/rstudio/sparklyr?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/rstudio/sparklyr.svg" class="img-fluid" alt="Join the chat at https://gitter.im/rstudio/sparklyr"></a></p>
+<ul>
+<li>Connect to <a href="http://spark.apache.org/">Spark</a> from R. The sparklyr package provides a <br> complete <a href="https://github.com/hadley/dplyr">dplyr</a> backend.</li>
+<li>Filter and aggregate Spark datasets then bring them into R for <br> analysis and visualization.</li>
+<li>Use Spark’s distributed <a href="http://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> library from R.</li>
+<li>Create <a href="http://spark.rstudio.com/extensions.html">extensions</a> that call the full Spark API and provide <br> interfaces to Spark packages.</li>
+</ul>
+<p><br></p>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p>You can install the <strong>sparklyr</strong> package from CRAN as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should also install a local version of Spark for development purposes:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_install</span>(<span class="at">version =</span> <span class="st">"2.1.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To upgrade to the latest version of sparklyr, run the following command and restart your r session:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you use the RStudio IDE, you should also download the latest <a href="https://www.rstudio.com/products/rstudio/download/preview/">preview release</a> of the IDE which includes several enhancements for interacting with Spark (see the <a href="#rstudio-ide">RStudio IDE</a> section below for more details).</p>
+</section>
+<section id="connecting-to-spark" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-to-spark">Connecting to Spark</h2>
+<p>You can connect to both local instances of Spark as well as remote Spark clusters. Here we’ll connect to a local instance of Spark via the <a href="https://spark.rstudio.com/reference/spark-connections">spark_connect</a> function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The returned Spark connection (<code>sc</code>) provides a remote dplyr data source to the Spark cluster.</p>
+<p>For more information on connecting to remote Spark clusters see the <a href="http://spark.rstudio.com/deployment.html">Deployment</a> section of the sparklyr website.</p>
+</section>
+<section id="using-dplyr" class="level2">
+<h2 class="anchored" data-anchor-id="using-dplyr">Using dplyr</h2>
+<p>We can now use all of the available dplyr verbs against the tables within the cluster.</p>
+<p>We’ll start by copying some datasets from R into the Spark cluster (note that you may need to install the nycflights13 and Lahman packages in order to execute this code):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"nycflights13"</span>, <span class="st">"Lahman"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, nycflights13<span class="sc">::</span>flights, <span class="st">"flights"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>batting_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, Lahman<span class="sc">::</span>Batting, <span class="st">"batting"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">src_tbls</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## [1] "batting" "flights" "iris"</code></pre>
+<p>To start with here’s a simple filtering example:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filter by departure delay and print the first few records</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="sc">%&gt;%</span> <span class="fu">filter</span>(dep_delay <span class="sc">==</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:   lazy query [?? x 19]
+## # Database: spark_connection
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+##  1  2013     1     1      517            515         2      830
+##  2  2013     1     1      542            540         2      923
+##  3  2013     1     1      702            700         2     1058
+##  4  2013     1     1      715            713         2      911
+##  5  2013     1     1      752            750         2     1025
+##  6  2013     1     1      917            915         2     1206
+##  7  2013     1     1      932            930         2     1219
+##  8  2013     1     1     1028           1026         2     1350
+##  9  2013     1     1     1042           1040         2     1325
+## 10  2013     1     1     1231           1229         2     1523
+## # ... with more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dbl&gt;</code></pre>
+<p><a href="https://CRAN.R-project.org/package=dplyr">Introduction to dplyr</a> provides additional dplyr examples you can try. For example, consider the last example from the tutorial which plots data on flight delays:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>delay <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tailnum) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>(), <span class="at">dist =</span> <span class="fu">mean</span>(distance), <span class="at">delay =</span> <span class="fu">mean</span>(arr_delay)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;</span> <span class="dv">20</span>, dist <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="sc">!</span><span class="fu">is.na</span>(delay)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  collect</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plot delays</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(delay, <span class="fu">aes</span>(dist, delay)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> count), <span class="at">alpha =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_area</span>(<span class="at">max_size =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## `geom_smooth()` using method = 'gam'</code></pre>
+<p><img src="tools/readme/ggplot2-1.png" class="img-fluid"></p>
+<section id="window-functions" class="level3">
+<h3 class="anchored" data-anchor-id="window-functions">Window Functions</h3>
+<p>dplyr <a href="https://CRAN.R-project.org/package=dplyr">window functions</a> are also supported, for example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>batting_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(playerID, yearID, teamID, G, AB<span class="sc">:</span>H) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(playerID, yearID, teamID) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">min_rank</span>(<span class="fu">desc</span>(H)) <span class="sc">&lt;=</span> <span class="dv">2</span> <span class="sc">&amp;</span> H <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:     lazy query [?? x 7]
+## # Database:   spark_connection
+## # Groups:     playerID
+## # Ordered by: playerID, yearID, teamID
+##     playerID yearID teamID     G    AB     R     H
+##        &lt;chr&gt;  &lt;int&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1 aaronha01   1959    ML1   154   629   116   223
+##  2 aaronha01   1963    ML1   161   631   121   201
+##  3 abbotji01   1999    MIL    20    21     0     2
+##  4 abnersh01   1992    CHA    97   208    21    58
+##  5 abnersh01   1990    SDN    91   184    17    45
+##  6 acklefr01   1963    CHA     2     5     0     1
+##  7 acklefr01   1964    CHA     3     1     0     1
+##  8 adamecr01   2016    COL   121   225    25    49
+##  9 adamecr01   2015    COL    26    53     4    13
+## 10 adamsac01   1943    NY1    70    32     3     4
+## # ... with more rows</code></pre>
+<p>For additional documentation on using dplyr with Spark see the <a href="http://spark.rstudio.com/dplyr.html">dplyr</a> section of the sparklyr website.</p>
+</section>
+</section>
+<section id="using-sql" class="level2">
+<h2 class="anchored" data-anchor-id="using-sql">Using SQL</h2>
+<p>It’s also possible to execute SQL queries directly against tables within a Spark cluster. The <code>spark_connection</code> object implements a <a href="https://github.com/rstats-db/DBI">DBI</a> interface for Spark, so you can use <code>dbGetQuery</code> to execute SQL and return the result as an R data frame:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>iris_preview <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(sc, <span class="st">"SELECT * FROM iris LIMIT 10"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>iris_preview</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>##    Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+## 1           5.1         3.5          1.4         0.2  setosa
+## 2           4.9         3.0          1.4         0.2  setosa
+## 3           4.7         3.2          1.3         0.2  setosa
+## 4           4.6         3.1          1.5         0.2  setosa
+## 5           5.0         3.6          1.4         0.2  setosa
+## 6           5.4         3.9          1.7         0.4  setosa
+## 7           4.6         3.4          1.4         0.3  setosa
+## 8           5.0         3.4          1.5         0.2  setosa
+## 9           4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa</code></pre>
+</section>
+<section id="machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="machine-learning">Machine Learning</h2>
+<p>You can orchestrate machine learning algorithms in a Spark cluster via the <a href="http://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> functions within <strong>sparklyr</strong>. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows.</p>
+<p>Here’s an example where we use <a href="http://spark.rstudio.com/reference/sparklyr/latest/ml_linear_regression.html">ml_linear_regression</a> to fit a linear regression model. We’ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car’s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We’ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy mtcars into spark</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transform our data set, and then partition into 'training', 'test'</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> mtcars_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cyl8 =</span> cyl <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">training =</span> <span class="fl">0.5</span>, <span class="at">test =</span> <span class="fl">0.5</span>, <span class="at">seed =</span> <span class="dv">1099</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear model to the training dataset</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training <span class="sc">%&gt;%</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_linear_regression</span>(<span class="at">response =</span> <span class="st">"mpg"</span>, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"wt"</span>, <span class="st">"cyl"</span>))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))
+##
+## Formula: mpg ~ wt + cyl
+##
+## Coefficients:
+## (Intercept)          wt         cyl
+##   33.499452   -2.818463   -0.923187</code></pre>
+<p>For linear regression models produced by Spark, we can use <code>summary()</code> to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Call: ml_linear_regression.tbl_spark(., response = "mpg", features = c("wt", "cyl"))
+##
+## Deviance Residuals:
+##    Min     1Q Median     3Q    Max
+## -1.752 -1.134 -0.499  1.296  2.282
+##
+## Coefficients:
+## (Intercept)          wt         cyl
+##   33.499452   -2.818463   -0.923187
+##
+## R-Squared: 0.8274
+## Root Mean Squared Error: 1.422</code></pre>
+<p>Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it’s easy to chain these functions together with dplyr pipelines. To learn more see the <a href="./mlib">machine learning</a> section.</p>
+</section>
+<section id="reading-and-writing-data" class="level2">
+<h2 class="anchored" data-anchor-id="reading-and-writing-data">Reading and Writing Data</h2>
+<p>You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the local filesystem of cluster nodes.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>temp_csv <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".csv"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>temp_parquet <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".parquet"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>temp_json <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".json"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_csv</span>(iris_tbl, temp_csv)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>iris_csv_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"iris_csv"</span>, temp_csv)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_parquet</span>(iris_tbl, temp_parquet)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>iris_parquet_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_parquet</span>(sc, <span class="st">"iris_parquet"</span>, temp_parquet)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_json</span>(iris_tbl, temp_json)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>iris_json_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_json</span>(sc, <span class="st">"iris_json"</span>, temp_json)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">src_tbls</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## [1] "batting"      "flights"      "iris"         "iris_csv"
+## [5] "iris_json"    "iris_parquet" "mtcars"</code></pre>
+</section>
+<section id="distributed-r" class="level2">
+<h2 class="anchored" data-anchor-id="distributed-r">Distributed R</h2>
+<p>You can execute arbitrary r code across your cluster using <code>spark_apply</code>. For example, we can apply <code>rgamma</code> over <code>iris</code> as follows:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(iris_tbl, <span class="cf">function</span>(data) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  data[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">+</span> <span class="fu">rgamma</span>(<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:   table&lt;sparklyr_tmp_115c74acb6510&gt; [?? x 4]
+## # Database: spark_connection
+##    Sepal_Length Sepal_Width Petal_Length Petal_Width
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+##  1     5.336757    3.736757     1.636757   0.4367573
+##  2     5.136757    3.236757     1.636757   0.4367573
+##  3     4.936757    3.436757     1.536757   0.4367573
+##  4     4.836757    3.336757     1.736757   0.4367573
+##  5     5.236757    3.836757     1.636757   0.4367573
+##  6     5.636757    4.136757     1.936757   0.6367573
+##  7     4.836757    3.636757     1.636757   0.5367573
+##  8     5.236757    3.636757     1.736757   0.4367573
+##  9     4.636757    3.136757     1.636757   0.4367573
+## 10     5.136757    3.336757     1.736757   0.3367573
+## # ... with more rows</code></pre>
+<p>You can also group by columns to perform an operation over each group of rows and make use of any package within the closure:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  iris_tbl,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(e) broom<span class="sc">::</span><span class="fu">tidy</span>(<span class="fu">lm</span>(Petal_Width <span class="sc">~</span> Petal_Length, e)),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"term"</span>, <span class="st">"estimate"</span>, <span class="st">"std.error"</span>, <span class="st">"statistic"</span>, <span class="st">"p.value"</span>),</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"Species"</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:   table&lt;sparklyr_tmp_115c73965f30&gt; [?? x 6]
+## # Database: spark_connection
+##      Species         term    estimate  std.error  statistic      p.value
+##        &lt;chr&gt;        &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;
+## 1 versicolor  (Intercept) -0.08428835 0.16070140 -0.5245029 6.023428e-01
+## 2 versicolor Petal_Length  0.33105360 0.03750041  8.8279995 1.271916e-11
+## 3  virginica  (Intercept)  1.13603130 0.37936622  2.9945505 4.336312e-03
+## 4  virginica Petal_Length  0.16029696 0.06800119  2.3572668 2.253577e-02
+## 5     setosa  (Intercept) -0.04822033 0.12164115 -0.3964146 6.935561e-01
+## 6     setosa Petal_Length  0.20124509 0.08263253  2.4354220 1.863892e-02</code></pre>
+</section>
+<section id="extensions" class="level2">
+<h2 class="anchored" data-anchor-id="extensions">Extensions</h2>
+<p>The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages. Since Spark is a general purpose cluster computing system there are many potential applications for extensions (e.g.&nbsp;interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).</p>
+<p>Here’s a simple example that wraps a Spark text file line counting function with an R function:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write a CSV</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>tempfile <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".csv"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(nycflights13<span class="sc">::</span>flights, tempfile, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">na =</span> <span class="st">""</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># define an R interface to Spark line counting</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>count_lines <span class="ot">&lt;-</span> <span class="cf">function</span>(sc, path) {</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"textFile"</span>, path, 1L) <span class="sc">%&gt;%</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invoke</span>(<span class="st">"count"</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># call spark to count the lines of the CSV</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">count_lines</span>(sc, tempfile)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## [1] 336777</code></pre>
+<p>To learn more about creating extensions see the <a href="http://spark.rstudio.com/extensions.html">Extensions</a> section of the sparklyr website.</p>
+</section>
+<section id="table-utilities" class="level2">
+<h2 class="anchored" data-anchor-id="table-utilities">Table Utilities</h2>
+<p>You can cache a table into memory with:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">"batting"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>and unload from memory using:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_uncache</span>(sc, <span class="st">"batting"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connection-utilities" class="level2">
+<h2 class="anchored" data-anchor-id="connection-utilities">Connection Utilities</h2>
+<p>You can view the Spark web console using the <code>spark_web</code> function:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_web</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can show the log using the <code>spark_log</code> function:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_log</span>(sc, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## 17/11/09 15:55:18 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 69 (/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T//RtmpyR8oP9/file115c74b94924.csv MapPartitionsRDD[258] at textFile at NativeMethodAccessorImpl.java:0) (first 15 tasks are for partitions Vector(0))
+## 17/11/09 15:55:18 INFO TaskSchedulerImpl: Adding task set 69.0 with 1 tasks
+## 17/11/09 15:55:18 INFO TaskSetManager: Starting task 0.0 in stage 69.0 (TID 140, localhost, executor driver, partition 0, PROCESS_LOCAL, 4904 bytes)
+## 17/11/09 15:55:18 INFO Executor: Running task 0.0 in stage 69.0 (TID 140)
+## 17/11/09 15:55:18 INFO HadoopRDD: Input split: file:/var/folders/fz/v6wfsg2x1fb1rw4f6r0x4jwm0000gn/T/RtmpyR8oP9/file115c74b94924.csv:0+33313106
+## 17/11/09 15:55:18 INFO Executor: Finished task 0.0 in stage 69.0 (TID 140). 832 bytes result sent to driver
+## 17/11/09 15:55:18 INFO TaskSetManager: Finished task 0.0 in stage 69.0 (TID 140) in 126 ms on localhost (executor driver) (1/1)
+## 17/11/09 15:55:18 INFO TaskSchedulerImpl: Removed TaskSet 69.0, whose tasks have all completed, from pool
+## 17/11/09 15:55:18 INFO DAGScheduler: ResultStage 69 (count at NativeMethodAccessorImpl.java:0) finished in 0.126 s
+## 17/11/09 15:55:18 INFO DAGScheduler: Job 47 finished: count at NativeMethodAccessorImpl.java:0, took 0.131380 s</code></pre>
+<p>Finally, we disconnect from Spark:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="rstudio-ide" class="level2">
+<h2 class="anchored" data-anchor-id="rstudio-ide">RStudio IDE</h2>
+<p>The latest RStudio <a href="https://www.rstudio.com/products/rstudio/download/preview/">Preview Release</a> of the RStudio IDE includes integrated support for Spark and the sparklyr package, including tools for:</p>
+<ul>
+<li>Creating and managing Spark connections</li>
+<li>Browsing the tables and columns of Spark DataFrames</li>
+<li>Previewing the first 1,000 rows of Spark DataFrames</li>
+</ul>
+<p>Once you’ve installed the sparklyr package, you should find a new <strong>Spark</strong> pane within the IDE. This pane includes a <strong>New Connection</strong> dialog which can be used to make connections to local or remote Spark instances:</p>
+<p><img src="tools/readme/spark-connect.png" class="screenshot" width="389"></p>
+<p>Once you’ve connected to Spark you’ll be able to browse the tables contained within the Spark cluster and preview Spark DataFrames using the standard RStudio data viewer:</p>
+<p><img src="tools/readme/spark-dataview.png" class="screenshot" width="639"></p>
+<p>You can also connect to Spark through <a href="http://livy.io">Livy</a> through a new connection dialog:</p>
+<p><img src="tools/readme/spark-connect-livy.png" class="screenshot" width="389"></p>
+<p>The RStudio IDE features for sparklyr are available now as part of the <a href="https://www.rstudio.com/products/rstudio/download/preview/">RStudio Preview Release</a>.</p>
+</section>
+<section id="using-h2o" class="level2">
+<h2 class="anchored" data-anchor-id="using-h2o">Using H2O</h2>
+<p><a href="https://cran.r-project.org/package=rsparkling">rsparkling</a> is a CRAN package from <a href="http://h2o.ai">H2O</a> that extends <a href="http://spark.rstudio.com">sparklyr</a> to provide an interface into <a href="https://github.com/h2oai/sparkling-water">Sparkling Water</a>. For instance, the following example installs, configures and runs <a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/glm.html">h2o.glm</a>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">rsparkling.sparklingwater.version =</span> <span class="st">"2.1.14"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsparkling)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(h2o)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"2.1.0"</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="st">"mtcars"</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>mtcars_h2o <span class="ot">&lt;-</span> <span class="fu">as_h2o_frame</span>(sc, mtcars_tbl, <span class="at">strict_version_check =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>mtcars_glm <span class="ot">&lt;-</span> <span class="fu">h2o.glm</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">"wt"</span>, <span class="st">"cyl"</span>),</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="st">"mpg"</span>,</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">training_frame =</span> mtcars_h2o,</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lambda_search =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mtcars_glm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Model Details:
+## ==============
+##
+## H2ORegressionModel: glm
+## Model ID:  GLM_model_R_1510271749678_1
+## GLM Model: summary
+##     family     link                              regularization
+## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.1013 )
+##                                                                lambda_search
+## 1 nlambda = 100, lambda.max = 10.132, lambda.min = 0.1013, lambda.1se = -1.0
+##   number_of_predictors_total number_of_active_predictors
+## 1                          2                           2
+##   number_of_iterations                                training_frame
+## 1                  100 frame_rdd_29_b907d4915799eac74fb1ea60ad594bbf
+##
+## Coefficients: glm coefficients
+##       names coefficients standardized_coefficients
+## 1 Intercept    38.941654                 20.090625
+## 2       cyl    -1.468783                 -2.623132
+## 3        wt    -3.034558                 -2.969186
+##
+## H2ORegressionMetrics: glm
+## ** Reported on training data. **
+##
+## MSE:  6.017684
+## RMSE:  2.453097
+## MAE:  1.940985
+## RMSLE:  0.1114801
+## Mean Residual Deviance :  6.017684
+## R^2 :  0.8289895
+## Null Deviance :1126.047
+## Null D.o.F. :31
+## Residual Deviance :192.5659
+## Residual D.o.F. :29
+## AIC :156.2425</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connecting-through-livy" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-through-livy">Connecting through Livy</h2>
+<p><a href="https://github.com/cloudera/livy">Livy</a> enables remote connections to Apache Spark clusters. Before connecting to Livy, you will need the connection information to an existing service running Livy. Otherwise, to test <code>livy</code> in your local environment, you can install it and run it locally as follows:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_install</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_service_start</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To connect, use the Livy service address as <code>master</code> and <code>method = "livy"</code> in <code>spark_connect</code>. Once connection completes, use <code>sparklyr</code> as usual, for instance:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"http://localhost:8998"</span>, <span class="at">method =</span> <span class="st">"livy"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source:   table&lt;iris&gt; [?? x 5]
+## # Database: spark_connection
+##    Sepal_Length Sepal_Width Petal_Length Petal_Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;   &lt;chr&gt;
+##  1          5.1         3.5          1.4         0.2  setosa
+##  2          4.9         3.0          1.4         0.2  setosa
+##  3          4.7         3.2          1.3         0.2  setosa
+##  4          4.6         3.1          1.5         0.2  setosa
+##  5          5.0         3.6          1.4         0.2  setosa
+##  6          5.4         3.9          1.7         0.4  setosa
+##  7          4.6         3.4          1.4         0.3  setosa
+##  8          5.0         3.4          1.5         0.2  setosa
+##  9          4.4         2.9          1.4         0.2  setosa
+## 10          4.9         3.1          1.5         0.1  setosa
+## # ... with more rows</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once you are done using <code>livy</code> locally, you should stop this service with:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">livy_service_stop</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To connect to remote <code>livy</code> clusters that support basic authentication connect as:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">livy_config</span>(<span class="at">username=</span><span class="st">"&lt;username&gt;"</span>, <span class="at">password=</span><span class="st">"&lt;password"</span><span class="sc">&gt;</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"&lt;address&gt;"</span>, <span class="at">method =</span> <span class="st">"livy"</span>, <span class="at">config =</span> config)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      return window.localStorage.getItem("quarto-color-scheme");
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = null;
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.id = "quarto-color-scheme-toggle";
+    a.classList.add('top-right');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main> <!-- /main -->
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body></html>

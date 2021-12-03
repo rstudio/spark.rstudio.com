@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr - Understanding Spark Caching</title>
-<style>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-99.9.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr - Understanding Spark Caching</title>
+  <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -76,16 +75,29 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-<!--[if lt IE 9]>
+
+  <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]--><script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-<script id="quarto-search-options" type="application/json">{
+  <![endif]-->
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -103,7 +115,9 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><script type="text/javascript">
+  }</script>
+  
+  <script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -115,11 +129,14 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script><link rel="stylesheet" href="../styles.css">
+  </script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body class="docked">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-light "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light ">
+      <div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">sparklyr</span>
   </a>
@@ -128,18 +145,24 @@
           </div>
           <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Understanding Spark Caching</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <div class="sidebar-menu-container"> 
   <ul class="list-unstyled mt-1">
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Using sparklyr</div>
@@ -148,18 +171,18 @@
         </div>
       <div class="collapse  show" id="usingsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../guides/connections.html" class="">Configuring connections</a>
 </li>
           <li class="sidebar-item">
   <a href="../troubleshooting.html" class="">Troubleshooting</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Guides</div>
@@ -168,7 +191,7 @@
         </div>
       <div class="collapse  show" id="guides-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../dplyr.html" class="">Manipulating data</a>
 </li>
           <li class="sidebar-item">
@@ -202,11 +225,11 @@
   <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Extend sparklyr</div>
@@ -215,18 +238,18 @@
         </div>
       <div class="collapse  show" id="extendsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../guides/h2o.html" class="">Using H2O</a>
 </li>
           <li class="sidebar-item">
   <a href="../graphframes.html" class="">Graph Analysis</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -239,18 +262,18 @@
         </div>
       <div class="collapse  show" id="mleap-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="..//mleap/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
   <a href="../mleap/reference" class="">Reference</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Deployment Examples</div>
@@ -259,7 +282,7 @@
         </div>
       <div class="collapse  show" id="deploymentexamples-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../examples/stand-alone-aws.html" class="">Standalone cluster</a>
 </li>
           <li class="sidebar-item">
@@ -275,163 +298,193 @@
   <a href="../examples/qubole-overview.html" class="">Qubole cluster</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<li class="sidebar-item">
+      <li class="sidebar-item">
   <a href="../reference/" class="">Reference</a>
 </li>
   </ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+  </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-<li>
-<a href="#preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a>
+<li><a href="#preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a>
 <ul class="collapse">
 <li><a href="#download-test-data" class="nav-link" data-scroll-target="#download-test-data">Download Test Data</a></li>
 <li><a href="#start-a-spark-session" class="nav-link" data-scroll-target="#start-a-spark-session">Start a Spark session</a></li>
-</ul>
-</li>
+</ul></li>
 <li><a href="#the-memory-argument" class="nav-link" data-scroll-target="#the-memory-argument">The Memory Argument</a></li>
-<li>
-<a href="#loading-less-data-into-memory" class="nav-link" data-scroll-target="#loading-less-data-into-memory">Loading Less Data into Memory</a>
+<li><a href="#loading-less-data-into-memory" class="nav-link" data-scroll-target="#loading-less-data-into-memory">Loading Less Data into Memory</a>
 <ul class="collapse">
 <li><a href="#lazy-transform" class="nav-link" data-scroll-target="#lazy-transform">Lazy Transform</a></li>
 <li><a href="#register-in-spark" class="nav-link" data-scroll-target="#register-in-spark">Register in Spark</a></li>
 <li><a href="#cache-into-memory" class="nav-link" data-scroll-target="#cache-into-memory">Cache into Memory</a></li>
 <li><a href="#driver-memory" class="nav-link" data-scroll-target="#driver-memory">Driver Memory</a></li>
-</ul>
-</li>
-<li>
-<a href="#process-on-the-fly" class="nav-link" data-scroll-target="#process-on-the-fly">Process on the fly</a>
+</ul></li>
+<li><a href="#process-on-the-fly" class="nav-link" data-scroll-target="#process-on-the-fly">Process on the fly</a>
 <ul class="collapse">
 <li><a href="#union-and-transform" class="nav-link" data-scroll-target="#union-and-transform">Union and Transform</a></li>
 <li><a href="#collect-into-r" class="nav-link" data-scroll-target="#collect-into-r">Collect into R</a></li>
 <li><a href="#plot-in-r" class="nav-link" data-scroll-target="#plot-in-r">Plot in R</a></li>
+</ul></li>
 </ul>
-</li>
-</ul></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Understanding Spark Caching</h1>
-</header><section id="introduction" class="level2"><h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<main class="content">
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7">Understanding Spark Caching</h1>
+</header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Spark also supports pulling data sets into a cluster-wide in-memory cache. This is very useful when data is accessed repeatedly, such as when querying a small dataset or when running an iterative algorithm like random forests. Since operations in Spark are lazy, caching can help force computation. Sparklyr tools can be used to cache and uncache DataFrames. The Spark UI will tell you which DataFrames and what percentages are in memory.</p>
 <p>By using a reproducible example, we will review some of the main configuration settings, commands and command arguments that can be used that can help you get the best out of Spark’s memory management options.</p>
-</section><section id="preparation" class="level2"><h2 class="anchored" data-anchor-id="preparation">Preparation</h2>
-<section id="download-test-data" class="level3"><h3 class="anchored" data-anchor-id="download-test-data">Download Test Data</h3>
+</section>
+<section id="preparation" class="level2">
+<h2 class="anchored" data-anchor-id="preparation">Preparation</h2>
+<section id="download-test-data" class="level3">
+<h3 class="anchored" data-anchor-id="download-test-data">Download Test Data</h3>
 <p>The 2008 and 2007 Flights data from the Statistical Computing site will be used for this exercise. The <strong>spark_read_csv</strong> supports reading compressed CSV files in a <strong>bz2</strong> format, so no additional file preparation is needed.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"2008.csv.bz2"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"http://stat-computing.org/dataexpo/2009/2008.csv.bz2"</span>, <span class="st">"2008.csv.bz2"</span><span class="op">)</span><span class="op">}</span>
-<span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"2007.csv.bz2"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"http://stat-computing.org/dataexpo/2009/2007.csv.bz2"</span>, <span class="st">"2007.csv.bz2"</span><span class="op">)</span><span class="op">}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">"2008.csv.bz2"</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  {<span class="fu">download.file</span>(<span class="st">"http://stat-computing.org/dataexpo/2009/2008.csv.bz2"</span>, <span class="st">"2008.csv.bz2"</span>)}</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">"2007.csv.bz2"</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  {<span class="fu">download.file</span>(<span class="st">"http://stat-computing.org/dataexpo/2009/2007.csv.bz2"</span>, <span class="st">"2007.csv.bz2"</span>)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="start-a-spark-session" class="level3"><h3 class="anchored" data-anchor-id="start-a-spark-session">Start a Spark session</h3>
+</section>
+<section id="start-a-spark-session" class="level3">
+<h3 class="anchored" data-anchor-id="start-a-spark-session">Start a Spark session</h3>
 <p>A local deployment will be used for this example.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-
-<span class="co"># Install Spark version 2</span>
-<span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark_install.html">spark_install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"2.0.0"</span><span class="op">)</span>
-
-<span class="co"># Customize the connection configuration</span>
-<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">conf</span><span class="op">$</span><span class="va">`sparklyr.shell.driver-memory`</span> <span class="op">&lt;-</span> <span class="st">"16G"</span>
-
-<span class="co"># Connect to Spark</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">conf</span>, version <span class="op">=</span> <span class="st">"2.0.0"</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Install Spark version 2</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_install</span>(<span class="at">version =</span> <span class="st">"2.0.0"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Customize the connection configuration</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span><span class="st">`</span><span class="at">sparklyr.shell.driver-memory</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="st">"16G"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to Spark</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">config =</span> conf, <span class="at">version =</span> <span class="st">"2.0.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section></section><section id="the-memory-argument" class="level2"><h2 class="anchored" data-anchor-id="the-memory-argument">The Memory Argument</h2>
+</section>
+</section>
+<section id="the-memory-argument" class="level2">
+<h2 class="anchored" data-anchor-id="the-memory-argument">The Memory Argument</h2>
 <p>In the <em>spark_read_…</em> functions, the <strong>memory</strong> argument controls if the data will be loaded into memory as an RDD. Setting it to <strong>FALSE</strong> means that Spark will essentially map the file, but not make a copy of it in memory. This makes the <strong>spark_read_csv</strong> command run faster, but the trade off is that any data transformation operations will take much longer.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark_2008"</span>, <span class="st">"2008.csv.bz2"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="st">"flights_spark_2008"</span>, <span class="st">"2008.csv.bz2"</span>, <span class="at">memory =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In the RStudio IDE, the <strong>flights_spark_2008</strong> table now shows up in the Spark tab.</p>
 <center>
-<a href="images/deployment/performance/latest-tab1.png"> <img src="images/deployment/performance/latest-tab1.png" width="400px"></a>
+<a href="images/deployment/performance/latest-tab1.png"> <img src="images/deployment/performance/latest-tab1.png" width="400px"> </a>
 </center>
 <p>To access the Spark Web UI, click the <strong>SparkUI</strong> button in the <strong>RStudio Spark Tab</strong>. As expected, the <strong>Storage</strong> page shows no tables loaded into memory.</p>
 <center>
-<a href="images/deployment/performance/storage-1.png"> <img src="images/deployment/performance/storage-1.png" width="1000px"></a>
+<a href="images/deployment/performance/storage-1.png"> <img src="images/deployment/performance/storage-1.png" width="1000px"> </a>
 </center>
-</section><section id="loading-less-data-into-memory" class="level2"><h2 class="anchored" data-anchor-id="loading-less-data-into-memory">Loading Less Data into Memory</h2>
+</section>
+<section id="loading-less-data-into-memory" class="level2">
+<h2 class="anchored" data-anchor-id="loading-less-data-into-memory">Loading Less Data into Memory</h2>
 <p>Using the pre-processing capabilities of Spark, the data will be transformed before being loaded into memory. In this section, we will continue to build on the example started in the <strong>Spark Read</strong> section</p>
-<section id="lazy-transform" class="level3"><h3 class="anchored" data-anchor-id="lazy-transform">Lazy Transform</h3>
+<section id="lazy-transform" class="level3">
+<h3 class="anchored" data-anchor-id="lazy-transform">Lazy Transform</h3>
 <p>The following <strong>dplyr</strong> script will not be immediately run, so the code is processed quickly. There are some check-ups made, but for the most part it is building a Spark SQL statement in the background.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="va">flights_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>,<span class="st">"flights_spark_2008"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/mutate.html">mutate</a></span><span class="op">(</span>DepDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">DepDelay</span><span class="op">)</span>,
-         ArrDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span>,
-         <span class="va">DepDelay</span> <span class="op">&gt;</span> <span class="fl">15</span> , <span class="va">DepDelay</span> <span class="op">&lt;</span> <span class="fl">240</span>,
-         <span class="va">ArrDelay</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">60</span> , <span class="va">ArrDelay</span> <span class="op">&lt;</span> <span class="fl">360</span>, 
-         Gain <span class="op">=</span> <span class="va">DepDelay</span> <span class="op">-</span> <span class="va">ArrDelay</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/filter.html">filter</a></span><span class="op">(</span><span class="va">ArrDelay</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/select.html">select</a></span><span class="op">(</span><span class="va">Origin</span>, <span class="va">Dest</span>, <span class="va">UniqueCarrier</span>, <span class="va">Distance</span>, <span class="va">DepDelay</span>, <span class="va">ArrDelay</span>, <span class="va">Gain</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flights_table <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc,<span class="st">"flights_spark_2008"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DepDelay =</span> <span class="fu">as.numeric</span>(DepDelay),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">ArrDelay =</span> <span class="fu">as.numeric</span>(ArrDelay),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         DepDelay <span class="sc">&gt;</span> <span class="dv">15</span> , DepDelay <span class="sc">&lt;</span> <span class="dv">240</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         ArrDelay <span class="sc">&gt;</span> <span class="sc">-</span><span class="dv">60</span> , ArrDelay <span class="sc">&lt;</span> <span class="dv">360</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Gain =</span> DepDelay <span class="sc">-</span> ArrDelay) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ArrDelay <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Origin, Dest, UniqueCarrier, Distance, DepDelay, ArrDelay, Gain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="register-in-spark" class="level3"><h3 class="anchored" data-anchor-id="register-in-spark">Register in Spark</h3>
+</section>
+<section id="register-in-spark" class="level3">
+<h3 class="anchored" data-anchor-id="register-in-spark">Register in Spark</h3>
 <p><strong>sdf_register</strong> will register the resulting Spark SQL in Spark. The results will show up as a table called <strong>flights_spark</strong>. But a table of the same name is still not loaded into memory in Spark.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="va">flights_table</span>, <span class="st">"flights_spark"</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sdf_register</span>(flights_table, <span class="st">"flights_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
-<a href="images/deployment/performance/spark-tab-3.png"> <img src="images/deployment/performance/spark-tab-3.png" width="400px"></a>
+<a href="images/deployment/performance/spark-tab-3.png"> <img src="images/deployment/performance/spark-tab-3.png" width="400px"> </a>
 </center>
-</section><section id="cache-into-memory" class="level3"><h3 class="anchored" data-anchor-id="cache-into-memory">Cache into Memory</h3>
+</section>
+<section id="cache-into-memory" class="level3">
+<h3 class="anchored" data-anchor-id="cache-into-memory">Cache into Memory</h3>
 <p>The <strong>tbl_cache</strong> command loads the results into an Spark RDD in memory, so any analysis from there on will not need to re-read and re-transform the original file. The resulting Spark RDD is smaller than the original file because the transformations created a smaller data set than the original file.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">"flights_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
-<a href="images/deployment/performance/storage-new-3.png"> <img src="images/deployment/performance/storage-new-3.png" width="1000px"></a>
+<a href="images/deployment/performance/storage-new-3.png"> <img src="images/deployment/performance/storage-new-3.png" width="1000px"> </a>
 </center>
-</section><section id="driver-memory" class="level3"><h3 class="anchored" data-anchor-id="driver-memory">Driver Memory</h3>
+</section>
+<section id="driver-memory" class="level3">
+<h3 class="anchored" data-anchor-id="driver-memory">Driver Memory</h3>
 <p>In the <strong>Executors</strong> page of the Spark Web UI, we can see that the Storage Memory is at about half of the 16 gigabytes requested. This is mainly because of a Spark setting called <strong>spark.memory.fraction</strong>, which reserves by default 40% of the memory requested.</p>
 <center>
-<a href="images/deployment/performance/drivers-1.png"> <img src="images/deployment/performance/drivers-1.png" width="1000px"></a>
+<a href="images/deployment/performance/drivers-1.png"> <img src="images/deployment/performance/drivers-1.png" width="1000px"> </a>
 </center>
-</section></section><section id="process-on-the-fly" class="level2"><h2 class="anchored" data-anchor-id="process-on-the-fly">Process on the fly</h2>
+</section>
+</section>
+<section id="process-on-the-fly" class="level2">
+<h2 class="anchored" data-anchor-id="process-on-the-fly">Process on the fly</h2>
 <p>The plan is to read the Flights 2007 file, combine it with the 2008 file and summarize the data without bringing either file fully into memory.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark_2007"</span> , <span class="st">"2007.csv.bz2"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="st">"flights_spark_2007"</span> , <span class="st">"2007.csv.bz2"</span>, <span class="at">memory =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="union-and-transform" class="level3"><h3 class="anchored" data-anchor-id="union-and-transform">Union and Transform</h3>
+<section id="union-and-transform" class="level3">
+<h3 class="anchored" data-anchor-id="union-and-transform">Union and Transform</h3>
 <p>The <strong>union</strong> command is akin to the <strong>bind_rows</strong> dyplyr command. It will allow us to append the 2007 file to the 2008 file, and as with the previous transform, this script will be evaluated lazily.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="va">all_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark_2008"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">union</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark_2007"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Month</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">tally</a></span><span class="op">(</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>all_flights <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">"flights_spark_2008"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">union</span>(<span class="fu">tbl</span>(sc, <span class="st">"flights_spark_2007"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year, Month) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="collect-into-r" class="level3"><h3 class="anchored" data-anchor-id="collect-into-r">Collect into R</h3>
+</section>
+<section id="collect-into-r" class="level3">
+<h3 class="anchored" data-anchor-id="collect-into-r">Collect into R</h3>
 <p>When receiving a <strong>collect</strong> command, Spark will execute the SQL statement and send the results back to R in a data frame. In this case, R only loads 24 observations into a data frame called <em>all_flights</em>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="va">all_flights</span> <span class="op">&lt;-</span> <span class="va">all_flights</span> <span class="op"><a href="https://rdrr.io/pkg/sparklyr/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>all_flights <span class="ot">&lt;-</span> all_flights <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
-<a href="images/deployment/performance/all-flights.png"> <img src="images/deployment/performance/all-flights.png" width="400px"></a>
+<a href="images/deployment/performance/all-flights.png"> <img src="images/deployment/performance/all-flights.png" width="400px"> </a>
 </center>
-</section><section id="plot-in-r" class="level3"><h3 class="anchored" data-anchor-id="plot-in-r">Plot in R</h3>
+</section>
+<section id="plot-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="plot-in-r">Plot in R</h3>
 <p>Now the smaller data set can be plotted</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">all_flights</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Month</span>, y <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fl">1000</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Year</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Dark2"</span>, name <span class="op">=</span> <span class="st">"Year"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">12</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"J"</span>,<span class="st">"F"</span>,<span class="st">"M"</span>,<span class="st">"A"</span>,<span class="st">"M"</span>,<span class="st">"J"</span>,<span class="st">"J"</span>,<span class="st">"A"</span>,<span class="st">"S"</span>,<span class="st">"O"</span>,<span class="st">"N"</span>,<span class="st">"D"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_light</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"Number of Flights (Thousands)"</span>, title <span class="op">=</span> <span class="st">"Number of Flights Year-Over-Year"</span><span class="op">)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> all_flights, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> n<span class="sc">/</span><span class="dv">1000</span>, <span class="at">fill =</span> <span class="fu">factor</span>(Year))) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Dark2"</span>, <span class="at">name =</span> <span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"J"</span>,<span class="st">"F"</span>,<span class="st">"M"</span>,<span class="st">"A"</span>,<span class="st">"M"</span>,<span class="st">"J"</span>,<span class="st">"J"</span>,<span class="st">"A"</span>,<span class="st">"S"</span>,<span class="st">"O"</span>,<span class="st">"N"</span>,<span class="st">"D"</span>)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Number of Flights (Thousands)"</span>, <span class="at">title =</span> <span class="st">"Number of Flights Year-Over-Year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <center>
-<a href="images/deployment/performance/new-plot.png"> <img src="images/deployment/performance/new-plot.png" width="600"></a>
+<a href="images/deployment/performance/new-plot.png"> <img src="images/deployment/performance/new-plot.png" width="600"> </a>
 </center>
 
 
-</section></section><script type="application/javascript">
+</section>
+</section>
+<script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -602,7 +655,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script></main><!-- /main --><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+</main> <!-- /main -->
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>

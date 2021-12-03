@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>sparklyr – ml_lda</title>
+<style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+<!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--><script src="../../site_libs/quarto-nav/quarto-nav.js"></script><script src="../../site_libs/quarto-nav/headroom.min.js"></script><script src="../../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../../site_libs/quarto-search/fuse.min.js"></script><script src="../../site_libs/quarto-search/quarto-search.js"></script><script src="../../site_libs/quarto-html/quarto.js"></script><script src="../../site_libs/quarto-html/popper.min.js"></script><script src="../../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../../site_libs/quarto-html/anchor.min.js"></script><link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script><link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><link rel="stylesheet" href="../../styles.css">
+</head>
+<body class="docked">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-light "><div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">sparklyr</span>
+  </a>
+          <div class="ms-auto">
+            <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+          </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">(Untitled)</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Using sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="usingsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../../guides/connections.html" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../troubleshooting.html" class="">Troubleshooting</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Guides</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="guides-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../../dplyr.html" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../mlib.html" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/caching.html" class="">Understanding Caching</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../deployment.html" class="">Deployment Options</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/data-lakes.html" class="">Data Lakes</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/pipelines.html" class="">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/streaming.html" class="">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/arrow.html" class="">Apache Arrow</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Extend sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="extendsparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../../guides/h2o.html" class="">Using H2O</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../graphframes.html" class="">Graph Analysis</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+          <div class="d-inline-flex w-100 sidebar-section-item">
+            <div class="sidebar-section-link me-auto">
+            <a href="../../mleap" class="">MLeap</a>
+            </div>
+            <a class="text-start  " data-bs-toggle="collapse" data-bs-target="#mleap-collapse" aria-expanded="true">
+              <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+            </div>
+        </div>
+      <div class="collapse  show" id="mleap-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../..//mleap/news.html" class="">News</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../mleap/reference" class="">Reference</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="sparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../..//sparklyr/news.html" class="">News</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../sparklyr/reference" class="">Reference</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Deployment Examples</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="deploymentexamples-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="../../examples/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../examples/yarn-cluster-emr.html" class="">YARN cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../examples/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../examples/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../examples/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+</ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+<ul>
+<li>
+<a href="#ml_lda" class="nav-link active" data-scroll-target="#ml_lda">ml_lda</a>
+<ul class="collapse">
+<li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
+<li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+<li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+<li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
+<li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
+<li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul></nav>
+</div>
+<!-- main -->
+<main class="content"><section id="ml_lda" class="level1"><h1>ml_lda</h1>
+<p>Spark ML – Latent Dirichlet Allocation</p>
+<section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>Latent Dirichlet Allocation (LDA), a topic model designed for text documents.</p>
+</section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda</a></span><span class="op">(</span>
+  <span class="va">x</span>,
+  formula <span class="op">=</span> <span class="cn">NULL</span>,
+  k <span class="op">=</span> <span class="fl">10</span>,
+  max_iter <span class="op">=</span> <span class="fl">20</span>,
+  doc_concentration <span class="op">=</span> <span class="cn">NULL</span>,
+  topic_concentration <span class="op">=</span> <span class="cn">NULL</span>,
+  subsampling_rate <span class="op">=</span> <span class="fl">0.05</span>,
+  optimizer <span class="op">=</span> <span class="st">"online"</span>,
+  checkpoint_interval <span class="op">=</span> <span class="fl">10</span>,
+  keep_last_checkpoint <span class="op">=</span> <span class="cn">TRUE</span>,
+  learning_decay <span class="op">=</span> <span class="fl">0.51</span>,
+  learning_offset <span class="op">=</span> <span class="fl">1024</span>,
+  optimize_doc_concentration <span class="op">=</span> <span class="cn">TRUE</span>,
+  seed <span class="op">=</span> <span class="cn">NULL</span>,
+  features_col <span class="op">=</span> <span class="st">"features"</span>,
+  topic_distribution_col <span class="op">=</span> <span class="st">"topicDistribution"</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"lda_"</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_describe_topics</a></span><span class="op">(</span><span class="va">model</span>, max_terms_per_topic <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_log_likelihood</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">dataset</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_log_perplexity</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">dataset</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_topics_matrix</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+</section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
+</tr>
+<tr class="even">
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
+</tr>
+<tr class="odd">
+<td>k</td>
+<td>The number of clusters to create</td>
+</tr>
+<tr class="even">
+<td>max_iter</td>
+<td>The maximum number of iterations to use.</td>
+</tr>
+<tr class="odd">
+<td>doc_concentration</td>
+<td>Concentration parameter (commonly named “alpha”) for the prior placed on documents’ distributions over topics (“theta”). See details.</td>
+</tr>
+<tr class="even">
+<td>topic_concentration</td>
+<td>Concentration parameter (commonly named “beta” or “eta”) for the prior placed on topics’ distributions over terms.</td>
+</tr>
+<tr class="odd">
+<td>subsampling_rate</td>
+<td>(For Online optimizer only) Fraction of the corpus to be sampled and used in each iteration of mini-batch gradient descent, in range (0, 1]. Note that this should be adjusted in synch with <code>max_iter</code> so the entire corpus is used. Specifically, set both so that maxIterations * miniBatchFraction greater than or equal to 1.</td>
+</tr>
+<tr class="even">
+<td>optimizer</td>
+<td>Optimizer or inference algorithm used to estimate the LDA model. Supported: “online” for Online Variational Bayes (default) and “em” for Expectation-Maximization.</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_interval</td>
+<td>Set checkpoint interval (&gt;= 1) or disable checkpoint (-1).</td>
+</tr>
+</tbody>
+</table>
+<p>E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. keep_last_checkpoint | (Spark 2.0.0+) (For EM optimizer only) If using checkpointing, this indicates whether to keep the last checkpoint. If <code>FALSE</code>, then the checkpoint will be deleted. Deleting the checkpoint can cause failures if a data partition is lost, so set this bit with care. Note that checkpoints will be cleaned up via reference counting, regardless. learning_decay | (For Online optimizer only) Learning rate, set as an exponential decay rate. This should be between (0.5, 1.0] to guarantee asymptotic convergence. This is called “kappa” in the Online LDA paper (Hoffman et al., 2010). Default: 0.51, based on Hoffman et al. learning_offset | (For Online optimizer only) A (positive) learning parameter that downweights early iterations. Larger values make early iterations count less. This is called “tau0” in the Online LDA paper (Hoffman et al., 2010) Default: 1024, following Hoffman et al. optimize_doc_concentration | (For Online optimizer only) Indicates whether the <code>doc_concentration</code> (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: <code>FALSE</code> seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called “theta” in the literature). Returns a vector of zeros for an empty document. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted LDA model returned by <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda()</a></code>. max_terms_per_topic | Maximum number of terms to collect for each topic. Default value of 10. dataset | test corpus to use for calculating log likelihood or log perplexity</p>
+</section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
+<p>For <code>ml_lda.tbl_spark</code> with the formula interface, you can specify named arguments in <code>...</code> that will be passed <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_regex_tokenizer.html">ft_regex_tokenizer()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_stop_words_remover.html">ft_stop_words_remover()</a></code>, and <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_count_vectorizer.html">ft_count_vectorizer()</a></code>. For example, to increase the default <code>min_token_length</code>, you can use <code>ml_lda(dataset, ~ text, min_token_length = 4)</code>.</p>
+<p>Terminology for LDA:</p>
+<ul>
+<li><p>“term” = “word”: an element of the vocabulary</p></li>
+<li><p>“token”: instance of a term appearing in a document</p></li>
+<li><p>“topic”: multinomial distribution over terms representing some concept</p></li>
+<li><p>“document”: one piece of text, corresponding to one row in the input data</p></li>
+</ul>
+<p>Original LDA paper (journal version): Blei, Ng, and Jordan. “Latent Dirichlet Allocation.” JMLR, 2003.</p>
+<p>Input data (<code>features_col</code>): LDA is given a collection of documents as input data, via the <code>features_col</code> parameter. Each document is specified as a Vector of length <code>vocab_size</code>, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as <code>ft_tokenizer</code> and <code>ft_count_vectorizer</code> can be useful for converting text to word count vectors</p>
+</section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
+<p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
+</ul>
+<p><code>ml_describe_topics</code> returns a DataFrame with topics and their top-weighted terms.</p>
+<p><code>ml_log_likelihood</code> calculates a lower bound on the log likelihood of the entire corpus</p>
+</section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/juliasilge/janeaustenr">janeaustenr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+
+<span class="va">lines_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>,
+  <span class="fu">austen_books</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, <span class="op">]</span>,
+  name <span class="op">=</span> <span class="st">"lines_tbl"</span>,
+  overwrite <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="co"># transform the data in a tidy form</span>
+<span class="va">lines_tbl_tidy</span> <span class="op">&lt;-</span> <span class="va">lines_tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_tokenizer.html">ft_tokenizer</a></span><span class="op">(</span>
+    input_col <span class="op">=</span> <span class="st">"text"</span>,
+    output_col <span class="op">=</span> <span class="st">"word_list"</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_stop_words_remover.html">ft_stop_words_remover</a></span><span class="op">(</span>
+    input_col <span class="op">=</span> <span class="st">"word_list"</span>,
+    output_col <span class="op">=</span> <span class="st">"wo_stop_words"</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu">explode</span><span class="op">(</span><span class="va">wo_stop_words</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">text</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">text</span>, <span class="va">book</span><span class="op">)</span>
+
+<span class="va">lda_model</span> <span class="op">&lt;-</span> <span class="va">lines_tbl_tidy</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda</a></span><span class="op">(</span><span class="op">~</span><span class="va">text</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+
+<span class="co"># vocabulary and topics</span>
+<span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">lda_model</span><span class="op">)</span></code></pre></div>
+</section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
+<p>Other ml clustering algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_kmeans()</a></code></p>
+
+
+</section></section><script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      return window.localStorage.getItem("quarto-color-scheme");
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = null;
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.id = "quarto-color-scheme-toggle";
+    a.classList.add('top-right');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script></main><!-- /main --><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body>
+</html>

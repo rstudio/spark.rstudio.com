@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>../../sparklyr - Using RStudio Workbench inside of Qubole</title>
-  <style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>../../sparklyr - Using RStudio Workbench inside of Qubole</title>
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -12,29 +14,16 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
   </style>
-
-  <!--[if lt IE 9]>
+<!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
-  <script src="../site_libs/clipboard/clipboard.min.js"></script>
-  <meta name="quarto:offset" content="../">
-  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-  <script src="../site_libs/quarto-search/fuse.min.js"></script>
-  <script src="../site_libs/quarto-search/quarto-search.js"></script>
-  <script src="../site_libs/quarto-html/quarto.js"></script>
-  <script src="../site_libs/quarto-html/popper.min.js"></script>
-  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-  <script src="../site_libs/quarto-html/anchor.min.js"></script>
-  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-  <script id="quarto-search-options" type="application/json">{
+  <![endif]--><script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -52,9 +41,7 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script>
-  
-  <script type="text/javascript">
+  }</script><script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -66,14 +53,11 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script>
-  <link rel="stylesheet" href="../styles.css">
+  </script><link rel="stylesheet" href="../styles.css">
 </head>
 <body class="docked">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-light ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-light "><div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">sparklyr</span>
   </a>
@@ -82,24 +66,18 @@
           </div>
           <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
-    </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Using RStudio Workbench inside of Qubole</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-  <div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="sidebar-menu-container"> 
   <ul class="list-unstyled mt-1">
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Using sparklyr</div>
@@ -108,18 +86,18 @@
         </div>
       <div class="collapse  show" id="usingsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../guides/connections.html" class="">Configuring connections</a>
 </li>
           <li class="sidebar-item">
   <a href="../troubleshooting.html" class="">Troubleshooting</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Guides</div>
@@ -128,7 +106,7 @@
         </div>
       <div class="collapse  show" id="guides-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../dplyr.html" class="">Manipulating data</a>
 </li>
           <li class="sidebar-item">
@@ -162,11 +140,11 @@
   <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Extend sparklyr</div>
@@ -175,18 +153,35 @@
         </div>
       <div class="collapse  show" id="extendsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../guides/h2o.html" class="">Using H2O</a>
 </li>
-          <li class="sidebar-item">
-  <a href="../graphframes.html" class="">Graph Analysis</a>
-</li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="sparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="..//sparklyr/news.html" class="">News</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../sparklyr/reference" class="">Reference</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -199,18 +194,18 @@
         </div>
       <div class="collapse  show" id="mleap-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="..//mleap/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
   <a href="../mleap/reference" class="">Reference</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -223,38 +218,18 @@
         </div>
       <div class="collapse  show" id="graphframes-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="..//mleap/news.html" class="">News</a>
+<li class="sidebar-item">
+  <a href="..//graphframes/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
-  <a href="../mleap/reference" class="">Reference</a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
-              <div class="me-auto sidebar-section-item">sparklyr</div>
-            <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="sparklyr-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="..//sparklyr/news.html" class="">News</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../sparklyr/reference" class="">Reference</a>
+  <a href="../graphframes/reference" class="">Reference</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Deployment Examples</div>
@@ -263,7 +238,7 @@
         </div>
       <div class="collapse  show" id="deploymentexamples-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../examples/stand-alone-aws.html" class="">Standalone cluster</a>
 </li>
           <li class="sidebar-item">
@@ -279,38 +254,27 @@
   <a href="../examples/qubole-overview.html" class="">Qubole cluster</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-  </ul>
-  </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">On this page</h2>
+</ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
 <li><a href="#advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
 <li><a href="#access-rstudio-workbench" class="nav-link" data-scroll-target="#access-rstudio-workbench">Access RStudio Workbench</a></li>
 <li><a href="#use-sparklyr" class="nav-link" data-scroll-target="#use-sparklyr">Use <code>sparklyr</code></a></li>
 <li><a href="#additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
-</ul>
-</nav>
-    </div>
+</ul></nav>
+</div>
 <!-- main -->
-<main class="content">
-<header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7">Using RStudio Workbench inside of Qubole</h1>
-</header>
-
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Using RStudio Workbench inside of Qubole</h1>
+</header><section id="overview" class="level2"><h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>Qubole users can request <a href="https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html">access to RStudio Server Pro</a>. This allows users to use <a href="https://spark.rstudio.com/"><code>sparklyr</code></a> to interact directly with Spark from within the Qubole cluster.</p>
 <p><img src="../images/deployment/qubole/rstudio-qubole.png" width="800px" align="center"></p>
-</section>
-<section id="advantages-and-limitations" class="level2">
-<h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
+</section><section id="advantages-and-limitations" class="level2"><h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
 <p>Advantages:</p>
 <ul>
 <li>Ability for users to connect <code>sparklyr</code> directly to Spark within Qubole</li>
@@ -323,26 +287,19 @@
 <li>Persistent packages must be managed using Qubole Environments, not directly from within RStudio</li>
 <li>RStudio Workbench installed within a Qubole cluster will be limited to the compute resources and lifecycle of that particular Spark cluster</li>
 <li>Non-Spark jobs will use CPU and RAM resources within the Qubole cluster</li>
-</ul>
-</section>
-<section id="access-rstudio-workbench" class="level2">
-<h2 class="anchored" data-anchor-id="access-rstudio-workbench">Access RStudio Workbench</h2>
+</ul></section><section id="access-rstudio-workbench" class="level2"><h2 class="anchored" data-anchor-id="access-rstudio-workbench">Access RStudio Workbench</h2>
 <p>RStudio Workbench can be accessed from the cluster resources menu:</p>
 <p><img src="../images/deployment/qubole/rstudio-qubole-resources.png" width="800px" align="center"></p>
-</section>
-<section id="use-sparklyr" class="level2">
-<h2 class="anchored" data-anchor-id="use-sparklyr">Use <code>sparklyr</code></h2>
+</section><section id="use-sparklyr" class="level2"><h2 class="anchored" data-anchor-id="use-sparklyr">Use <code>sparklyr</code>
+</h2>
 <p>Use the following R code to establish a connection from <code>sparklyr</code> to the Qubole cluster:</p>
-<pre><code>library(sparklyr)
-sc &lt;- spark_connect(method = "qubole")</code></pre>
-</section>
-<section id="additional-information" class="level2">
-<h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
+<pre><code><a href="https://spark.rstudio.com/">library(sparklyr)
+sc &lt;- spark_connect(method = "qubole")</a></code></pre>
+</section><section id="additional-information" class="level2"><h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
 <p>For more information on using RStudio Workbench inside of Qubole, refer to the <a href="https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html">Qubole documentation</a>.</p>
 
 
-</section>
-<script type="application/javascript">
+</section><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -513,10 +470,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script>
-</main> <!-- /main -->
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script></main><!-- /main --><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>
@@ -524,4 +478,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body></html>
+</body>
+</html>

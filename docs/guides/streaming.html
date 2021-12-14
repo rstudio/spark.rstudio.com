@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>../../sparklyr - Intro to Spark Streaming with sparklyr</title>
-  <style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>../../sparklyr - Intro to Spark Streaming with sparklyr</title>
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -75,29 +77,16 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-
-  <!--[if lt IE 9]>
+<!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
-  <script src="../site_libs/clipboard/clipboard.min.js"></script>
-  <meta name="quarto:offset" content="../">
-  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-  <script src="../site_libs/quarto-search/fuse.min.js"></script>
-  <script src="../site_libs/quarto-search/quarto-search.js"></script>
-  <script src="../site_libs/quarto-html/quarto.js"></script>
-  <script src="../site_libs/quarto-html/popper.min.js"></script>
-  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-  <script src="../site_libs/quarto-html/anchor.min.js"></script>
-  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-  <script id="quarto-search-options" type="application/json">{
+  <![endif]--><script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -115,9 +104,7 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script>
-  
-  <script type="text/javascript">
+  }</script><script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -129,14 +116,11 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script>
-  <link rel="stylesheet" href="../styles.css">
+  </script><link rel="stylesheet" href="../styles.css">
 </head>
 <body class="docked">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-light ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-light "><div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">sparklyr</span>
   </a>
@@ -145,24 +129,18 @@
           </div>
           <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
-    </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
+    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Intro to Spark Streaming with sparklyr</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
-  <div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="sidebar-menu-container"> 
   <ul class="list-unstyled mt-1">
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Using sparklyr</div>
@@ -171,18 +149,18 @@
         </div>
       <div class="collapse  show" id="usingsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../guides/connections.html" class="">Configuring connections</a>
 </li>
           <li class="sidebar-item">
   <a href="../troubleshooting.html" class="">Troubleshooting</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Guides</div>
@@ -191,7 +169,7 @@
         </div>
       <div class="collapse  show" id="guides-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../dplyr.html" class="">Manipulating data</a>
 </li>
           <li class="sidebar-item">
@@ -225,11 +203,11 @@
   <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Extend sparklyr</div>
@@ -238,18 +216,35 @@
         </div>
       <div class="collapse  show" id="extendsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../guides/h2o.html" class="">Using H2O</a>
 </li>
-          <li class="sidebar-item">
-  <a href="../graphframes.html" class="">Graph Analysis</a>
-</li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">sparklyr</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="sparklyr-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+<li class="sidebar-item">
+  <a href="..//sparklyr/news.html" class="">News</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../sparklyr/reference" class="">Reference</a>
+</li>
+        </ul>
+</div>
+    </li>
+  </ul>
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -262,18 +257,18 @@
         </div>
       <div class="collapse  show" id="mleap-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="..//mleap/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
   <a href="../mleap/reference" class="">Reference</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -286,38 +281,18 @@
         </div>
       <div class="collapse  show" id="graphframes-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="..//mleap/news.html" class="">News</a>
+<li class="sidebar-item">
+  <a href="..//graphframes/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
-  <a href="../mleap/reference" class="">Reference</a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
-              <div class="me-auto sidebar-section-item">sparklyr</div>
-            <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="sparklyr-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="..//sparklyr/news.html" class="">News</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../sparklyr/reference" class="">Reference</a>
+  <a href="../graphframes/reference" class="">Reference</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
+<ul class="list-unstyled sidebar-section depth1">
+<li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Deployment Examples</div>
@@ -326,7 +301,7 @@
         </div>
       <div class="collapse  show" id="deploymentexamples-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
+<li class="sidebar-item">
   <a href="../examples/stand-alone-aws.html" class="">Standalone cluster</a>
 </li>
           <li class="sidebar-item">
@@ -342,50 +317,51 @@
   <a href="../examples/qubole-overview.html" class="">Qubole cluster</a>
 </li>
         </ul>
-      </div>
+</div>
     </li>
   </ul>
-  </ul>
-  </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">On this page</h2>
+</ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#the-sparklyr-interface" class="nav-link active" data-scroll-target="#the-sparklyr-interface">The <code>sparklyr</code> interface</a></li>
 <li><a href="#interacting-with-a-stream" class="nav-link" data-scroll-target="#interacting-with-a-stream">Interacting with a stream</a></li>
-<li><a href="#example-1---inputoutput" class="nav-link" data-scroll-target="#example-1---inputoutput">Example 1 - Input/Output</a>
+<li>
+<a href="#example-1---inputoutput" class="nav-link" data-scroll-target="#example-1---inputoutput">Example 1 - Input/Output</a>
 <ul class="collapse">
 <li><a href="#code-breakdown" class="nav-link" data-scroll-target="#code-breakdown">Code breakdown</a></li>
-</ul></li>
-<li><a href="#example-2---processing" class="nav-link" data-scroll-target="#example-2---processing">Example 2 - Processing</a>
+</ul>
+</li>
+<li>
+<a href="#example-2---processing" class="nav-link" data-scroll-target="#example-2---processing">Example 2 - Processing</a>
 <ul class="collapse">
 <li><a href="#code-breakdown-1" class="nav-link" data-scroll-target="#code-breakdown-1">Code breakdown</a></li>
-</ul></li>
-<li><a href="#example-3---aggregate-in-process-and-output-to-memory" class="nav-link" data-scroll-target="#example-3---aggregate-in-process-and-output-to-memory">Example 3 - Aggregate in process and output to memory</a>
+</ul>
+</li>
+<li>
+<a href="#example-3---aggregate-in-process-and-output-to-memory" class="nav-link" data-scroll-target="#example-3---aggregate-in-process-and-output-to-memory">Example 3 - Aggregate in process and output to memory</a>
 <ul class="collapse">
 <li><a href="#code-breakdown-2" class="nav-link" data-scroll-target="#code-breakdown-2">Code breakdown</a></li>
-</ul></li>
-<li><a href="#example-4---shiny-integration" class="nav-link" data-scroll-target="#example-4---shiny-integration">Example 4 - Shiny integration</a>
+</ul>
+</li>
+<li>
+<a href="#example-4---shiny-integration" class="nav-link" data-scroll-target="#example-4---shiny-integration">Example 4 - Shiny integration</a>
 <ul class="collapse">
 <li><a href="#code-breakdown-3" class="nav-link" data-scroll-target="#code-breakdown-3">Code breakdown</a></li>
-</ul></li>
-<li><a href="#example-5---ml-pipeline-model" class="nav-link" data-scroll-target="#example-5---ml-pipeline-model">Example 5 - ML Pipeline Model</a>
+</ul>
+</li>
+<li>
+<a href="#example-5---ml-pipeline-model" class="nav-link" data-scroll-target="#example-5---ml-pipeline-model">Example 5 - ML Pipeline Model</a>
 <ul class="collapse">
 <li><a href="#code-breakdown-4" class="nav-link" data-scroll-target="#code-breakdown-4">Code Breakdown</a></li>
-</ul></li>
 </ul>
-</nav>
-    </div>
+</li>
+</ul></nav>
+</div>
 <!-- main -->
-<main class="content">
-<header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7">Intro to Spark Streaming with sparklyr</h1>
-</header>
-
-<section id="the-sparklyr-interface" class="level2">
-<h2 class="anchored" data-anchor-id="the-sparklyr-interface">The <code>sparklyr</code> interface</h2>
+<main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Intro to Spark Streaming with sparklyr</h1>
+</header><section id="the-sparklyr-interface" class="level2"><h2 class="anchored" data-anchor-id="the-sparklyr-interface">The <code>sparklyr</code> interface</h2>
 <p>As stated in the Spark’s official site, <a href="https://spark.apache.org/streaming/">Spark Streaming</a> makes it easy to build scalable fault-tolerant streaming applications. Because is part of the Spark API, it is possible to re-use query code that queries the current state of the stream, as well as joining the streaming data with historical data. Please see <a href="https://spark.apache.org/docs/2.1.3/structured-streaming-programming-guide.html">Spark’s official documentation</a> for a deeper look into Spark Streaming.</p>
 <p>The <code>sparklyr</code> interface provides the following:</p>
 <ul>
@@ -394,114 +370,134 @@
 <li>Write stream results to Spark memory and the following file formats: CSV, text, JSON, parquet, Kafka, JDBC, and orc</li>
 <li>An out-of-the box <a href="#example-1---inputoutput">graph visualization</a> to monitor the stream</li>
 <li>A new <a href="#example-4---shiny-integration">reactiveSpark()</a> function, that allows Shiny apps to poll the contents of the stream create Shiny apps that are able to read the contents of the stream</li>
-</ul>
-</section>
-<section id="interacting-with-a-stream" class="level2">
-<h2 class="anchored" data-anchor-id="interacting-with-a-stream">Interacting with a stream</h2>
+</ul></section><section id="interacting-with-a-stream" class="level2"><h2 class="anchored" data-anchor-id="interacting-with-a-stream">Interacting with a stream</h2>
 <p>A good way of looking at the way how Spark streams update is as a three stage operation:</p>
 <ol type="1">
-<li><strong>Input</strong> - Spark reads the data inside a given folder. The folder is expected to contain multiple data files, with new files being created containing the most current stream data.</li>
-<li><strong>Processing</strong> - Spark applies the desired operations on top of the data. These operations could be data manipulations (<code>dplyr</code>, SQL), data transformations (<code>sdf</code> operations, PipelineModel predictions), or native R manipulations (<code>spark_apply()</code>).</li>
-<li><strong>Output</strong> - The results of processing the input files are saved in a different folder.</li>
+<li>
+<strong>Input</strong> - Spark reads the data inside a given folder. The folder is expected to contain multiple data files, with new files being created containing the most current stream data.</li>
+<li>
+<strong>Processing</strong> - Spark applies the desired operations on top of the data. These operations could be data manipulations (<code>dplyr</code>, SQL), data transformations (<code>sdf</code> operations, PipelineModel predictions), or native R manipulations (<code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_apply.html">spark_apply()</a></code>).</li>
+<li>
+<strong>Output</strong> - The results of processing the input files are saved in a different folder.</li>
 </ol>
 <p>In the same way all of the read and write operations in <code>sparklyr</code> for Spark Standalone, or in <code>sparklyr</code>’s local mode, the input and output folders are actual OS file system folders. For Hadoop clusters, these will be folder locations inside the HDFS.</p>
-</section>
-<section id="example-1---inputoutput" class="level2">
-<h2 class="anchored" data-anchor-id="example-1---inputoutput">Example 1 - Input/Output</h2>
-<p>The first intro example is a small script that can be used with a local master. The result should be to see the <code>stream_view()</code> app showing live the number of records processed for each iteration of test data being sent to the stream.</p>
+</section><section id="example-1---inputoutput" class="level2"><h2 class="anchored" data-anchor-id="example-1---inputoutput">Example 1 - Input/Output</h2>
+<p>The first intro example is a small script that can be used with a local master. The result should be to see the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_view.html">stream_view()</a></code> app showing live the number of records processed for each iteration of test data being sent to the stream.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source-out"</span>)) <span class="fu">unlink</span>(<span class="st">"source-out"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">iterations =</span> <span class="dv">1</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>read_folder <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"source"</span>) </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_csv</span>(read_folder, <span class="st">"source-out"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.5</span>)))</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_view</span>(write_output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source-out"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">read_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"source"</span><span class="op">)</span> 
+<span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="va">read_folder</span>, <span class="st">"source-out"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/future.html">future</a></span><span class="op">(</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>interval <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_view.html">stream_view</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span></code></pre></div>
 </div>
 <center>
 <p>
-<img src="../guides/streaming/stream_view.png" align="center" width="500/">
-</p>
+<img src="../guides/streaming/stream_view.png" align="center" width="500/"></p>
 </center>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
-<section id="code-breakdown" class="level3">
-<h3 class="anchored" data-anchor-id="code-breakdown">Code breakdown</h3>
+<section id="code-breakdown" class="level3"><h3 class="anchored" data-anchor-id="code-breakdown">Code breakdown</h3>
 <ol type="1">
-<li><p>Open the Spark connection ::: {.cell}</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>Optional step. This resets the input and output folders. It makes it easier to run the code multiple times in a clean manner. ::: {.cell}</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source-out"</span>)) <span class="fu">unlink</span>(<span class="st">"source-out"</span>, <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>Produces a single test file inside the “source” folder. This allows the “read” function to infer CSV file definition. ::: {.cell}</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">iterations =</span> <span class="dv">1</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">"source"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<li>
+<p>Open the Spark connection ::: {.cell}</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span></code></pre></div>
 <p>:::</p>
-<pre><code>[1] "stream_1.csv"</code></pre></li>
-<li><p>Points the stream reader to the folder where the streaming files will be placed. Since it is primed with a single CSV file, it will use as the expected layout of subsequent files. By default, <code>stream_read_csv()</code> creates a single integer variable data frame. ::: {.cell}</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>read_folder <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"source"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p><strong>The output writer is what starts the streaming job</strong>. It will start monitoring the input folder, and then write the new results in the “source-out” folder. So as new records stream in, new files will be created in the “source-out” folder. Since there are no operations on the incoming data at this time, the output files will have the same exact raw data as the input files. The only difference is that the files and sub folders within “source-out” will be structured how Spark structures data folders. ::: {.cell}</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_csv</span>(read_folder, <span class="st">"source-out"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">"source-out"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>::: <code>[1] "_spark_metadata"                                     "checkpoint"  [3] "part-00000-1f29719a-2314-40e1-b93d-a647a3d57154-c000.csv"</code></p></li>
-<li><p>The test generation function will run 100 files every 0.2 seconds. To run the tests “out-of-sync” with the current R session, the <code>future</code> package is used. ::: {.cell}</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">iterations =</span> <span class="dv">100</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>The <code>stream_view()</code> function can be used before the 50 tests are complete because of the use of the <code>future</code> package. It will monitor the status of the job that <code>write_output</code> is pointing to and provide information on the amount of data coming into the “source” folder and going out into the “source-out” folder. ::: {.cell}</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_view</span>(write_output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>The monitor will continue to run even after the tests are complete. To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session. ::: {.cell}</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-</ol>
-</section>
-</section>
-<section id="example-2---processing" class="level2">
-<h2 class="anchored" data-anchor-id="example-2---processing">Example 2 - Processing</h2>
+</li>
+<li>
+<p>Optional step. This resets the input and output folders. It makes it easier to run the code multiple times in a clean manner. ::: {.cell}</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source-out"</span>, <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>Produces a single test file inside the “source” folder. This allows the “read” function to infer CSV file definition. ::: {.cell}</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+<pre><code>[1] "stream_1.csv"</code></pre>
+</li>
+<li>
+<p>Points the stream reader to the folder where the streaming files will be placed. Since it is primed with a single CSV file, it will use as the expected layout of subsequent files. By default, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv()</a></code> creates a single integer variable data frame. ::: {.cell}</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">read_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"source"</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p><strong>The output writer is what starts the streaming job</strong>. It will start monitoring the input folder, and then write the new results in the “source-out” folder. So as new records stream in, new files will be created in the “source-out” folder. Since there are no operations on the incoming data at this time, the output files will have the same exact raw data as the input files. The only difference is that the files and sub folders within “source-out” will be structured how Spark structures data folders. ::: {.cell}</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="va">read_folder</span>, <span class="st">"source-out"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span></code></pre></div>
+<p>::: <code>[1] "_spark_metadata"                                     "checkpoint"  [3] "part-00000-1f29719a-2314-40e1-b93d-a647a3d57154-c000.csv"</code></p>
+</li>
+<li>
+<p>The test generation function will run 100 files every 0.2 seconds. To run the tests “out-of-sync” with the current R session, the <code>future</code> package is used. ::: {.cell}</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/future.html">future</a></span><span class="op">(</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>interval <span class="op">=</span> <span class="fl">0.2</span>, iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>The <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_view.html">stream_view()</a></code> function can be used before the 50 tests are complete because of the use of the <code>future</code> package. It will monitor the status of the job that <code>write_output</code> is pointing to and provide information on the amount of data coming into the “source” folder and going out into the “source-out” folder. ::: {.cell}</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_view.html">stream_view</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>The monitor will continue to run even after the tests are complete. To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session. ::: {.cell}</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+</ol></section></section><section id="example-2---processing" class="level2"><h2 class="anchored" data-anchor-id="example-2---processing">Example 2 - Processing</h2>
 <p>The second example builds on the first. It adds a processing step that manipulates the input data before saving it to the output folder. In this case, a new binary field is added indicating if the value from <code>x</code> is over 400 or not. This time, while run the second code chunk in this example a few times during the stream tests to see the aggregated values change.</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source-out"</span>)) <span class="fu">unlink</span>(<span class="st">"source-out"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">iterations =</span> <span class="dv">1</span>)</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>read_folder <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"source"</span>) </span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>process_stream <span class="ot">&lt;-</span> read_folder <span class="sc">%&gt;%</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">as.double</span>(x)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"x"</span>,</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"over"</span>,</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">400</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_csv</span>(process_stream, <span class="st">"source-out"</span>)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">iterations =</span> <span class="dv">100</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source-out"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">read_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"source"</span><span class="op">)</span> 
+
+<span class="va">process_stream</span> <span class="op">&lt;-</span> <span class="va">read_folder</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/mutate.html">mutate</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">as.double</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_binarizer.html">ft_binarizer</a></span><span class="op">(</span>
+    input_col <span class="op">=</span> <span class="st">"x"</span>,
+    output_col <span class="op">=</span> <span class="st">"over"</span>,
+    threshold <span class="op">=</span> <span class="fl">400</span>
+  <span class="op">)</span>
+
+<span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="va">process_stream</span>, <span class="st">"source-out"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/future.html">future</a></span><span class="op">(</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>interval <span class="op">=</span> <span class="fl">0.2</span>, iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Run this code a few times during the experiment: ::: {.cell}</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, <span class="at">memory =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(over) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">over</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">tally</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>:::</p>
 <p>The results would look similar to this. The <code>n</code> totals will increase as the experiment progresses.</p>
 <pre><code># Source:   lazy query [?? x 2]
@@ -511,208 +507,226 @@
 1     0 40215
 2     1 60006</code></pre>
 <p>Clean up after the experiment ::: {.cell}</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 <p>:::</p>
-<section id="code-breakdown-1" class="level3">
-<h3 class="anchored" data-anchor-id="code-breakdown-1">Code breakdown</h3>
+<section id="code-breakdown-1" class="level3"><h3 class="anchored" data-anchor-id="code-breakdown-1">Code breakdown</h3>
 <ol type="1">
-<li><p>The processing starts with the <code>read_folder</code> variable that contains the input stream. It coerces the integer field <code>x</code>, into a type double. This is because the next function, <code>ft_binarizer()</code> does not accept integers. The binarizer determines if <code>x</code> is over 400 or not. This is a good illustration of how <code>dplyr</code> can help simplify the manipulation needed during the processing stage. ::: {.cell}</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>process_stream <span class="ot">&lt;-</span> read_folder <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">as.double</span>(x)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"x"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"over"</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">400</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>The output now needs to write-out the processed data instead of the raw input data. Swap <code>read_folder</code> with <code>process_stream</code>. ::: {.cell}</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_csv</span>(process_stream, <span class="st">"source-out"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>The “source-out” folder can be treated as a if it was a single table within Spark. Using <code>spark_read_csv()</code>, the data can be mapped, but not brought into memory (<code>memory = FALSE</code>). This allows the current results to be further analyzed using regular <code>dplyr</code> commands. ::: {.cell}</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, <span class="at">memory =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(over) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-</ol>
-</section>
-</section>
-<section id="example-3---aggregate-in-process-and-output-to-memory" class="level2">
-<h2 class="anchored" data-anchor-id="example-3---aggregate-in-process-and-output-to-memory">Example 3 - Aggregate in process and output to memory</h2>
+<li>
+<p>The processing starts with the <code>read_folder</code> variable that contains the input stream. It coerces the integer field <code>x</code>, into a type double. This is because the next function, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_binarizer.html">ft_binarizer()</a></code> does not accept integers. The binarizer determines if <code>x</code> is over 400 or not. This is a good illustration of how <code>dplyr</code> can help simplify the manipulation needed during the processing stage. ::: {.cell}</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">process_stream</span> <span class="op">&lt;-</span> <span class="va">read_folder</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/mutate.html">mutate</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html">as.double</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_binarizer.html">ft_binarizer</a></span><span class="op">(</span>
+    input_col <span class="op">=</span> <span class="st">"x"</span>,
+    output_col <span class="op">=</span> <span class="st">"over"</span>,
+    threshold <span class="op">=</span> <span class="fl">400</span>
+  <span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>The output now needs to write-out the processed data instead of the raw input data. Swap <code>read_folder</code> with <code>process_stream</code>. ::: {.cell}</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="va">process_stream</span>, <span class="st">"source-out"</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>The “source-out” folder can be treated as a if it was a single table within Spark. Using <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv()</a></code>, the data can be mapped, but not brought into memory (<code>memory = FALSE</code>). This allows the current results to be further analyzed using regular <code>dplyr</code> commands. ::: {.cell}</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">over</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">tally</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+</ol></section></section><section id="example-3---aggregate-in-process-and-output-to-memory" class="level2"><h2 class="anchored" data-anchor-id="example-3---aggregate-in-process-and-output-to-memory">Example 3 - Aggregate in process and output to memory</h2>
 <p>Another option is to save the results of the processing into a in-memory Spark table. Unless intentionally saving it to disk, the table and its data will only exist while the Spark session is active.</p>
 <p>The biggest advantage of using Spark memory as the target, is that it will allow for aggregation to happen during processing. This is an advantage because <em>aggregation is not allowed for any file output, expect Kafka, on the input/process stage</em>.</p>
 <p>Using example 2 as the base, this example code will perform some aggregations to the current stream input and save only those summarized results into Spark memory:</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">iterations =</span> <span class="dv">1</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>read_folder <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"source"</span>) </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>process_stream <span class="ot">&lt;-</span> read_folder <span class="sc">%&gt;%</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_watermark</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(timestamp) <span class="sc">%&gt;%</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_x =</span> <span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_x =</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>()</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_memory</span>(process_stream, <span class="at">name =</span> <span class="st">"stream"</span>)</span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">read_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"source"</span><span class="op">)</span> 
+
+<span class="va">process_stream</span> <span class="op">&lt;-</span> <span class="va">read_folder</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_watermark.html">stream_watermark</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">timestamp</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+    max_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    min_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span>
+
+<span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_memory.html">stream_write_memory</a></span><span class="op">(</span><span class="va">process_stream</span>, name <span class="op">=</span> <span class="st">"stream"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/future.html">future</a></span><span class="op">(</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Run this command a different times while the experiment is running: ::: {.cell}</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(sc, <span class="st">"stream"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"stream"</span><span class="op">)</span> </code></pre></div>
 <p>:::</p>
 <p>Clean up after the experiment ::: {.cell}</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">write_output</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 <p>:::</p>
-<section id="code-breakdown-2" class="level3">
-<h3 class="anchored" data-anchor-id="code-breakdown-2">Code breakdown</h3>
+<section id="code-breakdown-2" class="level3"><h3 class="anchored" data-anchor-id="code-breakdown-2">Code breakdown</h3>
 <ol type="1">
-<li><p>The <code>stream_watermark()</code> functions add a new <code>timestamp</code> variable that is then used in the <code>group_by()</code> command. This is required by Spark Stream to accept summarized results as output of the stream. The second step is to simply decide what kinds of aggregations we need to perform. In this case, a simply max, min and count are performed.<br>
+<li>
+<p>The <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_watermark.html">stream_watermark()</a></code> functions add a new <code>timestamp</code> variable that is then used in the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> command. This is required by Spark Stream to accept summarized results as output of the stream. The second step is to simply decide what kinds of aggregations we need to perform. In this case, a simply max, min and count are performed.<br>
 ::: {.cell}</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>process_stream <span class="ot">&lt;-</span> read_folder <span class="sc">%&gt;%</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_watermark</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(timestamp) <span class="sc">%&gt;%</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_x =</span> <span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_x =</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>()</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>The <code>spark_write_memory()</code> function is used to write the output to Spark memory. The results will appear as a table of the Spark session with the name assigned in the <code>name</code> argument, in this case the name selected is: “stream”.<br>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">process_stream</span> <span class="op">&lt;-</span> <span class="va">read_folder</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_watermark.html">stream_watermark</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">timestamp</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+    max_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    min_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>The <code>spark_write_memory()</code> function is used to write the output to Spark memory. The results will appear as a table of the Spark session with the name assigned in the <code>name</code> argument, in this case the name selected is: “stream”.<br>
 ::: {.cell}</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>write_output <span class="ot">&lt;-</span> <span class="fu">stream_write_memory</span>(process_stream, <span class="at">name =</span> <span class="st">"stream"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>To query the current data in the “stream” table can be queried by using the <code>dplyr</code> <code>tbl()</code> command. ::: {.cell}</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl</span>(sc, <span class="st">"stream"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-</ol>
-</section>
-</section>
-<section id="example-4---shiny-integration" class="level2">
-<h2 class="anchored" data-anchor-id="example-4---shiny-integration">Example 4 - Shiny integration</h2>
-<p><code>sparklyr</code> provides a new Shiny function called <code>reactiveSpark()</code>. It can take a Spark data frame, in this case the one created as a result of the stream processing, and then creates a Spark memory stream table, the same way a table is created in example 3.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">write_output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_memory.html">stream_write_memory</a></span><span class="op">(</span><span class="va">process_stream</span>, name <span class="op">=</span> <span class="st">"stream"</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>To query the current data in the “stream” table can be queried by using the <code>dplyr</code> <code><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl()</a></code> command. ::: {.cell}</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"stream"</span><span class="op">)</span> </code></pre></div>
+<p>:::</p>
+</li>
+</ol></section></section><section id="example-4---shiny-integration" class="level2"><h2 class="anchored" data-anchor-id="example-4---shiny-integration">Example 4 - Shiny integration</h2>
+<p><code>sparklyr</code> provides a new Shiny function called <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/reactiveSpark.html">reactiveSpark()</a></code>. It can take a Spark data frame, in this case the one created as a result of the stream processing, and then creates a Spark memory stream table, the same way a table is created in example 3.</p>
 <div class="cell">
-<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source-out"</span>)) <span class="fu">unlink</span>(<span class="st">"source-out"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">iterations =</span> <span class="dv">1</span>)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>read_folder <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, <span class="st">"source"</span>) </span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>process_stream <span class="ot">&lt;-</span> read_folder <span class="sc">%&gt;%</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_watermark</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(timestamp) <span class="sc">%&gt;%</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_x =</span> <span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_x =</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>()</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">iterations =</span> <span class="dv">100</span>)))</span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tableOutput</span>(<span class="st">"table"</span>)</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session){</span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  ps <span class="ot">&lt;-</span> <span class="fu">reactiveSpark</span>(process_stream)</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ps</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">timestamp =</span> <span class="fu">as.character</span>(timestamp)) </span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="fu">runGadget</span>(ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source-out"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>iterations <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">read_folder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"source"</span><span class="op">)</span> 
+
+<span class="va">process_stream</span> <span class="op">&lt;-</span> <span class="va">read_folder</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_watermark.html">stream_watermark</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">timestamp</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+    max_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    min_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+    count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://future.futureverse.org/reference/future.html">future</a></span><span class="op">(</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>interval <span class="op">=</span> <span class="fl">0.2</span>, iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">tableOutput</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span><span class="op">{</span>
+  
+  <span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/reactiveSpark.html">reactiveSpark</a></span><span class="op">(</span><span class="va">process_stream</span><span class="op">)</span>
+  
+  <span class="va">output</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">renderTable</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu">ps</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+      <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/mutate.html">mutate</a></span><span class="op">(</span>timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">timestamp</span><span class="op">)</span><span class="op">)</span> 
+    <span class="op">}</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runGadget.html">runGadget</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></code></pre></div>
 </div>
 <center>
 <p>
-<img src="../guides/streaming/shiny.png" align="center" width="500/">
-</p>
+<img src="../guides/streaming/shiny.png" align="center" width="500/"></p>
 </center>
-<section id="code-breakdown-3" class="level3">
-<h3 class="anchored" data-anchor-id="code-breakdown-3">Code breakdown</h3>
+<section id="code-breakdown-3" class="level3"><h3 class="anchored" data-anchor-id="code-breakdown-3">Code breakdown</h3>
 <ol type="1">
-<li><p>Notice that there is no <code>stream_write_...</code> command. The reason is that <code>reactiveSpark()</code> function contains the <code>stream_write_memory()</code> function.</p></li>
-<li><p>This very basic Shiny app simply displays the output of a table in the <code>ui</code> section ::: {.cell}</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(shiny)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tableOutput</span>(<span class="st">"table"</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>In the <code>server</code> section, the <code>reactiveSpark()</code> function will update every time there’s a change to the stream and return a data frame. The results are saved to a variable called <code>ps()</code> in this script. Treat the <code>ps()</code> variable as a regular table that can be piped from, as shown in the example. In this case, the <code>timestamp</code> variable is converted to string for to make it easier to read. ::: {.cell}</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output, session){</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  ps <span class="ot">&lt;-</span> <span class="fu">reactiveSpark</span>(process_stream)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">renderTable</span>({</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ps</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">timestamp =</span> <span class="fu">as.character</span>(timestamp)) </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>Use <code>runGadget()</code> to display the Shiny app in the Viewer pane. This is optional, the app can be run using normal Shiny run functions.</p>
+<li><p>Notice that there is no <code>stream_write_...</code> command. The reason is that <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/reactiveSpark.html">reactiveSpark()</a></code> function contains the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_memory.html">stream_write_memory()</a></code> function.</p></li>
+<li>
+<p>This very basic Shiny app simply displays the output of a table in the <code>ui</code> section ::: {.cell}</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/">shiny</a></span><span class="op">)</span>
+
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">tableOutput</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>In the <code>server</code> section, the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/reactiveSpark.html">reactiveSpark()</a></code> function will update every time there’s a change to the stream and return a data frame. The results are saved to a variable called <code>ps()</code> in this script. Treat the <code>ps()</code> variable as a regular table that can be piped from, as shown in the example. In this case, the <code>timestamp</code> variable is converted to string for to make it easier to read. ::: {.cell}</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span><span class="op">{</span>
+
+  <span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/reactiveSpark.html">reactiveSpark</a></span><span class="op">(</span><span class="va">process_stream</span><span class="op">)</span>
+
+  <span class="va">output</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">renderTable</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu">ps</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+      <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/mutate.html">mutate</a></span><span class="op">(</span>timestamp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">timestamp</span><span class="op">)</span><span class="op">)</span> 
+  <span class="op">}</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>Use <code><a href="https://rdrr.io/pkg/shiny/man/runGadget.html">runGadget()</a></code> to display the Shiny app in the Viewer pane. This is optional, the app can be run using normal Shiny run functions.</p>
 <p>::: {.cell}</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runGadget</span>(ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-</ol>
-</section>
-</section>
-<section id="example-5---ml-pipeline-model" class="level2">
-<h2 class="anchored" data-anchor-id="example-5---ml-pipeline-model">Example 5 - ML Pipeline Model</h2>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runGadget.html">runGadget</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+</ol></section></section><section id="example-5---ml-pipeline-model" class="level2"><h2 class="anchored" data-anchor-id="example-5---ml-pipeline-model">Example 5 - ML Pipeline Model</h2>
 <p>This example uses a fitted <a href="../guides/pipelines/">Pipeline Model</a> to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">spark_version =</span> <span class="st">"2.3.0"</span>)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source"</span>)) <span class="fu">unlink</span>(<span class="st">"source"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">"source-out"</span>)) <span class="fu">unlink</span>(<span class="st">"source-out"</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">1001</span>))</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">df =</span> df, <span class="at">iteration =</span> <span class="dv">1</span>)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>model_sample <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"sample"</span>, <span class="st">"source"</span>)</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_pipeline</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(x <span class="sc">~</span> y) <span class="sc">%&gt;%</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_linear_regression</span>()</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>fitted_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(pipeline, model_sample)</span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>ml_stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(</span>
-<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">sc =</span> sc, </span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">"source"</span>, </span>
-<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">"integer"</span>, <span class="at">y =</span> <span class="st">"integer"</span>)</span>
-<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
-<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(fitted_pipeline, .)  <span class="sc">%&gt;%</span></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> features) <span class="sc">%&gt;%</span></span>
-<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_write_csv</span>(<span class="st">"source-out"</span>)</span>
-<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">df =</span> df, <span class="at">interval =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, spark_version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/unlink.html">unlink</a></span><span class="op">(</span><span class="st">"source-out"</span>, <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">df</span>, iteration <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="va">model_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"sample"</span>, <span class="st">"source"</span><span class="op">)</span>
+
+<span class="va">pipeline</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_pipeline.html">ml_pipeline</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_r_formula.html">ft_r_formula</a></span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="va">y</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_linear_regression.html">ml_linear_regression</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">fitted_pipeline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml-transform-methods.html">ml_fit</a></span><span class="op">(</span><span class="va">pipeline</span>, <span class="va">model_sample</span><span class="op">)</span>
+
+<span class="va">ml_stream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span>
+    sc <span class="op">=</span> <span class="va">sc</span>, 
+    path <span class="op">=</span> <span class="st">"source"</span>, 
+    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"integer"</span>, y <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span>
+  <span class="op">)</span>  <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml-transform-methods.html">ml_transform</a></span><span class="op">(</span><span class="va">fitted_pipeline</span>, <span class="va">.</span><span class="op">)</span>  <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span> <span class="va">features</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">df</span>, interval <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, <span class="at">memory =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"stream"</span>, <span class="st">"source-out"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </code></pre></div>
 </div>
 <pre><code>### Source: spark&lt;stream&gt; [?? x 4]
 ##       x     y label prediction
@@ -729,40 +743,41 @@
 ##10   285   286   285       285.
 ### ... with more rows</code></pre>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(ml_stream)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">ml_stream</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
-<section id="code-breakdown-4" class="level3">
-<h3 class="anchored" data-anchor-id="code-breakdown-4">Code Breakdown</h3>
+<section id="code-breakdown-4" class="level3"><h3 class="anchored" data-anchor-id="code-breakdown-4">Code Breakdown</h3>
 <ol type="1">
-<li><p>Creates and fits a pipeline ::: {.cell}</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), <span class="at">y =</span> <span class="fu">rep</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">1001</span>))</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_generate_test</span>(<span class="at">df =</span> df, <span class="at">iteration =</span> <span class="dv">1</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>model_sample <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"sample"</span>, <span class="st">"source"</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_pipeline</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(x <span class="sc">~</span> y) <span class="sc">%&gt;%</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_linear_regression</span>()</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>fitted_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(pipeline, model_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-<li><p>This example pipelines the input, process and output in a single code segment. The <code>ml_transform()</code> function is used to create the predictions. Because the CSV format does not support <em>list</em> type fields, the <code>features</code> column is removed before the results are sent to the output. ::: {.cell}</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ml_stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">sc =</span> sc, </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> <span class="st">"source"</span>, </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="at">x =</span> <span class="st">"integer"</span>, <span class="at">y =</span> <span class="st">"integer"</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(fitted_pipeline, .)  <span class="sc">%&gt;%</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> features) <span class="sc">%&gt;%</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stream_write_csv</span>(<span class="st">"source-out"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p></li>
-</ol>
+<li>
+<p>Creates and fits a pipeline ::: {.cell}</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1001</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_generate_test.html">stream_generate_test</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">df</span>, iteration <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="va">model_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"sample"</span>, <span class="st">"source"</span><span class="op">)</span>
 
+<span class="va">pipeline</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_pipeline.html">ml_pipeline</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ft_r_formula.html">ft_r_formula</a></span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="va">y</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_linear_regression.html">ml_linear_regression</a></span><span class="op">(</span><span class="op">)</span>
 
-</section>
-</section>
-<script type="application/javascript">
+<span class="va">fitted_pipeline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml-transform-methods.html">ml_fit</a></span><span class="op">(</span><span class="va">pipeline</span>, <span class="va">model_sample</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+<li>
+<p>This example pipelines the input, process and output in a single code segment. The <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml-transform-methods.html">ml_transform()</a></code> function is used to create the predictions. Because the CSV format does not support <em>list</em> type fields, the <code>features</code> column is removed before the results are sent to the output. ::: {.cell}</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ml_stream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_read_csv.html">stream_read_csv</a></span><span class="op">(</span>
+    sc <span class="op">=</span> <span class="va">sc</span>, 
+    path <span class="op">=</span> <span class="st">"source"</span>, 
+    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"integer"</span>, y <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span>
+  <span class="op">)</span>  <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml-transform-methods.html">ml_transform</a></span><span class="op">(</span><span class="va">fitted_pipeline</span>, <span class="va">.</span><span class="op">)</span>  <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span> <span class="va">features</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/stream_write_csv.html">stream_write_csv</a></span><span class="op">(</span><span class="st">"source-out"</span><span class="op">)</span></code></pre></div>
+<p>:::</p>
+</li>
+</ol></section></section><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -933,10 +948,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script>
-</main> <!-- /main -->
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script></main><!-- /main --><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>
@@ -944,4 +956,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body></html>
+</body>
+</html>

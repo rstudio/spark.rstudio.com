@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr – ml_kmeans</title>
-<style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-99.9.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr – ml_kmeans</title>
+  <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -77,16 +75,29 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-<!--[if lt IE 9]>
+
+  <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]--><script src="../../site_libs/quarto-nav/quarto-nav.js"></script><script src="../../site_libs/quarto-nav/headroom.min.js"></script><script src="../../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../../site_libs/quarto-search/fuse.min.js"></script><script src="../../site_libs/quarto-search/quarto-search.js"></script><script src="../../site_libs/quarto-html/quarto.js"></script><script src="../../site_libs/quarto-html/popper.min.js"></script><script src="../../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../../site_libs/quarto-html/anchor.min.js"></script><link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script><link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/bootstrap/bootstrap-dark.min.css">
-<script id="quarto-search-options" type="application/json">{
+  <![endif]-->
+  <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../../">
+  <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../../site_libs/quarto-search/quarto-search.js"></script>
+  <script src="../../site_libs/quarto-html/quarto.js"></script>
+  <script src="../../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -104,7 +115,9 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><script type="text/javascript">
+  }</script>
+  
+  <script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -116,11 +129,14 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script><link rel="stylesheet" href="../../styles.css">
+  </script>
+  <link rel="stylesheet" href="../../styles.css">
 </head>
 <body class="docked">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-light "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light ">
+      <div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">sparklyr</span>
   </a>
@@ -129,18 +145,24 @@
           </div>
           <div id="quarto-search" class="" title="Search"></div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">(Untitled)</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <div class="sidebar-menu-container"> 
   <ul class="list-unstyled mt-1">
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#usingsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Using sparklyr</div>
@@ -149,18 +171,18 @@
         </div>
       <div class="collapse  show" id="usingsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../../guides/connections.html" class="">Configuring connections</a>
 </li>
           <li class="sidebar-item">
   <a href="../../troubleshooting.html" class="">Troubleshooting</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#guides-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Guides</div>
@@ -169,7 +191,7 @@
         </div>
       <div class="collapse  show" id="guides-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../../dplyr.html" class="">Manipulating data</a>
 </li>
           <li class="sidebar-item">
@@ -203,11 +225,11 @@
   <a href="../../guides/aws-s3.html" class="">AWS S3 buckets</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#extendsparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Extend sparklyr</div>
@@ -216,18 +238,18 @@
         </div>
       <div class="collapse  show" id="extendsparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../../guides/h2o.html" class="">Using H2O</a>
 </li>
           <li class="sidebar-item">
   <a href="../../graphframes.html" class="">Graph Analysis</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
           <div class="d-inline-flex w-100 sidebar-section-item">
             <div class="sidebar-section-link me-auto">
@@ -240,18 +262,42 @@
         </div>
       <div class="collapse  show" id="mleap-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../..//mleap/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
   <a href="../../mleap/reference" class="">Reference</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+          <div class="d-inline-flex w-100 sidebar-section-item">
+            <div class="sidebar-section-link me-auto">
+            <a href="../../graphframes" class="">Graphframes</a>
+            </div>
+            <a class="text-start  " data-bs-toggle="collapse" data-bs-target="#graphframes-collapse" aria-expanded="true">
+              <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+            </div>
+        </div>
+      <div class="collapse  show" id="graphframes-collapse">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../..//mleap/news.html" class="">News</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../../mleap/reference" class="">Reference</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#sparklyr-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">sparklyr</div>
@@ -260,18 +306,18 @@
         </div>
       <div class="collapse  show" id="sparklyr-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../..//sparklyr/news.html" class="">News</a>
 </li>
           <li class="sidebar-item">
   <a href="../../sparklyr/reference" class="">Reference</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-<ul class="list-unstyled sidebar-section depth1">
-<li class="">
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
         <div class="me-auto">
             <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#deploymentexamples-collapse" aria-expanded="true">
               <div class="me-auto sidebar-section-item">Deployment Examples</div>
@@ -280,7 +326,7 @@
         </div>
       <div class="collapse  show" id="deploymentexamples-collapse">
         <ul class="list-unstyled sidebar-item-contents">
-<li class="sidebar-item">
+          <li class="sidebar-item">
   <a href="../../examples/stand-alone-aws.html" class="">Standalone cluster</a>
 </li>
           <li class="sidebar-item">
@@ -296,16 +342,18 @@
   <a href="../../examples/qubole-overview.html" class="">Qubole cluster</a>
 </li>
         </ul>
-</div>
+      </div>
     </li>
   </ul>
-</ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+  </ul>
+  </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
 <ul>
-<li>
-<a href="#ml_kmeans" class="nav-link active" data-scroll-target="#ml_kmeans">ml_kmeans</a>
+<li><a href="#ml_kmeans" class="nav-link active" data-scroll-target="#ml_kmeans">ml_kmeans</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
@@ -313,49 +361,58 @@
 <li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
 <li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
 <li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
+</ul></li>
 </ul>
-</li>
-</ul></nav>
-</div>
+</nav>
+    </div>
 <!-- main -->
-<main class="content"><section id="ml_kmeans" class="level1"><h1>ml_kmeans</h1>
+<main class="content">
+
+<section id="ml_kmeans" class="level1">
+<h1>ml_kmeans</h1>
 <p>Spark ML – K-Means Clustering</p>
-<section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>K-means clustering with support for k-means|| initialization proposed by Bahmani et al. Using <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_kmeans()</a></code> with the formula interface requires Spark 2.0+.</p>
-</section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_kmeans</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  formula <span class="op">=</span> <span class="cn">NULL</span>,
-  k <span class="op">=</span> <span class="fl">2</span>,
-  max_iter <span class="op">=</span> <span class="fl">20</span>,
-  tol <span class="op">=</span> <span class="fl">1e-04</span>,
-  init_steps <span class="op">=</span> <span class="fl">2</span>,
-  init_mode <span class="op">=</span> <span class="st">"k-means||"</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>,
-  features_col <span class="op">=</span> <span class="st">"features"</span>,
-  prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"kmeans_"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_compute_cost</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">dataset</span><span class="op">)</span>
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_compute_silhouette_measure</a></span><span class="op">(</span>
-  <span class="va">model</span>,
-  <span class="va">dataset</span>,
-  distance_measure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"squaredEuclidean"</span>, <span class="st">"cosine"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-</section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<section id="description" class="level2">
+<h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>K-means clustering with support for k-means|| initialization proposed by Bahmani et al. Using <code>ml_kmeans()</code> with the formula interface requires Spark 2.0+.</p>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_kmeans</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">2</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_iter =</span> <span class="dv">20</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tol =</span> <span class="fl">1e-04</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_steps =</span> <span class="dv">2</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_mode =</span> <span class="st">"k-means||"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">features_col =</span> <span class="st">"features"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction_col =</span> <span class="st">"prediction"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="fu">random_string</span>(<span class="st">"kmeans_"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_compute_cost</span>(model, dataset)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_compute_silhouette_measure</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  model,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  dataset,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">distance_measure =</span> <span class="fu">c</span>(<span class="st">"squaredEuclidean"</span>, <span class="st">"cosine"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
 <colgroup>
 <col style="width: 44%">
 <col style="width: 55%">
 </colgroup>
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th>Argument</th>
 <th>Description</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td>x</td>
@@ -391,29 +448,36 @@
 </tr>
 </tbody>
 </table>
-<p>reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted K-means model returned by <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_kmeans()</a></code> dataset | Dataset on which to calculate K-means cost distance_measure | Distance measure to apply when computing the Silhouette measure.</p>
-</section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
+<p>reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted K-means model returned by <code>ml_kmeans()</code> dataset | Dataset on which to calculate K-means cost distance_measure | Distance measure to apply when computing the Silhouette measure.</p>
+</section>
+<section id="value" class="level2">
+<h2 class="anchored" data-anchor-id="value">Value</h2>
 <p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code>ml_lda()</code>.</p></li>
 </ul>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_compute_cost()</a></code> returns the K-means cost (sum of squared distances of points to their nearest center) for the model on the given data.</p>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_compute_silhouette_measure()</a></code> returns the Silhouette measure of the clustering on the given data.</p>
-</section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
-<span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_kmeans.html">ml_kmeans</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
-</section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p><code>ml_compute_cost()</code> returns the K-means cost (sum of squared distances of points to their nearest center) for the model on the given data.</p>
+<p><code>ml_compute_silhouette_measure()</code> returns the Silhouette measure of the clustering on the given data.</p>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_kmeans</span>(iris_tbl, Species <span class="sc">~</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="see-also" class="level2">
+<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
 <p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/ml_lda.html">ml_lda()</a></code></p>
+<p>Other ml clustering algorithms: <code>ml_bisecting_kmeans()</code>, <code>ml_gaussian_mixture()</code>, <code>ml_lda()</code></p>
 
 
-</section></section><script type="application/javascript">
+</section>
+</section>
+<script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -584,7 +648,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script></main><!-- /main --><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+</main> <!-- /main -->
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>
@@ -592,5 +659,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body>
-</html>
+</body></html>

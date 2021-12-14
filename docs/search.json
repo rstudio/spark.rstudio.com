@@ -9247,6 +9247,720 @@
     "text": "Hive Functions\nMany of Hive’s built-in functions (UDF) and built-in aggregate functions (UDAF) can be called inside dplyr’s mutate and summarize. The Languange Reference UDF page provides the list of available functions.\nThe following example uses the datediff and current_date Hive UDFs to figure the difference between the flight_date and the current system date:\nflights %>% \n  mutate(flight_date = paste(year,month,day,sep=\"-\"),\n         days_since = datediff(current_date(), flight_date)) %>%\n  group_by(flight_date,days_since) %>%\n  tally() %>%\n  arrange(-days_since)\n## # Source: lazy query [?? x 3]\n## # Database: spark_connection\n## # Groups: flight_date\n## # Ordered by: -days_since\n##    flight_date days_since     n\n##    <chr>            <int> <dbl>\n##  1 2013-1-1          1844   842\n##  2 2013-1-2          1843   943\n##  3 2013-1-3          1842   914\n##  4 2013-1-4          1841   915\n##  5 2013-1-5          1840   720\n##  6 2013-1-6          1839   832\n##  7 2013-1-7          1838   933\n##  8 2013-1-8          1837   899\n##  9 2013-1-9          1836   902\n## 10 2013-1-10         1835   932\n## # ... with more rows"
   },
   {
+    "objectID": "graphframes/NEWS.html",
+    "href": "graphframes/NEWS.html",
+    "title": "sparklyr",
+    "section": "",
+    "text": "graphframes 0.1.2\n\nUpdated dependency to graphframes 0.6.0, with support for Spark 2.3."
+  },
+  {
+    "objectID": "graphframes/index.html#installation",
+    "href": "graphframes/index.html#installation",
+    "title": "sparklyr",
+    "section": "Installation",
+    "text": "Installation\nFor those already using sparklyr simply run:\ninstall.packages(\"graphframes\")\n# or, for the development version,\n# devtools::install_github(\"rstudio/graphframes\")\nOtherwise, install first sparklyr from CRAN using:\ninstall.packages(\"sparklyr\")\nThe examples make use of the highschool dataset from the ggplot package."
+  },
+  {
+    "objectID": "graphframes/index.html#getting-started",
+    "href": "graphframes/index.html#getting-started",
+    "title": "sparklyr",
+    "section": "Getting Started",
+    "text": "Getting Started\nWe will calculate PageRank over the built-in “friends” dataset as follows.\nlibrary(graphframes)\nlibrary(sparklyr)\nlibrary(dplyr)\n\n# connect to spark using sparklyr\nsc <- spark_connect(master = \"local\", version = \"2.3.0\")\n\n# obtain the example graph\ng <- gf_friends(sc)\n\n# compute PageRank\nresults <- gf_pagerank(g, tol = 0.01, reset_probability = 0.15)\nresults\n## GraphFrame\n## Vertices:\n##   $ id       <chr> \"f\", \"b\", \"g\", \"a\", \"d\", \"c\", \"e\"\n##   $ name     <chr> \"Fanny\", \"Bob\", \"Gabby\", \"Alice\", \"David\", \"Charlie\",...\n##   $ age      <int> 36, 36, 60, 34, 29, 30, 32\n##   $ pagerank <dbl> 0.3283607, 2.6555078, 0.1799821, 0.4491063, 0.3283607...\n## Edges:\n##   $ src          <chr> \"b\", \"c\", \"d\", \"e\", \"a\", \"a\", \"e\", \"f\"\n##   $ dst          <chr> \"c\", \"b\", \"a\", \"f\", \"e\", \"b\", \"d\", \"c\"\n##   $ relationship <chr> \"follow\", \"follow\", \"friend\", \"follow\", \"friend\",...\n##   $ weight       <dbl> 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.5, 1.0\nWe can then visualize the results by collecting the results to R:\nlibrary(tidygraph)\nlibrary(ggraph)\n\nvertices <- results %>%\n  gf_vertices() %>%\n  collect()\n\nedges <- results %>%\n  gf_edges() %>%\n  collect()\n\nedges %>%\n  as_tbl_graph() %>%\n  activate(nodes) %>%\n  left_join(vertices, by = c(name = \"id\")) %>%\n  ggraph(layout = \"nicely\") +\n  geom_node_label(aes(label = name.y, color = pagerank)) +\n  geom_edge_link(\n    aes(\n      alpha = weight,\n      start_cap = label_rect(node1.name.y),\n      end_cap = label_rect(node2.name.y)\n    ),\n    arrow = arrow(length = unit(4, \"mm\"))\n  ) +\n  theme_graph(fg_text_colour = 'white')"
+  },
+  {
+    "objectID": "graphframes/index.html#further-reading",
+    "href": "graphframes/index.html#further-reading",
+    "title": "sparklyr",
+    "section": "Further Reading",
+    "text": "Further Reading\nAppart from calculating PageRank using gf_pagerank, many other functions are available, including:\n\ngf_bfs(): Breadth-first search (BFS).\ngf_connected_components(): Connected components.\ngf_shortest_paths(): Shortest paths algorithm.\ngf_scc(): Strongly connected components.\ngf_triangle_count(): Computes the number of triangles passing through each vertex and others.\ngf_degrees(): Degrees of vertices\n\nFor instance, one can calculate the degrees of vertices using gf_degrees as follows:\ngf_friends(sc) %>% gf_degrees()\n## # Source: spark<?> [?? x 2]\n##   id    degree\n## * <chr>  <int>\n## 1 f          2\n## 2 b          3\n## 3 a          3\n## 4 c          3\n## 5 e          3\n## 6 d          2\nFinally, we disconnect from Spark:\nspark_disconnect(sc)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_triangle_count.html#description",
+    "href": "graphframes/reference/gf_triangle_count.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nThis algorithm ignores edge direction; i.e., all edges are treated as undirected. In a multigraph, duplicate edges will be counted only once."
+  },
+  {
+    "objectID": "graphframes/reference/gf_triangle_count.html#usage",
+    "href": "graphframes/reference/gf_triangle_count.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_triangle_count(x, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_triangle_count.html#arguments",
+    "href": "graphframes/reference/gf_triangle_count.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_triangle_count.html#examples",
+    "href": "graphframes/reference/gf_triangle_count.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_triangle_count(g)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_lpa.html#description",
+    "href": "graphframes/reference/gf_lpa.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nRun static Label Propagation for detecting communities in networks. Each node in the network is initially assigned to its own community. At every iteration, nodes send their community affiliation to all neighbors and update their state to the mode community affiliation of incoming messages. LPA is a standard community detection algorithm for graphs. It is very inexpensive computationally, although (1) convergence is not guaranteed and (2) one can end up with trivial solutions (all nodes are identified into a single community)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_lpa.html#usage",
+    "href": "graphframes/reference/gf_lpa.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_lpa(x, max_iter, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_lpa.html#arguments",
+    "href": "graphframes/reference/gf_lpa.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). max_iter | Maximum number of iterations. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_lpa.html#examples",
+    "href": "graphframes/reference/gf_lpa.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_lpa(g, max_iter = 5)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_pagerank.html#description",
+    "href": "graphframes/reference/gf_pagerank.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nPageRank"
+  },
+  {
+    "objectID": "graphframes/reference/gf_pagerank.html#usage",
+    "href": "graphframes/reference/gf_pagerank.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_pagerank(x, tol = NULL, reset_probability = 0.15, max_iter = NULL,\n  source_id = NULL, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_pagerank.html#arguments",
+    "href": "graphframes/reference/gf_pagerank.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). tol | Tolerance. reset_probability | Reset probability. max_iter | Maximum number of iterations. source_id | (Optional) Source vertex for a personalized pagerank. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_pagerank.html#examples",
+    "href": "graphframes/reference/gf_pagerank.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_pagerank(g, reset_probability = 0.15, tol = 0.01)"
+  },
+  {
+    "objectID": "graphframes/reference/spark_graphframe.html#description",
+    "href": "graphframes/reference/spark_graphframe.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nRetrieve a GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/spark_graphframe.html#usage",
+    "href": "graphframes/reference/spark_graphframe.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\nspark_graphframe(x, ...)\n\nspark_graphframe(x, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/spark_graphframe.html#arguments",
+    "href": "graphframes/reference/spark_graphframe.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). … | additional arguments, not used"
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertices.html#description",
+    "href": "graphframes/reference/gf_vertices.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nExtract vertices DataFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertices.html#usage",
+    "href": "graphframes/reference/gf_vertices.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_vertices(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertices.html#arguments",
+    "href": "graphframes/reference/gf_vertices.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_edge_columns.html#description",
+    "href": "graphframes/reference/gf_edge_columns.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nEdges column names"
+  },
+  {
+    "objectID": "graphframes/reference/gf_edge_columns.html#usage",
+    "href": "graphframes/reference/gf_edge_columns.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_edge_columns(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_edge_columns.html#arguments",
+    "href": "graphframes/reference/gf_edge_columns.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_shortest_paths.html#description",
+    "href": "graphframes/reference/gf_shortest_paths.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nComputes shortest paths from every vertex to the given set of landmark vertices. Note that this takes edge direction into account."
+  },
+  {
+    "objectID": "graphframes/reference/gf_shortest_paths.html#usage",
+    "href": "graphframes/reference/gf_shortest_paths.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_shortest_paths(x, landmarks, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_shortest_paths.html#arguments",
+    "href": "graphframes/reference/gf_shortest_paths.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). landmarks | IDs of landmark vertices. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_shortest_paths.html#examples",
+    "href": "graphframes/reference/gf_shortest_paths.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_shortest_paths(g, landmarks = c(\"a\", \"d\"))"
+  },
+  {
+    "objectID": "graphframes/reference/gf_in_degrees.html#description",
+    "href": "graphframes/reference/gf_in_degrees.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nIn-degrees of vertices"
+  },
+  {
+    "objectID": "graphframes/reference/gf_in_degrees.html#usage",
+    "href": "graphframes/reference/gf_in_degrees.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_in_degrees(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_in_degrees.html#arguments",
+    "href": "graphframes/reference/gf_in_degrees.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_find.html#description",
+    "href": "graphframes/reference/gf_find.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nMotif finding uses a simple Domain-Specific Language (DSL) for expressing structural queries. For example, gf_find(g, “(a)-[e]->(b); (b)-[e2]->(a)”) will search for pairs of vertices a,b connected by edges in both directions. It will return a DataFrame of all such structures in the graph, with columns for each of the named elements (vertices or edges) in the motif. In this case, the returned columns will be in order of the pattern: “a, e, b, e2.”"
+  },
+  {
+    "objectID": "graphframes/reference/gf_find.html#usage",
+    "href": "graphframes/reference/gf_find.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_find(x, pattern)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_find.html#arguments",
+    "href": "graphframes/reference/gf_find.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). pattern | pattern specifying a motif to search for"
+  },
+  {
+    "objectID": "graphframes/reference/gf_find.html#examples",
+    "href": "graphframes/reference/gf_find.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ngf_friends(sc) %>%\n  gf_find(\"(a)-[e]->(b); (b)-[e2]->(a)\")"
+  },
+  {
+    "objectID": "graphframes/reference/gf_graphframe.html#description",
+    "href": "graphframes/reference/gf_graphframe.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nCreate a new GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_graphframe.html#usage",
+    "href": "graphframes/reference/gf_graphframe.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_graphframe(vertices = NULL, edges)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_graphframe.html#arguments",
+    "href": "graphframes/reference/gf_graphframe.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nvertices\nA tbl_spark representing vertices.\n\n\nedges\nA tbl_psark representing edges."
+  },
+  {
+    "objectID": "graphframes/reference/gf_graphframe.html#examples",
+    "href": "graphframes/reference/gf_graphframe.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\", version = \"2.3.0\")\nv_tbl <- sdf_copy_to(\n  sc, data.frame(id = 1:3, name = LETTERS[1:3])\n)\ne_tbl <- sdf_copy_to(\n  sc, data.frame(src = c(1, 2, 2), dst = c(2, 1, 3),\n                 action = c(\"love\", \"hate\", \"follow\"))\n)\ngf_graphframe(v_tbl, e_tbl)\ngf_graphframe(edges = e_tbl)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_friends.html#description",
+    "href": "graphframes/reference/gf_friends.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nGraph of friends in a social network."
+  },
+  {
+    "objectID": "graphframes/reference/gf_friends.html#usage",
+    "href": "graphframes/reference/gf_friends.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_friends(sc)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_friends.html#arguments",
+    "href": "graphframes/reference/gf_friends.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nsc\nA Spark connection."
+  },
+  {
+    "objectID": "graphframes/reference/gf_friends.html#examples",
+    "href": "graphframes/reference/gf_friends.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\")\ngf_friends(sc)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_bfs.html#description",
+    "href": "graphframes/reference/gf_bfs.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nBreadth-first search (BFS)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_bfs.html#usage",
+    "href": "graphframes/reference/gf_bfs.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_bfs(x, from_expr, to_expr, max_path_length = 10, edge_filter = NULL,\n  ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_bfs.html#arguments",
+    "href": "graphframes/reference/gf_bfs.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). from_expr | Spark SQL expression specifying valid starting vertices for the BFS. to_expr | Spark SQL expression specifying valid target vertices for the BFS. max_path_length | Limit on the length of paths. edge_filter | Spark SQL expression specifying edges which may be used in the search. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_bfs.html#examples",
+    "href": "graphframes/reference/gf_bfs.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_bfs(g, from_expr = \"name = 'Esther'\", to_expr = \"age < 32\")"
+  },
+  {
+    "objectID": "graphframes/reference/gf_unpersist.html#description",
+    "href": "graphframes/reference/gf_unpersist.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nUnpersist the GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_unpersist.html#usage",
+    "href": "graphframes/reference/gf_unpersist.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_unpersist(x, blocking = FALSE)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_unpersist.html#arguments",
+    "href": "graphframes/reference/gf_unpersist.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). blocking | whether to block until all blocks are deleted"
+  },
+  {
+    "objectID": "graphframes/reference/gf_edges.html#description",
+    "href": "graphframes/reference/gf_edges.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nExtract edges DataFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_edges.html#usage",
+    "href": "graphframes/reference/gf_edges.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_edges(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_edges.html#arguments",
+    "href": "graphframes/reference/gf_edges.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_cache.html#description",
+    "href": "graphframes/reference/gf_cache.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nCache the GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_cache.html#usage",
+    "href": "graphframes/reference/gf_cache.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_cache(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_cache.html#arguments",
+    "href": "graphframes/reference/gf_cache.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#description",
+    "href": "graphframes/reference/gf_grid_ising_model.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nGenerate a grid Ising model with random parameters"
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#usage",
+    "href": "graphframes/reference/gf_grid_ising_model.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_grid_ising_model(sc, n, v_std = 1, e_std = 1)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#arguments",
+    "href": "graphframes/reference/gf_grid_ising_model.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\n\n\n\n\nArgument\nDescription\n\n\n\n\nsc\nA Spark connection.\n\n\nn\nLength of one side of the grid. The grid will be of size n x n.\n\n\nv_std\nStandard deviation of normal distribution used to generate vertex factors “a”. Default of 1.0.\n\n\ne_std\nStandard deviation of normal distribution used to generate edge factors “b”. Default of 1.0."
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#details",
+    "href": "graphframes/reference/gf_grid_ising_model.html#details",
+    "title": "sparklyr",
+    "section": "Details",
+    "text": "Details\nThis method generates a grid Ising model with random parameters. Ising models are probabilistic graphical models over binary variables xi. Each binary variable xi corresponds to one vertex, and it may take values -1 or +1. The probability distribution P(X) (over all xi) is parameterized by vertex factors ai and edge factors bij:\nP(X) = (1/Z) * exp[ i a_i x_i + {ij} b_{ij} x_i x_j ]"
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#value",
+    "href": "graphframes/reference/gf_grid_ising_model.html#value",
+    "title": "sparklyr",
+    "section": "Value",
+    "text": "Value\nGraphFrame. Vertices have columns “id” and “a”. Edges have columns “src”, “dst”, and “b”. Edges are directed, but they should be treated as undirected in any algorithms run on this model. Vertex IDs are of the form “i,j”. E.g., vertex “1,3” is in the second row and fourth column of the grid."
+  },
+  {
+    "objectID": "graphframes/reference/gf_grid_ising_model.html#examples",
+    "href": "graphframes/reference/gf_grid_ising_model.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ngf_grid_ising_model(sc, 5)"
+  },
+  {
+    "objectID": "graphframes/reference/index.html",
+    "href": "graphframes/reference/index.html",
+    "title": "sparklyr",
+    "section": "",
+    "text": "Function(s)\nDescription\n\n\n\n\ngf_bfs()\nBreadth-first search (BFS)\n\n\ngf_cache()\nCache the GraphFrame\n\n\ngf_chain()\nChain graph\n\n\ngf_connected_components()\nConnected components\n\n\ngf_degrees()\nDegrees of vertices\n\n\ngf_edge_columns()\nEdges column names\n\n\ngf_edges()\nExtract edges DataFrame\n\n\ngf_find()\nMotif finding: Searching the graph for structural patterns\n\n\ngf_friends()\nGraph of friends in a social network.\n\n\ngf_graphframe()\nCreate a new GraphFrame\n\n\ngf_grid_ising_model()\nGenerate a grid Ising model with random parameters\n\n\ngf_in_degrees()\nIn-degrees of vertices\n\n\ngf_lpa()\nLabel propagation algorithm (LPA)\n\n\ngf_out_degrees()\nOut-degrees of vertices\n\n\ngf_pagerank()\nPageRank\n\n\ngf_persist()\nPersist the GraphFrame\n\n\ngf_register()\nRegister a GraphFrame object\n\n\ngf_scc()\nStrongly connected components\n\n\ngf_shortest_paths()\nShortest paths\n\n\ngf_star()\nGenerate a star graph\n\n\ngf_triangle_count()\nComputes the number of triangles passing through each vertex.\n\n\ngf_triplets()\nTriplets of graph\n\n\ngf_two_blobs()\nGenerate two blobs\n\n\ngf_unpersist()\nUnpersist the GraphFrame\n\n\ngf_vertex_columns()\nVertices column names\n\n\ngf_vertices()\nExtract vertices DataFrame\n\n\nspark_graphframe() spark_graphframe()\nRetrieve a GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_out_degrees.html#description",
+    "href": "graphframes/reference/gf_out_degrees.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nOut-degrees of vertices"
+  },
+  {
+    "objectID": "graphframes/reference/gf_out_degrees.html#usage",
+    "href": "graphframes/reference/gf_out_degrees.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_out_degrees(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_out_degrees.html#arguments",
+    "href": "graphframes/reference/gf_out_degrees.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertex_columns.html#description",
+    "href": "graphframes/reference/gf_vertex_columns.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nVertices column names"
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertex_columns.html#usage",
+    "href": "graphframes/reference/gf_vertex_columns.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_vertex_columns(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_vertex_columns.html#arguments",
+    "href": "graphframes/reference/gf_vertex_columns.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_scc.html#description",
+    "href": "graphframes/reference/gf_scc.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nCompute the strongly connected component (SCC) of each vertex and return a DataFrame with each vertex assigned to the SCC containing that vertex."
+  },
+  {
+    "objectID": "graphframes/reference/gf_scc.html#usage",
+    "href": "graphframes/reference/gf_scc.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_scc(x, max_iter, ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_scc.html#arguments",
+    "href": "graphframes/reference/gf_scc.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). max_iter | Maximum number of iterations. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_scc.html#examples",
+    "href": "graphframes/reference/gf_scc.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ng <- gf_friends(sc)\ngf_scc(g, max_iter = 10)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_chain.html#description",
+    "href": "graphframes/reference/gf_chain.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nReturns a chain graph of the given size with Long ID type. The vertex IDs are 0, 1, …, n-1, and the edges are (0, 1), (1, 2), …., (n-2, n-1)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_chain.html#usage",
+    "href": "graphframes/reference/gf_chain.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_chain(sc, n)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_chain.html#arguments",
+    "href": "graphframes/reference/gf_chain.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nsc\nA Spark connection.\n\n\nn\nSize of the graph to return."
+  },
+  {
+    "objectID": "graphframes/reference/gf_chain.html#examples",
+    "href": "graphframes/reference/gf_chain.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ngf_chain(sc, 5)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_star.html#description",
+    "href": "graphframes/reference/gf_star.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nReturns a star graph with Long ID type, consisting of a central element indexed 0 (the root) and the n other leaf vertices 1, 2, …, n."
+  },
+  {
+    "objectID": "graphframes/reference/gf_star.html#usage",
+    "href": "graphframes/reference/gf_star.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_star(sc, n)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_star.html#arguments",
+    "href": "graphframes/reference/gf_star.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nsc\nA Spark connection.\n\n\nn\nThe number of leaves."
+  },
+  {
+    "objectID": "graphframes/reference/gf_star.html#examples",
+    "href": "graphframes/reference/gf_star.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ngf_star(sc, 5)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_register.html#description",
+    "href": "graphframes/reference/gf_register.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nRegister a GraphFrame object"
+  },
+  {
+    "objectID": "graphframes/reference/gf_register.html#usage",
+    "href": "graphframes/reference/gf_register.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_register(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_register.html#arguments",
+    "href": "graphframes/reference/gf_register.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_two_blobs.html#description",
+    "href": "graphframes/reference/gf_two_blobs.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nTwo densely connected blobs (vertices 0->n-1 and n->2n-1) connected by a single edge (0->n)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_two_blobs.html#usage",
+    "href": "graphframes/reference/gf_two_blobs.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_two_blobs(sc, blob_size)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_two_blobs.html#arguments",
+    "href": "graphframes/reference/gf_two_blobs.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nsc\nA Spark connection.\n\n\nblob_size\nThe size of each blob."
+  },
+  {
+    "objectID": "graphframes/reference/gf_two_blobs.html#examples",
+    "href": "graphframes/reference/gf_two_blobs.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\ngf_two_blobs(sc, 3)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_triplets.html#description",
+    "href": "graphframes/reference/gf_triplets.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nTriplets of graph"
+  },
+  {
+    "objectID": "graphframes/reference/gf_triplets.html#usage",
+    "href": "graphframes/reference/gf_triplets.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_triplets(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_triplets.html#arguments",
+    "href": "graphframes/reference/gf_triplets.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_degrees.html#description",
+    "href": "graphframes/reference/gf_degrees.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nDegrees of vertices"
+  },
+  {
+    "objectID": "graphframes/reference/gf_degrees.html#usage",
+    "href": "graphframes/reference/gf_degrees.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_degrees(x)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_degrees.html#arguments",
+    "href": "graphframes/reference/gf_degrees.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe)."
+  },
+  {
+    "objectID": "graphframes/reference/gf_persist.html#description",
+    "href": "graphframes/reference/gf_persist.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nPersist the GraphFrame"
+  },
+  {
+    "objectID": "graphframes/reference/gf_persist.html#usage",
+    "href": "graphframes/reference/gf_persist.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_persist(x, storage_level = \"MEMORY_AND_DISK\")"
+  },
+  {
+    "objectID": "graphframes/reference/gf_persist.html#arguments",
+    "href": "graphframes/reference/gf_persist.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). storage_level | The storage level to be used. Please view the http://spark.apache.org/docs/latest/programming-guide.html#rdd-persistenceSpark Documentation for information on what storage levels are accepted."
+  },
+  {
+    "objectID": "graphframes/reference/gf_connected_components.html#description",
+    "href": "graphframes/reference/gf_connected_components.html#description",
+    "title": "sparklyr",
+    "section": "Description",
+    "text": "Description\nComputes the connected component membership of each vertex and returns a DataFrame of vertex information with each vertex assigned a component ID."
+  },
+  {
+    "objectID": "graphframes/reference/gf_connected_components.html#usage",
+    "href": "graphframes/reference/gf_connected_components.html#usage",
+    "title": "sparklyr",
+    "section": "Usage",
+    "text": "Usage\ngf_connected_components(x, broadcast_threshold = 1000000L,\n  algorithm = c(\"graphframes\", \"graphx\"), checkpoint_interval = 2L,\n  ...)"
+  },
+  {
+    "objectID": "graphframes/reference/gf_connected_components.html#arguments",
+    "href": "graphframes/reference/gf_connected_components.html#arguments",
+    "title": "sparklyr",
+    "section": "Arguments",
+    "text": "Arguments\n\n\n\nArgument\nDescription\n\n\n\n\nx\nAn object coercable to a GraphFrame (typically, a\n\n\n\ngf_graphframe). broadcast_threshold | Broadcast threshold in propagating component assignments. algorithm | One of ‘graphframes’ or ‘graphx’. checkpoint_interval | Checkpoint interval in terms of number of iterations. … | Optional arguments, currently not used."
+  },
+  {
+    "objectID": "graphframes/reference/gf_connected_components.html#examples",
+    "href": "graphframes/reference/gf_connected_components.html#examples",
+    "title": "sparklyr",
+    "section": "Examples",
+    "text": "Examples\n\n# checkpoint directory is required for gf_connected_components()\nspark_set_checkpoint_dir(sc, tempdir())\ng <- gf_friends(sc)\ngf_connected_components(g)"
+  },
+  {
     "objectID": "graphframes.html#highlights",
     "href": "graphframes.html#highlights",
     "title": "R interface for GraphFrames",

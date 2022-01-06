@@ -348,17 +348,20 @@
 </ul></section><section id="installation" class="level2"><h2 class="anchored" data-anchor-id="installation">Installation</h2>
 <p>To install from CRAN, run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"graphframes"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"graphframes"</span><span class="op">)</span></code></pre></div>
 <p>For the development version, run:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/graphframes"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/graphframes"</span><span class="op">)</span></code></pre></div>
 </section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <p>The examples make use of the <code>highschool</code> dataset from the <code>ggplot</code> package.</p>
 <section id="create-a-graphframe" class="level3"><h3 class="anchored" data-anchor-id="create-a-graphframe">Create a GraphFrame</h3>
 <p>The base for graph analyses in Spark, using <code>sparklyr</code>, will be a GraphFrame.</p>
 <p>Open a new Spark connection using <code>sparklyr</code>, and copy the <code>highschool</code> data set</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/graphframes">graphframes</a></span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/graphframes">graphframes</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
@@ -378,7 +381,8 @@
 ## 6     2    21  1957</code></pre>
 <p>The vertices table is be constructed using <code>dplyr</code>. The variable name expected by the GraphFrame is <strong>id</strong>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">from_tbl</span> <span class="op">&lt;-</span> <span class="va">highschool_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="va">from_tbl</span> <span class="op">&lt;-</span> <span class="va">highschool_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">from</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">from</span><span class="op">)</span>
 
@@ -402,12 +406,14 @@
 ## 6    12</code></pre>
 <p>The edges table can also be created using <code>dplyr</code>. In order for the GraphFrame to work, the <strong>from</strong> variable needs be renamed <strong>src</strong>, and the <strong>to</strong> variable <strong>dst</strong>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create a table with &lt;source, destination&gt; edges</span>
+<code class="sourceCode R">
+<span class="co"># Create a table with &lt;source, destination&gt; edges</span>
 <span class="va">edges_tbl</span> <span class="op">&lt;-</span> <span class="va">highschool_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">transmute</a></span><span class="op">(</span>src <span class="op">=</span> <span class="va">from</span>, dst <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
 <p>The <code>gf_graphframe()</code> function creates a new GraphFrame</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span></code></pre></div>
 <pre><code>## GraphFrame
 ## Vertices:
 ##   Database: spark_connection
@@ -419,7 +425,8 @@
 </section><section id="basic-page-rank" class="level3"><h3 class="anchored" data-anchor-id="basic-page-rank">Basic Page Rank</h3>
 <p>We will calculate <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a> over this dataset. The <code>gf_graphframe()</code> command can easily be piped into the <code>gf_pagerank()</code> function to execute the Page Rank.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">gf_pagerank</span><span class="op">(</span>reset_prob <span class="op">=</span> <span class="fl">0.15</span>, max_iter <span class="op">=</span> <span class="fl">10L</span>, source_id <span class="op">=</span> <span class="st">"1"</span><span class="op">)</span></code></pre></div>
 <pre><code>## GraphFrame
 ## Vertices:
@@ -433,7 +440,8 @@
 ##   $ weight &lt;dbl&gt; 0.03125, 0.03125, 0.03125, 0.03125, 0.03125, 0.03125, 0.03125,…</code></pre>
 <p>Additionaly, one can calculate the degrees of vertices using <code>gf_degrees</code> as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="fu">gf_graphframe</span><span class="op">(</span><span class="va">vertices_tbl</span>, <span class="va">edges_tbl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">gf_degrees</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source: spark&lt;?&gt; [?? x 2]
 ##       id degree
@@ -452,7 +460,8 @@
 </section><section id="visualizations" class="level3"><h3 class="anchored" data-anchor-id="visualizations">Visualizations</h3>
 <p>In order to visualize large <code>graphframe</code>s, one can use <code>sample_n</code> and then use <code>ggraph</code> with <code>igraph</code> to visualize the graph as follows:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 
 <span class="va">graph</span> <span class="op">&lt;-</span> <span class="va">highschool_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/pipe.html">%&gt;%</a></span>

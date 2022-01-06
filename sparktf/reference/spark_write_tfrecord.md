@@ -1,0 +1,67 @@
+# spark_write_tfrecord
+
+
+Write a Spark DataFrame to a TFRecord file
+
+
+
+
+## Description
+
+Serialize a Spark DataFrame to the TensorFlow TFRecord format for
+  training or inference.
+
+
+
+
+
+## Usage
+```r
+spark_write_tfrecord(x, path, record_type = c("Example",
+  "SequenceExample"), write_locality = c("distributed", "local"),
+  mode = NULL)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A Spark DataFrame
+path | The path to the file. Needs to be accessible from the cluster.
+Supports the "hdfs://", "s3a://", and "file://" protocols.
+record_type | Output format of TensorFlow records. One of ``"Example"`` and 
+``"SequenceExample"``.
+write_locality | Determines whether the TensorFlow records are
+written locally on the workers or on a distributed file system. One of
+``"distributed"`` and ``"local"``. See Details for more information.
+mode | A ``character`` element. Specifies the behavior when data or
+  table already exists. Supported values include: 'error', 'append', 'overwrite' and
+  'ignore'. Notice that 'overwrite' will also change the column structure.
+
+  For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
+  for your version of Spark.
+
+
+
+
+## Details
+
+For ``write_locality = local``, each of the workers stores on the
+  local disk a subset of the data. The subset that is stored on each worker
+  is determined by the partitioning of the DataFrame. Each of the partitions
+  is coalesced into a single TFRecord file and written on the node where the
+  partition lives. This is useful in the context of distributed training, in which
+  each of the workers gets a subset of the data to work on. When this mode is
+  activated, the path provided to the writer is interpreted as a base path
+  that is created on each of the worker nodes, and that will be populated with data
+  from the DataFrame.
+
+
+
+
+
+

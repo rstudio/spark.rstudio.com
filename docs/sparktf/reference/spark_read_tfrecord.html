@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-99.9.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr – sparklyr_get_backend_port</title>
+<title>sparklyr – spark_read_tfrecord</title>
 <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -326,39 +326,61 @@
       <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
 <li>
-<a href="#sparklyr_get_backend_port" class="nav-link active" data-scroll-target="#sparklyr_get_backend_port">sparklyr_get_backend_port</a>
+<a href="#spark_read_tfrecord" class="nav-link active" data-scroll-target="#spark_read_tfrecord">spark_read_tfrecord</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
 </ul>
 </li>
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="sparklyr_get_backend_port" class="level1"><h1>sparklyr_get_backend_port</h1>
-<p>Return the port number of a sparklyr backend.</p>
+<main class="content"><section id="spark_read_tfrecord" class="level1"><h1>spark_read_tfrecord</h1>
+<p>Read a TFRecord File</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Retrieve the port number of the sparklyr backend associated with a Spark connection.</p>
+<p>Read a TFRecord file as a Spark DataFrame.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/sparklyr_get_backend_port.html">sparklyr_get_backend_port</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">spark_read_tfrecord</span><span class="op">(</span><span class="va">sc</span>, <span class="va">name</span>, <span class="va">path</span>, schema <span class="op">=</span> <span class="cn">NULL</span>,
+  record_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Example"</span>, <span class="st">"SequenceExample"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead><tr class="header">
 <th>Argument</th>
 <th>Description</th>
 </tr></thead>
-<tbody><tr class="odd">
+<tbody>
+<tr class="odd">
 <td>sc</td>
-<td>A <code>spark_connection</code>.</td>
-</tr></tbody>
-</table></section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The port number of the sparklyr backend associated with <code>sc</code>.</p>
-
-
-</section></section><script type="application/javascript">
+<td>A spark conneciton.</td>
+</tr>
+<tr class="even">
+<td>name</td>
+<td>The name to assign to the newly generated table.</td>
+</tr>
+<tr class="odd">
+<td>path</td>
+<td>The path to the file. Needs to be accessible from the cluster. Supports the “hdfs://”, “s3a://” and “file://” protocols.</td>
+</tr>
+<tr class="even">
+<td>schema</td>
+<td>(Currently unsupported.) Schema of TensorFlow records. If not provided, the schema is inferred from TensorFlow records.</td>
+</tr>
+<tr class="odd">
+<td>record_type</td>
+<td>Input format of TensorFlow records. By default it is Example.</td>
+</tr>
+<tr class="even">
+<td>overwrite</td>
+<td>Boolean; overwrite the table with the given name if it already exists?</td>
+</tr>
+</tbody>
+</table></section></section><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-99.9.9">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr – sparklyr_get_backend_port</title>
+<title>sparklyr – xgboost_classifier</title>
 <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -326,39 +326,302 @@
       <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
 <li>
-<a href="#sparklyr_get_backend_port" class="nav-link active" data-scroll-target="#sparklyr_get_backend_port">sparklyr_get_backend_port</a>
+<a href="#xgboost_classifier" class="nav-link active" data-scroll-target="#xgboost_classifier">xgboost_classifier</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
 <li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
 <li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
 </ul>
 </li>
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="sparklyr_get_backend_port" class="level1"><h1>sparklyr_get_backend_port</h1>
-<p>Return the port number of a sparklyr backend.</p>
+<main class="content"><section id="xgboost_classifier" class="level1"><h1>xgboost_classifier</h1>
+<p>XGBoost Classifier</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Retrieve the port number of the sparklyr backend associated with a Spark connection.</p>
+<p>XGBoost classifier for Spark.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/sparklyr_get_backend_port.html">sparklyr_get_backend_port</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">xgboost_classifier</span><span class="op">(</span>
+  <span class="va">x</span>,
+  formula <span class="op">=</span> <span class="cn">NULL</span>,
+  eta <span class="op">=</span> <span class="fl">0.3</span>,
+  gamma <span class="op">=</span> <span class="fl">0</span>,
+  max_depth <span class="op">=</span> <span class="fl">6</span>,
+  min_child_weight <span class="op">=</span> <span class="fl">1</span>,
+  max_delta_step <span class="op">=</span> <span class="fl">0</span>,
+  grow_policy <span class="op">=</span> <span class="st">"depthwise"</span>,
+  max_bins <span class="op">=</span> <span class="fl">16</span>,
+  subsample <span class="op">=</span> <span class="fl">1</span>,
+  colsample_bytree <span class="op">=</span> <span class="fl">1</span>,
+  colsample_bylevel <span class="op">=</span> <span class="fl">1</span>,
+  lambda <span class="op">=</span> <span class="fl">1</span>,
+  alpha <span class="op">=</span> <span class="fl">0</span>,
+  tree_method <span class="op">=</span> <span class="st">"auto"</span>,
+  sketch_eps <span class="op">=</span> <span class="fl">0.03</span>,
+  scale_pos_weight <span class="op">=</span> <span class="fl">1</span>,
+  sample_type <span class="op">=</span> <span class="st">"uniform"</span>,
+  normalize_type <span class="op">=</span> <span class="st">"tree"</span>,
+  rate_drop <span class="op">=</span> <span class="fl">0</span>,
+  skip_drop <span class="op">=</span> <span class="fl">0</span>,
+  lambda_bias <span class="op">=</span> <span class="fl">0</span>,
+  tree_limit <span class="op">=</span> <span class="fl">0</span>,
+  num_round <span class="op">=</span> <span class="fl">1</span>,
+  num_workers <span class="op">=</span> <span class="fl">1</span>,
+  nthread <span class="op">=</span> <span class="fl">1</span>,
+  use_external_memory <span class="op">=</span> <span class="cn">FALSE</span>,
+  silent <span class="op">=</span> <span class="fl">0</span>,
+  custom_obj <span class="op">=</span> <span class="cn">NULL</span>,
+  custom_eval <span class="op">=</span> <span class="cn">NULL</span>,
+  missing <span class="op">=</span> <span class="cn">NaN</span>,
+  seed <span class="op">=</span> <span class="fl">0</span>,
+  timeout_request_workers <span class="op">=</span> <span class="fl">30</span> <span class="op">*</span> <span class="fl">60</span> <span class="op">*</span> <span class="fl">1000</span>,
+  checkpoint_path <span class="op">=</span> <span class="st">""</span>,
+  checkpoint_interval <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
+  objective <span class="op">=</span> <span class="st">"multi:softprob"</span>,
+  base_score <span class="op">=</span> <span class="fl">0.5</span>,
+  train_test_ratio <span class="op">=</span> <span class="fl">1</span>,
+  num_early_stopping_rounds <span class="op">=</span> <span class="fl">0</span>,
+  objective_type <span class="op">=</span> <span class="st">"classification"</span>,
+  eval_metric <span class="op">=</span> <span class="cn">NULL</span>,
+  maximize_evaluation_metrics <span class="op">=</span> <span class="cn">FALSE</span>,
+  num_class <span class="op">=</span> <span class="cn">NULL</span>,
+  base_margin_col <span class="op">=</span> <span class="cn">NULL</span>,
+  thresholds <span class="op">=</span> <span class="cn">NULL</span>,
+  weight_col <span class="op">=</span> <span class="cn">NULL</span>,
+  features_col <span class="op">=</span> <span class="st">"features"</span>,
+  label_col <span class="op">=</span> <span class="st">"label"</span>,
+  prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
+  probability_col <span class="op">=</span> <span class="st">"probability"</span>,
+  raw_prediction_col <span class="op">=</span> <span class="st">"rawPrediction"</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/sparklyr/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"xgboost_classifier_"</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead><tr class="header">
 <th>Argument</th>
 <th>Description</th>
 </tr></thead>
-<tbody><tr class="odd">
-<td>sc</td>
-<td>A <code>spark_connection</code>.</td>
-</tr></tbody>
-</table></section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
-<p>The port number of the sparklyr backend associated with <code>sc</code>.</p>
-
-
-</section></section><script type="application/javascript">
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
+</tr>
+<tr class="even">
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
+</tr>
+<tr class="odd">
+<td>eta</td>
+<td>Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features and eta actually shrinks the feature weights to make the boosting process more conservative. [default=0.3] range: [0,1]</td>
+</tr>
+<tr class="even">
+<td>gamma</td>
+<td>Minimum loss reduction required to make a further partition on a leaf node of the tree. the larger, the more conservative the algorithm will be. [default=0]</td>
+</tr>
+<tr class="odd">
+<td>max_depth</td>
+<td>Maximum depth of a tree, increase this value will make model more complex / likely to be overfitting. [default=6]</td>
+</tr>
+<tr class="even">
+<td>min_child_weight</td>
+<td>Minimum sum of instance weight(hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning. In linear regression mode, this simply corresponds to minimum number of instances needed to be in each node. The larger, the more conservative the algorithm will be. [default=1]</td>
+</tr>
+<tr class="odd">
+<td>max_delta_step</td>
+<td>Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [default=0]</td>
+</tr>
+<tr class="even">
+<td>grow_policy</td>
+<td>Growth policy for fast histogram algorithm.</td>
+</tr>
+<tr class="odd">
+<td>max_bins</td>
+<td>Maximum number of bins in histogram.</td>
+</tr>
+<tr class="even">
+<td>subsample</td>
+<td>Subsample ratio of the training instance. Setting it to 0.5 means that XGBoost randomly collected half of the data instances to grow trees and this will prevent overfitting. [default=1] range:(0,1]</td>
+</tr>
+<tr class="odd">
+<td>colsample_bytree</td>
+<td>Subsample ratio of columns when constructing each tree. [default=1] range: (0,1]</td>
+</tr>
+<tr class="even">
+<td>colsample_bylevel</td>
+<td>Subsample ratio of columns for each split, in each level. [default=1] range: (0,1]</td>
+</tr>
+<tr class="odd">
+<td>lambda</td>
+<td>L2 regularization term on weights, increase this value will make model more conservative. [default=1]</td>
+</tr>
+<tr class="even">
+<td>alpha</td>
+<td>L1 regularization term on weights, increase this value will make model more conservative, defaults to 0.</td>
+</tr>
+<tr class="odd">
+<td>tree_method</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’, ‘approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>sketch_eps</td>
+<td>This is only used for approximate greedy algorithm. This roughly translated into O(1 / sketch_eps) number of bins. Compared to directly select number of bins, this comes with theoretical guarantee with sketch accuracy. [default=0.03] range: (0, 1)</td>
+</tr>
+<tr class="odd">
+<td>scale_pos_weight</td>
+<td>Control the balance of positive and negative weights, useful for unbalanced classes. A typical value to consider: sum(negative cases) / sum(positive cases). [default=1]</td>
+</tr>
+<tr class="even">
+<td>sample_type</td>
+<td>Parameter for Dart booster. Type of sampling algorithm. “uniform”: dropped trees are selected uniformly. “weighted”: dropped trees are selected in proportion to weight. [default=“uniform”]</td>
+</tr>
+<tr class="odd">
+<td>normalize_type</td>
+<td>Parameter of Dart booster. type of normalization algorithm, options: ‘tree’, ‘forest’. [default=“tree”]</td>
+</tr>
+<tr class="even">
+<td>rate_drop</td>
+<td>Parameter of Dart booster. dropout rate. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="odd">
+<td>skip_drop</td>
+<td>Parameter of Dart booster. probability of skip dropout. If a dropout is skipped, new trees are added in the same manner as gbtree. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="even">
+<td>lambda_bias</td>
+<td>Parameter of linear booster L2 regularization term on bias, default 0 (no L1 reg on bias because it is not important.)</td>
+</tr>
+<tr class="odd">
+<td>tree_limit</td>
+<td>Limit number of trees in the prediction; defaults to 0 (use all trees.)</td>
+</tr>
+<tr class="even">
+<td>num_round</td>
+<td>The number of rounds for boosting.</td>
+</tr>
+<tr class="odd">
+<td>num_workers</td>
+<td>number of workers used to train xgboost model. Defaults to 1.</td>
+</tr>
+<tr class="even">
+<td>nthread</td>
+<td>Number of threads used by per worker. Defaults to 1.</td>
+</tr>
+<tr class="odd">
+<td>use_external_memory</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’, ‘approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>silent</td>
+<td>0 means printing running messages, 1 means silent mode. default: 0</td>
+</tr>
+<tr class="odd">
+<td>custom_obj</td>
+<td>Customized objective function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="even">
+<td>custom_eval</td>
+<td>Customized evaluation function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="odd">
+<td>missing</td>
+<td>The value treated as missing. default: Float.NaN</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Random seed for the C++ part of XGBoost and train/test splitting.</td>
+</tr>
+<tr class="odd">
+<td>timeout_request_workers</td>
+<td>the maximum time to wait for the job requesting new workers. default: 30 minutes</td>
+</tr>
+<tr class="even">
+<td>checkpoint_path</td>
+<td>The hdfs folder to load and save checkpoint boosters.</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_interval</td>
+<td>Param for set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the trained model will get checkpointed every 10 iterations. Note: checkpoint_path must also be set if the checkpoint interval is greater than 0.</td>
+</tr>
+<tr class="even">
+<td>objective</td>
+<td>Specify the learning task and the corresponding learning objective. options: reg:linear, reg:logistic, binary:logistic, binary:logitraw, count:poisson, multi:softmax, multi:softprob, rank:pairwise, reg:gamma. default: reg:linear.</td>
+</tr>
+<tr class="odd">
+<td>base_score</td>
+<td>Param for initial prediction (aka base margin) column name. Defaults to 0.5.</td>
+</tr>
+<tr class="even">
+<td>train_test_ratio</td>
+<td>Fraction of training points to use for testing.</td>
+</tr>
+<tr class="odd">
+<td>num_early_stopping_rounds</td>
+<td>If non-zero, the training will be stopped after a specified number of consecutive increases in any evaluation metric.</td>
+</tr>
+<tr class="even">
+<td>objective_type</td>
+<td>The learning objective type of the specified custom objective and eval. Corresponding type will be assigned if custom objective is defined options: regression, classification.</td>
+</tr>
+<tr class="odd">
+<td>eval_metric</td>
+<td>Evaluation metrics for validation data, a default metric will be assigned according to objective(rmse for regression, and error for classification, mean average precision for ranking). options: rmse, mae, logloss, error, merror, mlogloss, auc, aucpr, ndcg, map, gamma-deviance</td>
+</tr>
+<tr class="even">
+<td>maximize_evaluation_metrics</td>
+<td>Whether to maximize evaluation metrics. Defaults to FALSE (for minization.)</td>
+</tr>
+<tr class="odd">
+<td>num_class</td>
+<td>Number of classes.</td>
+</tr>
+<tr class="even">
+<td>base_margin_col</td>
+<td>Param for initial prediction (aka base margin) column name.</td>
+</tr>
+<tr class="odd">
+<td>thresholds</td>
+<td>Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values &gt; 0 excepting that at most one value may be 0. The class with largest value <code>p/t</code> is predicted, where <code>p</code> is the original probability of that class and <code>t</code> is the class’s threshold.</td>
+</tr>
+<tr class="even">
+<td>weight_col</td>
+<td>Weight column.</td>
+</tr>
+<tr class="odd">
+<td>features_col</td>
+<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="even">
+<td>label_col</td>
+<td>Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="odd">
+<td>prediction_col</td>
+<td>Prediction column name.</td>
+</tr>
+<tr class="even">
+<td>probability_col</td>
+<td>Column name for predicted class conditional probabilities.</td>
+</tr>
+<tr class="odd">
+<td>raw_prediction_col</td>
+<td>Raw prediction (a.k.a. confidence) column name.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Optional arguments; see Details.</td>
+</tr>
+</tbody>
+</table></section></section><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {

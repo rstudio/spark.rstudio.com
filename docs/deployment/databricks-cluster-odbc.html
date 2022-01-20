@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.2.443">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>sparklyr - Guides</title>
+  <title>sparklyr - Using an ODBC connection with Databricks</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,6 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
-  <link href="../guides/connections.html" rel="next">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -56,7 +55,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="floating">
+<body>
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -70,7 +69,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
+    <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deployment" role="button" data-bs-toggle="dropdown" aria-expanded="false">Deployment</a>
@@ -162,118 +161,79 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Guides</h1>
-      <button type="button" class="quarto-btn-toggle btn">
-        <i class="bi bi-chevron-right"></i>
-      </button>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-  <div class="sidebar-menu-container"> 
-  <ul class="list-unstyled mt-1">
-      <li class="sidebar-item">
-  <a href="../guides/index.html" class="active">Guides</a>
-</li>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-basics" aria-expanded="true">
-              <div class="me-auto sidebar-section-item">Basics</div>
-            <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="quarto-sidebar-section-basics">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="../guides/connections.html" class="">Configuring connections</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../troubleshooting.md" class="">Troubleshooting</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../dplyr.md" class="">Manipulating data</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../mlib.md" class="">Machine Learning</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/caching.html" class="">Understanding Caching</a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-specialized" aria-expanded="true">
-              <div class="me-auto sidebar-section-item">Specialized</div>
-            <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-        </div>
-      <div class="collapse  show" id="quarto-sidebar-section-specialized">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="../guides/distributed-r.html" class="">Distributed R</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/pipelines.md" class="">ML Pipelines</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/textmining.html" class="">Text mining</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/streaming.Rmd" class="">Stream Analysis</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/arrow.html" class="">Apache Arrow</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
-</li>
-          <li class="sidebar-item">
-  <a href="../guides/h2o.html" class="">Using H2O</a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
-  </ul>
-  </div>
-</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <div id="quarto-toc-target"></div>
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
+<li><a href="#driver-installation" class="nav-link" data-scroll-target="#driver-installation">Driver installation</a></li>
+<li><a href="#driver-configuration" class="nav-link" data-scroll-target="#driver-configuration">Driver configuration</a></li>
+<li><a href="#connect-to-databricks" class="nav-link" data-scroll-target="#connect-to-databricks">Connect to Databricks</a></li>
+<li><a href="#additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
+</ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7">Guides</h1>
+<h1 class="title display-7">Using an ODBC connection with Databricks</h1>
 </header>
-<table class="table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><a href="guides/data-lakes.qmd">Data Lakes</a></td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This configuration details how to connect to Databricks using an ODBC connection. With this setup, R can connect to Databricks using the <a href="https://github.com/r-dbi/odbc"><code>odbc</code></a> and <a href="https://dbi.r-dbi.org/"><code>DBI</code></a> R packages. This type of configuration is the recommended approach for connecting to Databricks from RStudio Connect and can also be used from RStudio Workbench.</p>
+</section>
+<section id="advantages-and-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
+<p>Advantages:</p>
+<ul>
+<li>ODBC connections tend to be more stable than Spark connections. This is especially beneficial for content published to RStudio Connect.</li>
+<li>If code is developed using a Spark connection and <code>sparklyr</code>, it is easy to swap out the connection type for an ODBC connection and the remaining code will still run.</li>
+<li>The Spark ODBC driver provided by Databricks was benchmarked against a native Spark connection and the performance of the two is very comparable.</li>
+</ul>
+<p>Limitations: - Not all Spark features and functions are available through an ODBC connection.</p>
+</section>
+<section id="driver-installation" class="level2">
+<h2 class="anchored" data-anchor-id="driver-installation">Driver installation</h2>
+<p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#step-1-download-and-install-a-jdbc-or-odbc-driver">Download and install the Spark ODBC driver from Databricks</a></p>
+</section>
+<section id="driver-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="driver-configuration">Driver configuration</h2>
+<p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#configure-odbc-data-source-name-for-the-simba-odbc-driver">Create a DSN for Databricks</a>.</p>
+<pre><code>[Databricks-Spark]
+Driver=Simba
+Server=&lt;server-hostname&gt;
+HOST=&lt;server-hostname&gt;
+PORT=&lt;port&gt;
+SparkServerType=3
+Schema=default
+ThriftTransport=2
+SSL=1
+AuthMech=3
+UID=token
+PWD=&lt;personal-access-token&gt;
+HTTPPath=&lt;http-path&gt;</code></pre>
+</section>
+<section id="connect-to-databricks" class="level2">
+<h2 class="anchored" data-anchor-id="connect-to-databricks">Connect to Databricks</h2>
+<p>The connection can be tested from the command line using <code>isql -v Databricks-Spark</code> where <code>Databricks-Spark</code> is the DSN name for the connection. If that connects successfully, then the following code can be used to create a connection from an R session:</p>
+<pre><code>library(DBI)
+library(odbc)
+
+con &lt;- dbConnect(odbc(), "Databricks-Spark")</code></pre>
+</section>
+<section id="additional-information" class="level2">
+<h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
+<p>For more information about ODBC connections from R, please visit <a href="https://db.rstudio.com/">db.rstudio.com</a>.</p>
 
 
+</section>
 </main> <!-- /main -->
 <script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -451,9 +411,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../guides/connections.html">
-        <span class="nav-page-text">Configuring connections</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

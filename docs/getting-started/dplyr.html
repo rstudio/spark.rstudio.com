@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.443">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr – dplyr</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">sparklyr</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../guides/index.html">Guides</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deployment" role="button" data-bs-toggle="dropdown" aria-expanded="false">Deployment</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-deployment">    
+        <li>
+    <a class="dropdown-item" href="../deployment.Rmd">Deployment Options</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../examples/stand-alone-aws.Rmd">Standalone cluster</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../guides/data-lakes.Rmd">Data Lakes</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../examples/yarn-cluster-emr.Rmd">EMR cluster</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../examples/cloudera-aws.Rmd">Cloudera cluster</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../examples/databricks-cluster-local.Rmd">Databricks cluster</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../examples/qubole-overview.Rmd">Qubole cluster</a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/reference/index.md">Reference</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-packages" role="button" data-bs-toggle="dropdown" aria-expanded="false">Packages</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-packages">    
+        <li class="dropdown-header">graphframes (Graph X)</li>
+        <li>
+    <a class="dropdown-item" href="../packages/graphframes/latest/index.html">About</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/graphframes/latest/news.html">News</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/graphframes/latest/reference/index.md">Reference</a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">MLeap (Production Pipelines)</li>
+        <li>
+    <a class="dropdown-item" href="../packages/mleap/latest/index.html">About</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/mleap/latest/news.html">News</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/mleap/latest/reference/index.html">Reference</a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">sparkxgb (XGBoost)</li>
+        <li>
+    <a class="dropdown-item" href="../packages/sparkxgb/index.html">About</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/sparkxgb/news.html">News</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/sparkxgb/reference/index.html">Reference</a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Spark TF (Tensorflow)</li>
+        <li>
+    <a class="dropdown-item" href="../packages/sparktf/index.html">About</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/sparktf/news.html">News</a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../packages/sparktf/reference/index.html">Reference</a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#manipulating-data-with-dplyr" class="nav-link active" data-scroll-target="#manipulating-data-with-dplyr">Manipulating Data with dplyr</a>
+<ul class="collapse">
+<li><a href="#overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#reading-data" class="nav-link" data-scroll-target="#reading-data">Reading Data</a>
+<ul class="collapse">
+<li><a href="#flights-data" class="nav-link" data-scroll-target="#flights-data">Flights Data</a></li>
+</ul></li>
+<li><a href="#dplyr-verbs" class="nav-link" data-scroll-target="#dplyr-verbs">dplyr Verbs</a></li>
+<li><a href="#laziness" class="nav-link" data-scroll-target="#laziness">Laziness</a></li>
+<li><a href="#piping" class="nav-link" data-scroll-target="#piping">Piping</a></li>
+<li><a href="#grouping" class="nav-link" data-scroll-target="#grouping">Grouping</a></li>
+<li><a href="#collecting-to-r" class="nav-link" data-scroll-target="#collecting-to-r">Collecting to R</a></li>
+<li><a href="#sql-translation" class="nav-link" data-scroll-target="#sql-translation">SQL Translation</a></li>
+<li><a href="#window-functions" class="nav-link" data-scroll-target="#window-functions">Window Functions</a></li>
+<li><a href="#peforming-joins" class="nav-link" data-scroll-target="#peforming-joins">Peforming Joins</a></li>
+<li><a href="#sampling" class="nav-link" data-scroll-target="#sampling">Sampling</a></li>
+<li><a href="#writing-data" class="nav-link" data-scroll-target="#writing-data">Writing Data</a></li>
+<li><a href="#hive-functions" class="nav-link" data-scroll-target="#hive-functions">Hive Functions</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content">
+
+<section id="manipulating-data-with-dplyr" class="level1">
+<h1>Manipulating Data with dplyr</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p><a href="https://cran.r-project.org/web/packages/dplyr/index.html"><strong>dplyr</strong></a> is an R package for working with structured data both in and outside of R. dplyr makes data manipulation for R users easy, consistent, and performant. With dplyr as an interface to manipulating Spark DataFrames, you can:</p>
+<ul>
+<li>Select, filter, and aggregate data</li>
+<li>Use window functions (e.g.&nbsp;for sampling)</li>
+<li>Perform joins on DataFrames</li>
+<li>Collect data from Spark into R</li>
+</ul>
+<p>Statements in dplyr can be chained together using pipes defined by the <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> R package. dplyr also supports <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html">non-standard evalution</a> of its arguments. For more information on dplyr, see the <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html">introduction</a>, a guide for connecting to <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html">databases</a>, and a variety of <a href="https://cran.r-project.org/web/packages/dplyr/index.html">vignettes</a>.</p>
+</section>
+<section id="reading-data" class="level2">
+<h2 class="anchored" data-anchor-id="reading-data">Reading Data</h2>
+<p>You can read data into Spark DataFrames using the following functions:</p>
+<table class="table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/spark_read_csv/"><code>spark_read_csv</code></a></td>
+<td>Reads a CSV file and provides a data source compatible with dplyr</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/spark_read_json/"><code>spark_read_json</code></a></td>
+<td>Reads a JSON file and provides a data source compatible with dplyr</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/spark_read_parquet/"><code>spark_read_parquet</code></a></td>
+<td>Reads a parquet file and provides a data source compatible with dplyr</td>
+</tr>
+</tbody>
+</table>
+<p>Regardless of the format of your data, Spark supports reading data from a variety of different data sources. These include data stored on HDFS (<code>hdfs://</code> protocol), Amazon S3 (<code>s3n://</code> protocol), or local files available to the Spark worker nodes (<code>file://</code> protocol)</p>
+<p>Each of these functions returns a reference to a Spark DataFrame which can be used as a dplyr table (<code>tbl</code>).</p>
+<section id="flights-data" class="level3">
+<h3 class="anchored" data-anchor-id="flights-data">Flights Data</h3>
+<p>This guide will demonstrate some of the basic data manipulation verbs of dplyr by using data from the <code>nycflights13</code> R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US <a href="http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&amp;Link=0">Bureau of Transportation Statistics</a>, and is documented in <code>?nycflights13</code></p>
+<p>Connect to the cluster and copy the flights data using the <code>copy_to</code> function. Caveat: The flight data in <code>nycflights13</code> is convenient for dplyr demonstrations because it is small, but in practice large data should rarely be copied directly from R objects.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master=</span><span class="st">"local"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, flights, <span class="st">"flights"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>airlines <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, airlines, <span class="st">"airlines"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">src_tbls</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## [1] "airlines" "flights"</code></pre>
+</section>
+</section>
+<section id="dplyr-verbs" class="level2">
+<h2 class="anchored" data-anchor-id="dplyr-verbs">dplyr Verbs</h2>
+<p>Verbs are dplyr commands for manipulating data. When connected to a Spark DataFrame, dplyr translates the commands into Spark SQL statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:</p>
+<ul>
+<li><code>select</code> ~ <code>SELECT</code></li>
+<li><code>filter</code> ~ <code>WHERE</code></li>
+<li><code>arrange</code> ~ <code>ORDER</code></li>
+<li><code>summarise</code> ~ <code>aggregators: sum, min, sd, etc.</code></li>
+<li><code>mutate</code> ~ <code>operators: +, *, log, etc.</code></li>
+</ul>
+<!-- end list -->
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(flights, year<span class="sc">:</span>day, arr_delay, dep_delay)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 5]
+## # Database: spark_connection
+##     year month   day arr_delay dep_delay
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1  2013     1     1     11.0       2.00
+##  2  2013     1     1     20.0       4.00
+##  3  2013     1     1     33.0       2.00
+##  4  2013     1     1    -18.0      -1.00
+##  5  2013     1     1    -25.0      -6.00
+##  6  2013     1     1     12.0      -4.00
+##  7  2013     1     1     19.0      -5.00
+##  8  2013     1     1    -14.0      -3.00
+##  9  2013     1     1    - 8.00     -3.00
+## 10  2013     1     1      8.00     -2.00
+## # ... with more rows</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(flights, dep_delay <span class="sc">&gt;</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 19]
+## # Database: spark_connection
+##    year month   day dep_t~ sche~ dep_~ arr_~ sche~ arr_~ carr~ flig~ tail~
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;
+## 1  2013     1     9    641   900  1301  1242  1530  1272 HA       51 N384~
+## 2  2013     1    10   1121  1635  1126  1239  1810  1109 MQ     3695 N517~
+## 3  2013     6    15   1432  1935  1137  1607  2120  1127 MQ     3535 N504~
+## 4  2013     7    22    845  1600  1005  1044  1815   989 MQ     3075 N665~
+## 5  2013     9    20   1139  1845  1014  1457  2210  1007 AA      177 N338~
+## # ... with 7 more variables: origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;,
+## #   distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(flights, <span class="fu">desc</span>(dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: table&lt;flights&gt; [?? x 19]
+## # Database: spark_connection
+## # Ordered by: desc(dep_delay)
+##     year month   day dep_~ sche~ dep_~ arr_~ sche~ arr_~ carr~ flig~ tail~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt;
+##  1  2013     1     9   641   900  1301  1242  1530  1272 HA       51 N384~
+##  2  2013     6    15  1432  1935  1137  1607  2120  1127 MQ     3535 N504~
+##  3  2013     1    10  1121  1635  1126  1239  1810  1109 MQ     3695 N517~
+##  4  2013     9    20  1139  1845  1014  1457  2210  1007 AA      177 N338~
+##  5  2013     7    22   845  1600  1005  1044  1815   989 MQ     3075 N665~
+##  6  2013     4    10  1100  1900   960  1342  2211   931 DL     2391 N959~
+##  7  2013     3    17  2321   810   911   135  1020   915 DL     2119 N927~
+##  8  2013     6    27   959  1900   899  1236  2226   850 DL     2007 N376~
+##  9  2013     7    22  2257   759   898   121  1026   895 DL     2047 N671~
+## 10  2013    12     5   756  1700   896  1058  2020   878 AA      172 N5DM~
+## # ... with more rows, and 7 more variables: origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;, time_hour
+## #   &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(flights, <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Warning: Missing values are always removed in SQL.
+## Use `AVG(x, na.rm = TRUE)` to silence this warning
+
+## # Source: lazy query [?? x 1]
+## # Database: spark_connection
+##   mean_dep_delay
+##            &lt;dbl&gt;
+## 1           12.6</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(flights, <span class="at">speed =</span> distance <span class="sc">/</span> air_time <span class="sc">*</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 20]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    517     515   2.00   830    819  11.0  UA     1545
+##  2  2013     1     1    533     529   4.00   850    830  20.0  UA     1714
+##  3  2013     1     1    542     540   2.00   923    850  33.0  AA     1141
+##  4  2013     1     1    544     545  -1.00  1004   1022 -18.0  B6      725
+##  5  2013     1     1    554     600  -6.00   812    837 -25.0  DL      461
+##  6  2013     1     1    554     558  -4.00   740    728  12.0  UA     1696
+##  7  2013     1     1    555     600  -5.00   913    854  19.0  B6      507
+##  8  2013     1     1    557     600  -3.00   709    723 -14.0  EV     5708
+##  9  2013     1     1    557     600  -3.00   838    846 - 8.00 B6       79
+## 10  2013     1     1    558     600  -2.00   753    745   8.00 AA      301
+## # ... with more rows, and 9 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;, speed &lt;dbl&gt;</code></pre>
+</section>
+<section id="laziness" class="level2">
+<h2 class="anchored" data-anchor-id="laziness">Laziness</h2>
+<p>When working with databases, dplyr tries to be as lazy as possible:</p>
+<ul>
+<li><p>It never pulls data into R unless you explicitly ask for it.</p></li>
+<li><p>It delays doing any work until the last possible moment: it collects together everything you want to do and then sends it to the database in one step.</p></li>
+</ul>
+<p>For example, take the following code:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>c1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, day <span class="sc">==</span> <span class="dv">17</span>, month <span class="sc">==</span> <span class="dv">5</span>, carrier <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'UA'</span>, <span class="st">'WN'</span>, <span class="st">'AA'</span>, <span class="st">'DL'</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>c2 <span class="ot">&lt;-</span> <span class="fu">select</span>(c1, year, month, day, carrier, dep_delay, air_time, distance)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>c3 <span class="ot">&lt;-</span> <span class="fu">arrange</span>(c2, year, month, day, carrier)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>c4 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(c3, <span class="at">air_time_hours =</span> air_time <span class="sc">/</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This sequence of operations never actually touches the database. It’s not until you ask for the data (e.g.&nbsp;by printing <code>c4</code>) that dplyr requests the results from the database.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>c4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 8]
+## # Database: spark_connection
+## # Ordered by: year, month, day, carrier
+##     year month   day carrier dep_delay air_time distance air_time_hours
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;          &lt;dbl&gt;
+##  1  2013     5    17 AA          -2.00      294     2248           4.90
+##  2  2013     5    17 AA          -1.00      146     1096           2.43
+##  3  2013     5    17 AA          -2.00      185     1372           3.08
+##  4  2013     5    17 AA          -9.00      186     1389           3.10
+##  5  2013     5    17 AA           2.00      147     1096           2.45
+##  6  2013     5    17 AA          -4.00      114      733           1.90
+##  7  2013     5    17 AA          -7.00      117      733           1.95
+##  8  2013     5    17 AA          -7.00      142     1089           2.37
+##  9  2013     5    17 AA          -6.00      148     1089           2.47
+## 10  2013     5    17 AA          -7.00      137      944           2.28
+## # ... with more rows</code></pre>
+</section>
+<section id="piping" class="level2">
+<h2 class="anchored" data-anchor-id="piping">Piping</h2>
+<p>You can use <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>c4 <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="dv">5</span>, day <span class="sc">==</span> <span class="dv">17</span>, carrier <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'UA'</span>, <span class="st">'WN'</span>, <span class="st">'AA'</span>, <span class="st">'DL'</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(carrier, dep_delay, air_time, distance) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">air_time_hours =</span> air_time <span class="sc">/</span> <span class="dv">60</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="grouping" class="level2">
+<h2 class="anchored" data-anchor-id="grouping">Grouping</h2>
+<p>The <code>group_by</code> function corresponds to the <code>GROUP BY</code> statement in SQL.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>c4 <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(carrier) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>(), <span class="at">mean_dep_delay =</span> <span class="fu">mean</span>(dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Warning: Missing values are always removed in SQL.
+## Use `AVG(x, na.rm = TRUE)` to silence this warning
+
+## # Source: lazy query [?? x 3]
+## # Database: spark_connection
+##   carrier count mean_dep_delay
+##   &lt;chr&gt;   &lt;dbl&gt;          &lt;dbl&gt;
+## 1 AA       94.0           1.47
+## 2 DL      136             6.24
+## 3 UA      172             9.63
+## 4 WN       34.0           7.97</code></pre>
+</section>
+<section id="collecting-to-r" class="level2">
+<h2 class="anchored" data-anchor-id="collecting-to-r">Collecting to R</h2>
+<p>You can copy data from Spark into R’s memory by using <code>collect()</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>carrierhours <span class="ot">&lt;-</span> <span class="fu">collect</span>(c4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>collect()</code> executes the Spark query and returns the results to R for further analysis and visualization.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the significance of pairwise differences and plot the results</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(carrierhours, <span class="fu">pairwise.t.test</span>(air_time, carrier))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  air_time and carrier 
+## 
+##    AA      DL      UA     
+## DL 0.25057 -       -      
+## UA 0.07957 0.00044 -      
+## WN 0.07957 0.23488 0.00041
+## 
+## P value adjustment method: holm</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(carrierhours, <span class="fu">aes</span>(carrier, air_time_hours)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="guides-dplyr_files/figure-gfm/unnamed-chunk-12-1.png" class="img-fluid"><!-- --></p>
+</section>
+<section id="sql-translation" class="level2">
+<h2 class="anchored" data-anchor-id="sql-translation">SQL Translation</h2>
+<p>It’s relatively straightforward to translate R code to SQL (or indeed to any programming language) when doing simple mathematical operations of the form you normally use when filtering, mutating and summarizing. dplyr knows how to convert the following R functions to Spark SQL:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic math operators</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="sc">+</span>, <span class="sc">-</span>, <span class="sc">*</span>, <span class="sc">/</span>, <span class="sc">%%</span>, <span class="sc">^</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Math functions</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, log10, round, sign, sin, sinh, sqrt, tan, tanh</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Logical comparisons</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span>, <span class="sc">&lt;=</span>, <span class="sc">!=</span>, <span class="sc">&gt;=</span>, <span class="sc">&gt;</span>, <span class="sc">==</span>, <span class="sc">%in%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Boolean operations</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="er">&amp;</span>, <span class="sc">&amp;&amp;</span>, <span class="sc">|</span>, <span class="sc">||</span>, <span class="sc">!</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Character functions</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>paste, tolower, toupper, nchar</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Casting</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>as.double, as.integer, as.logical, as.character, as.date</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic aggregations</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>mean, sum, min, max, sd, var, cor, cov, n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="window-functions" class="level2">
+<h2 class="anchored" data-anchor-id="window-functions">Window Functions</h2>
+<p>dplyr supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems. You can compare the dplyr syntax to the query it has generated by using <code>dbplyr::sql_render()</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the most and least delayed flight each day</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>bestworst <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dep_delay) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dep_delay <span class="sc">==</span> <span class="fu">min</span>(dep_delay) <span class="sc">||</span> dep_delay <span class="sc">==</span> <span class="fu">max</span>(dep_delay))</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>dbplyr<span class="sc">::</span><span class="fu">sql_render</span>(bestworst)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Missing values are always removed in SQL.</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Use `min(x, na.rm = TRUE)` to silence this warning</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Missing values are always removed in SQL.</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Use `max(x, na.rm = TRUE)` to silence this warning</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="do">## &lt;SQL&gt; SELECT `year`, `month`, `day`, `dep_delay`</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="do">## FROM (SELECT `year`, `month`, `day`, `dep_delay`, min(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz3`, max(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz4`</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="do">## FROM (SELECT `year`, `month`, `day`, `dep_delay`</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="do">## FROM `flights`) `coaxmtqqbj`) `efznnpuovy`</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="do">## WHERE (`dep_delay` = `zzz3` OR `dep_delay` = `zzz4`)</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>bestworst</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Missing values are always removed in SQL.</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Use `min(x, na.rm = TRUE)` to silence this warning</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Missing values are always removed in SQL.</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Use `max(x, na.rm = TRUE)` to silence this warning</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="do">## # Source: lazy query [?? x 4]</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="do">## # Database: spark_connection</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="do">## # Groups: year, month, day</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="do">##     year month   day dep_delay</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="do">##    &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="do">##  1  2013     1     1     853  </span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="do">##  2  2013     1     1   -  15.0</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="do">##  3  2013     1     1   -  15.0</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="do">##  4  2013     1     9    1301  </span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="do">##  5  2013     1     9   -  17.0</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="do">##  6  2013     1    24   -  15.0</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="do">##  7  2013     1    24     329  </span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="do">##  8  2013     1    29   -  27.0</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="do">##  9  2013     1    29     235  </span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="do">## 10  2013     2     1   -  15.0</span></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="do">## # ... with more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rank each flight within a daily</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ranked <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dep_delay) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">rank</span>(<span class="fu">desc</span>(dep_delay)))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>dbplyr<span class="sc">::</span><span class="fu">sql_render</span>(ranked)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## &lt;SQL&gt; SELECT `year`, `month`, `day`, `dep_delay`, rank() OVER (PARTITION BY `year`, `month`, `day` ORDER BY `dep_delay` DESC) AS `rank`
+## FROM (SELECT `year`, `month`, `day`, `dep_delay`
+## FROM `flights`) `mauqwkxuam`</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ranked</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 5]
+## # Database: spark_connection
+## # Groups: year, month, day
+##     year month   day dep_delay  rank
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt; &lt;int&gt;
+##  1  2013     1     1       853     1
+##  2  2013     1     1       379     2
+##  3  2013     1     1       290     3
+##  4  2013     1     1       285     4
+##  5  2013     1     1       260     5
+##  6  2013     1     1       255     6
+##  7  2013     1     1       216     7
+##  8  2013     1     1       192     8
+##  9  2013     1     1       157     9
+## 10  2013     1     1       155    10
+## # ... with more rows</code></pre>
+</section>
+<section id="peforming-joins" class="level2">
+<h2 class="anchored" data-anchor-id="peforming-joins">Peforming Joins</h2>
+<p>It’s rare that a data analysis involves only a single table of data. In practice, you’ll normally have many tables that contribute to an analysis, and you need flexible tools to combine them. In dplyr, there are three families of verbs that work with two tables at a time:</p>
+<ul>
+<li><p>Mutating joins, which add new variables to one table from matching rows in another.</p></li>
+<li><p>Filtering joins, which filter observations from one table based on whether or not they match an observation in the other table.</p></li>
+<li><p>Set operations, which combine the observations in the data sets as if they were set elements.</p></li>
+</ul>
+<p>All two-table verbs work similarly. The first two arguments are <code>x</code> and <code>y</code>, and provide the tables to combine. The output is always a new table with the same type as <code>x</code>.</p>
+<p>The following statements are equivalent:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(airlines)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## Joining, by = "carrier"
+
+## # Source: lazy query [?? x 20]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    517     515   2.00   830    819  11.0  UA     1545
+##  2  2013     1     1    533     529   4.00   850    830  20.0  UA     1714
+##  3  2013     1     1    542     540   2.00   923    850  33.0  AA     1141
+##  4  2013     1     1    544     545  -1.00  1004   1022 -18.0  B6      725
+##  5  2013     1     1    554     600  -6.00   812    837 -25.0  DL      461
+##  6  2013     1     1    554     558  -4.00   740    728  12.0  UA     1696
+##  7  2013     1     1    555     600  -5.00   913    854  19.0  B6      507
+##  8  2013     1     1    557     600  -3.00   709    723 -14.0  EV     5708
+##  9  2013     1     1    557     600  -3.00   838    846 - 8.00 B6       79
+## 10  2013     1     1    558     600  -2.00   753    745   8.00 AA      301
+## # ... with more rows, and 9 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;, name &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(airlines, <span class="at">by =</span> <span class="st">"carrier"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 20]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    517     515   2.00   830    819  11.0  UA     1545
+##  2  2013     1     1    533     529   4.00   850    830  20.0  UA     1714
+##  3  2013     1     1    542     540   2.00   923    850  33.0  AA     1141
+##  4  2013     1     1    544     545  -1.00  1004   1022 -18.0  B6      725
+##  5  2013     1     1    554     600  -6.00   812    837 -25.0  DL      461
+##  6  2013     1     1    554     558  -4.00   740    728  12.0  UA     1696
+##  7  2013     1     1    555     600  -5.00   913    854  19.0  B6      507
+##  8  2013     1     1    557     600  -3.00   709    723 -14.0  EV     5708
+##  9  2013     1     1    557     600  -3.00   838    846 - 8.00 B6       79
+## 10  2013     1     1    558     600  -2.00   753    745   8.00 AA      301
+## # ... with more rows, and 9 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;, name &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(airlines, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"carrier"</span>, <span class="st">"carrier"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 20]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    517     515   2.00   830    819  11.0  UA     1545
+##  2  2013     1     1    533     529   4.00   850    830  20.0  UA     1714
+##  3  2013     1     1    542     540   2.00   923    850  33.0  AA     1141
+##  4  2013     1     1    544     545  -1.00  1004   1022 -18.0  B6      725
+##  5  2013     1     1    554     600  -6.00   812    837 -25.0  DL      461
+##  6  2013     1     1    554     558  -4.00   740    728  12.0  UA     1696
+##  7  2013     1     1    555     600  -5.00   913    854  19.0  B6      507
+##  8  2013     1     1    557     600  -3.00   709    723 -14.0  EV     5708
+##  9  2013     1     1    557     600  -3.00   838    846 - 8.00 B6       79
+## 10  2013     1     1    558     600  -2.00   753    745   8.00 AA      301
+## # ... with more rows, and 9 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;, name &lt;chr&gt;</code></pre>
+</section>
+<section id="sampling" class="level2">
+<h2 class="anchored" data-anchor-id="sampling">Sampling</h2>
+<p>You can use <code>sample_n()</code> and <code>sample_frac()</code> to take a random sample of rows: use <code>sample_n()</code> for a fixed number and <code>sample_frac()</code> for a fixed fraction.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(flights, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 19]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    517     515   2.00   830    819  11.0  UA     1545
+##  2  2013     1     1    533     529   4.00   850    830  20.0  UA     1714
+##  3  2013     1     1    542     540   2.00   923    850  33.0  AA     1141
+##  4  2013     1     1    544     545  -1.00  1004   1022 -18.0  B6      725
+##  5  2013     1     1    554     600  -6.00   812    837 -25.0  DL      461
+##  6  2013     1     1    554     558  -4.00   740    728  12.0  UA     1696
+##  7  2013     1     1    555     600  -5.00   913    854  19.0  B6      507
+##  8  2013     1     1    557     600  -3.00   709    723 -14.0  EV     5708
+##  9  2013     1     1    557     600  -3.00   838    846 - 8.00 B6       79
+## 10  2013     1     1    558     600  -2.00   753    745   8.00 AA      301
+## # ... with more rows, and 8 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_frac</span>(flights, <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 19]
+## # Database: spark_connection
+##     year month   day dep_t~ sched_~ dep_d~ arr_~ sched~ arr_d~ carr~ flig~
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;int&gt;
+##  1  2013     1     1    655     655   0     1021   1030 - 9.00 DL     1415
+##  2  2013     1     1    656     700 - 4.00   854    850   4.00 AA      305
+##  3  2013     1     1   1044    1045 - 1.00  1231   1212  19.0  EV     4322
+##  4  2013     1     1   1056    1059 - 3.00  1203   1209 - 6.00 EV     4479
+##  5  2013     1     1   1317    1325 - 8.00  1454   1505 -11.0  MQ     4475
+##  6  2013     1     1   1708    1700   8.00  2037   2005  32.0  WN     1066
+##  7  2013     1     1   1825    1829 - 4.00  2056   2053   3.00 9E     3286
+##  8  2013     1     1   1843    1845 - 2.00  1955   2024 -29.0  DL      904
+##  9  2013     1     1   2108    2057  11.0     25     39 -14.0  UA     1517
+## 10  2013     1     2    557     605 - 8.00   832    823   9.00 DL      544
+## # ... with more rows, and 8 more variables: tailnum &lt;chr&gt;, origin &lt;chr&gt;,
+## #   dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dbl&gt;</code></pre>
+</section>
+<section id="writing-data" class="level2">
+<h2 class="anchored" data-anchor-id="writing-data">Writing Data</h2>
+<p>It is often useful to save the results of your analysis or the tables that you have generated on your Spark cluster into persistent storage. The best option in many scenarios is to write the table out to a <a href="https://parquet.apache.org/">Parquet</a> file using the <a href="reference/sparklyr/spark_write_parquet.html">spark_write_parquet</a> function. For example:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_parquet</span>(tbl, <span class="st">"hdfs://hdfs.company.org:9000/hdfs-path/data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will write the Spark DataFrame referenced by the tbl R variable to the given HDFS path. You can use the <a href="reference/sparklyr/spark_read_parquet.html">spark_read_parquet</a> function to read the same table back into a subsequent Spark session:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_parquet</span>(sc, <span class="st">"data"</span>, <span class="st">"hdfs://hdfs.company.org:9000/hdfs-path/data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can also write data as CSV or JSON using the <a href="reference/sparklyr/spark_write_csv.html">spark_write_csv</a> and <a href="reference/sparklyr/spark_write_json.html">spark_write_json</a> functions.</p>
+</section>
+<section id="hive-functions" class="level2">
+<h2 class="anchored" data-anchor-id="hive-functions">Hive Functions</h2>
+<p>Many of Hive’s built-in functions (UDF) and built-in aggregate functions (UDAF) can be called inside dplyr’s mutate and summarize. The <a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF">Languange Reference UDF</a> page provides the list of available functions.</p>
+<p>The following example uses the <strong>datediff</strong> and <strong>current_date</strong> Hive UDFs to figure the difference between the flight_date and the current system date:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">flight_date =</span> <span class="fu">paste</span>(year,month,day,<span class="at">sep=</span><span class="st">"-"</span>),</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">days_since =</span> <span class="fu">datediff</span>(<span class="fu">current_date</span>(), flight_date)) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(flight_date,days_since) <span class="sc">%&gt;%</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>days_since)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>## # Source: lazy query [?? x 3]
+## # Database: spark_connection
+## # Groups: flight_date
+## # Ordered by: -days_since
+##    flight_date days_since     n
+##    &lt;chr&gt;            &lt;int&gt; &lt;dbl&gt;
+##  1 2013-1-1          1844   842
+##  2 2013-1-2          1843   943
+##  3 2013-1-3          1842   914
+##  4 2013-1-4          1841   915
+##  5 2013-1-5          1840   720
+##  6 2013-1-6          1839   832
+##  7 2013-1-7          1838   933
+##  8 2013-1-8          1837   899
+##  9 2013-1-9          1836   902
+## 10 2013-1-10         1835   932
+## # ... with more rows</code></pre>
+
+
+</section>
+</section>
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      return window.localStorage.getItem("quarto-color-scheme");
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = null;
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.id = "quarto-color-scheme-toggle";
+    a.classList.add('top-right');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body></html>

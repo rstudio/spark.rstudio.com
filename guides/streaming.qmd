@@ -34,7 +34,7 @@ In the same way all of the read and write operations in `sparklyr` for Spark Sta
 
 The first intro example is a small script that can be used with a local master. The result should be to see the `stream_view()` app showing live the number of records processed for each iteration of test data being sent to the stream.
 
-```{r, eval = FALSE}
+```{r}
 library(future)
 library(sparklyr)
 
@@ -55,7 +55,7 @@ stream_view(write_output)
 
 </center>
 
-```{r, eval = FALSE}
+```{r}
 stream_stop(write_output)
 spark_disconnect(sc)
 ```
@@ -64,21 +64,21 @@ spark_disconnect(sc)
 
 1.  Open the Spark connection
 
-    ```{r, eval = FALSE}
+    ```{r}
     library(sparklyr)
     sc <- spark_connect(master = "local")
     ```
 
 2.  Optional step. This resets the input and output folders. It makes it easier to run the code multiple times in a clean manner.
 
-    ```{r, eval = FALSE}
+    ```{r}
     if(file.exists("source")) unlink("source", TRUE)
     if(file.exists("source-out")) unlink("source-out", TRUE)
     ```
 
 3.  Produces a single test file inside the "source" folder. This allows the "read" function to infer CSV file definition.
 
-    ```{r, eval = FALSE}
+    ```{r}
     stream_generate_test(iterations = 1)
     list.files("source")
     ```
@@ -87,13 +87,13 @@ spark_disconnect(sc)
 
 4.  Points the stream reader to the folder where the streaming files will be placed. Since it is primed with a single CSV file, it will use as the expected layout of subsequent files. By default, `stream_read_csv()` creates a single integer variable data frame.
 
-    ```{r, eval = FALSE}
+    ```{r}
     read_folder <- stream_read_csv(sc, "source")
     ```
 
 5.  **The output writer is what starts the streaming job**. It will start monitoring the input folder, and then write the new results in the "source-out" folder. So as new records stream in, new files will be created in the "source-out" folder. Since there are no operations on the incoming data at this time, the output files will have the same exact raw data as the input files. The only difference is that the files and sub folders within "source-out" will be structured how Spark structures data folders.
 
-    ```{r, eval = FALSE}
+    ```{r}
     write_output <- stream_write_csv(read_folder, "source-out")
     list.files("source-out")
     ```
@@ -103,20 +103,20 @@ spark_disconnect(sc)
 
 6.  The test generation function will run 100 files every 0.2 seconds. To run the tests "out-of-sync" with the current R session, the `future` package is used.
 
-    ```{r, eval = FALSE}
+    ```{r}
     library(future)
     invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
     ```
 
 7.  The `stream_view()` function can be used before the 50 tests are complete because of the use of the `future` package. It will monitor the status of the job that `write_output` is pointing to and provide information on the amount of data coming into the "source" folder and going out into the "source-out" folder.
 
-    ```{r, eval = FALSE}
+    ```{r}
     stream_view(write_output)
     ```
 
 8.  The monitor will continue to run even after the tests are complete. To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session.
 
-    ```{r, eval = FALSE}
+    ```{r}
     stream_stop(write_output)
     spark_disconnect(sc)
     ```
@@ -125,7 +125,7 @@ spark_disconnect(sc)
 
 The second example builds on the first. It adds a processing step that manipulates the input data before saving it to the output folder. In this case, a new binary field is added indicating if the value from `x` is over 400 or not. This time, while run the second code chunk in this example a few times during the stream tests to see the aggregated values change.
 
-```{r, eval = FALSE}
+```{r}
 library(future)
 library(sparklyr)
 library(dplyr, warn.conflicts = FALSE)
@@ -153,7 +153,7 @@ invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
 
 Run this code a few times during the experiment:
 
-```{r, eval = FALSE}
+```{r}
 spark_read_csv(sc, "stream", "source-out", memory = FALSE) %>%
   group_by(over) %>%
   tally()
@@ -170,7 +170,7 @@ The results would look similar to this. The `n` totals will increase as the expe
 
 Clean up after the experiment
 
-```{r, eval = FALSE}
+```{r}
 stream_stop(write_output)
 spark_disconnect(sc)
 ```
@@ -179,7 +179,7 @@ spark_disconnect(sc)
 
 1.  The processing starts with the `read_folder` variable that contains the input stream. It coerces the integer field `x`, into a type double. This is because the next function, `ft_binarizer()` does not accept integers. The binarizer determines if `x` is over 400 or not. This is a good illustration of how `dplyr` can help simplify the manipulation needed during the processing stage.
 
-    ```{r, eval = FALSE}
+    ```{r}
     process_stream <- read_folder %>%
       mutate(x = as.double(x)) %>%
       ft_binarizer(
@@ -191,13 +191,13 @@ spark_disconnect(sc)
 
 2.  The output now needs to write-out the processed data instead of the raw input data. Swap `read_folder` with `process_stream`.
 
-    ```{r, eval = FALSE}
+    ```{r}
     write_output <- stream_write_csv(process_stream, "source-out")
     ```
 
 3.  The "source-out" folder can be treated as a if it was a single table within Spark. Using `spark_read_csv()`, the data can be mapped, but not brought into memory (`memory = FALSE`). This allows the current results to be further analyzed using regular `dplyr` commands.
 
-    ```{r, eval = FALSE}
+    ```{r}
     spark_read_csv(sc, "stream", "source-out", memory = FALSE) %>%
       group_by(over) %>%
       tally()
@@ -211,7 +211,7 @@ The biggest advantage of using Spark memory as the target, is that it will allow
 
 Using example 2 as the base, this example code will perform some aggregations to the current stream input and save only those summarized results into Spark memory:
 
-```{r, eval = FALSE}
+```{r}
 library(future)
 library(sparklyr)
 library(dplyr, warn.conflicts = FALSE)
@@ -239,13 +239,13 @@ invisible(future(stream_generate_test()))
 
 Run this command a different times while the experiment is running:
 
-```{r, eval = FALSE}
+```{r}
 tbl(sc, "stream") 
 ```
 
 Clean up after the experiment
 
-```{r, eval = FALSE}
+```{r}
 stream_stop(write_output)
 spark_disconnect(sc)
 ```
@@ -254,7 +254,7 @@ spark_disconnect(sc)
 
 1.  The `stream_watermark()` functions add a new `timestamp` variable that is then used in the `group_by()` command. This is required by Spark Stream to accept summarized results as output of the stream. The second step is to simply decide what kinds of aggregations we need to perform. In this case, a simply max, min and count are performed.
 
-    ```{r, eval = FALSE}
+    ```{r}
     process_stream <- read_folder %>%
       stream_watermark() %>%
       group_by(timestamp) %>%
@@ -267,13 +267,13 @@ spark_disconnect(sc)
 
 2.  The `spark_write_memory()` function is used to write the output to Spark memory. The results will appear as a table of the Spark session with the name assigned in the `name` argument, in this case the name selected is: "stream".
 
-    ```{r, eval = FALSE}
+    ```{r}
     write_output <- stream_write_memory(process_stream, name = "stream")
     ```
 
 3.  To query the current data in the "stream" table can be queried by using the `dplyr` `tbl()` command.
 
-    ```{r, eval = FALSE}
+    ```{r}
     tbl(sc, "stream") 
     ```
 
@@ -281,7 +281,7 @@ spark_disconnect(sc)
 
 `sparklyr` provides a new Shiny function called `reactiveSpark()`. It can take a Spark data frame, in this case the one created as a result of the stream processing, and then creates a Spark memory stream table, the same way a table is created in example 3.
 
-```{r, eval = FALSE}
+```{r}
 library(future)
 library(sparklyr)
 library(dplyr, warn.conflicts = FALSE)
@@ -330,7 +330,7 @@ runGadget(ui, server)
 
 2.  This very basic Shiny app simply displays the output of a table in the `ui` section
 
-    ```{r, eval = FALSE}
+    ```{r}
     library(shiny)
 
     ui <- function(){
@@ -340,7 +340,7 @@ runGadget(ui, server)
 
 3.  In the `server` section, the `reactiveSpark()` function will update every time there's a change to the stream and return a data frame. The results are saved to a variable called `ps()` in this script. Treat the `ps()` variable as a regular table that can be piped from, as shown in the example. In this case, the `timestamp` variable is converted to string for to make it easier to read.
 
-    ```{r, eval = FALSE}
+    ```{r}
     server <- function(input, output, session){
       
       ps <- reactiveSpark(process_stream)
@@ -354,7 +354,7 @@ runGadget(ui, server)
 
 4.  Use `runGadget()` to display the Shiny app in the Viewer pane. This is optional, the app can be run using normal Shiny run functions.
 
-    ```{r, eval = FALSE}
+    ```{r}
     runGadget(ui, server)
     ```
 
@@ -362,7 +362,7 @@ runGadget(ui, server)
 
 This example uses a fitted [Pipeline Model](/guides/pipelines/) to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.
 
-```{r, eval = FALSE}
+```{r}
 library(sparklyr)
 library(dplyr, warn.conflicts = FALSE)
 
@@ -396,7 +396,7 @@ ml_stream <- stream_read_csv(
 stream_generate_test(df = df, interval = 0.5)
 ```
 
-```{r, eval = FALSE}
+```{r}
 spark_read_csv(sc, "stream", "source-out", memory = FALSE) 
 ```
 
@@ -415,7 +415,7 @@ spark_read_csv(sc, "stream", "source-out", memory = FALSE)
     ##10   285   286   285       285.
     ### ... with more rows
 
-```{r, eval = FALSE}
+```{r}
 stream_stop(ml_stream)
 spark_disconnect(sc)
 ```
@@ -424,7 +424,7 @@ spark_disconnect(sc)
 
 1.  Creates and fits a pipeline
 
-    ```{r, eval = FALSE}
+    ```{r}
     df <- data.frame(x = rep(1:1000), y = rep(2:1001))
     stream_generate_test(df = df, iteration = 1)
     model_sample <- spark_read_csv(sc, "sample", "source")
@@ -439,7 +439,7 @@ spark_disconnect(sc)
 
 2.  This example pipelines the input, process and output in a single code segment. The `ml_transform()` function is used to create the predictions. Because the CSV format does not support *list* type fields, the `features` column is removed before the results are sent to the output.
 
-    ```{r, eval = FALSE}
+    ```{r}
     ml_stream <- stream_read_csv(
         sc = sc, 
         path = "source", 
@@ -450,7 +450,7 @@ spark_disconnect(sc)
       stream_write_csv("source-out")
     ```
 
-```{r, eval = FALSE}
+```{r}
 stream_stop(write_output)
 spark_disconnect(sc)
 ```

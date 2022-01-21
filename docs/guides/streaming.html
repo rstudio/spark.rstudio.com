@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/aws-s3.html" rel="next">
+  <link href="../guides/textmining.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -132,79 +134,8 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../guides/index.html">Guides</a>
+    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deployment" role="button" data-bs-toggle="dropdown" aria-expanded="false">Deployment</a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-deployment">    
-        <li>
-    <a class="dropdown-item" href="../deployment.Rmd">Deployment Options</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/stand-alone-aws.Rmd">Standalone cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../guides/data-lakes.Rmd">Data Lakes</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/yarn-cluster-emr.Rmd">EMR cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/cloudera-aws.Rmd">Cloudera cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/databricks-cluster-local.Rmd">Databricks cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/qubole-overview.Rmd">Qubole cluster</a>
-  </li>  
-    </ul>
-  </li>
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-packages" role="button" data-bs-toggle="dropdown" aria-expanded="false">Packages</a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-packages">    
-        <li class="dropdown-header">graphframes (Graph X)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/graphframes/latest/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/graphframes/latest/news.html">News</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">MLeap (Production Pipelines)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/reference/index.html">Reference</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">sparkxgb (XGBoost)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/reference/index.html">Reference</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Spark TF (Tensorflow)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/reference/index.html">Reference</a>
-  </li>  
-    </ul>
-  </li>
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -218,10 +149,88 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Intro to Spark Streaming with sparklyr</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../guides/index.html" class="">Get Started</a>
+</li>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-basics" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Basics</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="quarto-sidebar-section-basics">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/connections.Rmd" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../troubleshooting.md" class="">Troubleshooting</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../dplyr.md" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../mlib.md" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/caching.Rmd" class="">Understanding Caching</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-specialized" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Specialized</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="quarto-sidebar-section-specialized">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/pipelines.html" class="">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/streaming.html" class="active">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/h2o.html" class="">Using H2O</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -255,7 +264,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Intro to Spark Streaming with sparklyr</h1>
+<h1 class="title d-none d-lg-block display-7">Intro to Spark Streaming with sparklyr</h1>
 </header>
 
 <section id="the-sparklyr-interface" class="level2">
@@ -300,7 +309,6 @@
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_view</span>(write_output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="../images/guides/streaming/stream_view.png" class="img-fluid" width="500"></p>
-
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -338,7 +346,12 @@
 <li><p>The test generation function will run 100 files every 0.2 seconds. To run the tests “out-of-sync” with the current R session, the <code>future</code> package is used.</p>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">future</span>(<span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">iterations =</span> <span class="dv">100</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">future</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stream_generate_test</span>(<span class="at">interval =</span> <span class="fl">0.2</span>, <span class="at">iterations =</span> <span class="dv">100</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>The <code>stream_view()</code> function can be used before the 50 tests are complete because of the use of the <code>future</code> package. It will monitor the status of the job that <code>write_output</code> is pointing to and provide information on the amount of data coming into the “source” folder and going out into the “source-out” folder.</p>
 <div class="cell">
@@ -347,7 +360,8 @@
 <li><p>The monitor will continue to run even after the tests are complete. To end the experiment, stop the Shiny app and then use the following to stop the stream and close the Spark session.</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ol>
 </section>
@@ -460,7 +474,8 @@
 <p>Clean up after the experiment</p>
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(write_output)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="code-breakdown-2" class="level3">
 <h3 class="anchored" data-anchor-id="code-breakdown-2">Code breakdown</h3>
@@ -564,7 +579,7 @@
 </section>
 <section id="example-5---ml-pipeline-model" class="level2">
 <h2 class="anchored" data-anchor-id="example-5---ml-pipeline-model">Example 5 - ML Pipeline Model</h2>
-<p>This example uses a fitted <a href="../guides/pipelines/">Pipeline Model</a> to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.</p>
+<p>This example uses a fitted <a href="../guides/pipelines.html">Pipeline Model</a> to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.</p>
 <div class="cell">
 <div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
@@ -830,8 +845,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../guides/textmining.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Text mining</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../guides/aws-s3.html">
+        <span class="nav-page-text">AWS S3 buckets</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

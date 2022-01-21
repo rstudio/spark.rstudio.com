@@ -13,11 +13,15 @@ execute:
 
 **sparklyr** provides support to run arbitrary R code at scale within your Spark Cluster through `spark_apply()`. This is especially useful where there is a need to use functionality available only in R or R packages that is not available in Apache Spark nor [Spark Packages](https://spark-packages.org/).
 
-`spark_apply()` applies an R function to a Spark object (typically, a Spark DataFrame). Spark objects are partitioned so they can be distributed across a cluster. You can use `spark_apply` with the default partitions or you can define your own partitions with the `group_by` argument. Your R function must return another Spark DataFrame. `spark_apply` will run your R function on each partition and output a single Spark DataFrame.
+`spark_apply()` applies an R function to a Spark object (typically, a Spark DataFrame). Spark objects are partitioned so they can be distributed across a cluster. You can use `spark_apply()` with the default partitions or you can define your own partitions with the `group_by()` argument. Your R function must return another Spark DataFrame. `spark_apply()` will run your R function on each partition and output a single Spark DataFrame.
 
 ### Apply an R function to a Spark Object
 
 Lets run a simple example. We will apply the identify function, `I()`, over a list of numbers we created with the `sdf_len()` function.
+
+```{r, include = FALSE}
+library(sparklyr)
+```
 
 ```{r}
 library(sparklyr)
@@ -63,11 +67,10 @@ spark_apply(trees_tbl, function(e) lapply(e, jitter))
 By default `spark_apply()` derives the column names from the input Spark data frame. Use the `names` argument to rename or add new columns.
 
 ```{r}
-trees_tbl %>%
-  spark_apply(
-    function(e) data.frame(2.54 * e$Girth, e),
-    names = c("Girth(cm)", colnames(trees))
-    )
+spark_apply(
+  trees_tbl,
+  function(e) data.frame(2.54 * e$Girth, e), names = c("Girth(cm)", colnames(trees))
+  )
 ```
 
 ### Group By
@@ -77,8 +80,7 @@ In some cases you may want to apply your R function to specific groups in your d
 ```{r}
 iris_tbl <- sdf_copy_to(sc, iris)
 
-iris_tbl %>%
-  spark_apply(nrow, group_by = "Species")
+spark_apply(iris_tbl, nrow, group_by = "Species")
 ```
 
 ```{r}
@@ -103,7 +105,7 @@ spark_apply(
   )
 ```
 
-To use R packages inside Spark, your packages must be installed on the worker nodes. The first time you call `spark_apply` all of the contents in your local `.libPaths()` will be copied into each Spark worker node via the `SparkConf.addFile()` function. Packages will only be copied once and will persist as long as the connection remains open. It's not uncommon for R libraries to be several gigabytes in size, so be prepared for a one-time tax while the R packages are copied over to your Spark cluster. You can disable package distribution by setting `packages = FALSE`. Note: packages are not copied in local mode (`master="local"`) because the packages already exist on the system.
+To use R packages inside Spark, your packages must be installed on the worker nodes. The first time you call `spark_apply()` all of the contents in your local `.libPaths()` will be copied into each Spark worker node via the `SparkConf.addFile()` function. Packages will only be copied once and will persist as long as the connection remains open. It's not uncommon for R libraries to be several gigabytes in size, so be prepared for a one-time tax while the R packages are copied over to your Spark cluster. You can disable package distribution by setting `packages = FALSE`. Note: packages are not copied in local mode (`master="local"`) because the packages already exist on the system.
 
 ## Handling Errors
 
@@ -117,7 +119,7 @@ It is worth mentioning that different cluster providers and platforms expose wor
 
 ## Requirements
 
-The **R Runtime** is expected to be pre-installed in the cluster for `spark_apply` to function. Failure to install the cluster will trigger a `Cannot run program, no such file or directory` error while attempting to use `spark_apply()`. Contact your cluster administrator to consider making the R runtime available throughout the entire cluster.
+The **R Runtime** is expected to be pre-installed in the cluster for `spark_apply()` to function. Failure to install the cluster will trigger a `Cannot run program, no such file or directory` error while attempting to use `spark_apply()`. Contact your cluster administrator to consider making the R runtime available throughout the entire cluster.
 
 A **Homogeneous Cluster** is required since the driver node distributes, and potentially compiles, packages to the workers. For instance, the driver and workers must have the same processor architecture, system libraries, etc.
 

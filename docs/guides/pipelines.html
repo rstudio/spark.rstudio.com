@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/textmining.html" rel="next">
+  <link href="../guides/distributed-r.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -132,85 +134,8 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../guides/index.html">Guides</a>
+    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-deployment" role="button" data-bs-toggle="dropdown" aria-expanded="false">Deployment</a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-deployment">    
-        <li>
-    <a class="dropdown-item" href="../deployment.Rmd">Deployment Options</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/stand-alone-aws.Rmd">Standalone cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../guides/data-lakes.Rmd">Data Lakes</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/yarn-cluster-emr.Rmd">EMR cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/cloudera-aws.Rmd">Cloudera cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/databricks-cluster-local.Rmd">Databricks cluster</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../examples/qubole-overview.Rmd">Qubole cluster</a>
-  </li>  
-    </ul>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="../packages/sparklyr/reference/index.md">Reference</a>
-  </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-packages" role="button" data-bs-toggle="dropdown" aria-expanded="false">Packages</a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-packages">    
-        <li class="dropdown-header">graphframes (Graph X)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/graphframes/latest/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/graphframes/latest/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/graphframes/latest/reference/index.md">Reference</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">MLeap (Production Pipelines)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/mleap/latest/reference/index.html">Reference</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">sparkxgb (XGBoost)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparkxgb/reference/index.html">Reference</a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Spark TF (Tensorflow)</li>
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/index.html">About</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/news.html">News</a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../packages/sparktf/reference/index.html">Reference</a>
-  </li>  
-    </ul>
-  </li>
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -224,10 +149,88 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Spark ML Pipelines</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../guides/index.html" class="">Get Started</a>
+</li>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-basics" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Basics</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="quarto-sidebar-section-basics">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/connections.Rmd" class="">Configuring connections</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../troubleshooting.md" class="">Troubleshooting</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../dplyr.md" class="">Manipulating data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../mlib.md" class="">Machine Learning</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/caching.Rmd" class="">Understanding Caching</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-specialized" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Specialized</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="quarto-sidebar-section-specialized">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/distributed-r.html" class="">Distributed R</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/pipelines.html" class="active">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/textmining.html" class="">Text mining</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/streaming.html" class="">Stream Analysis</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/aws-s3.html" class="">AWS S3 buckets</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/h2o.html" class="">Using H2O</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -253,7 +256,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Spark ML Pipelines</h1>
+<h1 class="title d-none d-lg-block display-7">Spark ML Pipelines</h1>
 </header>
 
 <p>Spark’s <strong>ML Pipelines</strong> provide a way to easily combine multiple transformations and algorithms into a single workflow, or pipeline.</p>
@@ -813,8 +816,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../guides/distributed-r.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Distributed R</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../guides/textmining.html">
+        <span class="nav-page-text">Text mining</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

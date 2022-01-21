@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.2.443">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>sparklyr - Guides</title>
+  <title>sparklyr - Data Lakes</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -69,7 +69,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
+    <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
 </ul>
               <div class="quarto-toggle-container">
@@ -90,43 +90,84 @@
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-      <div id="quarto-toc-target"></div>
+      <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#audience" class="nav-link active" data-scroll-target="#audience">Audience</a></li>
+<li><a href="#introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+<li><a href="#r-for-data-science" class="nav-link" data-scroll-target="#r-for-data-science">R for Data Science</a></li>
+<li><a href="#hadoop-as-a-data-source" class="nav-link" data-scroll-target="#hadoop-as-a-data-source">Hadoop as a Data Source</a></li>
+<li><a href="#spark-as-an-analysis-engine" class="nav-link" data-scroll-target="#spark-as-an-analysis-engine">Spark as an Analysis Engine</a></li>
+<li><a href="#cluster-setup" class="nav-link" data-scroll-target="#cluster-setup">Cluster Setup</a></li>
+<li><a href="#considerations" class="nav-link" data-scroll-target="#considerations">Considerations</a></li>
+<li><a href="#r-for-data-science-toolchain-with-spark" class="nav-link" data-scroll-target="#r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</a></li>
+</ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Guides</h1>
+<h1 class="title display-7">Data Lakes</h1>
 </header>
-<table class="table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 66%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td><a href="../guides/caching.html">Understanding Spark Caching</a></td>
-<td>Learn how to take advantage of how Spark manages memory storage</td>
-</tr>
-<tr class="even">
-<td><a href="../guides/distributed-r.html">Run R code in Spark</a></td>
-<td>Learn how to run R code in parallel using Spark</td>
-</tr>
-<tr class="odd">
-<td><a href="../guides/pipelines.html">ML Pipelines</a></td>
-<td>Learn how to create formalize data manipulation and modeling inside a Spark ML Pipeline.</td>
-</tr>
-<tr class="even">
-<td><a href="../guides/streaming.html">Stream Data</a></td>
-<td>Learn how to think about and use Spark to analyze stream data.</td>
-</tr>
-<tr class="odd">
-<td><a href="../guides/textmining.html">Text Mining</a></td>
-<td>Learn how to use Spark to convert long text into usable word tables.</td>
-</tr>
-</tbody>
-</table>
+
+<section id="audience" class="level2">
+<h2 class="anchored" data-anchor-id="audience">Audience</h2>
+<p>This article explains how to take advantage of Apache Spark at organizations that have a Hadoop based Big Data Lake.</p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>We have noticed that the types of questions we field after a demo of <code>sparklyr</code> to our customers were more about high-level architecture than how the package works. To answer those questions, we put together a set of slides that illustrate and discuss important concepts, to help customers see where Spark, R, and <code>sparklyr</code> fit in a Big Data Platform implementation. In this article, we’ll review those slides and provide a narrative that will help you better envision how you can take advantage of our products.</p>
+</section>
+<section id="r-for-data-science" class="level2">
+<h2 class="anchored" data-anchor-id="r-for-data-science">R for Data Science</h2>
+<p>It is very important to preface the Use Case review with some background information about where RStudio focuses its efforts when developing packages and products. Many vendors offer <em>R integration</em>, but in most cases, what this means is that they will add a model built in R to their pipeline or interface, and pass new inputs to that model to generate outputs that can be used in the next step in the pipeline, or in a calculation for the interface.</p>
+<p>In contrast, our focus is on the process that happens before that: the discipline that produces the model, meaning <strong>Data Science</strong>.</p>
+<p><img src="../images/guides/data-lakes/slide-1.png" class="img-fluid"></p>
+<p>In their <a href="http://r4ds.had.co.nz/">R for Data Science</a> book, Hadley Wickham and Garrett Grolemund provide a great diagram that nicely illustrates the Data Science process:</p>
+<ul>
+<li><p>We <strong>import</strong> data into memory with R</p></li>
+<li><p>Clean and <strong>tidy</strong> the data</p></li>
+<li><p>Dive into a cyclical process called <strong>understand</strong>, which helps us to get to know our data, and hopefully find the answer to the question we started with. This cycle typically involves making <strong>transformations</strong> to our tidied data, using the transformed data to fit <strong>models</strong>, and <strong>visualizing</strong> results.</p></li>
+<li><p>Once we find an answer to our question, we then <strong>communicate</strong> the results.</p></li>
+</ul>
+<p>Data Scientists like using R because it allows them to complete a Data Science project from beginning to end inside the R environment, and in memory.</p>
+</section>
+<section id="hadoop-as-a-data-source" class="level2">
+<h2 class="anchored" data-anchor-id="hadoop-as-a-data-source">Hadoop as a Data Source</h2>
+<p>What happens when the data that needs to be analyzed is very large, like the data sets found in a Hadoop cluster? It would be impossible to fit these in memory, so workarounds are normally used. Possible workarounds include using a comparatively minuscule data sample, or download as much data as possible. This becomes disruptive to Data Scientists because either the small sample may not be representative, or they have to wait a long time in every iteration of importing a lot of data, exploring a lot of data, and modeling a lot of data.</p>
+<p><img src="../images/guides/data-lakes/slide-2.png" class="img-fluid"></p>
+</section>
+<section id="spark-as-an-analysis-engine" class="level2">
+<h2 class="anchored" data-anchor-id="spark-as-an-analysis-engine">Spark as an Analysis Engine</h2>
+<p>We noticed that a very important mental leap to make is to see Spark not just as a gateway to Hadoop (or worse, as an additional data source), but as a computing engine. As such, it is an excellent vehicle to scale our analytics. Spark has many capabilities that makes it ideal for Data Science in a data lake, such as close integration with Hadoop and Hive, the ability to cache data into memory across multiple nodes, data transformers, and its Machine Learning libraries.</p>
+<p>The approach, then, is to <strong>push as much compute</strong> to the cluster as possible, using R primarily as an interface to Spark for the Data Scientist, which will then <strong>collect as few results</strong> as possible back into R memory, mostly to <strong>visualize</strong> and <strong>communicate</strong>. As shown in the slide, the more <strong>import</strong>, <strong>tidy</strong>, <strong>transform</strong> and <strong>modeling</strong> work we can push to Spark, the faster we can analyze very large data sets.</p>
+<p><img src="../images/guides/data-lakes/slide-3.png" class="img-fluid"></p>
+</section>
+<section id="cluster-setup" class="level2">
+<h2 class="anchored" data-anchor-id="cluster-setup">Cluster Setup</h2>
+<p>Here is an illustration of how R, RStudio, and <code>sparklyr</code> can be added to the YARN managed cluster. The highlights are:</p>
+<ul>
+<li>R, RStudio, and <code>sparklyr</code> need to be installed on one node only, typically an edge node</li>
+<li>The Data Scientist can access R, Spark, and the cluster via a web browser by navigating to the RStudio IDE inside the edge node</li>
+</ul>
+<p><img src="../images/guides/data-lakes/slide-4.png" class="img-fluid"></p>
+</section>
+<section id="considerations" class="level2">
+<h2 class="anchored" data-anchor-id="considerations">Considerations</h2>
+<p>There are some important considerations to keep in mind when combining your Data Lake and R for large scale analytics:</p>
+<ul>
+<li><p>Spark’s Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a <code>sparklyr</code> extension such as <a href="http://spark.rstudio.com/extensions.html">H2O</a>, or collecting a sample of the data into R memory for modeling.</p></li>
+<li><p>Spark does not have visualization functionality; currently, the best approach is to collect pre-calculated data into R for plotting. A good way to drastically reduce the number of rows being brought back into memory is to push as much computation as possible to Spark, and return just the results to be plotted. For example, the bins of a Histogram can be calculated in Spark, so that only the final bucket values would be returned to R for visualization.</p></li>
+<li><p>A particular use case may require a different way of scaling analytics. We have published an article that provides a very good overview of the options that are available: <a href="https://rviews.rstudio.com/2016/12/21/r-for-enterprise-how-to-scale-your-analytics-using-r/">R for Enterprise: How to Scale Your Analytics Using R</a></p></li>
+</ul>
+</section>
+<section id="r-for-data-science-toolchain-with-spark" class="level2">
+<h2 class="anchored" data-anchor-id="r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</h2>
+<p>With sparklyr, the Data Scientist will be able to access the Data Lake’s data, and also gain an additional, very powerful <strong>understand</strong> layer via Spark. sparklyr, along with the <a href="https://www.rstudio.com/products/rstudio/">RStudio IDE</a> and the <a href="http://tidyverse.org/">tidyverse</a> packages, provides the Data Scientist with an excellent toolbox to analyze data, big and small.</p>
+<p><img src="../images/guides/data-lakes/slide-5.png" class="img-fluid"></p>
 
 
+</section>
 </main> <!-- /main -->
 <script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

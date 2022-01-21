@@ -53,8 +53,6 @@ stream_view(write_output)
 
 ![](/images/guides/streaming/stream_view.png){width="500"}
 
-</center>
-
 ```{r}
 stream_stop(write_output)
 spark_disconnect(sc)
@@ -105,7 +103,12 @@ spark_disconnect(sc)
 
     ```{r}
     library(future)
-    invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
+
+    invisible(
+      future(
+        stream_generate_test(interval = 0.2, iterations = 100)
+        )
+      )
     ```
 
 7.  The `stream_view()` function can be used before the 50 tests are complete because of the use of the `future` package. It will monitor the status of the job that `write_output` is pointing to and provide information on the amount of data coming into the "source" folder and going out into the "source-out" folder.
@@ -118,6 +121,7 @@ spark_disconnect(sc)
 
     ```{r}
     stream_stop(write_output)
+
     spark_disconnect(sc)
     ```
 
@@ -247,6 +251,7 @@ Clean up after the experiment
 
 ```{r}
 stream_stop(write_output)
+
 spark_disconnect(sc)
 ```
 
@@ -360,7 +365,7 @@ runGadget(ui, server)
 
 ## Example 5 - ML Pipeline Model
 
-This example uses a fitted [Pipeline Model](/guides/pipelines/) to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.
+This example uses a fitted [Pipeline Model](/guides/pipelines.html) to process the input, and saves the predictions to the output. This approach would be used to apply Machine Learning on top of streaming data.
 
 ```{r}
 library(sparklyr)

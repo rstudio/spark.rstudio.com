@@ -170,7 +170,7 @@
   <a href="./get-started.html" class="active">Get Started</a>
 </li>
       <li class="sidebar-item">
-  <a href="./get-started/dplyr.html" class="">Manipulating Data with dplyr</a>
+  <a href="./get-started/dplyr.html" class="">Manipulating Data with <code>dplyr</code></a>
 </li>
   </ul>
   </div>
@@ -185,52 +185,133 @@
 <h1 class="title d-none d-lg-block display-7">Get Started</h1>
 </header>
 <div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Installation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Manipulate Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Machine Learning</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Reading and Writing Data</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Install</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Read Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Prepare Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Model Data</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-1-1-tab">
+<section id="install-the-package" class="level3">
+<h3 class="anchored" data-anchor-id="install-the-package">Install the package</h3>
 <p>You can install the <code>sparklyr</code> package from <a href="https://CRAN.r-project.org">CRAN</a> as follows:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You should also install a local version of Spark for development purposes. <strong>This step is only necessary if you do not have a Spark cluster to experiment with</strong>:</p>
+</section>
+<section id="install-spark-locally" class="level3">
+<h3 class="anchored" data-anchor-id="install-spark-locally">Install Spark locally</h3>
+<p>This section is meant for developers new to <code>sparklyr</code>. You will need a running Spark environment to connect to. <code>sparklyr</code> can install Spark in your computer. The installed Spark environment is meant for learning and prototyping purposes. The installation will work on all the major Operating Systems that R works on, including Linux, MacOS, and Windows.</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_install</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="connecting-to-spark" class="level3">
-<h3 class="anchored" data-anchor-id="connecting-to-spark">Connecting to Spark</h3>
-<p>You can connect to both local instances of Spark as well as remote Spark clusters. Here we’ll connect to a local instance of Spark via the <code>spark_connect()</code> function:</p>
+<p>Please be aware that after installation, Spark is <strong>not</strong> running. The next section will explain how to start a single node Spark cluster in your machine.</p>
+</section>
+<section id="connect-to-spark" class="level3">
+<h3 class="anchored" data-anchor-id="connect-to-spark">Connect to Spark</h3>
+<p>You can use <code>spark_connect()</code> to connect to Spark clusters. The arguments passed to this functions depend on the type of Spark cluster you are connecting to. There are several different types of Spark clusters, such as YARN, Stand Alone and Kubernetes.</p>
+<p><code>spark_connect()</code> is able to both start, and connect to, the single node Spark cluster in your machine. In order to do that, pass “local” as the argument for <code>master</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The returned Spark connection (<code>sc</code>) provides a remote dplyr data source to the Spark cluster.</p>
-<p>For more information on connecting to remote Spark clusters see the <a href="https://spark.rstudio.com/deployment.html">Deployment</a> section of the <code>sparklyr</code> website.</p>
+<p>The <code>sc</code> variable now contains all of the connection information needed to interact with the cluster.</p>
+<p>To learn how to connect to other types of Spark clusters, see the <a href="./deployment/index.qmd">Deployment</a> section of this site.</p>
+<p>For “local” connection, <code>spark_disconnect()</code> will shut down the single node Spark environment in your machine, and tell R that the connection is no longer valid. For other types of Spark clusters, <code>spark_disconnect()</code> will only end the Spark session, it will not shut down the Spark cluster itself.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-2-tab">
+<p>A new Spark session will contain no data. The first step is to either load data into your Spark session’s memory, or point Spark to the location of the data so it can access the data on-demand.</p>
+<p>For this exercise, we will start a “local” Spark session, and then transfer data from our R environment to the Spark session’s memory. To do that, we will use the <code>copy_to()</code> command:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tbl_mtcars <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="st">"spark_mtcars"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you are using the RStudio IDE, you will notice a new table in the Connections pane. The name of that table is <strong>spark_mtcars</strong>. That is the name of the data set inside the Spark memory. The <code>tbl_mtcars</code> variable does not contain any <code>mtcars</code> data, this variable contains the info that points to the location where the Spark session loaded the data to.</p>
+<p>Calling the <code>tbl_mtcars</code> variable in R will download the first 1,000 records and display them :</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tbl_mtcars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;spark_mtcars&gt; [?? x 11]
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  21       6  160    110  3.9   2.62  16.5     0     1     4     4
+ 2  21       6  160    110  3.9   2.88  17.0     0     1     4     4
+ 3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1
+ 4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1
+ 5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2
+ 6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1
+ 7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4
+ 8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2
+ 9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2
+10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4
+# … with more rows</code></pre>
+</div>
+</div>
+<p>Notice that at the top of the data print out, it is noted that records were downloaded from Spark: <em>Source: spark…</em>.</p>
+<p>To clean up the session, we will now stop the Spark session:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="files" class="level3">
+<h3 class="anchored" data-anchor-id="files">Files</h3>
+<p>In a formal Spark environment, it will be rare when we would have to upload data from R into Spark.</p>
+<p>Using <code>sparklyr</code>, you can tell Spark to read and write data. Spark is able to interact with multiple types of file systems, such as HDFS, S3 and local. Additionally, Spark is able to read several file types such as CSV, Parquet, Delta and JSON. <code>sparklyr</code> provides functions that makes it easy to access these features. See the <a href="./packages/sparklyr/latest/reference/#spark-data">Spark Data</a> section for a full list of available functions.</p>
+<p>The following command will tell Spark to read a CSV file, and to also load it into Spark memory.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Do not run the next following command. It is for example purposes only.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_read_csv</span>(sc, <span class="at">name =</span> <span class="st">"test_table"</span>,  <span class="at">path =</span> <span class="st">"/test/path/test_file.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-3-tab">
+<p>There are three methods for working with data:</p>
+<ul>
+<li>Using <code>dplyr</code> commands</li>
+<li>Using SQL</li>
+<li>Using Spark’s feature transformers</li>
+</ul>
 <p>For this example start a local session of Spark. We’ll start by copying a data set from R into the Spark cluster (note that you may need to install the <code>nycflights13</code>)</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, nycflights13<span class="sc">::</span>flights, <span class="st">"spark_flights"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, nycflights13<span class="sc">::</span>flights, <span class="st">"spark_flights"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="using-dplyr" class="level3">
 <h3 class="anchored" data-anchor-id="using-dplyr">Using <code>dplyr</code></h3>
 <p>We can now use all of the available <code>dplyr</code> verbs against the tables within the cluster.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>delay <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tailnum) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(), </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="fu">mean</span>(distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;</span> <span class="dv">20</span>, dist <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="sc">!</span><span class="fu">is.na</span>(delay)) </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>delay</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>delay <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tailnum) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(), </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">dist =</span> <span class="fu">mean</span>(distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(count <span class="sc">&gt;</span> <span class="dv">20</span>, dist <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="sc">!</span><span class="fu">is.na</span>(delay)) </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>delay</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 4]
+   tailnum count  dist  delay
+   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 N24211    130 1330.  7.7  
+ 2 N793JB    283 1529.  4.72 
+ 3 N657JB    285 1286.  5.03 
+ 4 N633AA     24 1587. -0.625
+ 5 N9EAMQ    248  675.  9.24 
+ 6 N3GKAA     77 1247.  4.97 
+ 7 N997DL     63  868.  4.90 
+ 8 N318NB    202  814. -1.12 
+ 9 N651JB    261 1408.  7.58 
+10 N841UA     96 1208.  2.10 
+# … with more rows</code></pre>
+</div>
 </div>
 <p>For additional documentation on using dplyr with Spark see the <a href="./get-started/dplyr.html">Manipulating Data with <code>dplyr</code></a> article in this site</p>
 </section>
@@ -238,57 +319,46 @@
 <h3 class="anchored" data-anchor-id="using-sql">Using SQL</h3>
 <p>It’s also possible to execute SQL queries directly against tables within a Spark cluster. The <code>spark_connection()</code> object implements a <a href="https://dbi.r-dbi.org/">DBI</a> interface for Spark, so you can use <code>dbGetQuery()</code> to execute SQL and return the result as an R data frame:</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(sc, <span class="st">"SELECT carrier, sched_dep_time, dep_time, dep_delay FROM spark_flights LIMIT 5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(sc, <span class="st">"SELECT carrier, sched_dep_time, dep_time, dep_delay FROM spark_flights LIMIT 5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>  carrier sched_dep_time dep_time dep_delay
+1      UA            515      517         2
+2      UA            529      533         4
+3      AA            540      542         2
+4      B6            545      544        -1
+5      DL            600      554        -6</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-3-tab">
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-4-tab">
 <p>You can orchestrate machine learning algorithms in a Spark cluster via the <a href="https://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> functions within <strong>sparklyr</strong>. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows.</p>
 <p>Here’s an example where we use <a href="https://spark.rstudio.com/reference/ml_linear_regression/">ml_linear_regression</a> to fit a linear regression model. We’ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car’s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We’ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy mtcars into spark</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transform our data set, and then partition into 'training', 'test'</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> mtcars_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cyl8 =</span> cyl <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">training =</span> <span class="fl">0.5</span>, <span class="at">test =</span> <span class="fl">0.5</span>, <span class="at">seed =</span> <span class="dv">1099</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear model to the training dataset</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training <span class="sc">%&gt;%</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_linear_regression</span>(<span class="at">response =</span> <span class="st">"mpg"</span>, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"wt"</span>, <span class="st">"cyl"</span>))</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># copy mtcars into spark</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transform our data set, and then partition into 'training', 'test'</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>partitions <span class="ot">&lt;-</span> mtcars_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(hp <span class="sc">&gt;=</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cyl8 =</span> cyl <span class="sc">==</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_partition</span>(<span class="at">training =</span> <span class="fl">0.5</span>, <span class="at">test =</span> <span class="fl">0.5</span>, <span class="at">seed =</span> <span class="dv">1099</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a linear model to the training dataset</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> partitions<span class="sc">$</span>training <span class="sc">%&gt;%</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_linear_regression</span>(<span class="at">response =</span> <span class="st">"mpg"</span>, <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"wt"</span>, <span class="st">"cyl"</span>))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For linear regression models produced by Spark, we can use <code>summary()</code> to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it’s easy to chain these functions together with dplyr pipelines. To learn more see the <a href="https://spark.rstudio.com/mlib/">machine learning</a> section.</p>
-</div>
-<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-4-tab">
-<p>You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the local filesystem of cluster nodes.</p>
-<div class="cell">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>temp_csv <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".csv"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>temp_parquet <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".parquet"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>temp_json <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".json"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_csv</span>(iris_tbl, temp_csv)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>iris_csv_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"iris_csv"</span>, temp_csv)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_parquet</span>(iris_tbl, temp_parquet)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>iris_parquet_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_parquet</span>(sc, <span class="st">"iris_parquet"</span>, temp_parquet)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_write_json</span>(iris_tbl, temp_json)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>iris_json_tbl <span class="ot">&lt;-</span> <span class="fu">spark_read_json</span>(sc, <span class="st">"iris_json"</span>, temp_json)</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="fu">src_tbls</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </div>
 </div>
 </div>
@@ -472,7 +542,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./get-started/dplyr.html">
-        <span class="nav-page-text">Manipulating Data with dplyr</span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Manipulating Data with <code>dplyr</code></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

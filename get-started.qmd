@@ -55,6 +55,10 @@ For more information on connecting to remote Spark clusters see the [Deployment]
 
 ## Manipulate Data
 
+For this example start a local session of Spark. We'll start by copying a 
+data set from R into the Spark cluster (note that you may need to install the 
+`nycflights13`)
+
 ```{r}
 library(sparklyr)
 sc <- spark_connect(master = "local")
@@ -63,23 +67,7 @@ flights_tbl <- copy_to(sc, nycflights13::flights, "spark_flights")
 
 ### Using `dplyr`
 
-We can now use all of the available dplyr verbs against the tables within the cluster.
-
-We'll start by copying some data sets from R into the Spark cluster (note that you may need to install the `nycflights13`):
-
-To start with here's a simple filtering example:
-
-```{r}
-library(dplyr)
-
-flights_tbl %>% 
-  filter(dep_delay == 2) %>% 
-  select(carrier, sched_dep_time, dep_time, dep_delay) %>% 
-  head(5)
-```
-
-
-[Introduction to `dplyr`](https://CRAN.R-project.org/package=dplyr) provides additional `dplyr` examples you can try. For example, consider the last example from the tutorial which plots data on flight delays:
+We can now use all of the available `dplyr` verbs against the tables within the cluster.
 
 ```{r}
 delay <- flights_tbl %>%
@@ -91,30 +79,15 @@ delay <- flights_tbl %>%
     ) %>%
   filter(count > 20, dist < 2000, !is.na(delay)) 
 
-show_query(delay)
+delay
 ```
 
-
-```{r}
-#| message: false
-#| fig-width: 4
-#| fig-height: 3
-
-library(ggplot2)
-
-delay %>%
-  collect() %>%  # Downloads the data into R
-  ggplot(aes(dist, delay)) +
-  geom_point(aes(size = count), alpha = 1/2) +
-  geom_smooth() +
-  scale_size_area(max_size = 2)
-```
-
-For additional documentation on using dplyr with Spark see the [dplyr](https://spark.rstudio.com/dplyr.html) section of the sparklyr website.
+For additional documentation on using dplyr with Spark see the [Manipulating Data with `dplyr`](/get-started/dplyr.qmd) article in 
+this site
 
 ### Using SQL
 
-It's also possible to execute SQL queries directly against tables within a Spark cluster. The `spark_connection()` object implements a [DBI](https://github.com/rstats-db/DBI) interface for Spark, so you can use `dbGetQuery()` to execute SQL and return the result as an R data frame:
+It's also possible to execute SQL queries directly against tables within a Spark cluster. The `spark_connection()` object implements a [DBI](https://dbi.r-dbi.org/) interface for Spark, so you can use `dbGetQuery()` to execute SQL and return the result as an R data frame:
 
 ```{r sql-dbi}
 library(DBI)

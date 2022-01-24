@@ -1,0 +1,187 @@
+---
+title: "Get Started"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: false
+---
+
+```{r, include = FALSE}
+library(sparklyr) 
+library(dplyr)
+```
+
+
+::: {.panel-tabset}
+
+## Installation
+
+You can install the `sparklyr` package from [CRAN](https://CRAN.r-project.org) as follows:
+
+```{r}
+#| eval: false
+
+install.packages("sparklyr")
+```
+
+You should also install a local version of Spark for development purposes. **This step is only necessary if you do not have a Spark cluster to experiment with**:
+
+```{r}
+#| eval: false
+
+library(sparklyr)
+
+spark_install()
+```
+
+### Connecting to Spark
+
+You can connect to both local instances of Spark as well as remote Spark clusters. Here we'll connect to a local instance of Spark via the `spark_connect()` function:
+
+```{r}
+#| eval: false
+
+library(sparklyr)
+
+sc <- spark_connect(master = "local")
+```
+
+
+The returned Spark connection (`sc`) provides a remote dplyr data source to the Spark cluster.
+
+For more information on connecting to remote Spark clusters see the [Deployment](https://spark.rstudio.com/deployment.html) section of the `sparklyr` website.
+
+## Manipulate Data
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "local")
+flights_tbl <- copy_to(sc, nycflights13::flights, "spark_flights")
+```
+
+### Using `dplyr`
+
+We can now use all of the available dplyr verbs against the tables within the cluster.
+
+We'll start by copying some data sets from R into the Spark cluster (note that you may need to install the `nycflights13`):
+
+To start with here's a simple filtering example:
+
+```{r}
+library(dplyr)
+
+flights_tbl %>% 
+  filter(dep_delay == 2) %>% 
+  select(carrier, sched_dep_time, dep_time, dep_delay) %>% 
+  head(5)
+```
+
+
+[Introduction to `dplyr`](https://CRAN.R-project.org/package=dplyr) provides additional `dplyr` examples you can try. For example, consider the last example from the tutorial which plots data on flight delays:
+
+```{r}
+delay <- flights_tbl %>%
+  group_by(tailnum) %>%
+  summarise(
+    count = n(), 
+    dist = mean(distance, na.rm = TRUE), 
+    delay = mean(arr_delay, na.rm = TRUE)
+    ) %>%
+  filter(count > 20, dist < 2000, !is.na(delay)) 
+
+show_query(delay)
+```
+
+
+```{r}
+#| message: false
+#| fig-width: 4
+#| fig-height: 3
+
+library(ggplot2)
+
+delay %>%
+  collect() %>%  # Downloads the data into R
+  ggplot(aes(dist, delay)) +
+  geom_point(aes(size = count), alpha = 1/2) +
+  geom_smooth() +
+  scale_size_area(max_size = 2)
+```
+
+For additional documentation on using dplyr with Spark see the [dplyr](https://spark.rstudio.com/dplyr.html) section of the sparklyr website.
+
+### Using SQL
+
+It's also possible to execute SQL queries directly against tables within a Spark cluster. The `spark_connection()` object implements a [DBI](https://github.com/rstats-db/DBI) interface for Spark, so you can use `dbGetQuery()` to execute SQL and return the result as an R data frame:
+
+```{r sql-dbi}
+library(DBI)
+
+dbGetQuery(sc, "SELECT carrier, sched_dep_time, dep_time, dep_delay FROM spark_flights LIMIT 5")
+
+```
+```{r}
+spark_disconnect(sc)
+```
+
+
+## Machine Learning
+
+You can orchestrate machine learning algorithms in a Spark cluster via the [machine learning](https://spark.apache.org/docs/latest/mllib-guide.html) functions within **sparklyr**. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows.
+
+Here's an example where we use [ml_linear_regression](https://spark.rstudio.com/reference/ml_linear_regression/) to fit a linear regression model. We'll use the built-in `mtcars` dataset, and see if we can predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the number of cylinders the engine contains (`cyl`). We'll assume in each case that the relationship between `mpg` and each of our features is linear.
+
+```{r}
+#| eval: false
+
+# copy mtcars into spark
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
+
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  mutate(cyl8 = cyl == 8) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
+
+# fit a linear model to the training dataset
+fit <- partitions$training %>%
+  ml_linear_regression(response = "mpg", features = c("wt", "cyl"))
+fit
+```
+
+For linear regression models produced by Spark, we can use `summary()` to learn a bit more about the quality of our fit, and the statistical significance of each of our predictors.
+
+```{r}
+#| eval: false
+
+summary(fit)
+```
+
+Spark machine learning supports a wide array of algorithms and feature transformations and as illustrated above it's easy to chain these functions together with dplyr pipelines. To learn more see the [machine learning](https://spark.rstudio.com/mlib/) section.
+
+## Reading and Writing Data
+
+You can read and write data in CSV, JSON, and Parquet formats. Data can be stored in HDFS, S3, or on the local filesystem of cluster nodes.
+
+```{r}
+#| eval: false
+
+temp_csv <- tempfile(fileext = ".csv")
+temp_parquet <- tempfile(fileext = ".parquet")
+temp_json <- tempfile(fileext = ".json")
+
+spark_write_csv(iris_tbl, temp_csv)
+iris_csv_tbl <- spark_read_csv(sc, "iris_csv", temp_csv)
+
+spark_write_parquet(iris_tbl, temp_parquet)
+iris_parquet_tbl <- spark_read_parquet(sc, "iris_parquet", temp_parquet)
+
+spark_write_json(iris_tbl, temp_json)
+iris_json_tbl <- spark_read_json(sc, "iris_json", temp_json)
+
+src_tbls(sc)
+```
+
+:::

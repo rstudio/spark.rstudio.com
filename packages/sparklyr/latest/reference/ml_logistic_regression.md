@@ -1,0 +1,169 @@
+# ml_logistic_regression
+
+
+Spark ML -- Logistic Regression
+
+
+
+
+## Description
+
+Perform classification using logistic regression.
+
+
+
+
+
+## Usage
+```r
+ml_logistic_regression(
+  x,
+  formula = NULL,
+  fit_intercept = TRUE,
+  elastic_net_param = 0,
+  reg_param = 0,
+  max_iter = 100,
+  threshold = 0.5,
+  thresholds = NULL,
+  tol = 1e-06,
+  weight_col = NULL,
+  aggregation_depth = 2,
+  lower_bounds_on_coefficients = NULL,
+  lower_bounds_on_intercepts = NULL,
+  upper_bounds_on_coefficients = NULL,
+  upper_bounds_on_intercepts = NULL,
+  features_col = "features",
+  label_col = "label",
+  family = "auto",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("logistic_regression_"),
+  ...
+)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
+fit_intercept | Boolean; should the model be fit with an intercept term?
+elastic_net_param | ElasticNet mixing parameter, in range [0, 1]. For alpha = 0, the penalty is an L2 penalty. For alpha = 1, it is an L1 penalty.
+reg_param | Regularization parameter (aka lambda)
+max_iter | The maximum number of iterations to use.
+threshold | in binary classification prediction, in range [0, 1].
+thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value ``p/t`` is predicted, where ``p`` is the original probability of that class and ``t`` is the class's threshold.
+tol | Param for the convergence tolerance for iterative algorithms.
+weight_col | The name of the column to use as weights for the model fit.
+aggregation_depth | (Spark 2.1.0+) Suggested depth for treeAggregate (>= 2).
+lower_bounds_on_coefficients | (Spark 2.2.0+) Lower bounds on coefficients if fitting under bound constrained optimization.
+The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.
+lower_bounds_on_intercepts | (Spark 2.2.0+) Lower bounds on intercepts if fitting under bound constrained optimization.
+The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.
+upper_bounds_on_coefficients | (Spark 2.2.0+) Upper bounds on coefficients if fitting under bound constrained optimization.
+The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.
+upper_bounds_on_intercepts | (Spark 2.2.0+) Upper bounds on intercepts if fitting under bound constrained optimization.
+The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.
+features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
+label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
+family | (Spark 2.1.0+) Param for the name of family which is a description of the label distribution to be used in the model. Supported options: "auto", "binomial", and "multinomial."
+prediction_col | Prediction column name.
+probability_col | Column name for predicted class conditional probabilities.
+raw_prediction_col | Raw prediction (a.k.a. confidence) column name.
+uid | A character string used to uniquely identify the ML estimator.
+... | Optional arguments; see Details.
+
+
+
+
+## Details
+
+When ``x`` is a ``tbl_spark`` and ``formula`` (alternatively, ``response`` and ``features``) is specified, the function returns a ``ml_model`` object wrapping a ``ml_pipeline_model`` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument ``predicted_label_col`` (defaults to ``"predicted_label"``) can be used to specify the name of the predicted label column. In addition to the fitted ``ml_pipeline_model``, ``ml_model`` objects also contain a ``ml_pipeline`` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with ``type = "pipeline"`` to faciliate model refresh workflows.
+
+
+
+
+
+## Value
+
+The object returned depends on the class of ``x``.
+
+
+  
+*  `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to
+  a Spark `Predictor` object and can be used to compose
+  `Pipeline` objects.
+
+  
+*  `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with
+  the predictor appended to the pipeline.
+
+  
+*  `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then
+  immediately fit with the input `tbl_spark`, returning a prediction model.
+
+  
+*  `tbl_spark`, with `formula`: specified When `formula`
+    is specified, the input `tbl_spark` is first transformed using a
+    `RFormula` transformer before being fit by
+    the predictor. The object returned in this case is a `ml_model` which is a
+    wrapper of a `ml_pipeline_model`.
+
+
+
+
+
+
+## Examples
+
+```r
+
+sc <- spark_connect(master = "local")
+mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE)
+
+partitions <- mtcars_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+mtcars_training <- partitions$training
+mtcars_test <- partitions$test
+
+lr_model <- mtcars_training %>%
+  ml_logistic_regression(am ~ gear + carb)
+
+pred <- ml_predict(lr_model, mtcars_test)
+
+ml_binary_classification_evaluator(pred)
+
+```
+
+
+
+
+
+
+## See Also
+
+See http://spark.apache.org/docs/latest/ml-classification-regression.html for
+  more information on the set of supervised learning algorithms.
+
+Other ml algorithms: 
+`ml_aft_survival_regression()`,
+`ml_decision_tree_classifier()`,
+`ml_gbt_classifier()`,
+`ml_generalized_linear_regression()`,
+`ml_isotonic_regression()`,
+`ml_linear_regression()`,
+`ml_linear_svc()`,
+`ml_multilayer_perceptron_classifier()`,
+`ml_naive_bayes()`,
+`ml_one_vs_rest()`,
+`ml_random_forest_classifier()`
+
+
+

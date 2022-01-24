@@ -1,0 +1,253 @@
+# ml_gbt_classifier
+
+
+Spark ML -- Gradient Boosted Trees
+
+
+
+
+## Description
+
+Perform binary classification and regression using gradient boosted trees. Multiclass classification is not supported yet.
+
+
+
+
+
+## Usage
+```r
+ml_gbt_classifier(
+  x,
+  formula = NULL,
+  max_iter = 20,
+  max_depth = 5,
+  step_size = 0.1,
+  subsampling_rate = 1,
+  feature_subset_strategy = "auto",
+  min_instances_per_node = 1L,
+  max_bins = 32,
+  min_info_gain = 0,
+  loss_type = "logistic",
+  seed = NULL,
+  thresholds = NULL,
+  checkpoint_interval = 10,
+  cache_node_ids = FALSE,
+  max_memory_in_mb = 256,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("gbt_classifier_"),
+  ...
+)
+
+ml_gradient_boosted_trees(
+  x,
+  formula = NULL,
+  type = c("auto", "regression", "classification"),
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  checkpoint_interval = 10,
+  loss_type = c("auto", "logistic", "squared", "absolute"),
+  max_bins = 32,
+  max_depth = 5,
+  max_iter = 20L,
+  min_info_gain = 0,
+  min_instances_per_node = 1,
+  step_size = 0.1,
+  subsampling_rate = 1,
+  feature_subset_strategy = "auto",
+  seed = NULL,
+  thresholds = NULL,
+  cache_node_ids = FALSE,
+  max_memory_in_mb = 256,
+  uid = random_string("gradient_boosted_trees_"),
+  response = NULL,
+  features = NULL,
+  ...
+)
+
+ml_gbt_regressor(
+  x,
+  formula = NULL,
+  max_iter = 20,
+  max_depth = 5,
+  step_size = 0.1,
+  subsampling_rate = 1,
+  feature_subset_strategy = "auto",
+  min_instances_per_node = 1,
+  max_bins = 32,
+  min_info_gain = 0,
+  loss_type = "squared",
+  seed = NULL,
+  checkpoint_interval = 10,
+  cache_node_ids = FALSE,
+  max_memory_in_mb = 256,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  uid = random_string("gbt_regressor_"),
+  ...
+)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
+max_iter | Maxmimum number of iterations.
+max_depth | Maximum depth of the tree (>= 0); that is, the maximum
+number of nodes separating any leaves from the root of the tree.
+step_size | Step size (a.k.a. learning rate) in interval (0, 1] for shrinking the contribution of each estimator. (default = 0.1)
+subsampling_rate | Fraction of the training data used for learning each decision tree, in range (0, 1]. (default = 1.0)
+feature_subset_strategy | The number of features to consider for splits at each tree node. See details for options.
+min_instances_per_node | Minimum number of instances each child must
+have after split.
+max_bins | The maximum number of bins used for discretizing
+continuous features and for choosing how to split on features at
+each node. More bins give higher granularity.
+min_info_gain | Minimum information gain for a split to be considered
+at a tree node. Should be >= 0, defaults to 0.
+loss_type | Loss function which GBT tries to minimize. Supported: ``"squared"`` (L2) and ``"absolute"`` (L1) (default = squared) for regression and ``"logistic"`` (default) for classification. For ``ml_gradient_boosted_trees``, setting ``"auto"``
+will default to the appropriate loss type based on model type.
+seed | Seed for random numbers.
+thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value ``p/t`` is predicted, where ``p`` is the original probability of that class and ``t`` is the class's threshold.
+checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1).
+E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
+cache_node_ids | If ``FALSE``, the algorithm will pass trees to executors to match instances with nodes.
+If ``TRUE``, the algorithm will cache node IDs for each instance. Caching can speed up training of deeper trees.
+Defaults to ``FALSE``.
+max_memory_in_mb | Maximum memory in MB allocated to histogram aggregation.
+If too small, then 1 node will be split per iteration,
+and its aggregates may exceed this size. Defaults to 256.
+features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
+label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
+prediction_col | Prediction column name.
+probability_col | Column name for predicted class conditional probabilities.
+raw_prediction_col | Raw prediction (a.k.a. confidence) column name.
+uid | A character string used to uniquely identify the ML estimator.
+... | Optional arguments; see Details.
+type | The type of model to fit. ``"regression"`` treats the response
+as a continuous variable, while ``"classification"`` treats the response
+as a categorical variable. When ``"auto"`` is used, the model type is
+inferred based on the response variable type -- if it is a numeric type,
+then regression is used; classification otherwise.
+response | (Deprecated) The name of the response column (as a length-one character vector.)
+features | (Deprecated) The name of features (terms) to use for the model fit.
+
+
+
+
+## Details
+
+When ``x`` is a ``tbl_spark`` and ``formula`` (alternatively, ``response`` and ``features``) is specified, the function returns a ``ml_model`` object wrapping a ``ml_pipeline_model`` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument ``predicted_label_col`` (defaults to ``"predicted_label"``) can be used to specify the name of the predicted label column. In addition to the fitted ``ml_pipeline_model``, ``ml_model`` objects also contain a ``ml_pipeline`` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with ``type = "pipeline"`` to faciliate model refresh workflows.
+
+The supported options for ``feature_subset_strategy`` are
+  
+    
+*  `"auto"`: Choose automatically for task: If `num_trees == 1`, set to `"all"`. If `num_trees > 1` (forest), set to `"sqrt"` for classification and to `"onethird"` for regression.
+    
+*  `"all"`: use all features
+    
+*  `"onethird"`: use 1/3 of the features
+    
+*  `"sqrt"`: use use sqrt(number of features)
+    
+*  `"log2"`: use log2(number of features)
+    
+*  `"n"`: when `n` is in the range (0, 1.0], use n * number of features. When `n` is in the range (1, number of features), use `n` features. (default = `"auto"`)
+    
+
+``ml_gradient_boosted_trees`` is a wrapper around ``ml_gbt_regressor.tbl_spark`` and ``ml_gbt_classifier.tbl_spark`` and calls the appropriate method based on model type.
+
+
+
+
+
+## Value
+
+The object returned depends on the class of ``x``.
+
+
+  
+*  `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to
+  a Spark `Predictor` object and can be used to compose
+  `Pipeline` objects.
+
+  
+*  `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with
+  the predictor appended to the pipeline.
+
+  
+*  `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then
+  immediately fit with the input `tbl_spark`, returning a prediction model.
+
+  
+*  `tbl_spark`, with `formula`: specified When `formula`
+    is specified, the input `tbl_spark` is first transformed using a
+    `RFormula` transformer before being fit by
+    the predictor. The object returned in this case is a `ml_model` which is a
+    wrapper of a `ml_pipeline_model`.
+
+
+
+
+
+
+## Examples
+
+```r
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+partitions <- iris_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+iris_training <- partitions$training
+iris_test <- partitions$test
+
+gbt_model <- iris_training %>%
+  ml_gradient_boosted_trees(Sepal_Length ~ Petal_Length + Petal_Width)
+
+pred <- ml_predict(gbt_model, iris_test)
+
+ml_regression_evaluator(pred, label_col = "Sepal_Length")
+
+```
+
+
+
+
+
+
+## See Also
+
+See http://spark.apache.org/docs/latest/ml-classification-regression.html for
+  more information on the set of supervised learning algorithms.
+
+Other ml algorithms: 
+`ml_aft_survival_regression()`,
+`ml_decision_tree_classifier()`,
+`ml_generalized_linear_regression()`,
+`ml_isotonic_regression()`,
+`ml_linear_regression()`,
+`ml_linear_svc()`,
+`ml_logistic_regression()`,
+`ml_multilayer_perceptron_classifier()`,
+`ml_naive_bayes()`,
+`ml_one_vs_rest()`,
+`ml_random_forest_classifier()`
+
+
+

@@ -1,0 +1,86 @@
+# spark_write_source
+
+
+Writes a Spark DataFrame into a generic source
+
+
+
+
+## Description
+
+Writes a Spark DataFrame into a generic source.
+
+
+
+
+
+## Usage
+```r
+spark_write_source(
+  x,
+  source,
+  mode = NULL,
+  options = list(),
+  partition_by = NULL,
+  ...
+)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A Spark DataFrame or dplyr operation
+source | A data source capable of reading data.
+mode | A ``character`` element. Specifies the behavior when data or
+  table already exists. Supported values include: 'error', 'append', 'overwrite' and
+  ignore. Notice that 'overwrite' will also change the column structure.
+
+  For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
+  for your version of Spark.
+options | A list of strings with additional options.
+partition_by | A ``character`` vector. Partitions the output by the given columns on the file system.
+... | Optional arguments; currently unused.
+
+
+
+
+
+
+
+## See Also
+
+Other Spark serialization routines: 
+`collect_from_rds()`,
+`spark_load_table()`,
+`spark_read_avro()`,
+`spark_read_binary()`,
+`spark_read_csv()`,
+`spark_read_delta()`,
+`spark_read_image()`,
+`spark_read_jdbc()`,
+`spark_read_json()`,
+`spark_read_libsvm()`,
+`spark_read_orc()`,
+`spark_read_parquet()`,
+`spark_read_source()`,
+`spark_read_table()`,
+`spark_read_text()`,
+`spark_read()`,
+`spark_save_table()`,
+`spark_write_avro()`,
+`spark_write_csv()`,
+`spark_write_delta()`,
+`spark_write_jdbc()`,
+`spark_write_json()`,
+`spark_write_orc()`,
+`spark_write_parquet()`,
+`spark_write_table()`,
+`spark_write_text()`
+
+
+

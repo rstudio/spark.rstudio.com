@@ -1,0 +1,145 @@
+# ml_als
+
+
+Spark ML -- ALS
+
+
+
+
+## Description
+
+Perform recommendation using Alternating Least Squares (ALS) matrix factorization.
+
+
+
+
+
+## Usage
+```r
+ml_als(
+  x,
+  formula = NULL,
+  rating_col = "rating",
+  user_col = "user",
+  item_col = "item",
+  rank = 10,
+  reg_param = 0.1,
+  implicit_prefs = FALSE,
+  alpha = 1,
+  nonnegative = FALSE,
+  max_iter = 10,
+  num_user_blocks = 10,
+  num_item_blocks = 10,
+  checkpoint_interval = 10,
+  cold_start_strategy = "nan",
+  intermediate_storage_level = "MEMORY_AND_DISK",
+  final_storage_level = "MEMORY_AND_DISK",
+  uid = random_string("als_"),
+  ...
+)
+
+ml_recommend(model, type = c("items", "users"), n = 1)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula.
+This is used to transform the input dataframe before fitting, see ft_r_formula for details.
+The ALS model requires a specific formula format, please use ``rating_col ~ user_col + item_col``.
+rating_col | Column name for ratings. Default: "rating"
+user_col | Column name for user ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: "user"
+item_col | Column name for item ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: "item"
+rank | Rank of the matrix factorization (positive). Default: 10
+reg_param | Regularization parameter.
+implicit_prefs | Whether to use implicit preference. Default: FALSE.
+alpha | Alpha parameter in the implicit preference formulation (nonnegative).
+nonnegative | Whether to apply nonnegativity constraints. Default: FALSE.
+max_iter | Maximum number of iterations.
+num_user_blocks | Number of user blocks (positive). Default: 10
+num_item_blocks | Number of item blocks (positive). Default: 10
+checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1).
+E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
+cold_start_strategy | (Spark 2.2.0+) Strategy for dealing with unknown or new users/items at prediction time. This may be useful in cross-validation or production scenarios, for handling user/item ids the model has not seen in the training data. Supported values: - "nan": predicted value for unknown ids will be NaN. - "drop": rows in the input DataFrame containing unknown ids will be dropped from the output DataFrame containing predictions. Default: "nan".
+intermediate_storage_level | (Spark 2.0.0+) StorageLevel for intermediate datasets. Pass in a string representation of ``StorageLevel``. Cannot be "NONE". Default: "MEMORY_AND_DISK".
+final_storage_level | (Spark 2.0.0+) StorageLevel for ALS model factors. Pass in a string representation of ``StorageLevel``. Default: "MEMORY_AND_DISK".
+uid | A character string used to uniquely identify the ML estimator.
+... | Optional arguments; currently unused.
+model | An ALS model object
+type | What to recommend, one of ``items`` or ``users``
+n | Maximum number of recommendations to return
+
+
+
+
+## Details
+
+``ml_recommend()`` returns the top ``n`` users/items recommended for each item/user, for all items/users. The output has been transformed (exploded and separated) from the default Spark outputs to be more user friendly.
+
+
+
+
+
+## Value
+
+ALS attempts to estimate the ratings matrix R as the product of two lower-rank matrices, X and Y, i.e. X * Yt = R. Typically these approximations are called 'factor' matrices. The general approach is iterative. During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix.
+
+This is a blocked implementation of the ALS factorization algorithm that groups the two sets of factors (referred to as "users" and "products") into blocks and reduces communication by only sending one copy of each user vector to each product block on each iteration, and only for the product blocks that need that user's feature vector. This is achieved by pre-computing some information about the ratings matrix to determine the "out-links" of each user (which blocks of products it will contribute to) and "in-link" information for each product (which of the feature vectors it receives from each user block it will depend on). This allows us to send only an array of feature vectors between each user block and product block, and have the product block find the users' ratings and update the products based on these messages.
+
+For implicit preference data, the algorithm used is based on "Collaborative Filtering for Implicit Feedback Datasets", available at \Sexpr[results=rd,stage=build]{tools:::Rd_expr_doi("#1")}10.1109/ICDM.2008.22`tools:::Rd_expr_doi("10.1109/ICDM.2008.22")`, adapted for the blocked approach used here.
+
+Essentially instead of finding the low-rank approximations to the rating matrix R, this finds the approximations for a preference matrix P where the elements of P are 1 if r is greater than 0 and 0 if r is less than or equal to 0. The ratings then act as 'confidence' values related to strength of indicated user preferences rather than explicit ratings given to items.
+
+The object returned depends on the class of ``x``.
+
+
+  
+*  `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_als` recommender object, which is an Estimator.
+
+  
+*  `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with
+  the recommender appended to the pipeline.
+
+  
+*  `tbl_spark`: When `x` is a `tbl_spark`, a recommender
+  estimator is constructed then immediately fit with the input
+  `tbl_spark`, returning a recommendation model, i.e. `ml_als_model`.
+
+
+
+
+
+
+## Examples
+
+```r
+
+
+library(sparklyr)
+sc <- spark_connect(master = "local")
+
+movies <- data.frame(
+  user   = c(1, 2, 0, 1, 2, 0),
+  item   = c(1, 1, 1, 2, 2, 0),
+  rating = c(3, 1, 2, 4, 5, 4)
+)
+movies_tbl <- sdf_copy_to(sc, movies)
+
+model <- ml_als(movies_tbl, rating ~ user + item)
+
+ml_predict(model, movies_tbl)
+
+ml_recommend(model, type = "item", 1)
+
+```
+
+
+
+
+

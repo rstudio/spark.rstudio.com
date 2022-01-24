@@ -86,8 +86,6 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
-  <link href="../guides/h2o.html" rel="next">
-  <link href="../guides/streaming.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -120,7 +118,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="floating">
+<body>
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -134,7 +132,10 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
+    <a class="nav-link" href="../get-started.html">Get Started</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
 </ul>
               <div class="quarto-toggle-container">
@@ -149,48 +150,10 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Using Spark with AWS S3 buckets</h1>
-      <button type="button" class="quarto-btn-toggle btn">
-        <i class="bi bi-chevron-right"></i>
-      </button>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-  <div class="sidebar-menu-container"> 
-  <ul class="list-unstyled mt-1">
-      <li class="sidebar-item">
-  <a href="../guides/index.html" class="">Overview</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/caching.html" class="">Understanding Caching</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/distributed-r.html" class="">Distributed R</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/pipelines.html" class="">ML Pipelines</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/textmining.html" class="">Text mining</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/streaming.html" class="">Stream Analysis</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/aws-s3.html" class="active">AWS S3 buckets</a>
-</li>
-      <li class="sidebar-item">
-  <a href="../guides/h2o.html" class="">Using H2O</a>
-</li>
-  </ul>
-  </div>
-</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -200,8 +163,6 @@
 <li><a href="#connecting-to-spark" class="nav-link" data-scroll-target="#connecting-to-spark">Connecting to Spark</a>
 <ul class="collapse">
 <li><a href="#hadoop-aws-package" class="nav-link" data-scroll-target="#hadoop-aws-package">Hadoop-AWS package:</a></li>
-<li><a href="#executor-memory" class="nav-link" data-scroll-target="#executor-memory">Executor Memory</a></li>
-<li><a href="#master-url-and-spark-home" class="nav-link" data-scroll-target="#master-url-and-spark-home">Master URL and Spark home</a></li>
 </ul></li>
 <li><a href="#data-importwrangle-approach" class="nav-link" data-scroll-target="#data-importwrangle-approach">Data Import/Wrangle approach</a>
 <ul class="collapse">
@@ -215,7 +176,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7">Using Spark with AWS S3 buckets</h1>
+<h1 class="title display-7">Using Spark with AWS S3 buckets</h1>
 </header>
 
 <section id="aws-access-keys" class="level2">
@@ -233,49 +194,32 @@
 <li>The master URL</li>
 <li>The Spark Home</li>
 </ul>
-<p>To connect to Spark, we first need to initialize a variable with the contents of sparklyr default config (<code>spark_config</code>) which we will then customize for our needs</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="hadoop-aws-package" class="level3">
 <h3 class="anchored" data-anchor-id="hadoop-aws-package">Hadoop-AWS package:</h3>
 <p>A Spark connection can be enhanced by using packages, please note that these are not R packages. For example, there are packages that tells Spark how to read CSV files, Hadoop or Hadoop in AWS.</p>
-<p>In order to read S3 buckets, our Spark connection will need a package called <code>hadoop-aws</code>. If needed, multiple packages can be used. We experimented with many combinations of packages, and determined that for reading data in S3 we only need the one. The version we used, 2.7.3, refers to the latest Hadoop version, so as this article ages, please make sure to check this site to ensure that you are using the latest version: https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>sparklyr.defaultPackages <span class="ot">&lt;-</span> <span class="st">"org.apache.hadoop:hadoop-aws:2.7.3"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="executor-memory" class="level3">
-<h3 class="anchored" data-anchor-id="executor-memory">Executor Memory</h3>
-<p>As mentioned above this setting <em>key but not critical</em>. There are two points worth highlighting about it is:</p>
-<ul>
-<li><p>The only performance related setting in a Spark Stand Alone cluster that can be tweaked, and in most cases because Spark defaults to a fraction of what is available, we then need to increase it by manually passing a value to that setting.</p></li>
-<li><p>If more than the available RAM is requested, then Spark will set the Cores to 0, thus rendering the session unusable.</p></li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.executor.memory <span class="ot">&lt;-</span> <span class="st">"14g"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="master-url-and-spark-home" class="level3">
-<h3 class="anchored" data-anchor-id="master-url-and-spark-home">Master URL and Spark home</h3>
-<p>There are three important points to mention when executing the spark_connect command:</p>
-<ol type="1">
-<li>The master will be the Spark Master’s URL. To find the URL, please see the Spark Cluster section.</li>
-<li>Point the Spark Home to the location where Spark was installed in this node</li>
-<li>Make sure to the conf variable as the value for the config argument</li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"spark://ip-172-30-1-5.us-west-2.compute.internal:7077"</span>, </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">spark_home =</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">config =</span>  conf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In order to read S3 buckets, our Spark connection will need a package called <code>hadoop-aws</code>. If needed, multiple packages can be used. We experimented with many combinations of packages, and determined that for reading data in S3 we only need one. The version we used, 3.3.1, refers to the latest <strong>Hadoop</strong> version, so as this article ages, please visit this site to make sure that you are using the latest version: <a href="https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws">Hadoop AWS Maven Repository</a></p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>sparklyr.defaultPackages <span class="ot">&lt;-</span> <span class="st">"org.apache.hadoop:hadoop-aws:3.3.1"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">maste =</span> <span class="st">"local"</span>, <span class="at">config =</span> conf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="data-importwrangle-approach" class="level2">
 <h2 class="anchored" data-anchor-id="data-importwrangle-approach">Data Import/Wrangle approach</h2>
 <p>We experimented with multiple approaches. Most of the factors for settling on a recommended approach were made based on the speed of each step. The premise is that we would rather wait longer during Data Import, if it meant that we can much faster Register and Cache our data subsets during Data Wrangling, especially since we would expect to end up with many subsets as we explore and model.The selected combination was the second slowest during the Import stage, but the fastest when caching a subset, by a lot.</p>
-<p>In our tests, it took 72 seconds to read and cache the 29 columns of the 41 million rows of data, the slowest was 77 seconds. But when it comes to registering and caching a considerably sizable subset of 3 columns and almost all of the 41 million records, this approach was 17X faster than the second fastest approach. It took 1/3 of a second to register and cache the subset, the second fastest was 5 seconds.</p>
+<p>In our original tests, it took 72 seconds to read and cache the 29 columns of the 41 million rows of data, the slowest was 77 seconds. But when it comes to registering and caching a considerably sizable subset of 3 columns and almost all of the 41 million records, this approach was 17X faster than the second fastest approach. It took 1/3 of a second to register and cache the subset, the second fastest was 5 seconds.</p>
 <p>To implement this approach, we need to set three arguments in the <code>spark_csv_read()</code> step:</p>
 <ul>
 <li><code>memory</code></li>
 <li><code>infer_schema</code></li>
 <li><code>columns</code></li>
 </ul>
-<p>Again, this is a recommended approach. The columns argument is needed only if infer_schema is set to <code>FALSE.</code> When memory is set to <code>TRUE</code> it makes Spark load the entire dataset into memory, and setting infer_schema to FALSE prevents Spark from trying to figure out what the schema of the files are. By trying different combinations the memory and infer_schema arguments you may be able to find an approach that may better fits your needs.</p>
+<p>Again, this is a recommended approach. The columns argument is needed only if <code>infer_schema</code> is set to <code>FALSE.</code> When memory is set to <code>TRUE</code> it makes Spark load the entire dataset into memory, and setting <code>infer_schema</code> to FALSE prevents Spark from trying to figure out what the schema of the files are. By trying different combinations the memory and <code>infer_schema</code> arguments you may be able to find an approach that may better fits your needs.</p>
 <section id="reading-the-schema" class="level3">
 <h3 class="anchored" data-anchor-id="reading-the-schema">Reading the schema</h3>
 <p>Surprisingly, another critical detail that can easily be overlooked is choosing the right <strong>s3 URI scheme</strong>. There are two options: <strong>s3n</strong> and <strong>s3a</strong>. In most examples and tutorials I found, there was no reason give of why or when to use which one. The article the finally clarified it was this one: https://wiki.apache.org/hadoop/AmazonS3</p>
@@ -285,54 +229,56 @@
 <section id="data-import" class="level2">
 <h2 class="anchored" data-anchor-id="data-import">Data Import</h2>
 <p>After the long introduction in the previous section, there is only one point to add about the following code chunk. If there are any <code>NA</code> values in numeric fields, then define the column as character and then convert it on later subsets using dplyr. The data import will fail if it finds any NA values on numeric fields. This is a small trade off in this approach because the next fastest one does not have this issue but is 17X slower at caching subsets.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"flights_spark"</span>, </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">path =</span>  <span class="st">"s3a://flights-data/full"</span>, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">memory =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">columns =</span> <span class="fu">list</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Year =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Month =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayofMonth =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayOfWeek =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSDepTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSArrTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">UniqueCarrier =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">FlightNum =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TailNum =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ActualElapsedTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSElapsedTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                            <span class="at">AirTime =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Origin =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Dest =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Distance =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiIn =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiOut =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Cancelled =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CancellationCode =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Diverted =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CarrierDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                            <span class="at">WeatherDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                            <span class="at">NASDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                            <span class="at">SecurityDelay =</span> <span class="st">"character"</span>,</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                            <span class="at">LateAircraftDelay =</span> <span class="st">"character"</span>), </span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>                         <span class="at">infer_schema =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"flights_spark"</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">path =</span>  <span class="st">"s3a://flights-data/full"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">memory =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">columns =</span> <span class="fu">list</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Year =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Month =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayofMonth =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayOfWeek =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSDepTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSArrTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">UniqueCarrier =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">FlightNum =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TailNum =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ActualElapsedTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSElapsedTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                            <span class="at">AirTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Origin =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Dest =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Distance =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiIn =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiOut =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Cancelled =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CancellationCode =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Diverted =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CarrierDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                            <span class="at">WeatherDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                            <span class="at">NASDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                            <span class="at">SecurityDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                            <span class="at">LateAircraftDelay =</span> <span class="st">"character"</span>), </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                         <span class="at">infer_schema =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="data-wrangle" class="level2">
 <h2 class="anchored" data-anchor-id="data-wrangle">Data Wrangle</h2>
 <p>There are a few points we need to highlight about the following simple dyplr code:</p>
 <p>Because there were NAs in the original fields, we have to mutate them to a number. Try coercing any variable as integer instead of numeric, this will save a lot of space when cached to Spark memory. The sdf_register command can be piped at the end of the code. After running the code, a new table will appear in the RStudio IDE’s Spark tab</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tidy_flights <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">"flights_spark"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ArrDelay =</span> <span class="fu">as.integer</span>(ArrDelay),</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">DepDelay =</span> <span class="fu">as.integer</span>(DepDelay),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Distance =</span> <span class="fu">as.integer</span>(Distance)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ArrDelay)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DepDelay, ArrDelay, Distance) <span class="sc">%&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_register</span>(<span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tidy_flights <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">"flights_spark"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ArrDelay =</span> <span class="fu">as.integer</span>(ArrDelay),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">DepDelay =</span> <span class="fu">as.integer</span>(DepDelay),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Distance =</span> <span class="fu">as.integer</span>(Distance)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ArrDelay)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DepDelay, ArrDelay, Distance) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_register</span>(<span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>After we use <code>tbl_cache()</code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
@@ -511,14 +457,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../guides/streaming.html">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Stream Analysis</span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../guides/h2o.html">
-        <span class="nav-page-text">Using H2O</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

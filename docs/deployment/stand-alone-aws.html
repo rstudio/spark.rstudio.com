@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../deployment/data-lakes.html" rel="next">
+  <link href="../deployment/index.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -137,6 +139,9 @@
   <li class="nav-item">
     <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../deployment/index.html" aria-current="page">Deployment</a>
+  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -150,10 +155,45 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Spark Standalone Deployment in AWS</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../deployment/index.html" class="">Overview</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/stand-alone-aws.html" class="active">Standalone cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/data-lakes.html" class="">Data Lakes</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/yarn-cluster-emr.html" class="">EMR cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -184,7 +224,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Spark Standalone Deployment in AWS</h1>
+<h1 class="title d-none d-lg-block display-7">Spark Standalone Deployment in AWS</h1>
 </header>
 
 <section id="overview" class="level2">
@@ -192,9 +232,7 @@
 <p>The plan is to launch 4 identical EC2 server instances. One server will be the Master node and the other 3 the worker nodes. In one of the worker nodes, we will install RStudio server.</p>
 <p>What makes a server the Master node is only the fact that it is running the <strong>master</strong> service, while the other machines are running the <strong>slave</strong> service and are pointed to that first master. This simple setup, allows us to install the same Spark components on all 4 servers and then just add RStudio to one of them.</p>
 <p>The topology will look something like this:</p>
-<p>
-<img src="images/deployment/amazon-ec2/spark-sa-setup.png" width="600px" align="center">
-</p>
+<p><img src="../images/deployment/amazon-ec2/spark-sa-setup.png" class="img-fluid"></p>
 </section>
 <section id="aws-ec-instances" class="level2">
 <h2 class="anchored" data-anchor-id="aws-ec-instances">AWS EC Instances</h2>
@@ -214,6 +252,7 @@
 <ul>
 <li>We will add the Java 8 repository, install it and set it as default</li>
 </ul>
+<!-- -->
 <pre><code>sudo apt-add-repository ppa:webupd8team/java
 sudo apt-get update
 sudo apt-get install oracle-java8-installer
@@ -228,6 +267,7 @@ sudo apt-get update</code></pre>
 <ul>
 <li>Download and unpack a pre-compiled version of Spark. Here’s is the link to the <a href="http://spark.apache.org/downloads.html">official Spark download page</a></li>
 </ul>
+<!-- -->
 <pre><code>wget http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz
 tar -xvzf spark-2.1.0-bin-hadoop2.7.tgz
 cd spark-2.1.0-bin-hadoop2.7</code></pre>
@@ -248,6 +288,7 @@ cd spark-2.1.0-bin-hadoop2.7</code></pre>
 <ul>
 <li>In order to get the latest R core, we will need to update the source list in Ubuntu.</li>
 </ul>
+<!-- -->
 <pre><code>sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" &gt;&gt; /etc/apt/sources.list'
 gpg --keyserver keyserver.ubuntu.com --recv-key 0x517166190x51716619e084dab9
 gpg -a --export 0x517166190x51716619e084dab9 | sudo apt-key add -
@@ -255,6 +296,7 @@ sudo apt-get update</code></pre>
 <ul>
 <li>Now we can install R</li>
 </ul>
+<!-- -->
 <pre><code>sudo apt-get install r-base
 sudo apt-get install gdebi-core</code></pre>
 </section>
@@ -263,6 +305,7 @@ sudo apt-get install gdebi-core</code></pre>
 <ul>
 <li>We will download and install 1.044 of RStudio Server. To find the latest version, please visit the <a href="https://www.rstudio.com/products/rstudio/download3/">RStudio website</a>. In order to get the enhanced integration with Spark, RStudio version 1.044 or later will be needed.</li>
 </ul>
+<!-- -->
 <pre><code>wget https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb
 sudo gdebi rstudio-server-1.0.153-amd64.deb</code></pre>
 </section>
@@ -271,6 +314,7 @@ sudo gdebi rstudio-server-1.0.153-amd64.deb</code></pre>
 <ul>
 <li>Run the following commands</li>
 </ul>
+<!-- -->
 <pre><code>sudo apt-get -y install libcurl4-gnutls-dev
 sudo apt-get -y install libssl-dev
 sudo apt-get -y install libxml2-dev</code></pre>
@@ -280,6 +324,7 @@ sudo apt-get -y install libxml2-dev</code></pre>
 <ul>
 <li>Run the following command to add a default user</li>
 </ul>
+<!-- -->
 <pre><code>sudo adduser rstudio-user</code></pre>
 </section>
 <section id="start-the-master-node" class="level3">
@@ -288,6 +333,7 @@ sudo apt-get -y install libxml2-dev</code></pre>
 <li><p>Select one of the servers to become your Master node</p></li>
 <li><p>Run the command that starts the master service</p></li>
 </ul>
+<!-- -->
 <pre><code>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-master.sh</code></pre>
 <ul>
 <li>Close the terminal connection (optional)</li>
@@ -296,10 +342,14 @@ sudo apt-get -y install libxml2-dev</code></pre>
 <section id="start-worker-nodes" class="level3">
 <h3 class="anchored" data-anchor-id="start-worker-nodes">Start Worker nodes</h3>
 <ul>
-<li>Start the slave service. <strong>Important</strong>: Use dots not dashes as separators for the Spark Master node’s address</li>
+<li>Start the “slave” service. <strong>Important</strong>: Use dots not dashes as separators for the Spark Master node’s address</li>
 </ul>
+<!-- -->
 <pre><code>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://[Master node's IP address]:7077</code></pre>
-<p>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://ip-172-30-1-94.us-west-2.compute.internal:7077 - Close the terminal connection (optional)</p>
+<p><em>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://ip-172-30-1-94.us-west-2.compute.internal:7077</em></p>
+<ul>
+<li>Close the terminal connection (optional)</li>
+</ul>
 </section>
 <section id="pre-load-pacakges" class="level3">
 <h3 class="anchored" data-anchor-id="pre-load-pacakges">Pre-load pacakges</h3>
@@ -312,22 +362,25 @@ sudo apt-get -y install libxml2-dev</code></pre>
 <section id="connect-to-the-spark-master" class="level3">
 <h3 class="anchored" data-anchor-id="connect-to-the-spark-master">Connect to the Spark Master</h3>
 <ul>
-<li><p>Navigate to the Spark Master’s UI, typically on port 8080 <img src="images/deployment/amazon-ec2/spark-master.png" class="screenshot" width="639"></p></li>
+<li>Navigate to the Spark Master’s UI, typically on port 8080</li>
+</ul>
+<p><img src="../images/deployment/amazon-ec2/spark-master.png" class="img-fluid" width="418"></p>
+<ul>
 <li><p>Note the <strong>Spark Master URL</strong></p></li>
 <li><p>Logon to RStudio</p></li>
 <li><p>Run the following code</p></li>
 </ul>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.executor.memory <span class="ot">&lt;-</span> <span class="st">"2GB"</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.memory.fraction <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master=</span><span class="st">"[Spark Master URL]"</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">version =</span> <span class="st">"2.1.0"</span>,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">config =</span> conf,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">spark_home =</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.executor.memory <span class="ot">&lt;-</span> <span class="st">"2GB"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.memory.fraction <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master=</span><span class="st">"[Spark Master URL]"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">version =</span> <span class="st">"2.1.0"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">config =</span> conf,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">spark_home =</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
@@ -507,8 +560,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../deployment/index.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../deployment/data-lakes.html">
+        <span class="nav-page-text">Data Lakes</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

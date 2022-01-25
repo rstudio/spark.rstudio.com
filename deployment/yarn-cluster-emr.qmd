@@ -1,18 +1,17 @@
 ---
 title: "Using sparklyr with an Apache Spark cluster"
-output:
-  html_document:
+format:
+  html:
+    theme: default
     toc: true
-    toc_depth: 2
-    toc_float:
-      collapsed: false
-params:
-  width: 600
+execute:
+    eval: false
+    freeze: false
 ---
 
 This document demonstrates how to use `sparklyr` with an Apache Spark cluster. Data are downloaded from the web and stored in Hive tables on HDFS across multiple worker nodes. RStudio Server is installed on the master node and orchestrates the analysis in spark. Here is the basic workflow.
 
-<img src="images/deployment/amazon-emr/workflowShare.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/workflowShare.png)
 
 # Data preparation
 
@@ -22,68 +21,69 @@ This demonstration uses Amazon Web Services (AWS), but it could just as easily u
 
 Before beginning this setup we assume you have:
 
-* Familiarity with and access to an AWS account
-* Familiarity with basic linux commands
-* Sudo privileges in order to install software from the command line
+-   Familiarity with and access to an AWS account
+-   Familiarity with basic linux commands
+-   Sudo privileges in order to install software from the command line
 
-<p><img src="images/deployment/amazon-emr/emrArchitecture.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/emrArchitecture.png){width="334"}
 
 ### Build an EMR cluster
 
 Before beginning the EMR wizard setup, make sure you create the following in AWS:
 
-* An AWS key pair (.pem key) so you can SSH into the EC2 master node
-* A security group that gives you access to port 22 on your IP and port 8787 from anywhere
+-   An AWS key pair (.pem key) so you can SSH into the EC2 master node
+-   A security group that gives you access to port 22 on your IP and port 8787 from anywhere
 
-<img src="images/deployment/amazon-emr/awsNewSecurityGroup.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/awsNewSecurityGroup.png)
 
-***
+------------------------------------------------------------------------
 
 #### Step 1: Select software
 
 Make sure to select Hive and Spark as part of the install. Note that by choosing Spark, R will also be installed on the master node as part of the distribution.
 
-<img src="images/deployment/amazon-emr/emrConfigStep1.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/emrConfigStep1.png)
 
-***
+------------------------------------------------------------------------
 
 #### Step 2: Select hardware
 
 Install 2 core nodes and one master node with m3.xlarge 80 GiB storage per node. You can easily increase the number of nodes later.
 
-<img src="images/deployment/amazon-emr/emrConfigStep2.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/emrConfigStep2.png)
 
-***
+------------------------------------------------------------------------
 
 #### Step 3: Select general cluster settings
 
 Click next on the general cluster settings.
 
-<img src="images/deployment/amazon-emr/emrConfigStep3.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/emrConfigStep3.png)
 
-***
+------------------------------------------------------------------------
 
 #### Step 4: Select security
 
 Enter your EC2 key pair and security group. Make sure the security group has ports 22 and 8787 open.
 
-<img src="images/deployment/amazon-emr/emrConfigStep4.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/emrConfigStep4.png)
 
-***
+------------------------------------------------------------------------
 
 ### Connect to EMR
 
 The cluster page will give you details about your EMR cluster and instructions on connecting.
 
-<img src="images/deployment/amazon-emr/awsClusterConnect.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/awsClusterConnect.png)
 
 Connect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome.
+
 ```{bash eval=FALSE}
 # Log in to master node
 ssh -i ~/spark-demo.pem hadoop@ec2-52-10-102-11.us-west-2.compute.amazonaws.com
 ```
 
-<img src="images/deployment/amazon-emr/emrLogin.png" width=`r params$width`/>
+![](/images/deployment/amazon-emr/emrLogin.png)
 
 ### Install RStudio Server
 
@@ -188,7 +188,7 @@ hive
 
 Create the metadata that will structure the flights table. Load data into the Hive table.
 
-```sql
+``` sql
 # Create metadata for flights
 CREATE EXTERNAL TABLE IF NOT EXISTS flights
 (
@@ -233,7 +233,7 @@ LOAD DATA INPATH '/user/rstudio-user/flights' INTO TABLE flights;
 
 Create the metadata that will structure the airlines table. Load data into the Hive table.
 
-```sql
+``` sql
 # Create metadata for airlines
 CREATE EXTERNAL TABLE IF NOT EXISTS airlines
 (
@@ -255,7 +255,7 @@ LOAD DATA INPATH '/user/rstudio-user/airlines' INTO TABLE airlines;
 
 Create the metadata that will structure the airports table. Load data into the Hive table.
 
-```sql
+``` sql
 # Create metadata for airports
 CREATE EXTERNAL TABLE IF NOT EXISTS airports
 (
@@ -288,7 +288,7 @@ LOAD DATA INPATH '/user/rstudio-user/airports' INTO TABLE airports;
 
 Log in to RStudio Server by pointing a browser at your master node IP:8787.
 
-<p><img src="images/deployment/amazon-emr/rstudioLogin.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/rstudioLogin.png){width="296"}
 
 Set the environment variable `SPARK_HOME` and then run `spark_connect`. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.
 
@@ -304,17 +304,17 @@ sc <- spark_connect(master = "yarn-client", config = config, version = '1.6.2')
 
 Once you are connected, you will see the Spark pane appear along with your hive tables.
 
-<p><img src="images/deployment/amazon-emr/rstudioSparkPane.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/rstudioSparkPane.png){width="367"}
 
 You can inspect your tables by clicking on the data icon.
 
-<p><img src="images/deployment/amazon-emr/rstudioData.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/rstudioData.png){width="549"}
 
 # Data analysis
 
 Is there evidence to suggest that some airline carriers make up time in flight? This analysis predicts time gained in flight by airline carrier.
 
-<p><img src="images/deployment/amazon-emr/rstudio.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/rstudio.png)
 
 ## Cache the tables into memory
 
@@ -357,24 +357,23 @@ model_data %>%
   select(description, gain, distance, depdelay) %>%
   arrange(gain)
 ```
-```
-Source:   query [?? x 4]
-Database: spark connection master=yarn-client app=sparklyr local=FALSE
 
-                    description       gain  distance depdelay
-                          <chr>      <dbl>     <dbl>    <dbl>
-1        ATA Airlines d/b/a ATA -3.3480120 1134.7084 56.06583
-2  ExpressJet Airlines Inc. (1) -3.0326180  519.7125 59.41659
-3                     Envoy Air -2.5434415  416.3716 53.12529
-4       Northwest Airlines Inc. -2.2030586  779.2342 48.52828
-5          Delta Air Lines Inc. -1.8248026  868.3997 50.77174
-6   AirTran Airways Corporation -1.4331555  641.8318 54.96702
-7    Continental Air Lines Inc. -0.9617003 1116.6668 57.00553
-8        American Airlines Inc. -0.8860262 1074.4388 55.45045
-9             Endeavor Air Inc. -0.6392733  467.1951 58.47395
-10              JetBlue Airways -0.3262134 1139.0443 54.06156
-# ... with more rows
-```
+    Source:   query [?? x 4]
+    Database: spark connection master=yarn-client app=sparklyr local=FALSE
+
+                        description       gain  distance depdelay
+                              <chr>      <dbl>     <dbl>    <dbl>
+    1        ATA Airlines d/b/a ATA -3.3480120 1134.7084 56.06583
+    2  ExpressJet Airlines Inc. (1) -3.0326180  519.7125 59.41659
+    3                     Envoy Air -2.5434415  416.3716 53.12529
+    4       Northwest Airlines Inc. -2.2030586  779.2342 48.52828
+    5          Delta Air Lines Inc. -1.8248026  868.3997 50.77174
+    6   AirTran Airways Corporation -1.4331555  641.8318 54.96702
+    7    Continental Air Lines Inc. -0.9617003 1116.6668 57.00553
+    8        American Airlines Inc. -0.8860262 1074.4388 55.45045
+    9             Endeavor Air Inc. -0.6392733  467.1951 58.47395
+    10              JetBlue Airways -0.3262134 1139.0443 54.06156
+    # ... with more rows
 
 ## Train a linear model
 
@@ -392,44 +391,43 @@ ml1 <- model_partition$train %>%
 # Summarize the linear model
 summary(ml1)
 ```
-```
-Deviance Residuals: (approximate):
-     Min       1Q   Median       3Q      Max 
--305.422   -5.593    2.699    9.750  147.871 
 
-Coefficients:
-                    Estimate  Std. Error  t value  Pr(>|t|)    
-(Intercept)      -1.24342576  0.10248281 -12.1330 < 2.2e-16 ***
-distance          0.00326600  0.00001670 195.5709 < 2.2e-16 ***
-depdelay         -0.01466233  0.00020337 -72.0977 < 2.2e-16 ***
-uniquecarrier_AA -2.32650517  0.10522524 -22.1098 < 2.2e-16 ***
-uniquecarrier_AQ  2.98773637  0.28798507  10.3746 < 2.2e-16 ***
-uniquecarrier_AS  0.92054894  0.11298561   8.1475 4.441e-16 ***
-uniquecarrier_B6 -1.95784698  0.11728289 -16.6934 < 2.2e-16 ***
-uniquecarrier_CO -2.52618081  0.11006631 -22.9514 < 2.2e-16 ***
-uniquecarrier_DH  2.23287189  0.11608798  19.2343 < 2.2e-16 ***
-uniquecarrier_DL -2.68848119  0.10621977 -25.3106 < 2.2e-16 ***
-uniquecarrier_EV  1.93484736  0.10724290  18.0417 < 2.2e-16 ***
-uniquecarrier_F9 -0.89788137  0.14422281  -6.2257 4.796e-10 ***
-uniquecarrier_FL -1.46706706  0.11085354 -13.2343 < 2.2e-16 ***
-uniquecarrier_HA -0.14506644  0.25031456  -0.5795    0.5622    
-uniquecarrier_HP  2.09354855  0.12337515  16.9690 < 2.2e-16 ***
-uniquecarrier_MQ -1.88297535  0.10550507 -17.8473 < 2.2e-16 ***
-uniquecarrier_NW -2.79538927  0.10752182 -25.9983 < 2.2e-16 ***
-uniquecarrier_OH  0.83520117  0.11032997   7.5700 3.730e-14 ***
-uniquecarrier_OO  0.61993842  0.10679884   5.8047 6.447e-09 ***
-uniquecarrier_TZ -4.99830389  0.15912629 -31.4109 < 2.2e-16 ***
-uniquecarrier_UA -0.68294396  0.10638099  -6.4198 1.365e-10 ***
-uniquecarrier_US -0.61589284  0.10669583  -5.7724 7.815e-09 ***
-uniquecarrier_WN  3.86386059  0.10362275  37.2878 < 2.2e-16 ***
-uniquecarrier_XE -2.59658123  0.10775736 -24.0966 < 2.2e-16 ***
-uniquecarrier_YV  3.11113140  0.11659679  26.6828 < 2.2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    Deviance Residuals: (approximate):
+         Min       1Q   Median       3Q      Max 
+    -305.422   -5.593    2.699    9.750  147.871 
 
-R-Squared: 0.02385
-Root Mean Squared Error: 17.74
-```
+    Coefficients:
+                        Estimate  Std. Error  t value  Pr(>|t|)    
+    (Intercept)      -1.24342576  0.10248281 -12.1330 < 2.2e-16 ***
+    distance          0.00326600  0.00001670 195.5709 < 2.2e-16 ***
+    depdelay         -0.01466233  0.00020337 -72.0977 < 2.2e-16 ***
+    uniquecarrier_AA -2.32650517  0.10522524 -22.1098 < 2.2e-16 ***
+    uniquecarrier_AQ  2.98773637  0.28798507  10.3746 < 2.2e-16 ***
+    uniquecarrier_AS  0.92054894  0.11298561   8.1475 4.441e-16 ***
+    uniquecarrier_B6 -1.95784698  0.11728289 -16.6934 < 2.2e-16 ***
+    uniquecarrier_CO -2.52618081  0.11006631 -22.9514 < 2.2e-16 ***
+    uniquecarrier_DH  2.23287189  0.11608798  19.2343 < 2.2e-16 ***
+    uniquecarrier_DL -2.68848119  0.10621977 -25.3106 < 2.2e-16 ***
+    uniquecarrier_EV  1.93484736  0.10724290  18.0417 < 2.2e-16 ***
+    uniquecarrier_F9 -0.89788137  0.14422281  -6.2257 4.796e-10 ***
+    uniquecarrier_FL -1.46706706  0.11085354 -13.2343 < 2.2e-16 ***
+    uniquecarrier_HA -0.14506644  0.25031456  -0.5795    0.5622    
+    uniquecarrier_HP  2.09354855  0.12337515  16.9690 < 2.2e-16 ***
+    uniquecarrier_MQ -1.88297535  0.10550507 -17.8473 < 2.2e-16 ***
+    uniquecarrier_NW -2.79538927  0.10752182 -25.9983 < 2.2e-16 ***
+    uniquecarrier_OH  0.83520117  0.11032997   7.5700 3.730e-14 ***
+    uniquecarrier_OO  0.61993842  0.10679884   5.8047 6.447e-09 ***
+    uniquecarrier_TZ -4.99830389  0.15912629 -31.4109 < 2.2e-16 ***
+    uniquecarrier_UA -0.68294396  0.10638099  -6.4198 1.365e-10 ***
+    uniquecarrier_US -0.61589284  0.10669583  -5.7724 7.815e-09 ***
+    uniquecarrier_WN  3.86386059  0.10362275  37.2878 < 2.2e-16 ***
+    uniquecarrier_XE -2.59658123  0.10775736 -24.0966 < 2.2e-16 ***
+    uniquecarrier_YV  3.11113140  0.11659679  26.6828 < 2.2e-16 ***
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    R-Squared: 0.02385
+    Root Mean Squared Error: 17.74
 
 ## Assess model performance
 
@@ -460,7 +458,7 @@ deciles %>%
   labs(title = 'Average gain by predicted decile', x = 'Decile', y = 'Minutes')
 ```
 
-<p><img src="images/deployment/amazon-emr/performance-1.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/performance-1.png)
 
 ## Visualize predictions
 
@@ -492,13 +490,13 @@ ggplot(carrier, aes(gain, prediction)) +
   labs(title='Average Gains Forecast', x = 'Actual', y = 'Predicted')
 ```
 
-<p><img src="images/deployment/amazon-emr/forecast-1.png" width=`r params$width`/></p>
+![](/images/deployment/amazon-emr/forecast-1.png)
 
 Some carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.
 
 # Share Insights
 
-This simple linear model contains a wealth of detailed information about carriers, distances traveled, and flight delays. These detailed insights can be conveyed to a non-technical audiance via an interactive [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html). 
+This simple linear model contains a wealth of detailed information about carriers, distances traveled, and flight delays. These detailed insights can be conveyed to a non-technical audiance via an interactive [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html).
 
 ## Build dashboard
 
@@ -528,10 +526,5 @@ save(pred_data, airports, ml1_summary, file = 'flights_pred_2008.RData')
 ## Publish dashboard
 
 Use the saved data to build an R Markdown [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html). Publish the flexdashboard to [Shiny Server](https://www.rstudio.com/products/shiny-server-pro/), [Shinyapps.io](https://www.rstudio.com/products/shinyapps/) or [RStudio Connect](https://www.rstudio.com/products/connect/).
-<p>
-<a href="https://beta.rstudioconnect.com/content/1439/">
-<img src="images/deployment/amazon-emr/flightsDashboard.png" width=`r params$width`/>
-</a>
-</p>
 
-
+![](/images/deployment/amazon-emr/flightsDashboard.png)

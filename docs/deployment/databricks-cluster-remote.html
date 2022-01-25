@@ -11,6 +11,69 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
 
   <!--[if lt IE 9]>
@@ -74,6 +137,9 @@
   <li class="nav-item">
     <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../deployment/index.html">Deployment</a>
+  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -118,7 +184,7 @@
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>With this configuration, RStudio Workbench is installed outside of the Spark cluster and allows users to connect to Spark remotely using <code>sparklyr</code> with <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>.</p>
-<p><img src="../images/deployment/databricks/rstudio-databricks-remote.png" width="800px" align="center"></p>
+<p><img src="../images/deployment/databricks/rstudio-databricks-remote.png" class="img-fluid"></p>
 <p>This is the recommended configuration because it targets separate environments, involves a typical configuration process, avoids resource contention, and allows RStudio Workbench to connect to Databricks as well as other remote storage and compute resources.</p>
 </section>
 <section id="advantages-and-limitations" class="level2">
@@ -166,9 +232,9 @@
 <p>In the prompts that follow, enter the following information:</p>
 <table class="table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 33%">
-<col style="width: 39%">
+<col style="width: 12%">
+<col style="width: 54%">
+<col style="width: 32%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -211,34 +277,35 @@
 <section id="install-sparklyr" class="level2">
 <h2 class="anchored" data-anchor-id="install-sparklyr">Install <code>sparklyr</code></h2>
 <p>The integration of <code>sparklyr</code> with Databricks Connect is currently being added to the development version of <code>sparklyr</code>. To use this functionality now, you’ll need to install the development version of <code>sparklyr</code> by running the following command in an R console:</p>
-<pre><code>devtools::install_github("sparklyr/sparklyr")</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"sparklyr/sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="install-spark" class="level2">
 <h2 class="anchored" data-anchor-id="install-spark">Install Spark</h2>
 <p>To work with a remote Databricks cluster, you need to have a local installation of Spark that matches the version of Spark on the Databricks Cluster.</p>
 <p>You can install Spark by running the following command in an R console:</p>
-<pre><code>library(sparklyr)
-sparklyr::spark_install()</code></pre>
-<p>You can specify the version of Spark to install along with other options. Refer to the <a href="https://spark.rstudio.com/reference/spark_install/"><code>spark_install()</code> options in the <code>sparklyr</code> reference documentation</a> for more information.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sparklyr<span class="sc">::</span><span class="fu">spark_install</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="use-sparklyr" class="level2">
 <h2 class="anchored" data-anchor-id="use-sparklyr">Use <code>sparklyr</code></h2>
 <p>In order to connect to Databricks using <code>sparklyr</code> and <code>databricks-connect</code>, <code>SPARK_HOME</code> must be set to the output of the <code>databricks-connect get-spark-home</code> command.</p>
 <p>You can set <code>SPARK_HOME</code> as an environment variable or directly within <code>spark_connect()</code>. The following R code demonstrates connecting to Databricks, copying some data into the cluster, summarizing that data using <code>sparklyr</code>, and disconnecting:</p>
-<pre><code>library(sparklyr)
-library(dplyr)
-
-databricks_connect_spark_home &lt;- system("databricks-connect get-spark-home", intern = TRUE)
-sc &lt;- spark_connect(method = "databricks", spark_home = databricks_connect_spark_home)
-
-cars_tbl &lt;- copy_to(sc, mtcars, overwrite = TRUE)
-
-cars_tbl %&gt;% 
-  group_by(cyl) %&gt;% 
-  summarise(mean_mpg = mean(mpg, na.rm = TRUE),
-            mean_hp  = mean(hp, na.rm = TRUE))
-
-spark_disconnect(sc)</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>databricks_connect_spark_home <span class="ot">&lt;-</span> <span class="fu">system</span>(<span class="st">"databricks-connect get-spark-home"</span>, <span class="at">intern =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">method =</span> <span class="st">"databricks"</span>, <span class="at">spark_home =</span> databricks_connect_spark_home)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>cars_tbl <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>cars_tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_mpg =</span> <span class="fu">mean</span>(mpg, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_hp  =</span> <span class="fu">mean</span>(hp, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="additional-information" class="level2">
 <h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>

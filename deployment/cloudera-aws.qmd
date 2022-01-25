@@ -1,46 +1,43 @@
 ---
 title: "Using sparklyr with an Apache Spark cluster"
-output:
-  html_document:
+format:
+  html:
+    theme: default
     toc: true
-    toc_depth: 2
-    toc_float:
-      collapsed: false
-params:
-  width: 600
-aliases:
-  /articles/deployment-cdh.html
+execute:
+    eval: false
+    freeze: false
 ---
-# Summary 
+
+# Summary
 
 This document demonstrates how to use `sparklyr` with an Cloudera Hadoop & Spark cluster. Data are downloaded from the web and stored in Hive tables on HDFS across multiple worker nodes. RStudio Server is installed on the master node and orchestrates the analysis in spark.
 
-# Cloudera Cluster 
+# Cloudera Cluster
 
-This demonstration is focused on adding RStudio integration to an existing Cloudera cluster.  The assumption will be made that there no aid is needed to setup and administer the cluster.
+This demonstration is focused on adding RStudio integration to an existing Cloudera cluster. The assumption will be made that there no aid is needed to setup and administer the cluster.
 
-##CDH 5
+## CDH 5
 
 We will start with a Cloudera cluster CDH version 5.8.2 (free version) with an underlaying Ubuntu Linux distribution.
 
-<img src="images/deployment/cdh/manager-landing-page.png" width=`r params$width`/>
+![](/images/deployment/cdh/manager-landing-page.png)
 
-##Spark 1.6
+## Spark 1.6
 
 The default Spark 1.6.0 parcel is in installed and running
 
-<img src="images/deployment/cdh/spark-history-server-1.png" width=`r params$width`/>
+![](/images/deployment/cdh/spark-history-server-1.png)
 
 ## Hive data
 
-For this demo, we have created and populated 3 tables in Hive.  The table names are: flights, airlines and airports. Using Hue, we can see the loaded tables. For the links to the data files and their Hive import scripts please see *Appendix A*.
+For this demo, we have created and populated 3 tables in Hive. The table names are: flights, airlines and airports. Using Hue, we can see the loaded tables. For the links to the data files and their Hive import scripts please see *Appendix A*.
 
-<img src="images/deployment/cdh/hue-metastore-1.png" width=`r params$width`/>
-
+![](/images/deployment/cdh/hue-metastore-1.png)
 
 # Install RStudio
 
-The latest version of R is needed. In Ubuntu, the default core R is not  the latest so we have to update the source list.  We will also install a few other dependencies.
+The latest version of R is needed. In Ubuntu, the default core R is not the latest so we have to update the source list. We will also install a few other dependencies.
 
 ```{bash eval=FALSE}
 sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list'
@@ -60,10 +57,9 @@ wget https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-1.0.40-amd64.de
 sudo gdebi rstudio-server-1.0.49-amd64.deb
 ```
 
-
 ### Create and configure a User
 
-Create a user called `rstudio` that will perform the data analysis. 
+Create a user called `rstudio` that will perform the data analysis.
 
 ```{bash eval=FALSE}
 sudo adduser rstudio
@@ -80,7 +76,7 @@ sudo usermod -a -G supergroup rstudio
 
 Log in to RStudio Server by pointing a browser at your master node IP:8787.
 
-<p><img src="images/deployment/cdh/sign-in-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/sign-in-1.png)
 
 Set the environment variable `SPARK_HOME` and then run `spark_connect`. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.
 
@@ -95,21 +91,21 @@ sc <- spark_connect(master = "yarn-client", version="1.6.0", spark_home = '/opt/
 
 Once you are connected, you will see the Spark pane appear along with your hive tables.
 
-<p><img src="images/deployment/cdh/spark-pane-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/spark-pane-1.png)
 
 You can inspect your tables by clicking on the data icon.
 
-<p><img src="images/deployment/cdh/tables-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/tables-1.png)
 
 This is what the tables look like loaded in Spark via the History Server Web UI (port 18088)
 
-<p><img src="images/deployment/cdh/spark-rdd-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/spark-rdd-1.png)
 
 # Data analysis
 
 Is there evidence to suggest that some airline carriers make up time in flight? This analysis predicts time gained in flight by airline carrier.
 
-<p><img src="images/deployment/cdh/data-analysis-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/data-analysis-1.png)
 
 ## Cache the tables into memory
 
@@ -152,24 +148,23 @@ model_data %>%
   select(description, gain, distance, depdelay) %>%
   arrange(gain)
 ```
-```
-Source:   query [?? x 4]
-Database: spark connection master=yarn-client app=sparklyr local=FALSE
 
-                    description       gain  distance depdelay
-                          <chr>      <dbl>     <dbl>    <dbl>
-1        ATA Airlines d/b/a ATA -5.5679651 1240.7219 61.84391
-2       Northwest Airlines Inc. -3.1134556  779.1926 48.84979
-3                     Envoy Air -2.2056576  437.0883 54.54923
-4             PSA Airlines Inc. -1.9267647  500.6955 55.60335
-5  ExpressJet Airlines Inc. (1) -1.5886314  537.3077 61.58386
-6               JetBlue Airways -1.3742524 1087.2337 59.80750
-7         SkyWest Airlines Inc. -1.1265678  419.6489 54.04198
-8          Delta Air Lines Inc. -0.9829374  956.9576 50.19338
-9        American Airlines Inc. -0.9631200 1066.8396 56.78222
-10  AirTran Airways Corporation -0.9411572  665.6574 53.38363
-# ... with more rows
-```
+    Source:   query [?? x 4]
+    Database: spark connection master=yarn-client app=sparklyr local=FALSE
+
+                        description       gain  distance depdelay
+                              <chr>      <dbl>     <dbl>    <dbl>
+    1        ATA Airlines d/b/a ATA -5.5679651 1240.7219 61.84391
+    2       Northwest Airlines Inc. -3.1134556  779.1926 48.84979
+    3                     Envoy Air -2.2056576  437.0883 54.54923
+    4             PSA Airlines Inc. -1.9267647  500.6955 55.60335
+    5  ExpressJet Airlines Inc. (1) -1.5886314  537.3077 61.58386
+    6               JetBlue Airways -1.3742524 1087.2337 59.80750
+    7         SkyWest Airlines Inc. -1.1265678  419.6489 54.04198
+    8          Delta Air Lines Inc. -0.9829374  956.9576 50.19338
+    9        American Airlines Inc. -0.9631200 1066.8396 56.78222
+    10  AirTran Airways Corporation -0.9411572  665.6574 53.38363
+    # ... with more rows
 
 ## Train a linear model
 
@@ -187,44 +182,43 @@ ml1 <- model_partition$train %>%
 # Summarize the linear model
 summary(ml1)
 ```
-```
-Call: ml_linear_regression(., gain ~ distance + depdelay + uniquecarrier)
 
-Deviance Residuals: (approximate):
-     Min       1Q   Median       3Q      Max 
--302.343   -5.669    2.714    9.832  104.130 
+    Call: ml_linear_regression(., gain ~ distance + depdelay + uniquecarrier)
 
-Coefficients:
-                    Estimate  Std. Error  t value  Pr(>|t|)    
-(Intercept)      -1.26566581  0.10385870 -12.1864 < 2.2e-16 ***
-distance          0.00308711  0.00002404 128.4155 < 2.2e-16 ***
-depdelay         -0.01397013  0.00028816 -48.4812 < 2.2e-16 ***
-uniquecarrier_AA -2.18483090  0.10985406 -19.8885 < 2.2e-16 ***
-uniquecarrier_AQ  3.14330242  0.29114487  10.7964 < 2.2e-16 ***
-uniquecarrier_AS  0.09210380  0.12825003   0.7182 0.4726598    
-uniquecarrier_B6 -2.66988794  0.12682192 -21.0523 < 2.2e-16 ***
-uniquecarrier_CO -1.11611186  0.11795564  -9.4621 < 2.2e-16 ***
-uniquecarrier_DL -1.95206198  0.11431110 -17.0767 < 2.2e-16 ***
-uniquecarrier_EV  1.70420830  0.11337215  15.0320 < 2.2e-16 ***
-uniquecarrier_F9 -1.03178176  0.15384863  -6.7065 1.994e-11 ***
-uniquecarrier_FL -0.99574060  0.12034738  -8.2739 2.220e-16 ***
-uniquecarrier_HA -1.16970713  0.34894788  -3.3521 0.0008020 ***
-uniquecarrier_MQ -1.55569040  0.10975613 -14.1741 < 2.2e-16 ***
-uniquecarrier_NW -3.58502418  0.11534938 -31.0797 < 2.2e-16 ***
-uniquecarrier_OH -1.40654797  0.12034858 -11.6873 < 2.2e-16 ***
-uniquecarrier_OO -0.39069404  0.11132164  -3.5096 0.0004488 ***
-uniquecarrier_TZ -7.26285217  0.34428509 -21.0955 < 2.2e-16 ***
-uniquecarrier_UA -0.56995737  0.11186757  -5.0949 3.489e-07 ***
-uniquecarrier_US -0.52000028  0.11218498  -4.6352 3.566e-06 ***
-uniquecarrier_WN  4.22838982  0.10629405  39.7801 < 2.2e-16 ***
-uniquecarrier_XE -1.13836940  0.11332176 -10.0455 < 2.2e-16 ***
-uniquecarrier_YV  3.17149538  0.11709253  27.0854 < 2.2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    Deviance Residuals: (approximate):
+         Min       1Q   Median       3Q      Max 
+    -302.343   -5.669    2.714    9.832  104.130 
 
-R-Squared: 0.02301
-Root Mean Squared Error: 17.83
-```
+    Coefficients:
+                        Estimate  Std. Error  t value  Pr(>|t|)    
+    (Intercept)      -1.26566581  0.10385870 -12.1864 < 2.2e-16 ***
+    distance          0.00308711  0.00002404 128.4155 < 2.2e-16 ***
+    depdelay         -0.01397013  0.00028816 -48.4812 < 2.2e-16 ***
+    uniquecarrier_AA -2.18483090  0.10985406 -19.8885 < 2.2e-16 ***
+    uniquecarrier_AQ  3.14330242  0.29114487  10.7964 < 2.2e-16 ***
+    uniquecarrier_AS  0.09210380  0.12825003   0.7182 0.4726598    
+    uniquecarrier_B6 -2.66988794  0.12682192 -21.0523 < 2.2e-16 ***
+    uniquecarrier_CO -1.11611186  0.11795564  -9.4621 < 2.2e-16 ***
+    uniquecarrier_DL -1.95206198  0.11431110 -17.0767 < 2.2e-16 ***
+    uniquecarrier_EV  1.70420830  0.11337215  15.0320 < 2.2e-16 ***
+    uniquecarrier_F9 -1.03178176  0.15384863  -6.7065 1.994e-11 ***
+    uniquecarrier_FL -0.99574060  0.12034738  -8.2739 2.220e-16 ***
+    uniquecarrier_HA -1.16970713  0.34894788  -3.3521 0.0008020 ***
+    uniquecarrier_MQ -1.55569040  0.10975613 -14.1741 < 2.2e-16 ***
+    uniquecarrier_NW -3.58502418  0.11534938 -31.0797 < 2.2e-16 ***
+    uniquecarrier_OH -1.40654797  0.12034858 -11.6873 < 2.2e-16 ***
+    uniquecarrier_OO -0.39069404  0.11132164  -3.5096 0.0004488 ***
+    uniquecarrier_TZ -7.26285217  0.34428509 -21.0955 < 2.2e-16 ***
+    uniquecarrier_UA -0.56995737  0.11186757  -5.0949 3.489e-07 ***
+    uniquecarrier_US -0.52000028  0.11218498  -4.6352 3.566e-06 ***
+    uniquecarrier_WN  4.22838982  0.10629405  39.7801 < 2.2e-16 ***
+    uniquecarrier_XE -1.13836940  0.11332176 -10.0455 < 2.2e-16 ***
+    uniquecarrier_YV  3.17149538  0.11709253  27.0854 < 2.2e-16 ***
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+    R-Squared: 0.02301
+    Root Mean Squared Error: 17.83
 
 ## Assess model performance
 
@@ -255,7 +249,7 @@ deciles %>%
   labs(title = 'Average gain by predicted decile', x = 'Decile', y = 'Minutes')
 ```
 
-<p><img src="images/deployment/cdh/performance-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/performance-1.png)
 
 ## Visualize predictions
 
@@ -287,13 +281,13 @@ ggplot(carrier, aes(gain, prediction)) +
   labs(title='Average Gains Forecast', x = 'Actual', y = 'Predicted')
 ```
 
-<p><img src="images/deployment/cdh/forecast-1.png" width=`r params$width`/></p>
+![](/images/deployment/cdh/forecast-1.png)
 
 Some carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.
 
 # Share Insights
 
-This simple linear model contains a wealth of detailed information about carriers, distances traveled, and flight delays. These detailed insights can be conveyed to a non-technical audiance via an interactive [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html). 
+This simple linear model contains a wealth of detailed information about carriers, distances traveled, and flight delays. These detailed insights can be conveyed to a non-technical audiance via an interactive [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html).
 
 ## Build dashboard
 
@@ -322,13 +316,11 @@ save(pred_data, airports, ml1_summary, file = 'flights_pred_2008.RData')
 
 ## Publish dashboard
 
-Use the saved data to build an R Markdown [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html). Publish the flexdashboard 
+Use the saved data to build an R Markdown [flexdashboard](http://rmarkdown.rstudio.com/flexdashboard/index.html). Publish the flexdashboard
 
-<img src="images/deployment/cdh/flex-1.png" width=`r params$width`/>
-
+![](/images/deployment/cdh/flex-1.png)
 
 #Appendix
-
 
 ### Appendix A - Data files
 
@@ -355,12 +347,11 @@ wget -O /tmp/airlines.csv http://www.transtats.bts.gov/Download_Lookup.asp?Looku
 wget -O /tmp/airports.csv https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat
 ```
 
-
 ### Hive tables
 
 We used the Hue interface, logged in as 'admin' to load the data into HDFS and then into Hive.
 
-```sql
+``` sql
 CREATE EXTERNAL TABLE IF NOT EXISTS flights
 (
 year int,
@@ -399,13 +390,13 @@ LINES TERMINATED BY '\n'
 TBLPROPERTIES("skip.header.line.count"="1");
 ```
 
-```sql
+``` sql
 LOAD DATA INPATH '/user/admin/flights/2006.csv/' INTO TABLE flights;
 LOAD DATA INPATH '/user/admin/flights/2007.csv/' INTO TABLE flights;
 LOAD DATA INPATH '/user/admin/flights/2008.csv/' INTO TABLE flights;
 ```
 
-```sql
+``` sql
 # Create metadata for airlines
 CREATE EXTERNAL TABLE IF NOT EXISTS airlines
 (
@@ -422,11 +413,11 @@ STORED AS TEXTFILE
 tblproperties("skip.header.line.count"="1");
 ```
 
-```sql
+``` sql
 LOAD DATA INPATH '/user/admin/L_UNIQUE_CARRIERS.csv' INTO TABLE airlines;
 ```
 
-```sql
+``` sql
 CREATE EXTERNAL TABLE IF NOT EXISTS airports
 (
 id string,
@@ -451,7 +442,6 @@ WITH SERDEPROPERTIES
 STORED AS TEXTFILE;
 ```
 
-```sql
+``` sql
 LOAD DATA INPATH '/user/admin/airports.dat' INTO TABLE airports;
 ```
-

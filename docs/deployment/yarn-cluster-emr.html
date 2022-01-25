@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../deployment/cloudera-aws.html" rel="next">
+  <link href="../deployment/data-lakes.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -137,6 +139,9 @@
   <li class="nav-item">
     <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../deployment/index.html" aria-current="page">Deployment</a>
+  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -150,10 +155,45 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Using sparklyr with an Apache Spark cluster</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../deployment/index.html" class="">Overview</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/data-lakes.html" class="">Data Lakes</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/yarn-cluster-emr.html" class="active">EMR cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/cloudera-aws.html" class="">Cloudera cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -195,11 +235,11 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Using sparklyr with an Apache Spark cluster</h1>
+<h1 class="title d-none d-lg-block display-7">Using sparklyr with an Apache Spark cluster</h1>
 </header>
 
 <p>This document demonstrates how to use <code>sparklyr</code> with an Apache Spark cluster. Data are downloaded from the web and stored in Hive tables on HDFS across multiple worker nodes. RStudio Server is installed on the master node and orchestrates the analysis in spark. Here is the basic workflow.</p>
-<p><img src="images/deployment/amazon-emr/workflowShare.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/workflowShare.png" class="img-fluid"></p>
 <section id="data-preparation" class="level1">
 <h1>Data preparation</h1>
 <section id="set-up-the-cluster" class="level2">
@@ -211,9 +251,7 @@
 <li>Familiarity with basic linux commands</li>
 <li>Sudo privileges in order to install software from the command line</li>
 </ul>
-<p>
-<img src="images/deployment/amazon-emr/emrArchitecture.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/emrArchitecture.png" class="img-fluid" width="334"></p>
 <section id="build-an-emr-cluster" class="level3">
 <h3 class="anchored" data-anchor-id="build-an-emr-cluster">Build an EMR cluster</h3>
 <p>Before beginning the EMR wizard setup, make sure you create the following in AWS:</p>
@@ -221,42 +259,43 @@
 <li>An AWS key pair (.pem key) so you can SSH into the EC2 master node</li>
 <li>A security group that gives you access to port 22 on your IP and port 8787 from anywhere</li>
 </ul>
-<p><img src="images/deployment/amazon-emr/awsNewSecurityGroup.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/awsNewSecurityGroup.png" class="img-fluid"></p>
 <hr>
 <section id="step-1-select-software" class="level4">
 <h4 class="anchored" data-anchor-id="step-1-select-software">Step 1: Select software</h4>
 <p>Make sure to select Hive and Spark as part of the install. Note that by choosing Spark, R will also be installed on the master node as part of the distribution.</p>
-<p><img src="images/deployment/amazon-emr/emrConfigStep1.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/emrConfigStep1.png" class="img-fluid"></p>
 <hr>
 </section>
 <section id="step-2-select-hardware" class="level4">
 <h4 class="anchored" data-anchor-id="step-2-select-hardware">Step 2: Select hardware</h4>
 <p>Install 2 core nodes and one master node with m3.xlarge 80 GiB storage per node. You can easily increase the number of nodes later.</p>
-<p><img src="images/deployment/amazon-emr/emrConfigStep2.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/emrConfigStep2.png" class="img-fluid"></p>
 <hr>
 </section>
 <section id="step-3-select-general-cluster-settings" class="level4">
 <h4 class="anchored" data-anchor-id="step-3-select-general-cluster-settings">Step 3: Select general cluster settings</h4>
 <p>Click next on the general cluster settings.</p>
-<p><img src="images/deployment/amazon-emr/emrConfigStep3.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/emrConfigStep3.png" class="img-fluid"></p>
 <hr>
 </section>
 <section id="step-4-select-security" class="level4">
 <h4 class="anchored" data-anchor-id="step-4-select-security">Step 4: Select security</h4>
 <p>Enter your EC2 key pair and security group. Make sure the security group has ports 22 and 8787 open.</p>
-<p><img src="images/deployment/amazon-emr/emrConfigStep4.png" width="600/"></p>
+<p><img src="../images/deployment/amazon-emr/emrConfigStep4.png" class="img-fluid"></p>
 <hr>
 </section>
 </section>
 <section id="connect-to-emr" class="level3">
 <h3 class="anchored" data-anchor-id="connect-to-emr">Connect to EMR</h3>
 <p>The cluster page will give you details about your EMR cluster and instructions on connecting.</p>
-<p><img src="images/deployment/amazon-emr/awsClusterConnect.png" width="600/"></p>
-<p>Connect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome. ::: {.cell}</p>
+<p><img src="../images/deployment/amazon-emr/awsClusterConnect.png" class="img-fluid"></p>
+<p>Connect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome.</p>
+<div class="cell">
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash cell-code code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Log in to master node</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-i</span> ~/spark-demo.pem hadoop@ec2-52-10-102-11.us-west-2.compute.amazonaws.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p>
-<p><img src="images/deployment/amazon-emr/emrLogin.png" width="600/"></p>
+</div>
+<p><img src="../images/deployment/amazon-emr/emrLogin.png" class="img-fluid"></p>
 </section>
 <section id="install-rstudio-server" class="level3">
 <h3 class="anchored" data-anchor-id="install-rstudio-server">Install RStudio Server</h3>
@@ -441,9 +480,7 @@
 <section id="connect-to-spark" class="level2">
 <h2 class="anchored" data-anchor-id="connect-to-spark">Connect to Spark</h2>
 <p>Log in to RStudio Server by pointing a browser at your master node IP:8787.</p>
-<p>
-<img src="images/deployment/amazon-emr/rstudioLogin.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/rstudioLogin.png" class="img-fluid" width="296"></p>
 <p>Set the environment variable <code>SPARK_HOME</code> and then run <code>spark_connect</code>. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to Spark</span></span>
@@ -455,21 +492,15 @@
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"yarn-client"</span>, <span class="at">config =</span> config, <span class="at">version =</span> <span class="st">'1.6.2'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once you are connected, you will see the Spark pane appear along with your hive tables.</p>
-<p>
-<img src="images/deployment/amazon-emr/rstudioSparkPane.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/rstudioSparkPane.png" class="img-fluid" width="367"></p>
 <p>You can inspect your tables by clicking on the data icon.</p>
-<p>
-<img src="images/deployment/amazon-emr/rstudioData.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/rstudioData.png" class="img-fluid" width="549"></p>
 </section>
 </section>
 <section id="data-analysis" class="level1">
 <h1>Data analysis</h1>
 <p>Is there evidence to suggest that some airline carriers make up time in flight? This analysis predicts time gained in flight by airline carrier.</p>
-<p>
-<img src="images/deployment/amazon-emr/rstudio.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/rstudio.png" class="img-fluid"></p>
 <section id="cache-the-tables-into-memory" class="level2">
 <h2 class="anchored" data-anchor-id="cache-the-tables-into-memory">Cache the tables into memory</h2>
 <p>Use <code>tbl_cache</code> to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.</p>
@@ -605,9 +636,7 @@ Root Mean Squared Error: 17.74</code></pre>
 <span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">'identity'</span>, <span class="at">position =</span> <span class="st">'dodge'</span>) <span class="sc">+</span></span>
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Average gain by predicted decile'</span>, <span class="at">x =</span> <span class="st">'Decile'</span>, <span class="at">y =</span> <span class="st">'Minutes'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>
-<img src="images/deployment/amazon-emr/performance-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/performance-1.png" class="img-fluid"></p>
 </section>
 <section id="visualize-predictions" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-predictions">Visualize predictions</h2>
@@ -637,9 +666,7 @@ Root Mean Squared Error: 17.74</code></pre>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">substr</span>(description, <span class="dv">1</span>, <span class="dv">20</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">'Average Gains Forecast'</span>, <span class="at">x =</span> <span class="st">'Actual'</span>, <span class="at">y =</span> <span class="st">'Predicted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>
-<img src="images/deployment/amazon-emr/forecast-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/amazon-emr/forecast-1.png" class="img-fluid"></p>
 <p>Some carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.</p>
 </section>
 </section>
@@ -672,10 +699,8 @@ Root Mean Squared Error: 17.74</code></pre>
 </section>
 <section id="publish-dashboard" class="level2">
 <h2 class="anchored" data-anchor-id="publish-dashboard">Publish dashboard</h2>
-Use the saved data to build an R Markdown <a href="http://rmarkdown.rstudio.com/flexdashboard/index.html">flexdashboard</a>. Publish the flexdashboard to <a href="https://www.rstudio.com/products/shiny-server-pro/">Shiny Server</a>, <a href="https://www.rstudio.com/products/shinyapps/">Shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a>.
-<p>
-<a href="https://beta.rstudioconnect.com/content/1439/"> <img src="images/deployment/amazon-emr/flightsDashboard.png" width="600/"> </a>
-</p>
+<p>Use the saved data to build an R Markdown <a href="http://rmarkdown.rstudio.com/flexdashboard/index.html">flexdashboard</a>. Publish the flexdashboard to <a href="https://www.rstudio.com/products/shiny-server-pro/">Shiny Server</a>, <a href="https://www.rstudio.com/products/shinyapps/">Shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a>.</p>
+<p><img src="../images/deployment/amazon-emr/flightsDashboard.png" class="img-fluid"></p>
 
 
 </section>
@@ -855,8 +880,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../deployment/data-lakes.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data Lakes</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../deployment/cloudera-aws.html">
+        <span class="nav-page-text">Cloudera cluster</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

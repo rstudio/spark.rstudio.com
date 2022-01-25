@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../deployment/databricks-cluster-local.html" rel="next">
+  <link href="../deployment/yarn-cluster-emr.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -137,6 +139,9 @@
   <li class="nav-item">
     <a class="nav-link" href="../guides/index.html">Guides</a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../deployment/index.html" aria-current="page">Deployment</a>
+  </li>  
 </ul>
               <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
@@ -150,10 +155,45 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Using sparklyr with an Apache Spark cluster</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../deployment/index.html" class="">Overview</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/stand-alone-aws.html" class="">Standalone cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/data-lakes.html" class="">Data Lakes</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/yarn-cluster-emr.html" class="">EMR cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/cloudera-aws.html" class="active">Cloudera cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/databricks-cluster-local.html" class="">Databricks cluster</a>
+</li>
+      <li class="sidebar-item">
+  <a href="../deployment/qubole-overview.html" class="">Qubole cluster</a>
+</li>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -162,6 +202,8 @@
 <li><a href="#summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
 <li><a href="#cloudera-cluster" class="nav-link" data-scroll-target="#cloudera-cluster">Cloudera Cluster</a>
 <ul class="collapse">
+<li><a href="#cdh-5" class="nav-link" data-scroll-target="#cdh-5">CDH 5</a></li>
+<li><a href="#spark-1.6" class="nav-link" data-scroll-target="#spark-1.6">Spark 1.6</a></li>
 <li><a href="#hive-data" class="nav-link" data-scroll-target="#hive-data">Hive data</a></li>
 </ul></li>
 <li><a href="#install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a>
@@ -192,7 +234,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Using sparklyr with an Apache Spark cluster</h1>
+<h1 class="title d-none d-lg-block display-7">Using sparklyr with an Apache Spark cluster</h1>
 </header>
 
 <section id="summary" class="level1">
@@ -202,16 +244,20 @@
 <section id="cloudera-cluster" class="level1">
 <h1>Cloudera Cluster</h1>
 <p>This demonstration is focused on adding RStudio integration to an existing Cloudera cluster. The assumption will be made that there no aid is needed to setup and administer the cluster.</p>
-<p>##CDH 5</p>
+<section id="cdh-5" class="level2">
+<h2 class="anchored" data-anchor-id="cdh-5">CDH 5</h2>
 <p>We will start with a Cloudera cluster CDH version 5.8.2 (free version) with an underlaying Ubuntu Linux distribution.</p>
-<p><img src="images/deployment/cdh/manager-landing-page.png" width="600/"></p>
-<p>##Spark 1.6</p>
+<p><img src="../images/deployment/cdh/manager-landing-page.png" class="img-fluid"></p>
+</section>
+<section id="spark-1.6" class="level2">
+<h2 class="anchored" data-anchor-id="spark-1.6">Spark 1.6</h2>
 <p>The default Spark 1.6.0 parcel is in installed and running</p>
-<p><img src="images/deployment/cdh/spark-history-server-1.png" width="600/"></p>
+<p><img src="../images/deployment/cdh/spark-history-server-1.png" class="img-fluid"></p>
+</section>
 <section id="hive-data" class="level2">
 <h2 class="anchored" data-anchor-id="hive-data">Hive data</h2>
 <p>For this demo, we have created and populated 3 tables in Hive. The table names are: flights, airlines and airports. Using Hue, we can see the loaded tables. For the links to the data files and their Hive import scripts please see <em>Appendix A</em>.</p>
-<p><img src="images/deployment/cdh/hue-metastore-1.png" width="600/"></p>
+<p><img src="../images/deployment/cdh/hue-metastore-1.png" class="img-fluid"></p>
 </section>
 </section>
 <section id="install-rstudio" class="level1">
@@ -248,9 +294,7 @@
 <section id="connect-to-spark" class="level1">
 <h1>Connect to Spark</h1>
 <p>Log in to RStudio Server by pointing a browser at your master node IP:8787.</p>
-<p>
-<img src="images/deployment/cdh/sign-in-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/sign-in-1.png" class="img-fluid"></p>
 <p>Set the environment variable <code>SPARK_HOME</code> and then run <code>spark_connect</code>. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
@@ -260,24 +304,16 @@
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"yarn-client"</span>, <span class="at">version=</span><span class="st">"1.6.0"</span>, <span class="at">spark_home =</span> <span class="st">'/opt/cloudera/parcels/CDH/lib/spark/'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once you are connected, you will see the Spark pane appear along with your hive tables.</p>
-<p>
-<img src="images/deployment/cdh/spark-pane-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/spark-pane-1.png" class="img-fluid"></p>
 <p>You can inspect your tables by clicking on the data icon.</p>
-<p>
-<img src="images/deployment/cdh/tables-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/tables-1.png" class="img-fluid"></p>
 <p>This is what the tables look like loaded in Spark via the History Server Web UI (port 18088)</p>
-<p>
-<img src="images/deployment/cdh/spark-rdd-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/spark-rdd-1.png" class="img-fluid"></p>
 </section>
 <section id="data-analysis" class="level1">
 <h1>Data analysis</h1>
 <p>Is there evidence to suggest that some airline carriers make up time in flight? This analysis predicts time gained in flight by airline carrier.</p>
-<p>
-<img src="images/deployment/cdh/data-analysis-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/data-analysis-1.png" class="img-fluid"></p>
 <section id="cache-the-tables-into-memory" class="level2">
 <h2 class="anchored" data-anchor-id="cache-the-tables-into-memory">Cache the tables into memory</h2>
 <p>Use <code>tbl_cache</code> to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.</p>
@@ -413,9 +449,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">'identity'</span>, <span class="at">position =</span> <span class="st">'dodge'</span>) <span class="sc">+</span></span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Average gain by predicted decile'</span>, <span class="at">x =</span> <span class="st">'Decile'</span>, <span class="at">y =</span> <span class="st">'Minutes'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>
-<img src="images/deployment/cdh/performance-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/performance-1.png" class="img-fluid"></p>
 </section>
 <section id="visualize-predictions" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-predictions">Visualize predictions</h2>
@@ -445,9 +479,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">substr</span>(description, <span class="dv">1</span>, <span class="dv">20</span>)), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">'Average Gains Forecast'</span>, <span class="at">x =</span> <span class="st">'Actual'</span>, <span class="at">y =</span> <span class="st">'Predicted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>
-<img src="images/deployment/cdh/forecast-1.png" width="600/">
-</p>
+<p><img src="../images/deployment/cdh/forecast-1.png" class="img-fluid"></p>
 <p>Some carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.</p>
 </section>
 </section>
@@ -481,7 +513,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <section id="publish-dashboard" class="level2">
 <h2 class="anchored" data-anchor-id="publish-dashboard">Publish dashboard</h2>
 <p>Use the saved data to build an R Markdown <a href="http://rmarkdown.rstudio.com/flexdashboard/index.html">flexdashboard</a>. Publish the flexdashboard</p>
-<p><img src="images/deployment/cdh/flex-1.png" width="600/"></p>
+<p><img src="../images/deployment/cdh/flex-1.png" class="img-fluid"></p>
 <p>#Appendix</p>
 <section id="appendix-a---data-files" class="level3">
 <h3 class="anchored" data-anchor-id="appendix-a---data-files">Appendix A - Data files</h3>
@@ -767,8 +799,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../deployment/yarn-cluster-emr.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">EMR cluster</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../deployment/databricks-cluster-local.html">
+        <span class="nav-page-text">Databricks cluster</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

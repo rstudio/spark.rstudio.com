@@ -1,0 +1,309 @@
+---
+title: "Spark Machine Learning Library (MLlib)"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+
+``` {r}
+#| include: false
+
+library(sparklyr)
+library(ggplot2)
+library(dplyr)
+```
+
+## Overview
+
+**`sparklyr`** provides bindings to Spark's distributed [machine learning](https://spark.apache.org/docs/latest/mllib-guide.html) library. 
+In particular, `sparklyr` allows you to access the machine learning routines 
+provided by the [spark.ml](https://spark.apache.org/docs/latest/ml-guide) package. 
+Together with `sparklyr`'s [dplyr](/guides/dplyr.qmd) interface, you can easily 
+create and tune machine learning workflows on Spark, orchestrated entirely within R.
+
+`sparklyr` provides three families of functions that you can use with Spark machine learning:
+
+-   Machine learning algorithms for analyzing data (`ml_*`)
+-   Feature transformers for manipulating individual features (`ft_*`)
+-   Functions for manipulating Spark DataFrames (`sdf_*`)
+
+An analytic workflow with `sparklyr` might be composed of the following stages.
+For an example see [Example Workflow](#example-workflow).
+
+1.  Perform SQL queries through the sparklyr [dplyr](/dplyr) interface
+
+1.  Use the `sdf_*` and `ft_*` family of functions to generate new columns, or 
+partition your data set
+
+1.  Choose an appropriate machine learning algorithm from the `ml_*` family of 
+functions to model your data
+
+1.  Inspect the quality of your model fit, and use it to make predictions 
+with new data.
+
+1.  Collect the results for visualization and further analysis in R
+
+## Algorithms
+
+Spark's machine learning library can be accessed from `sparklyr` through the 
+`ml_*` set of functions. Visit the `sparklyr` reference page to see the complete
+list of available algorithms: [Reference - Spark Machine Learning](/packages/sparklyr/latest/reference/index.html#spark-machine-learning)
+
+### Formulas
+
+The `ml_*` functions take the arguments `response` and `features`. But `features`
+can also be a formula with main effects (it currently does not accept interaction 
+terms). The intercept term can be omitted by using `-1`.
+
+The following two statements are equivalent:
+
+``` r
+ml_linear_regression(z ~ -1 + x + y)
+```
+
+```r
+ml_linear_regression(intercept = FALSE, response = "z", features = c("x", "y"))
+```
+
+### Options
+
+The Spark model output can be modified with the `ml_options` argument in 
+the `ml_*` functions. The `ml_options` is an *experts only* interface for 
+tweaking the model output. For example, `model.transform` can be used to 
+mutate the Spark model object before the fit is performed.
+
+## Transformers
+
+A model is often fit not on a data set as-is, but instead on some transformation 
+of that data set. Spark provides [feature transformers](http://spark.apache.org/docs/latest/ml-features), 
+facilitating many common transformations of data within a Spark DataFrame, and 
+`sparklyr` exposes these within the `ft_*` family of functions. These routines 
+generally take one or more input columns, and generate a new output column
+formed as a transformation of those columns. Visit the `sparklyr` reference page
+to see the complete list of available transformers:
+[Reference - Feature Transformers](/packages/sparklyr/latest/reference/index.html#spark-feature-transformers)
+
+## Examples
+
+We will use the `iris` data set to examine a handful of learning algorithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.
+
+``` {r}
+library(sparklyr)
+library(ggplot2)
+library(dplyr)
+
+sc <- spark_connect(master = "local")
+
+iris_tbl <- copy_to(sc, iris, "iris", overwrite = TRUE)
+
+iris_tbl
+```
+
+### K-Means Clustering
+
+Use Spark's [K-means clustering](http://spark.apache.org/docs/latest/ml-clustering.html#k-means)
+to partition a dataset into groups. K-means clustering partitions points into `k`
+groups, such that the sum of squares from points to the assigned cluster centers
+is minimized.
+
+```{r}
+kmeans_model <- iris_tbl %>%
+  ml_kmeans(k = 3, features = c("Petal_Length", "Petal_Width"))
+
+kmeans_model
+```
+Run and collect predictions into R:
+
+```{r}
+predicted <- ml_predict(kmeans_model, iris_tbl) %>%
+  collect()
+
+table(predicted$Species, predicted$prediction)
+```
+
+Use the collected data to plot the results:
+
+```{r}
+predicted %>%
+  ggplot(aes(Petal_Length, Petal_Width)) +
+  geom_point(aes(Petal_Width, Petal_Length, col = factor(prediction + 1)),
+    size = 2, alpha = 0.5
+  ) +
+  geom_point(
+    data = kmeans_model$centers, aes(Petal_Width, Petal_Length),
+    col = scales::muted(c("red", "green", "blue")),
+    pch = "x", size = 12
+  ) +
+  scale_color_discrete(
+    name = "Predicted Cluster",
+    labels = paste("Cluster", 1:3)
+  ) +
+  labs(
+    x = "Petal Length",
+    y = "Petal Width",
+    title = "K-Means Clustering",
+    subtitle = "Use Spark.ML to predict cluster membership with the iris dataset."
+  )
+```
+
+### Linear Regression
+
+Use Spark's [linear regression](http://spark.apache.org/docs/latest/ml-classification-regression.html#linear-regression) to model the linear relationship between a response variable and one or more 
+explanatory variables.
+
+```{r}
+lm_model <- iris_tbl %>%
+  ml_linear_regression(Petal_Length ~ Petal_Width)
+```
+
+Extract the slope and the intercept into discrete R variables. We will use them
+to plot:
+
+```{r}
+spark_slope <- coef(lm_model)[["Petal_Width"]]
+spark_intercept <- coef(lm_model)[["(Intercept)"]]
+```
+
+
+```{r}
+iris_tbl %>%
+  select(Petal_Width, Petal_Length) %>%
+  collect() %>%
+  ggplot(aes(Petal_Length, Petal_Width)) +
+  geom_point(aes(Petal_Width, Petal_Length), size = 2, alpha = 0.5) +
+  geom_abline(aes(
+    slope = spark_slope,
+    intercept = spark_intercept
+  ),
+  color = "red"
+  ) +
+  labs(
+    x = "Petal Width",
+    y = "Petal Length",
+    title = "Linear Regression: Petal Length ~ Petal Width",
+    subtitle = "Use Spark.ML linear regression to predict petal length as a function of petal width."
+  )
+```
+
+### Logistic Regression
+
+Use Spark's [logistic regression](http://spark.apache.org/docs/latest/ml-classification-regression.html#logistic-regression) to perform logistic regression, modeling a binary outcome as a function 
+of one or more explanatory variables.
+
+```{r}
+glm_model <- iris_tbl %>% 
+  mutate(is_setosa = ifelse(Species == "setosa", 1, 0)) %>% 
+  select_if(is.numeric) %>% 
+  ml_logistic_regression(is_setosa ~.)
+
+summary(glm_model)
+```
+
+```{r}
+ml_predict(glm_model, iris_tbl) %>% 
+  count(Species, prediction) 
+```
+
+### PCA
+
+Use Spark's [Principal Components Analysis (PCA)](https://spark.apache.org/docs/latest/mllib-dimensionality-reduction) to perform dimensionality reduction. PCA is a statistical method to find a
+rotation such that the first coordinate has the largest variance possible, and 
+each succeeding coordinate in turn has the largest variance possible.
+
+```{r}
+pca_model <- tbl(sc, "iris") %>%
+  select(-Species) %>%
+  ml_pca()
+
+pca_model
+```
+
+### Random Forest
+
+Use Spark's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or multiclass classification.
+
+```{r}
+rf_model <- iris_tbl %>%
+  ml_random_forest(
+    Species ~ Petal_Length + Petal_Width, type = "classification"
+    )
+```
+
+Use `ml_predict()` to use the apply the new model back to the data.  
+
+```{r}
+rf_predict <- ml_predict(rf_model, iris_tbl) 
+
+glimpse(rf_predict)
+```
+To get an idea of the model effectiveness, use `count()` to compare species against
+the prediction.  `ml_predict()` created a variable called `predicted_label`. That
+variable contains the string value of the prediction:
+
+```{r}
+rf_predict %>% 
+  count(Species, predicted_label) 
+```
+
+
+### FT String Indexing
+
+Use `ft_string_indexer()` and `ft_index_to_string()` to convert a character 
+column into a numeric column and back again.
+
+```{r}
+ft_string2idx <- iris_tbl %>%
+  ft_string_indexer("Species", "Species_idx") %>%
+  ft_index_to_string("Species_idx", "Species_remap") %>% 
+  select(Species, Species_remap, Species_idx)
+```
+
+To see the value assigned to each value in `Species`, we can pull the aggregates
+of all the species, re-mapped species and index combinations:
+
+```{r}
+ft_string2idx %>% 
+  group_by_all() %>% 
+  summarise(count = n(), .groups = "keep")
+```
+
+
+### SDF Partitioning
+
+Split a Spark DataFrame into "training" and "test" datasets.
+
+```{r}
+partitions <- iris_tbl %>%
+  sdf_random_split(training = 0.75, test = 0.25, seed = 1099)
+```
+
+The `partitions` variable is now a `list` with two elements called `training`
+and `test`. It does not contain any data. It is just a pointer to where Spark
+has separated the data, so nothing is downloaded into R. Use `partitions$training`
+to access the data the Spark has separated for that purpose. 
+
+```{r}
+fit <- partitions$training %>%
+  ml_linear_regression(Petal_Length ~ Petal_Width)
+```
+
+Use `ml_predict()` to then calculate the **mse** of the "test" data:
+
+```{r}
+ml_predict(fit, partitions$test) %>%
+  mutate(resid = Petal_Length - prediction) %>%
+  summarize(mse = mean(resid ^ 2, na.rm = TRUE)) 
+```
+
+### Disconnect from Spark
+
+Lastly, cleanup your session by disconnecting Spark:
+
+```{r}
+spark_disconnect(sc)
+```

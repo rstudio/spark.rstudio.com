@@ -86,6 +86,8 @@
   <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="../site_libs/quarto-search/fuse.min.js"></script>
   <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/caching.html" rel="next">
+  <link href="../guides/aws-s3.html" rel="prev">
   <script src="../site_libs/quarto-html/quarto.js"></script>
   <script src="../site_libs/quarto-html/popper.min.js"></script>
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -118,7 +120,7 @@
   }</script>
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="floating">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -135,7 +137,7 @@
     <a class="nav-link" href="../get-started/index.html">Get Started</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../guides/index.html">Guides</a>
+    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
   </li>  
 </ul>
               <div class="quarto-toggle-container">
@@ -150,10 +152,130 @@
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Manipulating Data with <code>dplyr</code></h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1">
+      <li class="sidebar-item">
+  <a href="../guides/index.html" class="">Overview</a>
+</li>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Data Access</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/aws-s3.html" class="">Access S3 buckets</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Preparation &amp; Analysis</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/dplyr.html" class="active">Using <code>dplyr</code></a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/caching.html" class="">Managing Spark cache</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Modeling and Machine Learning</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/mlib.html" class="">Spark ML Overview</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/pipelines.html" class="">ML Pipelines</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/h2o.html" class="">H2O models</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Non-rectangular Data</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/streaming.html" class="">Streaming Data</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/textmining.html" class="">Text Data</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <ul class="list-unstyled sidebar-section depth1">
+    <li class="">
+        <div class="me-auto">
+            <a class="sidebar-section-item d-inline-flex text-start w-100 " data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true">
+              <div class="me-auto sidebar-section-item">Advanced</div>
+            <div><i class="bi bi-chevron-right ms-2"></i></div>
+            </a>
+        </div>
+      <div class="collapse  show" id="">
+        <ul class="list-unstyled sidebar-item-contents">
+          <li class="sidebar-item">
+  <a href="../guides/distributed-r.html" class="">Run R code inside Spark</a>
+</li>
+          <li class="sidebar-item">
+  <a href="../guides/extensions.html" class="">Create <code>sparklyr</code> extensions</a>
+</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+      <li class="sidebar-item">
+  <a href="../guides/troubleshooting.html" class="">Troubleshooting</a>
+</li>
+  </ul>
+  </div>
+</nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
       <nav id="TOC" role="doc-toc">
@@ -178,7 +300,7 @@
 <!-- main -->
 <main class="content">
 <header id="title-block-header">
-<h1 class="title display-7">Manipulating Data with <code>dplyr</code></h1>
+<h1 class="title d-none d-lg-block display-7">Manipulating Data with <code>dplyr</code></h1>
 </header>
 
 <section id="overview" class="level2">
@@ -766,8 +888,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../guides/aws-s3.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Access S3 buckets</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../guides/caching.html">
+        <span class="nav-page-text">Managing Spark cache</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

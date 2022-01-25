@@ -1,0 +1,75 @@
+---
+title: "Read Data"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+```{r, include = FALSE}
+library(sparklyr) 
+library(dplyr)
+```
+
+A new Spark session will contain no data. The first step is to either load data
+into your Spark session's memory, or point Spark to the location of the data
+so it can access the data on-demand.
+
+## Exercise 
+
+For this exercise, we will start a "local" Spark session, and then transfer data 
+from our R environment to the Spark session's memory.  To do that, we will 
+use the `copy_to()` command:
+
+```{r}
+library(sparklyr)
+
+sc <- spark_connect(master = "local")
+
+tbl_mtcars <- copy_to(sc, mtcars, "spark_mtcars")
+```
+
+If you are using the RStudio IDE, you will notice a new table in the Connections
+pane.  The name of that table is **spark_mtcars**.  That is the name of the data
+set inside the Spark memory. The `tbl_mtcars` variable does not contain any
+`mtcars` data, this variable contains the info that points to the location where 
+the Spark session loaded the data to. 
+
+Calling the `tbl_mtcars` variable in R will download the first 1,000 records and
+display them :
+
+```{r}
+tbl_mtcars
+```
+Notice that at the top of the data print out, it is noted that records were 
+downloaded from Spark: *Source: spark<spark_mtcars>...*.
+
+To clean up the session, we will now stop the Spark session:
+
+```{r}
+spark_disconnect(sc)
+```
+
+## Working with files
+
+In a formal Spark environment, it will be rare when we would have to upload data
+from R into Spark.  
+
+Using `sparklyr`, you can tell Spark to read and write data. Spark is able to interact
+with multiple types of file systems, such as HDFS, S3 and local. Additionally, 
+Spark is able to read several file types such as CSV, Parquet, Delta and JSON.
+`sparklyr` provides functions that makes it easy to access these features.  See
+the [Spark Data](/packages/sparklyr/latest/reference/#spark-data) section for a 
+full list of available functions.  
+
+The following command will tell Spark to read a CSV file, and to also load it
+into Spark memory. 
+
+```{r}
+#| eval: false
+# Do not run the next following command. It is for example purposes only.
+spark_read_csv(sc, name = "test_table",  path = "/test/path/test_file.csv")
+```

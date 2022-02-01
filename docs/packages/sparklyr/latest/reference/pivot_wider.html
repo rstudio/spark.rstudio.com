@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>sparklyr – pivot_wider</title>
-  <style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>sparklyr – pivot_wider</title>
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -12,27 +14,15 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
   </style>
-
-  <script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
-  <script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
-  <script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
-  <meta name="quarto:offset" content="../../../../">
-  <script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-  <script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
-  <script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
-  <link href="../../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-  <script src="../../../../site_libs/quarto-html/quarto.js"></script>
-  <script src="../../../../site_libs/quarto-html/popper.min.js"></script>
-  <script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-  <script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
-  <link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-  <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
-  <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/bootstrap/bootstrap-dark.min.css">
-  <script id="quarto-search-options" type="application/json">{
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script><script src="../../../../site_libs/quarto-nav/headroom.min.js"></script><script src="../../../../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../../../../site_libs/quarto-search/fuse.min.js"></script><script src="../../../../site_libs/quarto-search/quarto-search.js"></script><link href="../../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script><script src="../../../../site_libs/quarto-html/popper.min.js"></script><script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../../../../site_libs/quarto-html/anchor.min.js"></script><link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script><link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -50,27 +40,22 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script>
-  <!--[if lt IE 9]>
+  }</script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <link rel="stylesheet" href="../../../../styles.css">
+  <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../../../../index.html">
-    <img src="../../../../images/favicon/apple-touch-icon.png" alt="">
-    <span class="navbar-title">sparklyr</span>
+    <img src="../../../../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
   </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../../../../get-started/index.html">Get Started</a>
   </li>  
   <li class="nav-item">
@@ -89,7 +74,7 @@
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
   </li>  
 </ul>
-              <div class="quarto-toggle-container">
+<div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -100,38 +85,28 @@
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#pivot_wider" class="nav-link active" data-scroll-target="#pivot_wider">pivot_wider</a>
+<li>
+<a href="#pivot_wider" class="nav-link active" data-scroll-target="#pivot_wider">pivot_wider</a>
 <ul class="collapse">
 <li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
-</ul></li>
 </ul>
-</nav>
-    </div>
+</li>
+</ul></nav>
+</div>
 <!-- main -->
-<main class="content">
-
-<section id="pivot_wider" class="level1">
-<h1>pivot_wider</h1>
+<main class="content"><section id="pivot_wider" class="level1"><h1>pivot_wider</h1>
 <p>Pivot wider</p>
-<section id="description" class="level2">
-<h2 class="anchored" data-anchor-id="description">Description</h2>
+<section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
 <p>See <code>pivot_wider</code> for more details.</p>
 
 
-</section>
-</section>
-</main> <!-- /main -->
-<script type="application/javascript">
+</section></section></main><!-- /main --><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -302,9 +277,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>
@@ -312,4 +285,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body></html>
+</body>
+</html>

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>sparklyr - Using an ODBC connection with Databricks</title>
-  <style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>sparklyr - Using an ODBC connection with Databricks</title>
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -75,27 +77,15 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-
-  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
-  <script src="../site_libs/clipboard/clipboard.min.js"></script>
-  <meta name="quarto:offset" content="../">
-  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-  <script src="../site_libs/quarto-search/fuse.min.js"></script>
-  <script src="../site_libs/quarto-search/quarto-search.js"></script>
-  <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-  <script src="../site_libs/quarto-html/quarto.js"></script>
-  <script src="../site_libs/quarto-html/popper.min.js"></script>
-  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-  <script src="../site_libs/quarto-html/anchor.min.js"></script>
-  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-  <script id="quarto-search-options" type="application/json">{
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -113,27 +103,22 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script>
-  <!--[if lt IE 9]>
+  }</script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
-  <link rel="stylesheet" href="../styles.css">
+  <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
-    <img src="../images/favicon/apple-touch-icon.png" alt="">
-    <span class="navbar-title">sparklyr</span>
+    <img src="../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
   </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="../get-started/index.html">Get Started</a>
   </li>  
   <li class="nav-item">
@@ -152,7 +137,7 @@
     <a class="nav-link" href="../packages/index.html">Packages</a>
   </li>  
 </ul>
-              <div class="quarto-toggle-container">
+<div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -163,15 +148,11 @@
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
-<h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
 <li><a href="#advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
@@ -179,21 +160,13 @@
 <li><a href="#driver-configuration" class="nav-link" data-scroll-target="#driver-configuration">Driver configuration</a></li>
 <li><a href="#connect-to-databricks" class="nav-link" data-scroll-target="#connect-to-databricks">Connect to Databricks</a></li>
 <li><a href="#additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
-</ul>
-</nav>
-    </div>
+</ul></nav>
+</div>
 <!-- main -->
-<main class="content">
-<header id="title-block-header">
-<h1 class="title display-7">Using an ODBC connection with Databricks</h1>
-</header>
-
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<main class="content"><header id="title-block-header"><h1 class="title display-7">Using an ODBC connection with Databricks</h1>
+</header><section id="overview" class="level2"><h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>This configuration details how to connect to Databricks using an ODBC connection. With this setup, R can connect to Databricks using the <a href="https://github.com/r-dbi/odbc"><code>odbc</code></a> and <a href="https://dbi.r-dbi.org/"><code>DBI</code></a> R packages. This type of configuration is the recommended approach for connecting to Databricks from RStudio Connect and can also be used from RStudio Workbench.</p>
-</section>
-<section id="advantages-and-limitations" class="level2">
-<h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
+</section><section id="advantages-and-limitations" class="level2"><h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
 <p>Advantages:</p>
 <ul>
 <li>ODBC connections tend to be more stable than Spark connections. This is especially beneficial for content published to RStudio Connect.</li>
@@ -201,13 +174,9 @@
 <li>The Spark ODBC driver provided by Databricks was benchmarked against a native Spark connection and the performance of the two is very comparable.</li>
 </ul>
 <p>Limitations: - Not all Spark features and functions are available through an ODBC connection.</p>
-</section>
-<section id="driver-installation" class="level2">
-<h2 class="anchored" data-anchor-id="driver-installation">Driver installation</h2>
+</section><section id="driver-installation" class="level2"><h2 class="anchored" data-anchor-id="driver-installation">Driver installation</h2>
 <p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#step-1-download-and-install-a-jdbc-or-odbc-driver">Download and install the Spark ODBC driver from Databricks</a></p>
-</section>
-<section id="driver-configuration" class="level2">
-<h2 class="anchored" data-anchor-id="driver-configuration">Driver configuration</h2>
+</section><section id="driver-configuration" class="level2"><h2 class="anchored" data-anchor-id="driver-configuration">Driver configuration</h2>
 <p><a href="https://docs.databricks.com/integrations/bi/jdbc-odbc-bi.html#configure-odbc-data-source-name-for-the-simba-odbc-driver">Create a DSN for Databricks</a>.</p>
 <pre><code>[Databricks-Spark]
 Driver=Simba
@@ -222,23 +191,20 @@ AuthMech=3
 UID=token
 PWD=&lt;personal-access-token&gt;
 HTTPPath=&lt;http-path&gt;</code></pre>
-</section>
-<section id="connect-to-databricks" class="level2">
-<h2 class="anchored" data-anchor-id="connect-to-databricks">Connect to Databricks</h2>
+</section><section id="connect-to-databricks" class="level2"><h2 class="anchored" data-anchor-id="connect-to-databricks">Connect to Databricks</h2>
 <p>The connection can be tested from the command line using <code>isql -v Databricks-Spark</code> where <code>Databricks-Spark</code> is the DSN name for the connection. If that connects successfully, then the following code can be used to create a connection from an R session:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(odbc)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu">odbc</span>(), <span class="st">"Databricks-Spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="additional-information" class="level2">
-<h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-dbi/odbc">odbc</a></span><span class="op">)</span>
+
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/odbc/man/odbc.html">odbc</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Databricks-Spark"</span><span class="op">)</span></code></pre></div>
+</section><section id="additional-information" class="level2"><h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
 <p>For more information about ODBC connections from R, please visit <a href="https://db.rstudio.com/">db.rstudio.com</a>.</p>
 
 
-</section>
-</main> <!-- /main -->
-<script type="application/javascript">
+</section></main><!-- /main --><script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -409,9 +375,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
   </div>
@@ -419,4 +383,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body></html>
+</body>
+</html>

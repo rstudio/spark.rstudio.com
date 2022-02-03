@@ -174,9 +174,7 @@
 <p>This class performs expectation maximization for multivariate Gaussian Mixture Models (GMMs). A GMM represents a composite distribution of independent Gaussian distributions with associated “mixing” weights specifying each’s contribution to the composite. Given a set of sample points, this class will maximize the log-likelihood for a mixture of k Gaussians, iterating until the log-likelihood changes by less than <code>tol</code>, or until it has reached the max number of iterations. While this process is generally guaranteed to converge, it is not guaranteed to find a global optimum.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gaussian_mixture.html">ml_gaussian_mixture</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gaussian_mixture.html">ml_gaussian_mixture</a></span><span class="op">(</span>
   <span class="va">x</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
   k <span class="op">=</span> <span class="fl">2</span>,
@@ -233,12 +231,10 @@
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="//reference/ml_lda.html">ml_lda()</a></code>.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
 </ul></section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-
-
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 <span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
@@ -247,7 +243,7 @@
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_clustering_evaluator.html">ml_clustering_evaluator</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></code></pre></div>
 </section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
 <p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <code><a href="//reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="//reference/ml_kmeans.html">ml_kmeans()</a></code>, <code><a href="//reference/ml_lda.html">ml_lda()</a></code></p>
+<p>Other ml clustering algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code></p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

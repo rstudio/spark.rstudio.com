@@ -78,7 +78,7 @@
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../deployment/databricks-cluster-local.html" rel="next">
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../deployment/databricks-clusters.qmd" rel="next">
 <link href="../deployment/yarn-cluster-emr.html" rel="prev">
 <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
@@ -202,7 +202,7 @@
     <ul id="quarto-sidebar-section-stand-alone-clusters" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/databricks-cluster-local.html" class="sidebar-item-text ">Databricks cluster</a>
+  <a href="../deployment/databricks-clusters.qmd" class="sidebar-item-text ">Databricks cluster</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -311,9 +311,7 @@
 <p>Set the environment variable <code>SPARK_HOME</code> and then run <code>spark_connect</code>. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
@@ -332,9 +330,7 @@
 <p>Use <code>tbl_cache</code> to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Cache flights Hive table into Spark</span>
+<code class="sourceCode R"><span class="co"># Cache flights Hive table into Spark</span>
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">'flights'</span><span class="op">)</span>
 <span class="va">flights_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">'flights'</span><span class="op">)</span>
 
@@ -350,9 +346,7 @@
 <p>Filter the data to contain only the records to be used in the fitted model. Join carrier descriptions for reference. Create a new variable called <code>gain</code> which represents the amount of time gained (or lost) in flight.</p>
 <div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Filter records and create target variable 'gain'</span>
+<code class="sourceCode R"><span class="co"># Filter records and create target variable 'gain'</span>
 <span class="va">model_data</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">arrdelay</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">depdelay</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">depdelay</span> <span class="op">&gt;</span> <span class="fl">15</span> <span class="op">&amp;</span> <span class="va">depdelay</span> <span class="op">&lt;</span> <span class="fl">240</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -390,9 +384,7 @@ Database: spark connection master=yarn-client app=sparklyr local=FALSE
 <p>Predict time gained or lost in flight as a function of distance, departure delay, and airline carrier.</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Partition the data into training and validation sets</span>
+<code class="sourceCode R"><span class="co"># Partition the data into training and validation sets</span>
 <span class="va">model_partition</span> <span class="op">&lt;-</span> <span class="va">model_data</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition</a></span><span class="op">(</span>train <span class="op">=</span> <span class="fl">0.8</span>, valid <span class="op">=</span> <span class="fl">0.2</span>, seed <span class="op">=</span> <span class="fl">5555</span><span class="op">)</span>
 
@@ -443,9 +435,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <p>Compare the model performance using the validation data.</p>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Calculate average gains by predicted decile</span>
+<code class="sourceCode R"><span class="co"># Calculate average gains by predicted decile</span>
 <span class="va">model_deciles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">model_partition</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf-transform-methods.html">sdf_predict</a></span><span class="op">(</span><span class="va">ml1</span>, <span class="va">x</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
     <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>decile <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">ntile</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">prediction</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -473,9 +463,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <p>Compare actual gains to predicted gains for an out of time sample.</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Select data from an out of time sample</span>
+<code class="sourceCode R"><span class="co"># Select data from an out of time sample</span>
 <span class="va">data_2008</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">arrdelay</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">depdelay</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">depdelay</span> <span class="op">&gt;</span> <span class="fl">15</span> <span class="op">&amp;</span> <span class="va">depdelay</span> <span class="op">&lt;</span> <span class="fl">240</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -507,9 +495,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <p>Aggregate the scored data by origin, destination, and airline. Save the aggregated data.</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Summarize by origin, destination, and carrier</span>
+<code class="sourceCode R"><span class="co"># Summarize by origin, destination, and carrier</span>
 <span class="va">summary_2008</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf-transform-methods.html">sdf_predict</a></span><span class="op">(</span><span class="va">ml1</span>, <span class="va">data_2008</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>carrier <span class="op">=</span> <span class="va">uniquecarrier</span>, airline <span class="op">=</span> <span class="va">description</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">origin</span>, <span class="va">dest</span>, <span class="va">carrier</span>, <span class="va">airline</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -812,7 +798,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../deployment/databricks-cluster-local.html">
+      <a href="../deployment/databricks-clusters.qmd">
         <span class="nav-page-text">Databricks cluster</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

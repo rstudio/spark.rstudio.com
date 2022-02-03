@@ -305,12 +305,10 @@
 <p>Statements in dplyr can be chained together using pipes defined by the <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> R package. dplyr also supports <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html">non-standard evalution</a> of its arguments. For more information on dplyr, see the <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html">introduction</a>, a guide for connecting to <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html">databases</a>, and a variety of <a href="https://cran.r-project.org/web/packages/dplyr/index.html">vignettes</a>.</p>
 <section id="flights-data" class="level3"><h3 class="anchored" data-anchor-id="flights-data">Flights Data</h3>
 <p>This guide will demonstrate some of the basic data manipulation verbs of dplyr by using data from the <code>nycflights13</code> R package. This package contains data for all 336,776 flights departing New York City in 2013. It also includes useful metadata on airlines, airports, weather, and planes. The data comes from the US <a href="http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&amp;Link=0">Bureau of Transportation Statistics</a>, and is documented in <code>?nycflights13</code></p>
-<p>Connect to the cluster and copy the flights data using the <code><a href="//reference/copy_to.html">copy_to()</a></code> function. Caveat: The flight data in <code>nycflights13</code> is convenient for dplyr demonstrations because it is small, but in practice large data should rarely be copied directly from R objects.</p>
+<p>Connect to the cluster and copy the flights data using the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to()</a></code> function. Caveat: The flight data in <code>nycflights13</code> is convenient for dplyr demonstrations because it is small, but in practice large data should rarely be copied directly from R objects.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
@@ -324,10 +322,10 @@
 <p>Verbs are <code>dplyr</code> commands for manipulating data. When connected to a Spark DataFrame, <code>dplyr</code> translates the commands into <strong>Spark SQL</strong> statements. Remote data sources use exactly the same five verbs as local data sources. Here are the five verbs with their corresponding SQL commands:</p>
 <ul>
 <li>
-<code><a href="//reference/select.html">select()</a></code> ~ <code>SELECT</code>
+<code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select()</a></code> ~ <code>SELECT</code>
 </li>
 <li>
-<code><a href="//reference/filter.html">filter()</a></code> ~ <code>WHERE</code>
+<code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter()</a></code> ~ <code>WHERE</code>
 </li>
 <li>
 <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> ~ <code>ORDER</code>
@@ -336,14 +334,12 @@
 <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> ~ <code>aggregators: sum, min, sd, etc.</code>
 </li>
 <li>
-<code><a href="//reference/mutate.html">mutate()</a></code> ~ <code>operators: +, *, log, etc.</code>
+<code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate()</a></code> ~ <code>operators: +, *, log, etc.</code>
 </li>
 </ul>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="va">year</span><span class="op">:</span><span class="va">day</span>, <span class="va">arr_delay</span>, <span class="va">dep_delay</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="va">year</span><span class="op">:</span><span class="va">day</span>, <span class="va">arr_delay</span>, <span class="va">dep_delay</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 5]
     year month   day arr_delay dep_delay
@@ -363,9 +359,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="va">dep_delay</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="va">dep_delay</span> <span class="op">&gt;</span> <span class="fl">1000</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 19]
    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
@@ -382,9 +376,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source:     spark&lt;?&gt; [?? x 19]
 # Ordered by: desc(dep_delay)
@@ -407,9 +399,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
   <span class="va">flights_tbl</span>, 
   mean_dep_delay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">dep_delay</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
@@ -422,9 +412,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">flights_tbl</span>, speed <span class="op">=</span> <span class="va">distance</span> <span class="op">/</span> <span class="va">air_time</span> <span class="op">*</span> <span class="fl">60</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">flights_tbl</span>, speed <span class="op">=</span> <span class="va">distance</span> <span class="op">/</span> <span class="va">air_time</span> <span class="op">*</span> <span class="fl">60</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 20]
     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
@@ -453,9 +441,7 @@
 <p>For example, take the following code:</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">c1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span>
   <span class="va">flights_tbl</span>, 
   <span class="va">day</span> <span class="op">==</span> <span class="fl">17</span>, <span class="va">month</span> <span class="op">==</span> <span class="fl">5</span>, <span class="va">carrier</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'UA'</span>, <span class="st">'WN'</span>, <span class="st">'AA'</span>, <span class="st">'DL'</span><span class="op">)</span>
   <span class="op">)</span>
@@ -469,9 +455,7 @@
 <p>This sequence of operations never actually touches the database. It’s not until you ask for the data (e.g. by printing <code>c4</code>) that dplyr requests the results from the database.</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">c4</span></code></pre></div>
+<code class="sourceCode R"><span class="va">c4</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source:     spark&lt;?&gt; [?? x 8]
 # Ordered by: year, month, day, carrier
@@ -494,9 +478,7 @@
 <p>You can use <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes to write cleaner syntax. Using the same example from above, you can write a much cleaner version like this:</p>
 <div class="cell">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">c4</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">c4</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">month</span> <span class="op">==</span> <span class="fl">5</span>, <span class="va">day</span> <span class="op">==</span> <span class="fl">17</span>, <span class="va">carrier</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'UA'</span>, <span class="st">'WN'</span>, <span class="st">'AA'</span>, <span class="st">'DL'</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">carrier</span>, <span class="va">dep_delay</span>, <span class="va">air_time</span>, <span class="va">distance</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>air_time_hours <span class="op">=</span> <span class="va">air_time</span> <span class="op">/</span> <span class="fl">60</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
@@ -506,9 +488,7 @@
 <p>The <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> function corresponds to the <code>GROUP BY</code> statement in SQL.</p>
 <div class="cell">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">carrier</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>
     count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, 
@@ -537,19 +517,15 @@ This warning is displayed only once per session.</code></pre>
 </div>
 </div>
 </section><section id="collecting-to-r" class="level2"><h2 class="anchored" data-anchor-id="collecting-to-r">Collecting to R</h2>
-<p>You can copy data from Spark into R’s memory by using <code><a href="//reference/collect.html">collect()</a></code>.</p>
+<p>You can copy data from Spark into R’s memory by using <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect()</a></code>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">carrierhours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="va">c4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">carrierhours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="va">c4</span><span class="op">)</span></code></pre></div>
 </div>
-<p><code><a href="//reference/collect.html">collect()</a></code> executes the Spark query and returns the results to R for further analysis and visualization.</p>
+<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect()</a></code> executes the Spark query and returns the results to R for further analysis and visualization.</p>
 <div class="cell">
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Test the significance of pairwise differences and plot the results</span>
+<code class="sourceCode R"><span class="co"># Test the significance of pairwise differences and plot the results</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">carrierhours</span>, <span class="fu"><a href="https://rdrr.io/r/stats/pairwise.t.test.html">pairwise.t.test</a></span><span class="op">(</span><span class="va">air_time</span>, <span class="va">carrier</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
@@ -568,9 +544,7 @@ P value adjustment method: holm </code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">carrierhours</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">carrierhours</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">carrier</span>, <span class="va">air_time_hours</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-display">
@@ -603,9 +577,7 @@ P value adjustment method: holm </code></pre>
 <p><code>dplyr</code> supports Spark SQL window functions. Window functions are used in conjunction with mutate and filter to solve a wide range of problems. You can compare the <code>dplyr</code> syntax to the query it has generated by using <code><a href="https://dplyr.tidyverse.org/reference/explain.html">dplyr::show_query()</a></code>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="co"># Rank each flight within a daily</span>
+<code class="sourceCode R"><span class="co"># Rank each flight within a daily</span>
 <span class="va">ranked</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">dep_delay</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
@@ -620,9 +592,7 @@ FROM `flights`</code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">ranked</span> </code></pre></div>
+<code class="sourceCode R"><span class="va">ranked</span> </code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 5]
 # Groups: year, month, day
@@ -651,9 +621,7 @@ FROM `flights`</code></pre>
 <p>All two-table verbs work similarly. The first two arguments are <code>x</code> and <code>y</code>, and provide the tables to combine. The output is always a new table with the same type as <code>x</code>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/left_join.html">left_join</a></span><span class="op">(</span><span class="va">airlines_tbl</span>, by <span class="op">=</span> <span class="st">"carrier"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">flight</span>, <span class="va">dep_time</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
@@ -677,9 +645,7 @@ FROM `flights`</code></pre>
 <p>You can use <code><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_frac()</a></code> to take a random sample of rows: use <code><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n()</a></code> for a fixed number and <code><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_frac()</a></code> for a fixed fraction.</p>
 <div class="cell">
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 4]
@@ -699,9 +665,7 @@ FROM `flights`</code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_frac</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_frac</a></span><span class="op">(</span><span class="va">flights_tbl</span>, <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 1]
@@ -715,9 +679,7 @@ FROM `flights`</code></pre>
 <p>The following example uses the <strong>datediff</strong> and <strong>current_date</strong> Hive UDFs to figure the difference between the flight_date and the current system date:</p>
 <div class="cell">
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>
     flight_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">year</span>,<span class="va">month</span>,<span class="va">day</span>,sep<span class="op">=</span><span class="st">"-"</span><span class="op">)</span>,
     days_since <span class="op">=</span> <span class="fu">datediff</span><span class="op">(</span><span class="fu">current_date</span><span class="op">(</span><span class="op">)</span>, <span class="va">flight_date</span><span class="op">)</span>
@@ -746,9 +708,7 @@ FROM `flights`</code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
 
 

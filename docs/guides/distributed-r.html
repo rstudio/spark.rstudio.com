@@ -297,15 +297,13 @@
 <!-- main -->
 <main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Distributing R Computations</h1>
 </header><section id="overview" class="level2"><h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p><strong>sparklyr</strong> provides support to run arbitrary R code at scale within your Spark Cluster through <code><a href="//reference/spark_apply.html">spark_apply()</a></code>. This is especially useful where there is a need to use functionality available only in R or R packages that is not available in Apache Spark nor <a href="https://spark-packages.org/">Spark Packages</a>.</p>
-<p><code><a href="//reference/spark_apply.html">spark_apply()</a></code> applies an R function to a Spark object (typically, a Spark DataFrame). Spark objects are partitioned so they can be distributed across a cluster. You can use <code><a href="//reference/spark_apply.html">spark_apply()</a></code> with the default partitions or you can define your own partitions with the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> argument. Your R function must return another Spark DataFrame. <code><a href="//reference/spark_apply.html">spark_apply()</a></code> will run your R function on each partition and output a single Spark DataFrame.</p>
+<p><strong>sparklyr</strong> provides support to run arbitrary R code at scale within your Spark Cluster through <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code>. This is especially useful where there is a need to use functionality available only in R or R packages that is not available in Apache Spark nor <a href="https://spark-packages.org/">Spark Packages</a>.</p>
+<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> applies an R function to a Spark object (typically, a Spark DataFrame). Spark objects are partitioned so they can be distributed across a cluster. You can use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> with the default partitions or you can define your own partitions with the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> argument. Your R function must return another Spark DataFrame. <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> will run your R function on each partition and output a single Spark DataFrame.</p>
 <section id="apply-an-r-function-to-a-spark-object" class="level3"><h3 class="anchored" data-anchor-id="apply-an-r-function-to-a-spark-object">Apply an R function to a Spark Object</h3>
-<p>Lets run a simple example. We will apply the identify function, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>, over a list of numbers we created with the <code><a href="//reference/sdf_len.html">sdf_len()</a></code> function.</p>
+<p>Lets run a simple example. We will apply the identify function, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>, over a list of numbers we created with the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 
@@ -322,12 +320,10 @@
 5     5</code></pre>
 </div>
 </div>
-<p>Your R function should be designed to operate on an R <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html">data frame</a>. The R function passed to <code><a href="//reference/spark_apply.html">spark_apply()</a></code> expects a DataFrame and will return an object that can be cast as a DataFrame. We can use the <code>class</code> function to verify the class of the data.</p>
+<p>Your R function should be designed to operate on an R <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html">data frame</a>. The R function passed to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> expects a DataFrame and will return an object that can be cast as a DataFrame. We can use the <code>class</code> function to verify the class of the data.</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fl">10</span>, repartition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fl">10</span>, repartition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 1]
@@ -341,9 +337,7 @@
 <p>Spark will partition your data by hash or range so it can be distributed across a cluster. In the following example we create two partitions and count the number of rows in each partition. Then we print the first record in each partition.</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">trees_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">trees</span>, repartition <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">trees_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">trees</span>, repartition <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
   <span class="va">trees_tbl</span>,
@@ -359,9 +353,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">e</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">e</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 3]
   Girth Height Volume
@@ -370,12 +362,10 @@
 2  12.9     74   22.2</code></pre>
 </div>
 </div>
-<p>We can apply any arbitrary function to the partitions in the Spark DataFrame. For instance, we can scale or jitter the columns. Notice that <code><a href="//reference/spark_apply.html">spark_apply()</a></code> applies the R function to all partitions and returns a single DataFrame.</p>
+<p>We can apply any arbitrary function to the partitions in the Spark DataFrame. For instance, we can scale or jitter the columns. Notice that <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> applies the R function to all partitions and returns a single DataFrame.</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 3]
      Girth Height  Volume
@@ -395,9 +385,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">e</span>, <span class="va">jitter</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">e</span>, <span class="va">jitter</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 3]
    Girth Height Volume
@@ -415,12 +403,10 @@
 # … with more rows</code></pre>
 </div>
 </div>
-<p>By default <code><a href="//reference/spark_apply.html">spark_apply()</a></code> derives the column names from the input Spark data frame. Use the <code>names</code> argument to rename or add new columns.</p>
+<p>By default <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> derives the column names from the input Spark data frame. Use the <code>names</code> argument to rename or add new columns.</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
   <span class="va">trees_tbl</span>,
   <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fl">2.54</span> <span class="op">*</span> <span class="va">e</span><span class="op">$</span><span class="va">Girth</span>, <span class="va">e</span><span class="op">)</span>, names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Girth(cm)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
@@ -445,9 +431,7 @@
 <p>In some cases you may want to apply your R function to specific groups in your data. For example, suppose you want to compute regression models against specific subgroups. To solve this, you can specify a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> argument. This example counts the number of rows in <code>iris</code> by species and then fits a simple linear model for each species.</p>
 <div class="cell">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span><span class="op">)</span>
 
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="va">nrow</span>, group_by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
@@ -461,9 +445,7 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">iris_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
     <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal_Length</span> <span class="op">~</span> <span class="va">Petal_Width</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">r.squared</span>,
     names <span class="op">=</span> <span class="st">"r.squared"</span>,
@@ -479,12 +461,10 @@
 </div>
 </div>
 </section></section><section id="distributing-packages" class="level2"><h2 class="anchored" data-anchor-id="distributing-packages">Distributing Packages</h2>
-<p>With <code><a href="//reference/spark_apply.html">spark_apply()</a></code> you can use any R package inside Spark. For instance, you can use the <a href="https://cran.r-project.org/package=broom">broom</a> package to create a tidy data frame from linear regression output.</p>
+<p>With <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> you can use any R package inside Spark. For instance, you can use the <a href="https://cran.r-project.org/package=broom">broom</a> package to create a tidy data frame from linear regression output.</p>
 <div class="cell">
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
   <span class="va">iris_tbl</span>,
   <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal_Length</span> <span class="op">~</span> <span class="va">Petal_Width</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span>,
   names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"term"</span>, <span class="st">"estimate"</span>, <span class="st">"std.error"</span>, <span class="st">"statistic"</span>, <span class="st">"p.value"</span><span class="op">)</span>,
@@ -502,18 +482,16 @@
 6 setosa     Petal_Width    0.546    0.224       2.44 1.86e- 2</code></pre>
 </div>
 </div>
-<p>To use R packages inside Spark, your packages must be installed on the worker nodes. The first time you call <code><a href="//reference/spark_apply.html">spark_apply()</a></code> all of the contents in your local <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code> will be copied into each Spark worker node via the <code>SparkConf.addFile()</code> function. Packages will only be copied once and will persist as long as the connection remains open. It’s not uncommon for R libraries to be several gigabytes in size, so be prepared for a one-time tax while the R packages are copied over to your Spark cluster. You can disable package distribution by setting <code>packages = FALSE</code>. Note: packages are not copied in local mode (<code>master="local"</code>) because the packages already exist on the system.</p>
+<p>To use R packages inside Spark, your packages must be installed on the worker nodes. The first time you call <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> all of the contents in your local <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code> will be copied into each Spark worker node via the <code>SparkConf.addFile()</code> function. Packages will only be copied once and will persist as long as the connection remains open. It’s not uncommon for R libraries to be several gigabytes in size, so be prepared for a one-time tax while the R packages are copied over to your Spark cluster. You can disable package distribution by setting <code>packages = FALSE</code>. Note: packages are not copied in local mode (<code>master="local"</code>) because the packages already exist on the system.</p>
 </section><section id="handling-errors" class="level2"><h2 class="anchored" data-anchor-id="handling-errors">Handling Errors</h2>
 <p>It can be more difficult to troubleshoot R issues in a cluster than in local mode. For instance, the following R code causes the distributed execution to fail and suggests you check the logs for details.</p>
 <div class="cell">
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"Make this fail"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"Make this fail"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <p>It is worth mentioning that different cluster providers and platforms expose worker logs in different ways. Specific documentation for your environment will point out how to retrieve these logs.</p>
 </section><section id="requirements" class="level2"><h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
-<p>The <strong>R Runtime</strong> is expected to be pre-installed in the cluster for <code><a href="//reference/spark_apply.html">spark_apply()</a></code> to function. Failure to install the cluster will trigger a <code>Cannot run program, no such file or directory</code> error while attempting to use <code><a href="//reference/spark_apply.html">spark_apply()</a></code>. Contact your cluster administrator to consider making the R runtime available throughout the entire cluster.</p>
+<p>The <strong>R Runtime</strong> is expected to be pre-installed in the cluster for <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> to function. Failure to install the cluster will trigger a <code>Cannot run program, no such file or directory</code> error while attempting to use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code>. Contact your cluster administrator to consider making the R runtime available throughout the entire cluster.</p>
 <p>A <strong>Homogeneous Cluster</strong> is required since the driver node distributes, and potentially compiles, packages to the workers. For instance, the driver and workers must have the same processor architecture, system libraries, etc.</p>
 </section><section id="configuration" class="level2"><h2 class="anchored" data-anchor-id="configuration">Configuration</h2>
 <p>The following table describes relevant parameters while making use of <code>spark_apply</code>.</p>
@@ -544,9 +522,7 @@
 <p>For example, one could make use of an specific R version by running:</p>
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">config</span><span class="op">[[</span><span class="st">"spark.r.command"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"&lt;path-to-r-version&gt;"</span>
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">config</span><span class="op">)</span>
 
@@ -557,17 +533,15 @@
 <p>Closures are serialized using <code>serialize</code>, which is described as “A simple low-level interface for serializing to connections.”. One of the current limitations of <code>serialize</code> is that it wont serialize objects being referenced outside of it’s environment. For instance, the following function will error out since the closures references <code>external_value</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">external_value</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<code class="sourceCode R"><span class="va">external_value</span> <span class="op">&lt;-</span> <span class="fl">1</span>
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="va">e</span> <span class="op">+</span> <span class="va">external_value</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="livy" class="level3"><h3 class="anchored" data-anchor-id="livy">Livy</h3>
 <p>Currently, Livy connections do not support distributing packages since the client machine where the libraries are pre-compiled might not have the same processor architecture, not operating systems that the cluster machines.</p>
 </section><section id="computing-over-groups" class="level3"><h3 class="anchored" data-anchor-id="computing-over-groups">Computing over Groups</h3>
-<p>While performing computations over groups, <code><a href="//reference/spark_apply.html">spark_apply()</a></code> will provide partitions over the selected column; however, this implies that each partition can fit into a worker node, if this is not the case an exception will be thrown. To perform operations over groups that exceed the resources of a single node, one can consider partitioning to smaller units or use <code><a href="https://dplyr.tidyverse.org/reference/do.html">dplyr::do()</a></code> which is currently optimized for large partitions.</p>
+<p>While performing computations over groups, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> will provide partitions over the selected column; however, this implies that each partition can fit into a worker node, if this is not the case an exception will be thrown. To perform operations over groups that exceed the resources of a single node, one can consider partitioning to smaller units or use <code><a href="https://dplyr.tidyverse.org/reference/do.html">dplyr::do()</a></code> which is currently optimized for large partitions.</p>
 </section><section id="package-installation" class="level3"><h3 class="anchored" data-anchor-id="package-installation">Package Installation</h3>
-<p>Since packages are copied only once for the duration of the <code><a href="//reference/spark-connections.html">spark_connect()</a></code> connection, installing additional packages is not supported while the connection is active. Therefore, if a new package needs to be installed, <code><a href="//reference/spark-connections.html">spark_disconnect()</a></code> the connection, modify packages and reconnect.</p>
+<p>Since packages are copied only once for the duration of the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> connection, installing additional packages is not supported while the connection is active. Therefore, if a new package needs to be installed, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> the connection, modify packages and reconnect.</p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

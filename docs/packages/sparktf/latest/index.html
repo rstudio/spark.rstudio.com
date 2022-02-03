@@ -210,15 +210,11 @@
 </section><section id="installation" class="level2"><h2 class="anchored" data-anchor-id="installation">Installation</h2>
 <p>You can install the development version of sparktf from GitHub with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/sparktf"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/sparktf"</span><span class="op">)</span></code></pre></div>
 </section><section id="example" class="level2"><h2 class="anchored" data-anchor-id="example">Example</h2>
 <p>We first attach the required packages and establish a Spark connection.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sparktf</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sparktf</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://keras.rstudio.com">keras</a></span><span class="op">)</span>
 <span class="fu">use_implementation</span><span class="op">(</span><span class="st">"tensorflow"</span><span class="op">)</span>
@@ -229,9 +225,7 @@
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></code></pre></div>
 <p>Copied a sample dataset to Spark then write it to disk via <code>spark_write_tfrecord()</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"iris"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"iris"</span><span class="op">)</span>
 <span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span><span class="op">)</span>
 
 <span class="va">iris_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -245,9 +239,7 @@
   <span class="op">)</span></code></pre></div>
 <p>We now read the saved <code>TFRecord</code> file and parse the contents to create a dataset object. For details, refer to the <a href="https://tensorflow.rstudio.com/tools/tfdatasets/articles/introduction.html">package website for tfdatasets</a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu">tfrecord_dataset</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">data_path</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu">tfrecord_dataset</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">data_path</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">dataset_map</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">example_proto</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
       label <span class="op">=</span> <span class="va">tf</span><span class="op">$</span><span class="fu">FixedLenFeature</span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_linetype_size_shape.html">shape</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">tf</span><span class="op">$</span><span class="va">float32</span><span class="op">)</span>,
@@ -269,9 +261,7 @@
   <span class="fu">dataset_batch</span><span class="op">(</span><span class="fl">16</span><span class="op">)</span></code></pre></div>
 <p>Now, we can define a Keras model using the <a href="https://keras.rstudio.com/">keras package</a> and fit it by feeding the <code>dataset</code> object defined above.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">keras_model_sequential</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">keras_model_sequential</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">32</span>, activation <span class="op">=</span> <span class="st">"relu"</span>, input_shape <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">layer_dense</span><span class="op">(</span><span class="fl">3</span>, activation <span class="op">=</span> <span class="st">"softmax"</span><span class="op">)</span>
 
@@ -282,9 +272,7 @@
   <span class="fu">fit</span><span class="op">(</span><span class="va">dataset</span>, epochs <span class="op">=</span> <span class="fl">100</span>, verbose <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <p>Finally, we can use the trained model to make some predictions.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-
-<span class="va">new_data</span> <span class="op">&lt;-</span> <span class="va">tf</span><span class="op">$</span><span class="fu">constant</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.9</span>, <span class="fl">3.2</span>, <span class="fl">1.4</span>, <span class="fl">0.2</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="va">tf</span><span class="op">$</span><span class="fu">constant</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.9</span>, <span class="fl">3.2</span>, <span class="fl">1.4</span>, <span class="fl">0.2</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">model</span><span class="op">(</span><span class="va">new_data</span><span class="op">)</span>
 <span class="co">#&gt; tf.Tensor([[0.76382965 0.19407341 0.04209692]], shape=(1, 3), dtype=float32)</span></code></pre></div>
 

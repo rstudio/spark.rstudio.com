@@ -79,3 +79,48 @@ end the Spark session, it will not shut down the Spark cluster itself.
 #| eval: false
 spark_disconnect(sc)
 ```
+
+## Clusters
+
+Here are some examples of how to use `spark_connect()` to connect to different
+types of Spark clusters:
+
+**Hadoop YARN**:
+
+```r
+sc <- spark_connect(master = "yarn")
+```
+
+**Mesos**:
+
+```r
+sc <- spark_connect(master = "mesos://host:port")
+```
+
+**Kubernetes**:
+
+```r
+sc <- spark_connect(master = "k8s://https://server")
+```
+
+**Apache Livy**:
+
+```r
+sc <- spark_connect(master = "http://server/livy", method = "livy")
+```
+
+**Stand Alone**: 
+
+```r
+sc <- spark_connect(master = "spark://master-url:7077")
+```
+
+**Qubole**: (for more info visit the [Qubole page](/deployment/qubole-overview.qmd) on this site)
+
+```r
+sc <- spark_connect(method = "qubole")
+```
+
+**Databricks** - Visit the [Databricks page](/deployment/databricks-cluster.qmd) 
+on this site to review the connection
+options

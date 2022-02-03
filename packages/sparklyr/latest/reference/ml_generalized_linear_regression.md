@@ -166,7 +166,7 @@ family_link
 
 ## See Also
 
-See http://spark.apache.org/docs/latest/ml-classification-regression.html for
+See https://spark.apache.org/docs/latest/ml-classification-regression.html for
   more information on the set of supervised learning algorithms.
 
 Other ml algorithms: 

@@ -40,7 +40,7 @@ expand_struct_cols | Whether to expand columns containing structs
 The ``type`` column returned gives the string representation of the
 underlying Spark  type for that column; for example, a vector of numeric
 values would be returned with the type ``"DoubleType"``. Please see the
-http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.types.packageSpark Scala API Documentation
+https://spark.apache.org/docs/latest/api/scala/index.htmlSpark Scala API Documentation
 for information on what types are available and exposed by Spark.
 
 

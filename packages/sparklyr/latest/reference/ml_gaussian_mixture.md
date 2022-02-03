@@ -106,7 +106,7 @@ ml_clustering_evaluator(pred)
 
 ## See Also
 
-See http://spark.apache.org/docs/latest/ml-clustering.html for
+See https://spark.apache.org/docs/latest/ml-clustering.html for
   more information on the set of clustering algorithms.
 
 Other ml clustering algorithms: 

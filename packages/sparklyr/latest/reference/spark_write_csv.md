@@ -54,7 +54,7 @@ mode | A ``character`` element. Specifies the behavior when data or
   table already exists. Supported values include: 'error', 'append', 'overwrite' and
   ignore. Notice that 'overwrite' will also change the column structure.
 
-  For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
+  For more details see also https://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
   for your version of Spark.
 partition_by | A ``character`` vector. Partitions the output by the given columns on the file system.
 ... | Optional arguments; currently unused.

@@ -2,11 +2,11 @@
 
 Function(s) | Description
 ------------- |----------------
-[install_maven()](/packages/mleap/0.1.3/reference/install_maven.html) | Install Maven
-[install_mleap()](/packages/mleap/0.1.3/reference/install_mleap.html) | Install MLeap runtime
-[ml_write_bundle()](/packages/mleap/0.1.3/reference/ml_write_bundle.html) | Export a Spark pipeline for serving
-[mleap_installed_versions()](/packages/mleap/0.1.3/reference/mleap_installed_versions.html) | Find existing MLeap installations
-[mleap_load_bundle()](/packages/mleap/0.1.3/reference/mleap_load_bundle.html) | Loads an MLeap bundle
-[mleap_model_schema()](/packages/mleap/0.1.3/reference/mleap_model_schema.html) | MLeap model schema
-[mleap_transform()](/packages/mleap/0.1.3/reference/mleap_transform.html) | Transform data using an MLeap model
+[install_maven()](/packages/mleap/reference/install_maven.html) | Install Maven
+[install_mleap()](/packages/mleap/reference/install_mleap.html) | Install MLeap runtime
+[ml_write_bundle()](/packages/mleap/reference/ml_write_bundle.html) | Export a Spark pipeline for serving
+[mleap_installed_versions()](/packages/mleap/reference/mleap_installed_versions.html) | Find existing MLeap installations
+[mleap_load_bundle()](/packages/mleap/reference/mleap_load_bundle.html) | Loads an MLeap bundle
+[mleap_model_schema()](/packages/mleap/reference/mleap_model_schema.html) | MLeap model schema
+[mleap_transform()](/packages/mleap/reference/mleap_transform.html) | Transform data using an MLeap model
 

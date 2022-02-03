@@ -105,7 +105,7 @@ iris_tbl %>%
 
 ## See Also
 
-See http://spark.apache.org/docs/latest/ml-features.html for
+See https://spark.apache.org/docs/latest/ml-features.html for
   more information on the set of transformations available for DataFrame
   columns in Spark.
 

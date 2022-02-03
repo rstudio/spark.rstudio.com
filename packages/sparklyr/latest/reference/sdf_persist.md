@@ -30,7 +30,7 @@ Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 storage.level | The storage level to be used. Please view the
-http://spark.apache.org/docs/latest/programming-guide.html#rdd-persistenceSpark Documentation
+https://spark.apache.org/docs/latest/programming-guide.html#rdd-persistenceSpark Documentation
 for information on what storage levels are accepted.
 name | A name to assign this table. Passed to [sdf_register()].
 

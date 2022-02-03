@@ -39,7 +39,7 @@ sc | A ``spark_connection``.
 name | The name to assign to the newly generated table.
 path | The path to the file. Needs to be accessible from the cluster.
 Supports the "hdfs://", "s3a://" and "file://" protocols.
-options | A list of strings with additional options. See http://spark.apache.org/docs/latest/sql-programming-guide.html#configuration.
+options | A list of strings with additional options. See https://spark.apache.org/docs/latest/sql-programming-guide.html#configuration.
 repartition | The number of partitions used to distribute the
 generated table. Use 0 (the default) to avoid partitioning.
 memory | Boolean; should the data be loaded eagerly into memory? (That

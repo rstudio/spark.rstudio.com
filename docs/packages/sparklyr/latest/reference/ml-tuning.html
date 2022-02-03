@@ -174,8 +174,7 @@
 <p>Perform hyper-parameter tuning using either K-fold cross validation or train-validation split.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_sub_models</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_sub_models</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_validation_metrics</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 
@@ -247,7 +246,7 @@
 </table>
 <p>If set to <code>FALSE</code>, then only the single best sub-model will be available after fitting. If set to true, then all sub-models will be available. Warning: For large models, collecting all sub-models can cause OOMs on the Spark driver. parallelism | The number of threads to use when running parallel algorithms. Default is 1 for serial execution. seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; currently unused. train_ratio | Ratio between train and validation data. Must be between 0 and 1. Default: 0.75</p>
 </section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
-<p><code><a href="/packages/sparklyr/reference/ml-tuning.html">ml_cross_validator()</a></code> performs k-fold cross validation while <code><a href="/packages/sparklyr/reference/ml-tuning.html">ml_train_validation_split()</a></code> performs tuning on one pair of train and validation datasets.</p>
+<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_cross_validator()</a></code> performs k-fold cross validation while <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_train_validation_split()</a></code> performs tuning on one pair of train and validation datasets.</p>
 </section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
 <p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
@@ -255,12 +254,11 @@
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the tuning estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a tuning estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a <code>ml_cross_validation_model</code> or a <code>ml_train_validation_split_model</code> object.</p></li>
 </ul>
-<p>For cross validation, <code><a href="/packages/sparklyr/reference/ml-tuning.html">ml_sub_models()</a></code> returns a nested list of models, where the first layer represents fold indices and the second layer represents param maps. For train-validation split, <code><a href="/packages/sparklyr/reference/ml-tuning.html">ml_sub_models()</a></code> returns a list of models, corresponding to the order of the estimator param maps.</p>
-<p><code><a href="/packages/sparklyr/reference/ml-tuning.html">ml_validation_metrics()</a></code> returns a data frame of performance metrics and hyperparameter combinations.</p>
+<p>For cross validation, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_sub_models()</a></code> returns a nested list of models, where the first layer represents fold indices and the second layer represents param maps. For train-validation split, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_sub_models()</a></code> returns a list of models, corresponding to the order of the estimator param maps.</p>
+<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-tuning.html">ml_validation_metrics()</a></code> returns a data frame of performance metrics and hyperparameter combinations.</p>
 </section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 <span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 

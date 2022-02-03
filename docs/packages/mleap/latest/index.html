@@ -221,24 +221,20 @@
 <section id="getting-started" class="level2"><h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
 <p><strong>mleap</strong> can be installed from CRAN via</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"mleap"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"mleap"</span><span class="op">)</span></code></pre></div>
 <p>or, for the latest development version from GitHub, using</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/mleap"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/mleap"</span><span class="op">)</span></code></pre></div>
 <p>Once mleap has been installed, we can install the external dependencies using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/mleap">mleap</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/mleap">mleap</a></span><span class="op">)</span>
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/install_maven.html">install_maven</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co"># Alternatively, if you already have Maven installed, you can </span>
 <span class="co">#  set options(maven.home = "path/to/maven")</span>
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/install_mleap.html">install_mleap</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>We can now export Spark ML pipelines from sparklyr.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, version <span class="op">=</span> <span class="st">"2.4.0"</span><span class="op">)</span>
 <span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
@@ -259,8 +255,7 @@
 <p>At this point, we can share <code>mtcars_model.zip</code> with our deployment/implementation engineers, and they would be able to embed the model in another application. See the <a href="http://mleap-docs.combust.ml/">MLeap docs</a> for details.</p>
 <p>We also provide R functions for testing that the saved models behave as expected. Here we load the previously saved model:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/mleap_load_bundle.html">mleap_load_bundle</a></span><span class="op">(</span><span class="va">model_path</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/mleap_load_bundle.html">mleap_load_bundle</a></span><span class="op">(</span><span class="va">model_path</span><span class="op">)</span>
 <span class="va">model</span></code></pre></div>
 <pre><code>## MLeap Transformer
 ## &lt;7e2f61ed-154b-4c9e-9926-85fa326d69ef&gt; 
@@ -269,8 +264,7 @@
 ##   MLeap Version: 0.14.0</code></pre>
 <p>We can retrieve the schema associated with the model:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/mleap_model_schema.html">mleap_model_schema</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/mleap_model_schema.html">mleap_model_schema</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 5
 ##   name       type   nullable dimension io    
 ##   &lt;chr&gt;      &lt;chr&gt;  &lt;lgl&gt;    &lt;chr&gt;     &lt;chr&gt; 
@@ -282,8 +276,7 @@
 ## 6 prediction double FALSE    &lt;NA&gt;      output</code></pre>
 <p>Then, we create a new data frame to be scored, and make predictions using our model:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">qsec</span>, <span class="op">~</span><span class="va">hp</span>, <span class="op">~</span><span class="va">wt</span>,
   <span class="fl">16.2</span>,  <span class="fl">101</span>, <span class="fl">2.68</span>,
   <span class="fl">18.1</span>,  <span class="fl">99</span>,  <span class="fl">3.08</span>

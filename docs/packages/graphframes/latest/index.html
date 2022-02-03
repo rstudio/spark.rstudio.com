@@ -212,20 +212,17 @@
 <section id="installation" class="level2"><h2 class="anchored" data-anchor-id="installation">Installation</h2>
 <p>For those already using <code>sparklyr</code> simply run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"graphframes"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"graphframes"</span><span class="op">)</span>
 <span class="co"># or, for the development version,</span>
 <span class="co"># devtools::install_github("rstudio/graphframes")</span></code></pre></div>
 <p>Otherwise, install first <code>sparklyr</code> from CRAN using:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sparklyr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sparklyr"</span><span class="op">)</span></code></pre></div>
 <p>The examples make use of the <code>highschool</code> dataset from the <code>ggplot</code> package.</p>
 </section><section id="getting-started" class="level2"><h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
 <p>We will calculate <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a> over the built-in “friends” dataset as follows.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/graphframes">graphframes</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/graphframes">graphframes</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
@@ -251,8 +248,7 @@
 ##   $ weight       &lt;dbl&gt; 1.0, 1.0, 1.0, 0.5, 0.5, 0.5, 0.5, 1.0</code></pre>
 <p>We can then visualize the results by collecting the results to R:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidygraph.data-imaginist.com">tidygraph</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidygraph.data-imaginist.com">tidygraph</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
 
 <span class="va">vertices</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
@@ -297,8 +293,7 @@
 </ul>
 <p>For instance, one can calculate the degrees of vertices using <code>gf_degrees</code> as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">gf_friends</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu">gf_degrees</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">gf_friends</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu">gf_degrees</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source: spark&lt;?&gt; [?? x 2]
 ##   id    degree
 ## * &lt;chr&gt;  &lt;int&gt;
@@ -310,8 +305,7 @@
 ## 6 d          2</code></pre>
 <p>Finally, we disconnect from Spark:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

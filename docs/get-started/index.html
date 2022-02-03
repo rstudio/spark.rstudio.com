@@ -199,8 +199,7 @@
 <p>You can install the <code>sparklyr</code> package from <a href="https://CRAN.r-project.org">CRAN</a> as follows:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sparklyr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sparklyr"</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="install-spark-locally" class="level2"><h2 class="anchored" data-anchor-id="install-spark-locally">Install Spark locally</h2>
 <div class="callout-caution callout callout-style-default callout-captioned">
@@ -219,57 +218,48 @@ Caution
 <p>This section is meant for developers new to <code>sparklyr</code>. You will need a running Spark environment to connect to. <code>sparklyr</code> can install Spark in your computer. The installed Spark environment is meant for learning and prototyping purposes. The installation will work on all the major Operating Systems that R works on, including Linux, MacOS, and Windows.</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_install.html">spark_install</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Please be aware that after installation, Spark is <strong>not</strong> running. The next section will explain how to start a single node Spark cluster in your machine.</p>
 </section><section id="connect-to-spark" class="level2"><h2 class="anchored" data-anchor-id="connect-to-spark">Connect to Spark</h2>
-<p>You can use <code><a href="/packages/sparklyr/reference/spark-connections.html">spark_connect()</a></code> to connect to Spark clusters. The arguments passed to this functions depend on the type of Spark cluster you are connecting to. There are several different types of Spark clusters, such as YARN, Stand Alone and Kubernetes.</p>
-<p><code><a href="/packages/sparklyr/reference/spark-connections.html">spark_connect()</a></code> is able to both start, and connect to, the single node Spark cluster in your machine. In order to do that, pass “local” as the argument for <code>master</code>:</p>
+<p>You can use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> to connect to Spark clusters. The arguments passed to this functions depend on the type of Spark cluster you are connecting to. There are several different types of Spark clusters, such as YARN, Stand Alone and Kubernetes.</p>
+<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> is able to both start, and connect to, the single node Spark cluster in your machine. In order to do that, pass “local” as the argument for <code>master</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></code></pre></div>
 </div>
 <p>The <code>sc</code> variable now contains all of the connection information needed to interact with the cluster.</p>
 <p>To learn how to connect to other types of Spark clusters, see the <a href="../deployment/index.html">Deployment</a> section of this site.</p>
 </section><section id="disconnect-from-spark" class="level2"><h2 class="anchored" data-anchor-id="disconnect-from-spark">Disconnect from Spark</h2>
-<p>For “local” connection, <code><a href="/packages/sparklyr/reference/spark-connections.html">spark_disconnect()</a></code> will shut down the single node Spark environment in your machine, and tell R that the connection is no longer valid. For other types of Spark clusters, <code><a href="/packages/sparklyr/reference/spark-connections.html">spark_disconnect()</a></code> will only end the Spark session, it will not shut down the Spark cluster itself.</p>
+<p>For “local” connection, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> will shut down the single node Spark environment in your machine, and tell R that the connection is no longer valid. For other types of Spark clusters, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> will only end the Spark session, it will not shut down the Spark cluster itself.</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="clusters" class="level2"><h2 class="anchored" data-anchor-id="clusters">Clusters</h2>
-<p>Here are some examples of how to use <code><a href="/packages/sparklyr/reference/spark-connections.html">spark_connect()</a></code> to connect to different types of Spark clusters:</p>
+<p>Here are some examples of how to use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> to connect to different types of Spark clusters:</p>
 <p><strong>Hadoop YARN</strong>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn"</span><span class="op">)</span></code></pre></div>
 <p><strong>Mesos</strong>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"mesos://host:port"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"mesos://host:port"</span><span class="op">)</span></code></pre></div>
 <p><strong>Kubernetes</strong>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"k8s://https://server"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"k8s://https://server"</span><span class="op">)</span></code></pre></div>
 <p><strong>Apache Livy</strong>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"http://server/livy"</span>, method <span class="op">=</span> <span class="st">"livy"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"http://server/livy"</span>, method <span class="op">=</span> <span class="st">"livy"</span><span class="op">)</span></code></pre></div>
 <p><strong>Stand Alone</strong>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"spark://master-url:7077"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"spark://master-url:7077"</span><span class="op">)</span></code></pre></div>
 <p><strong>Qubole</strong>: (for more info visit the <a href="../deployment/qubole-overview.html">Qubole page</a> on this site)</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"qubole"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"qubole"</span><span class="op">)</span></code></pre></div>
 <p><strong>Databricks</strong> - Visit the <a href="../deployment/databricks-cluster.html">Databricks page</a> on this site to review the connection options</p>
 
 

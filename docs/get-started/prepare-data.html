@@ -207,8 +207,7 @@
 <p>For the exercise start a local session of Spark. We’ll start by copying a data set from R into the Spark cluster (note that you may need to install the <code>nycflights13</code>)</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 <span class="va">flights_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html">flights</a></span>, <span class="st">"spark_flights"</span><span class="op">)</span></code></pre></div>
 </div>
@@ -218,8 +217,7 @@
 <p>In this example, we can see how easy it is to summarize the flights data without having to know how to write Spark SQL:</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">delay</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">delay</span> <span class="op">&lt;-</span> <span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">tailnum</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
     count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>, 
@@ -249,8 +247,7 @@
 <p><code>sparklyr</code> and <code>dplyr</code> translate the R commands into Spark SQL for us. To see the resulting query use <code><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query()</a></code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">delay</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">delay</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code>&lt;SQL&gt;
 SELECT *
@@ -263,11 +260,10 @@ WHERE ((`count` &gt; 20.0) AND (`dist` &lt; 2000.0) AND (NOT(((`delay`) IS NULL)
 <p>Notice that the <code>delay</code> variable does not contain data. It only contains the <code>dplyr</code> commands that are to run against the Spark connection.</p>
 <p>For additional documentation on using dplyr with Spark see the <a href="../guides/dplyr.html">Manipulating Data with <code>dplyr</code></a> article in this site</p>
 </section><section id="using-sql" class="level2"><h2 class="anchored" data-anchor-id="using-sql">Using SQL</h2>
-<p>It’s also possible to execute SQL queries directly against tables within a Spark cluster. The <code><a href="/packages/sparklyr/reference/spark_connection.html">spark_connection()</a></code> object implements a <a href="https://dbi.r-dbi.org/">DBI</a> interface for Spark, so you can use <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code> to execute SQL and return the result as an R data frame:</p>
+<p>It’s also possible to execute SQL queries directly against tables within a Spark cluster. The <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_connection.html">spark_connection()</a></code> object implements a <a href="https://dbi.r-dbi.org/">DBI</a> interface for Spark, so you can use <code><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery()</a></code> to execute SQL and return the result as an R data frame:</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org">DBI</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html">dbGetQuery</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"SELECT carrier, sched_dep_time, dep_time, dep_delay FROM spark_flights LIMIT 5"</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
@@ -281,11 +277,10 @@ WHERE ((`count` &gt; 20.0) AND (`dist` &lt; 2000.0) AND (NOT(((`delay`) IS NULL)
 </div>
 </section><section id="using-feature-transformers" class="level2"><h2 class="anchored" data-anchor-id="using-feature-transformers">Using Feature Transformers</h2>
 <p>Both of the previous methods rely on SQL statements. Spark provides commands that make some data transformation more convenient, and without the use of SQL.</p>
-<p>For example, the <code><a href="/packages/sparklyr/reference/ft_binarizer.html">ft_binarizer()</a></code> command simplifies the creation of a new column that indicates if the value of another column is above a certain threshold.</p>
+<p>For example, the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ft_binarizer.html">ft_binarizer()</a></code> command simplifies the creation of a new column that indicates if the value of another column is above a certain threshold.</p>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">flights_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ft_binarizer.html">ft_binarizer</a></span><span class="op">(</span><span class="st">"dep_delay"</span>, <span class="st">"over_one"</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">dep_delay</span>, <span class="va">over_one</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></code></pre></div>
@@ -305,8 +300,7 @@ WHERE ((`count` &gt; 20.0) AND (`dist` &lt; 2000.0) AND (NOT(((`delay`) IS NULL)
 <p>Lastly, cleanup your session by disconnecting Spark:</p>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
 
 

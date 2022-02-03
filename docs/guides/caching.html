@@ -310,7 +310,8 @@
 <p>Because of their size, we will use trip data provided by the <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">NYC Taxi &amp; Limousine Commission</a>. Each file represents a month’s worth of trips. We will download two files, the ones for January and February 2020.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"jan_2020.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R">
+<span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="st">"jan_2020.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span>
     <span class="st">"https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-01.csv"</span>,
     <span class="st">"jan_2020.csv"</span>,
@@ -330,7 +331,8 @@
 <p>A local deployment will be used for this example.</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
@@ -343,10 +345,11 @@
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
 </div>
 </section></section><section id="the-memory-argument" class="level2"><h2 class="anchored" data-anchor-id="the-memory-argument">The Memory Argument</h2>
-<p>In the <em>spark_read_…</em> functions, the <strong>memory</strong> argument controls if the data will be loaded into memory as an RDD. Setting it to <strong>FALSE</strong> means that Spark will essentially map the file, but not make a copy of it in memory. This makes the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv()</a></code> command run faster, but the trade off is that any data transformation operations will take much longer.</p>
+<p>In the <em>spark_read_…</em> functions, the <strong>memory</strong> argument controls if the data will be loaded into memory as an RDD. Setting it to <strong>FALSE</strong> means that Spark will essentially map the file, but not make a copy of it in memory. This makes the <code><a href="/packages/sparklyr/reference/spark_read_csv.html">spark_read_csv()</a></code> command run faster, but the trade off is that any data transformation operations will take much longer.</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span>
   <span class="va">sc</span>, 
   <span class="st">"taxi_jan_2020"</span>, 
   <span class="st">"jan_2020.csv"</span>, 
@@ -383,15 +386,17 @@
 <p>The following <code>dplyr</code> script will not be immediately run, so the code is processed quickly. There are some check-ups made, but for the most part it is building a Spark SQL statement in the background.</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">trips_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>,<span class="st">"taxi_jan_2020"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="va">trips_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>,<span class="st">"taxi_jan_2020"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">trip_distance</span> <span class="op">&gt;</span> <span class="fl">20</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">VendorID</span>, <span class="va">passenger_count</span>, <span class="va">trip_distance</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="register-in-spark" class="level3"><h3 class="anchored" data-anchor-id="register-in-spark">Register in Spark</h3>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register()</a></code> will register the resulting Spark SQL in Spark. The results will show up as a table called <strong>trip_spark</strong>. But a table of the same name is still not loaded into memory in Spark.</p>
+<p><code><a href="/packages/sparklyr/reference/sdf_register.html">sdf_register()</a></code> will register the resulting Spark SQL in Spark. The results will show up as a table called <strong>trip_spark</strong>. But a table of the same name is still not loaded into memory in Spark.</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="va">trips_table</span>, <span class="st">"trips_spark"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="va">trips_table</span>, <span class="st">"trips_spark"</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;trips_spark&gt; [?? x 3]
    VendorID passenger_count trip_distance
@@ -411,10 +416,11 @@
 </div>
 <p><img src="../images/guides/caching/caching-3.png" class="img-fluid" width="268"></p>
 </section><section id="cache-into-memory" class="level3"><h3 class="anchored" data-anchor-id="cache-into-memory">Cache into Memory</h3>
-<p>The <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache()</a></code> command loads the results into an Spark RDD in memory, so any analysis from there on will not need to re-read and re-transform the original file. The resulting Spark RDD is smaller than the original file because the transformations created a smaller data set than the original file.</p>
+<p>The <code><a href="/packages/sparklyr/reference/tbl_cache.html">tbl_cache()</a></code> command loads the results into an Spark RDD in memory, so any analysis from there on will not need to re-read and re-transform the original file. The resulting Spark RDD is smaller than the original file because the transformations created a smaller data set than the original file.</p>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"trips_spark"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"trips_spark"</span><span class="op">)</span></code></pre></div>
 </div>
 <p><img src="../images/guides/caching/caching-4.png" class="img-fluid" width="553"></p>
 </section><section id="driver-memory" class="level3"><h3 class="anchored" data-anchor-id="driver-memory">Driver Memory</h3>
@@ -424,7 +430,8 @@
 <p>The plan for this exercise is to read the January file, combine it with the February file and summarize the data without bringing either file fully into memory.</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"taxi_feb_2020"</span> , <span class="st">"feb_2020.csv"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"taxi_feb_2020"</span> , <span class="st">"feb_2020.csv"</span>, memory <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;taxi_feb_2020&gt; [?? x 18]
    VendorID tpep_pickup_datetime tpep_dropoff_dat… passenger_count trip_distance
@@ -450,23 +457,26 @@
 <p>The <code><a href="https://generics.r-lib.org/reference/setops.html">union()</a></code> command is akin to the <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_rows()</a></code> command. It will allow us to append the February file to the January file, and as with the previous transform, this script will be evaluated lazily.</p>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">passenger_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"taxi_jan_2020"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="va">passenger_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"taxi_jan_2020"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html">union</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"taxi_feb_2020"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>pickup_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="va">tpep_pickup_datetime</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">pickup_date</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="collect-into-r" class="level3"><h3 class="anchored" data-anchor-id="collect-into-r">Collect into R</h3>
-<p>When receiving a <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect()</a></code> command, Spark will execute the SQL statement and send the results back to R in a data frame. In this case, R only loads 51 observations into a data frame called <em>passenger_count</em>.</p>
+<p>When receiving a <code><a href="/packages/sparklyr/reference/collect.html">collect()</a></code> command, Spark will execute the SQL statement and send the results back to R in a data frame. In this case, R only loads 51 observations into a data frame called <em>passenger_count</em>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">passenger_count</span> <span class="op">&lt;-</span> <span class="va">passenger_count</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R">
+<span class="va">passenger_count</span> <span class="op">&lt;-</span> <span class="va">passenger_count</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="plot-in-r" class="level3"><h3 class="anchored" data-anchor-id="plot-in-r">Plot in R</h3>
 <p>Now the smaller data set can be plotted</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">passenger_count</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R">
+<span class="va">passenger_count</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">pickup_date</span> <span class="op">&gt;=</span> <span class="st">"2020-01-01"</span>, <span class="va">pickup_date</span> <span class="op">&lt;=</span> <span class="st">"2020-02-28"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">pickup_date</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -482,7 +492,8 @@
 </div>
 <div class="cell">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </div>
 
 

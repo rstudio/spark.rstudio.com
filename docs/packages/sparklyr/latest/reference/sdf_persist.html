@@ -172,7 +172,8 @@
 <p>Persist a Spark DataFrame, forcing any pending computations and (optionally) serializing the results to disk.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_persist.html">sdf_persist</a></span><span class="op">(</span><span class="va">x</span>, storage.level <span class="op">=</span> <span class="st">"MEMORY_AND_DISK"</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_persist.html">sdf_persist</a></span><span class="op">(</span><span class="va">x</span>, storage.level <span class="op">=</span> <span class="st">"MEMORY_AND_DISK"</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
 <thead><tr class="header">
@@ -190,7 +191,7 @@
 </tr>
 </tbody>
 </table>
-<p>http://spark.apache.org/docs/latest/programming-guide.html#rdd-persistenceSpark Documentation for information on what storage levels are accepted. name | A name to assign this table. Passed to [sdf_register()].</p>
+<p>https://spark.apache.org/docs/latest/programming-guide.html#rdd-persistenceSpark Documentation for information on what storage levels are accepted. name | A name to assign this table. Passed to [sdf_register()].</p>
 </section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>Spark DataFrames invoke their operations lazily – pending operations are deferred until their results are actually needed. Persisting a Spark DataFrame effectively ‘forces’ any pending computations, and then persists the generated Spark DataFrame as requested (to memory, to disk, or otherwise).</p>
 <p>Users of Spark should be careful to persist the results of any computations which are non-deterministic – otherwise, one might see that the values within a column seem to ‘change’ as new operations are performed on that data set.</p>

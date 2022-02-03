@@ -171,10 +171,11 @@
 <main class="content"><section id="ml_kmeans" class="level1"><h1>ml_kmeans</h1>
 <p>Spark ML – K-Means Clustering</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>K-means clustering with support for k-means|| initialization proposed by Bahmani et al. Using <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code> with the formula interface requires Spark 2.0+.</p>
+<p>K-means clustering with support for k-means|| initialization proposed by Bahmani et al. Using <code><a href="/packages/sparklyr/reference/ml_kmeans.html">ml_kmeans()</a></code> with the formula interface requires Spark 2.0+.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans</a></span><span class="op">(</span>
+<code class="sourceCode R">
+<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans</a></span><span class="op">(</span>
   <span class="va">x</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
   k <span class="op">=</span> <span class="fl">2</span>,
@@ -241,26 +242,27 @@
 </tr>
 </tbody>
 </table>
-<p>reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted K-means model returned by <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code> dataset | Dataset on which to calculate K-means cost distance_measure | Distance measure to apply when computing the Silhouette measure.</p>
+<p>reproducible across repeated calls. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments, see Details. model | A fitted K-means model returned by <code><a href="/packages/sparklyr/reference/ml_kmeans.html">ml_kmeans()</a></code> dataset | Dataset on which to calculate K-means cost distance_measure | Distance measure to apply when computing the Silhouette measure.</p>
 </section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
 <p>The object returned depends on the class of <code>x</code>.</p>
 <ul>
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="/packages/sparklyr/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
 </ul>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_compute_cost()</a></code> returns the K-means cost (sum of squared distances of points to their nearest center) for the model on the given data.</p>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_compute_silhouette_measure()</a></code> returns the Silhouette measure of the clustering on the given data.</p>
+<p><code><a href="/packages/sparklyr/reference/ml_kmeans.html">ml_compute_cost()</a></code> returns the K-means cost (sum of squared distances of points to their nearest center) for the model on the given data.</p>
+<p><code><a href="/packages/sparklyr/reference/ml_kmeans.html">ml_compute_silhouette_measure()</a></code> returns the Silhouette measure of the clustering on the given data.</p>
 </section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
+
 <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 <span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
 </section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>See http://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code></p>
+<p>See https://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
+<p>Other ml clustering algorithms: <code><a href="/packages/sparklyr/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans()</a></code>, <code><a href="/packages/sparklyr/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="/packages/sparklyr/reference/ml_lda.html">ml_lda()</a></code></p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

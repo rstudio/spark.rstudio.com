@@ -105,7 +105,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -137,6 +149,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -310,7 +329,7 @@
 <main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Configuring Spark Connections</h1>
 </header><section id="local-mode" class="level2"><h2 class="anchored" data-anchor-id="local-mode">Local mode</h2>
 <p>Local mode is an excellent way to learn and experiment with Spark. Local mode also provides a convenient development environment for analyses, reports, and applications that you plan to eventually deploy to a multi-node Spark cluster.</p>
-<p>To work in local mode, you should <strong>first install a version of Spark for local use</strong>. You can do this using the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_install.html">spark_install()</a></code> function, for example:</p>
+<p>To work in local mode, you should <strong>first install a version of Spark for local use</strong>. You can do this using the <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_install.html">spark_install()</a></code> function, for example:</p>
 <section id="recommended-properties" class="level3"><h3 class="anchored" data-anchor-id="recommended-properties">Recommended properties</h3>
 <p>The following are the recommended Spark properties to set when connecting via R:</p>
 <ul>
@@ -323,21 +342,21 @@
 <span class="va">conf</span><span class="op">$</span><span class="va">`sparklyr.shell.driver-memory`</span> <span class="op">&lt;-</span> <span class="st">"16G"</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.memory.fraction</span> <span class="op">&lt;-</span> <span class="fl">0.9</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, 
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, 
                     version <span class="op">=</span> <span class="st">"2.1.0"</span>,
                     config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
 <section id="executors-page" class="level4"><h4 class="anchored" data-anchor-id="executors-page">Executors page</h4>
 <p>To see how the requested configuration affected the Spark connection, go to the <strong>Executors</strong> page in the Spark Web UI available in http://localhost:4040/storage/</p>
 <p><img src="../images/deployment/connections/local.png" class="img-fluid"></p>
 </section></section></section><section id="customizing-connections" class="level2"><h2 class="anchored" data-anchor-id="customizing-connections">Customizing connections</h2>
-<p>A connection to Spark can be customized by setting the values of certain Spark properties. In <code>sparklyr</code>, Spark properties can be set by using the <code>config</code> argument in the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> function.</p>
-<p>By default, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> uses <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config()</a></code> as the default configuration. But that can be customized as shown in the example code below. Because of the unending number of possible combinations, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config()</a></code> contains only a basic configuration, so it will be very likely that additional settings will be needed to properly connect to the cluster.</p>
+<p>A connection to Spark can be customized by setting the values of certain Spark properties. In <code>sparklyr</code>, Spark properties can be set by using the <code>config</code> argument in the <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> function.</p>
+<p>By default, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> uses <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config()</a></code> as the default configuration. But that can be customized as shown in the example code below. Because of the unending number of possible combinations, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config()</a></code> contains only a basic configuration, so it will be very likely that additional settings will be needed to properly connect to the cluster.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># Load variable with spark_config()</span>
+<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>   <span class="co"># Load variable with spark_config()</span>
 
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.memory</span> <span class="op">&lt;-</span> <span class="st">"16G"</span> <span class="co"># Use `$` to add or set values</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-client"</span>, 
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-client"</span>, 
                     config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span>  <span class="co"># Pass the conf variable </span></code></pre></div>
 <section id="spark-definitions" class="level3"><h3 class="anchored" data-anchor-id="spark-definitions">Spark definitions</h3>
 <p>It may be useful to provide some simple definitions for the Spark nomenclature:</p>
@@ -364,16 +383,16 @@
 <li><p><strong>spark.executor.instances</strong> - Number of executors to start. This property is acknowledged by the cluster if <em>spark.dynamicAllocation.enabled</em> is set to “false”.</p></li>
 <li><p><strong>spark.dynamicAllocation.enabled</strong> - Overrides the mechanism that Spark provides to dynamically adjust resources. Disabling it provides more control over the number of the Executors that can be started, which in turn impact the amount of storage available for the session. For more information, please see the <a href="https://spark.apache.org/docs/latest/job-scheduling.html#dynamic-resource-allocation">Dynamic Resource Allocation</a> page in the official Spark website.</p></li>
 </ul></section><section id="client-mode" class="level3"><h3 class="anchored" data-anchor-id="client-mode">Client mode</h3>
-<p>Using <code>yarn-client</code> as the value for the <code>master</code> argument in <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> will make the server in which R is running to be the Spark’s session driver. Here is a sample connection:</p>
+<p>Using <code>yarn-client</code> as the value for the <code>master</code> argument in <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> will make the server in which R is running to be the Spark’s session driver. Here is a sample connection:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.memory</span> <span class="op">&lt;-</span> <span class="st">"300M"</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.cores</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.instances</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.dynamicAllocation.enabled</span> <span class="op">&lt;-</span> <span class="st">"false"</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-client"</span>, 
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-client"</span>, 
                     spark_home <span class="op">=</span> <span class="st">"/usr/lib/spark/"</span>,
                     version <span class="op">=</span> <span class="st">"1.6.0"</span>,
                     config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
@@ -396,9 +415,9 @@
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.cores</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.instances</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.dynamicAllocation.enabled</span> <span class="op">&lt;-</span> <span class="st">"false"</span>
-<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-cluster"</span>, 
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"yarn-cluster"</span>, 
                     config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
 </section><section id="yarn-executor" class="level3"><h3 class="anchored" data-anchor-id="yarn-executor">Executor memory error</h3>
 <p>Requesting more memory or CPUs for Executors than allowed will return an error. This is one of the exceptions to the cluster’s ‘silent’ overrides. It will return a message similar to this:</p>
@@ -429,13 +448,13 @@
 <p>If the <code>spark.executor.cores</code> property is set to 2, and dynamic allocation is disabled, then Spark will spawn 6 executors. The <code>spark.executor.memory</code> property should be set to a level that when the value is multiplied by 6 (number of executors) it will not be over total available RAM. In this case, the value can be safely set to 7GB so that the total memory requested will be 42GB, which is under the available 44.1GB.</p>
 </section></section><section id="connection-example-1" class="level3"><h3 class="anchored" data-anchor-id="connection-example-1">Connection example</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.memory</span> <span class="op">&lt;-</span> <span class="st">"7GB"</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.memory.fraction</span> <span class="op">&lt;-</span> <span class="fl">0.9</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.executor.cores</span> <span class="op">&lt;-</span> <span class="fl">2</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">spark.dynamicAllocation.enabled</span> <span class="op">&lt;-</span> <span class="st">"false"</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master<span class="op">=</span><span class="st">"spark://master-url:7077"</span>, 
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master<span class="op">=</span><span class="st">"spark://master-url:7077"</span>, 
               version <span class="op">=</span> <span class="st">"2.1.0"</span>,
               config <span class="op">=</span> <span class="va">conf</span>,
               spark_home <span class="op">=</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span><span class="op">)</span></code></pre></div>

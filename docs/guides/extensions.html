@@ -105,7 +105,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -137,6 +149,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -304,9 +323,9 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="va">count_lines</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sc</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-api.html">spark_context</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-    <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"textFile"</span>, <span class="va">file</span>, <span class="fl">1L</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-    <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"count"</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-api.html">spark_context</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"textFile"</span>, <span class="va">file</span>, <span class="fl">1L</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"count"</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
 <p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
@@ -314,7 +333,7 @@
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 <span class="fu">count_lines</span><span class="op">(</span><span class="va">sc</span>, <span class="st">"hdfs://path/data.csv"</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Here are links to some additional examples of extension packages:</p>
@@ -450,23 +469,23 @@
 <p>For example, to create a new instance of the <code>java.math.BigInteger</code> class and then call the <code>longValue()</code> method on it you would use code like this:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">billionBigInteger</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span><span class="op">)</span>
-<span class="va">billion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="va">billionBigInteger</span>, <span class="st">"longValue"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">billionBigInteger</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span><span class="op">)</span>
+<span class="va">billion</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="va">billionBigInteger</span>, <span class="st">"longValue"</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Note the <code>sc</code> argument: that’s the <code>spark_connection</code> object which is provided by the front-end package (e.g. sparklyr).</p>
 <p>The previous example can be re-written to be more compact and clear using <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes:</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">billion</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"longValue"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">billion</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"longValue"</span><span class="op">)</span></code></pre></div>
 </div>
 <p>This syntax is similar to the method-chaining syntax often used with Scala code so is generally preferred.</p>
 <p>Calling a static method of a class is also straightforward. For example, to call the <code>Math::hypot()</code> static function you would use this code:</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hypot</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_static</a></span><span class="op">(</span><span class="st">"java.lang.Math"</span>, <span class="st">"hypot"</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span> </code></pre></div>
+<code class="sourceCode R"><span class="va">hypot</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_static</a></span><span class="op">(</span><span class="st">"java.lang.Math"</span>, <span class="st">"hypot"</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span> </code></pre></div>
 </div>
 </section><section id="wrapper-functions" class="level2"><h2 class="anchored" data-anchor-id="wrapper-functions">Wrapper Functions</h2>
 <p>Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we’ll describe the typical form of these functions as well as how to handle special types like Spark DataFrames.</p>
@@ -474,9 +493,9 @@
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">count_lines</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sc</span>, <span class="va">file</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-api.html">spark_context</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-    <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"textFile"</span>, <span class="va">file</span>, <span class="fl">1L</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"count"</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-api.html">spark_context</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"textFile"</span>, <span class="va">file</span>, <span class="fl">1L</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"count"</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
 <p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
@@ -522,17 +541,17 @@
 <code class="sourceCode R"><span class="va">analyze</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">features</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="co"># normalize whatever we were passed (e.g. a dplyr tbl) into a DataFrame</span>
-  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_dataframe.html">spark_dataframe</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_dataframe.html">spark_dataframe</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
   
   <span class="co"># get the underlying connection so we can create new objects</span>
-  <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_connection.html">spark_connection</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
+  <span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_connection.html">spark_connection</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
   
   <span class="co"># create an object to do the analysis and call its `analyze` and `summary`</span>
   <span class="co"># methods (note that the df and features are passed to the analyze function)</span>
-  <span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>  
-    <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="st">"com.example.tools.Analyzer"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"analyze"</span>, <span class="va">df</span>, <span class="va">features</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
+  <span class="va">summary</span> <span class="op">&lt;-</span> <span class="va">sc</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>  
+    <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke_new</a></span><span class="op">(</span><span class="st">"com.example.tools.Analyzer"</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"analyze"</span>, <span class="va">df</span>, <span class="va">features</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/invoke.html">invoke</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
 
   <span class="co"># return the results</span>
   <span class="va">summary</span>
@@ -557,7 +576,7 @@
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">spark_dependencies</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">spark_version</span>, <span class="va">scala_version</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_dependency.html">spark_dependency</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_dependency.html">spark_dependency</a></span><span class="op">(</span>
     jars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
       <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span>
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span><span class="st">"java/sparkds-%s-%s.jar"</span>, <span class="va">spark_version</span>, <span class="va">scala_version</span><span class="op">)</span>, 
@@ -572,7 +591,7 @@
 <span class="op">}</span>
 
 <span class="va">.onLoad</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">libname</span>, <span class="va">pkgname</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">register_extension</a></span><span class="op">(</span><span class="va">pkgname</span><span class="op">)</span>
+  <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">register_extension</a></span><span class="op">(</span><span class="va">pkgname</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
 <p>The <code>spark_version</code> argument is provided so that a package can support multiple Spark versions for it’s JARs. Note that the argument will include just the major and minor versions (e.g. <code>1.6</code> or <code>2.0</code>) and will not include the patch level (as JARs built for a given major/minor version are expected to work for all patch levels).</p>
@@ -583,13 +602,13 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">sparkds</span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></code></pre></div>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></code></pre></div>
 </div>
 <section id="compiling-jars" class="level3"><h3 class="anchored" data-anchor-id="compiling-jars">Compiling JARs</h3>
 <p>The <strong>sparklyr</strong> package includes a utility function (<code>compile_package_jars</code>) that will automatically compile a JAR file from your Scala source code for the required permutations of Spark and Scala compiler versions. To use the function just invoke it from the root directory of your R package as follows:</p>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/compile_package_jars.html">compile_package_jars</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/compile_package_jars.html">compile_package_jars</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Note that a prerequisite to calling <code>compile_package_jars</code> is the installation of the Scala 2.10 and 2.11 compilers to one of the following paths:</p>
 <ul>

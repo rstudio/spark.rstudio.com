@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -174,14 +193,14 @@
 <p>Reduction of Multiclass Classification to Binary Classification. Performs reduction using one against all strategy. For a multiclass classification with k classes, train k models (one per class). Each example is scored against all k models and the model with highest score is picked to label the example.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_one_vs_rest.html">ml_one_vs_rest</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_one_vs_rest.html">ml_one_vs_rest</a></span><span class="op">(</span>
   <span class="va">x</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
   classifier <span class="op">=</span> <span class="cn">NULL</span>,
   features_col <span class="op">=</span> <span class="st">"features"</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"one_vs_rest_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"one_vs_rest_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -239,7 +258,7 @@
 <li><p><code>tbl_spark</code>, with <code>formula</code>: specified When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the predictor. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>.</p></li>
 </ul></section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
 <p>See https://spark.apache.org/docs/latest/ml-classification-regression.html for more information on the set of supervised learning algorithms.</p>
-<p>Other ml algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_aft_survival_regression.html">ml_aft_survival_regression()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_decision_tree.html">ml_decision_tree_classifier()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gradient_boosted_trees.html">ml_gbt_classifier()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_generalized_linear_regression.html">ml_generalized_linear_regression()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_isotonic_regression.html">ml_isotonic_regression()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_svc.html">ml_linear_svc()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_logistic_regression.html">ml_logistic_regression()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_multilayer_perceptron_classifier.html">ml_multilayer_perceptron_classifier()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_naive_bayes.html">ml_naive_bayes()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest_classifier()</a></code></p>
+<p>Other ml algorithms: <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_aft_survival_regression.html">ml_aft_survival_regression()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_decision_tree.html">ml_decision_tree_classifier()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_gradient_boosted_trees.html">ml_gbt_classifier()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_generalized_linear_regression.html">ml_generalized_linear_regression()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_isotonic_regression.html">ml_isotonic_regression()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_svc.html">ml_linear_svc()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_logistic_regression.html">ml_logistic_regression()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_multilayer_perceptron_classifier.html">ml_multilayer_perceptron_classifier()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_naive_bayes.html">ml_naive_bayes()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest_classifier()</a></code></p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

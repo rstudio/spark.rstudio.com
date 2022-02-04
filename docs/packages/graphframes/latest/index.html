@@ -104,7 +104,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../styles.css">
 </head>
@@ -136,6 +148,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -227,7 +246,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="co"># connect to spark using sparklyr</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, version <span class="op">=</span> <span class="st">"2.3.0"</span><span class="op">)</span>
 
 <span class="co"># obtain the example graph</span>
 <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gf_friends</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span>
@@ -251,18 +270,18 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidygraph.data-imaginist.com">tidygraph</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
 
-<span class="va">vertices</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">gf_vertices</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">vertices</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">gf_vertices</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">gf_edges</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">gf_edges</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="va">edges</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">as_tbl_graph</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">activate</span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/left_join.html">left_join</a></span><span class="op">(</span><span class="va">vertices</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<span class="va">edges</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">as_tbl_graph</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">activate</span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/left_join.html">left_join</a></span><span class="op">(</span><span class="va">vertices</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">ggraph</span><span class="op">(</span>layout <span class="op">=</span> <span class="st">"nicely"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_node_label</span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name.y</span>, color <span class="op">=</span> <span class="va">pagerank</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_edge_link</span><span class="op">(</span>
@@ -293,7 +312,7 @@
 </ul>
 <p>For instance, one can calculate the degrees of vertices using <code>gf_degrees</code> as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">gf_friends</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu">gf_degrees</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">gf_friends</span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu">gf_degrees</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source: spark&lt;?&gt; [?? x 2]
 ##   id    degree
 ## * &lt;chr&gt;  &lt;int&gt;
@@ -305,7 +324,7 @@
 ## 6 d          2</code></pre>
 <p>Finally, we disconnect from Spark:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

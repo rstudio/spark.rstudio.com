@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -257,28 +276,28 @@
 <p>You can install Spark by running the following command in an R console:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_install.html">spark_install</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_install.html">spark_install</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </section><section id="use-sparklyr" class="level2"><h2 class="anchored" data-anchor-id="use-sparklyr">Use <code>sparklyr</code>
 </h2>
 <p>In order to connect to Databricks using <code>sparklyr</code> and <code>databricks-connect</code>, <code>SPARK_HOME</code> must be set to the output of the <code>databricks-connect get-spark-home</code> command.</p>
-<p>You can set <code>SPARK_HOME</code> as an environment variable or directly within <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code>. The following R code demonstrates connecting to Databricks, copying some data into the cluster, summarizing that data using <code>sparklyr</code>, and disconnecting:</p>
+<p>You can set <code>SPARK_HOME</code> as an environment variable or directly within <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code>. The following R code demonstrates connecting to Databricks, copying some data into the cluster, summarizing that data using <code>sparklyr</code>, and disconnecting:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="va">databricks_connect_spark_home</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html">system</a></span><span class="op">(</span><span class="st">"databricks-connect get-spark-home"</span>, intern <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"databricks"</span>, spark_home <span class="op">=</span> <span class="va">databricks_connect_spark_home</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"databricks"</span>, spark_home <span class="op">=</span> <span class="va">databricks_connect_spark_home</span><span class="op">)</span>
 
-<span class="va">cars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">cars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="va">cars_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+<span class="va">cars_tbl</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>
     mean_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
     mean_hp  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">hp</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
     <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 </section><section id="additional-information" class="level2"><h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
 <p>For more information on the setup, configuration, troubleshooting, and limitations of Databricks Connect, refer to the <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect section of the Databricks documentation</a>.</p>
 

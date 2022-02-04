@@ -105,7 +105,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -137,6 +149,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -311,11 +330,11 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
 
-<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">conf</span><span class="op">$</span><span class="va">sparklyr.defaultPackages</span> <span class="op">&lt;-</span> <span class="st">"org.apache.hadoop:hadoop-aws:3.3.1"</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>maste <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>maste <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
 </div>
 </section></section><section id="data-importwrangle-approach" class="level2"><h2 class="anchored" data-anchor-id="data-importwrangle-approach">Data Import/Wrangle approach</h2>
 <p>We experimented with multiple approaches. Most of the factors for settling on a recommended approach were made based on the speed of each step. The premise is that we would rather wait longer during Data Import, if it meant that we can much faster Register and Cache our data subsets during Data Wrangling, especially since we would expect to end up with many subsets as we explore and model.The selected combination was the second slowest during the Import stage, but the fastest when caching a subset, by a lot.</p>
@@ -334,7 +353,7 @@
 <p>After the long introduction in the previous section, there is only one point to add about the following code chunk. If there are any <code>NA</code> values in numeric fields, then define the column as character and then convert it on later subsets using dplyr. The data import will fail if it finds any NA values on numeric fields. This is a small trade off in this approach because the next fastest one does not have this issue but is 17X slower at caching subsets.</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span>, 
+<code class="sourceCode R"><span class="va">flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span>, 
                           path <span class="op">=</span>  <span class="st">"s3a://flights-data/full"</span>, 
                           memory <span class="op">=</span> <span class="cn">TRUE</span>, 
                           columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
@@ -373,16 +392,16 @@
 <p>There are a few points we need to highlight about the following simple dyplr code:</p>
 <p>Because there were NAs in the original fields, we have to mutate them to a number. Try coercing any variable as integer instead of numeric, this will save a lot of space when cached to Spark memory. The sdf_register command can be piped at the end of the code. After running the code, a new table will appear in the RStudio IDE’s Spark tab</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>ArrDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">tidy_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>ArrDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span>,
          DepDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">DepDelay</span><span class="op">)</span>,
-         Distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">Distance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">DepDelay</span>, <span class="va">ArrDelay</span>, <span class="va">Distance</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
-<p>After we use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache()</a></code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
+         Distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">Distance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">DepDelay</span>, <span class="va">ArrDelay</span>, <span class="va">Distance</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
+<p>After we use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache()</a></code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
 
 
 </section></main><!-- /main --><script type="application/javascript">

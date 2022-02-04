@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -173,12 +192,12 @@
 <p>Writes a Spark dataframe stream into a text stream.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_text.html">stream_write_text</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_text.html">stream_write_text</a></span><span class="op">(</span>
   <span class="va">x</span>,
   <span class="va">path</span>,
   mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"append"</span>, <span class="st">"complete"</span>, <span class="st">"update"</span><span class="op">)</span>,
-  trigger <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_trigger_interval.html">stream_trigger_interval</a></span><span class="op">(</span><span class="op">)</span>,
-  checkpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"checkpoints"</span>, <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span>,
+  trigger <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_trigger_interval.html">stream_trigger_interval</a></span><span class="op">(</span><span class="op">)</span>,
+  checkpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"checkpoints"</span>, <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span><span class="op">)</span>,
   options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,
   partition_by <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
@@ -205,18 +224,18 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"text-in"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/writeLines.html">writeLines</a></span><span class="op">(</span><span class="st">"A text entry"</span>, <span class="st">"text-in/text.txt"</span><span class="op">)</span>
 
 <span class="va">text_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"file://"</span>, <span class="fu"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"text-in"</span><span class="op">)</span>
 
-<span class="va">stream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_text.html">stream_read_text</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">text_path</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_text.html">stream_write_text</a></span><span class="op">(</span><span class="st">"text-out"</span><span class="op">)</span>
+<span class="va">stream</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_text.html">stream_read_text</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">text_path</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_text.html">stream_write_text</a></span><span class="op">(</span><span class="st">"text-out"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">stream</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_stop.html">stream_stop</a></span><span class="op">(</span><span class="va">stream</span><span class="op">)</span></code></pre></div>
 </section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>Other Spark stream serialization: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_csv.html">stream_read_csv()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_delta.html">stream_read_delta()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_json.html">stream_read_json()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_kafka.html">stream_read_kafka()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_orc.html">stream_read_orc()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_parquet.html">stream_read_parquet()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_socket.html">stream_read_socket()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_text.html">stream_read_text()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_console.html">stream_write_console()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_csv.html">stream_write_csv()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_delta.html">stream_write_delta()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_json.html">stream_write_json()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_kafka.html">stream_write_kafka()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_memory.html">stream_write_memory()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_orc.html">stream_write_orc()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_parquet.html">stream_write_parquet()</a></code></p>
+<p>Other Spark stream serialization: <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_csv.html">stream_read_csv()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_delta.html">stream_read_delta()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_json.html">stream_read_json()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_kafka.html">stream_read_kafka()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_orc.html">stream_read_orc()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_parquet.html">stream_read_parquet()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_socket.html">stream_read_socket()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_read_text.html">stream_read_text()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_console.html">stream_write_console()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_csv.html">stream_write_csv()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_delta.html">stream_write_delta()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_json.html">stream_write_json()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_kafka.html">stream_write_kafka()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_memory.html">stream_write_memory()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_orc.html">stream_write_orc()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/stream_write_parquet.html">stream_write_parquet()</a></code></p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

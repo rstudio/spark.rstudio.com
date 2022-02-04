@@ -105,7 +105,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -137,6 +149,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -322,9 +341,9 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/h2oai/h2o-3">h2o</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span><span class="st">"local"</span>, version <span class="op">=</span> <span class="st">"2.1.0"</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span><span class="st">"local"</span>, version <span class="op">=</span> <span class="st">"2.1.0"</span><span class="op">)</span>
 
-<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, <span class="st">"mtcars"</span><span class="op">)</span></code></pre></div>
+<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, <span class="st">"mtcars"</span><span class="op">)</span></code></pre></div>
 <p>Now, let’s perform some simple transformations – we’ll</p>
 <ol type="1">
 <li>Remove all cars with horsepower less than 100,</li>
@@ -335,15 +354,15 @@
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># transform our data set, and then partition into 'training', 'test'</span>
-<span class="va">partitions</span> <span class="op">&lt;-</span> <span class="va">mtcars_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">&gt;=</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>cyl8 <span class="op">=</span> <span class="va">cyl</span> <span class="op">==</span> <span class="fl">8</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.5</span>, test <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1099</span><span class="op">)</span></code></pre></div>
+<span class="va">partitions</span> <span class="op">&lt;-</span> <span class="va">mtcars_tbl</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">hp</span> <span class="op">&gt;=</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>cyl8 <span class="op">=</span> <span class="va">cyl</span> <span class="op">==</span> <span class="fl">8</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.5</span>, test <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1099</span><span class="op">)</span></code></pre></div>
 <p>Now, we convert our training and test sets into H2O Frames using rsparkling conversion functions. We have already split the data into training and test frames using dplyr.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">training</span> <span class="op">&lt;-</span> <span class="fu">as_h2o_frame</span><span class="op">(</span><span class="va">sc</span>, <span class="va">partitions</span><span class="op">$</span><span class="va">training</span>, strict_version_check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu">as_h2o_frame</span><span class="op">(</span><span class="va">sc</span>, <span class="va">partitions</span><span class="op">$</span><span class="va">test</span>, strict_version_check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p>Alternatively, we can use the <code>h2o.splitFrame()</code> function instead of <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition()</a></code> to partition the data within H2O instead of Spark (e.g. <code>partitions &lt;- h2o.splitFrame(as_h2o_frame(mtcars_tbl), 0.5)</code>)</p>
+<p>Alternatively, we can use the <code>h2o.splitFrame()</code> function instead of <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition()</a></code> to partition the data within H2O instead of Spark (e.g. <code>partitions &lt;- h2o.splitFrame(as_h2o_frame(mtcars_tbl), 0.5)</code>)</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># fit a linear model to the training dataset</span>
 <span class="va">glm_model</span> <span class="op">&lt;-</span> <span class="fu">h2o.glm</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"wt"</span>, <span class="st">"cyl"</span><span class="op">)</span>, 
@@ -399,9 +418,9 @@
 <span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu">as_spark_dataframe</span><span class="op">(</span><span class="va">sc</span>, <span class="va">pred</span>, strict_version_check <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># extract the true 'mpg' values from our test dataset</span>
-<span class="va">actual</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">test</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+<span class="va">actual</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">test</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/collect.html">collect</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">`[[`</span><span class="op">(</span><span class="st">"mpg"</span><span class="op">)</span>
 
 <span class="co"># produce a data.frame housing our predicted + actual 'mpg' values</span>
@@ -584,7 +603,7 @@ Combines a given list of columns into a single vector column
 </table></section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <p>We will use the <code>iris</code> data set to examine a handful of learning algorithms and transformers. The iris data set measures attributes for 150 flowers in 3 different species of iris.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, <span class="st">"iris"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, <span class="st">"iris"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">iris_tbl</span></code></pre></div>
 <pre><code>## # Source:   table&lt;iris&gt; [?? x 5]
 ## # Database: spark_connection
@@ -715,7 +734,7 @@ Combines a given list of columns into a single vector column
 <p>In this example, we will use the <code>prostate</code> dataset available within the h2o package:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"prostate.csv"</span>, package <span class="op">=</span> <span class="st">"h2o"</span><span class="op">)</span>
-<span class="va">prostate_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"prostate"</span>, <span class="va">path</span><span class="op">)</span>
+<span class="va">prostate_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"prostate"</span>, <span class="va">path</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">prostate_df</span><span class="op">)</span></code></pre></div>
 <pre><code>## # Source:   lazy query [?? x 9]
 ## # Database: spark_connection
@@ -895,7 +914,7 @@ Combines a given list of columns into a single vector column
 <code class="sourceCode R"><span class="fu">h2o.download_pojo</span><span class="op">(</span><span class="va">my_model</span>, path <span class="op">=</span> <span class="st">"/Users/me/h2omodels"</span><span class="op">)</span></code></pre></div>
 <p>Finally, disconnect with:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect_all</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect_all</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>You can learn more about how to take H2O models to production in the <a href="http://docs.h2o.ai/h2o/latest-stable/h2o-docs/productionizing.html">productionizing H2O models</a> section of the H2O docs.</p>
 </section></section><section id="additional-resources" class="level2"><h2 class="anchored" data-anchor-id="additional-resources">Additional Resources</h2>

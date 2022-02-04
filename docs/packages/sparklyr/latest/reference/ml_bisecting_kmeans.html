@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -174,7 +193,7 @@
 <p>A bisecting k-means algorithm based on the paper “A comparison of document clustering techniques” by Steinbach, Karypis, and Kumar, with modification to fit Spark. The algorithm starts from a single cluster that contains all points. Iteratively it finds divisible clusters on the bottom level and bisects each of them using k-means, until there are k leaf clusters in total or no leaf clusters are divisible. The bisecting steps of clusters on the same level are grouped together to increase parallelism. If bisecting all divisible clusters on the bottom level would result more than k leaf clusters, larger clusters get higher priority.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans</a></span><span class="op">(</span>
   <span class="va">x</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
   k <span class="op">=</span> <span class="fl">4</span>,
@@ -183,7 +202,7 @@
   min_divisible_cluster_size <span class="op">=</span> <span class="fl">1</span>,
   features_col <span class="op">=</span> <span class="st">"features"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"bisecting_bisecting_kmeans_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"bisecting_bisecting_kmeans_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -226,21 +245,21 @@
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code>.</p></li>
 </ul></section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
-<span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span>, name <span class="op">=</span> <span class="st">"iris_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">iris_tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_bisecting_kmeans.html">ml_bisecting_kmeans</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></code></pre></div>
 </section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
 <p>See https://spark.apache.org/docs/latest/ml-clustering.html for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code>, <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code></p>
+<p>Other ml clustering algorithms: <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_gaussian_mixture.html">ml_gaussian_mixture()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code>, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_lda.html">ml_lda()</a></code></p>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -171,36 +190,36 @@
 <p>Manage Spark Connections</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
 <p>These routines allow you to manage your connections to Spark.</p>
-<p>Call <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> on each open Spark connection</p>
+<p>Call <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> on each open Spark connection</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>
   <span class="va">master</span>,
   spark_home <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"SPARK_HOME"</span><span class="op">)</span>,
   method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"shell"</span>, <span class="st">"livy"</span>, <span class="st">"databricks"</span>, <span class="st">"test"</span>, <span class="st">"qubole"</span><span class="op">)</span>,
   app_name <span class="op">=</span> <span class="st">"sparklyr"</span>,
   version <span class="op">=</span> <span class="cn">NULL</span>,
-  config <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>,
-  extensions <span class="op">=</span> <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">registered_extensions</a></span><span class="op">(</span><span class="op">)</span>,
+  config <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>,
+  extensions <span class="op">=</span> <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">registered_extensions</a></span><span class="op">(</span><span class="op">)</span>,
   packages <span class="op">=</span> <span class="cn">NULL</span>,
   scala_version <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connection_is_open</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connection_is_open</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect_all</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect_all</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_submit</a></span><span class="op">(</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_submit</a></span><span class="op">(</span>
   <span class="va">master</span>,
   <span class="va">file</span>,
   spark_home <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"SPARK_HOME"</span><span class="op">)</span>,
   app_name <span class="op">=</span> <span class="st">"sparklyr"</span>,
   version <span class="op">=</span> <span class="cn">NULL</span>,
-  config <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>,
-  extensions <span class="op">=</span> <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">registered_extensions</a></span><span class="op">(</span><span class="op">)</span>,
+  config <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>,
+  extensions <span class="op">=</span> <span class="fu">sparklyr</span><span class="fu">::</span><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">registered_extensions</a></span><span class="op">(</span><span class="op">)</span>,
   scala_version <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -215,24 +234,24 @@
 <td>Spark cluster url to connect to. Use <code>"local"</code> to</td>
 </tr></tbody>
 </table>
-<p>connect to a local instance of Spark installed via <code>spark_install</code>. spark_home | The path to a Spark installation. Defaults to the path provided by the <code>SPARK_HOME</code> environment variable. If <code>SPARK_HOME</code> is defined, it will always be used unless the <code>version</code> parameter is specified to force the use of a locally installed version. method | The method used to connect to Spark. Default connection method is <code>"shell"</code> to connect using spark-submit, use <code>"livy"</code> to perform remote connections using HTTP, or <code>"databricks"</code> when using a Databricks clusters. app_name | The application name to be used while running in the Spark cluster. version | The version of Spark to use. Required for <code>"local"</code> Spark connections, optional otherwise. config | Custom configuration for the generated Spark connection. See <code>spark_config</code> for details. extensions | Extension R packages to enable for this connection. By default, all packages enabled through the use of <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">sparklyr::register_extension</a></code> will be passed here. packages | A list of Spark packages to load. For example, <code>"delta"</code> or <code>"kafka"</code> to enable Delta Lake or Kafka. Also supports full versions like <code>"io.delta:delta-core_2.11:0.4.0"</code>. This is similar to adding packages into the <code>sparklyr.shell.packages</code> configuration option. Notice that the <code>version</code> parameter is used to choose the correct package, otherwise assumes the latest version is being used. scala_version | Load the sparklyr jar file that is built with the version of Scala specified (this currently only makes sense for Spark 2.4, where sparklyr will by default assume Spark 2.4 on current host is built with Scala 2.11, and therefore <code>scala_version = '2.12'</code> is needed if sparklyr is connecting to Spark 2.4 built with Scala 2.12) … | Additional params to be passed to each <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> call (e.g., <code>terminate = TRUE</code>) sc | A <code>spark_connection</code>. file | Path to R source file to submit for batch execution.</p>
+<p>connect to a local instance of Spark installed via <code>spark_install</code>. spark_home | The path to a Spark installation. Defaults to the path provided by the <code>SPARK_HOME</code> environment variable. If <code>SPARK_HOME</code> is defined, it will always be used unless the <code>version</code> parameter is specified to force the use of a locally installed version. method | The method used to connect to Spark. Default connection method is <code>"shell"</code> to connect using spark-submit, use <code>"livy"</code> to perform remote connections using HTTP, or <code>"databricks"</code> when using a Databricks clusters. app_name | The application name to be used while running in the Spark cluster. version | The version of Spark to use. Required for <code>"local"</code> Spark connections, optional otherwise. config | Custom configuration for the generated Spark connection. See <code>spark_config</code> for details. extensions | Extension R packages to enable for this connection. By default, all packages enabled through the use of <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/register_extension.html">sparklyr::register_extension</a></code> will be passed here. packages | A list of Spark packages to load. For example, <code>"delta"</code> or <code>"kafka"</code> to enable Delta Lake or Kafka. Also supports full versions like <code>"io.delta:delta-core_2.11:0.4.0"</code>. This is similar to adding packages into the <code>sparklyr.shell.packages</code> configuration option. Notice that the <code>version</code> parameter is used to choose the correct package, otherwise assumes the latest version is being used. scala_version | Load the sparklyr jar file that is built with the version of Scala specified (this currently only makes sense for Spark 2.4, where sparklyr will by default assume Spark 2.4 on current host is built with Scala 2.11, and therefore <code>scala_version = '2.12'</code> is needed if sparklyr is connecting to Spark 2.4 built with Scala 2.12) … | Additional params to be passed to each <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> call (e.g., <code>terminate = TRUE</code>) sc | A <code>spark_connection</code>. file | Path to R source file to submit for batch execution.</p>
 </section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>By default, when using <code>method = "livy"</code>, jars are downloaded from GitHub. But an alternative path (local to Livy server or on HDFS or HTTP(s)) to <code>sparklyr</code> JAR can also be specified through the <code>sparklyr.livy.jar</code> setting.</p>
 </section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">conf</span><span class="op">$</span><span class="va">`sparklyr.shell.conf`</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
   <span class="st">"spark.executor.extraJavaOptions=-Duser.timezone='UTC'"</span>,
   <span class="st">"spark.driver.extraJavaOptions=-Duser.timezone='UTC'"</span>,
   <span class="st">"spark.sql.session.timeZone='UTC'"</span>
 <span class="op">)</span>
 
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>
   master <span class="op">=</span> <span class="st">"spark://HOST:PORT"</span>, config <span class="op">=</span> <span class="va">conf</span>
 <span class="op">)</span>
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/connection_is_open.html">connection_is_open</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/connection_is_open.html">connection_is_open</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span></code></pre></div>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

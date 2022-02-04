@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -172,7 +191,7 @@
 <p>This functions serializes a Spark pipeline model into an MLeap bundle.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/ml_write_bundle.html">ml_write_bundle</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">dataset</span>, <span class="va">path</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/mleap/latest/reference/ml_write_bundle.html">ml_write_bundle</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">dataset</span>, <span class="va">path</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
 <colgroup>
@@ -205,16 +224,16 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
-<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">pipeline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_pipeline.html">ml_pipeline</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ft_binarizer.html">ft_binarizer</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="st">"big_hp"</span>, threshold <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ft_vector_assembler.html">ft_vector_assembler</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"big_hp"</span>, <span class="st">"wt"</span>, <span class="st">"qsec"</span><span class="op">)</span>, <span class="st">"features"</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_gradient_boosted_trees.html">ml_gbt_regressor</a></span><span class="op">(</span>label_col <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span>
-<span class="va">pipeline_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_fit</a></span><span class="op">(</span><span class="va">pipeline</span>, <span class="va">mtcars_tbl</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">pipeline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_pipeline.html">ml_pipeline</a></span><span class="op">(</span><span class="va">sc</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ft_binarizer.html">ft_binarizer</a></span><span class="op">(</span><span class="st">"hp"</span>, <span class="st">"big_hp"</span>, threshold <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ft_vector_assembler.html">ft_vector_assembler</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"big_hp"</span>, <span class="st">"wt"</span>, <span class="st">"qsec"</span><span class="op">)</span>, <span class="st">"features"</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_gradient_boosted_trees.html">ml_gbt_regressor</a></span><span class="op">(</span>label_col <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span>
+<span class="va">pipeline_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_fit</a></span><span class="op">(</span><span class="va">pipeline</span>, <span class="va">mtcars_tbl</span><span class="op">)</span>
 <span class="va">model_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"mtcars_model.zip"</span><span class="op">)</span>
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/mleap/latest/reference/ml_write_bundle.html">ml_write_bundle</a></span><span class="op">(</span><span class="va">pipeline_model</span>, 
-                <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_transform</a></span><span class="op">(</span><span class="va">pipeline_model</span>, <span class="va">mtcars_tbl</span><span class="op">)</span>,
+<span class="fu"><a href="https://spark.rstudio.com/packages/mleap/latest/reference/ml_write_bundle.html">ml_write_bundle</a></span><span class="op">(</span><span class="va">pipeline_model</span>, 
+                <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_transform</a></span><span class="op">(</span><span class="va">pipeline_model</span>, <span class="va">mtcars_tbl</span><span class="op">)</span>,
                 <span class="va">model_path</span>,
                 overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 

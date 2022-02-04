@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -174,7 +193,7 @@
 <p>Perform recommendation using Alternating Least Squares (ALS) matrix factorization.</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_als</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_als</a></span><span class="op">(</span>
   <span class="va">x</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
   rating_col <span class="op">=</span> <span class="st">"rating"</span>,
@@ -192,11 +211,11 @@
   cold_start_strategy <span class="op">=</span> <span class="st">"nan"</span>,
   intermediate_storage_level <span class="op">=</span> <span class="st">"MEMORY_AND_DISK"</span>,
   final_storage_level <span class="op">=</span> <span class="st">"MEMORY_AND_DISK"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"als_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"als_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend</a></span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"items"</span>, <span class="st">"users"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend</a></span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"items"</span>, <span class="st">"users"</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
 <colgroup>
@@ -220,7 +239,7 @@
 </table>
 <p>This is used to transform the input dataframe before fitting, see ft_r_formula for details. The ALS model requires a specific formula format, please use <code>rating_col ~ user_col + item_col</code>. rating_col | Column name for ratings. Default: “rating” user_col | Column name for user ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “user” item_col | Column name for item ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “item” rank | Rank of the matrix factorization (positive). Default: 10 reg_param | Regularization parameter. implicit_prefs | Whether to use implicit preference. Default: FALSE. alpha | Alpha parameter in the implicit preference formulation (nonnegative). nonnegative | Whether to apply nonnegativity constraints. Default: FALSE. max_iter | Maximum number of iterations. num_user_blocks | Number of user blocks (positive). Default: 10 num_item_blocks | Number of item blocks (positive). Default: 10 checkpoint_interval | Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. cold_start_strategy | (Spark 2.2.0+) Strategy for dealing with unknown or new users/items at prediction time. This may be useful in cross-validation or production scenarios, for handling user/item ids the model has not seen in the training data. Supported values: - “nan”: predicted value for unknown ids will be NaN. - “drop”: rows in the input DataFrame containing unknown ids will be dropped from the output DataFrame containing predictions. Default: “nan”. intermediate_storage_level | (Spark 2.0.0+) StorageLevel for intermediate datasets. Pass in a string representation of <code>StorageLevel</code>. Cannot be “NONE”. Default: “MEMORY_AND_DISK”. final_storage_level | (Spark 2.0.0+) StorageLevel for ALS model factors. Pass in a string representation of <code>StorageLevel</code>. Default: “MEMORY_AND_DISK”. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; currently unused. model | An ALS model object type | What to recommend, one of <code>items</code> or <code>users</code> n | Maximum number of recommendations to return</p>
 </section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend()</a></code> returns the top <code>n</code> users/items recommended for each item/user, for all items/users. The output has been transformed (exploded and separated) from the default Spark outputs to be more user friendly.</p>
+<p><code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend()</a></code> returns the top <code>n</code> users/items recommended for each item/user, for all items/users. The output has been transformed (exploded and separated) from the default Spark outputs to be more user friendly.</p>
 </section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
 <p>ALS attempts to estimate the ratings matrix R as the product of two lower-rank matrices, X and Y, i.e. X * Yt = R. Typically these approximations are called ‘factor’ matrices. The general approach is iterative. During each iteration, one of the factor matrices is held constant, while the other is solved for using least squares. The newly-solved factor matrix is then held constant while solving for the other factor matrix.</p>
 <p>This is a blocked implementation of the ALS factorization algorithm that groups the two sets of factors (referred to as “users” and “products”) into blocks and reduces communication by only sending one copy of each user vector to each product block on each iteration, and only for the product blocks that need that user’s feature vector. This is achieved by pre-computing some information about the ratings matrix to determine the “out-links” of each user (which blocks of products it will contribute to) and “in-link” information for each product (which of the feature vectors it receives from each user block it will depend on). This allows us to send only an array of feature vectors between each user block and product block, and have the product block find the users’ ratings and update the products based on these messages.</p>
@@ -236,20 +255,20 @@
 <code class="sourceCode R">
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
 
 <span class="va">movies</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   user   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>,
   item   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>,
   rating <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="va">movies_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">movies</span><span class="op">)</span>
+<span class="va">movies_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">movies</span><span class="op">)</span>
 
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_als</a></span><span class="op">(</span><span class="va">movies_tbl</span>, <span class="va">rating</span> <span class="op">~</span> <span class="va">user</span> <span class="op">+</span> <span class="va">item</span><span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_als</a></span><span class="op">(</span><span class="va">movies_tbl</span>, <span class="va">rating</span> <span class="op">~</span> <span class="va">user</span> <span class="op">+</span> <span class="va">item</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">movies_tbl</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">movies_tbl</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend</a></span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"item"</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_als.html">ml_recommend</a></span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"item"</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

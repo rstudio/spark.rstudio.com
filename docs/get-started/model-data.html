@@ -104,7 +104,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../styles.css">
 </head>
@@ -136,6 +148,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -202,30 +221,30 @@
 <main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Model Data</h1>
 </header><p>You can orchestrate machine learning algorithms in a Spark cluster via the <a href="https://spark.apache.org/docs/latest/mllib-guide.html">machine learning</a> functions within <code>sparklyr</code>. These functions connect to a set of high-level APIs built on top of DataFrames that help you create and tune machine learning workflows.</p>
 <section id="exercise" class="level2"><h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
-<p>Here’s an example where we use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression()</a></code> to fit a linear regression model. We’ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car’s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We’ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
+<p>Here’s an example where we use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression()</a></code> to fit a linear regression model. We’ll use the built-in <code>mtcars</code> dataset, and see if we can predict a car’s fuel consumption (<code>mpg</code>) based on its weight (<code>wt</code>), and the number of cylinders the engine contains (<code>cyl</code>). We’ll assume in each case that the relationship between <code>mpg</code> and each of our features is linear.</p>
 <section id="initialize-the-environment" class="level3"><h3 class="anchored" data-anchor-id="initialize-the-environment">Initialize the environment</h3>
 <p>We will start by creating a local Spark session and load the <code>mtcars</code> data frame to it.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
-<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 </section><section id="prepare-the-data" class="level3"><h3 class="anchored" data-anchor-id="prepare-the-data">Prepare the data</h3>
-<p>Spark provides data frame operations that makes it easier to prepare data for modeling. In this case, we will use the <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition()</a></code> command to divide the <code>mtcars</code> data into “training” and “test”.</p>
+<p>Spark provides data frame operations that makes it easier to prepare data for modeling. In this case, we will use the <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_partition()</a></code> command to divide the <code>mtcars</code> data into “training” and “test”.</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">partitions</span> <span class="op">&lt;-</span> <span class="va">mtcars_tbl</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span>, <span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_random_split</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.5</span>, test <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1099</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">partitions</span> <span class="op">&lt;-</span> <span class="va">mtcars_tbl</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">wt</span>, <span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_random_split</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.5</span>, test <span class="op">=</span> <span class="fl">0.5</span>, seed <span class="op">=</span> <span class="fl">1099</span><span class="op">)</span></code></pre></div>
 </div>
 <p>Note that the newly created <code>partitions</code> variable does not contain data, it contains a pointer to where the data was split within Spark. That means that no data is downloaded to the R session.</p>
 </section><section id="fit-the-model" class="level3"><h3 class="anchored" data-anchor-id="fit-the-model">Fit the model</h3>
 <p>Next, we will fit a linear model to the training data set:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">training</span> <span class="op"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">training</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_linear_regression.html">ml_linear_regression</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span>
 
 <span class="va">fit</span></code></pre></div>
 <div class="cell-output-stdout">
@@ -254,10 +273,10 @@ Root Mean Squared Error: 2.416</code></pre>
 </div>
 </div>
 </section><section id="use-the-model" class="level3"><h3 class="anchored" data-anchor-id="use-the-model">Use the model</h3>
-<p>We can use <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict()</a></code> to create a Spark data frame that contains the predictions against the testing data set.</p>
+<p>We can use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict()</a></code> to create a Spark data frame that contains the predictions against the testing data set.</p>
 <div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">partitions</span><span class="op">$</span><span class="va">test</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">partitions</span><span class="op">$</span><span class="va">test</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></code></pre></div>
 <div class="cell-output-stdout">

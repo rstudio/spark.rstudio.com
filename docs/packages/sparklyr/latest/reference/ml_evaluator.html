@@ -103,7 +103,19 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><!--[if lt IE 9]>
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]--><link rel="stylesheet" href="../../../../styles.css">
 </head>
@@ -135,6 +147,13 @@
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
   </li>  
 </ul>
 <div class="quarto-toggle-container">
@@ -174,44 +193,44 @@
 <p>A set of functions to calculate performance metrics for prediction models. Also see the Spark ML Documentation https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.packagehttps://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package</p>
 </section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator</a></span><span class="op">(</span>
   <span class="va">x</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   raw_prediction_col <span class="op">=</span> <span class="st">"rawPrediction"</span>,
   metric_name <span class="op">=</span> <span class="st">"areaUnderROC"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"binary_classification_evaluator_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"binary_classification_evaluator_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_eval</a></span><span class="op">(</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_eval</a></span><span class="op">(</span>
   <span class="va">x</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
   metric_name <span class="op">=</span> <span class="st">"areaUnderROC"</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator</a></span><span class="op">(</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator</a></span><span class="op">(</span>
   <span class="va">x</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
   metric_name <span class="op">=</span> <span class="st">"f1"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"multiclass_classification_evaluator_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"multiclass_classification_evaluator_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_classification_eval</a></span><span class="op">(</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_classification_eval</a></span><span class="op">(</span>
   <span class="va">x</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
   metric_name <span class="op">=</span> <span class="st">"f1"</span>
 <span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_regression_evaluator</a></span><span class="op">(</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_regression_evaluator</a></span><span class="op">(</span>
   <span class="va">x</span>,
   label_col <span class="op">=</span> <span class="st">"label"</span>,
   prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
   metric_name <span class="op">=</span> <span class="st">"rmse"</span>,
-  uid <span class="op">=</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"regression_evaluator_"</span><span class="op">)</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"regression_evaluator_"</span><span class="op">)</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 </section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -263,45 +282,45 @@
 <li><p>Multiclass Classification: <code>f1</code> (default), <code>precision</code>, <code>recall</code>, <code>weightedPrecision</code>, <code>weightedRecall</code> or <code>accuracy</code>; for Spark 2.X: <code>f1</code> (default), <code>weightedPrecision</code>, <code>weightedRecall</code> or <code>accuracy</code>.</p></li>
 <li><p>Regression: <code>rmse</code> (root mean squared error, default), <code>mse</code> (mean squared error), <code>r2</code>, or <code>mae</code> (mean absolute error.)</p></li>
 </ul>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_eval()</a></code> is an alias for <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator()</a></code> for backwards compatibility.</p>
-<p><code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_classification_eval()</a></code> is an alias for <code><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator()</a></code> for backwards compatibility.</p>
+<p><code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_eval()</a></code> is an alias for <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator()</a></code> for backwards compatibility.</p>
+<p><code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_classification_eval()</a></code> is an alias for <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator()</a></code> for backwards compatibility.</p>
 </section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
 <p>The calculated performance metric</p>
 </section><section id="examples" class="level2"><h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
-<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, name <span class="op">=</span> <span class="st">"mtcars_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+<span class="va">mtcars_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, name <span class="op">=</span> <span class="st">"mtcars_tbl"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="va">partitions</span> <span class="op">&lt;-</span> <span class="va">mtcars_tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_random_split</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.7</span>, test <span class="op">=</span> <span class="fl">0.3</span>, seed <span class="op">=</span> <span class="fl">1111</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_random_split.html">sdf_random_split</a></span><span class="op">(</span>training <span class="op">=</span> <span class="fl">0.7</span>, test <span class="op">=</span> <span class="fl">0.3</span>, seed <span class="op">=</span> <span class="fl">1111</span><span class="op">)</span>
 
 <span class="va">mtcars_training</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">training</span>
 <span class="va">mtcars_test</span> <span class="op">&lt;-</span> <span class="va">partitions</span><span class="op">$</span><span class="va">test</span>
 
 <span class="co"># for multiclass classification</span>
 <span class="va">rf_model</span> <span class="op">&lt;-</span> <span class="va">mtcars_training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">.</span>, type <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">.</span>, type <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span>
 
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
+<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_multiclass_classification_evaluator</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span>
 
 <span class="co"># for regression</span>
 <span class="va">rf_model</span> <span class="op">&lt;-</span> <span class="va">mtcars_training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">.</span>, type <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">~</span> <span class="va">.</span>, type <span class="op">=</span> <span class="st">"regression"</span><span class="op">)</span>
 
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
+<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_regression_evaluator</a></span><span class="op">(</span><span class="va">pred</span>, label_col <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_regression_evaluator</a></span><span class="op">(</span><span class="va">pred</span>, label_col <span class="op">=</span> <span class="st">"cyl"</span><span class="op">)</span>
 
 <span class="co"># for binary classification</span>
 <span class="va">rf_model</span> <span class="op">&lt;-</span> <span class="va">mtcars_training</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">carb</span>, type <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_random_forest.html">ml_random_forest</a></span><span class="op">(</span><span class="va">am</span> <span class="op">~</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">carb</span>, type <span class="op">=</span> <span class="st">"classification"</span><span class="op">)</span>
 
-<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
+<span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml-transform-methods.html">ml_predict</a></span><span class="op">(</span><span class="va">rf_model</span>, <span class="va">mtcars_test</span><span class="op">)</span>
 
-<span class="fu"><a href="https://edgararuiz.github.io/spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_evaluator.html">ml_binary_classification_evaluator</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></code></pre></div>
 
 
 </section></section></main><!-- /main --><script type="application/javascript">

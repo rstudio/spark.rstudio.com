@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>sparklyr - Distributing R Computations</title>
+<style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../guides/extensions.html" rel="next">
+<link href="../guides/textmining.html" rel="prev">
+<link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--><link rel="stylesheet" href="../styles.css">
+</head>
+<body class="floating">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <img src="../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../get-started/index.html">Get Started</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../deployment/index.html">Deployment</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/news.html">News</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../learn-more.html">Learn more</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Distributing R Computations</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-tools-main">
+</div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/index.html" class="sidebar-item-text ">Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">Interacting with Spark</a>
+      <a class="sidebar-item-toggle text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/dplyr.html" class="sidebar-item-text ">Using <code>dplyr</code></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/caching.html" class="sidebar-item-text ">Managing Spark cache</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/connections.html" class="sidebar-item-text ">Spark connection options</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/aws-s3.html" class="sidebar-item-text ">Access S3 buckets</a>
+  </div>
+</li>
+    </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">Machine Learning</a>
+      <a class="sidebar-item-toggle text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/mlib.html" class="sidebar-item-text ">Spark ML Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/pipelines.html" class="sidebar-item-text ">ML Pipelines</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/h2o.html" class="sidebar-item-text ">H2O models</a>
+  </div>
+</li>
+    </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">Non-rectangular Data</a>
+      <a class="sidebar-item-toggle text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/streaming.html" class="sidebar-item-text ">Streaming Data</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/textmining.html" class="sidebar-item-text ">Text Data</a>
+  </div>
+</li>
+    </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">Advanced</a>
+      <a class="sidebar-item-toggle text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/distributed-r.html" class="sidebar-item-text active">Run R code inside Spark</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/extensions.html" class="sidebar-item-text ">Create <code>sparklyr</code> extensions</a>
+  </div>
+</li>
+    </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/troubleshooting.html" class="sidebar-item-text ">Troubleshooting</a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+<ul>
+<li>
+<a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
+<ul class="collapse">
+<li><a href="#apply-an-r-function-to-a-spark-object" class="nav-link" data-scroll-target="#apply-an-r-function-to-a-spark-object">Apply an R function to a Spark Object</a></li>
+<li><a href="#group-by" class="nav-link" data-scroll-target="#group-by">Group By</a></li>
+</ul>
+</li>
+<li><a href="#distributing-packages" class="nav-link" data-scroll-target="#distributing-packages">Distributing Packages</a></li>
+<li><a href="#handling-errors" class="nav-link" data-scroll-target="#handling-errors">Handling Errors</a></li>
+<li><a href="#requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
+<li><a href="#configuration" class="nav-link" data-scroll-target="#configuration">Configuration</a></li>
+<li>
+<a href="#limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a>
+<ul class="collapse">
+<li><a href="#closures" class="nav-link" data-scroll-target="#closures">Closures</a></li>
+<li><a href="#livy" class="nav-link" data-scroll-target="#livy">Livy</a></li>
+<li><a href="#computing-over-groups" class="nav-link" data-scroll-target="#computing-over-groups">Computing over Groups</a></li>
+<li><a href="#package-installation" class="nav-link" data-scroll-target="#package-installation">Package Installation</a></li>
+</ul>
+</li>
+</ul></nav>
+</div>
+<!-- main -->
+<main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Distributing R Computations</h1>
+</header><section id="overview" class="level2"><h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p><strong>sparklyr</strong> provides support to run arbitrary R code at scale within your Spark Cluster through <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code>. This is especially useful where there is a need to use functionality available only in R or R packages that is not available in Apache Spark nor <a href="https://spark-packages.org/">Spark Packages</a>.</p>
+<p><code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> applies an R function to a Spark object (typically, a Spark DataFrame). Spark objects are partitioned so they can be distributed across a cluster. You can use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> with the default partitions or you can define your own partitions with the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> argument. Your R function must return another Spark DataFrame. <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> will run your R function on each partition and output a single Spark DataFrame.</p>
+<section id="apply-an-r-function-to-a-spark-object" class="level3"><h3 class="anchored" data-anchor-id="apply-an-r-function-to-a-spark-object">Apply an R function to a Spark Object</h3>
+<p>Lets run a simple example. We will apply the identify function, <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>, over a list of numbers we created with the <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len()</a></code> function.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
+
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fl">5</span>, repartition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 1]
+     id
+  &lt;int&gt;
+1     1
+2     2
+3     3
+4     4
+5     5</code></pre>
+</div>
+</div>
+<p>Your R function should be designed to operate on an R <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html">data frame</a>. The R function passed to <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> expects a DataFrame and will return an object that can be cast as a DataFrame. We can use the <code>class</code> function to verify the class of the data.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fl">10</span>, repartition <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 1]
+  result    
+  &lt;chr&gt;     
+1 tbl_df    
+2 tbl       
+3 data.frame</code></pre>
+</div>
+</div>
+<p>Spark will partition your data by hash or range so it can be distributed across a cluster. In the following example we create two partitions and count the number of rows in each partition. Then we print the first record in each partition.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">trees_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">trees</span>, repartition <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+  <span class="va">trees_tbl</span>,
+  <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span>, names <span class="op">=</span> <span class="st">"n"</span>
+  <span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 1]
+      n
+  &lt;int&gt;
+1    15
+2    16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">e</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 3]
+  Girth Height Volume
+  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1   8.3     70   10.3
+2  12.9     74   22.2</code></pre>
+</div>
+</div>
+<p>We can apply any arbitrary function to the partitions in the Spark DataFrame. For instance, we can scale or jitter the columns. Notice that <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> applies the R function to all partitions and returns a single DataFrame.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 3]
+     Girth Height  Volume
+     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1 -2.05   -0.607 -1.69  
+ 2 -1.79   -1.43  -1.69  
+ 3 -1.62   -1.76  -1.71  
+ 4 -0.134  -0.276 -0.339 
+ 5  0.0407  1.21   0.191 
+ 6  0.128   1.54   0.390 
+ 7  0.302  -1.27  -0.515 
+ 8  0.302   0.221  0.0589
+ 9  0.389   1.05   1.03  
+10  0.477   0.221  0.434 
+# … with more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">trees_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">e</span>, <span class="va">jitter</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 3]
+   Girth Height Volume
+   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1  8.32   70.1   10.3
+ 2  8.60   65.2   10.3
+ 3  8.81   63.2   10.2
+ 4 10.5    72.1   16.4
+ 5 10.7    80.8   18.8
+ 6 10.8    83.0   19.7
+ 7 11.0    66.2   15.6
+ 8 11.0    75.2   18.2
+ 9 11.1    80.0   22.6
+10 11.2    74.8   19.9
+# … with more rows</code></pre>
+</div>
+</div>
+<p>By default <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> derives the column names from the input Spark data frame. Use the <code>names</code> argument to rename or add new columns.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+  <span class="va">trees_tbl</span>,
+  <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fl">2.54</span> <span class="op">*</span> <span class="va">e</span><span class="op">$</span><span class="va">Girth</span>, <span class="va">e</span><span class="op">)</span>, names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Girth(cm)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 4]
+   `Girth(cm)` Girth Height Volume
+         &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1        21.1   8.3     70   10.3
+ 2        21.8   8.6     65   10.3
+ 3        22.4   8.8     63   10.2
+ 4        26.7  10.5     72   16.4
+ 5        27.2  10.7     81   18.8
+ 6        27.4  10.8     83   19.7
+ 7        27.9  11       66   15.6
+ 8        27.9  11       75   18.2
+ 9        28.2  11.1     80   22.6
+10        28.4  11.2     75   19.9
+# … with more rows</code></pre>
+</div>
+</div>
+</section><section id="group-by" class="level3"><h3 class="anchored" data-anchor-id="group-by">Group By</h3>
+<p>In some cases you may want to apply your R function to specific groups in your data. For example, suppose you want to compute regression models against specific subgroups. To solve this, you can specify a <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> argument. This example counts the number of rows in <code>iris</code> by species and then fits a simple linear model for each species.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_copy_to.html">sdf_copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">iris</span><span class="op">)</span>
+
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="va">nrow</span>, group_by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 2]
+  Species    result
+  &lt;chr&gt;       &lt;int&gt;
+1 versicolor     50
+2 virginica      50
+3 setosa         50</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">iris_tbl</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+    <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal_Length</span> <span class="op">~</span> <span class="va">Petal_Width</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">r.squared</span>,
+    names <span class="op">=</span> <span class="st">"r.squared"</span>,
+    group_by <span class="op">=</span> <span class="st">"Species"</span>
+    <span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 2]
+  Species    r.squared
+  &lt;chr&gt;          &lt;dbl&gt;
+1 versicolor     0.619
+2 virginica      0.104
+3 setosa         0.110</code></pre>
+</div>
+</div>
+</section></section><section id="distributing-packages" class="level2"><h2 class="anchored" data-anchor-id="distributing-packages">Distributing Packages</h2>
+<p>With <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> you can use any R package inside Spark. For instance, you can use the <a href="https://cran.r-project.org/package=broom">broom</a> package to create a tidy data frame from linear regression output.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span>
+  <span class="va">iris_tbl</span>,
+  <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal_Length</span> <span class="op">~</span> <span class="va">Petal_Width</span>, <span class="va">e</span><span class="op">)</span><span class="op">)</span>,
+  names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"term"</span>, <span class="st">"estimate"</span>, <span class="st">"std.error"</span>, <span class="st">"statistic"</span>, <span class="st">"p.value"</span><span class="op">)</span>,
+  group_by <span class="op">=</span> <span class="st">"Species"</span>
+  <span class="op">)</span></code></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 6]
+  Species    term        estimate std.error statistic  p.value
+  &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 versicolor (Intercept)    1.78     0.284       6.28 9.48e- 8
+2 versicolor Petal_Width    1.87     0.212       8.83 1.27e-11
+3 virginica  (Intercept)    4.24     0.561       7.56 1.04e- 9
+4 virginica  Petal_Width    0.647    0.275       2.36 2.25e- 2
+5 setosa     (Intercept)    1.33     0.0600     22.1  7.68e-27
+6 setosa     Petal_Width    0.546    0.224       2.44 1.86e- 2</code></pre>
+</div>
+</div>
+<p>To use R packages inside Spark, your packages must be installed on the worker nodes. The first time you call <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> all of the contents in your local <code><a href="https://rdrr.io/r/base/libPaths.html">.libPaths()</a></code> will be copied into each Spark worker node via the <code>SparkConf.addFile()</code> function. Packages will only be copied once and will persist as long as the connection remains open. It’s not uncommon for R libraries to be several gigabytes in size, so be prepared for a one-time tax while the R packages are copied over to your Spark cluster. You can disable package distribution by setting <code>packages = FALSE</code>. Note: packages are not copied in local mode (<code>master="local"</code>) because the packages already exist on the system.</p>
+</section><section id="handling-errors" class="level2"><h2 class="anchored" data-anchor-id="handling-errors">Handling Errors</h2>
+<p>It can be more difficult to troubleshoot R issues in a cluster than in local mode. For instance, the following R code causes the distributed execution to fail and suggests you check the logs for details.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"Make this fail"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<p>It is worth mentioning that different cluster providers and platforms expose worker logs in different ways. Specific documentation for your environment will point out how to retrieve these logs.</p>
+</section><section id="requirements" class="level2"><h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
+<p>The <strong>R Runtime</strong> is expected to be pre-installed in the cluster for <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> to function. Failure to install the cluster will trigger a <code>Cannot run program, no such file or directory</code> error while attempting to use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code>. Contact your cluster administrator to consider making the R runtime available throughout the entire cluster.</p>
+<p>A <strong>Homogeneous Cluster</strong> is required since the driver node distributes, and potentially compiles, packages to the workers. For instance, the driver and workers must have the same processor architecture, system libraries, etc.</p>
+</section><section id="configuration" class="level2"><h2 class="anchored" data-anchor-id="configuration">Configuration</h2>
+<p>The following table describes relevant parameters while making use of <code>spark_apply</code>.</p>
+<table class="table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead><tr class="header">
+<th>Value</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>spark.r.command</code></td>
+<td>The path to the R binary. Useful to select from multiple R versions.</td>
+</tr>
+<tr class="even">
+<td><code>sparklyr.worker.gateway.address</code></td>
+<td>The gateway address to use under each worker node. Defaults to <code>sparklyr.gateway.address</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>sparklyr.worker.gateway.port</code></td>
+<td>The gateway port to use under each worker node. Defaults to <code>sparklyr.gateway.port</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>For example, one could make use of an specific R version by running:</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">config</span><span class="op">[[</span><span class="st">"spark.r.command"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"&lt;path-to-r-version&gt;"</span>
+<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">config</span><span class="op">)</span>
+
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_len.html">sdf_len</a></span><span class="op">(</span><span class="va">sc</span>, <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="va">e</span><span class="op">)</span></code></pre></div>
+</div>
+</section><section id="limitations" class="level2"><h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<section id="closures" class="level3"><h3 class="anchored" data-anchor-id="closures">Closures</h3>
+<p>Closures are serialized using <code>serialize</code>, which is described as “A simple low-level interface for serializing to connections.”. One of the current limitations of <code>serialize</code> is that it wont serialize objects being referenced outside of it’s environment. For instance, the following function will error out since the closures references <code>external_value</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">external_value</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply</a></span><span class="op">(</span><span class="va">iris_tbl</span>, <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="va">e</span> <span class="op">+</span> <span class="va">external_value</span><span class="op">)</span></code></pre></div>
+</div>
+</section><section id="livy" class="level3"><h3 class="anchored" data-anchor-id="livy">Livy</h3>
+<p>Currently, Livy connections do not support distributing packages since the client machine where the libraries are pre-compiled might not have the same processor architecture, not operating systems that the cluster machines.</p>
+</section><section id="computing-over-groups" class="level3"><h3 class="anchored" data-anchor-id="computing-over-groups">Computing over Groups</h3>
+<p>While performing computations over groups, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_apply.html">spark_apply()</a></code> will provide partitions over the selected column; however, this implies that each partition can fit into a worker node, if this is not the case an exception will be thrown. To perform operations over groups that exceed the resources of a single node, one can consider partitioning to smaller units or use <code><a href="https://dplyr.tidyverse.org/reference/do.html">dplyr::do()</a></code> which is currently optimized for large partitions.</p>
+</section><section id="package-installation" class="level3"><h3 class="anchored" data-anchor-id="package-installation">Package Installation</h3>
+<p>Since packages are copied only once for the duration of the <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect()</a></code> connection, installing additional packages is not supported while the connection is active. Therefore, if a new package needs to be installed, <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_disconnect()</a></code> the connection, modify packages and reconnect.</p>
+
+
+</section></section></main><!-- /main --><script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      return window.localStorage.getItem("quarto-color-scheme");
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = null;
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.id = "quarto-color-scheme-toggle";
+    a.classList.add('top-right');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../guides/textmining.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Text Data</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../guides/extensions.html">
+        <span class="nav-page-text">Create <code>sparklyr</code> extensions</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body>
+</html>

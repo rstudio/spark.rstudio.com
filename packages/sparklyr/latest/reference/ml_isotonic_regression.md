@@ -1,0 +1,139 @@
+# ml_isotonic_regression
+
+
+Spark ML -- Isotonic Regression
+
+
+
+
+## Description
+
+Currently implemented using parallelized pool adjacent violators algorithm. Only univariate (single feature) algorithm supported.
+
+
+
+
+
+## Usage
+```r
+ml_isotonic_regression(
+  x,
+  formula = NULL,
+  feature_index = 0,
+  isotonic = TRUE,
+  weight_col = NULL,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  uid = random_string("isotonic_regression_"),
+  ...
+)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
+formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
+feature_index | Index of the feature if ``features_col`` is a vector column (default: 0), no effect otherwise.
+isotonic | Whether the output sequence should be isotonic/increasing (true) or antitonic/decreasing (false). Default: true
+weight_col | The name of the column to use as weights for the model fit.
+features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
+label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
+prediction_col | Prediction column name.
+uid | A character string used to uniquely identify the ML estimator.
+... | Optional arguments; see Details.
+
+
+
+
+## Details
+
+When ``x`` is a ``tbl_spark`` and ``formula`` (alternatively, ``response`` and ``features``) is specified, the function returns a ``ml_model`` object wrapping a ``ml_pipeline_model`` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument ``predicted_label_col`` (defaults to ``"predicted_label"``) can be used to specify the name of the predicted label column. In addition to the fitted ``ml_pipeline_model``, ``ml_model`` objects also contain a ``ml_pipeline`` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with ``type = "pipeline"`` to faciliate model refresh workflows.
+
+
+
+
+
+## Value
+
+The object returned depends on the class of ``x``.
+
+
+  
+*  `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to
+  a Spark `Predictor` object and can be used to compose
+  `Pipeline` objects.
+
+  
+*  `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with
+  the predictor appended to the pipeline.
+
+  
+*  `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then
+  immediately fit with the input `tbl_spark`, returning a prediction model.
+
+  
+*  `tbl_spark`, with `formula`: specified When `formula`
+    is specified, the input `tbl_spark` is first transformed using a
+    `RFormula` transformer before being fit by
+    the predictor. The object returned in this case is a `ml_model` which is a
+    wrapper of a `ml_pipeline_model`.
+
+
+
+
+
+
+## Examples
+
+```r
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+partitions <- iris_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+iris_training <- partitions$training
+iris_test <- partitions$test
+
+iso_res <- iris_tbl %>%
+  ml_isotonic_regression(Petal_Length ~ Petal_Width)
+
+pred <- ml_predict(iso_res, iris_test)
+
+pred
+
+```
+
+
+
+
+
+
+## See Also
+
+See https://spark.apache.org/docs/latest/ml-classification-regression.html for
+  more information on the set of supervised learning algorithms.
+
+Other ml algorithms: 
+`ml_aft_survival_regression()`,
+`ml_decision_tree_classifier()`,
+`ml_gbt_classifier()`,
+`ml_generalized_linear_regression()`,
+`ml_linear_regression()`,
+`ml_linear_svc()`,
+`ml_logistic_regression()`,
+`ml_multilayer_perceptron_classifier()`,
+`ml_naive_bayes()`,
+`ml_one_vs_rest()`,
+`ml_random_forest_classifier()`
+
+
+

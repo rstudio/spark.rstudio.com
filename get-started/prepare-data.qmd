@@ -1,0 +1,112 @@
+---
+title: "Prepare Data"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+```{r, include = FALSE}
+library(sparklyr) 
+library(dplyr)
+```
+
+`sparklyr` provide multiple methods to prepare data inside Spark:
+
+- Using `dplyr` commands
+- Using SQL
+- Using Spark's feature transformers
+
+This article will introduce each method and provide a simple example.
+
+## Exercise
+
+For the exercise start a local session of Spark. We'll start by copying a 
+data set from R into the Spark cluster (note that you may need to install the 
+`nycflights13`)
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "local")
+flights_tbl <- copy_to(sc, nycflights13::flights, "spark_flights")
+```
+
+## Using `dplyr`
+
+We can use familiar `dplyr` commands to prepare data inside Spark.  The commands
+run **inside Spark**, so there are no unnecessary data transfers between R and
+Spark.
+
+In this example, we can see how easy it is to summarize the flights data without 
+having to know how to write Spark SQL: 
+
+```{r}
+delay <- flights_tbl %>%
+  group_by(tailnum) %>%
+  summarise(
+    count = n(), 
+    dist = mean(distance, na.rm = TRUE), 
+    delay = mean(arr_delay, na.rm = TRUE)
+    ) %>%
+  filter(count > 20, dist < 2000, !is.na(delay)) 
+
+delay
+```
+
+`sparklyr` and `dplyr` translate the R commands into Spark SQL for us. To see 
+the resulting query use `show_query()`:
+
+```{r}
+dplyr::show_query(delay)
+```
+
+Notice that the `delay` variable does not contain data. It only contains the
+`dplyr` commands that are to run against the Spark connection.  
+
+For additional documentation on using dplyr with Spark see the 
+[Manipulating Data with `dplyr`](/guides/dplyr.qmd) article in 
+this site
+
+## Using SQL
+
+It's also possible to execute SQL queries directly against tables within a Spark 
+cluster. The `spark_connection()` object implements a [DBI](https://dbi.r-dbi.org/) 
+interface for Spark, so you can use `dbGetQuery()` to execute SQL and return the 
+result as an R data frame:
+
+```{r}
+library(DBI)
+
+dbGetQuery(sc, "SELECT carrier, sched_dep_time, dep_time, dep_delay FROM spark_flights LIMIT 5")
+
+```
+
+## Using Feature Transformers
+
+Both of the previous methods rely on SQL statements.  Spark provides commands that
+make some data transformation more convenient, and without the use of SQL. 
+
+For example, the `ft_binarizer()` command simplifies the creation of a new 
+column that indicates if the value of another column is above a certain threshold.
+
+```{r}
+flights_tbl %>% 
+  ft_binarizer("dep_delay", "over_one", threshold = 1) %>% 
+  select(dep_delay, over_one) %>% 
+  head(5)
+```
+
+
+Find a full list of the Spark Feature Transformers available through `sparklyr`
+here: [Reference - FT](/packages/sparklyr/latest/reference/index.html#spark-feature-transformers).
+
+## Disconnect from Spark
+
+Lastly, cleanup your session by disconnecting Spark:
+
+```{r}
+spark_disconnect(sc)
+```

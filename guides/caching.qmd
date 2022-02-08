@@ -1,0 +1,176 @@
+---
+title: "Understanding Spark Caching"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+## Introduction
+
+Spark also supports pulling data sets into a cluster-wide in-memory cache. This is very useful when data is accessed repeatedly, such as when querying a small dataset or when running an iterative algorithm like random forests. Since operations in Spark are lazy, caching can help force computation. `sparklyr` tools can be used to cache and un-cache DataFrames. The Spark UI will tell you which `DataFrames` and what percentages are in memory.
+
+By using a reproducible example, we will review some of the main configuration settings, commands and command arguments that can be used that can help you get the best out of Spark's memory management options.
+
+## Preparation
+
+### Download Test Data
+
+Because of their size, we will use trip data provided by the [NYC Taxi & Limousine Commission](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page). Each file represents a month's worth of trips. We will download two files, the ones for January and February 2020.
+
+```{r}
+#| include: false
+
+library(sparklyr)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+if(!file.exists("jan_2020.csv")) {
+  download.file(
+    "https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-01.csv",
+    "jan_2020.csv",
+    mode = "wb"
+  )  
+}
+
+if(!file.exists("feb_2020.csv")) {
+  download.file(
+    "https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2020-02.csv",
+    "feb_2020.csv",
+    mode = "wb"
+  )  
+}
+```
+
+### Start a Spark session
+
+A local deployment will be used for this example.
+
+```{r}
+library(sparklyr)
+library(dplyr)
+library(ggplot2)
+
+
+# Customize the connection configuration
+conf <- spark_config()
+conf$`sparklyr.shell.driver-memory` <- "16G"
+
+# Connect to Spark
+sc <- spark_connect(master = "local", config = conf)
+```
+
+## The Memory Argument
+
+In the *spark_read\_...* functions, the **memory** argument controls if the data will be loaded into memory as an RDD. Setting it to **FALSE** means that Spark will essentially map the file, but not make a copy of it in memory. This makes the `spark_read_csv()` command run faster, but the trade off is that any data transformation operations will take much longer.
+
+```{r}
+spark_read_csv(
+  sc, 
+  "taxi_jan_2020", 
+  "jan_2020.csv", 
+  memory = FALSE
+  )
+```
+
+In the RStudio IDE, the **taxi_jan_2020** table now shows up in the Spark tab.
+
+![](/images/guides/caching/caching-1.png){width="429"}
+
+To access the Spark Web UI, click the **Spark** button in the **RStudio Spark Tab**. As expected, the **Storage** page shows no tables loaded into memory.
+
+![](/images/guides/caching/caching-2.png){width="505"}
+
+## Loading Less Data into Memory
+
+Using the pre-processing capabilities of Spark, the data will be transformed before being loaded into memory. In this section, we will continue to build on the example started in the previous section
+
+### Lazy Transform
+
+The following `dplyr` script will not be immediately run, so the code is processed quickly. There are some check-ups made, but for the most part it is building a Spark SQL statement in the background.
+
+```{r}
+trips_table <- tbl(sc,"taxi_jan_2020") %>%
+  filter(trip_distance > 20) %>% 
+  select(VendorID, passenger_count, trip_distance)
+```
+
+### Register in Spark
+
+`sdf_register()` will register the resulting Spark SQL in Spark. The results will show up as a table called **trip_spark**. But a table of the same name is still not loaded into memory in Spark.
+
+```{r}
+sdf_register(trips_table, "trips_spark")
+```
+
+![](/images/guides/caching/caching-3.png){width="268"}
+
+### Cache into Memory
+
+The `tbl_cache()` command loads the results into an Spark RDD in memory, so any analysis from there on will not need to re-read and re-transform the original file. The resulting Spark RDD is smaller than the original file because the transformations created a smaller data set than the original file.
+
+```{r}
+tbl_cache(sc, "trips_spark")
+```
+
+![](/images/guides/caching/caching-4.png){width="553"}
+
+### Driver Memory
+
+In the **Executors** page of the Spark Web UI, we can see that the Storage Memory is at about half of the 16 gigabytes requested. This is mainly because of a Spark setting called **spark.memory.fraction**, which reserves by default 40% of the memory requested.
+
+![](/images/guides/caching/caching-5.png){width="477"}
+
+## Process on the fly
+
+The plan for this exercise is to read the January file, combine it with the February file and summarize the data without bringing either file fully into memory.
+
+```{r}
+spark_read_csv(sc, "taxi_feb_2020" , "feb_2020.csv", memory = FALSE)
+```
+
+### Union and Transform
+
+The `union()` command is akin to the `dplyr::bind_rows()` command. It will allow us to append the February file to the January file, and as with the previous transform, this script will be evaluated lazily.
+
+```{r}
+passenger_count <- tbl(sc, "taxi_jan_2020") %>%
+  union(tbl(sc, "taxi_feb_2020")) %>%
+  mutate(pickup_date = as.Date(tpep_pickup_datetime)) %>% 
+  count(pickup_date)
+```
+
+### Collect into R
+
+When receiving a `collect()` command, Spark will execute the SQL statement and send the results back to R in a data frame. In this case, R only loads 51 observations into a data frame called *passenger_count*.
+
+```{r}
+passenger_count <- passenger_count %>%
+  collect()
+```
+
+### Plot in R
+
+Now the smaller data set can be plotted
+
+```{r}
+passenger_count %>% 
+  filter(pickup_date >= "2020-01-01", pickup_date <= "2020-02-28") %>% 
+  ggplot() +
+  geom_line(aes(pickup_date, n)) +
+  theme_minimal() +
+  labs(title = "Daily Trip Volume", 
+       subtitle = "NYC Yellow Cab - January and February 2020",
+       y = "Number of Trips",
+       x = ""
+       )
+```
+
+```{r}
+spark_disconnect(sc)
+```

@@ -1,0 +1,92 @@
+---
+title: "Model Data"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+```{r, include = FALSE}
+library(sparklyr) 
+library(dplyr)
+```
+
+
+You can orchestrate machine learning algorithms in a Spark cluster via the [machine learning](https://spark.apache.org/docs/latest/mllib-guide.html) functions 
+within `sparklyr`. These functions connect to a set of high-level APIs built on
+top of DataFrames that help you create and tune machine learning workflows.
+
+## Exercise
+
+Here's an example where we use `ml_linear_regression()` to fit a linear 
+regression model. We'll use the built-in `mtcars` dataset, and see if we can 
+predict a car's fuel consumption (`mpg`) based on its weight (`wt`), and the
+number of cylinders the engine contains (`cyl`). We'll assume in each case that 
+the relationship between `mpg` and each of our features is linear.
+
+### Initialize the environment
+
+We will start by creating a local Spark session and load 
+the `mtcars` data frame to it.
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "local")
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
+```
+
+### Prepare the data
+
+Spark provides data frame operations that makes it easier to prepare data for
+modeling.  In this case, we will use the `sdf_partition()` command to 
+divide the `mtcars` data into "training" and "test". 
+
+```{r}
+partitions <- mtcars_tbl %>%
+  select(mpg, wt, cyl) %>% 
+  sdf_random_split(training = 0.5, test = 0.5, seed = 1099)
+```
+
+Note that the newly created `partitions` variable does not contain data, it 
+contains a pointer to where the data was split within Spark. That means that no
+data is downloaded to the R session.
+
+### Fit the model
+
+Next, we will fit a linear model to the training data set:
+
+```{r}
+fit <- partitions$training %>%
+  ml_linear_regression(mpg ~ .)
+
+fit
+```
+
+For linear regression models produced by Spark, we can use `summary()` to 
+learn a bit more about the quality of our fit, and the statistical significance 
+of each of our predictors.
+
+```{r}
+summary(fit)
+```
+### Use the model
+
+We can use `ml_predict()` to create a Spark data frame that contains the 
+predictions against the testing data set.
+
+```{r}
+pred <- ml_predict(fit, partitions$test)
+
+head(pred)
+```
+
+### Further reading
+
+Spark machine learning supports a wide array of algorithms and feature 
+transformations and as illustrated above it's easy to chain these functions
+together with `dplyr` pipelines. To learn more see the  [Machine Learning](/guides/mlib.qmd) 
+article on this site. For a list of Spark ML models available through `sparklyr` visit
+[Reference - ML](/packages/sparklyr/latest/reference/index.html#spark-machine-learning)

@@ -1,0 +1,53 @@
+# sdf-transform-methods
+
+
+Spark ML -- Transform, fit, and predict methods (sdf_ interface)
+
+
+
+
+## Description
+
+Deprecated methods for transformation, fit, and prediction. These are mirrors of the corresponding ml-transform-methods.
+
+
+
+
+
+## Usage
+```r
+sdf_predict(x, model, ...)
+
+sdf_transform(x, transformer, ...)
+
+sdf_fit(x, estimator, ...)
+
+sdf_fit_and_transform(x, estimator, ...)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+x | A ``tbl_spark``.
+model | A ``ml_transformer`` or a ``ml_model`` object.
+... | Optional arguments passed to the corresponding ``ml_`` methods.
+transformer | A ``ml_transformer`` object.
+estimator | A ``ml_estimator`` object.
+
+
+
+
+
+## Value
+
+``sdf_predict()``, ``sdf_transform()``, and ``sdf_fit_and_transform()`` return a transformed dataframe whereas ``sdf_fit()`` returns a ``ml_transformer``.
+
+
+
+
+

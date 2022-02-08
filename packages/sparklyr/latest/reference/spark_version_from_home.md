@@ -1,0 +1,39 @@
+# spark_version_from_home
+
+
+Get the Spark Version Associated with a Spark Installation
+
+
+
+
+## Description
+
+Retrieve the version of Spark associated with a Spark installation.
+
+
+
+
+
+## Usage
+```r
+spark_version_from_home(spark_home, default = NULL)
+```
+
+
+
+
+## Arguments
+
+
+Argument      |Description
+------------- |----------------
+spark_home | The path to a Spark installation.
+default | The default version to be inferred, in case
+version lookup failed, e.g. no Spark installation was found
+at ``spark_home``.
+
+
+
+
+
+

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-99.9.9">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>sparklyr – xgboost_regressor</title>
+<style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script><script src="../../../../site_libs/quarto-nav/headroom.min.js"></script><script src="../../../../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../../../../site_libs/quarto-search/fuse.min.js"></script><script src="../../../../site_libs/quarto-search/quarto-search.js"></script><link href="../../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script><script src="../../../../site_libs/quarto-html/popper.min.js"></script><script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../../../../site_libs/quarto-html/anchor.min.js"></script><link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script><link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link class="quarto-color-scheme" href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/bootstrap/bootstrap-dark.min.css">
+<script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script><script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script><!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]--><link rel="stylesheet" href="../../../../styles.css">
+</head>
+<body>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../../../index.html">
+    <img src="../../../../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../../../get-started/index.html">Get Started</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../guides/index.html">Guides</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../deployment/index.html">Deployment</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../packages/sparklyr/latest/news.html">News</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../packages/sparklyr/latest/reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../packages/index.html">Packages</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../learn-more.html">Learn more</a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+<div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+<ul>
+<li>
+<a href="#xgboost_regressor" class="nav-link active" data-scroll-target="#xgboost_regressor">xgboost_regressor</a>
+<ul class="collapse">
+<li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
+<li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+<li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+<li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
+<li><a href="#value" class="nav-link" data-scroll-target="#value">Value</a></li>
+<li><a href="#see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul></nav>
+</div>
+<!-- main -->
+<main class="content"><section id="xgboost_regressor" class="level1"><h1>xgboost_regressor</h1>
+<p>XGBoost Regressor</p>
+<section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>XGBoost regressor for Spark.</p>
+</section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">xgboost_regressor</span><span class="op">(</span>
+  <span class="va">x</span>,
+  formula <span class="op">=</span> <span class="cn">NULL</span>,
+  eta <span class="op">=</span> <span class="fl">0.3</span>,
+  gamma <span class="op">=</span> <span class="fl">0</span>,
+  max_depth <span class="op">=</span> <span class="fl">6</span>,
+  min_child_weight <span class="op">=</span> <span class="fl">1</span>,
+  max_delta_step <span class="op">=</span> <span class="fl">0</span>,
+  grow_policy <span class="op">=</span> <span class="st">"depthwise"</span>,
+  max_bins <span class="op">=</span> <span class="fl">16</span>,
+  subsample <span class="op">=</span> <span class="fl">1</span>,
+  colsample_bytree <span class="op">=</span> <span class="fl">1</span>,
+  colsample_bylevel <span class="op">=</span> <span class="fl">1</span>,
+  lambda <span class="op">=</span> <span class="fl">1</span>,
+  alpha <span class="op">=</span> <span class="fl">0</span>,
+  tree_method <span class="op">=</span> <span class="st">"auto"</span>,
+  sketch_eps <span class="op">=</span> <span class="fl">0.03</span>,
+  scale_pos_weight <span class="op">=</span> <span class="fl">1</span>,
+  sample_type <span class="op">=</span> <span class="st">"uniform"</span>,
+  normalize_type <span class="op">=</span> <span class="st">"tree"</span>,
+  rate_drop <span class="op">=</span> <span class="fl">0</span>,
+  skip_drop <span class="op">=</span> <span class="fl">0</span>,
+  lambda_bias <span class="op">=</span> <span class="fl">0</span>,
+  tree_limit <span class="op">=</span> <span class="fl">0</span>,
+  num_round <span class="op">=</span> <span class="fl">1</span>,
+  num_workers <span class="op">=</span> <span class="fl">1</span>,
+  nthread <span class="op">=</span> <span class="fl">1</span>,
+  use_external_memory <span class="op">=</span> <span class="cn">FALSE</span>,
+  silent <span class="op">=</span> <span class="fl">0</span>,
+  custom_obj <span class="op">=</span> <span class="cn">NULL</span>,
+  custom_eval <span class="op">=</span> <span class="cn">NULL</span>,
+  missing <span class="op">=</span> <span class="cn">NaN</span>,
+  seed <span class="op">=</span> <span class="fl">0</span>,
+  timeout_request_workers <span class="op">=</span> <span class="fl">30</span> <span class="op">*</span> <span class="fl">60</span> <span class="op">*</span> <span class="fl">1000</span>,
+  checkpoint_path <span class="op">=</span> <span class="st">""</span>,
+  checkpoint_interval <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
+  objective <span class="op">=</span> <span class="st">"reg:linear"</span>,
+  base_score <span class="op">=</span> <span class="fl">0.5</span>,
+  train_test_ratio <span class="op">=</span> <span class="fl">1</span>,
+  num_early_stopping_rounds <span class="op">=</span> <span class="fl">0</span>,
+  objective_type <span class="op">=</span> <span class="st">"regression"</span>,
+  eval_metric <span class="op">=</span> <span class="cn">NULL</span>,
+  maximize_evaluation_metrics <span class="op">=</span> <span class="cn">FALSE</span>,
+  base_margin_col <span class="op">=</span> <span class="cn">NULL</span>,
+  weight_col <span class="op">=</span> <span class="cn">NULL</span>,
+  features_col <span class="op">=</span> <span class="st">"features"</span>,
+  label_col <span class="op">=</span> <span class="st">"label"</span>,
+  prediction_col <span class="op">=</span> <span class="st">"prediction"</span>,
+  uid <span class="op">=</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/random_string.html">random_string</a></span><span class="op">(</span><span class="st">"xgboost_regressor_"</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
+</section><section id="arguments" class="level2"><h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
+<table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
+</tr>
+<tr class="even">
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
+</tr>
+<tr class="odd">
+<td>eta</td>
+<td>Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features and eta actually shrinks the feature weights to make the boosting process more conservative. [default=0.3] range: [0,1]</td>
+</tr>
+<tr class="even">
+<td>gamma</td>
+<td>Minimum loss reduction required to make a further partition on a leaf node of the tree. the larger, the more conservative the algorithm will be. [default=0]</td>
+</tr>
+<tr class="odd">
+<td>max_depth</td>
+<td>Maximum depth of a tree, increase this value will make model more complex / likely to be overfitting. [default=6]</td>
+</tr>
+<tr class="even">
+<td>min_child_weight</td>
+<td>Minimum sum of instance weight(hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning. In linear regression mode, this simply corresponds to minimum number of instances needed to be in each node. The larger, the more conservative the algorithm will be. [default=1]</td>
+</tr>
+<tr class="odd">
+<td>max_delta_step</td>
+<td>Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [default=0]</td>
+</tr>
+<tr class="even">
+<td>grow_policy</td>
+<td>Growth policy for fast histogram algorithm.</td>
+</tr>
+<tr class="odd">
+<td>max_bins</td>
+<td>Maximum number of bins in histogram.</td>
+</tr>
+<tr class="even">
+<td>subsample</td>
+<td>Subsample ratio of the training instance. Setting it to 0.5 means that XGBoost randomly collected half of the data instances to grow trees and this will prevent overfitting. [default=1] range:(0,1]</td>
+</tr>
+<tr class="odd">
+<td>colsample_bytree</td>
+<td>Subsample ratio of columns when constructing each tree. [default=1] range: (0,1]</td>
+</tr>
+<tr class="even">
+<td>colsample_bylevel</td>
+<td>Subsample ratio of columns for each split, in each level. [default=1] range: (0,1]</td>
+</tr>
+<tr class="odd">
+<td>lambda</td>
+<td>L2 regularization term on weights, increase this value will make model more conservative. [default=1]</td>
+</tr>
+<tr class="even">
+<td>alpha</td>
+<td>L1 regularization term on weights, increase this value will make model more conservative, defaults to 0.</td>
+</tr>
+<tr class="odd">
+<td>tree_method</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’, ‘approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>sketch_eps</td>
+<td>This is only used for approximate greedy algorithm. This roughly translated into O(1 / sketch_eps) number of bins. Compared to directly select number of bins, this comes with theoretical guarantee with sketch accuracy. [default=0.03] range: (0, 1)</td>
+</tr>
+<tr class="odd">
+<td>scale_pos_weight</td>
+<td>Control the balance of positive and negative weights, useful for unbalanced classes. A typical value to consider: sum(negative cases) / sum(positive cases). [default=1]</td>
+</tr>
+<tr class="even">
+<td>sample_type</td>
+<td>Parameter for Dart booster. Type of sampling algorithm. “uniform”: dropped trees are selected uniformly. “weighted”: dropped trees are selected in proportion to weight. [default=“uniform”]</td>
+</tr>
+<tr class="odd">
+<td>normalize_type</td>
+<td>Parameter of Dart booster. type of normalization algorithm, options: ‘tree’, ‘forest’. [default=“tree”]</td>
+</tr>
+<tr class="even">
+<td>rate_drop</td>
+<td>Parameter of Dart booster. dropout rate. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="odd">
+<td>skip_drop</td>
+<td>Parameter of Dart booster. probability of skip dropout. If a dropout is skipped, new trees are added in the same manner as gbtree. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="even">
+<td>lambda_bias</td>
+<td>Parameter of linear booster L2 regularization term on bias, default 0 (no L1 reg on bias because it is not important.)</td>
+</tr>
+<tr class="odd">
+<td>tree_limit</td>
+<td>Limit number of trees in the prediction; defaults to 0 (use all trees.)</td>
+</tr>
+<tr class="even">
+<td>num_round</td>
+<td>The number of rounds for boosting.</td>
+</tr>
+<tr class="odd">
+<td>num_workers</td>
+<td>number of workers used to train xgboost model. Defaults to 1.</td>
+</tr>
+<tr class="even">
+<td>nthread</td>
+<td>Number of threads used by per worker. Defaults to 1.</td>
+</tr>
+<tr class="odd">
+<td>use_external_memory</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’, ‘approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>silent</td>
+<td>0 means printing running messages, 1 means silent mode. default: 0</td>
+</tr>
+<tr class="odd">
+<td>custom_obj</td>
+<td>Customized objective function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="even">
+<td>custom_eval</td>
+<td>Customized evaluation function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="odd">
+<td>missing</td>
+<td>The value treated as missing. default: Float.NaN</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Random seed for the C++ part of XGBoost and train/test splitting.</td>
+</tr>
+<tr class="odd">
+<td>timeout_request_workers</td>
+<td>the maximum time to wait for the job requesting new workers. default: 30 minutes</td>
+</tr>
+<tr class="even">
+<td>checkpoint_path</td>
+<td>The hdfs folder to load and save checkpoint boosters.</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_interval</td>
+<td>Param for set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the trained model will get checkpointed every 10 iterations. Note: checkpoint_path must also be set if the checkpoint interval is greater than 0.</td>
+</tr>
+<tr class="even">
+<td>objective</td>
+<td>Specify the learning task and the corresponding learning objective. options: reg:linear, reg:logistic, binary:logistic, binary:logitraw, count:poisson, multi:softmax, multi:softprob, rank:pairwise, reg:gamma. default: reg:linear.</td>
+</tr>
+<tr class="odd">
+<td>base_score</td>
+<td>Param for initial prediction (aka base margin) column name. Defaults to 0.5.</td>
+</tr>
+<tr class="even">
+<td>train_test_ratio</td>
+<td>Fraction of training points to use for testing.</td>
+</tr>
+<tr class="odd">
+<td>num_early_stopping_rounds</td>
+<td>If non-zero, the training will be stopped after a specified number of consecutive increases in any evaluation metric.</td>
+</tr>
+<tr class="even">
+<td>objective_type</td>
+<td>The learning objective type of the specified custom objective and eval. Corresponding type will be assigned if custom objective is defined options: regression, classification.</td>
+</tr>
+<tr class="odd">
+<td>eval_metric</td>
+<td>Evaluation metrics for validation data, a default metric will be assigned according to objective(rmse for regression, and error for classification, mean average precision for ranking). options: rmse, mae, logloss, error, merror, mlogloss, auc, aucpr, ndcg, map, gamma-deviance</td>
+</tr>
+<tr class="even">
+<td>maximize_evaluation_metrics</td>
+<td>Whether to maximize evaluation metrics. Defaults to FALSE (for minization.)</td>
+</tr>
+<tr class="odd">
+<td>base_margin_col</td>
+<td>Param for initial prediction (aka base margin) column name.</td>
+</tr>
+<tr class="even">
+<td>weight_col</td>
+<td>Weight column.</td>
+</tr>
+<tr class="odd">
+<td>features_col</td>
+<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="even">
+<td>label_col</td>
+<td>Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="odd">
+<td>prediction_col</td>
+<td>Prediction column name.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Optional arguments; see Details.</td>
+</tr>
+</tbody>
+</table></section><section id="details" class="level2"><h2 class="anchored" data-anchor-id="details">Details</h2>
+<p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code>) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code>) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code>, <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <code>ml_save</code> with <code>type = "pipeline"</code> to faciliate model refresh workflows.</p>
+</section><section id="value" class="level2"><h2 class="anchored" data-anchor-id="value">Value</h2>
+<p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Predictor</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the predictor appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a predictor is constructed then immediately fit with the input <code>tbl_spark</code>, returning a prediction model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code>: specified When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the predictor. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>.</p></li>
+</ul></section><section id="see-also" class="level2"><h2 class="anchored" data-anchor-id="see-also">See Also</h2>
+<p>See http://spark.apache.org/docs/latest/ml-classification-regression.html for more information on the set of supervised learning algorithms.</p>
+
+
+</section></section></main><!-- /main --><script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      return window.localStorage.getItem("quarto-color-scheme");
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = null;
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.id = "quarto-color-scheme-toggle";
+    a.classList.add('top-right');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body>
+</html>

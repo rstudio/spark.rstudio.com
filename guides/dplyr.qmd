@@ -1,0 +1,328 @@
+---
+title: "Manipulating Data with `dplyr`"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+    eval: true
+    freeze: true
+---
+
+
+## Overview
+
+[**`dplyr`**](https://cran.r-project.org/web/packages/dplyr/index.html) is
+an R package for working with structured data both in and outside of R.
+dplyr makes data manipulation for R users easy, consistent, and
+performant. With `dplyr` as an interface to manipulating Spark DataFrames,
+you can:
+
+  - Select, filter, and aggregate data
+  - Use window functions (e.g. for sampling)
+  - Perform joins on `DataFrames`
+  - Collect data from Spark into R
+
+Statements in dplyr can be chained together using pipes defined by the
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html)
+R package. dplyr also supports [non-standard
+evalution](https://cran.r-project.org/web/packages/dplyr/vignettes/nse.html)
+of its arguments. For more information on dplyr, see the
+[introduction](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html),
+a guide for connecting to
+[databases](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html),
+and a variety of
+[vignettes](https://cran.r-project.org/web/packages/dplyr/index.html).
+
+
+### Flights Data
+
+This guide will demonstrate some of the basic data manipulation verbs of
+dplyr by using data from the `nycflights13` R package. This package
+contains data for all 336,776 flights departing New York City in 2013.
+It also includes useful metadata on airlines, airports, weather, and
+planes. The data comes from the US [Bureau of Transportation
+Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0),
+and is documented in `?nycflights13`
+
+Connect to the cluster and copy the flights data using the `copy_to()`
+function. Caveat: The flight data in `nycflights13` is convenient for
+dplyr demonstrations because it is small, but in practice large data
+should rarely be copied directly from R objects.
+
+```{r, include = FALSE}
+library(sparklyr)
+library(dplyr)
+library(ggplot2)
+```
+
+
+```{r}
+library(sparklyr)
+library(dplyr)
+library(ggplot2)
+
+sc <- spark_connect(master="local")
+
+flights_tbl <- copy_to(sc, nycflights13::flights, "flights")
+
+airlines_tbl <- copy_to(sc, nycflights13::airlines, "airlines")
+
+```
+
+
+## dplyr Verbs
+
+Verbs are `dplyr` commands for manipulating data. When connected to a
+Spark DataFrame, `dplyr` translates the commands into **Spark SQL**
+statements. Remote data sources use exactly the same five verbs as local
+data sources. Here are the five verbs with their corresponding SQL
+commands:
+
+  - `select()` ~ `SELECT`
+  - `filter()` ~ `WHERE`
+  - `arrange()` ~ `ORDER`
+  - `summarise()` ~ `aggregators: sum, min, sd, etc.`
+  - `mutate()` ~ `operators: +, *, log, etc.`
+
+
+```{r}
+select(flights_tbl, year:day, arr_delay, dep_delay)
+```
+
+
+```{r}
+filter(flights_tbl, dep_delay > 1000)
+```
+
+```{r}
+arrange(flights_tbl, desc(dep_delay))
+```
+
+
+```{r}
+summarise(
+  flights_tbl, 
+  mean_dep_delay = mean(dep_delay, na.rm = TRUE)
+  )
+```
+
+
+```{r}
+mutate(flights_tbl, speed = distance / air_time * 60)
+```
+
+
+## Laziness
+
+When working with databases, `dplyr` tries to be as lazy as possible:
+
+  - It never pulls data into R unless you explicitly ask for it.
+
+  - It delays doing any work until the last possible moment: it collects
+    together everything you want to do and then sends it to the database
+    in one step.
+
+For example, take the following
+code:
+
+```{r}
+c1 <- filter(
+  flights_tbl, 
+  day == 17, month == 5, carrier %in% c('UA', 'WN', 'AA', 'DL')
+  )
+
+c2 <- select(c1, year, month, day, carrier, dep_delay, air_time, distance)
+
+c3 <- mutate(c2, air_time_hours = air_time / 60)
+
+c4 <- arrange(c3, year, month, day, carrier)
+
+```
+
+This sequence of operations never actually touches the database. It’s
+not until you ask for the data (e.g. by printing `c4`) that dplyr
+requests the results from the database.
+
+```{r}
+c4
+```
+
+## Piping
+
+You can use
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html)
+pipes to write cleaner syntax. Using the same example from above, you
+can write a much cleaner version like this:
+
+```{r}
+c4 <- flights_tbl %>%
+  filter(month == 5, day == 17, carrier %in% c('UA', 'WN', 'AA', 'DL')) %>%
+  select(carrier, dep_delay, air_time, distance) %>%
+  mutate(air_time_hours = air_time / 60) %>% 
+  arrange(carrier) 
+```
+
+
+## Grouping
+
+The `group_by()` function corresponds to the `GROUP BY` statement in SQL.
+
+```{r}
+flights_tbl %>% 
+  group_by(carrier) %>%
+  summarize(
+    count = n(), 
+    mean_dep_delay = mean(dep_delay, na.rm = FALSE)
+    )
+```
+
+
+## Collecting to R
+
+You can copy data from Spark into R’s memory by using `collect()`.
+
+```{r}
+carrierhours <- collect(c4)
+```
+
+`collect()` executes the Spark query and returns the results to R for
+further analysis and visualization.
+
+```{r}
+# Test the significance of pairwise differences and plot the results
+
+with(carrierhours, pairwise.t.test(air_time, carrier))
+```
+
+
+```{r}
+carrierhours %>% 
+  ggplot() + 
+  geom_boxplot(aes(carrier, air_time_hours))
+```
+
+
+## SQL Translation
+
+It’s relatively straightforward to translate R code to SQL (or indeed to
+any programming language) when doing simple mathematical operations of
+the form you normally use when *filtering*, *mutating* and *summarizing.*
+`dplyr` knows how to convert the following R functions to Spark SQL:
+
+``` r
+# Basic math operators
++, -, *, /, %%, ^
+  
+# Math functions
+abs, acos, asin, asinh, atan, atan2, ceiling, cos, cosh, exp, floor, log, 
+log10, round, sign, sin, sinh, sqrt, tan, tanh
+
+# Logical comparisons
+<, <=, !=, >=, >, ==, %in%
+
+# Boolean operations
+&, &&, |, ||, !
+
+# Character functions
+paste, tolower, toupper, nchar
+
+# Casting
+as.double, as.integer, as.logical, as.character, as.date
+
+# Basic aggregations
+mean, sum, min, max, sd, var, cor, cov, n
+```
+
+`dplyr` supports Spark SQL window functions. Window functions are used in
+conjunction with mutate and filter to solve a wide range of problems.
+You can compare the `dplyr` syntax to the query it has generated by using
+`dplyr::show_query()`.
+
+```{r}
+# Rank each flight within a daily
+ranked <- flights_tbl %>%
+  group_by(year, month, day) %>%
+  select(dep_delay) %>% 
+  mutate(rank = rank(desc(dep_delay)))
+
+dplyr::show_query(ranked)
+```
+
+```{r}
+ranked 
+```
+
+
+## Peforming Joins
+
+It’s rare that a data analysis involves only a single table of data. In
+practice, you’ll normally have many tables that contribute to an
+analysis, and you need flexible tools to combine them. In `dplyr`, there
+are three families of verbs that work with two tables at a time:
+
+  - Mutating joins, which add new variables to one table from matching
+    rows in another.
+
+  - Filtering joins, which filter observations from one table based on
+    whether or not they match an observation in the other table.
+
+  - Set operations, which combine the observations in the data sets as
+    if they were set elements.
+
+All two-table verbs work similarly. The first two arguments are `x` and
+`y`, and provide the tables to combine. The output is always a new table
+with the same type as `x`.
+
+
+```{r}
+flights_tbl %>% 
+  left_join(airlines_tbl, by = "carrier") %>% 
+  select(name, flight, dep_time)
+```
+
+
+## Sampling
+
+You can use `sample_n()` and `sample_frac()` to take a random sample of
+rows: use `sample_n()` for a fixed number and `sample_frac()` for a
+fixed fraction.
+
+```{r}
+sample_n(flights_tbl, 10) %>% 
+  select(1:4)
+```
+
+```{r}
+sample_frac(flights_tbl, 0.01) %>% 
+  count()
+```
+
+## Hive Functions
+
+Many of Hive’s built-in functions (UDF) and built-in aggregate functions
+(UDAF) can be called inside dplyr’s mutate and summarize. The [Languange
+Reference
+UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF)
+page provides the list of available functions.
+
+The following example uses the **datediff** and **current\_date** Hive
+UDFs to figure the difference between the flight\_date and the current
+system date:
+
+```{r}
+flights_tbl %>% 
+  mutate(
+    flight_date = paste(year,month,day,sep="-"),
+    days_since = datediff(current_date(), flight_date)
+    ) %>%
+  group_by(flight_date,days_since) %>%
+  count() %>%
+  arrange(-days_since)
+```
+
+```{r}
+spark_disconnect(sc)
+```
+
+

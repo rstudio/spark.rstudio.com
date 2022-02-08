@@ -1,0 +1,192 @@
+project:
+  output-dir: docs
+  type: site
+  
+website:
+  title: sparklyr
+  site-url: https://spark.rstudio.com
+  google-analytics: UA-20375833-3
+  page-navigation: true
+  reader-mode: true  
+  favicon: "images/favicon/apple-touch-icon.png"
+  navbar:
+    search: true
+    background: light
+    collapse-below: lg
+    type: light
+    logo: "images/favicon/apple-touch-icon.png"
+    left: 
+      - text: Get Started
+        href: get-started/index.qmd
+      - text: Guides
+        href: guides/index.qmd
+      - text: Deployment
+        href: deployment/index.qmd
+      - text: News
+        href: packages/sparklyr/latest/news.md
+      - text: Reference
+        href: packages/sparklyr/latest/reference/index.md
+      - text: Packages
+        href: packages/index.qmd
+      - text: Learn more
+        href: learn-more.qmd
+    right:
+      - icon: github
+        href: https://github.com/sparklyr/sparklyr
+        
+  sidebar:
+    - id: get-started
+      title: Get Started
+      collapse-level: 2
+      style: "floating"
+      align: left
+      contents:
+        - href: get-started/index.qmd
+        - href: get-started/read-data.qmd       
+        - href: get-started/prepare-data.qmd
+        - href: get-started/model-data.qmd
+      
+    - id: guides
+      title: Guides
+      collapse-level: 3
+      align: left
+      contents:
+        - text: Overview
+          href: guides/index.qmd
+        - section: Interacting with Spark
+          contents:
+          - text: Using `dplyr` 
+            href: guides/dplyr.qmd
+          - text: Managing Spark cache
+            href: guides/caching.qmd   
+          - text: Spark connection options
+            href: guides/connections.qmd
+          - text: Access S3 buckets
+            href: guides/aws-s3.qmd   
+        - section: Machine Learning
+          contents:
+          - text: Spark ML Overview
+            href: guides/mlib.qmd
+          - text: ML Pipelines
+            href: guides/pipelines.qmd          
+          - text: H2O models
+            href: guides/h2o.qmd
+        - section: Non-rectangular Data
+          contents:
+          - text: Streaming Data
+            href: guides/streaming.qmd   
+          - text: Text Data
+            href: guides/textmining.qmd                      
+        - section: Advanced
+          contents:
+          - text: Run R code inside Spark
+            href: guides/distributed-r.qmd
+          - text: Create `sparklyr` extensions
+            href: guides/extensions.qmd
+        - section: Troubleshooting
+          href: guides/troubleshooting.qmd
+   
+    - id: deployment
+      title: Deployment
+      collapse-level: 2
+      align: left
+      contents:
+      - text: Overview
+        href: deployment/index.qmd
+      - section: YARN (Hadoop)
+        contents:
+        - text: Understanding Data Lakes
+          href: deployment/data-lakes.qmd        
+        - text: EMR cluster
+          href: deployment/yarn-cluster-emr.qmd
+        - text: Cloudera cluster
+          href: deployment/cloudera-aws.qmd
+      - section: Stand Alone Clusters        
+        contents:
+        - text: Databricks cluster
+          href: deployment/databricks-cluster.qmd
+        - text: Qubole cluster
+          href: deployment/qubole-overview.qmd     
+        - text: Standalone cluster using AWS EC2
+          href: deployment/stand-alone-aws.qmd        
+        
+    - id: news
+      collapse-level: 2
+      text: news
+      contents:
+        - text: Package News
+          href: packages/sparklyr/latest/news.md
+        - text: Site News
+          href: site-news.qmd
+          
+    - id : reference
+      collapse-level: 2
+      text: Reference
+      contents: 
+      - text: Latest release
+        href: packages/sparklyr/latest/reference/index.md
+    
+    - id: mleap 
+      collapse-level: 3
+      contents:
+        - text: mleap
+          href: packages/mleap/latest/index.md
+        - text: News
+          href: packages/mleap/latest/news.md
+        - section: Reference
+          contents:
+          - text: Latest release
+            href: packages/mleap/latest/reference/index.md
+          - text: Dev release
+            href: packages/mleap/dev/reference/index.md
+          - text: Version 0.1.3
+            href: packages/mleap/0.1.3/reference/index.md
+          - text: Version 0.1.0
+            href: packages/mleap/0.1.0/reference/index.md
+
+    - id: sparkxgb 
+      collapse-level: 3
+      contents:
+        - text: sparkxgb
+          href: packages/sparkxgb/latest/index.md
+        - text: News
+          href: packages/sparkxgb/latest/news.md
+        - section: Reference
+          contents:
+          - text: Latest release
+            href: packages/sparkxgb/latest/reference/index.md          
+
+    - id: sparktf 
+      collapse-level: 3
+      contents:
+        - text: sparktf
+          href: packages/sparktf/latest/index.md
+        - text: News
+          href: packages/sparktf/latest/news.md
+        - section: Reference
+          contents:
+          - text: Latest release
+            href: packages/sparktf/latest/reference/index.md    
+      
+    - id: graphframes 
+      collapse-level: 3
+      contents:
+        - text: graphframes
+          href: packages/graphframes/latest/index.md
+        - text: News
+          href: packages/graphframes/latest/news.md
+        - section: Reference
+          contents:
+          - text: Latest release
+            href: packages/graphframes/latest/reference/index.md    
+            
+format:
+  html:
+    toc: true
+    code-copy: true
+    code-overflow: wrap
+    css: styles.css
+    theme:
+      light: [cosmo, theme.scss]
+      dark: [cosmo, theme-dark.scss]
+

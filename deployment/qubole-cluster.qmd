@@ -1,0 +1,50 @@
+---
+title: "Using RStudio Workbench inside of Qubole"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+    eval: false
+    freeze: false
+---
+
+## Overview
+
+Qubole users can request [access to RStudio Server Pro](https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html). This allows users to use [`sparklyr`](https://spark.rstudio.com/) to interact directly with Spark from within the Qubole cluster.
+
+![](/images/deployment/qubole/rstudio-qubole.png)
+
+## Advantages and limitations
+
+Advantages:
+
+-   Ability for users to connect `sparklyr` directly to Spark within Qubole
+-   Provides a high-bandwidth connection between R and the Spark JVM processes because they are running on the same machine
+-   Can load data from the cluster directly into an R session since RStudio Workbench is installed within the Qubole cluster
+-   A unique, persistent home directory for each user
+
+Limitations:
+
+-   Persistent packages must be managed using Qubole Environments, not directly from within RStudio
+-   RStudio Workbench installed within a Qubole cluster will be limited to the compute resources and lifecycle of that particular Spark cluster
+-   Non-Spark jobs will use CPU and RAM resources within the Qubole cluster
+
+## Access RStudio Workbench
+
+RStudio Workbench can be accessed from the cluster resources menu:
+
+![](/images/deployment/qubole/rstudio-qubole-resources.png){width="381"}
+
+## Use `sparklyr`
+
+Use the following R code to establish a connection from `sparklyr` to the Qubole cluster:
+
+``` r
+library(sparklyr)
+sc <- spark_connect(method = "qubole")
+```
+
+## Additional information
+
+For more information on using RStudio Workbench inside of Qubole, refer to the [Qubole documentation](https://docs.qubole.com/en/latest/user-guide/engines/spark/rstudio_spark.html).

@@ -179,28 +179,26 @@
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-tools-main">
-</div>
-    <div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../get-started/index.html" class="sidebar-item-text active">Install</a>
+  <a href="../get-started/index.html" class="sidebar-item-text sidebar-link active">Install</a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../get-started/read-data.html" class="sidebar-item-text ">Read Data</a>
+  <a href="../get-started/read-data.html" class="sidebar-item-text sidebar-link">Read Data</a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../get-started/prepare-data.html" class="sidebar-item-text ">Prepare Data</a>
+  <a href="../get-started/prepare-data.html" class="sidebar-item-text sidebar-link">Prepare Data</a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../get-started/model-data.html" class="sidebar-item-text ">Model Data</a>
+  <a href="../get-started/model-data.html" class="sidebar-item-text sidebar-link">Model Data</a>
   </div>
 </li>
     </ul>
@@ -216,7 +214,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Install</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Install</h1>
 </header><section id="install-the-package" class="level2"><h2 class="anchored" data-anchor-id="install-the-package">Install the package</h2>
 <p>You can install the <code>sparklyr</code> package from <a href="https://CRAN.r-project.org">CRAN</a> as follows:</p>
 <div class="cell">
@@ -354,12 +352,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -370,8 +369,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -459,7 +458,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../get-started/read-data.html">
+      <a href="../get-started/read-data.html" class="pagination-link">
         <span class="nav-page-text">Read Data</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

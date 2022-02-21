@@ -111,7 +111,7 @@
 <!-- sidebar -->
 <!-- margin-sidebar -->
 <!-- main -->
-<main class="content"><div class="whitebox">
+<div class="whitebox">
 <div style="padding-left: 100px; padding-right: 100px; display: inline-block;">
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -133,11 +133,11 @@
 <div style="padding-left: 100px; padding-right: 100px; display: inline-block;">
 <div class="quarto-layout-panel">
 <div class="quarto-layout-row quarto-layout-valign-top">
-<section id="get-started" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 class="anchored" data-anchor-id="get-started"><a href="./get-started/index.html">Get Started</a></h3>
+<section id="get-started" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 data-anchor-id="get-started"><a href="./get-started/index.html">Get Started</a></h3>
 <p><strong>Welcome new users!</strong> Start here to learn how to install and use <code>sparklyr</code>.</p>
-</section><section id="guides" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 class="anchored" data-anchor-id="guides"><a href="./guides/index.html">Guides</a></h3>
+</section><section id="guides" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 data-anchor-id="guides"><a href="./guides/index.html">Guides</a></h3>
 <p>“How-to” articles to help you learn how to do things such as: connect AWS S3 buckets, handling Streaming Data, create ML Pipelines and others.</p>
-</section><section id="deployment" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 class="anchored" data-anchor-id="deployment"><a href="./deployment/index.html">Deployment</a></h3>
+</section><section id="deployment" class="level3 quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;"><h3 data-anchor-id="deployment"><a href="./deployment/index.html">Deployment</a></h3>
 <p>Articles on Spark environments. Including AWS EMR, Databricks and Qubole.<br><br></p>
 </section>
 </div>
@@ -146,7 +146,8 @@
 </div>
 
 
-</main><!-- /main --><script type="application/javascript">
+
+<script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -215,12 +216,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -231,8 +233,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -317,11 +319,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
+</script>
 </div> <!-- /content -->
 
 

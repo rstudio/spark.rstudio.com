@@ -190,7 +190,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="ml_kmeans" class="level1"><h1>ml_kmeans</h1>
+<main class="content" id="quarto-document-content"><section id="ml_kmeans" class="level1"><h1>ml_kmeans</h1>
 <p>Spark ML – K-Means Clustering</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
 <p>K-means clustering with support for k-means|| initialization proposed by Bahmani et al. Using <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/ml_kmeans.html">ml_kmeans()</a></code> with the formula interface requires Spark 2.0+.</p>
@@ -354,12 +354,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -370,8 +371,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -456,11 +457,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
+</script>
 </div> <!-- /content -->
 
 

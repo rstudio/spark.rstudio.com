@@ -117,31 +117,29 @@
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-tools-main">
-</div>
-    <div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../packages/graphframes/latest/index.html" class="sidebar-item-text ">graphframes</a>
+  <a href="../../../packages/graphframes/latest/index.html" class="sidebar-item-text sidebar-link">graphframes</a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../packages/graphframes/latest/news.html" class="sidebar-item-text active">News</a>
+  <a href="../../../packages/graphframes/latest/news.html" class="sidebar-item-text sidebar-link active">News</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-reference" aria-expanded="true">Reference</a>
-      <a class="sidebar-item-toggle text-start  " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-reference" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-reference" aria-expanded="true">Reference</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-reference" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
     <ul id="quarto-sidebar-section-reference" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../packages/graphframes/latest/reference/index.html" class="sidebar-item-text ">Latest release</a>
+  <a href="../../../packages/graphframes/latest/reference/index.html" class="sidebar-item-text sidebar-link">Latest release</a>
   </div>
 </li>
     </ul>
@@ -155,7 +153,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="graphframes-0.1.2" class="level1"><h1>graphframes 0.1.2</h1>
+<main class="content" id="quarto-document-content"><section id="graphframes-0.1.2" class="level1"><h1>graphframes 0.1.2</h1>
 <ul>
 <li>Updated dependency to graphframes 0.6.0, with support for Spark 2.3.</li>
 </ul></section></main><!-- /main --><script type="application/javascript">
@@ -227,12 +225,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -243,8 +242,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -330,12 +329,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../../../packages/graphframes/latest/index.html">
+      <a href="../../../packages/graphframes/latest/index.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">graphframes</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../../packages/graphframes/latest/reference/index.html">
+      <a href="../../../packages/graphframes/latest/reference/index.html" class="pagination-link">
         <span class="nav-page-text">Latest release</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

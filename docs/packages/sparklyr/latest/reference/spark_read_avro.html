@@ -188,7 +188,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="spark_read_avro" class="level1"><h1>spark_read_avro</h1>
+<main class="content" id="quarto-document-content"><section id="spark_read_avro" class="level1"><h1>spark_read_avro</h1>
 <p>Read Apache Avro data into a Spark DataFrame.</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
 <p>Read Apache Avro data into a Spark DataFrame. Notice this functionality requires the Spark connection <code>sc</code> to be instantiated with either an explicitly specified Spark version (i.e., <code>spark_connect(..., version = &lt;version&gt;, packages = c("avro", &lt;other package(s)&gt;), ...)</code>) or a specific version of Spark avro package to use (e.g., <code>spark_connect(..., packages = c("org.apache.spark:spark-avro_2.12:3.0.0", &lt;other package(s)&gt;), ...)</code>).</p>
@@ -299,12 +299,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -315,8 +316,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -401,11 +402,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
+</script>
 </div> <!-- /content -->
 
 

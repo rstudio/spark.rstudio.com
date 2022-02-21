@@ -188,7 +188,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><section id="hof_map_zip_with" class="level1"><h1>hof_map_zip_with</h1>
+<main class="content" id="quarto-document-content"><section id="hof_map_zip_with" class="level1"><h1>hof_map_zip_with</h1>
 <p>Merges two maps into one</p>
 <section id="description" class="level2"><h2 class="anchored" data-anchor-id="description">Description</h2>
 <p>Merges two maps into a single map by applying the function specified to pairs of values with the same key (this is essentially a dplyr wrapper to the <code>map_zip_with(map1, map2, func)</code> higher- order function, which is supported since Spark 3.0)</p>
@@ -315,12 +315,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -331,8 +332,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -417,11 +418,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
+</script>
 </div> <!-- /content -->
 
 

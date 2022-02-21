@@ -185,7 +185,7 @@
 </ul></nav>
 </div>
 <!-- main -->
-<main class="content"><header id="title-block-header"><h1 class="title display-7">Using an ODBC connection with Databricks</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header"><h1 class="title display-7">Using an ODBC connection with Databricks</h1>
 </header><section id="overview" class="level2"><h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>This configuration details how to connect to Databricks using an ODBC connection. With this setup, R can connect to Databricks using the <a href="https://github.com/r-dbi/odbc"><code>odbc</code></a> and <a href="https://dbi.r-dbi.org/"><code>DBI</code></a> R packages. This type of configuration is the recommended approach for connecting to Databricks from RStudio Connect and can also be used from RStudio Workbench.</p>
 </section><section id="advantages-and-limitations" class="level2"><h2 class="anchored" data-anchor-id="advantages-and-limitations">Advantages and limitations</h2>
@@ -293,12 +293,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
   const getColorSchemeSentinel = () => {
     if (!isFileUrl()) {
-      return window.localStorage.getItem("quarto-color-scheme");
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
     } else {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = null;
+  let localAlternateSentinel = 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
@@ -309,8 +310,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
     const a = window.document.createElement('a');
-    a.id = "quarto-color-scheme-toggle";
     a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
     a.href = "";
     a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
     const i = window.document.createElement("i");
@@ -395,11 +396,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
+</script>
 </div> <!-- /content -->
 
 

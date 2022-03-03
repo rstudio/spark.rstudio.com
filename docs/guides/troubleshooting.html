@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr - Troubleshooting</title>
-<style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-99.9.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr - Troubleshooting</title>
+  <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -14,16 +12,28 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
   </style>
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../guides/extensions.html" rel="prev">
-<link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-<script id="quarto-search-options" type="application/json">{
+
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/extensions.html" rel="prev">
+  <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -41,7 +51,9 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><script type="text/javascript">
+  }</script>
+  
+  <script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -53,22 +65,27 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script><!--[if lt IE 9]>
+  </script>
+  <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]--><link rel="stylesheet" href="../styles.css">
+  <![endif]-->
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body class="floating">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
-    <img src="../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
+    <img src="../images/favicon/apple-touch-icon.png" alt="">
+    <span class="navbar-title">sparklyr</span>
   </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="../get-started/index.html">Get Started</a>
   </li>  
   <li class="nav-item">
@@ -90,14 +107,14 @@
     <a class="nav-link" href="../learn-more.html">Learn more</a>
   </li>  
 </ul>
-<ul class="navbar-nav navbar-nav-scroll ms-auto">
-<li class="nav-item compact">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
 </i> 
  </a>
   </li>  
 </ul>
-<div class="quarto-toggle-container">
+              <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -108,17 +125,23 @@
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Troubleshooting</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/index.html" class="sidebar-item-text sidebar-link">Overview</a>
   </div>
@@ -130,8 +153,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/dplyr.html" class="sidebar-item-text sidebar-link">Using <code>dplyr</code></a>
   </div>
@@ -152,7 +175,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">Machine Learning</a>
@@ -160,8 +183,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/mlib.html" class="sidebar-item-text sidebar-link">Spark ML Overview</a>
   </div>
@@ -177,7 +200,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">Non-rectangular Data</a>
@@ -185,8 +208,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/streaming.html" class="sidebar-item-text sidebar-link">Streaming Data</a>
   </div>
@@ -197,7 +220,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">Advanced</a>
@@ -205,8 +228,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/distributed-r.html" class="sidebar-item-text sidebar-link">Run R code inside Spark</a>
   </div>
@@ -217,36 +240,51 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/troubleshooting.html" class="sidebar-item-text sidebar-link active">Troubleshooting</a>
   </div>
 </li>
     </ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#help-with-code-debugging" class="nav-link active" data-scroll-target="#help-with-code-debugging">Help with code debugging</a></li>
 <li><a href="#code-does-not-work-after-upgrading-to-the-latest-sparklyr-version" class="nav-link" data-scroll-target="#code-does-not-work-after-upgrading-to-the-latest-sparklyr-version">Code does not work after upgrading to the latest <code>sparklyr</code> version</a></li>
 <li><a href="#not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake" class="nav-link" data-scroll-target="#not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake">Not able to connect, or the jobs take a long time when working with a Data Lake</a></li>
-</ul></nav>
-</div>
+</ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Troubleshooting</h1>
-</header><section id="help-with-code-debugging" class="level2"><h2 class="anchored" data-anchor-id="help-with-code-debugging">Help with code debugging</h2>
+<main class="content" id="quarto-document-content">
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7">Troubleshooting</h1>
+</header>
+
+<section id="help-with-code-debugging" class="level2">
+<h2 class="anchored" data-anchor-id="help-with-code-debugging">Help with code debugging</h2>
 <p>For general programming questions with <code>sparklyr</code>, please ask on <a href="http://stackoverflow.com">Stack Overflow</a>.</p>
-</section><section id="code-does-not-work-after-upgrading-to-the-latest-sparklyr-version" class="level2"><h2 class="anchored" data-anchor-id="code-does-not-work-after-upgrading-to-the-latest-sparklyr-version">Code does not work after upgrading to the latest <code>sparklyr</code> version</h2>
+</section>
+<section id="code-does-not-work-after-upgrading-to-the-latest-sparklyr-version" class="level2">
+<h2 class="anchored" data-anchor-id="code-does-not-work-after-upgrading-to-the-latest-sparklyr-version">Code does not work after upgrading to the latest <code>sparklyr</code> version</h2>
 <p>Please refer to the <a href="../news">NEWS</a> section of the <code>sparklyr</code> package to find out if any of the updates listed may have changed the way your code needs to work.</p>
 <p>If it seems that current version of the package has a bug, or the new functionality does not perform as stated, please refer to the <code>sparklyr</code> <a href="https://github.com/rstudio/sparklyr/issues">ISSUES</a> page. If no existing issue matches to what your problem is, please open a new issue.</p>
-</section><section id="not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake" class="level2"><h2 class="anchored" data-anchor-id="not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake">Not able to connect, or the jobs take a long time when working with a Data Lake</h2>
+</section>
+<section id="not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake" class="level2">
+<h2 class="anchored" data-anchor-id="not-able-to-connect-or-the-jobs-take-a-long-time-when-working-with-a-data-lake">Not able to connect, or the jobs take a long time when working with a Data Lake</h2>
 <p>The <a href="../guides/connections">Configuration connections</a> contains an overview and recommendations for requesting resources form the cluster.</p>
 <p>The articles in the <strong>Guides</strong> section provide best-practice information about specific operations that may match to the intent of your code.</p>
 <p>To verify your infrastructure, please review the <strong>Deployment Examples</strong> section.</p>
 
 
-</section></main><!-- /main --><script type="application/javascript">
+</section>
+</main> <!-- /main -->
+<script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -418,7 +456,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="../guides/extensions.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Create <code>sparklyr</code> extensions</span>
       </a>          
@@ -429,5 +469,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body>
-</html>
+</body></html>

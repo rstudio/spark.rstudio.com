@@ -1,8 +1,11 @@
 ---
 title: "`tidymodels` and Spark"
 execute:
-  eval: false
+  eval: true
   freeze: true
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
@@ -36,17 +39,37 @@ get_title <- function(x, pkg) {
 
 ## Intro
 
-`tidymodels` is a collection of packages for modeling and Machine Learning. Just as `sparklyr`, `tidymodels` uses `tidyverse` principles.
+`tidymodels` is a collection of packages for modeling and Machine
+Learning. Just as `sparklyr`, `tidymodels` uses `tidyverse` principles.
 
-`sparklyr` allows us to use `dplyr` verbs to manipulate data.  We use the same commands in R when manipulating local data or Spark data. Similarly, `sparklyr` and some packages in the `tidymodels` ecosystem offer integration.  As with any evolving framework, the available integration is not for every model and for every function.  This article aims at enumerating what is available today, and why should we consider using the `tidymodels` implementation in our day-to-day work with Spark.
+`sparklyr` allows us to use `dplyr` verbs to manipulate data. We use the
+same commands in R when manipulating local data or Spark data.
+Similarly, `sparklyr` and some packages in the `tidymodels` ecosystem
+offer integration. As with any evolving framework, the available
+integration is not for every model and for every function. This article
+aims at enumerating what is available today, and why should we consider
+using the `tidymodels` implementation in our day-to-day work with Spark.
 
 ## Model preparation with `parsnip`
 
-`parsnip` provides a common interface to models.  This enables us to run the same model against multiple engines. `parsnip` contains translation for each of these packages, so we do not have to remember, or find out, how to setup each argument in the respective package.
+`parsnip` provides a common interface to models. This enables us to run
+the same model against multiple engines. `parsnip` contains translation
+for each of these packages, so we do not have to remember, or find out,
+how to setup each argument in the respective package.
 
-### Why use in Spark? 
+### Why use in Spark?
 
-In some cases, it is better to try out model parameters on a smaller, local, data set in R. Once we are happy with the parameters, we can then run the model over the entire data set in Spark. For example, doing this for a Linear Regression model, we would use `lm()` locally, and then we would have to re-write the model using `ml_linear_regression()`.  Both of these functions have different sets of function arguments that we would need to set.  `parsnip` allows us to use the exact same set of functions and arguments when running against either back-end. With a couple of small changes, we can change the target engine (R vs Spark) and the target data set (local vs remote). Here is an example of what the model fitting looks like locally in R:
+In some cases, it is better to try out model parameters on a smaller,
+local, data set in R. Once we are happy with the parameters, we can then
+run the model over the entire data set in Spark. For example, doing this
+for a Linear Regression model, we would use `lm()` locally, and then we
+would have to re-write the model using `ml_linear_regression()`. Both of
+these functions have different sets of function arguments that we would
+need to set. `parsnip` allows us to use the exact same set of functions
+and arguments when running against either back-end. With a couple of
+small changes, we can change the target engine (R vs Spark) and the
+target data set (local vs remote). Here is an example of what the model
+fitting looks like locally in R:
 
 ```{r}
 #| eval: FALSE
@@ -56,7 +79,8 @@ linear_reg() %>%
   fit(mpg ~ ., data = mtcars)    # << Local `mtcars`
 ```
 
-To switch to Spark, we just need to change the engine to `spark`, and the training data set to the remote Spark data set:
+To switch to Spark, we just need to change the engine to `spark`, and
+the training data set to the remote Spark data set:
 
 ```{r}
 #| eval: FALSE
@@ -68,7 +92,8 @@ linear_reg() %>%
 
 ### List of supported models
 
-There are six `parsnip` models that currently support `sparklyr` equivalent models. Here is the list: 
+There are six `parsnip` models that currently support `sparklyr`
+equivalent models. Here is the list:
 
 ```{r}
 #| include: FALSE
@@ -95,7 +120,6 @@ supported_models <- spark_engines %>%
   mutate(model = paste0("`", model, "()`"))
 ```
 
-
 ```{r}
 #| echo: FALSE
 supported_models %>% 
@@ -111,14 +135,22 @@ supported_models %>%
 
 ### Examples
 
+This article will use the same Spark session in all the examples.
+
 ```{r}
 library(sparklyr)
 library(dplyr)
 
 sc <- spark_connect("local")
+```
 
+We will upload the `mtcars` data set to the Spark session:
+
+```{r}
 spark_mtcars <- copy_to(sc, mtcars)
 ```
+
+A Linear Regression model is prepared against `spark_mtcars`:
 
 ```{r}
 library(parsnip)
@@ -130,15 +162,26 @@ mtcars_model <- linear_reg() %>%
 mtcars_model
 ```
 
+It is also possible to see how `parsnip` plans to translate the model
+against the given engine. Use `translate()` so view the translation:
+
 ```{r}
 linear_reg() %>%
   set_engine("spark") %>%
   translate()
 ```
 
+Now, we will show an example with a classification model. We will fit a
+Random Forest model. To start, we will copy the `iris` data set to the
+Spark session:
+
 ```{r}
 spark_iris <- copy_to(sc, iris)
 ```
+
+We can prepare the model by piping the initial setup of 100 trees, then
+then to set the mode to "classification", and then the engine to "spark"
+and lastly, fit the model:
 
 ```{r}
 iris_model <- rand_forest(trees = 100) %>% 
@@ -149,22 +192,30 @@ iris_model <- rand_forest(trees = 100) %>%
 iris_model
 ```
 
-
-```{r}
-rand_forest(trees = 100) %>% 
-  set_mode("classification") %>% 
-  set_engine("spark") %>% 
-  translate()
-```
-
 ## Model results with `broom`
 
-The `broom` package offers great ways to get summarized information about a 
-fitted model. `sparklyr` offers integration for `parsnip` based, 
+The `broom` package offers great ways to get summarized information
+about a fitted model. There is support for three `broom` functions in
+`sparklyr`:
 
-- `tidy()` - Summarizes information about the components of a model. A model component might be a single term in a regression, a single hypothesis, a cluster, or a class. 
+-   `tidy()` - Summarizes information about the components of a model. A
+    model component might be a single term in a regression, a single
+    hypothesis, a cluster, or a class.
 
-- `glance()` - Returns a `tibble::tibble()` with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.
+-   `glance()` - Returns a `tibble::tibble()` with exactly one row of
+    model summaries. The summaries are typically goodness of fit
+    measures, p-values for hypothesis tests on residuals, or model
+    convergence information.
+
+-   `augment()` - It is similar to how `ml_predict()` works. Instead of
+    returning a vector of predictions, like `predict()` works,
+    `augment()` adds the prediction columns to the data set.
+
+### Why use in Spark?
+
+`tidy()` and `glance()` offer a very good, concise way to view the model
+results in a rectangular data frame. This is very helpful when we want
+to compare different model runs side-by-side.
 
 ```{r}
 #| include: FALSE
@@ -187,7 +238,8 @@ if(length(unique(all_table)) > 1) stop("Mistmatched methods")
 
 ### List of supported models
 
-Currently, 20 Spark models support `broom` via `sparklyr`.  Here is the current list of models and the corresponding `sparklyr` function:
+Currently, 20 Spark models support `broom` via `sparklyr`. Here is the
+current list of models and the corresponding `sparklyr` function:
 
 ```{r}
 #| echo: FALSE
@@ -220,12 +272,17 @@ tibble(obj_name = all_tidy) %>%
   cols_align("left")
 ```
 
-### Example
+### Examples
+
+Using the same Spark session and models created in the previous section
+we start by loading `broom`:
 
 ```{r}
 library(broom)
 ```
 
+To view the estimates for each term simply pass `mtcars_model` to the
+`tidy()` function:
 
 ```{r}
 #| include: FALSE
@@ -236,51 +293,111 @@ tidy(mtcars_model)
 #| warnings: FALSE
 tidy(mtcars_model)
 ```
+
+`glance()` returns the the models R Squared, error means, and variance:
 
 ```{r}
 #| warnings: FALSE
 glance(mtcars_model)
 ```
+
+```{r}
+#| eval: FALSE
+
+augment(mtcars_model)
+```
+
+::: callout-caution
+As of `sparklyr` version 1.7.5, a `sparklyr` model fitted through
+`parsnip` will not work with `augment()`. That is a bug that we will
+work to resolve.
+
+Pass the `fit` element to `augment()`. A model fitted using the ML
+function, such as `ml_linear_regression()` currently works.
+
+```{r}
+augment(mtcars_model$fit)
+```
+:::
+
+For our classification model, `tidy()` returns each feature's
+importance:
+
 ```{r}
 #| warnings: FALSE
 tidy(iris_model)
 ```
 
+The `glance()` model returns the number of trees, nodes depth,
+sub-sampling rate and impurtiy mode:
+
 ```{r}
 #| warnings: FALSE
 glance(iris_model)
 ```
+
 ## Correlations using `corrr`
+
+The `corrr` package helps with exploring data correlations in R. It
+returns a data frame with all of the correlations.
+
+### Why use in Spark?
+
+For `sparklyr`, `corrr` wraps the `ml_cor()` function, and returns a
+data frame with the exact same format as if the correlation would have
+been calculated in R. This allows us to use all the other functions
+inside `corrr`, such as filtering, and plotting without having to re-run
+the correlation inside Spark.
+
+### Example
+
+We start by loading the package `corrr`:
 
 ```{r}
 library(corrr)
 ```
 
+We will pipe `spark_mtcars` into the `correlate()` function. That runs
+the correlations inside Spark, and returning the results into R. Those
+results are saved into a data frame:
+
 ```{r}
 #| message: FALSE
 #| warning: FALSE
-spark_mtcars %>% 
+corr_mtcars <- spark_mtcars %>% 
   correlate()
 ```
 
+The `corr_mtcars` variable is now a local data set. So we do not need to
+go back to Spark if we wish to use it for other things that `corrr` can
+do:
+
+```{r}
+corr_mtcars
+```
+
+For example, `share()` removes the duplicate correlations from the data
+set, making it easier to read:
+
 ```{r}
 #| message: FALSE
 #| warning: FALSE
-spark_mtcars %>% 
-  correlate() %>% 
-  rplot()
+corr_mtcars %>% 
+  shave()
 ```
 
+`rplot()` provides a nice way to visualize the correlations. Again,
+because `corr_mtcars`'s data it is currently locally in R, plotting
+requires no extra steps:
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+corr_mtcars %>% 
+  rplot()
+```
 
 ```{r}
 #| include: FALSE
 spark_disconnect(sc)
 ```
-
-
-
-
-
-
-
-

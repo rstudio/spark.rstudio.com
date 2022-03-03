@@ -206,10 +206,15 @@
 </ul></li>
 <li><a href="#model-results-with-broom" class="nav-link" data-scroll-target="#model-results-with-broom">Model results with <code>broom</code></a>
 <ul class="collapse">
+<li><a href="#why-use-in-spark-1" class="nav-link" data-scroll-target="#why-use-in-spark-1">Why use in Spark?</a></li>
 <li><a href="#list-of-supported-models-1" class="nav-link" data-scroll-target="#list-of-supported-models-1">List of supported models</a></li>
+<li><a href="#examples-1" class="nav-link" data-scroll-target="#examples-1">Examples</a></li>
+</ul></li>
+<li><a href="#correlations-using-corrr" class="nav-link" data-scroll-target="#correlations-using-corrr">Correlations using <code>corrr</code></a>
+<ul class="collapse">
+<li><a href="#why-use-in-spark-2" class="nav-link" data-scroll-target="#why-use-in-spark-2">Why use in Spark?</a></li>
 <li><a href="#example" class="nav-link" data-scroll-target="#example">Example</a></li>
 </ul></li>
-<li><a href="#correlations-using-corrr" class="nav-link" data-scroll-target="#correlations-using-corrr">Correlations using <code>corrr</code></a></li>
 </ul>
 </nav>
     </div>
@@ -246,101 +251,1064 @@
 <h3 class="anchored" data-anchor-id="list-of-supported-models">List of supported models</h3>
 <p>There are six <code>parsnip</code> models that currently support <code>sparklyr</code> equivalent models. Here is the list:</p>
 <div class="cell">
+<div class="cell-output-display">
+<div id="vnjabcvyap" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
 
+#vnjabcvyap .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vnjabcvyap .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vnjabcvyap .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vnjabcvyap .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vnjabcvyap .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vnjabcvyap .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vnjabcvyap .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vnjabcvyap .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnjabcvyap .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnjabcvyap .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vnjabcvyap .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vnjabcvyap .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vnjabcvyap .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#vnjabcvyap .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnjabcvyap .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnjabcvyap .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vnjabcvyap .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#vnjabcvyap .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnjabcvyap .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#vnjabcvyap .gt_left {
+  text-align: left;
+}
+
+#vnjabcvyap .gt_center {
+  text-align: center;
+}
+
+#vnjabcvyap .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vnjabcvyap .gt_font_normal {
+  font-weight: normal;
+}
+
+#vnjabcvyap .gt_font_bold {
+  font-weight: bold;
+}
+
+#vnjabcvyap .gt_font_italic {
+  font-style: italic;
+}
+
+#vnjabcvyap .gt_super {
+  font-size: 65%;
+}
+
+#vnjabcvyap .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Model</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong><code>parsnip</code> function</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Classification</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Regression</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Boosted trees</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>boost_tree()</code></p>
+</div></td>
+<td class="gt_row gt_left">Yes</td>
+<td class="gt_row gt_left">Yes</td></tr>
+    <tr><td class="gt_row gt_left">Decision trees</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>decision_tree()</code></p>
+</div></td>
+<td class="gt_row gt_left">Yes</td>
+<td class="gt_row gt_left">Yes</td></tr>
+    <tr><td class="gt_row gt_left">Linear regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>linear_reg()</code></p>
+</div></td>
+<td class="gt_row gt_left"></td>
+<td class="gt_row gt_left">Yes</td></tr>
+    <tr><td class="gt_row gt_left">Logistic regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>logistic_reg()</code></p>
+</div></td>
+<td class="gt_row gt_left">Yes</td>
+<td class="gt_row gt_left"></td></tr>
+    <tr><td class="gt_row gt_left">Multinomial regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>multinom_reg()</code></p>
+</div></td>
+<td class="gt_row gt_left">Yes</td>
+<td class="gt_row gt_left"></td></tr>
+    <tr><td class="gt_row gt_left">Random forest</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>rand_forest()</code></p>
+</div></td>
+<td class="gt_row gt_left">Yes</td>
+<td class="gt_row gt_left">Yes</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
 </div>
 </section>
 <section id="examples" class="level3">
 <h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<p>This article will use the same Spark session in all the examples.</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="st">"local"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>spark_mtcars <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="st">"local"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We will upload the <code>mtcars</code> data set to the Spark session:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>mtcars_model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(mpg <span class="sc">~</span> ., <span class="at">data =</span> spark_mtcars)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>mtcars_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spark_mtcars <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>A Linear Regression model is prepared against <code>spark_mtcars</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">translate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mtcars_model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(mpg <span class="sc">~</span> ., <span class="at">data =</span> spark_mtcars)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>mtcars_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>parsnip model object
+
+Fit time:  4.5s 
+Formula: mpg ~ .
+
+Coefficients:
+(Intercept)         cyl        disp          hp        drat          wt 
+12.30337416 -0.11144048  0.01333524 -0.02148212  0.78711097 -3.71530393 
+       qsec          vs          am        gear        carb 
+ 0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925 </code></pre>
 </div>
-<div class="cell">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>spark_iris <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>It is also possible to see how <code>parsnip</code> plans to translate the model against the given engine. Use <code>translate()</code> so view the translation:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>iris_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Species <span class="sc">~</span>., <span class="at">data =</span> spark_iris)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>iris_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">translate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>Linear Regression Model Specification (regression)
+
+Computational engine: spark 
+
+Model fit template:
+sparklyr::ml_linear_regression(x = missing_arg(), formula = missing_arg(), 
+    weight_col = missing_arg())</code></pre>
 </div>
+</div>
+<p>Now, we will show an example with a classification model. We will fit a Random Forest model. To start, we will copy the <code>iris</code> data set to the Spark session:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">translate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>spark_iris <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can prepare the model by piping the initial setup of 100 trees, then then to set the mode to “classification”, and then the engine to “spark” and lastly, fit the model:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"spark"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Species <span class="sc">~</span>., <span class="at">data =</span> spark_iris)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>iris_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>parsnip model object
+
+Fit time:  5.8s 
+Formula: Species ~ .
+
+RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28befee699a0, numTrees=100, numClasses=3, numFeatures=4</code></pre>
+</div>
 </div>
 </section>
 </section>
 <section id="model-results-with-broom" class="level2">
 <h2 class="anchored" data-anchor-id="model-results-with-broom">Model results with <code>broom</code></h2>
-<p>The <code>broom</code> package offers great ways to get summarized information about a fitted model. <code>sparklyr</code> offers integration for <code>parsnip</code> based,</p>
+<p>The <code>broom</code> package offers great ways to get summarized information about a fitted model. There is support for three <code>broom</code> functions in <code>sparklyr</code>:</p>
 <ul>
 <li><p><code>tidy()</code> - Summarizes information about the components of a model. A model component might be a single term in a regression, a single hypothesis, a cluster, or a class.</p></li>
 <li><p><code>glance()</code> - Returns a <code>tibble::tibble()</code> with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.</p></li>
+<li><p><code>augment()</code> - It is similar to how <code>ml_predict()</code> works. Instead of returning a vector of predictions, like <code>predict()</code> works, <code>augment()</code> adds the prediction columns to the data set.</p></li>
 </ul>
+<section id="why-use-in-spark-1" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-in-spark-1">Why use in Spark?</h3>
+<p><code>tidy()</code> and <code>glance()</code> offer a very good, concise way to view the model results in a rectangular data frame. This is very helpful when we want to compare different model runs side-by-side.</p>
+</section>
 <section id="list-of-supported-models-1" class="level3">
 <h3 class="anchored" data-anchor-id="list-of-supported-models-1">List of supported models</h3>
 <p>Currently, 20 Spark models support <code>broom</code> via <code>sparklyr</code>. Here is the current list of models and the corresponding <code>sparklyr</code> function:</p>
 <div class="cell">
+<div class="cell-output-display">
+<div id="eutbelypnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
 
+#eutbelypnw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#eutbelypnw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#eutbelypnw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#eutbelypnw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#eutbelypnw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#eutbelypnw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#eutbelypnw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#eutbelypnw .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#eutbelypnw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#eutbelypnw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#eutbelypnw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#eutbelypnw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#eutbelypnw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#eutbelypnw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eutbelypnw .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#eutbelypnw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#eutbelypnw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#eutbelypnw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#eutbelypnw .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#eutbelypnw .gt_left {
+  text-align: left;
+}
+
+#eutbelypnw .gt_center {
+  text-align: center;
+}
+
+#eutbelypnw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#eutbelypnw .gt_font_normal {
+  font-weight: normal;
+}
+
+#eutbelypnw .gt_font_bold {
+  font-weight: bold;
+}
+
+#eutbelypnw .gt_font_italic {
+  font-style: italic;
+}
+
+#eutbelypnw .gt_super {
+  font-size: 65%;
+}
+
+#eutbelypnw .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style=""><strong>Models that support <code>glance()</code>, <code>tidy()</code>, and <code>augment()</code></strong></th>
+    </tr>
+    
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Model</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Function</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left"> ALS</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_als()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Bisecting K-Means Clustering</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_bisecting_kmeans()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Decision Trees</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_decision_tree()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Gaussian Mixture clustering.</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_gaussian_mixture()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Generalized Linear Regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_generalized_linear_regression()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Gradient Boosted Trees</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_gradient_boosted_trees()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Isotonic Regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_isotonic_regression()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> K-Means Clustering</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_kmeans()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Latent Dirichlet Allocation</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_lda()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Linear Regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_linear_regression()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> LinearSVC</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_linear_svc()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Logistic Regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_logistic_regression()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Multilayer Perceptron</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_multilayer_perceptron()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Naive-Bayes</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_naive_bayes()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Random Forest</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_random_forest()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left"> Survival Regression</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_aft_survival_regression()</code></p>
+</div></td></tr>
+    <tr><td class="gt_row gt_left">PCA (Estimator)</td>
+<td class="gt_row gt_left"><div class="gt_from_md"><p><code>ml_pca()</code></p>
+</div></td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
 </div>
 </section>
-<section id="example" class="level3">
-<h3 class="anchored" data-anchor-id="example">Example</h3>
+<section id="examples-1" class="level3">
+<h3 class="anchored" data-anchor-id="examples-1">Examples</h3>
+<p>Using the same Spark session and models created in the previous section we start by loading <code>broom</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>To view the estimates for each term simply pass <code>mtcars_model</code> to the <code>tidy()</code> function:</p>
 <div class="cell" data-warnings="false">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mtcars_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mtcars_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 11 × 5
+   term        estimate std.error statistic p.value
+   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+ 1 (Intercept)  12.3      18.7        0.657  0.518 
+ 2 cyl          -0.111     1.05      -0.107  0.916 
+ 3 disp          0.0133    0.0179     0.747  0.463 
+ 4 hp           -0.0215    0.0218    -0.987  0.335 
+ 5 drat          0.787     1.64       0.481  0.635 
+ 6 wt           -3.72      1.89      -1.96   0.0633
+ 7 qsec          0.821     0.731      1.12   0.274 
+ 8 vs            0.318     2.10       0.151  0.881 
+ 9 am            2.52      2.06       1.23   0.234 
+10 gear          0.655     1.49       0.439  0.665 
+11 carb         -0.199     0.829     -0.241  0.812 </code></pre>
 </div>
-<div class="cell" data-warnings="false">
-<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(mtcars_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>glance()</code> returns the the models R Squared, error means, and variance:</p>
 <div class="cell" data-warnings="false">
-<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(iris_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(mtcars_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  explained.varian… mean.absolute.e… mean.squared.er… r.squared root.mean.squar…
+              &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;            &lt;dbl&gt;
+1              30.6             1.72             4.61     0.869             2.15</code></pre>
 </div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(mtcars_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-caution callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As of <code>sparklyr</code> version 1.7.5, a <code>sparklyr</code> model fitted through <code>parsnip</code> will not work with <code>augment()</code>. That is a bug that we will work to resolve.</p>
+<p>Pass the <code>fit</code> element to <code>augment()</code>. A model fitted using the ML function, such as <code>ml_linear_regression()</code> currently works.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(mtcars_model<span class="sc">$</span>fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># Source: spark&lt;?&gt; [?? x 13]
+     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb fitted
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1  21       6  160    110  3.9   2.62  16.5     0     1     4     4   22.6
+ 2  21       6  160    110  3.9   2.88  17.0     0     1     4     4   22.1
+ 3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1   26.3
+ 4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1   21.2
+ 5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2   17.7
+ 6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1   20.4
+ 7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4   14.4
+ 8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2   22.5
+ 9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2   24.4
+10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4   18.7
+# … with more rows, and 1 more variable: resid &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<p>For our classification model, <code>tidy()</code> returns each feature’s importance:</p>
 <div class="cell" data-warnings="false">
-<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(iris_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(iris_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  feature      importance
+  &lt;chr&gt;             &lt;dbl&gt;
+1 Petal_Length     0.469 
+2 Petal_Width      0.418 
+3 Sepal_Length     0.0996
+4 Sepal_Width      0.0132</code></pre>
+</div>
+</div>
+<p>The <code>glance()</code> model returns the number of trees, nodes depth, sub-sampling rate and impurtiy mode:</p>
+<div class="cell" data-warnings="false">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(iris_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  num_trees total_num_nodes max_depth impurity subsampling_rate
+      &lt;int&gt;           &lt;int&gt;     &lt;int&gt; &lt;chr&gt;               &lt;dbl&gt;
+1       100            1394         5 gini                    1</code></pre>
+</div>
 </div>
 </section>
 </section>
 <section id="correlations-using-corrr" class="level2">
 <h2 class="anchored" data-anchor-id="correlations-using-corrr">Correlations using <code>corrr</code></h2>
+<p>The <code>corrr</code> package helps with exploring data correlations in R. It returns a data frame with all of the correlations.</p>
+<section id="why-use-in-spark-2" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-in-spark-2">Why use in Spark?</h3>
+<p>For <code>sparklyr</code>, <code>corrr</code> wraps the <code>ml_cor()</code> function, and returns a data frame with the exact same format as if the correlation would have been calculated in R. This allows us to use all the other functions inside <code>corrr</code>, such as filtering, and plotting without having to re-run the correlation inside Spark.</p>
+</section>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<p>We start by loading the package <code>corrr</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We will pipe <code>spark_mtcars</code> into the <code>correlate()</code> function. That runs the correlations inside Spark, and returning the results into R. Those results are saved into a data frame:</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>spark_mtcars <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>corr_mtcars <span class="ot">&lt;-</span> spark_mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The <code>corr_mtcars</code> variable is now a local data set. So we do not need to go back to Spark if we wish to use it for other things that <code>corrr</code> can do:</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>spark_mtcars <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>corr_mtcars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 11 × 12
+   term     mpg    cyl   disp     hp    drat     wt    qsec     vs      am
+   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1 mpg   NA     -0.852 -0.848 -0.776  0.681  -0.868  0.419   0.664  0.600 
+ 2 cyl   -0.852 NA      0.902  0.832 -0.700   0.782 -0.591  -0.811 -0.523 
+ 3 disp  -0.848  0.902 NA      0.791 -0.710   0.888 -0.434  -0.710 -0.591 
+ 4 hp    -0.776  0.832  0.791 NA     -0.449   0.659 -0.708  -0.723 -0.243 
+ 5 drat   0.681 -0.700 -0.710 -0.449 NA      -0.712  0.0912  0.440  0.713 
+ 6 wt    -0.868  0.782  0.888  0.659 -0.712  NA     -0.175  -0.555 -0.692 
+ 7 qsec   0.419 -0.591 -0.434 -0.708  0.0912 -0.175 NA       0.745 -0.230 
+ 8 vs     0.664 -0.811 -0.710 -0.723  0.440  -0.555  0.745  NA      0.168 
+ 9 am     0.600 -0.523 -0.591 -0.243  0.713  -0.692 -0.230   0.168 NA     
+10 gear   0.480 -0.493 -0.556 -0.126  0.700  -0.583 -0.213   0.206  0.794 
+11 carb  -0.551  0.527  0.395  0.750 -0.0908  0.428 -0.656  -0.570  0.0575
+# … with 2 more variables: gear &lt;dbl&gt;, carb &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>For example, <code>share()</code> removes the duplicate correlations from the data set, making it easier to read:</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>corr_mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shave</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 11 × 12
+   term     mpg    cyl   disp     hp    drat     wt   qsec     vs      am   gear
+   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1 mpg   NA     NA     NA     NA     NA      NA     NA     NA     NA      NA    
+ 2 cyl   -0.852 NA     NA     NA     NA      NA     NA     NA     NA      NA    
+ 3 disp  -0.848  0.902 NA     NA     NA      NA     NA     NA     NA      NA    
+ 4 hp    -0.776  0.832  0.791 NA     NA      NA     NA     NA     NA      NA    
+ 5 drat   0.681 -0.700 -0.710 -0.449 NA      NA     NA     NA     NA      NA    
+ 6 wt    -0.868  0.782  0.888  0.659 -0.712  NA     NA     NA     NA      NA    
+ 7 qsec   0.419 -0.591 -0.434 -0.708  0.0912 -0.175 NA     NA     NA      NA    
+ 8 vs     0.664 -0.811 -0.710 -0.723  0.440  -0.555  0.745 NA     NA      NA    
+ 9 am     0.600 -0.523 -0.591 -0.243  0.713  -0.692 -0.230  0.168 NA      NA    
+10 gear   0.480 -0.493 -0.556 -0.126  0.700  -0.583 -0.213  0.206  0.794  NA    
+11 carb  -0.551  0.527  0.395  0.750 -0.0908  0.428 -0.656 -0.570  0.0575  0.274
+# … with 1 more variable: carb &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p><code>rplot()</code> provides a nice way to visualize the correlations. Again, because <code>corr_mtcars</code>’s data it is currently locally in R, plotting requires no extra steps:</p>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>corr_mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidymodels_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 
 
+</section>
 </section>
 </main> <!-- /main -->
 <script type="application/javascript">

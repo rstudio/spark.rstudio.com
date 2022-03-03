@@ -1,8 +1,5 @@
 ---
 title: "`tidymodels` and Spark"
-format:
-  html:
-    toc: true
 execute:
   eval: true
   freeze: true
@@ -18,6 +15,7 @@ library(tidyr)
 library(dplyr)
 library(rlang)
 library(purrr)
+library(corrr)
 library(gt)
 
 get_title <- function(x, pkg) {
@@ -36,7 +34,7 @@ get_title <- function(x, pkg) {
 
 ```
 
-## `parsnip`
+## Model preparation with `parsnip`
 
 `parsnip` provides a common interface to models.  This enables us to run the same model against multiple engines.  With one change, we can easily run a Random Forest model against the `randomForest`, `ranger` and `sparklyr` packages. `parsnip` contains translation for each of these packages, so we do not have to remember, or find out, how to setup each argument in the respective package.
 
@@ -84,13 +82,17 @@ supported_models %>%
 ### Examples
 
 ```{r}
+library(sparklyr)
+library(dplyr)
+
 sc <- spark_connect("local")
 
 spark_mtcars <- copy_to(sc, mtcars)
 ```
 
-
 ```{r}
+library(parsnip)
+
 mtcars_model <- linear_reg() %>%
   set_engine("spark") %>%
   fit(mpg ~ ., data = spark_mtcars)
@@ -124,9 +126,33 @@ rand_forest(trees = 100) %>%
   set_engine("spark") %>% 
   translate()
 ```
+### Why use? 
 
+There are cases when we would like to test model parameters before fitting over the entire big data set. Using this approach allows us to first try out parameters (arguments) with a smaller data set that lives in R memory. When we are ready to run in Spark, we just change the `engine` and the `data` arguments.
 
-## `broom`
+We can go from this:
+
+```{r}
+#| eval: FALSE
+
+local_model <- rand_forest(trees = 100) %>% 
+  set_mode("classification") %>% 
+  set_engine("ranger") %>% 
+  fit(Species ~., data = iris)
+```
+
+To this, by switching `set_engine()` to `spark`, and `data` to `spark_iris`: 
+
+```{r}
+#| eval: FALSE
+
+local_model <- rand_forest(trees = 100) %>% 
+  set_mode("classification") %>% 
+  set_engine("spark") %>% 
+  fit(Species ~., data = spark_iris)
+```
+
+## Model results with `broom`
 
 The `broom` package offers great ways to get summarized information about a 
 fitted model. `sparklyr` offers integration for `parsnip` based, 
@@ -192,6 +218,16 @@ tibble(obj_name = all_tidy) %>%
 ### Example
 
 ```{r}
+library(broom)
+```
+
+
+```{r}
+#| include: FALSE
+tidy(mtcars_model)
+```
+
+```{r}
 #| warnings: FALSE
 tidy(mtcars_model)
 ```
@@ -209,6 +245,28 @@ tidy(iris_model)
 #| warnings: FALSE
 glance(iris_model)
 ```
+## Correlations using `corrr`
+
+```{r}
+library(corrr)
+```
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+spark_mtcars %>% 
+  correlate()
+```
+
+```{r}
+#| message: FALSE
+#| warning: FALSE
+spark_mtcars %>% 
+  correlate() %>% 
+  rplot()
+```
+
+
 ```{r}
 #| include: FALSE
 spark_disconnect(sc)

@@ -1,0 +1,223 @@
+---
+title: "`tidymodels` and Spark"
+format:
+  html:
+    toc: true
+execute:
+  eval: true
+  freeze: true
+---
+
+```{r}
+#| include: FALSE
+
+library(sparklyr)
+library(parsnip)
+library(stringr)
+library(tidyr)
+library(dplyr)
+library(rlang)
+library(purrr)
+library(gt)
+
+get_title <- function(x, pkg) {
+  map_chr(
+    x, ~{
+      ht <- help(.x, package = {{pkg}})
+      if(length(as.character(ht)) == 0) {
+        ""
+      } else {
+        htl <- utils:::.getHelpFile(as.character(ht))
+        htl[[1]][[1]][[1]]        
+      }
+    }
+  )
+}
+
+```
+
+## `parsnip`
+
+`parsnip` provides a common interface to models.  This enables us to run the same model against multiple engines.  With one change, we can easily run a Random Forest model against the `randomForest`, `ranger` and `sparklyr` packages. `parsnip` contains translation for each of these packages, so we do not have to remember, or find out, how to setup each argument in the respective package.
+
+### List of supported models
+
+```{r}
+#| include: FALSE
+
+pf <- ls("package:parsnip")
+
+spark_engines <- map_dfr(pf, ~{
+  x <- get_from_env(.x)
+  if(!is.null(x)) x$model <- .x
+  x
+  }) %>% 
+  filter(engine == "spark") %>% 
+  select(-engine)
+
+supported_models <- spark_engines %>% 
+  mutate(supported = "Yes") %>% 
+  pivot_wider(
+    names_from = "mode", 
+    values_from = "supported", 
+    values_fill = ""
+    ) %>% 
+  mutate(title = get_title(model, "parsnip")) %>% 
+  select(title, model, everything()) %>% 
+  mutate(model = paste0("`", model, "()`"))
+```
+
+
+```{r}
+#| echo: FALSE
+supported_models %>% 
+  gt() %>% 
+  cols_label(
+    title = md("**Model**"),
+    model = md("**`parsnip` function**"),
+    classification = md("**Classification**"),
+    regression = md("**Regression**")
+  ) %>% 
+  fmt_markdown(model)
+```
+
+### Examples
+
+```{r}
+sc <- spark_connect("local")
+
+spark_mtcars <- copy_to(sc, mtcars)
+```
+
+
+```{r}
+mtcars_model <- linear_reg() %>%
+  set_engine("spark") %>%
+  fit(mpg ~ ., data = spark_mtcars)
+
+mtcars_model
+```
+
+```{r}
+linear_reg() %>%
+  set_engine("spark") %>%
+  translate()
+```
+
+```{r}
+spark_iris <- copy_to(sc, iris)
+```
+
+```{r}
+iris_model <- rand_forest(trees = 100) %>% 
+  set_mode("classification") %>% 
+  set_engine("spark") %>% 
+  fit(Species ~., data = spark_iris)
+
+iris_model
+```
+
+
+```{r}
+rand_forest(trees = 100) %>% 
+  set_mode("classification") %>% 
+  set_engine("spark") %>% 
+  translate()
+```
+
+
+## `broom`
+
+The `broom` package offers great ways to get summarized information about a 
+fitted model. `sparklyr` offers integration for `parsnip` based, 
+
+- `tidy()` - Summarizes information about the components of a model. A model component might be a single term in a regression, a single hypothesis, a cluster, or a class. 
+
+- `glance()` - Returns a `tibble::tibble()` with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.
+
+```{r}
+#| include: FALSE
+
+
+af <- ls(getNamespace("sparklyr"), all.names = TRUE)
+
+find_methods <- function(x, pattern) {
+  y <- x[str_detect(x, pattern)] 
+  y1 <- str_remove(y, pattern)
+  y1[y1 != "ml_model"]
+}
+
+all_tidy <- find_methods(af, "tidy\\.")
+all_glance <- find_methods(af, "glance\\.")
+
+all_table <- table(c(all_tidy, all_glance))
+if(length(unique(all_table)) > 1) stop("Mistmatched methods")
+```
+
+### List of supported models
+
+Currently, 20 Spark models support `broom` via `sparklyr`.  Here is the current list of models and the corresponding `sparklyr` function:
+
+```{r}
+#| echo: FALSE
+
+tibble(obj_name = all_tidy) %>% 
+  mutate(
+    fname = str_replace(obj_name, "ml_model_", "ml_"),
+    fname = str_remove(fname, "_classification"),
+    fname = ifelse(fname == "ml_gbt", "ml_gradient_boosted_trees", fname)
+    ) %>% 
+  filter(
+    fname != "ml_decision_tree_regression", 
+    fname != "ml_gbt_regression", 
+    fname != "ml_random_forest_regression"
+    ) %>% 
+  mutate(
+    model = get_title(fname, "sparklyr"),
+    model = str_remove(model, "Spark ML --"),
+    model = str_remove(model, "Feature Transformation -- ")
+    ) %>% 
+  mutate(fname = md(paste0("`", fname,"()`"))) %>% 
+  arrange(model) %>% 
+  select(model, fname) %>%  
+  gt() %>% 
+  tab_header(md("**Models that support `glance()`, `tidy()`, and `augment()`**")) %>% 
+  cols_label(
+    model = md("**Model**"),
+    fname = md("**Function**")  ) %>% 
+  fmt_markdown(fname) %>% 
+  cols_align("left")
+```
+
+### Example
+
+```{r}
+#| warnings: FALSE
+tidy(mtcars_model)
+```
+
+```{r}
+#| warnings: FALSE
+glance(mtcars_model)
+```
+```{r}
+#| warnings: FALSE
+tidy(iris_model)
+```
+
+```{r}
+#| warnings: FALSE
+glance(iris_model)
+```
+```{r}
+#| include: FALSE
+spark_disconnect(sc)
+```
+
+
+
+
+
+
+
+

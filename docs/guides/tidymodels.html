@@ -227,14 +227,18 @@
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><code>tidymodels</code> is a collection of packages for modeling and Machine Learning. Just as <code>sparklyr</code>, <code>tidymodels</code> uses <code>tidyverse</code> principles.</p>
-<p><code>sparklyr</code> allows us to use <code>dplyr</code> verbs to manipulate data. We use the same commands in R when manipulating local data or Spark data. Similarly, <code>sparklyr</code> and some packages in the <code>tidymodels</code> ecosystem offer integration. As with any evolving framework, the available integration is not for every model and for every function. This article aims at enumerating what is available today, and why should we consider using the <code>tidymodels</code> implementation in our day-to-day work with Spark.</p>
+<p><code>sparklyr</code> allows us to use <code>dplyr</code> verbs to manipulate data. We use the same commands in R when manipulating local data or Spark data. Similarly, <code>sparklyr</code> and some packages in the <code>tidymodels</code> ecosystem offer integration.</p>
+<p>As with any evolving framework, the integration does not apply to all functions. This article aims at enumerating what is available today, and why should we consider using the <code>tidymodels</code> implementation in our day-to-day work with Spark.</p>
+<p>Our expectation is that this article will be constantly updated as the integration between <code>tidymodels</code> and <code>sparklyr</code> grows and improves.</p>
 </section>
 <section id="model-preparation-with-parsnip" class="level2">
 <h2 class="anchored" data-anchor-id="model-preparation-with-parsnip">Model preparation with <code>parsnip</code></h2>
 <p><code>parsnip</code> provides a common interface to models. This enables us to run the same model against multiple engines. <code>parsnip</code> contains translation for each of these packages, so we do not have to remember, or find out, how to setup each argument in the respective package.</p>
 <section id="why-use-in-spark" class="level3">
 <h3 class="anchored" data-anchor-id="why-use-in-spark">Why use in Spark?</h3>
-<p>In some cases, it is better to try out model parameters on a smaller, local, data set in R. Once we are happy with the parameters, we can then run the model over the entire data set in Spark. For example, doing this for a Linear Regression model, we would use <code>lm()</code> locally, and then we would have to re-write the model using <code>ml_linear_regression()</code>. Both of these functions have different sets of function arguments that we would need to set. <code>parsnip</code> allows us to use the exact same set of functions and arguments when running against either back-end. With a couple of small changes, we can change the target engine (R vs Spark) and the target data set (local vs remote). Here is an example of what the model fitting looks like locally in R:</p>
+<p>In some cases, it is better to try out model parameters on a smaller, local, data set in R. Once we are happy with the parameters, we can then run the model over the entire data set in Spark.</p>
+<p>For example, doing this for a Linear Regression model, we would use <code>lm()</code> locally, and then we would have to re-write the model using <code>ml_linear_regression()</code>. Both of these functions have different sets of function arguments that we would need to set.</p>
+<p><code>parsnip</code> allows us to use the exact same set of functions and arguments when running against either back-end. With a couple of small changes, we can change the target engine (R vs Spark) and the target data set (local vs remote). Here is an example of what the model fitting looks like locally in R:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">%&gt;%</span>           <span class="co"># &lt;&lt; Engine set to `lm`</span></span>
@@ -252,12 +256,12 @@
 <p>There are six <code>parsnip</code> models that currently support <code>sparklyr</code> equivalent models. Here is the list:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="vnjabcvyap" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="dsuoyfhwvl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vnjabcvyap .gt_table {
+#dsuoyfhwvl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -282,7 +286,7 @@
   border-left-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_heading {
+#dsuoyfhwvl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -294,7 +298,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_title {
+#dsuoyfhwvl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -304,7 +308,7 @@
   border-bottom-width: 0;
 }
 
-#vnjabcvyap .gt_subtitle {
+#dsuoyfhwvl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -314,13 +318,13 @@
   border-top-width: 0;
 }
 
-#vnjabcvyap .gt_bottom_border {
+#dsuoyfhwvl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_col_headings {
+#dsuoyfhwvl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -335,7 +339,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_col_heading {
+#dsuoyfhwvl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -355,7 +359,7 @@
   overflow-x: hidden;
 }
 
-#vnjabcvyap .gt_column_spanner_outer {
+#dsuoyfhwvl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -367,15 +371,15 @@
   padding-right: 4px;
 }
 
-#vnjabcvyap .gt_column_spanner_outer:first-child {
+#dsuoyfhwvl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vnjabcvyap .gt_column_spanner_outer:last-child {
+#dsuoyfhwvl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vnjabcvyap .gt_column_spanner {
+#dsuoyfhwvl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -387,7 +391,7 @@
   width: 100%;
 }
 
-#vnjabcvyap .gt_group_heading {
+#dsuoyfhwvl .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -409,7 +413,7 @@
   vertical-align: middle;
 }
 
-#vnjabcvyap .gt_empty_group_heading {
+#dsuoyfhwvl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -424,15 +428,15 @@
   vertical-align: middle;
 }
 
-#vnjabcvyap .gt_from_md > :first-child {
+#dsuoyfhwvl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vnjabcvyap .gt_from_md > :last-child {
+#dsuoyfhwvl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vnjabcvyap .gt_row {
+#dsuoyfhwvl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -451,7 +455,7 @@
   overflow-x: hidden;
 }
 
-#vnjabcvyap .gt_stub {
+#dsuoyfhwvl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -463,7 +467,7 @@
   padding-left: 12px;
 }
 
-#vnjabcvyap .gt_summary_row {
+#dsuoyfhwvl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -473,7 +477,7 @@
   padding-right: 5px;
 }
 
-#vnjabcvyap .gt_first_summary_row {
+#dsuoyfhwvl .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -483,7 +487,7 @@
   border-top-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_grand_summary_row {
+#dsuoyfhwvl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -493,7 +497,7 @@
   padding-right: 5px;
 }
 
-#vnjabcvyap .gt_first_grand_summary_row {
+#dsuoyfhwvl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -503,11 +507,11 @@
   border-top-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_striped {
+#dsuoyfhwvl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vnjabcvyap .gt_table_body {
+#dsuoyfhwvl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -516,7 +520,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_footnotes {
+#dsuoyfhwvl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -530,13 +534,13 @@
   border-right-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_footnote {
+#dsuoyfhwvl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#vnjabcvyap .gt_sourcenotes {
+#dsuoyfhwvl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -550,41 +554,41 @@
   border-right-color: #D3D3D3;
 }
 
-#vnjabcvyap .gt_sourcenote {
+#dsuoyfhwvl .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#vnjabcvyap .gt_left {
+#dsuoyfhwvl .gt_left {
   text-align: left;
 }
 
-#vnjabcvyap .gt_center {
+#dsuoyfhwvl .gt_center {
   text-align: center;
 }
 
-#vnjabcvyap .gt_right {
+#dsuoyfhwvl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vnjabcvyap .gt_font_normal {
+#dsuoyfhwvl .gt_font_normal {
   font-weight: normal;
 }
 
-#vnjabcvyap .gt_font_bold {
+#dsuoyfhwvl .gt_font_bold {
   font-weight: bold;
 }
 
-#vnjabcvyap .gt_font_italic {
+#dsuoyfhwvl .gt_font_italic {
   font-style: italic;
 }
 
-#vnjabcvyap .gt_super {
+#dsuoyfhwvl .gt_super {
   font-size: 65%;
 }
 
-#vnjabcvyap .gt_footnote_marks {
+#dsuoyfhwvl .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -704,10 +708,10 @@ sparklyr::ml_linear_regression(x = missing_arg(), formula = missing_arg(),
 <div class="cell-output-stdout">
 <pre><code>parsnip model object
 
-Fit time:  5.8s 
+Fit time:  5.7s 
 Formula: Species ~ .
 
-RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28befee699a0, numTrees=100, numClasses=3, numFeatures=4</code></pre>
+RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143bf17cd567, numTrees=100, numClasses=3, numFeatures=4</code></pre>
 </div>
 </div>
 </section>
@@ -717,7 +721,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
 <p>The <code>broom</code> package offers great ways to get summarized information about a fitted model. There is support for three <code>broom</code> functions in <code>sparklyr</code>:</p>
 <ul>
 <li><p><code>tidy()</code> - Summarizes information about the components of a model. A model component might be a single term in a regression, a single hypothesis, a cluster, or a class.</p></li>
-<li><p><code>glance()</code> - Returns a <code>tibble::tibble()</code> with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.</p></li>
+<li><p><code>glance()</code> - Returns a data frame with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.</p></li>
 <li><p><code>augment()</code> - It is similar to how <code>ml_predict()</code> works. Instead of returning a vector of predictions, like <code>predict()</code> works, <code>augment()</code> adds the prediction columns to the data set.</p></li>
 </ul>
 <section id="why-use-in-spark-1" class="level3">
@@ -729,12 +733,12 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
 <p>Currently, 20 Spark models support <code>broom</code> via <code>sparklyr</code>. Here is the current list of models and the corresponding <code>sparklyr</code> function:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="eutbelypnw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="tuglvjpxez" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#eutbelypnw .gt_table {
+#tuglvjpxez .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -759,7 +763,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-left-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_heading {
+#tuglvjpxez .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -771,7 +775,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-right-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_title {
+#tuglvjpxez .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -781,7 +785,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-bottom-width: 0;
 }
 
-#eutbelypnw .gt_subtitle {
+#tuglvjpxez .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -791,13 +795,13 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-top-width: 0;
 }
 
-#eutbelypnw .gt_bottom_border {
+#tuglvjpxez .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_col_headings {
+#tuglvjpxez .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -812,7 +816,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-right-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_col_heading {
+#tuglvjpxez .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -832,7 +836,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   overflow-x: hidden;
 }
 
-#eutbelypnw .gt_column_spanner_outer {
+#tuglvjpxez .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -844,15 +848,15 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   padding-right: 4px;
 }
 
-#eutbelypnw .gt_column_spanner_outer:first-child {
+#tuglvjpxez .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eutbelypnw .gt_column_spanner_outer:last-child {
+#tuglvjpxez .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eutbelypnw .gt_column_spanner {
+#tuglvjpxez .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -864,7 +868,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   width: 100%;
 }
 
-#eutbelypnw .gt_group_heading {
+#tuglvjpxez .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -886,7 +890,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   vertical-align: middle;
 }
 
-#eutbelypnw .gt_empty_group_heading {
+#tuglvjpxez .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -901,15 +905,15 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   vertical-align: middle;
 }
 
-#eutbelypnw .gt_from_md > :first-child {
+#tuglvjpxez .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eutbelypnw .gt_from_md > :last-child {
+#tuglvjpxez .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eutbelypnw .gt_row {
+#tuglvjpxez .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -928,7 +932,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   overflow-x: hidden;
 }
 
-#eutbelypnw .gt_stub {
+#tuglvjpxez .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -940,7 +944,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   padding-left: 12px;
 }
 
-#eutbelypnw .gt_summary_row {
+#tuglvjpxez .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -950,7 +954,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   padding-right: 5px;
 }
 
-#eutbelypnw .gt_first_summary_row {
+#tuglvjpxez .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -960,7 +964,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-top-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_grand_summary_row {
+#tuglvjpxez .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -970,7 +974,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   padding-right: 5px;
 }
 
-#eutbelypnw .gt_first_grand_summary_row {
+#tuglvjpxez .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -980,11 +984,11 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-top-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_striped {
+#tuglvjpxez .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eutbelypnw .gt_table_body {
+#tuglvjpxez .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -993,7 +997,7 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-bottom-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_footnotes {
+#tuglvjpxez .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1007,13 +1011,13 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-right-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_footnote {
+#tuglvjpxez .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#eutbelypnw .gt_sourcenotes {
+#tuglvjpxez .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1027,41 +1031,41 @@ RandomForestClassificationModel: uid=random_forest__6db0b460_570d_44de_8a32_28be
   border-right-color: #D3D3D3;
 }
 
-#eutbelypnw .gt_sourcenote {
+#tuglvjpxez .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#eutbelypnw .gt_left {
+#tuglvjpxez .gt_left {
   text-align: left;
 }
 
-#eutbelypnw .gt_center {
+#tuglvjpxez .gt_center {
   text-align: center;
 }
 
-#eutbelypnw .gt_right {
+#tuglvjpxez .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eutbelypnw .gt_font_normal {
+#tuglvjpxez .gt_font_normal {
   font-weight: normal;
 }
 
-#eutbelypnw .gt_font_bold {
+#tuglvjpxez .gt_font_bold {
   font-weight: bold;
 }
 
-#eutbelypnw .gt_font_italic {
+#tuglvjpxez .gt_font_italic {
   font-style: italic;
 }
 
-#eutbelypnw .gt_super {
+#tuglvjpxez .gt_super {
   font-size: 65%;
 }
 
-#eutbelypnw .gt_footnote_marks {
+#tuglvjpxez .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -1219,10 +1223,10 @@ Caution
 <pre><code># A tibble: 4 × 2
   feature      importance
   &lt;chr&gt;             &lt;dbl&gt;
-1 Petal_Length     0.469 
-2 Petal_Width      0.418 
+1 Petal_Width      0.460 
+2 Petal_Length     0.423 
 3 Sepal_Length     0.0996
-4 Sepal_Width      0.0132</code></pre>
+4 Sepal_Width      0.0176</code></pre>
 </div>
 </div>
 <p>The <code>glance()</code> model returns the number of trees, nodes depth, sub-sampling rate and impurtiy mode:</p>
@@ -1232,7 +1236,7 @@ Caution
 <pre><code># A tibble: 1 × 5
   num_trees total_num_nodes max_depth impurity subsampling_rate
       &lt;int&gt;           &lt;int&gt;     &lt;int&gt; &lt;chr&gt;               &lt;dbl&gt;
-1       100            1394         5 gini                    1</code></pre>
+1       100            1436         5 gini                    1</code></pre>
 </div>
 </div>
 </section>

@@ -45,10 +45,15 @@ Learning. Just as `sparklyr`, `tidymodels` uses `tidyverse` principles.
 `sparklyr` allows us to use `dplyr` verbs to manipulate data. We use the
 same commands in R when manipulating local data or Spark data.
 Similarly, `sparklyr` and some packages in the `tidymodels` ecosystem
-offer integration. As with any evolving framework, the available
-integration is not for every model and for every function. This article
-aims at enumerating what is available today, and why should we consider
-using the `tidymodels` implementation in our day-to-day work with Spark.
+offer integration.
+
+As with any evolving framework, the integration does not apply to all
+functions. This article aims at enumerating what is available today, and
+why should we consider using the `tidymodels` implementation in our
+day-to-day work with Spark.
+
+Our expectation is that this article will be constantly updated as the
+integration between `tidymodels` and `sparklyr` grows and improves.
 
 ## Model preparation with `parsnip`
 
@@ -61,15 +66,18 @@ how to setup each argument in the respective package.
 
 In some cases, it is better to try out model parameters on a smaller,
 local, data set in R. Once we are happy with the parameters, we can then
-run the model over the entire data set in Spark. For example, doing this
-for a Linear Regression model, we would use `lm()` locally, and then we
-would have to re-write the model using `ml_linear_regression()`. Both of
-these functions have different sets of function arguments that we would
-need to set. `parsnip` allows us to use the exact same set of functions
-and arguments when running against either back-end. With a couple of
-small changes, we can change the target engine (R vs Spark) and the
-target data set (local vs remote). Here is an example of what the model
-fitting looks like locally in R:
+run the model over the entire data set in Spark.
+
+For example, doing this for a Linear Regression model, we would use
+`lm()` locally, and then we would have to re-write the model using
+`ml_linear_regression()`. Both of these functions have different sets of
+function arguments that we would need to set.
+
+`parsnip` allows us to use the exact same set of functions and arguments
+when running against either back-end. With a couple of small changes, we
+can change the target engine (R vs Spark) and the target data set (local
+vs remote). Here is an example of what the model fitting looks like
+locally in R:
 
 ```{r}
 #| eval: FALSE
@@ -202,10 +210,10 @@ about a fitted model. There is support for three `broom` functions in
     model component might be a single term in a regression, a single
     hypothesis, a cluster, or a class.
 
--   `glance()` - Returns a `tibble::tibble()` with exactly one row of
-    model summaries. The summaries are typically goodness of fit
-    measures, p-values for hypothesis tests on residuals, or model
-    convergence information.
+-   `glance()` - Returns a data frame with exactly one row of model
+    summaries. The summaries are typically goodness of fit measures,
+    p-values for hypothesis tests on residuals, or model convergence
+    information.
 
 -   `augment()` - It is similar to how `ml_predict()` works. Instead of
     returning a vector of predictions, like `predict()` works,

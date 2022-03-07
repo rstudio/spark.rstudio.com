@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="generator" content="quarto-99.9.9">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>sparklyr - Using Spark with AWS S3 buckets</title>
-<style>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-99.9.9">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr - Using Spark with AWS S3 buckets</title>
+  <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     span.underline{text-decoration: underline;}
@@ -77,17 +75,29 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script><script src="../site_libs/quarto-nav/headroom.min.js"></script><script src="../site_libs/clipboard/clipboard.min.js"></script><meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script><script src="../site_libs/quarto-search/fuse.min.js"></script><script src="../site_libs/quarto-search/quarto-search.js"></script><link href="../guides/mlib.html" rel="next">
-<link href="../guides/connections.html" rel="prev">
-<link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js"></script><script src="../site_libs/quarto-html/popper.min.js"></script><script src="../site_libs/quarto-html/tippy.umd.min.js"></script><script src="../site_libs/quarto-html/anchor.min.js"></script><link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script><link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
-<link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
-<script id="quarto-search-options" type="application/json">{
+
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/mlib.html" rel="next">
+  <link href="../guides/connections.html" rel="prev">
+  <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
     "collapse-after": 2,
@@ -105,7 +115,9 @@
       "search-detached-cancel-button-title": "Cancel",
       "search-submit-button-title": "Submit"
     }
-  }</script><script type="text/javascript">
+  }</script>
+  
+  <script type="text/javascript">
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -117,22 +129,27 @@
     hitType: 'pageview',
     'anonymizeIp': true,
   });
-  </script><!--[if lt IE 9]>
+  </script>
+  <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]--><link rel="stylesheet" href="../styles.css">
+  <![endif]-->
+  <link rel="stylesheet" href="../styles.css">
 </head>
 <body class="floating">
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
       <a class="navbar-brand" href="../index.html">
-    <img src="../images/favicon/apple-touch-icon.png" alt=""><span class="navbar-title">sparklyr</span>
+    <img src="../images/favicon/apple-touch-icon.png" alt="">
+    <span class="navbar-title">sparklyr</span>
   </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="../get-started/index.html">Get Started</a>
   </li>  
   <li class="nav-item">
@@ -154,14 +171,14 @@
     <a class="nav-link" href="../learn-more.html">Learn more</a>
   </li>  
 </ul>
-<ul class="navbar-nav navbar-nav-scroll ms-auto">
-<li class="nav-item compact">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
 </i> 
  </a>
   </li>  
 </ul>
-<div class="quarto-toggle-container">
+              <div class="quarto-toggle-container">
                   <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
                   <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -172,17 +189,23 @@
               <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Using Spark with AWS S3 buckets</h1>
       <button type="button" class="quarto-btn-toggle btn">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/index.html" class="sidebar-item-text sidebar-link">Overview</a>
   </div>
@@ -194,8 +217,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/dplyr.html" class="sidebar-item-text sidebar-link">Using <code>dplyr</code></a>
   </div>
@@ -216,7 +239,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">Machine Learning</a>
@@ -224,10 +247,15 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/mlib.html" class="sidebar-item-text sidebar-link">Spark ML Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/tidymodels.html" class="sidebar-item-text sidebar-link">Using <code>tidymodels</code></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -241,7 +269,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">Non-rectangular Data</a>
@@ -249,8 +277,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/streaming.html" class="sidebar-item-text sidebar-link">Streaming Data</a>
   </div>
@@ -261,7 +289,7 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
         <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">Advanced</a>
@@ -269,8 +297,8 @@
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">
-<li class="sidebar-item">
+    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/distributed-r.html" class="sidebar-item-text sidebar-link">Run R code inside Spark</a>
   </div>
@@ -281,42 +309,48 @@
   </div>
 </li>
     </ul>
-</li>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/troubleshooting.html" class="sidebar-item-text sidebar-link">Troubleshooting</a>
   </div>
 </li>
     </ul>
-</div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc"><h2 id="toc-title">On this page</h2>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#aws-access-keys" class="nav-link active" data-scroll-target="#aws-access-keys">AWS Access Keys</a></li>
-<li>
-<a href="#connecting-to-spark" class="nav-link" data-scroll-target="#connecting-to-spark">Connecting to Spark</a>
+<li><a href="#connecting-to-spark" class="nav-link" data-scroll-target="#connecting-to-spark">Connecting to Spark</a>
 <ul class="collapse">
 <li><a href="#hadoop-aws-package" class="nav-link" data-scroll-target="#hadoop-aws-package">Hadoop-AWS package:</a></li>
-</ul>
-</li>
-<li>
-<a href="#data-importwrangle-approach" class="nav-link" data-scroll-target="#data-importwrangle-approach">Data Import/Wrangle approach</a>
+</ul></li>
+<li><a href="#data-importwrangle-approach" class="nav-link" data-scroll-target="#data-importwrangle-approach">Data Import/Wrangle approach</a>
 <ul class="collapse">
 <li><a href="#reading-the-schema" class="nav-link" data-scroll-target="#reading-the-schema">Reading the schema</a></li>
-</ul>
-</li>
+</ul></li>
 <li><a href="#data-import" class="nav-link" data-scroll-target="#data-import">Data Import</a></li>
 <li><a href="#data-wrangle" class="nav-link" data-scroll-target="#data-wrangle">Data Wrangle</a></li>
-</ul></nav>
-</div>
+</ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header"><h1 class="title d-none d-lg-block display-7">Using Spark with AWS S3 buckets</h1>
-</header><section id="aws-access-keys" class="level2"><h2 class="anchored" data-anchor-id="aws-access-keys">AWS Access Keys</h2>
+<main class="content" id="quarto-document-content">
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7">Using Spark with AWS S3 buckets</h1>
+</header>
+
+<section id="aws-access-keys" class="level2">
+<h2 class="anchored" data-anchor-id="aws-access-keys">AWS Access Keys</h2>
 <p>AWS Access Keys are needed to access S3 data. To learn how to setup a new keys, please review the AWS documentation: http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html .We then pass the keys to R via Environment Variables:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>AWS_ACCESS_KEY_ID<span class="op">=</span><span class="st">"[Your access key]"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span>AWS_SECRET_ACCESS_KEY<span class="op">=</span><span class="st">"[Your secret access key]"</span><span class="op">)</span></code></pre></div>
-</section><section id="connecting-to-spark" class="level2"><h2 class="anchored" data-anchor-id="connecting-to-spark">Connecting to Spark</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">AWS_ACCESS_KEY_ID=</span><span class="st">"[Your access key]"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">AWS_SECRET_ACCESS_KEY=</span><span class="st">"[Your secret access key]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connecting-to-spark" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-to-spark">Connecting to Spark</h2>
 <p>There are four key settings needed to connect to Spark and use S3:</p>
 <ul>
 <li>A Hadoop-AWS package</li>
@@ -324,20 +358,23 @@
 <li>The master URL</li>
 <li>The Spark Home</li>
 </ul>
-<section id="hadoop-aws-package" class="level3"><h3 class="anchored" data-anchor-id="hadoop-aws-package">Hadoop-AWS package:</h3>
+<section id="hadoop-aws-package" class="level3">
+<h3 class="anchored" data-anchor-id="hadoop-aws-package">Hadoop-AWS package:</h3>
 <p>A Spark connection can be enhanced by using packages, please note that these are not R packages. For example, there are packages that tells Spark how to read CSV files, Hadoop or Hadoop in AWS.</p>
 <p>In order to read S3 buckets, our Spark connection will need a package called <code>hadoop-aws</code>. If needed, multiple packages can be used. We experimented with many combinations of packages, and determined that for reading data in S3 we only need one. The version we used, 3.3.1, refers to the latest <strong>Hadoop</strong> version, so as this article ages, please visit this site to make sure that you are using the latest version: <a href="https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-aws">Hadoop AWS Maven Repository</a></p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.rstudio.com/">sparklyr</a></span><span class="op">)</span>
-
-<span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_config.html">spark_config</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">conf</span><span class="op">$</span><span class="va">sparklyr.defaultPackages</span> <span class="op">&lt;-</span> <span class="st">"org.apache.hadoop:hadoop-aws:3.3.1"</span>
-
-<span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark-connections.html">spark_connect</a></span><span class="op">(</span>maste <span class="op">=</span> <span class="st">"local"</span>, config <span class="op">=</span> <span class="va">conf</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>sparklyr.defaultPackages <span class="ot">&lt;-</span> <span class="st">"org.apache.hadoop:hadoop-aws:3.3.1"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">maste =</span> <span class="st">"local"</span>, <span class="at">config =</span> conf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section></section><section id="data-importwrangle-approach" class="level2"><h2 class="anchored" data-anchor-id="data-importwrangle-approach">Data Import/Wrangle approach</h2>
+</section>
+</section>
+<section id="data-importwrangle-approach" class="level2">
+<h2 class="anchored" data-anchor-id="data-importwrangle-approach">Data Import/Wrangle approach</h2>
 <p>We experimented with multiple approaches. Most of the factors for settling on a recommended approach were made based on the speed of each step. The premise is that we would rather wait longer during Data Import, if it meant that we can much faster Register and Cache our data subsets during Data Wrangling, especially since we would expect to end up with many subsets as we explore and model.The selected combination was the second slowest during the Import stage, but the fastest when caching a subset, by a lot.</p>
 <p>In our original tests, it took 72 seconds to read and cache the 29 columns of the 41 million rows of data, the slowest was 77 seconds. But when it comes to registering and caching a considerably sizable subset of 3 columns and almost all of the 41 million records, this approach was 17X faster than the second fastest approach. It took 1/3 of a second to register and cache the subset, the second fastest was 5 seconds.</p>
 <p>To implement this approach, we need to set three arguments in the <code>spark_csv_read()</code> step:</p>
@@ -347,65 +384,70 @@
 <li><code>columns</code></li>
 </ul>
 <p>Again, this is a recommended approach. The columns argument is needed only if <code>infer_schema</code> is set to <code>FALSE.</code> When memory is set to <code>TRUE</code> it makes Spark load the entire dataset into memory, and setting <code>infer_schema</code> to FALSE prevents Spark from trying to figure out what the schema of the files are. By trying different combinations the memory and <code>infer_schema</code> arguments you may be able to find an approach that may better fits your needs.</p>
-<section id="reading-the-schema" class="level3"><h3 class="anchored" data-anchor-id="reading-the-schema">Reading the schema</h3>
+<section id="reading-the-schema" class="level3">
+<h3 class="anchored" data-anchor-id="reading-the-schema">Reading the schema</h3>
 <p>Surprisingly, another critical detail that can easily be overlooked is choosing the right <strong>s3 URI scheme</strong>. There are two options: <strong>s3n</strong> and <strong>s3a</strong>. In most examples and tutorials I found, there was no reason give of why or when to use which one. The article the finally clarified it was this one: https://wiki.apache.org/hadoop/AmazonS3</p>
 <p>The gist of it is that <strong>s3a</strong> is the recommended one going forward, especially for Hadoop versions 2.7 and above. This means that if we copy from older examples that used <em>Hadoop 2.6 we would more likely also used s3n</em> thus making data import much, much slower.</p>
-</section></section><section id="data-import" class="level2"><h2 class="anchored" data-anchor-id="data-import">Data Import</h2>
+</section>
+</section>
+<section id="data-import" class="level2">
+<h2 class="anchored" data-anchor-id="data-import">Data Import</h2>
 <p>After the long introduction in the previous section, there is only one point to add about the following code chunk. If there are any <code>NA</code> values in numeric fields, then define the column as character and then convert it on later subsets using dplyr. The data import will fail if it finds any NA values on numeric fields. This is a small trade off in this approach because the next fastest one does not have this issue but is 17X slower at caching subsets.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/spark_read_csv.html">spark_read_csv</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span>, 
-                          path <span class="op">=</span>  <span class="st">"s3a://flights-data/full"</span>, 
-                          memory <span class="op">=</span> <span class="cn">TRUE</span>, 
-                          columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-                            Year <span class="op">=</span> <span class="st">"character"</span>,
-                            Month <span class="op">=</span> <span class="st">"character"</span>,
-                            DayofMonth <span class="op">=</span> <span class="st">"character"</span>,
-                            DayOfWeek <span class="op">=</span> <span class="st">"character"</span>,
-                            DepTime <span class="op">=</span> <span class="st">"character"</span>,
-                            CRSDepTime <span class="op">=</span> <span class="st">"character"</span>,
-                            ArrTime <span class="op">=</span> <span class="st">"character"</span>,
-                            CRSArrTime <span class="op">=</span> <span class="st">"character"</span>,
-                            UniqueCarrier <span class="op">=</span> <span class="st">"character"</span>,
-                            FlightNum <span class="op">=</span> <span class="st">"character"</span>,
-                            TailNum <span class="op">=</span> <span class="st">"character"</span>,
-                            ActualElapsedTime <span class="op">=</span> <span class="st">"character"</span>,
-                            CRSElapsedTime <span class="op">=</span> <span class="st">"character"</span>,
-                            AirTime <span class="op">=</span> <span class="st">"character"</span>,
-                            ArrDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            DepDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            Origin <span class="op">=</span> <span class="st">"character"</span>,
-                            Dest <span class="op">=</span> <span class="st">"character"</span>,
-                            Distance <span class="op">=</span> <span class="st">"character"</span>,
-                            TaxiIn <span class="op">=</span> <span class="st">"character"</span>,
-                            TaxiOut <span class="op">=</span> <span class="st">"character"</span>,
-                            Cancelled <span class="op">=</span> <span class="st">"character"</span>,
-                            CancellationCode <span class="op">=</span> <span class="st">"character"</span>,
-                            Diverted <span class="op">=</span> <span class="st">"character"</span>,
-                            CarrierDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            WeatherDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            NASDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            SecurityDelay <span class="op">=</span> <span class="st">"character"</span>,
-                            LateAircraftDelay <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span>, 
-                         infer_schema <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> <span class="fu">spark_read_csv</span>(sc, <span class="st">"flights_spark"</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">path =</span>  <span class="st">"s3a://flights-data/full"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">memory =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">columns =</span> <span class="fu">list</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Year =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Month =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayofMonth =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DayOfWeek =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSDepTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSArrTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                            <span class="at">UniqueCarrier =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">FlightNum =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TailNum =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ActualElapsedTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CRSElapsedTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                            <span class="at">AirTime =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                            <span class="at">ArrDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                            <span class="at">DepDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Origin =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Dest =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Distance =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiIn =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                            <span class="at">TaxiOut =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Cancelled =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CancellationCode =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Diverted =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                            <span class="at">CarrierDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                            <span class="at">WeatherDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                            <span class="at">NASDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>                            <span class="at">SecurityDelay =</span> <span class="st">"character"</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                            <span class="at">LateAircraftDelay =</span> <span class="st">"character"</span>), </span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>                         <span class="at">infer_schema =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="data-wrangle" class="level2"><h2 class="anchored" data-anchor-id="data-wrangle">Data Wrangle</h2>
+</section>
+<section id="data-wrangle" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangle">Data Wrangle</h2>
 <p>There are a few points we need to highlight about the following simple dyplr code:</p>
 <p>Because there were NAs in the original fields, we have to mutate them to a number. Try coercing any variable as integer instead of numeric, this will save a lot of space when cached to Spark memory. The sdf_register command can be piped at the end of the code. After running the code, a new table will appear in the RStudio IDE’s Spark tab</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tidy_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"flights_spark"</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/mutate.html">mutate</a></span><span class="op">(</span>ArrDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span>,
-         DepDelay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">DepDelay</span><span class="op">)</span>,
-         Distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">Distance</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ArrDelay</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/select.html">select</a></span><span class="op">(</span><span class="va">DepDelay</span>, <span class="va">ArrDelay</span>, <span class="va">Distance</span><span class="op">)</span> <span class="op"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/sdf_register.html">sdf_register</a></span><span class="op">(</span><span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
-<p>After we use <code><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache()</a></code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://spark.rstudio.com/packages/sparklyr/latest/reference/tbl_cache.html">tbl_cache</a></span><span class="op">(</span><span class="va">sc</span>, <span class="st">"tidy_spark"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tidy_flights <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="st">"flights_spark"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ArrDelay =</span> <span class="fu">as.integer</span>(ArrDelay),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">DepDelay =</span> <span class="fu">as.integer</span>(DepDelay),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Distance =</span> <span class="fu">as.integer</span>(Distance)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(ArrDelay)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DepDelay, ArrDelay, Distance) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_register</span>(<span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After we use <code>tbl_cache()</code> to load the <code>tidy_spark</code> table into Spark memory. We can see the new table in the Storage page of our Spark session.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_cache</span>(sc, <span class="st">"tidy_spark"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
-</section></main><!-- /main --><script type="application/javascript">
+</section>
+</main> <!-- /main -->
+<script type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const disableStylesheet = (stylesheets) => {
     for (let i=0; i < stylesheets.length; i++) {
@@ -577,7 +619,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     });
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="../guides/connections.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Spark connection options</span>
       </a>          
@@ -591,5 +635,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 
 
-</body>
-</html>
+</body></html>

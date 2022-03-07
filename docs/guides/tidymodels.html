@@ -324,7 +324,7 @@
 <h2 id="toc-title">On this page</h2>
 <ul>
 <li><a href="#intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-<li><a href="#model-preparation-with-parsnip" class="nav-link" data-scroll-target="#model-preparation-with-parsnip">Model preparation with <code>parsnip</code></a>
+<li><a href="#model-specification-with-parsnip" class="nav-link" data-scroll-target="#model-specification-with-parsnip">Model specification with <code>parsnip</code></a>
 <ul class="collapse">
 <li><a href="#why-use-in-spark" class="nav-link" data-scroll-target="#why-use-in-spark">Why use in Spark?</a></li>
 <li><a href="#list-of-supported-models" class="nav-link" data-scroll-target="#list-of-supported-models">List of supported models</a></li>
@@ -352,18 +352,18 @@
 
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p><code>tidymodels</code> is a collection of packages for modeling and Machine Learning. Just as <code>sparklyr</code>, <code>tidymodels</code> uses <code>tidyverse</code> principles.</p>
+<p><code>tidymodels</code> is a collection of packages for modeling and machine learning. Just like <code>sparklyr</code>, <code>tidymodels</code> uses <code>tidyverse</code> principles.</p>
 <p><code>sparklyr</code> allows us to use <code>dplyr</code> verbs to manipulate data. We use the same commands in R when manipulating local data or Spark data. Similarly, <code>sparklyr</code> and some packages in the <code>tidymodels</code> ecosystem offer integration.</p>
 <p>As with any evolving framework, the integration does not apply to all functions. This article aims at enumerating what is available today, and why should we consider using the <code>tidymodels</code> implementation in our day-to-day work with Spark.</p>
 <p>Our expectation is that this article will be constantly updated as the integration between <code>tidymodels</code> and <code>sparklyr</code> grows and improves.</p>
 </section>
-<section id="model-preparation-with-parsnip" class="level2">
-<h2 class="anchored" data-anchor-id="model-preparation-with-parsnip">Model preparation with <code>parsnip</code></h2>
+<section id="model-specification-with-parsnip" class="level2">
+<h2 class="anchored" data-anchor-id="model-specification-with-parsnip">Model specification with <code>parsnip</code></h2>
 <p><code>parsnip</code> provides a common interface to models. This enables us to run the same model against multiple engines. <code>parsnip</code> contains translation for each of these packages, so we do not have to remember, or find out, how to setup each argument in the respective package.</p>
 <section id="why-use-in-spark" class="level3">
 <h3 class="anchored" data-anchor-id="why-use-in-spark">Why use in Spark?</h3>
 <p>In some cases, it is better to try out model parameters on a smaller, local, data set in R. Once we are happy with the parameters, we can then run the model over the entire data set in Spark.</p>
-<p>For example, doing this for a Linear Regression model, we would use <code>lm()</code> locally, and then we would have to re-write the model using <code>ml_linear_regression()</code>. Both of these functions have different sets of function arguments that we would need to set.</p>
+<p>For example, doing this for a linear regression model, we would use <code>lm()</code> locally, and then we would have to re-write the model using <code>ml_linear_regression()</code>. Both of these functions have different sets of function arguments that we would need to set.</p>
 <p><code>parsnip</code> allows us to use the exact same set of functions and arguments when running against either back-end. With a couple of small changes, we can change the target engine (R vs Spark) and the target data set (local vs remote). Here is an example of what the model fitting looks like locally in R:</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
@@ -382,12 +382,12 @@
 <p>There are six <code>parsnip</code> models that currently support <code>sparklyr</code> equivalent models. Here is the list:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="dsuoyfhwvl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wfcduebynf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#dsuoyfhwvl .gt_table {
+#wfcduebynf .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -412,7 +412,7 @@
   border-left-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_heading {
+#wfcduebynf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -424,7 +424,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_title {
+#wfcduebynf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -434,7 +434,7 @@
   border-bottom-width: 0;
 }
 
-#dsuoyfhwvl .gt_subtitle {
+#wfcduebynf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -444,13 +444,13 @@
   border-top-width: 0;
 }
 
-#dsuoyfhwvl .gt_bottom_border {
+#wfcduebynf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_col_headings {
+#wfcduebynf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -465,7 +465,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_col_heading {
+#wfcduebynf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -485,7 +485,7 @@
   overflow-x: hidden;
 }
 
-#dsuoyfhwvl .gt_column_spanner_outer {
+#wfcduebynf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -497,15 +497,15 @@
   padding-right: 4px;
 }
 
-#dsuoyfhwvl .gt_column_spanner_outer:first-child {
+#wfcduebynf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dsuoyfhwvl .gt_column_spanner_outer:last-child {
+#wfcduebynf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dsuoyfhwvl .gt_column_spanner {
+#wfcduebynf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -517,7 +517,7 @@
   width: 100%;
 }
 
-#dsuoyfhwvl .gt_group_heading {
+#wfcduebynf .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -539,7 +539,7 @@
   vertical-align: middle;
 }
 
-#dsuoyfhwvl .gt_empty_group_heading {
+#wfcduebynf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -554,15 +554,15 @@
   vertical-align: middle;
 }
 
-#dsuoyfhwvl .gt_from_md > :first-child {
+#wfcduebynf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dsuoyfhwvl .gt_from_md > :last-child {
+#wfcduebynf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dsuoyfhwvl .gt_row {
+#wfcduebynf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -581,7 +581,7 @@
   overflow-x: hidden;
 }
 
-#dsuoyfhwvl .gt_stub {
+#wfcduebynf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,7 +593,7 @@
   padding-left: 12px;
 }
 
-#dsuoyfhwvl .gt_summary_row {
+#wfcduebynf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -603,7 +603,7 @@
   padding-right: 5px;
 }
 
-#dsuoyfhwvl .gt_first_summary_row {
+#wfcduebynf .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -613,7 +613,7 @@
   border-top-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_grand_summary_row {
+#wfcduebynf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -623,7 +623,7 @@
   padding-right: 5px;
 }
 
-#dsuoyfhwvl .gt_first_grand_summary_row {
+#wfcduebynf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -633,11 +633,11 @@
   border-top-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_striped {
+#wfcduebynf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dsuoyfhwvl .gt_table_body {
+#wfcduebynf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -646,7 +646,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_footnotes {
+#wfcduebynf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -660,13 +660,13 @@
   border-right-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_footnote {
+#wfcduebynf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#dsuoyfhwvl .gt_sourcenotes {
+#wfcduebynf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -680,41 +680,41 @@
   border-right-color: #D3D3D3;
 }
 
-#dsuoyfhwvl .gt_sourcenote {
+#wfcduebynf .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#dsuoyfhwvl .gt_left {
+#wfcduebynf .gt_left {
   text-align: left;
 }
 
-#dsuoyfhwvl .gt_center {
+#wfcduebynf .gt_center {
   text-align: center;
 }
 
-#dsuoyfhwvl .gt_right {
+#wfcduebynf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dsuoyfhwvl .gt_font_normal {
+#wfcduebynf .gt_font_normal {
   font-weight: normal;
 }
 
-#dsuoyfhwvl .gt_font_bold {
+#wfcduebynf .gt_font_bold {
   font-weight: bold;
 }
 
-#dsuoyfhwvl .gt_font_italic {
+#wfcduebynf .gt_font_italic {
   font-style: italic;
 }
 
-#dsuoyfhwvl .gt_super {
+#wfcduebynf .gt_super {
   font-size: 65%;
 }
 
-#dsuoyfhwvl .gt_footnote_marks {
+#wfcduebynf .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -782,7 +782,7 @@
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spark_mtcars <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A Linear Regression model is prepared against <code>spark_mtcars</code>:</p>
+<p>A linear regression model is trained with <code>spark_mtcars</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parsnip)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -794,7 +794,7 @@
 <div class="cell-output-stdout">
 <pre><code>parsnip model object
 
-Fit time:  4.5s 
+Fit time:  4.4s 
 Formula: mpg ~ .
 
 Coefficients:
@@ -819,7 +819,7 @@ sparklyr::ml_linear_regression(x = missing_arg(), formula = missing_arg(),
     weight_col = missing_arg())</code></pre>
 </div>
 </div>
-<p>Now, we will show an example with a classification model. We will fit a Random Forest model. To start, we will copy the <code>iris</code> data set to the Spark session:</p>
+<p>Now, we will show an example with a classification model. We will fit a random forest model. To start, we will copy the <code>iris</code> data set to the Spark session:</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>spark_iris <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, iris)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -834,10 +834,10 @@ sparklyr::ml_linear_regression(x = missing_arg(), formula = missing_arg(),
 <div class="cell-output-stdout">
 <pre><code>parsnip model object
 
-Fit time:  5.7s 
+Fit time:  6s 
 Formula: Species ~ .
 
-RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143bf17cd567, numTrees=100, numClasses=3, numFeatures=4</code></pre>
+RandomForestClassificationModel: uid=random_forest__e058a3d8_5b5b_4dbe_a073_6884e54bdb2b, numTrees=100, numClasses=3, numFeatures=4</code></pre>
 </div>
 </div>
 </section>
@@ -848,7 +848,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
 <ul>
 <li><p><code>tidy()</code> - Summarizes information about the components of a model. A model component might be a single term in a regression, a single hypothesis, a cluster, or a class.</p></li>
 <li><p><code>glance()</code> - Returns a data frame with exactly one row of model summaries. The summaries are typically goodness of fit measures, p-values for hypothesis tests on residuals, or model convergence information.</p></li>
-<li><p><code>augment()</code> - It is similar to how <code>ml_predict()</code> works. Instead of returning a vector of predictions, like <code>predict()</code> works, <code>augment()</code> adds the prediction columns to the data set.</p></li>
+<li><p><code>augment()</code> - Adds the prediction columns to the data set. This function is similar to <code>ml_predict()</code>, but instead of returning only a vector of predictions (like <code>predict()</code>), it adds the new column(s) to the data set. <code>augment()</code></p></li>
 </ul>
 <section id="why-use-in-spark-1" class="level3">
 <h3 class="anchored" data-anchor-id="why-use-in-spark-1">Why use in Spark?</h3>
@@ -859,12 +859,12 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
 <p>Currently, 20 Spark models support <code>broom</code> via <code>sparklyr</code>. Here is the current list of models and the corresponding <code>sparklyr</code> function:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="tuglvjpxez" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="czxkaneknv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#tuglvjpxez .gt_table {
+#czxkaneknv .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -889,7 +889,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-left-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_heading {
+#czxkaneknv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -901,7 +901,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-right-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_title {
+#czxkaneknv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -911,7 +911,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-bottom-width: 0;
 }
 
-#tuglvjpxez .gt_subtitle {
+#czxkaneknv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -921,13 +921,13 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-top-width: 0;
 }
 
-#tuglvjpxez .gt_bottom_border {
+#czxkaneknv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_col_headings {
+#czxkaneknv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -942,7 +942,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-right-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_col_heading {
+#czxkaneknv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -962,7 +962,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   overflow-x: hidden;
 }
 
-#tuglvjpxez .gt_column_spanner_outer {
+#czxkaneknv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -974,15 +974,15 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   padding-right: 4px;
 }
 
-#tuglvjpxez .gt_column_spanner_outer:first-child {
+#czxkaneknv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tuglvjpxez .gt_column_spanner_outer:last-child {
+#czxkaneknv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tuglvjpxez .gt_column_spanner {
+#czxkaneknv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -994,7 +994,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   width: 100%;
 }
 
-#tuglvjpxez .gt_group_heading {
+#czxkaneknv .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1016,7 +1016,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   vertical-align: middle;
 }
 
-#tuglvjpxez .gt_empty_group_heading {
+#czxkaneknv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1031,15 +1031,15 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   vertical-align: middle;
 }
 
-#tuglvjpxez .gt_from_md > :first-child {
+#czxkaneknv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tuglvjpxez .gt_from_md > :last-child {
+#czxkaneknv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tuglvjpxez .gt_row {
+#czxkaneknv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1058,7 +1058,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   overflow-x: hidden;
 }
 
-#tuglvjpxez .gt_stub {
+#czxkaneknv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1070,7 +1070,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   padding-left: 12px;
 }
 
-#tuglvjpxez .gt_summary_row {
+#czxkaneknv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1080,7 +1080,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   padding-right: 5px;
 }
 
-#tuglvjpxez .gt_first_summary_row {
+#czxkaneknv .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1090,7 +1090,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-top-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_grand_summary_row {
+#czxkaneknv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1100,7 +1100,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   padding-right: 5px;
 }
 
-#tuglvjpxez .gt_first_grand_summary_row {
+#czxkaneknv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1110,11 +1110,11 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-top-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_striped {
+#czxkaneknv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tuglvjpxez .gt_table_body {
+#czxkaneknv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1123,7 +1123,7 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-bottom-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_footnotes {
+#czxkaneknv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1137,13 +1137,13 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-right-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_footnote {
+#czxkaneknv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#tuglvjpxez .gt_sourcenotes {
+#czxkaneknv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1157,41 +1157,41 @@ RandomForestClassificationModel: uid=random_forest__d0cf55ae_2749_4b70_8238_143b
   border-right-color: #D3D3D3;
 }
 
-#tuglvjpxez .gt_sourcenote {
+#czxkaneknv .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#tuglvjpxez .gt_left {
+#czxkaneknv .gt_left {
   text-align: left;
 }
 
-#tuglvjpxez .gt_center {
+#czxkaneknv .gt_center {
   text-align: center;
 }
 
-#tuglvjpxez .gt_right {
+#czxkaneknv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tuglvjpxez .gt_font_normal {
+#czxkaneknv .gt_font_normal {
   font-weight: normal;
 }
 
-#tuglvjpxez .gt_font_bold {
+#czxkaneknv .gt_font_bold {
   font-weight: bold;
 }
 
-#tuglvjpxez .gt_font_italic {
+#czxkaneknv .gt_font_italic {
   font-style: italic;
 }
 
-#tuglvjpxez .gt_super {
+#czxkaneknv .gt_super {
   font-size: 65%;
 }
 
-#tuglvjpxez .gt_footnote_marks {
+#czxkaneknv .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -1349,10 +1349,10 @@ Caution
 <pre><code># A tibble: 4 × 2
   feature      importance
   &lt;chr&gt;             &lt;dbl&gt;
-1 Petal_Width      0.460 
-2 Petal_Length     0.423 
-3 Sepal_Length     0.0996
-4 Sepal_Width      0.0176</code></pre>
+1 Petal_Length     0.473 
+2 Petal_Width      0.405 
+3 Sepal_Length     0.107 
+4 Sepal_Width      0.0158</code></pre>
 </div>
 </div>
 <p>The <code>glance()</code> model returns the number of trees, nodes depth, sub-sampling rate and impurtiy mode:</p>
@@ -1362,7 +1362,7 @@ Caution
 <pre><code># A tibble: 1 × 5
   num_trees total_num_nodes max_depth impurity subsampling_rate
       &lt;int&gt;           &lt;int&gt;     &lt;int&gt; &lt;chr&gt;               &lt;dbl&gt;
-1       100            1436         5 gini                    1</code></pre>
+1       100            1440         5 gini                    1</code></pre>
 </div>
 </div>
 </section>
@@ -1406,7 +1406,7 @@ Caution
 # … with 2 more variables: gear &lt;dbl&gt;, carb &lt;dbl&gt;</code></pre>
 </div>
 </div>
-<p>For example, <code>share()</code> removes the duplicate correlations from the data set, making it easier to read:</p>
+<p>For example, <code>shave()</code> removes the duplicate correlations from the data set, making it easier to read:</p>
 <div class="cell">
 <div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>corr_mtcars <span class="sc">%&gt;%</span> </span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shave</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

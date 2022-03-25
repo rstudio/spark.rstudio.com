@@ -39,10 +39,7 @@ x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_cols | Names of input columns.
 output_col | Name of output column.
 num_features | Number of features. Defaults to 2^18.
-categorical_cols | Numeric columns to treat as categorical features.
-By default only string and boolean columns are treated as categorical,
-so this param can be used to explicitly specify the numerical columns to
-treat as categorical.
+categorical_cols | Numeric columns to treat as categorical features. By default only string and boolean columns are treated as categorical, so this param can be used to explicitly specify the numerical columns to treat as categorical.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

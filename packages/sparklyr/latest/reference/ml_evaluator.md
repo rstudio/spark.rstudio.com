@@ -72,9 +72,7 @@ raw_prediction_col | Raw prediction (a.k.a. confidence) column name.
 metric_name | The performance metric. See details.
 uid | A character string used to uniquely identify the ML estimator.
 ... | Optional arguments; currently unused.
-prediction_col | Name of the column that contains the predicted
-label or value NOT the scored probability. Column should be of type
-``Double``.
+prediction_col | Name of the column that contains the predicted label or value NOT the scored probability. Column should be of type ``Double``.
 
 
 

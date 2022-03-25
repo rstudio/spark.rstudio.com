@@ -31,8 +31,7 @@ ml_chisquare_test(x, features, label)
 Argument      |Description
 ------------- |----------------
 x | A ``tbl_spark``.
-features | The name(s) of the feature columns. This can also be the name
-of a single vector column created using ``ft_vector_assembler()``.
+features | The name(s) of the feature columns. This can also be the name of a single vector column created using ``ft_vector_assembler()``.
 label | The name of the label column.
 
 

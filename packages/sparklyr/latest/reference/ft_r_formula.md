@@ -39,15 +39,10 @@ ft_r_formula(
 Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
-formula | R formula as a character string or a formula. Formula objects are
-converted to character strings directly and the environment is not captured.
+formula | R formula as a character string or a formula. Formula objects are converted to character strings directly and the environment is not captured.
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
 label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
-force_index_label | (Spark 2.1.0+) Force to index label whether it is numeric or
-string type. Usually we index label only when it is string type. If
-the formula was used by classification algorithms, we can force to index
-label even it is numeric type by setting this param with true.
-Default: ``FALSE``.
+force_index_label | (Spark 2.1.0+) Force to index label whether it is numeric or string type. Usually we index label only when it is string type. If the formula was used by classification algorithms, we can force to index label even it is numeric type by setting this param with true. Default: ``FALSE``.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

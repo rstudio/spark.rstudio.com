@@ -54,13 +54,8 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are
-'skip' (filter out rows with invalid values), 'error' (throw an error), or
-'keep' (keep invalid values in a special additional bucket). Default: "error"
-string_order_type | (Spark 2.3+)How to order labels of string column.
-The first label after ordering is assigned an index of 0. Options are
-``"frequencyDesc"``, ``"frequencyAsc"``, ``"alphabetDesc"``, and ``"alphabetAsc"``.
-Defaults to ``"frequencyDesc"``.
+handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are 'skip' (filter out rows with invalid values), 'error' (throw an error), or 'keep' (keep invalid values in a special additional bucket). Default: "error"
+string_order_type | (Spark 2.3+)How to order labels of string column. The first label after ordering is assigned an index of 0. Options are ``"frequencyDesc"``, ``"frequencyAsc"``, ``"alphabetDesc"``, and ``"alphabetAsc"``. Defaults to ``"frequencyDesc"``.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 model | A fitted StringIndexer model returned by ``ft_string_indexer()``

@@ -28,8 +28,7 @@ spark_advisory_shuffle_partition_size(sc, size = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-size | Advisory size in bytes of the shuffle partition.
-Defaults to ``NULL`` to retrieve configuration entries.
+size | Advisory size in bytes of the shuffle partition. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

@@ -33,8 +33,7 @@ gf_lpa(x, max_iter, ...)
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 max_iter | Maximum number of iterations.
 ... | Optional arguments, currently not used.
 

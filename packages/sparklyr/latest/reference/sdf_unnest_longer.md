@@ -41,21 +41,10 @@ Argument      |Description
 data | The Spark dataframe to be unnested
 col | The struct column to extract components from
 values_to | Name of column to store vector values. Defaults to `col`.
-indices_to | A string giving the name of column which will contain the
-inner names or position (if not named) of the values. Defaults to `col`
-with `_id` suffix
-include_indices | Whether to include an index column. An index column
-will be included by default if `col` is a struct column. It will also be
-included if `indices_to` is not `NULL`.
-names_repair | Strategy for fixing duplicate column names (the semantic
-will be exactly identical to that of `.name_repair` option in
-`tibble`)
-ptype | Optionally, supply an R data frame prototype for the output.
-Each column of the unnested result will be casted based on the Spark
-equivalent of the type of the column with the same name within `ptype`,
-e.g., if `ptype` has a column `x` of type `character`, then column `x`
-of the unnested result will be casted from its original SQL type to
-StringType.
+indices_to | A string giving the name of column which will contain the inner names or position (if not named) of the values. Defaults to `col` with `_id` suffix
+include_indices | Whether to include an index column. An index column will be included by default if `col` is a struct column. It will also be included if `indices_to` is not `NULL`.
+names_repair | Strategy for fixing duplicate column names (the semantic will be exactly identical to that of `.name_repair` option in `tibble`)
+ptype | Optionally, supply an R data frame prototype for the output. Each column of the unnested result will be casted based on the Spark equivalent of the type of the column with the same name within `ptype`, e.g., if `ptype` has a column `x` of type `character`, then column `x` of the unnested result will be casted from its original SQL type to StringType.
 transform | Optionally, a named list of transformation functions applied
 
 

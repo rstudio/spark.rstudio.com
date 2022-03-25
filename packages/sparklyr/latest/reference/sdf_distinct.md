@@ -28,10 +28,7 @@ sdf_distinct(x, ..., name)
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame.
-... | Optional variables to use when determining uniqueness.
-If there are multiple rows for a given combination of inputs,
-only the first row will be preserved. If omitted, will use all
-variables.
+... | Optional variables to use when determining uniqueness. If there are multiple rows for a given combination of inputs, only the first row will be preserved. If omitted, will use all variables.
 name | A name to assign this table. Passed to [sdf_register()].
 
 

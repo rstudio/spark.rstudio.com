@@ -77,8 +77,7 @@ step_size | Step size to be used for each iteration of optimization (> 0).
 tol | Param for the convergence tolerance for iterative algorithms.
 block_size | Block size for stacking input data in matrices to speed up the computation. Data is stacked within partitions. If block size is more than remaining data in a partition then it is adjusted to the size of this data. Recommended size is between 10 and 1000. Default: 128
 solver | The solver algorithm for optimization. Supported options: "gd" (minibatch gradient descent) or "l-bfgs". Default: "l-bfgs"
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 initial_weights | The initial weights of the model.
 thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value ``p/t`` is predicted, where ``p`` is the original probability of that class and ``t`` is the class's threshold.
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.

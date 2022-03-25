@@ -28,8 +28,7 @@ connection_config(sc, prefix, not_prefix = list())
 Argument      |Description
 ------------- |----------------
 sc | ``spark_connection``
-prefix | Prefix to read parameters for
-(e.g. ``spark.context.``, ``spark.sql.``, etc.)
+prefix | Prefix to read parameters for (e.g. ``spark.context.``, ``spark.sql.``, etc.)
 not_prefix | Prefix to not include.
 
 

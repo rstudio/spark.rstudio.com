@@ -28,8 +28,7 @@ spark_coalesce_min_num_partitions(sc, num_partitions = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-num_partitions | Minimum number of shuffle partitions after coalescing.
-Defaults to ``NULL`` to retrieve configuration entries.
+num_partitions | Minimum number of shuffle partitions after coalescing. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

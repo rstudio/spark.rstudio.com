@@ -28,9 +28,7 @@ collect_from_rds(path)
 
 Argument      |Description
 ------------- |----------------
-path | Path to a local RDS file that is produced by `spark_write_rds()`
-(RDS files stored in HDFS will need to be downloaded to local filesystem
-first (e.g., by running `hadoop fs -copyToLocal ...` or similar)
+path | Path to a local RDS file that is produced by `spark_write_rds()` (RDS files stored in HDFS will need to be downloaded to local filesystem first (e.g., by running `hadoop fs -copyToLocal ...` or similar)
 
 
 

@@ -37,17 +37,11 @@ sdf_expand_grid(
 Argument      |Description
 ------------- |----------------
 sc | The associated Spark connection.
-... | Each input variable can be either a R vector/factor or a Spark
-dataframe. Unnamed inputs will assume the default names of 'Var1', 'Var2',
-etc in the result, similar to what `expand.grid` does for unnamed inputs.
-broadcast_vars | Indicates which input(s) should be broadcasted to all
-nodes of the Spark cluster during the join process (default: none).
-memory | Boolean; whether the resulting Spark dataframe should be
-cached into memory (default: TRUE)
-repartition | Number of partitions the resulting Spark dataframe should
-have
-partition_by | Vector of column names used for partitioning the
-resulting Spark dataframe, only supported for Spark 2.0+
+... | Each input variable can be either a R vector/factor or a Spark dataframe. Unnamed inputs will assume the default names of 'Var1', 'Var2', etc in the result, similar to what `expand.grid` does for unnamed inputs.
+broadcast_vars | Indicates which input(s) should be broadcasted to all nodes of the Spark cluster during the join process (default: none).
+memory | Boolean; whether the resulting Spark dataframe should be cached into memory (default: TRUE)
+repartition | Number of partitions the resulting Spark dataframe should have
+partition_by | Vector of column names used for partitioning the resulting Spark dataframe, only supported for Spark 2.0+
 
 
 

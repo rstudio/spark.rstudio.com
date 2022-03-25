@@ -25,9 +25,7 @@ Argument      |Description
 object | An  object.
 allow.na | Are ``NA`` values permitted for this object?
 allow.null | Are ``NULL`` values permitted for this object?
-default | If ``object`` is ``NULL``, what value should
-be used in its place? If ``default`` is specified, ``allow.null``
-is ignored (and assumed to be ``TRUE``).
+default | If ``object`` is ``NULL``, what value should be used in its place? If ``default`` is specified, ``allow.null`` is ignored (and assumed to be ``TRUE``).
 
 
 

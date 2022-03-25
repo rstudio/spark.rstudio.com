@@ -42,9 +42,7 @@ password | The password to use in the Authorization header
 negotiate | Whether to use gssnegotiate method or not
 custom_headers | List of custom headers to append to http requests. Defaults to ``list("X-Requested-By" = "sparklyr")``.
 proxy | Either NULL or a proxy specified by httr::use_proxy(). Defaults to NULL.
-curl_opts | List of CURL options (e.g., verbose, connecttimeout, dns_cache_timeout, etc, see httr::httr_options() for a
-list of valid options) -- NOTE: these configurations are for libcurl only and separate from HTTP headers or Livy session
-parameters.
+curl_opts | List of CURL options (e.g., verbose, connecttimeout, dns_cache_timeout, etc, see httr::httr_options() for a list of valid options) -- NOTE: these configurations are for libcurl only and separate from HTTP headers or Livy session parameters.
 ... | additional Livy session parameters
 
 

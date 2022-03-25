@@ -51,20 +51,11 @@ Argument      |Description
 sc | A ``spark_connection``.
 name | The name to assign to the newly generated table.
 dir | Directory to read binary files from.
-path_glob_filter | Glob pattern of binary files to be loaded
-(e.g., "*.jpg").
-recursive_file_lookup | If FALSE (default), then partition discovery
-will be enabled (i.e., if a partition naming scheme is present, then
-partitions specified by subdirectory names such as "date=2019-07-01" will
-be created and files outside subdirectories following a partition naming
-scheme will be ignored). If TRUE, then all nested directories will be
-searched even if their names do not follow a partition naming scheme.
-repartition | The number of partitions used to distribute the
-generated table. Use 0 (the default) to avoid partitioning.
-memory | Boolean; should the data be loaded eagerly into memory? (That
-is, should the table be cached?)
-overwrite | Boolean; overwrite the table with the given name if it
-already exists?
+path_glob_filter | Glob pattern of binary files to be loaded (e.g., "*.jpg").
+recursive_file_lookup | If FALSE (default), then partition discovery will be enabled (i.e., if a partition naming scheme is present, then partitions specified by subdirectory names such as "date=2019-07-01" will be created and files outside subdirectories following a partition naming scheme will be ignored). If TRUE, then all nested directories will be searched even if their names do not follow a partition naming scheme.
+repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
+overwrite | Boolean; overwrite the table with the given name if it already exists?
 
 
 

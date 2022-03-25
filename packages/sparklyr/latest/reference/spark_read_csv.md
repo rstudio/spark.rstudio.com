@@ -46,30 +46,19 @@ Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
 name | The name to assign to the newly generated table.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
-header | Boolean; should the first row of data be used as a header?
-Defaults to ``TRUE``.
-columns | A vector of column names or a named vector of column types.
-If specified, the elements can be ``"binary"`` for ``BinaryType``,
-``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``,
-``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``,
-``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``,
-``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
-infer_schema | Boolean; should column types be automatically inferred?
-Requires one extra pass over the data. Defaults to ``is.null(columns)``.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
+header | Boolean; should the first row of data be used as a header? Defaults to ``TRUE``.
+columns | A vector of column names or a named vector of column types. If specified, the elements can be ``"binary"`` for ``BinaryType``, ``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``, ``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``, ``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``, ``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
+infer_schema | Boolean; should column types be automatically inferred? Requires one extra pass over the data. Defaults to ``is.null(columns)``.
 delimiter | The character used to delimit each column. Defaults to ','.
 quote | The character used as a quote. Defaults to '"'.
 escape | The character used to escape other characters. Defaults to '\'.
 charset | The character set. Defaults to "UTF-8".
 null_value | The character to use for null, or missing, values. Defaults to ``NULL``.
 options | A list of strings with additional options.
-repartition | The number of partitions used to distribute the
-generated table. Use 0 (the default) to avoid partitioning.
-memory | Boolean; should the data be loaded eagerly into memory? (That
-is, should the table be cached?)
-overwrite | Boolean; overwrite the table with the given name if it
-already exists?
+repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
+overwrite | Boolean; overwrite the table with the given name if it already exists?
 ... | Optional arguments; currently unused.
 
 

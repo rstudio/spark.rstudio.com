@@ -62,14 +62,12 @@ doc_concentration | Concentration parameter (commonly named "alpha") for the pri
 topic_concentration | Concentration parameter (commonly named "beta" or "eta") for the prior placed on topics' distributions over terms.
 subsampling_rate | (For Online optimizer only) Fraction of the corpus to be sampled and used in each iteration of mini-batch gradient descent, in range (0, 1]. Note that this should be adjusted in synch with ``max_iter`` so the entire corpus is used. Specifically, set both so that maxIterations * miniBatchFraction greater than or equal to 1.
 optimizer | Optimizer or inference algorithm used to estimate the LDA model. Supported: "online" for Online Variational Bayes (default) and "em" for Expectation-Maximization.
-checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1).
-E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
+checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
 keep_last_checkpoint | (Spark 2.0.0+) (For EM optimizer only) If using checkpointing, this indicates whether to keep the last checkpoint. If ``FALSE``, then the checkpoint will be deleted. Deleting the checkpoint can cause failures if a data partition is lost, so set this bit with care. Note that checkpoints will be cleaned up via reference counting, regardless.
 learning_decay | (For Online optimizer only) Learning rate, set as an exponential decay rate. This should be between (0.5, 1.0] to guarantee asymptotic convergence. This is called "kappa" in the Online LDA paper (Hoffman et al., 2010). Default: 0.51, based on Hoffman et al.
 learning_offset | (For Online optimizer only) A (positive) learning parameter that downweights early iterations. Larger values make early iterations count less. This is called "tau0" in the Online LDA paper (Hoffman et al., 2010) Default: 1024, following Hoffman et al.
 optimize_doc_concentration | (For Online optimizer only) Indicates whether the ``doc_concentration`` (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: ``FALSE``
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
 topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called "theta" in the literature). Returns a vector of zeros for an empty document.
 uid | A character string used to uniquely identify the ML estimator.

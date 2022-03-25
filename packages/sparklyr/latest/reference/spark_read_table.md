@@ -38,16 +38,9 @@ Argument      |Description
 sc | A ``spark_connection``.
 name | The name to assign to the newly generated table.
 options | A list of strings with additional options. See https://spark.apache.org/docs/latest/sql-programming-guide.html#configuration.
-repartition | The number of partitions used to distribute the
-generated table. Use 0 (the default) to avoid partitioning.
-memory | Boolean; should the data be loaded eagerly into memory? (That
-is, should the table be cached?)
-columns | A vector of column names or a named vector of column types.
-If specified, the elements can be ``"binary"`` for ``BinaryType``,
-``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``,
-``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``,
-``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``,
-``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
+repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
+columns | A vector of column names or a named vector of column types. If specified, the elements can be ``"binary"`` for ``BinaryType``, ``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``, ``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``, ``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``, ``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
 ... | Optional arguments; currently unused.
 
 

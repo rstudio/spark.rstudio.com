@@ -28,8 +28,7 @@ spark_coalesce_initial_num_partitions(sc, num_partitions = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-num_partitions | Initial number of shuffle partitions before coalescing.
-Defaults to ``NULL`` to retrieve configuration entries.
+num_partitions | Initial number of shuffle partitions before coalescing. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

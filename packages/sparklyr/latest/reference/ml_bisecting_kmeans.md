@@ -42,8 +42,7 @@ x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
 k | The number of clusters to create
 max_iter | The maximum number of iterations to use.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 min_divisible_cluster_size | The minimum number of points (if greater than or equal to 1.0) or the minimum proportion of points (if less than 1.0) of a divisible cluster (default: 1.0).
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
 prediction_col | Prediction column name.

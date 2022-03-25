@@ -28,9 +28,7 @@ params %->% ...
 
 Argument      |Description
 ------------- |----------------
-params | Parameter(s) of the lambda expression, can be either a single
-parameter or a comma separated listed of parameters in the form of
-``.(param1, param2, ... )`` (see examples)
+params | Parameter(s) of the lambda expression, can be either a single parameter or a comma separated listed of parameters in the form of ``.(param1, param2, ... )`` (see examples)
 ... | Body of the lambda expression, *must be within parentheses*
 
 

@@ -30,10 +30,8 @@ hof_forall(x, pred, expr = NULL, dest_col = NULL, ...)
 Argument      |Description
 ------------- |----------------
 x | The Spark data frame to be processed
-pred | The predicate to test (it should take an array element as argument and
-return a boolean value)
-expr | The array being tested, could be any SQL expression evaluating to an
-array (default: the last column of the Spark data frame)
+pred | The predicate to test (it should take an array element as argument and return a boolean value)
+expr | The array being tested, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame)
 dest_col | Column to store the boolean result (default: expr)
 ... | Additional params to dplyr::mutate
 

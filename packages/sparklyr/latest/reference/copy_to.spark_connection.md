@@ -40,12 +40,9 @@ Argument      |Description
 dest | A ``spark_connection``.
 df | An  ``data.frame``.
 name | The name to assign to the copied table in Spark.
-overwrite | Boolean; overwrite a pre-existing table with the name ``name``
-if one already exists?
+overwrite | Boolean; overwrite a pre-existing table with the name ``name`` if one already exists?
 memory | Boolean; should the table be cached into memory?
-repartition | The number of partitions to use when distributing the
-table across the Spark cluster. The default (0) can be used to avoid
-partitioning.
+repartition | The number of partitions to use when distributing the table across the Spark cluster. The default (0) can be used to avoid partitioning.
 ... | Optional arguments; currently unused.
 
 

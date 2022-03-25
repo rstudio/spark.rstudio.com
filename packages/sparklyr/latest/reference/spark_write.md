@@ -32,16 +32,9 @@ spark_write(x, writer, paths, packages = NULL)
 Argument      |Description
 ------------- |----------------
 x | A Spark Dataframe to be saved into file(s)
-writer | A writer function with the signature function(partition, path)
-where ``partition`` is a R dataframe containing all rows from one partition
-of the original Spark Dataframe ``x`` and path is a string specifying the
-file to write ``partition`` to
-paths | A single destination path or a list of destination paths, each one
-specifying a location for a partition from ``x`` to be written to. If
-number of partition(s) in ``x`` is not equal to ``length(paths)`` then
-``x`` will be re-partitioned to contain ``length(paths)`` partition(s)
-packages | Boolean to distribute ``.libPaths()`` packages to each node,
-a list of packages to distribute, or a package bundle created with
+writer | A writer function with the signature function(partition, path) where ``partition`` is a R dataframe containing all rows from one partition of the original Spark Dataframe ``x`` and path is a string specifying the file to write ``partition`` to
+paths | A single destination path or a list of destination paths, each one specifying a location for a partition from ``x`` to be written to. If number of partition(s) in ``x`` is not equal to ``length(paths)`` then ``x`` will be re-partitioned to contain ``length(paths)`` partition(s)
+packages | Boolean to distribute ``.libPaths()`` packages to each node, a list of packages to distribute, or a package bundle created with
 
 
 

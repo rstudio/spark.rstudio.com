@@ -53,8 +53,7 @@ hadoop_version | Version of Hadoop to install. See ``spark_available_versions`` 
 reset | Attempts to reset settings to defaults.
 logging | Logging level to configure install. Supported options: "WARN", "INFO"
 verbose | Report information as Spark is downloaded / installed
-tarfile | Path to TAR file conforming to the pattern spark-###-bin-(hadoop)?### where ###
-reference spark and hadoop versions respectively.
+tarfile | Path to TAR file conforming to the pattern spark-###-bin-(hadoop)?### where ### reference spark and hadoop versions respectively.
 show_hadoop | Show Hadoop distributions?
 show_minor | Show minor Spark versions?
 show_future | Should future versions which have not been released be shown?

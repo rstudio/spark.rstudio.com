@@ -39,8 +39,7 @@ Argument      |Description
 ------------- |----------------
 version | The version of livy to use.
 spark_version | The version of spark to connect to.
-stdout, stderr | where output to 'stdout' or 'stderr' should
-be sent. Same options as ``system2``.
+stdout, stderr | where output to 'stdout' or 'stderr' should be sent. Same options as ``system2``.
 ... | Optional arguments; currently unused.
 
 

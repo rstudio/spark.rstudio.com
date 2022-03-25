@@ -31,24 +31,8 @@ sdf_bind_cols(...)
 
 Argument      |Description
 ------------- |----------------
-... | Spark tbls to combine.
-
-  Each argument can either be a Spark DataFrame or a list of
-  Spark DataFrames
-
-  When row-binding, columns are matched by name, and any missing
-  columns with be filled with NA.
-
-  When column-binding, rows are matched by position, so all data
-  frames must have the same number of rows.
-id | Data frame identifier.
-
-  When ``id`` is supplied, a new column of identifiers is
-  created to link each row to its original Spark DataFrame. The labels
-  are taken from the named arguments to ``sdf_bind_rows()``. When a
-  list of Spark DataFrames is supplied, the labels are taken from the
-  names of the list. If no names are found a numeric sequence is
-  used instead.
+... | Spark tbls to combine.    Each argument can either be a Spark DataFrame or a list of   Spark DataFrames    When row-binding, columns are matched by name, and any missing   columns with be filled with NA.    When column-binding, rows are matched by position, so all data   frames must have the same number of rows.
+id | Data frame identifier.    When ``id`` is supplied, a new column of identifiers is   created to link each row to its original Spark DataFrame. The labels   are taken from the named arguments to ``sdf_bind_rows()``. When a   list of Spark DataFrames is supplied, the labels are taken from the   names of the list. If no names are found a numeric sequence is   used instead.
 
 
 

@@ -46,11 +46,8 @@ output_col | The name of the output column.
 splits | A numeric vector of cutpoints, indicating the bucket boundaries.
 input_cols | Names of input columns.
 output_cols | Names of output columns.
-splits_array | Parameter for specifying multiple splits parameters. Each
-element in this array can be used to map continuous features into buckets.
-handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are
-'skip' (filter out rows with invalid values), 'error' (throw an error), or
-'keep' (keep invalid values in a special additional bucket). Default: "error"
+splits_array | Parameter for specifying multiple splits parameters. Each element in this array can be used to map continuous features into buckets.
+handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are 'skip' (filter out rows with invalid values), 'error' (throw an error), or 'keep' (keep invalid values in a special additional bucket). Default: "error"
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

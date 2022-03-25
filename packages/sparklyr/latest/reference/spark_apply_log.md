@@ -28,8 +28,7 @@ spark_apply_log(..., level = "INFO")
 Argument      |Description
 ------------- |----------------
 ... | Arguments to write to log.
-level | Severity level for this entry; recommended values: ``INFO``,
-``ERROR`` or ``WARN``.
+level | Severity level for this entry; recommended values: ``INFO``, ``ERROR`` or ``WARN``.
 
 
 

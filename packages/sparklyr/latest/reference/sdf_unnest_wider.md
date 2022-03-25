@@ -37,21 +37,10 @@ Argument      |Description
 ------------- |----------------
 data | The Spark dataframe to be unnested
 col | The struct column to extract components from
-names_sep | If `NULL`, the default, the names will be left as is.
-If a string, the inner and outer names will be pasted together using
-`names_sep` as the delimiter.
-names_repair | Strategy for fixing duplicate column names (the semantic
-will be exactly identical to that of `.name_repair` option in
-`tibble`)
-ptype | Optionally, supply an R data frame prototype for the output.
-Each column of the unnested result will be casted based on the Spark
-equivalent of the type of the column with the same name within `ptype`,
-e.g., if `ptype` has a column `x` of type `character`, then column `x`
-of the unnested result will be casted from its original SQL type to
-StringType.
-transform | Optionally, a named list of transformation functions applied
-to each component (e.g., list(`x = as.character`) to cast column `x` to
-String).
+names_sep | If `NULL`, the default, the names will be left as is. If a string, the inner and outer names will be pasted together using `names_sep` as the delimiter.
+names_repair | Strategy for fixing duplicate column names (the semantic will be exactly identical to that of `.name_repair` option in `tibble`)
+ptype | Optionally, supply an R data frame prototype for the output. Each column of the unnested result will be casted based on the Spark equivalent of the type of the column with the same name within `ptype`, e.g., if `ptype` has a column `x` of type `character`, then column `x` of the unnested result will be casted from its original SQL type to StringType.
+transform | Optionally, a named list of transformation functions applied to each component (e.g., list(`x = as.character`) to cast column `x` to String).
 
 
 

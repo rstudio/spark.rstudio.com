@@ -29,15 +29,9 @@ spark_read(sc, paths, reader, columns, packages = TRUE, ...)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-paths | A character vector of one or more file URIs (e.g.,
-c("hdfs://localhost:9000/file.txt", "hdfs://localhost:9000/file2.txt"))
-reader | A self-contained R function that takes a single file URI as
-argument and returns the data read from that file as a data frame.
-columns | a named list of column names and column types of the resulting
-data frame (e.g., list(column_1 = "integer", column_2 = "character")), or a
-list of column names only if column types should be inferred from the data
-(e.g., list("column_1", "column_2"), or NULL if column types should be
-inferred and resulting data frame can have arbitrary column names
+paths | A character vector of one or more file URIs (e.g., c("hdfs://localhost:9000/file.txt", "hdfs://localhost:9000/file2.txt"))
+reader | A self-contained R function that takes a single file URI as argument and returns the data read from that file as a data frame.
+columns | a named list of column names and column types of the resulting data frame (e.g., list(column_1 = "integer", column_2 = "character")), or a list of column names only if column types should be inferred from the data (e.g., list("column_1", "column_2"), or NULL if column types should be inferred and resulting data frame can have arbitrary column names
 packages | A list of R packages to distribute to Spark workers
 ... | Optional arguments; currently unused.
 

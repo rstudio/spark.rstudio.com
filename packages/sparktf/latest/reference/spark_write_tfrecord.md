@@ -31,19 +31,10 @@ spark_write_tfrecord(x, path, record_type = c("Example",
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://", and "file://" protocols.
-record_type | Output format of TensorFlow records. One of ``"Example"`` and 
-``"SequenceExample"``.
-write_locality | Determines whether the TensorFlow records are
-written locally on the workers or on a distributed file system. One of
-``"distributed"`` and ``"local"``. See Details for more information.
-mode | A ``character`` element. Specifies the behavior when data or
-  table already exists. Supported values include: 'error', 'append', 'overwrite' and
-  'ignore'. Notice that 'overwrite' will also change the column structure.
-
-  For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
-  for your version of Spark.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://", and "file://" protocols.
+record_type | Output format of TensorFlow records. One of ``"Example"`` and  ``"SequenceExample"``.
+write_locality | Determines whether the TensorFlow records are written locally on the workers or on a distributed file system. One of ``"distributed"`` and ``"local"``. See Details for more information.
+mode | A ``character`` element. Specifies the behavior when data or   table already exists. Supported values include: 'error', 'append', 'overwrite' and   'ignore'. Notice that 'overwrite' will also change the column structure.    For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes   for your version of Spark.
 
 
 

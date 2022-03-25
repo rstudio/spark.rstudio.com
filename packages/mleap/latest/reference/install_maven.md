@@ -27,8 +27,7 @@ install_maven(dir = NULL, version = NULL)
 
 Argument      |Description
 ------------- |----------------
-dir | (Optional) Directory to install maven in.
-Defaults to ``maven/`` under user's home directory.
+dir | (Optional) Directory to install maven in. Defaults to ``maven/`` under user's home directory.
 version | Version of Maven to install, defaults to the latest version tested with this package.
 
 

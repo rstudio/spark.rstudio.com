@@ -28,8 +28,7 @@ gf_bfs(x, from_expr, to_expr, max_path_length = 10, edge_filter = NULL,
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 from_expr | Spark SQL expression specifying valid starting vertices for the BFS.
 to_expr | Spark SQL expression specifying valid target vertices for the BFS.
 max_path_length | Limit on the length of paths.

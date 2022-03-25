@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – ml_logistic_regression</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -308,11 +308,54 @@
 </tr>
 <tr class="even">
 <td>lower_bounds_on_coefficients</td>
-<td>(Spark 2.2.0+) Lower bounds on coefficients if fitting under bound constrained optimization.</td>
+<td>(Spark 2.2.0+) Lower bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.</td>
+</tr>
+<tr class="odd">
+<td>lower_bounds_on_intercepts</td>
+<td>(Spark 2.2.0+) Lower bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.</td>
+</tr>
+<tr class="even">
+<td>upper_bounds_on_coefficients</td>
+<td>(Spark 2.2.0+) Upper bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression.</td>
+</tr>
+<tr class="odd">
+<td>upper_bounds_on_intercepts</td>
+<td>(Spark 2.2.0+) Upper bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression.</td>
+</tr>
+<tr class="even">
+<td>features_col</td>
+<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="odd">
+<td>label_col</td>
+<td>Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="even">
+<td>family</td>
+<td>(Spark 2.1.0+) Param for the name of family which is a description of the label distribution to be used in the model. Supported options: “auto”, “binomial”, and “multinomial.”</td>
+</tr>
+<tr class="odd">
+<td>prediction_col</td>
+<td>Prediction column name.</td>
+</tr>
+<tr class="even">
+<td>probability_col</td>
+<td>Column name for predicted class conditional probabilities.</td>
+</tr>
+<tr class="odd">
+<td>raw_prediction_col</td>
+<td>Raw prediction (a.k.a. confidence) column name.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Optional arguments; see Details.</td>
 </tr>
 </tbody>
 </table>
-<p>The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression. lower_bounds_on_intercepts | (Spark 2.2.0+) Lower bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression. upper_bounds_on_coefficients | (Spark 2.2.0+) Upper bounds on coefficients if fitting under bound constrained optimization. The bound matrix must be compatible with the shape (1, number of features) for binomial regression, or (number of classes, number of features) for multinomial regression. upper_bounds_on_intercepts | (Spark 2.2.0+) Upper bounds on intercepts if fitting under bound constrained optimization. The bounds vector size must be equal with 1 for binomial regression, or the number of classes for multinomial regression. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. label_col | Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>. family | (Spark 2.1.0+) Param for the name of family which is a description of the label distribution to be used in the model. Supported options: “auto”, “binomial”, and “multinomial.” prediction_col | Prediction column name. probability_col | Column name for predicted class conditional probabilities. raw_prediction_col | Raw prediction (a.k.a. confidence) column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; see Details.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>

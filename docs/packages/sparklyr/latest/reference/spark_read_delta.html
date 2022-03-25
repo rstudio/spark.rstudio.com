@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_read_delta</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -235,6 +235,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -248,11 +252,42 @@
 </tr>
 <tr class="even">
 <td>path</td>
-<td>The path to the file. Needs to be accessible from the cluster.</td>
+<td>The path to the file. Needs to be accessible from the cluster. Supports the “hdfs://”, “s3a://” and “file://” protocols.</td>
+</tr>
+<tr class="odd">
+<td>name</td>
+<td>The name to assign to the newly generated table.</td>
+</tr>
+<tr class="even">
+<td>version</td>
+<td>The version of the delta table to read.</td>
+</tr>
+<tr class="odd">
+<td>timestamp</td>
+<td>The timestamp of the delta table to read. For example, <code>"2019-01-01"</code> or <code>"2019-01-01'T'00:00:00.000Z"</code>.</td>
+</tr>
+<tr class="even">
+<td>options</td>
+<td>A list of strings with additional options.</td>
+</tr>
+<tr class="odd">
+<td>repartition</td>
+<td>The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.</td>
+</tr>
+<tr class="even">
+<td>memory</td>
+<td>Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)</td>
+</tr>
+<tr class="odd">
+<td>overwrite</td>
+<td>Boolean; overwrite the table with the given name if it already exists?</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>Optional arguments; currently unused.</td>
 </tr>
 </tbody>
 </table>
-<p>Supports the “hdfs://”, “s3a://” and “file://” protocols. name | The name to assign to the newly generated table. version | The version of the delta table to read. timestamp | The timestamp of the delta table to read. For example, <code>"2019-01-01"</code> or <code>"2019-01-01'T'00:00:00.000Z"</code>. options | A list of strings with additional options. repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning. memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?) overwrite | Boolean; overwrite the table with the given name if it already exists? … | Optional arguments; currently unused.</p>
 </section>
 <section id="see-also" class="level2">
 <h2 class="anchored" data-anchor-id="see-also">See Also</h2>

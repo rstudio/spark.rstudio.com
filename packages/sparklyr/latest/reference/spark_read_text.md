@@ -39,14 +39,10 @@ Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
 name | The name to assign to the newly generated table.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
-repartition | The number of partitions used to distribute the
-generated table. Use 0 (the default) to avoid partitioning.
-memory | Boolean; should the data be loaded eagerly into memory? (That
-is, should the table be cached?)
-overwrite | Boolean; overwrite the table with the given name if it
-already exists?
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
+repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
+overwrite | Boolean; overwrite the table with the given name if it already exists?
 options | A list of strings with additional options.
 whole | Read the entire text file as a single entry? Defaults to ``FALSE``.
 ... | Optional arguments; currently unused.

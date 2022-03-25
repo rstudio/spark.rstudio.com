@@ -37,8 +37,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-indices | An vector of indices to select features from a vector column.
-Note that the indices are 0-based.
+indices | An vector of indices to select features from a vector column. Note that the indices are 0-based.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

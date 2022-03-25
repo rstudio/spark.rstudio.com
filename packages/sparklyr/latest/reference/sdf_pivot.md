@@ -29,14 +29,8 @@ sdf_pivot(x, formula, fun.aggregate = "count")
 Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
-formula | A two-sided  formula of the form ``x_1 + x_2 + ... ~ y_1``.
-The left-hand side of the formula indicates which variables are used for grouping,
-and the right-hand side indicates which variable is used for pivoting. Currently,
-only a single pivot column is supported.
-fun.aggregate | How should the grouped dataset be aggregated? Can be
-a length-one character vector, giving the name of a Spark aggregation function
-to be called; a named  list mapping column names to an aggregation method,
-or an  function that is invoked on the grouped dataset.
+formula | A two-sided  formula of the form ``x_1 + x_2 + ... ~ y_1``. The left-hand side of the formula indicates which variables are used for grouping, and the right-hand side indicates which variable is used for pivoting. Currently, only a single pivot column is supported.
+fun.aggregate | How should the grouped dataset be aggregated? Can be a length-one character vector, giving the name of a Spark aggregation function to be called; a named  list mapping column names to an aggregation method, or an  function that is invoked on the grouped dataset.
 
 
 

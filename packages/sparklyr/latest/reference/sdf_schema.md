@@ -28,8 +28,7 @@ sdf_schema(x, expand_nested_cols = FALSE, expand_struct_cols = FALSE)
 Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
-expand_nested_cols | Whether to expand columns containing nested array
-of structs (which are usually created by tidyr::nest on a Spark data frame)
+expand_nested_cols | Whether to expand columns containing nested array of structs (which are usually created by tidyr::nest on a Spark data frame)
 expand_struct_cols | Whether to expand columns containing structs
 
 

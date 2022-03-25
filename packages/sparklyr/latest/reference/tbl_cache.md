@@ -32,8 +32,7 @@ Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
 name | The table name.
-force | Force the data to be loaded into memory? This is accomplished
-by calling the ``count`` API on the associated Spark DataFrame.
+force | Force the data to be loaded into memory? This is accomplished by calling the ``count`` API on the associated Spark DataFrame.
 
 
 

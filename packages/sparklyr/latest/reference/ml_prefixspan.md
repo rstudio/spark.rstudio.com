@@ -38,17 +38,10 @@ ml_freq_seq_patterns(model)
 Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
-seq_col | The name of the sequence column in dataset (default
-“sequence”). Rows with nulls in this column are ignored.
-min_support | The minimum support required to be considered a frequent
-sequential pattern.
-max_pattern_length | The maximum length of a frequent sequential
-pattern. Any frequent pattern exceeding this length will not be included in
-the results.
-max_local_proj_db_size | The maximum number of items allowed in a
-prefix-projected database before local iterative processing of the
-projected database begins. This parameter should be tuned with respect to
-the size of your executors.
+seq_col | The name of the sequence column in dataset (default “sequence”). Rows with nulls in this column are ignored.
+min_support | The minimum support required to be considered a frequent sequential pattern.
+max_pattern_length | The maximum length of a frequent sequential pattern. Any frequent pattern exceeding this length will not be included in the results.
+max_local_proj_db_size | The maximum number of items allowed in a prefix-projected database before local iterative processing of the projected database begins. This parameter should be tuned with respect to the size of your executors.
 uid | A character string used to uniquely identify the ML estimator.
 ... | Optional arguments; currently unused.
 model | A Prefix Span model.

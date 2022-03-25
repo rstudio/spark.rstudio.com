@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_config_kubernetes</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -258,11 +258,50 @@
 </tr>
 <tr class="odd">
 <td>image</td>
-<td>Container image to use to launch Spark and sparklyr. Also known</td>
+<td>Container image to use to launch Spark and sparklyr. Also known as <code>spark.kubernetes.container.image</code>.</td>
+</tr>
+<tr class="even">
+<td>driver</td>
+<td>Name of the driver pod. If not set, the driver pod name is set to “sparklyr” suffixed by id to avoid name conflicts. Also known as <code>spark.kubernetes.driver.pod.name</code>.</td>
+</tr>
+<tr class="odd">
+<td>account</td>
+<td>Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as <code>spark.kubernetes.authenticate.driver.serviceAccountName</code>.</td>
+</tr>
+<tr class="even">
+<td>jars</td>
+<td>Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running <code>system.file("java/", package = "sparklyr")</code>.</td>
+</tr>
+<tr class="odd">
+<td>forward</td>
+<td>Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to <code>TRUE</code> which runs <code>kubectl port-forward</code> and <code>pkill kubectl</code> on disconnection.</td>
+</tr>
+<tr class="even">
+<td>executors</td>
+<td>Number of executors to request while connecting.</td>
+</tr>
+<tr class="odd">
+<td>conf</td>
+<td>A named list of additional entries to add to <code>sparklyr.shell.conf</code>.</td>
+</tr>
+<tr class="even">
+<td>timeout</td>
+<td>Total seconds to wait before giving up on connection.</td>
+</tr>
+<tr class="odd">
+<td>ports</td>
+<td>Ports to forward using kubectl.</td>
+</tr>
+<tr class="even">
+<td>fix_config</td>
+<td>Should the spark-defaults.conf get fixed? <code>TRUE</code> for Windows.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Additional parameters, currently not in use.</td>
 </tr>
 </tbody>
 </table>
-<p>as <code>spark.kubernetes.container.image</code>. driver | Name of the driver pod. If not set, the driver pod name is set to “sparklyr” suffixed by id to avoid name conflicts. Also known as <code>spark.kubernetes.driver.pod.name</code>. account | Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as <code>spark.kubernetes.authenticate.driver.serviceAccountName</code>. jars | Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running <code>system.file("java/", package = "sparklyr")</code>. forward | Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to <code>TRUE</code> which runs <code>kubectl port-forward</code> and <code>pkill kubectl</code> on disconnection. executors | Number of executors to request while connecting. conf | A named list of additional entries to add to <code>sparklyr.shell.conf</code>. timeout | Total seconds to wait before giving up on connection. ports | Ports to forward using kubectl. fix_config | Should the spark-defaults.conf get fixed? <code>TRUE</code> for Windows. … | Additional parameters, currently not in use.</p>
 
 
 </section>

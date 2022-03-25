@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – hof_map_zip_with</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -241,11 +241,26 @@
 </tr>
 <tr class="even">
 <td>func</td>
-<td>The function to apply (it should take (key, value1, value2) as arguments,</td>
+<td>The function to apply (it should take (key, value1, value2) as arguments, where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map</td>
+</tr>
+<tr class="odd">
+<td>dest_col</td>
+<td>Column to store the query result (default: the last column of the Spark data frame)</td>
+</tr>
+<tr class="even">
+<td>map1</td>
+<td>The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame)</td>
+</tr>
+<tr class="odd">
+<td>map2</td>
+<td>The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame)</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>Additional params to dplyr::mutate</td>
 </tr>
 </tbody>
 </table>
-<p>where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map dest_col | Column to store the query result (default: the last column of the Spark data frame) map1 | The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame) map2 | The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame) … | Additional params to dplyr::mutate</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>

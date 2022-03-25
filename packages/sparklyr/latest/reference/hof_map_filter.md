@@ -30,11 +30,8 @@ hof_map_filter(x, func, expr = NULL, dest_col = NULL, ...)
 Argument      |Description
 ------------- |----------------
 x | The Spark data frame to be processed
-func | The filter function to apply (it should take (key, value) as arguments
-and return a boolean value, with FALSE indicating the key-value pair should be discarded
-and TRUE otherwise)
-expr | The map being filtered, could be any SQL expression evaluating to a map
-(default: the last column of the Spark data frame)
+func | The filter function to apply (it should take (key, value) as arguments and return a boolean value, with FALSE indicating the key-value pair should be discarded and TRUE otherwise)
+expr | The map being filtered, could be any SQL expression evaluating to a map (default: the last column of the Spark data frame)
 dest_col | Column to store the filtered result (default: expr)
 ... | Additional params to dplyr::mutate
 

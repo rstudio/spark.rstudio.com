@@ -28,10 +28,8 @@ spark_session_config(sc, config = TRUE, value = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-config | The configuration entry name(s) (e.g., ``"spark.sql.shuffle.partitions"``).
-Defaults to ``NULL`` to retrieve all configuration entries.
-value | The configuration value to be set. Defaults to ``NULL`` to retrieve
-configuration entries.
+config | The configuration entry name(s) (e.g., ``"spark.sql.shuffle.partitions"``). Defaults to ``NULL`` to retrieve all configuration entries.
+value | The configuration value to be set. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

@@ -28,8 +28,7 @@ spark_coalesce_shuffle_partitions(sc, enable = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-enable | Whether to enable coalescing of contiguous shuffle partitions.
-Defaults to ``NULL`` to retrieve configuration entries.
+enable | Whether to enable coalescing of contiguous shuffle partitions. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

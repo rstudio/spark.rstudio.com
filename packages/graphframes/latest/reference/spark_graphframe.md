@@ -29,8 +29,7 @@ spark_graphframe(x, ...)
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 ... | additional arguments, not used
 
 

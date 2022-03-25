@@ -41,8 +41,7 @@ ml_approx_similarity_join(
 
 Argument      |Description
 ------------- |----------------
-model | A fitted LSH model, returned by either ``ft_minhash_lsh()``
-or ``ft_bucketed_random_projection_lsh()``.
+model | A fitted LSH model, returned by either ``ft_minhash_lsh()`` or ``ft_bucketed_random_projection_lsh()``.
 dataset | The dataset to search for nearest neighbors of the key.
 key | Feature vector representing the item to search for.
 num_nearest_neighbors | The maximum number of nearest neighbors.

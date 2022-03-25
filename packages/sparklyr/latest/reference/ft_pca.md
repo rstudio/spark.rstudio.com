@@ -42,8 +42,7 @@ output_col | The name of the output column.
 k | The number of principal components
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
-features | The columns to use in the principal components
-analysis. Defaults to all columns in ``x``.
+features | The columns to use in the principal components analysis. Defaults to all columns in ``x``.
 pc_prefix | Length-one character vector used to prepend names of components.
 
 

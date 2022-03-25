@@ -28,8 +28,7 @@ gf_shortest_paths(x, landmarks, ...)
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 landmarks | IDs of landmark vertices.
 ... | Optional arguments, currently not used.
 

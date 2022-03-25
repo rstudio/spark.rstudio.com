@@ -31,16 +31,10 @@ hof_map_zip_with(x, func, dest_col = NULL, map1 = NULL, map2 = NULL, ...)
 Argument      |Description
 ------------- |----------------
 x | The Spark data frame to be processed
-func | The function to apply (it should take (key, value1, value2) as arguments,
-where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value
-pair present in map2, and return a transformed value associated with key in the
-resulting map
-dest_col | Column to store the query result
-(default: the last column of the Spark data frame)
-map1 | The first map being merged, could be any SQL expression evaluating to a
-map (default: the first column of the Spark data frame)
-map2 | The second map being merged, could be any SQL expression evaluating to a
-map (default: the second column of the Spark data frame)
+func | The function to apply (it should take (key, value1, value2) as arguments, where (key, value1) is a key-value pair present in map1, (key, value2) is a key-value pair present in map2, and return a transformed value associated with key in the resulting map
+dest_col | Column to store the query result (default: the last column of the Spark data frame)
+map1 | The first map being merged, could be any SQL expression evaluating to a map (default: the first column of the Spark data frame)
+map2 | The second map being merged, could be any SQL expression evaluating to a map (default: the second column of the Spark data frame)
 ... | Additional params to dplyr::mutate
 
 

@@ -51,8 +51,7 @@ x | a Spark ML model.
 exponentiate | For GLM, whether to exponentiate the coefficient estimates (typical for logistic regression.)
 ... | extra arguments (not used.)
 newdata | a tbl_spark of new data to use for prediction.
-type.residuals | type of residuals, defaults to ``"working"``. Must be set to
-``"working"`` when ``newdata`` is supplied.
+type.residuals | type of residuals, defaults to ``"working"``. Must be set to ``"working"`` when ``newdata`` is supplied.
 
 
 

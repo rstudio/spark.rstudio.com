@@ -36,12 +36,9 @@ stream_write_delta(
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame or dplyr operation
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
-mode | Specifies how data is written to a streaming sink. Valid values are
-``"append"``, ``"complete"`` or ``"update"``.
-checkpoint | The location where the system will write all the checkpoint
-information to guarantee end-to-end fault-tolerance.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
+mode | Specifies how data is written to a streaming sink. Valid values are ``"append"``, ``"complete"`` or ``"update"``.
+checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance.
 options | A list of strings with additional options.
 partition_by | Partitions the output by the given list of columns.
 ... | Optional arguments; currently unused.

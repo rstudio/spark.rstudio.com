@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – sdf_quantile</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -229,6 +229,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -242,11 +246,22 @@
 </tr>
 <tr class="even">
 <td>column</td>
-<td>The column(s) for which quantiles should be computed.</td>
+<td>The column(s) for which quantiles should be computed. Multiple columns are only supported in Spark 2.0+.</td>
+</tr>
+<tr class="odd">
+<td>probabilities</td>
+<td>A numeric vector of probabilities, for which quantiles should be computed.</td>
+</tr>
+<tr class="even">
+<td>relative.error</td>
+<td>The maximal possible difference between the actual percentile of a result and its expected percentile (e.g., if <code>relative.error</code> is 0.01 and <code>probabilities</code> is 0.95, then any value between the 94th and 96th percentile will be considered an acceptable approximation).</td>
+</tr>
+<tr class="odd">
+<td>weight.column</td>
+<td>If not NULL, then a generalized version of the Greenwald- Khanna algorithm will be run to compute weighted percentiles, with each sample from <code>column</code> having a relative weight specified by the corresponding value in <code>weight.column</code>. The weights can be considered as relative frequencies of sample data points.</td>
 </tr>
 </tbody>
 </table>
-<p>Multiple columns are only supported in Spark 2.0+. probabilities | A numeric vector of probabilities, for which quantiles should be computed. relative.error | The maximal possible difference between the actual percentile of a result and its expected percentile (e.g., if <code>relative.error</code> is 0.01 and <code>probabilities</code> is 0.95, then any value between the 94th and 96th percentile will be considered an acceptable approximation). weight.column | If not NULL, then a generalized version of the Greenwald- Khanna algorithm will be run to compute weighted percentiles, with each sample from <code>column</code> having a relative weight specified by the corresponding value in <code>weight.column</code>. The weights can be considered as relative frequencies of sample data points.</p>
 
 
 </section>

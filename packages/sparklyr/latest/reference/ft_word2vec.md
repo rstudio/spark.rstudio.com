@@ -46,16 +46,12 @@ x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
 vector_size | The dimension of the code that you want to transform from words. Default: 100
-min_count | The minimum number of times a token must appear to be included in
-the word2vec model's vocabulary. Default: 5
-max_sentence_length | (Spark 2.0.0+) Sets the maximum length (in words) of each sentence
-in the input data. Any sentence longer than this threshold will be divided into
-chunks of up to ``max_sentence_length`` size. Default: 1000
+min_count | The minimum number of times a token must appear to be included in the word2vec model's vocabulary. Default: 5
+max_sentence_length | (Spark 2.0.0+) Sets the maximum length (in words) of each sentence in the input data. Any sentence longer than this threshold will be divided into chunks of up to ``max_sentence_length`` size. Default: 1000
 num_partitions | Number of partitions for sentences of words. Default: 1
 step_size | Param for Step size to be used for each iteration of optimization (> 0).
 max_iter | The maximum number of iterations to use.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 model | A fitted ``Word2Vec`` model, returned by ``ft_word2vec()``.

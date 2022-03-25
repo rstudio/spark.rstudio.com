@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – sdf_collect</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -223,6 +223,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -236,15 +240,14 @@
 </tr>
 <tr class="even">
 <td>impl</td>
-<td>Which implementation to use while collecting Spark dataframe</td>
+<td>Which implementation to use while collecting Spark dataframe - row-wise: fetch the entire dataframe into memory and then process it row-by-row - row-wise-iter: iterate through the dataframe using RDD local iterator, processing one row at a time (hence reducing memory footprint) - column-wise: fetch the entire dataframe into memory and then process it column-by-column NOTE: (1) this will not apply to streaming or arrow use cases (2) this parameter will only affect implementation detail, and will not affect result of <code>sdf_collect</code>, and should only be set if performance profiling indicates any particular choice will be significantly better than the default choice (“row-wise”)</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Additional options.</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>row-wise: fetch the entire dataframe into memory and then process it row-by-row</li>
-<li>row-wise-iter: iterate through the dataframe using RDD local iterator, processing one row at a time (hence reducing memory footprint)</li>
-<li>column-wise: fetch the entire dataframe into memory and then process it column-by-column NOTE: (1) this will not apply to streaming or arrow use cases (2) this parameter will only affect implementation detail, and will not affect result of <code>sdf_collect</code>, and should only be set if performance profiling indicates any particular choice will be significantly better than the default choice (“row-wise”) … | Additional options.</li>
-</ul>
 
 
 </section>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_write_tfrecord</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -226,6 +226,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -239,12 +243,22 @@
 </tr>
 <tr class="even">
 <td>path</td>
-<td>The path to the file. Needs to be accessible from the cluster.</td>
+<td>The path to the file. Needs to be accessible from the cluster. Supports the “hdfs://”, “s3a://”, and “file://” protocols.</td>
+</tr>
+<tr class="odd">
+<td>record_type</td>
+<td>Output format of TensorFlow records. One of <code>"Example"</code> and <code>"SequenceExample"</code>.</td>
+</tr>
+<tr class="even">
+<td>write_locality</td>
+<td>Determines whether the TensorFlow records are written locally on the workers or on a distributed file system. One of <code>"distributed"</code> and <code>"local"</code>. See Details for more information.</td>
+</tr>
+<tr class="odd">
+<td>mode</td>
+<td>A <code>character</code> element. Specifies the behavior when data or table already exists. Supported values include: ‘error’, ‘append’, ‘overwrite’ and ‘ignore’. Notice that ‘overwrite’ will also change the column structure. For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes for your version of Spark.</td>
 </tr>
 </tbody>
 </table>
-<p>Supports the “hdfs://”, “s3a://”, and “file://” protocols. record_type | Output format of TensorFlow records. One of <code>"Example"</code> and <code>"SequenceExample"</code>. write_locality | Determines whether the TensorFlow records are written locally on the workers or on a distributed file system. One of <code>"distributed"</code> and <code>"local"</code>. See Details for more information. mode | A <code>character</code> element. Specifies the behavior when data or table already exists. Supported values include: ‘error’, ‘append’, ‘overwrite’ and ‘ignore’. Notice that ‘overwrite’ will also change the column structure.</p>
-<p>For more details see also http://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes for your version of Spark.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>

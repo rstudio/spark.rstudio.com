@@ -42,8 +42,7 @@ nn | Sample Size.
 m | The number of successes among the population.
 n | The number of failures among the population.
 k | The number of draws.
-num_partitions | Number of partitions in the resulting Spark dataframe
-(default: default parallelism of the Spark cluster).
+num_partitions | Number of partitions in the resulting Spark dataframe (default: default parallelism of the Spark cluster).
 seed | Random seed (default: a random long integer).
 output_col | Name of the output column containing sample values (default: "x").
 

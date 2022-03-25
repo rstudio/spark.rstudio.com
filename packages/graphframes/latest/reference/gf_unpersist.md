@@ -27,8 +27,7 @@ gf_unpersist(x, blocking = FALSE)
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 blocking | whether to block until all blocks are deleted
 
 

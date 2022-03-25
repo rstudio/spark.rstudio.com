@@ -28,9 +28,7 @@ spark_version_from_home(spark_home, default = NULL)
 Argument      |Description
 ------------- |----------------
 spark_home | The path to a Spark installation.
-default | The default version to be inferred, in case
-version lookup failed, e.g. no Spark installation was found
-at ``spark_home``.
+default | The default version to be inferred, in case version lookup failed, e.g. no Spark installation was found at ``spark_home``.
 
 
 

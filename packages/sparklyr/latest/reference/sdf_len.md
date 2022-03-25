@@ -29,8 +29,7 @@ Argument      |Description
 ------------- |----------------
 sc | The associated Spark connection.
 length | The desired length of the sequence.
-repartition | The number of partitions to use when distributing the
-data across the Spark cluster.
+repartition | The number of partitions to use when distributing the data across the Spark cluster.
 type | The data type to use for the index, either ``"integer"`` or ``"integer64"``.
 
 

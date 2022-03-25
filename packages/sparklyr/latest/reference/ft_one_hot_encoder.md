@@ -42,9 +42,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_cols | The name of the input columns.
 output_cols | The name of the output columns.
-handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are
-'skip' (filter out rows with invalid values), 'error' (throw an error), or
-'keep' (keep invalid values in a special additional bucket). Default: "error"
+handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are 'skip' (filter out rows with invalid values), 'error' (throw an error), or 'keep' (keep invalid values in a special additional bucket). Default: "error"
 drop_last | Whether to drop the last category. Defaults to ``TRUE``.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.

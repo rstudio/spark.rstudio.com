@@ -30,12 +30,8 @@ hof_array_sort(x, func, expr = NULL, dest_col = NULL, ...)
 Argument      |Description
 ------------- |----------------
 x | The Spark data frame to be processed
-func | The comparator function to apply (it should take 2 array elements as arguments
-and return an integer, with a return value of -1 indicating the first element is less than
-the second, 0 indicating equality, or 1 indicating the first element is greater than the
-second)
-expr | The array being sorted, could be any SQL expression evaluating to an array
-(default: the last column of the Spark data frame)
+func | The comparator function to apply (it should take 2 array elements as arguments and return an integer, with a return value of -1 indicating the first element is less than the second, 0 indicating equality, or 1 indicating the first element is greater than the second)
+expr | The array being sorted, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame)
 dest_col | Column to store the sorted result (default: expr)
 ... | Additional params to dplyr::mutate
 

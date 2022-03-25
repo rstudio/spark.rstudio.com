@@ -35,12 +35,9 @@ stream_write_console(
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame or dplyr operation
-mode | Specifies how data is written to a streaming sink. Valid values are
-``"append"``, ``"complete"`` or ``"update"``.
+mode | Specifies how data is written to a streaming sink. Valid values are ``"append"``, ``"complete"`` or ``"update"``.
 options | A list of strings with additional options.
-trigger | The trigger for the stream query, defaults to micro-batches runnnig
-every 5 seconds. See `stream_trigger_interval` and
-`stream_trigger_continuous`.
+trigger | The trigger for the stream query, defaults to micro-batches runnnig every 5 seconds. See `stream_trigger_interval` and `stream_trigger_continuous`.
 partition_by | Partitions the output by the given list of columns.
 ... | Optional arguments; currently unused.
 

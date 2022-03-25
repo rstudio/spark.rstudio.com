@@ -42,8 +42,7 @@ x | The Spark data frame to run aggregation on
 start | The starting value of the aggregation
 merge | The aggregation function
 finish | Optional param specifying a transformation to apply on the final value of the aggregation
-expr | The array being aggregated, could be any SQL expression evaluating to an array
-(default: the last column of the Spark data frame)
+expr | The array being aggregated, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame)
 dest_col | Column to store the aggregated result (default: expr)
 ... | Additional params to dplyr::mutate
 

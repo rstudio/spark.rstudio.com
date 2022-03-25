@@ -50,15 +50,9 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-bucket_length | The length of each hash bucket, a larger bucket lowers the
-false negative rate. The number of buckets will be (max L2 norm of input vectors) /
-bucketLength.
-num_hash_tables | Number of hash tables used in LSH OR-amplification. LSH
-OR-amplification can be used to reduce the false negative rate. Higher values
-for this param lead to a reduced false negative rate, at the expense of added
- computational complexity.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+bucket_length | The length of each hash bucket, a larger bucket lowers the false negative rate. The number of buckets will be (max L2 norm of input vectors) / bucketLength.
+num_hash_tables | Number of hash tables used in LSH OR-amplification. LSH OR-amplification can be used to reduce the false negative rate. Higher values for this param lead to a reduced false negative rate, at the expense of added  computational complexity.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

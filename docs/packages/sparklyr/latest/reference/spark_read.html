@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_read</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -225,6 +225,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -238,11 +242,26 @@
 </tr>
 <tr class="even">
 <td>paths</td>
-<td>A character vector of one or more file URIs (e.g.,</td>
+<td>A character vector of one or more file URIs (e.g., c(“hdfs://localhost:9000/file.txt”, “hdfs://localhost:9000/file2.txt”))</td>
+</tr>
+<tr class="odd">
+<td>reader</td>
+<td>A self-contained R function that takes a single file URI as argument and returns the data read from that file as a data frame.</td>
+</tr>
+<tr class="even">
+<td>columns</td>
+<td>a named list of column names and column types of the resulting data frame (e.g., list(column_1 = “integer”, column_2 = “character”)), or a list of column names only if column types should be inferred from the data (e.g., list(“column_1”, “column_2”), or NULL if column types should be inferred and resulting data frame can have arbitrary column names</td>
+</tr>
+<tr class="odd">
+<td>packages</td>
+<td>A list of R packages to distribute to Spark workers</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>Optional arguments; currently unused.</td>
 </tr>
 </tbody>
 </table>
-<p>c(“hdfs://localhost:9000/file.txt”, “hdfs://localhost:9000/file2.txt”)) reader | A self-contained R function that takes a single file URI as argument and returns the data read from that file as a data frame. columns | a named list of column names and column types of the resulting data frame (e.g., list(column_1 = “integer”, column_2 = “character”)), or a list of column names only if column types should be inferred from the data (e.g., list(“column_1”, “column_2”), or NULL if column types should be inferred and resulting data frame can have arbitrary column names packages | A list of R packages to distribute to Spark workers … | Optional arguments; currently unused.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>

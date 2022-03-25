@@ -51,8 +51,7 @@ elastic_net_param | ElasticNet mixing parameter, in range [0, 1]. For alpha = 0,
 reg_param | Regularization parameter (aka lambda)
 max_iter | The maximum number of iterations to use.
 weight_col | The name of the column to use as weights for the model fit.
-loss | The loss function to be optimized. Supported options: "squaredError"
-and "huber". Default: "squaredError"
+loss | The loss function to be optimized. Supported options: "squaredError" and "huber". Default: "squaredError"
 solver | Solver algorithm for optimization.
 standardization | Whether to standardize the training features before fitting the model.
 tol | Param for the convergence tolerance for iterative algorithms.

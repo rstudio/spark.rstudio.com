@@ -29,14 +29,8 @@ find_scalac(version, locations = NULL)
 
 Argument      |Description
 ------------- |----------------
-version | The ``scala`` version to search for. Versions
-of the form ``major.minor`` will be matched against the
-``scalac`` installation with version ``major.minor.patch``;
-if multiple compilers are discovered the most recent one will be
-used.
-locations | Additional locations to scan. By default, the
-directories ``/opt/scala`` and ``/usr/local/scala`` will
-be scanned.
+version | The ``scala`` version to search for. Versions of the form ``major.minor`` will be matched against the ``scalac`` installation with version ``major.minor.patch``; if multiple compilers are discovered the most recent one will be used.
+locations | Additional locations to scan. By default, the directories ``/opt/scala`` and ``/usr/local/scala`` will be scanned.
 
 
 

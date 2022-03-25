@@ -28,8 +28,7 @@ spark_adaptive_query_execution(sc, enable = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-enable | Whether to enable Spark adaptive query execution. Defaults to
-``NULL`` to retrieve configuration entries.
+enable | Whether to enable Spark adaptive query execution. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

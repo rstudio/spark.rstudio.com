@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – ml_decision_tree</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -314,11 +314,90 @@
 </tr>
 <tr class="odd">
 <td>max_depth</td>
-<td>Maximum depth of the tree (&gt;= 0); that is, the maximum</td>
+<td>Maximum depth of the tree (&gt;= 0); that is, the maximum number of nodes separating any leaves from the root of the tree.</td>
+</tr>
+<tr class="even">
+<td>max_bins</td>
+<td>The maximum number of bins used for discretizing continuous features and for choosing how to split on features at each node. More bins give higher granularity.</td>
+</tr>
+<tr class="odd">
+<td>min_instances_per_node</td>
+<td>Minimum number of instances each child must have after split.</td>
+</tr>
+<tr class="even">
+<td>min_info_gain</td>
+<td>Minimum information gain for a split to be considered at a tree node. Should be &gt;= 0, defaults to 0.</td>
+</tr>
+<tr class="odd">
+<td>impurity</td>
+<td>Criterion used for information gain calculation. Supported: “entropy” and “gini” (default) for classification and “variance” (default) for regression. For <code>ml_decision_tree</code>, setting <code>"auto"</code> will default to the appropriate criterion based on model type.</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Seed for random numbers.</td>
+</tr>
+<tr class="odd">
+<td>thresholds</td>
+<td>Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values &gt; 0 excepting that at most one value may be 0. The class with largest value <code>p/t</code> is predicted, where <code>p</code> is the original probability of that class and <code>t</code> is the class’s threshold.</td>
+</tr>
+<tr class="even">
+<td>cache_node_ids</td>
+<td>If <code>FALSE</code>, the algorithm will pass trees to executors to match instances with nodes. If <code>TRUE</code>, the algorithm will cache node IDs for each instance. Caching can speed up training of deeper trees. Defaults to <code>FALSE</code>.</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_interval</td>
+<td>Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.</td>
+</tr>
+<tr class="even">
+<td>max_memory_in_mb</td>
+<td>Maximum memory in MB allocated to histogram aggregation. If too small, then 1 node will be split per iteration, and its aggregates may exceed this size. Defaults to 256.</td>
+</tr>
+<tr class="odd">
+<td>features_col</td>
+<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="even">
+<td>label_col</td>
+<td>Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="odd">
+<td>prediction_col</td>
+<td>Prediction column name.</td>
+</tr>
+<tr class="even">
+<td>probability_col</td>
+<td>Column name for predicted class conditional probabilities.</td>
+</tr>
+<tr class="odd">
+<td>raw_prediction_col</td>
+<td>Raw prediction (a.k.a. confidence) column name.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Optional arguments; see Details.</td>
+</tr>
+<tr class="even">
+<td>type</td>
+<td>The type of model to fit. <code>"regression"</code> treats the response as a continuous variable, while <code>"classification"</code> treats the response as a categorical variable. When <code>"auto"</code> is used, the model type is inferred based on the response variable type – if it is a numeric type, then regression is used; classification otherwise.</td>
+</tr>
+<tr class="odd">
+<td>variance_col</td>
+<td>(Optional) Column name for the biased sample variance of prediction.</td>
+</tr>
+<tr class="even">
+<td>response</td>
+<td>(Deprecated) The name of the response column (as a length-one character vector.)</td>
+</tr>
+<tr class="odd">
+<td>features</td>
+<td>(Deprecated) The name of features (terms) to use for the model fit.</td>
 </tr>
 </tbody>
 </table>
-<p>number of nodes separating any leaves from the root of the tree. max_bins | The maximum number of bins used for discretizing continuous features and for choosing how to split on features at each node. More bins give higher granularity. min_instances_per_node | Minimum number of instances each child must have after split. min_info_gain | Minimum information gain for a split to be considered at a tree node. Should be &gt;= 0, defaults to 0. impurity | Criterion used for information gain calculation. Supported: “entropy” and “gini” (default) for classification and “variance” (default) for regression. For <code>ml_decision_tree</code>, setting <code>"auto"</code> will default to the appropriate criterion based on model type. seed | Seed for random numbers. thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values &gt; 0 excepting that at most one value may be 0. The class with largest value <code>p/t</code> is predicted, where <code>p</code> is the original probability of that class and <code>t</code> is the class’s threshold. cache_node_ids | If <code>FALSE</code>, the algorithm will pass trees to executors to match instances with nodes. If <code>TRUE</code>, the algorithm will cache node IDs for each instance. Caching can speed up training of deeper trees. Defaults to <code>FALSE</code>. checkpoint_interval | Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. max_memory_in_mb | Maximum memory in MB allocated to histogram aggregation. If too small, then 1 node will be split per iteration, and its aggregates may exceed this size. Defaults to 256. features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>. label_col | Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>. prediction_col | Prediction column name. probability_col | Column name for predicted class conditional probabilities. raw_prediction_col | Raw prediction (a.k.a. confidence) column name. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; see Details. type | The type of model to fit. <code>"regression"</code> treats the response as a continuous variable, while <code>"classification"</code> treats the response as a categorical variable. When <code>"auto"</code> is used, the model type is inferred based on the response variable type – if it is a numeric type, then regression is used; classification otherwise. variance_col | (Optional) Column name for the biased sample variance of prediction. response | (Deprecated) The name of the response column (as a length-one character vector.) features | (Deprecated) The name of features (terms) to use for the model fit.</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>

@@ -28,10 +28,8 @@ stream_render(stream = NULL, collect = 10, stats = NULL, ...)
 Argument      |Description
 ------------- |----------------
 stream | The stream to render
-collect | The interval in seconds to collect data before rendering the
-'htmlwidget'.
-stats | Optional stream statistics collected using ``stream_stats()``,
-when specified, ``stream`` should be omitted.
+collect | The interval in seconds to collect data before rendering the 'htmlwidget'.
+stats | Optional stream statistics collected using ``stream_stats()``, when specified, ``stream`` should be omitted.
 ... | Additional optional arguments.
 
 

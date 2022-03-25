@@ -33,17 +33,11 @@ stream_generate_test(
 
 Argument      |Description
 ------------- |----------------
-df | The data frame used as a source of rows to the stream, will
-be cast to data frame if needed. Defaults to a sequence of one thousand
-entries.
+df | The data frame used as a source of rows to the stream, will be cast to data frame if needed. Defaults to a sequence of one thousand entries.
 path | Path to save stream of files to, defaults to ``"source"``.
-distribution | The distribution of rows to use over each iteration,
-defaults to a binomial distribution. The stream will cycle through the
-distribution if needed.
-iterations | Number of iterations to execute before stopping, defaults
-to fifty.
-interval | The inverval in seconds use to write the stream, defaults
-to one second.
+distribution | The distribution of rows to use over each iteration, defaults to a binomial distribution. The stream will cycle through the distribution if needed.
+iterations | Number of iterations to execute before stopping, defaults to fifty.
+interval | The inverval in seconds use to write the stream, defaults to one second.
 
 
 

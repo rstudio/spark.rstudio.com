@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – join.tbl_spark</title>
   <style>
@@ -108,7 +108,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -163,6 +163,10 @@
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -180,15 +184,30 @@
 </tr>
 <tr class="odd">
 <td>by</td>
-<td>A character vector of variables to join by.</td>
+<td>A character vector of variables to join by. If <code>NULL</code>, the default, *_join() will perform a natural join, using all variables in common across <code>x</code> and <code>y</code>. A message lists the variables so that you can check they’re correct; suppress the message by supplying <code>by</code> explicitly. To join by different variables on <code>x</code> and <code>y</code>, use a named vector. For example, <code>by = c("a" = "b")</code> will match <code>x$a</code> to <code>y$b</code>. To join by multiple variables, use a vector with length &gt; 1. For example, <code>by = c("a", "b")</code> will match <code>x$a</code> to <code>y$a</code> and <code>x$b</code> to <code>y$b</code>. Use a named vector to match different variables in <code>x</code> and <code>y</code>. For example, <code>by = c("a" = "b", "c" = "d")</code> will match <code>x$a</code> to <code>y$b</code> and <code>x$c</code> to <code>y$d</code>. To perform a cross-join, generating all combinations of <code>x</code> and <code>y</code>, use <code>by = character()</code>.</td>
+</tr>
+<tr class="even">
+<td>copy</td>
+<td>If <code>x</code> and <code>y</code> are not from the same data source, and <code>copy</code> is <code>TRUE</code>, then <code>y</code> will be copied into a temporary table in same database as <code>x</code>. *_join() will automatically run <code>ANALYZE</code> on the created table in the hope that this will make you queries as efficient as possible by giving more data to the query planner. This allows you to join tables across srcs, but it’s potentially expensive operation so you must opt into it.</td>
+</tr>
+<tr class="odd">
+<td>suffix</td>
+<td>If there are non-joined duplicate variables in <code>x</code> and <code>y</code>, these suffixes will be added to the output to disambiguate them. Should be a character vector of length 2.</td>
+</tr>
+<tr class="even">
+<td>auto_index</td>
+<td>if <code>copy</code> is <code>TRUE</code>, automatically create indices for the variables in <code>by</code>. This may speed up the join if there are matching indexes in <code>x</code>.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Other parameters passed onto methods.</td>
+</tr>
+<tr class="even">
+<td>sql_on</td>
+<td>A custom join predicate as an SQL expression. Usually joins use column equality, but you can perform more complex queries by supply <code>sql_on</code> which should be a SQL expression that uses <code>LHS</code> and <code>RHS</code> aliases to refer to the left-hand side or right-hand side of the join respectively.</td>
 </tr>
 </tbody>
 </table>
-<p>If <code>NULL</code>, the default, *_join() will perform a natural join, using all variables in common across <code>x</code> and <code>y</code>. A message lists the variables so that you can check they’re correct; suppress the message by supplying <code>by</code> explicitly.</p>
-<p>To join by different variables on <code>x</code> and <code>y</code>, use a named vector. For example, <code>by = c("a" = "b")</code> will match <code>x$a</code> to <code>y$b</code>.</p>
-<p>To join by multiple variables, use a vector with length &gt; 1. For example, <code>by = c("a", "b")</code> will match <code>x$a</code> to <code>y$a</code> and <code>x$b</code> to <code>y$b</code>. Use a named vector to match different variables in <code>x</code> and <code>y</code>. For example, <code>by = c("a" = "b", "c" = "d")</code> will match <code>x$a</code> to <code>y$b</code> and <code>x$c</code> to <code>y$d</code>.</p>
-<p>To perform a cross-join, generating all combinations of <code>x</code> and <code>y</code>, use <code>by = character()</code>. copy | If <code>x</code> and <code>y</code> are not from the same data source, and <code>copy</code> is <code>TRUE</code>, then <code>y</code> will be copied into a temporary table in same database as <code>x</code>. *_join() will automatically run <code>ANALYZE</code> on the created table in the hope that this will make you queries as efficient as possible by giving more data to the query planner.</p>
-<p>This allows you to join tables across srcs, but it’s potentially expensive operation so you must opt into it. suffix | If there are non-joined duplicate variables in <code>x</code> and <code>y</code>, these suffixes will be added to the output to disambiguate them. Should be a character vector of length 2. auto_index | if <code>copy</code> is <code>TRUE</code>, automatically create indices for the variables in <code>by</code>. This may speed up the join if there are matching indexes in <code>x</code>. … | Other parameters passed onto methods. sql_on | A custom join predicate as an SQL expression. Usually joins use column equality, but you can perform more complex queries by supply <code>sql_on</code> which should be a SQL expression that uses <code>LHS</code> and <code>RHS</code> aliases to refer to the left-hand side or right-hand side of the join respectively.</p>
 
 
 </section>

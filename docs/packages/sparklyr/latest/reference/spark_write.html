@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_write</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -241,11 +241,18 @@
 </tr>
 <tr class="even">
 <td>writer</td>
-<td>A writer function with the signature function(partition, path)</td>
+<td>A writer function with the signature function(partition, path) where <code>partition</code> is a R dataframe containing all rows from one partition of the original Spark Dataframe <code>x</code> and path is a string specifying the file to write <code>partition</code> to</td>
+</tr>
+<tr class="odd">
+<td>paths</td>
+<td>A single destination path or a list of destination paths, each one specifying a location for a partition from <code>x</code> to be written to. If number of partition(s) in <code>x</code> is not equal to <code>length(paths)</code> then <code>x</code> will be re-partitioned to contain <code>length(paths)</code> partition(s)</td>
+</tr>
+<tr class="even">
+<td>packages</td>
+<td>Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with</td>
 </tr>
 </tbody>
 </table>
-<p>where <code>partition</code> is a R dataframe containing all rows from one partition of the original Spark Dataframe <code>x</code> and path is a string specifying the file to write <code>partition</code> to paths | A single destination path or a list of destination paths, each one specifying a location for a partition from <code>x</code> to be written to. If number of partition(s) in <code>x</code> is not equal to <code>length(paths)</code> then <code>x</code> will be re-partitioned to contain <code>length(paths)</code> partition(s) packages | Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>

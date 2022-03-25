@@ -39,19 +39,14 @@ spark_read_delta(
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 name | The name to assign to the newly generated table.
 version | The version of the delta table to read.
-timestamp | The timestamp of the delta table to read. For example,
-``"2019-01-01"`` or ``"2019-01-01'T'00:00:00.000Z"``.
+timestamp | The timestamp of the delta table to read. For example, ``"2019-01-01"`` or ``"2019-01-01'T'00:00:00.000Z"``.
 options | A list of strings with additional options.
-repartition | The number of partitions used to distribute the
-generated table. Use 0 (the default) to avoid partitioning.
-memory | Boolean; should the data be loaded eagerly into memory? (That
-is, should the table be cached?)
-overwrite | Boolean; overwrite the table with the given name if it
-already exists?
+repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning.
+memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?)
+overwrite | Boolean; overwrite the table with the given name if it already exists?
 ... | Optional arguments; currently unused.
 
 

@@ -28,9 +28,7 @@ ml_corr(x, columns = NULL, method = c("pearson", "spearman"))
 Argument      |Description
 ------------- |----------------
 x | A ``tbl_spark``.
-columns | The names of the columns to calculate correlations of. If only one
-column is specified, it must be a vector column (for example, assembled using
-``ft_vector_assember()``).
+columns | The names of the columns to calculate correlations of. If only one column is specified, it must be a vector column (for example, assembled using ``ft_vector_assember()``).
 method | The method to use, either ``"pearson"`` or ``"spearman"``.
 
 

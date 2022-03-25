@@ -31,8 +31,7 @@ Argument      |Description
 ------------- |----------------
 x | The Spark data frame to filter
 func | The filtering function
-expr | The array being filtered, could be any SQL expression evaluating to an array
-(default: the last column of the Spark data frame)
+expr | The array being filtered, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame)
 dest_col | Column to store the filtered result (default: expr)
 ... | Additional params to dplyr::mutate
 

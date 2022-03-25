@@ -31,9 +31,7 @@ Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
 x | A list of Java object references.
-element_type | A valid Java class name representing the generic type
-parameter of the Java array to be instantiated. Each element of ``x``
-must refer to a Java object that is assignable to ``element_type``.
+element_type | A valid Java class name representing the generic type parameter of the Java array to be instantiated. Each element of ``x`` must refer to a Java object that is assignable to ``element_type``.
 
 
 

@@ -53,8 +53,7 @@ probability_col | Column name for predicted class conditional probabilities.
 raw_prediction_col | Raw prediction (a.k.a. confidence) column name.
 k | The number of clusters to create
 max_iter | The maximum number of iterations to use.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 input_col | The name of the input column.
 input_cols | Names of output columns.
 output_col | The name of the output column.

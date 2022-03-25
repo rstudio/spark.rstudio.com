@@ -48,23 +48,14 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-num_buckets | Number of buckets (quantiles, or categories) into which data
-points are grouped. Must be greater than or equal to 2.
+num_buckets | Number of buckets (quantiles, or categories) into which data points are grouped. Must be greater than or equal to 2.
 input_cols | Names of input columns.
 output_cols | Names of output columns.
-num_buckets_array | Array of number of buckets (quantiles, or categories)
-into which data points are grouped. Each value must be greater than or equal to 2.
-handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are
-'skip' (filter out rows with invalid values), 'error' (throw an error), or
-'keep' (keep invalid values in a special additional bucket). Default: "error"
-relative_error | (Spark 2.0.0+) Relative error (see documentation for
-org.apache.spark.sql.DataFrameStatFunctions.approxQuantile
-https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctionshere
-for description). Must be in the range [0, 1]. default: 0.001
+num_buckets_array | Array of number of buckets (quantiles, or categories) into which data points are grouped. Each value must be greater than or equal to 2.
+handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are 'skip' (filter out rows with invalid values), 'error' (throw an error), or 'keep' (keep invalid values in a special additional bucket). Default: "error"
+relative_error | (Spark 2.0.0+) Relative error (see documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.DataFrameStatFunctionshere for description). Must be in the range [0, 1]. default: 0.001
 uid | A character string used to uniquely identify the feature transformer.
-weight_column | If not NULL, then a generalized version of the Greenwald-Khanna algorithm will be run to compute
-weighted percentiles, with each input having a relative weight specified by the corresponding value in `weight_column`.
-The weights can be considered as relative frequencies of sample inputs.
+weight_column | If not NULL, then a generalized version of the Greenwald-Khanna algorithm will be run to compute weighted percentiles, with each input having a relative weight specified by the corresponding value in `weight_column`. The weights can be considered as relative frequencies of sample inputs.
 ... | Optional arguments; currently unused.
 
 

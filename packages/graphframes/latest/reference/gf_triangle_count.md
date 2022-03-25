@@ -28,8 +28,7 @@ gf_triangle_count(x, ...)
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 ... | Optional arguments, currently not used.
 
 

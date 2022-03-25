@@ -41,8 +41,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-with_mean | Whether to center the data with mean before scaling. It will
-build a dense output, so take care when applying to sparse input. Default: FALSE
+with_mean | Whether to center the data with mean before scaling. It will build a dense output, so take care when applying to sparse input. Default: FALSE
 with_std | Whether to scale the data to unit standard deviation. Default: TRUE
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.

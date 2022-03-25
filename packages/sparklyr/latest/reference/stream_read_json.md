@@ -28,15 +28,9 @@ stream_read_json(sc, path, name = NULL, columns = NULL, options = list(), ...)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 name | The name to assign to the newly generated stream.
-columns | A vector of column names or a named vector of column types.
-If specified, the elements can be ``"binary"`` for ``BinaryType``,
-``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``,
-``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``,
-``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``,
-``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
+columns | A vector of column names or a named vector of column types. If specified, the elements can be ``"binary"`` for ``BinaryType``, ``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``, ``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``, ``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``, ``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
 options | A list of strings with additional options.
 ... | Optional arguments; currently unused.
 

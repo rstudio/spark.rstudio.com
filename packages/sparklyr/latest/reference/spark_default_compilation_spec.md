@@ -32,9 +32,7 @@ spark_default_compilation_spec(
 Argument      |Description
 ------------- |----------------
 pkg | The package containing Spark extensions to be compiled.
-locations | Additional locations to scan. By default, the
-directories ``/opt/scala`` and ``/usr/local/scala`` will
-be scanned.
+locations | Additional locations to scan. By default, the directories ``/opt/scala`` and ``/usr/local/scala`` will be scanned.
 
 
 

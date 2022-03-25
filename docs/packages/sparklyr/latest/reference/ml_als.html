@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – ml_als</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -265,11 +265,90 @@
 </tr>
 <tr class="even">
 <td>formula</td>
-<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula.</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details. The ALS model requires a specific formula format, please use <code>rating_col ~ user_col + item_col</code>.</td>
+</tr>
+<tr class="odd">
+<td>rating_col</td>
+<td>Column name for ratings. Default: “rating”</td>
+</tr>
+<tr class="even">
+<td>user_col</td>
+<td>Column name for user ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “user”</td>
+</tr>
+<tr class="odd">
+<td>item_col</td>
+<td>Column name for item ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “item”</td>
+</tr>
+<tr class="even">
+<td>rank</td>
+<td>Rank of the matrix factorization (positive). Default: 10</td>
+</tr>
+<tr class="odd">
+<td>reg_param</td>
+<td>Regularization parameter.</td>
+</tr>
+<tr class="even">
+<td>implicit_prefs</td>
+<td>Whether to use implicit preference. Default: FALSE.</td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>Alpha parameter in the implicit preference formulation (nonnegative).</td>
+</tr>
+<tr class="even">
+<td>nonnegative</td>
+<td>Whether to apply nonnegativity constraints. Default: FALSE.</td>
+</tr>
+<tr class="odd">
+<td>max_iter</td>
+<td>Maximum number of iterations.</td>
+</tr>
+<tr class="even">
+<td>num_user_blocks</td>
+<td>Number of user blocks (positive). Default: 10</td>
+</tr>
+<tr class="odd">
+<td>num_item_blocks</td>
+<td>Number of item blocks (positive). Default: 10</td>
+</tr>
+<tr class="even">
+<td>checkpoint_interval</td>
+<td>Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.</td>
+</tr>
+<tr class="odd">
+<td>cold_start_strategy</td>
+<td>(Spark 2.2.0+) Strategy for dealing with unknown or new users/items at prediction time. This may be useful in cross-validation or production scenarios, for handling user/item ids the model has not seen in the training data. Supported values: - “nan”: predicted value for unknown ids will be NaN. - “drop”: rows in the input DataFrame containing unknown ids will be dropped from the output DataFrame containing predictions. Default: “nan”.</td>
+</tr>
+<tr class="even">
+<td>intermediate_storage_level</td>
+<td>(Spark 2.0.0+) StorageLevel for intermediate datasets. Pass in a string representation of <code>StorageLevel</code>. Cannot be “NONE”. Default: “MEMORY_AND_DISK”.</td>
+</tr>
+<tr class="odd">
+<td>final_storage_level</td>
+<td>(Spark 2.0.0+) StorageLevel for ALS model factors. Pass in a string representation of <code>StorageLevel</code>. Default: “MEMORY_AND_DISK”.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
+<td>…</td>
+<td>Optional arguments; currently unused.</td>
+</tr>
+<tr class="even">
+<td>model</td>
+<td>An ALS model object</td>
+</tr>
+<tr class="odd">
+<td>type</td>
+<td>What to recommend, one of <code>items</code> or <code>users</code></td>
+</tr>
+<tr class="even">
+<td>n</td>
+<td>Maximum number of recommendations to return</td>
 </tr>
 </tbody>
 </table>
-<p>This is used to transform the input dataframe before fitting, see ft_r_formula for details. The ALS model requires a specific formula format, please use <code>rating_col ~ user_col + item_col</code>. rating_col | Column name for ratings. Default: “rating” user_col | Column name for user ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “user” item_col | Column name for item ids. Ids must be integers. Other numeric types are supported for this column, but will be cast to integers as long as they fall within the integer value range. Default: “item” rank | Rank of the matrix factorization (positive). Default: 10 reg_param | Regularization parameter. implicit_prefs | Whether to use implicit preference. Default: FALSE. alpha | Alpha parameter in the implicit preference formulation (nonnegative). nonnegative | Whether to apply nonnegativity constraints. Default: FALSE. max_iter | Maximum number of iterations. num_user_blocks | Number of user blocks (positive). Default: 10 num_item_blocks | Number of item blocks (positive). Default: 10 checkpoint_interval | Set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. cold_start_strategy | (Spark 2.2.0+) Strategy for dealing with unknown or new users/items at prediction time. This may be useful in cross-validation or production scenarios, for handling user/item ids the model has not seen in the training data. Supported values: - “nan”: predicted value for unknown ids will be NaN. - “drop”: rows in the input DataFrame containing unknown ids will be dropped from the output DataFrame containing predictions. Default: “nan”. intermediate_storage_level | (Spark 2.0.0+) StorageLevel for intermediate datasets. Pass in a string representation of <code>StorageLevel</code>. Cannot be “NONE”. Default: “MEMORY_AND_DISK”. final_storage_level | (Spark 2.0.0+) StorageLevel for ALS model factors. Pass in a string representation of <code>StorageLevel</code>. Default: “MEMORY_AND_DISK”. uid | A character string used to uniquely identify the ML estimator. … | Optional arguments; currently unused. model | An ALS model object type | What to recommend, one of <code>items</code> or <code>users</code> n | Maximum number of recommendations to return</p>
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>

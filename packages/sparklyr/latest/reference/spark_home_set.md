@@ -28,9 +28,7 @@ spark_home_set(path = NULL, ...)
 
 Argument      |Description
 ------------- |----------------
-path | A string containing the path to the installation location of
-Spark. If ``NULL``, the path to the most latest Spark/Hadoop versions is
-used.
+path | A string containing the path to the installation location of Spark. If ``NULL``, the path to the most latest Spark/Hadoop versions is used.
 ... | Additional parameters not currently used.
 
 

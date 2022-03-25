@@ -30,8 +30,7 @@ gf_connected_components(x, broadcast_threshold = 1000000L,
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 broadcast_threshold | Broadcast threshold in propagating component assignments.
 algorithm | One of 'graphframes' or 'graphx'.
 checkpoint_interval | Checkpoint interval in terms of number of iterations.

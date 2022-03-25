@@ -30,8 +30,7 @@ download_scalac(dest_path = NULL)
 
 Argument      |Description
 ------------- |----------------
-dest_path | The destination path where scalac will be
-downloaded to.
+dest_path | The destination path where scalac will be downloaded to.
 
 
 

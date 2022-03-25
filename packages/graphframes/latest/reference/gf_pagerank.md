@@ -28,8 +28,7 @@ gf_pagerank(x, tol = NULL, reset_probability = 0.15, max_iter = NULL,
 
 Argument      |Description
 ------------- |----------------
-x | An object coercable to a GraphFrame (typically, a
-``gf_graphframe``).
+x | An object coercable to a GraphFrame (typically, a ``gf_graphframe``).
 tol | Tolerance.
 reset_probability | Reset probability.
 max_iter | Maximum number of iterations.

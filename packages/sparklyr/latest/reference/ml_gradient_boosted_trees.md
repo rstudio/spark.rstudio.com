@@ -106,30 +106,19 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
 max_iter | Maxmimum number of iterations.
-max_depth | Maximum depth of the tree (>= 0); that is, the maximum
-number of nodes separating any leaves from the root of the tree.
+max_depth | Maximum depth of the tree (>= 0); that is, the maximum number of nodes separating any leaves from the root of the tree.
 step_size | Step size (a.k.a. learning rate) in interval (0, 1] for shrinking the contribution of each estimator. (default = 0.1)
 subsampling_rate | Fraction of the training data used for learning each decision tree, in range (0, 1]. (default = 1.0)
 feature_subset_strategy | The number of features to consider for splits at each tree node. See details for options.
-min_instances_per_node | Minimum number of instances each child must
-have after split.
-max_bins | The maximum number of bins used for discretizing
-continuous features and for choosing how to split on features at
-each node. More bins give higher granularity.
-min_info_gain | Minimum information gain for a split to be considered
-at a tree node. Should be >= 0, defaults to 0.
-loss_type | Loss function which GBT tries to minimize. Supported: ``"squared"`` (L2) and ``"absolute"`` (L1) (default = squared) for regression and ``"logistic"`` (default) for classification. For ``ml_gradient_boosted_trees``, setting ``"auto"``
-will default to the appropriate loss type based on model type.
+min_instances_per_node | Minimum number of instances each child must have after split.
+max_bins | The maximum number of bins used for discretizing continuous features and for choosing how to split on features at each node. More bins give higher granularity.
+min_info_gain | Minimum information gain for a split to be considered at a tree node. Should be >= 0, defaults to 0.
+loss_type | Loss function which GBT tries to minimize. Supported: ``"squared"`` (L2) and ``"absolute"`` (L1) (default = squared) for regression and ``"logistic"`` (default) for classification. For ``ml_gradient_boosted_trees``, setting ``"auto"`` will default to the appropriate loss type based on model type.
 seed | Seed for random numbers.
 thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value ``p/t`` is predicted, where ``p`` is the original probability of that class and ``t`` is the class's threshold.
-checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1).
-E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
-cache_node_ids | If ``FALSE``, the algorithm will pass trees to executors to match instances with nodes.
-If ``TRUE``, the algorithm will cache node IDs for each instance. Caching can speed up training of deeper trees.
-Defaults to ``FALSE``.
-max_memory_in_mb | Maximum memory in MB allocated to histogram aggregation.
-If too small, then 1 node will be split per iteration,
-and its aggregates may exceed this size. Defaults to 256.
+checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10.
+cache_node_ids | If ``FALSE``, the algorithm will pass trees to executors to match instances with nodes. If ``TRUE``, the algorithm will cache node IDs for each instance. Caching can speed up training of deeper trees. Defaults to ``FALSE``.
+max_memory_in_mb | Maximum memory in MB allocated to histogram aggregation. If too small, then 1 node will be split per iteration, and its aggregates may exceed this size. Defaults to 256.
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
 label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`.
 prediction_col | Prediction column name.
@@ -137,11 +126,7 @@ probability_col | Column name for predicted class conditional probabilities.
 raw_prediction_col | Raw prediction (a.k.a. confidence) column name.
 uid | A character string used to uniquely identify the ML estimator.
 ... | Optional arguments; see Details.
-type | The type of model to fit. ``"regression"`` treats the response
-as a continuous variable, while ``"classification"`` treats the response
-as a categorical variable. When ``"auto"`` is used, the model type is
-inferred based on the response variable type -- if it is a numeric type,
-then regression is used; classification otherwise.
+type | The type of model to fit. ``"regression"`` treats the response as a continuous variable, while ``"classification"`` treats the response as a categorical variable. When ``"auto"`` is used, the model type is inferred based on the response variable type -- if it is a numeric type, then regression is used; classification otherwise.
 response | (Deprecated) The name of the response column (as a length-one character vector.)
 features | (Deprecated) The name of features (terms) to use for the model fit.
 

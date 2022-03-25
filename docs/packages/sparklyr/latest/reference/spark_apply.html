@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-99.9.9">
+  <meta name="generator" content="quarto-0.9.88">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_apply</title>
   <style>
@@ -171,7 +171,7 @@
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -256,18 +256,58 @@
 </tr>
 <tr class="even">
 <td>f</td>
-<td>A function that transforms a data frame partition into a data frame.</td>
+<td>A function that transforms a data frame partition into a data frame. The function <code>f</code> has signature <code>f(df, context, group1, group2, ...)</code> where <code>df</code> is a data frame with the data to be processed, <code>context</code> is an optional object passed as the <code>context</code> parameter and <code>group1</code> to <code>groupN</code> contain the values of the <code>group_by</code> values. When <code>group_by</code> is not specified, <code>f</code> takes only one argument. Can also be an <code>rlang</code> anonymous function. For example, as <code>~ .x + 1</code> to define an expression that adds one to the given <code>.x</code> data frame.</td>
+</tr>
+<tr class="odd">
+<td>columns</td>
+<td>A vector of column names or a named vector of column types for the transformed object. When not specified, a sample of 10 rows is taken to infer out the output columns automatically, to avoid this performance penalty, specify the column types. The sample size is configurable using the <code>sparklyr.apply.schema.infer</code> configuration option.</td>
+</tr>
+<tr class="even">
+<td>memory</td>
+<td>Boolean; should the table be cached into memory?</td>
+</tr>
+<tr class="odd">
+<td>group_by</td>
+<td>Column name used to group by data frame partitions.</td>
+</tr>
+<tr class="even">
+<td>packages</td>
+<td>Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with <code>spark_apply_bundle()</code>. Defaults to <code>TRUE</code> or the <code>sparklyr.apply.packages</code> value set in <code>spark_config()</code>. For clusters using Yarn cluster mode, <code>packages</code> can point to a package bundle created using <code>spark_apply_bundle()</code> and made available as a Spark file using <code>config$sparklyr.shell.files</code>. For clusters using Livy, packages can be manually installed on the driver node. For offline clusters where <code>available.packages()</code> is not available, manually download the packages database from https://cran.r-project.org/web/packages/packages.rds and set <code>Sys.setenv(sparklyr.apply.packagesdb = "&lt;pathl-to-rds&gt;")</code>. Otherwise, all packages will be used by default. For clusters where R packages already installed in every worker node, the <code>spark.r.libpaths</code> config entry can be set in <code>spark_config()</code> to the local packages library. To specify multiple paths collapse them (without spaces) with a comma delimiter (e.g., <code>"/lib/path/one,/lib/path/two"</code>).</td>
+</tr>
+<tr class="odd">
+<td>context</td>
+<td>Optional object to be serialized and passed back to <code>f()</code>.</td>
+</tr>
+<tr class="even">
+<td>name</td>
+<td>Optional table name while registering the resulting data frame.</td>
+</tr>
+<tr class="odd">
+<td>barrier</td>
+<td>Optional to support Barrier Execution Mode in the scheduler.</td>
+</tr>
+<tr class="even">
+<td>fetch_result_as_sdf</td>
+<td>Whether to return the transformed results in a Spark Dataframe (defaults to <code>TRUE</code>). When set to <code>FALSE</code>, results will be returned as a list of R objects instead. NOTE: <code>fetch_result_as_sdf</code> must be set to <code>FALSE</code> when the transformation function being applied is returning R objects that cannot be stored in a Spark Dataframe (e.g., complex numbers or any other R data type that does not have an equivalent representation among Spark SQL data types).</td>
+</tr>
+<tr class="odd">
+<td>partition_index_param</td>
+<td>Optional if non-empty, then <code>f</code> also receives the index of the partition being processed as a named argument with this name, in addition to all positional argument(s) it will receive NOTE: when <code>fetch_result_as_sdf</code> is set to <code>FALSE</code>, object returned from the transformation function also must be serializable by the <code>base::serialize</code> function in R.</td>
+</tr>
+<tr class="even">
+<td>arrow_max_records_per_batch</td>
+<td>Maximum size of each Arrow record batch, ignored if Arrow serialization is not enabled.</td>
+</tr>
+<tr class="odd">
+<td>auto_deps</td>
+<td>[Experimental] Whether to infer all required R packages by examining the closure <code>f()</code> and only distribute required R and their transitive dependencies to Spark worker nodes (default: FALSE). NOTE: this option will only take effect if <code>packages</code> is set to <code>TRUE</code> or is a character vector of R package names. If <code>packages</code> is a character vector of R package names, then both the set of packages specified by <code>packages</code> and the set of inferred packages will be distributed to Spark workers.</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>Optional arguments; currently unused.</td>
 </tr>
 </tbody>
 </table>
-<p>The function <code>f</code> has signature <code>f(df, context, group1, group2, ...)</code> where <code>df</code> is a data frame with the data to be processed, <code>context</code> is an optional object passed as the <code>context</code> parameter and <code>group1</code> to <code>groupN</code> contain the values of the <code>group_by</code> values. When <code>group_by</code> is not specified, <code>f</code> takes only one argument.</p>
-<p>Can also be an <code>rlang</code> anonymous function. For example, as <code>~ .x + 1</code> to define an expression that adds one to the given <code>.x</code> data frame. columns | A vector of column names or a named vector of column types for the transformed object. When not specified, a sample of 10 rows is taken to infer out the output columns automatically, to avoid this performance penalty, specify the column types. The sample size is configurable using the <code>sparklyr.apply.schema.infer</code> configuration option. memory | Boolean; should the table be cached into memory? group_by | Column name used to group by data frame partitions. packages | Boolean to distribute <code>.libPaths()</code> packages to each node, a list of packages to distribute, or a package bundle created with <code>spark_apply_bundle()</code>.</p>
-<p>Defaults to <code>TRUE</code> or the <code>sparklyr.apply.packages</code> value set in <code>spark_config()</code>.</p>
-<p>For clusters using Yarn cluster mode, <code>packages</code> can point to a package bundle created using <code>spark_apply_bundle()</code> and made available as a Spark file using <code>config$sparklyr.shell.files</code>. For clusters using Livy, packages can be manually installed on the driver node.</p>
-<p>For offline clusters where <code>available.packages()</code> is not available, manually download the packages database from https://cran.r-project.org/web/packages/packages.rds and set <code>Sys.setenv(sparklyr.apply.packagesdb = "&lt;pathl-to-rds&gt;")</code>. Otherwise, all packages will be used by default.</p>
-<p>For clusters where R packages already installed in every worker node, the <code>spark.r.libpaths</code> config entry can be set in <code>spark_config()</code> to the local packages library. To specify multiple paths collapse them (without spaces) with a comma delimiter (e.g., <code>"/lib/path/one,/lib/path/two"</code>). context | Optional object to be serialized and passed back to <code>f()</code>. name | Optional table name while registering the resulting data frame. barrier | Optional to support Barrier Execution Mode in the scheduler. fetch_result_as_sdf | Whether to return the transformed results in a Spark Dataframe (defaults to <code>TRUE</code>). When set to <code>FALSE</code>, results will be returned as a list of R objects instead.</p>
-<p>NOTE: <code>fetch_result_as_sdf</code> must be set to <code>FALSE</code> when the transformation function being applied is returning R objects that cannot be stored in a Spark Dataframe (e.g., complex numbers or any other R data type that does not have an equivalent representation among Spark SQL data types). partition_index_param | Optional if non-empty, then <code>f</code> also receives the index of the partition being processed as a named argument with this name, in addition to all positional argument(s) it will receive</p>
-<p>NOTE: when <code>fetch_result_as_sdf</code> is set to <code>FALSE</code>, object returned from the transformation function also must be serializable by the <code>base::serialize</code> function in R. arrow_max_records_per_batch | Maximum size of each Arrow record batch, ignored if Arrow serialization is not enabled. auto_deps | [Experimental] Whether to infer all required R packages by examining the closure <code>f()</code> and only distribute required R and their transitive dependencies to Spark worker nodes (default: FALSE). NOTE: this option will only take effect if <code>packages</code> is set to <code>TRUE</code> or is a character vector of R package names. If <code>packages</code> is a character vector of R package names, then both the set of packages specified by <code>packages</code> and the set of inferred packages will be distributed to Spark workers. … | Optional arguments; currently unused.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>

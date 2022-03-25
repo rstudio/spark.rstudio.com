@@ -44,8 +44,7 @@ formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or
 k | The number of clusters to create
 max_iter | The maximum number of iterations to use.
 tol | Param for the convergence tolerance for iterative algorithms.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`.
 prediction_col | Prediction column name.
 probability_col | Column name for predicted class conditional probabilities. Note: Not all models output well-calibrated probability estimates! These probabilities should be treated as confidences, not precise probabilities.

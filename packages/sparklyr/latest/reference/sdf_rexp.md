@@ -30,10 +30,8 @@ Argument      |Description
 ------------- |----------------
 sc | A Spark connection.
 n | Sample Size (default: 1000).
-rate | Rate of the exponential distribution (default: 1). The exponential
-distribution with rate lambda has mean 1 / lambda and density f(x) = lambda e^- lambda x.
-num_partitions | Number of partitions in the resulting Spark dataframe
-(default: default parallelism of the Spark cluster).
+rate | Rate of the exponential distribution (default: 1). The exponential distribution with rate lambda has mean 1 / lambda and density f(x) = lambda e^- lambda x.
+num_partitions | Number of partitions in the resulting Spark dataframe (default: default parallelism of the Spark cluster).
 seed | Random seed (default: a random long integer).
 output_col | Name of the output column containing sample values (default: "x").
 

@@ -45,21 +45,11 @@ Argument      |Description
 ------------- |----------------
 master | Kubernetes url to connect to, found by running ``kubectl cluster-info``.
 version | The version of Spark being used.
-image | Container image to use to launch Spark and sparklyr. Also known
-as ``spark.kubernetes.container.image``.
-driver | Name of the driver pod. If not set, the driver pod name is set
-to "sparklyr" suffixed by id to avoid name conflicts. Also known as
-``spark.kubernetes.driver.pod.name``.
-account | Service account that is used when running the driver pod. The driver
-pod uses this service account when requesting executor pods from the API
-server. Also known as ``spark.kubernetes.authenticate.driver.serviceAccountName``.
-jars | Path to the sparklyr jars; either, a local path inside the container
-image with the sparklyr jars copied when the image was created or, a path
-accesible by the container where the sparklyr jars were copied. You can find
-a path to the sparklyr jars by running ``system.file("java/", package = "sparklyr")``.
-forward | Should ports used in sparklyr be forwarded automatically through Kubernetes?
-Default to ``TRUE`` which runs ``kubectl port-forward`` and ``pkill kubectl``
-on disconnection.
+image | Container image to use to launch Spark and sparklyr. Also known as ``spark.kubernetes.container.image``.
+driver | Name of the driver pod. If not set, the driver pod name is set to "sparklyr" suffixed by id to avoid name conflicts. Also known as ``spark.kubernetes.driver.pod.name``.
+account | Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as ``spark.kubernetes.authenticate.driver.serviceAccountName``.
+jars | Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running ``system.file("java/", package = "sparklyr")``.
+forward | Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to ``TRUE`` which runs ``kubectl port-forward`` and ``pkill kubectl`` on disconnection.
 executors | Number of executors to request while connecting.
 conf | A named list of additional entries to add to ``sparklyr.shell.conf``.
 timeout | Total seconds to wait before giving up on connection.

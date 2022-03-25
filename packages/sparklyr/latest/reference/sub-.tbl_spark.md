@@ -29,9 +29,7 @@ selected using syntaxes similar to those supported by R dataframes
 Argument      |Description
 ------------- |----------------
 x | The Spark dataframe
-i | Expression specifying subset of column(s) to include or exclude
-from the result (e.g., `["col1"]`, `[c("col1", "col2")]`, `[1:10]`, `[-1]`,
-`[NULL]`, or `[]`)
+i | Expression specifying subset of column(s) to include or exclude from the result (e.g., `["col1"]`, `[c("col1", "col2")]`, `[1:10]`, `[-1]`, `[NULL]`, or `[]`)
 
 
 

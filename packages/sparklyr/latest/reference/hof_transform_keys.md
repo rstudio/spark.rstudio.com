@@ -30,10 +30,8 @@ hof_transform_keys(x, func, expr = NULL, dest_col = NULL, ...)
 Argument      |Description
 ------------- |----------------
 x | The Spark data frame to be processed
-func | The transformation function to apply (it should take (key, value) as
-arguments and return a transformed key)
-expr | The map being transformed, could be any SQL expression evaluating to a map
-(default: the last column of the Spark data frame)
+func | The transformation function to apply (it should take (key, value) as arguments and return a transformed key)
+expr | The map being transformed, could be any SQL expression evaluating to a map (default: the last column of the Spark data frame)
 dest_col | Column to store the transformed result (default: expr)
 ... | Additional params to dplyr::mutate
 

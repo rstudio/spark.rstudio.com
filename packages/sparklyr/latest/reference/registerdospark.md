@@ -28,12 +28,8 @@ registerDoSpark(spark_conn, parallelism = NULL, ...)
 Argument      |Description
 ------------- |----------------
 spark_conn | Spark connection to use
-parallelism | Level of parallelism to use for task execution
-(if unspecified, then it will take the value of
- `SparkContext.defaultParallelism()` which by default is the number
- of cores available to the `sparklyr` application)
-... | additional options for sparklyr parallel backend
-(currently only the only valid option is nocompile = T, F)
+parallelism | Level of parallelism to use for task execution (if unspecified, then it will take the value of  `SparkContext.defaultParallelism()` which by default is the number  of cores available to the `sparklyr` application)
+... | additional options for sparklyr parallel backend (currently only the only valid option is nocompile = T, F)
 
 
 

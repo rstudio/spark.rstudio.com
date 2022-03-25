@@ -38,10 +38,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-binary | Binary toggle to control term frequency counts.
-If true, all non-zero counts are set to 1. This is useful for discrete
-probabilistic models that model binary events rather than integer
-counts. (default = ``FALSE``)
+binary | Binary toggle to control term frequency counts. If true, all non-zero counts are set to 1. This is useful for discrete probabilistic models that model binary events rather than integer counts. (default = ``FALSE``)
 num_features | Number of features. Should be greater than 0. (default = ``2^18``)
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.

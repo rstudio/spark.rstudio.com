@@ -40,14 +40,8 @@ livy_home_dir(version = NULL)
 Argument      |Description
 ------------- |----------------
 version | Version of Livy
-spark_home | The path to a Spark installation. The downloaded and
-installed version of livy will then be associated with this Spark
-installation. When unset (NULL), the value is inferred based on
-the value of spark_version supplied.
-spark_version | The version of Spark to use. When unset (NULL),
-the value is inferred based on the value of livy_version supplied.
-A version of Spark known to be compatible with the requested version of
-livy is chosen when possible.
+spark_home | The path to a Spark installation. The downloaded and installed version of livy will then be associated with this Spark installation. When unset (NULL), the value is inferred based on the value of spark_version supplied.
+spark_version | The version of Spark to use. When unset (NULL), the value is inferred based on the value of livy_version supplied. A version of Spark known to be compatible with the requested version of livy is chosen when possible.
 
 
 

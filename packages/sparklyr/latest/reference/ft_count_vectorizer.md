@@ -42,24 +42,10 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-binary | Binary toggle to control the output vector values.
-If ``TRUE``, all nonzero counts (after ``min_tf`` filter applied)
-are set to 1. This is useful for discrete probabilistic models that
- model binary events rather than integer counts. Default: ``FALSE``
-min_df | Specifies the minimum number of different documents a
-term must appear in to be included in the vocabulary. If this is an
-integer greater than or equal to 1, this specifies the number of
-documents the term must appear in; if this is a double in [0,1), then
-this specifies the fraction of documents. Default: 1.
-min_tf | Filter to ignore rare words in a document. For each
-document, terms with frequency/count less than the given threshold
-are ignored. If this is an integer greater than or equal to 1, then
-this specifies a count (of times the term must appear in the document);
-if this is a double in [0,1), then this specifies a fraction (out of
-the document's token count). Default: 1.
-vocab_size | Build a vocabulary that only considers the top
-``vocab_size`` terms ordered by term frequency across the corpus.
-Default: ``2^18``.
+binary | Binary toggle to control the output vector values. If ``TRUE``, all nonzero counts (after ``min_tf`` filter applied) are set to 1. This is useful for discrete probabilistic models that  model binary events rather than integer counts. Default: ``FALSE``
+min_df | Specifies the minimum number of different documents a term must appear in to be included in the vocabulary. If this is an integer greater than or equal to 1, this specifies the number of documents the term must appear in; if this is a double in [0,1), then this specifies the fraction of documents. Default: 1.
+min_tf | Filter to ignore rare words in a document. For each document, terms with frequency/count less than the given threshold are ignored. If this is an integer greater than or equal to 1, then this specifies a count (of times the term must appear in the document); if this is a double in [0,1), then this specifies a fraction (out of the document's token count). Default: 1.
+vocab_size | Build a vocabulary that only considers the top ``vocab_size`` terms ordered by term frequency across the corpus. Default: ``2^18``.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 model | A ``ml_count_vectorizer_model``.

@@ -43,8 +43,7 @@ Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 formula | Used when ``x`` is a ``tbl_spark``. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.
-model_type | The model type. Supported options: ``"multinomial"``
-and ``"bernoulli"``. (default = ``multinomial``)
+model_type | The model type. Supported options: ``"multinomial"`` and ``"bernoulli"``. (default = ``multinomial``)
 smoothing | The (Laplace) smoothing parameter. Defaults to 1.
 thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value ``p/t`` is predicted, where ``p`` is the original probability of that class and ``t`` is the class's threshold.
 weight_col | (Spark 2.1.0+) Weight column name. If this is not set or empty, we treat all instance weights as 1.0.

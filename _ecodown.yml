@@ -1,33 +1,38 @@
 site:
-  packages:
-    - repo_url: https://github.com/rstudio/mleap
-      quarto_sub_folder: packages/mleap
-      reference_examples: FALSE
-      versions:
-      - commit: latest_commit
-        version_folder: dev
-      - commit: latest_tag
+  clone_convert:
+    target_folder: '_repos'
+    packages:
+      - repo_url: https://github.com/rstudio/mleap
+        quarto_sub_folder: packages/mleap
+        reference_examples: FALSE
+        versions:
+        - commit: latest_commit
+          version_folder: dev
+        - commit: latest_tag
+          version_folder: latest
+          current: TRUE
+        - commit: 468e03e8b481ef77e47028419dbdf4e5d9a23bb2
+          version_folder: 0.1.3
+        - commit: 910e6bce994d4d965fd3dadf1dfecead37cc68b9
+          version_folder: 0.1.0    
+      - repo_url: https://github.com/rstudio/graphframes
+        quarto_sub_folder: packages/graphframes    
         version_folder: latest
-        current: TRUE
-      - commit: 468e03e8b481ef77e47028419dbdf4e5d9a23bb2
-        version_folder: 0.1.3
-      - commit: 910e6bce994d4d965fd3dadf1dfecead37cc68b9
-        version_folder: 0.1.0    
-    - repo_url: https://github.com/rstudio/graphframes
-      quarto_sub_folder: packages/graphframes    
-      version_folder: latest
-      reference_examples: FALSE
-    - repo_url: https://github.com/sparklyr/sparklyr
-      quarto_sub_folder: packages/sparklyr
-      version_folder: latest
-      reference_examples: FALSE
-      convert_readme: FALSE
-    - repo_url: https://github.com/rstudio/sparkxgb
-      quarto_sub_folder: packages/sparkxgb
-      version_folder: latest
-      reference_examples: FALSE
-    - repo_url: https://github.com/rstudio/sparktf
-      quarto_sub_folder: packages/sparktf 
-      version_folder: latest
-      reference_examples: FALSE
-
+        reference_examples: FALSE
+      - repo_url: https://github.com/sparklyr/sparklyr
+        quarto_sub_folder: packages/sparklyr
+        version_folder: latest
+        reference_examples: FALSE
+        convert_readme: FALSE
+      - repo_url: https://github.com/rstudio/sparkxgb
+        quarto_sub_folder: packages/sparkxgb
+        version_folder: latest
+        reference_examples: FALSE
+      - repo_url: https://github.com/rstudio/sparktf
+        quarto_sub_folder: packages/sparktf 
+        version_folder: latest
+        reference_examples: FALSE
+  autolink:
+    run: FALSE
+  quarto:
+    run: FALSE

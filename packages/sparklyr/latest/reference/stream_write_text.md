@@ -37,15 +37,10 @@ stream_write_text(
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame or dplyr operation
-path | The destination path. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
-mode | Specifies how data is written to a streaming sink. Valid values are
-``"append"``, ``"complete"`` or ``"update"``.
-trigger | The trigger for the stream query, defaults to micro-batches runnnig
-every 5 seconds. See `stream_trigger_interval` and
-`stream_trigger_continuous`.
-checkpoint | The location where the system will write all the checkpoint
-information to guarantee end-to-end fault-tolerance.
+path | The destination path. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
+mode | Specifies how data is written to a streaming sink. Valid values are ``"append"``, ``"complete"`` or ``"update"``.
+trigger | The trigger for the stream query, defaults to micro-batches runnnig every 5 seconds. See `stream_trigger_interval` and `stream_trigger_continuous`.
+checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance.
 options | A list of strings with additional options.
 partition_by | Partitions the output by the given list of columns.
 ... | Optional arguments; currently unused.

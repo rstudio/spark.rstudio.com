@@ -32,8 +32,7 @@ spark_auto_broadcast_join_threshold(sc, threshold = NULL)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-threshold | Maximum size in bytes for a table that will be broadcast to all worker nodes
-when performing a join. Defaults to ``NULL`` to retrieve configuration entries.
+threshold | Maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join. Defaults to ``NULL`` to retrieve configuration entries.
 
 
 

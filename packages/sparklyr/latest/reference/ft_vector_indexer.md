@@ -38,9 +38,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are
-'skip' (filter out rows with invalid values), 'error' (throw an error), or
-'keep' (keep invalid values in a special additional bucket). Default: "error"
+handle_invalid | (Spark 2.1.0+) Param for how to handle invalid entries. Options are 'skip' (filter out rows with invalid values), 'error' (throw an error), or 'keep' (keep invalid values in a special additional bucket). Default: "error"
 max_categories | Threshold for the number of values a categorical feature can take. If a feature is found to have > ``max_categories`` values, then it is declared continuous. Must be greater than or equal to 2. Defaults to 20.
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.

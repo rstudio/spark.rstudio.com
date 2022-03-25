@@ -61,13 +61,9 @@ estimator | A ``ml_estimator`` object.
 estimator_param_maps | A named list of stages and hyper-parameter sets to tune. See details.
 evaluator | A ``ml_evaluator`` object, see ml_evaluator.
 num_folds | Number of folds for cross validation. Must be >= 2. Default: 3
-collect_sub_models | Whether to collect a list of sub-models trained during tuning.
-If set to ``FALSE``, then only the single best sub-model will be available after fitting.
-If set to true, then all sub-models will be available. Warning: For large models, collecting
-all sub-models can cause OOMs on the Spark driver.
+collect_sub_models | Whether to collect a list of sub-models trained during tuning. If set to ``FALSE``, then only the single best sub-model will be available after fitting. If set to true, then all sub-models will be available. Warning: For large models, collecting all sub-models can cause OOMs on the Spark driver.
 parallelism | The number of threads to use when running parallel algorithms. Default is 1 for serial execution.
-seed | A random seed. Set this value if you need your results to be
-reproducible across repeated calls.
+seed | A random seed. Set this value if you need your results to be reproducible across repeated calls.
 uid | A character string used to uniquely identify the ML estimator.
 ... | Optional arguments; currently unused.
 train_ratio | Ratio between train and validation data. Must be between 0 and 1. Default: 0.75

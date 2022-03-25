@@ -41,17 +41,10 @@ stream_read_csv(
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 name | The name to assign to the newly generated stream.
-header | Boolean; should the first row of data be used as a header?
-Defaults to ``TRUE``.
-columns | A vector of column names or a named vector of column types.
-If specified, the elements can be ``"binary"`` for ``BinaryType``,
-``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``,
-``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``,
-``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``,
-``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
+header | Boolean; should the first row of data be used as a header? Defaults to ``TRUE``.
+columns | A vector of column names or a named vector of column types. If specified, the elements can be ``"binary"`` for ``BinaryType``, ``"boolean"`` for ``BooleanType``, ``"byte"`` for ``ByteType``, ``"integer"`` for ``IntegerType``, ``"integer64"`` for ``LongType``, ``"double"`` for ``DoubleType``, ``"character"`` for ``StringType``, ``"timestamp"`` for ``TimestampType`` and ``"date"`` for ``DateType``.
 delimiter | The character used to delimit each column. Defaults to ','.
 quote | The character used as a quote. Defaults to '"'.
 escape | The character used to escape other characters. Defaults to '\'.

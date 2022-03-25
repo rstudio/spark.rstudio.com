@@ -36,12 +36,9 @@ sdf_partition(x, ..., weights = NULL, seed = sample(.Machine$integer.max, 1))
 Argument      |Description
 ------------- |----------------
 x | An object coercable to a Spark DataFrame.
-... | Named parameters, mapping table names to weights. The weights
-will be normalized such that they sum to 1.
-weights | An alternate mechanism for supplying weights -- when
-specified, this takes precedence over the ``...`` arguments.
-seed | Random seed to use for randomly partitioning the dataset. Set
-this if you want your partitioning to be reproducible on repeated runs.
+... | Named parameters, mapping table names to weights. The weights will be normalized such that they sum to 1.
+weights | An alternate mechanism for supplying weights -- when specified, this takes precedence over the ``...`` arguments.
+seed | Random seed to use for randomly partitioning the dataset. Set this if you want your partitioning to be reproducible on repeated runs.
 
 
 

@@ -39,8 +39,7 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_col | The name of the input column.
 output_col | The name of the output column.
-degree | The polynomial degree to expand, which should be greater
-than equal to 1. A value of 1 means no expansion. Default: 2
+degree | The polynomial degree to expand, which should be greater than equal to 1. A value of 1 means no expansion. Default: 2
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

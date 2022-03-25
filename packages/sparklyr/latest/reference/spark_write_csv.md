@@ -41,8 +41,7 @@ spark_write_csv(
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame or dplyr operation
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 header | Should the first row of data be used as a header? Defaults to ``TRUE``.
 delimiter | The character used to delimit each column, defaults to ``,``.
 quote | The character used as a quote. Defaults to '"'.
@@ -50,12 +49,7 @@ escape | The character used to escape other characters, defaults to ``\``.
 charset | The character set, defaults to ``"UTF-8"``.
 null_value | The character to use for default values, defaults to ``NULL``.
 options | A list of strings with additional options.
-mode | A ``character`` element. Specifies the behavior when data or
-  table already exists. Supported values include: 'error', 'append', 'overwrite' and
-  ignore. Notice that 'overwrite' will also change the column structure.
-
-  For more details see also https://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes
-  for your version of Spark.
+mode | A ``character`` element. Specifies the behavior when data or   table already exists. Supported values include: 'error', 'append', 'overwrite' and   ignore. Notice that 'overwrite' will also change the column structure.    For more details see also https://spark.apache.org/docs/latest/sql-programming-guide.html#save-modes   for your version of Spark.
 partition_by | A ``character`` vector. Partitions the output by the given columns on the file system.
 ... | Optional arguments; currently unused.
 

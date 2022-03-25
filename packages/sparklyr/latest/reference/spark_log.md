@@ -30,8 +30,7 @@ spark_log(sc, n = 100, filter = NULL, ...)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-n | The max number of log entries to retrieve. Use ``NULL`` to
-retrieve all entries within the log.
+n | The max number of log entries to retrieve. Use ``NULL`` to retrieve all entries within the log.
 filter | Character string to filter log entries.
 ... | Optional arguments; currently unused.
 

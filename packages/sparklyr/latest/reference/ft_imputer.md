@@ -40,13 +40,8 @@ Argument      |Description
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 input_cols | The names of the input columns
 output_cols | The names of the output columns.
-missing_value | The placeholder for the missing values. All occurrences of
-``missing_value`` will be imputed. Note that null values are always treated
-as missing.
-strategy | The imputation strategy. Currently only "mean" and "median" are
-supported. If "mean", then replace missing values using the mean value of the
-feature. If "median", then replace missing values using the approximate median
-value of the feature. Default: mean
+missing_value | The placeholder for the missing values. All occurrences of ``missing_value`` will be imputed. Note that null values are always treated as missing.
+strategy | The imputation strategy. Currently only "mean" and "median" are supported. If "mean", then replace missing values using the mean value of the feature. If "median", then replace missing values using the approximate median value of the feature. Default: mean
 uid | A character string used to uniquely identify the feature transformer.
 ... | Optional arguments; currently unused.
 

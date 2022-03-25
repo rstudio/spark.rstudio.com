@@ -41,8 +41,7 @@ spark_write_avro(
 Argument      |Description
 ------------- |----------------
 x | A Spark DataFrame or dplyr operation
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 avro_schema | Optional Avro schema in JSON format
 record_name | Optional top level record name in write result (default: "topLevelRecord")
 record_namespace | Record namespace in write result (default: "")

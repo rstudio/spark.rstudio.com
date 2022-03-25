@@ -32,12 +32,9 @@ Argument      |Description
 ------------- |----------------
 x | The Spark data frame to process
 func | Element-wise combining function to be applied
-dest_col | Column to store the query result
-(default: the last column of the Spark data frame)
-left | Any expression evaluating to an array
-(default: the first column of the Spark data frame)
-right | Any expression evaluating to an array
-(default: the second column of the Spark data frame)
+dest_col | Column to store the query result (default: the last column of the Spark data frame)
+left | Any expression evaluating to an array (default: the first column of the Spark data frame)
+right | Any expression evaluating to an array (default: the second column of the Spark data frame)
 ... | Additional params to dplyr::mutate
 
 

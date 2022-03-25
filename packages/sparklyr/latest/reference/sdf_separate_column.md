@@ -31,11 +31,7 @@ Argument      |Description
 ------------- |----------------
 x | A ``spark_connection``, ``ml_pipeline``, or a ``tbl_spark``.
 column | The name of a (vector-typed) column.
-into | A specification of the columns that should be
-generated from ``column``. This can either be a
-vector of column names, or an  list mapping column
-names to the (1-based) index at which a particular
-vector element should be extracted.
+into | A specification of the columns that should be generated from ``column``. This can either be a vector of column names, or an  list mapping column names to the (1-based) index at which a particular vector element should be extracted.
 
 
 

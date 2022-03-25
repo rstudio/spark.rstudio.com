@@ -28,8 +28,7 @@ stream_read_delta(sc, path, name = NULL, options = list(), ...)
 Argument      |Description
 ------------- |----------------
 sc | A ``spark_connection``.
-path | The path to the file. Needs to be accessible from the cluster.
-Supports the "hdfs://", "s3a://" and "file://" protocols.
+path | The path to the file. Needs to be accessible from the cluster. Supports the "hdfs://", "s3a://" and "file://" protocols.
 name | The name to assign to the newly generated stream.
 options | A list of strings with additional options.
 ... | Optional arguments; currently unused.

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.9.88">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr - Spark Standalone Deployment in AWS</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../deployment/qubole-overview.html" rel="prev">
+  <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script>
+  
+  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="floating">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <img src="../images/favicon/apple-touch-icon.png" alt="">
+    <span class="navbar-title">sparklyr</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../get-started/index.html">Get Started</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../guides/index.html">Guides</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../deployment/index.html" aria-current="page">Deployment</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/news.html">News</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../learn-more.html">Learn more</a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Spark Standalone Deployment in AWS</h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">YARN (Hadoop)</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-yarn-(hadoop" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link">Understanding Data Lakes</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/yarn-cluster-emr.html" class="sidebar-item-text sidebar-link">EMR cluster</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/cloudera-aws.html" class="sidebar-item-text sidebar-link">Cloudera cluster</a>
+  </div>
+</li>
+    </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">Stand Alone Clusters</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-stand-alone-clusters" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/databricks-cluster.html" class="sidebar-item-text sidebar-link">Databricks cluster</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/qubole-overview.html" class="sidebar-item-text sidebar-link">Qubole cluster</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../deployment/stand-alone-aws.html" class="sidebar-item-text sidebar-link active">Standalone cluster using AWS EC2</a>
+  </div>
+</li>
+    </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#aws-ec-instances" class="nav-link" data-scroll-target="#aws-ec-instances">AWS EC Instances</a></li>
+<li><a href="#spark" class="nav-link" data-scroll-target="#spark">Spark</a>
+<ul class="collapse">
+<li><a href="#install-java-8" class="nav-link" data-scroll-target="#install-java-8">Install Java 8</a></li>
+<li><a href="#download-spark" class="nav-link" data-scroll-target="#download-spark">Download Spark</a></li>
+<li><a href="#create-and-launch-ami" class="nav-link" data-scroll-target="#create-and-launch-ami">Create and launch AMI</a></li>
+</ul></li>
+<li><a href="#rstudio-server" class="nav-link" data-scroll-target="#rstudio-server">RStudio Server</a>
+<ul class="collapse">
+<li><a href="#install-r" class="nav-link" data-scroll-target="#install-r">Install R</a></li>
+<li><a href="#install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a></li>
+<li><a href="#install-dependencies" class="nav-link" data-scroll-target="#install-dependencies">Install dependencies</a></li>
+<li><a href="#add-default-user" class="nav-link" data-scroll-target="#add-default-user">Add default user</a></li>
+<li><a href="#start-the-master-node" class="nav-link" data-scroll-target="#start-the-master-node">Start the Master node</a></li>
+<li><a href="#start-worker-nodes" class="nav-link" data-scroll-target="#start-worker-nodes">Start Worker nodes</a></li>
+<li><a href="#pre-load-pacakges" class="nav-link" data-scroll-target="#pre-load-pacakges">Pre-load pacakges</a></li>
+<li><a href="#connect-to-the-spark-master" class="nav-link" data-scroll-target="#connect-to-the-spark-master">Connect to the Spark Master</a></li>
+</ul></li>
+</ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<header id="title-block-header" class="quarto-title-block default">
+
+<div class="quarto-title"><h1 class="title d-none d-lg-block display-7">Spark Standalone Deployment in AWS</h1></div></header>
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>The plan is to launch 4 identical EC2 server instances. One server will be the Master node and the other 3 the worker nodes. In one of the worker nodes, we will install RStudio server.</p>
+<p>What makes a server the Master node is only the fact that it is running the <strong>master</strong> service, while the other machines are running the <strong>slave</strong> service and are pointed to that first master. This simple setup, allows us to install the same Spark components on all 4 servers and then just add RStudio to one of them.</p>
+<p>The topology will look something like this:</p>
+<p><img src="../images/deployment/amazon-ec2/spark-sa-setup.png" class="img-fluid"></p>
+</section>
+<section id="aws-ec-instances" class="level2">
+<h2 class="anchored" data-anchor-id="aws-ec-instances">AWS EC Instances</h2>
+<p>Here are the details of the EC2 instance, just deploy one at this point:</p>
+<ul>
+<li><strong>Type:</strong> t2.medium</li>
+<li><strong>OS:</strong> Ubuntu 16.04 LTS</li>
+<li><strong>Disk space:</strong> At least 20GB</li>
+<li><strong>Security group:</strong> Open the following ports: 8080 (Spark UI), 4040 (Spark Worker UI), 8088 (sparklyr UI) and 8787 (RStudio). Also open <em>All TCP</em> ports for the machines inside the security group.</li>
+</ul>
+</section>
+<section id="spark" class="level2">
+<h2 class="anchored" data-anchor-id="spark">Spark</h2>
+<p>Perform the steps in this section on all of the servers that will be part of the cluster.</p>
+<section id="install-java-8" class="level3">
+<h3 class="anchored" data-anchor-id="install-java-8">Install Java 8</h3>
+<ul>
+<li>We will add the Java 8 repository, install it and set it as default</li>
+</ul>
+<!-- -->
+<pre><code>sudo apt-add-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+sudo apt-get install oracle-java8-set-default
+sudo apt-get update</code></pre>
+<p>or alternatively, run</p>
+<pre><code>sudo apt install openjdk-8-jdk</code></pre>
+<p>to install Open JDK version 8.</p>
+</section>
+<section id="download-spark" class="level3">
+<h3 class="anchored" data-anchor-id="download-spark">Download Spark</h3>
+<ul>
+<li>Download and unpack a pre-compiled version of Spark. Here’s is the link to the <a href="http://spark.apache.org/downloads.html">official Spark download page</a></li>
+</ul>
+<!-- -->
+<pre><code>wget http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz
+tar -xvzf spark-2.1.0-bin-hadoop2.7.tgz
+cd spark-2.1.0-bin-hadoop2.7</code></pre>
+</section>
+<section id="create-and-launch-ami" class="level3">
+<h3 class="anchored" data-anchor-id="create-and-launch-ami">Create and launch AMI</h3>
+<ul>
+<li><p>We will create an image of the server. In Amazon, these are called AMIs, for information please see the <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html">User Guide</a>.</p></li>
+<li><p>Launch 3 instances of the AMI</p></li>
+</ul>
+</section>
+</section>
+<section id="rstudio-server" class="level2">
+<h2 class="anchored" data-anchor-id="rstudio-server">RStudio Server</h2>
+<p>Select one of the nodes to execute this section. Please check the <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio download page</a> for the latest version</p>
+<section id="install-r" class="level3">
+<h3 class="anchored" data-anchor-id="install-r">Install R</h3>
+<ul>
+<li>In order to get the latest R core, we will need to update the source list in Ubuntu.</li>
+</ul>
+<!-- -->
+<pre><code>sudo sh -c 'echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" &gt;&gt; /etc/apt/sources.list'
+gpg --keyserver keyserver.ubuntu.com --recv-key 0x517166190x51716619e084dab9
+gpg -a --export 0x517166190x51716619e084dab9 | sudo apt-key add -
+sudo apt-get update</code></pre>
+<ul>
+<li>Now we can install R</li>
+</ul>
+<!-- -->
+<pre><code>sudo apt-get install r-base
+sudo apt-get install gdebi-core</code></pre>
+</section>
+<section id="install-rstudio" class="level3">
+<h3 class="anchored" data-anchor-id="install-rstudio">Install RStudio</h3>
+<ul>
+<li>We will download and install 1.044 of RStudio Server. To find the latest version, please visit the <a href="https://www.rstudio.com/products/rstudio/download3/">RStudio website</a>. In order to get the enhanced integration with Spark, RStudio version 1.044 or later will be needed.</li>
+</ul>
+<!-- -->
+<pre><code>wget https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb
+sudo gdebi rstudio-server-1.0.153-amd64.deb</code></pre>
+</section>
+<section id="install-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="install-dependencies">Install dependencies</h3>
+<ul>
+<li>Run the following commands</li>
+</ul>
+<!-- -->
+<pre><code>sudo apt-get -y install libcurl4-gnutls-dev
+sudo apt-get -y install libssl-dev
+sudo apt-get -y install libxml2-dev</code></pre>
+</section>
+<section id="add-default-user" class="level3">
+<h3 class="anchored" data-anchor-id="add-default-user">Add default user</h3>
+<ul>
+<li>Run the following command to add a default user</li>
+</ul>
+<!-- -->
+<pre><code>sudo adduser rstudio-user</code></pre>
+</section>
+<section id="start-the-master-node" class="level3">
+<h3 class="anchored" data-anchor-id="start-the-master-node">Start the Master node</h3>
+<ul>
+<li><p>Select one of the servers to become your Master node</p></li>
+<li><p>Run the command that starts the master service</p></li>
+</ul>
+<!-- -->
+<pre><code>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-master.sh</code></pre>
+<ul>
+<li>Close the terminal connection (optional)</li>
+</ul>
+</section>
+<section id="start-worker-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="start-worker-nodes">Start Worker nodes</h3>
+<ul>
+<li>Start the “slave” service. <strong>Important</strong>: Use dots not dashes as separators for the Spark Master node’s address</li>
+</ul>
+<!-- -->
+<pre><code>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://[Master node's IP address]:7077</code></pre>
+<p><em>sudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://ip-172-30-1-94.us-west-2.compute.internal:7077</em></p>
+<ul>
+<li>Close the terminal connection (optional)</li>
+</ul>
+</section>
+<section id="pre-load-pacakges" class="level3">
+<h3 class="anchored" data-anchor-id="pre-load-pacakges">Pre-load pacakges</h3>
+<ul>
+<li><p>Log into RStudio (port 8787)</p></li>
+<li><p>Use ‘rstudio-user’</p></li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="connect-to-the-spark-master" class="level3">
+<h3 class="anchored" data-anchor-id="connect-to-the-spark-master">Connect to the Spark Master</h3>
+<ul>
+<li>Navigate to the Spark Master’s UI, typically on port 8080</li>
+</ul>
+<p><img src="../images/deployment/amazon-ec2/spark-master.png" class="img-fluid" width="418"></p>
+<ul>
+<li><p>Note the <strong>Spark Master URL</strong></p></li>
+<li><p>Logon to RStudio</p></li>
+<li><p>Run the following code</p></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>conf <span class="ot">&lt;-</span> <span class="fu">spark_config</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.executor.memory <span class="ot">&lt;-</span> <span class="st">"2GB"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>conf<span class="sc">$</span>spark.memory.fraction <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master=</span><span class="st">"[Spark Master URL]"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">version =</span> <span class="st">"2.1.0"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">config =</span> conf,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">spark_home =</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../deployment/qubole-overview.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Qubole cluster</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body></html>

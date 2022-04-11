@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.9.88">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>sparklyr - Creating Extensions for sparklyr</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="../site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="../site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="../">
+  <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="../site_libs/quarto-search/fuse.min.js"></script>
+  <script src="../site_libs/quarto-search/quarto-search.js"></script>
+  <link href="../guides/troubleshooting.html" rel="next">
+  <link href="../guides/distributed-r.html" rel="prev">
+  <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+  <script src="../site_libs/quarto-html/quarto.js"></script>
+  <script src="../site_libs/quarto-html/popper.min.js"></script>
+  <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="../site_libs/quarto-html/anchor.min.js"></script>
+  <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/bootstrap/bootstrap-dark.min.css">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "navbar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "end",
+    "type": "overlay",
+    "limit": 20,
+    "language": {
+      "search-no-results-text": "No results",
+      "search-matching-documents-text": "matching documents",
+      "search-copy-link-title": "Copy link to search",
+      "search-hide-matches-text": "Hide additional matches",
+      "search-more-match-text": "more match in this document",
+      "search-more-matches-text": "more matches in this document",
+      "search-clear-button-title": "Clear",
+      "search-detached-cancel-button-title": "Cancel",
+      "search-submit-button-title": "Submit"
+    }
+  }</script>
+  
+  <script type="text/javascript">
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-20375833-3', 'auto');
+
+  ga('send', {
+    hitType: 'pageview',
+    'anonymizeIp': true,
+  });
+  </script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="floating">
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <img src="../images/favicon/apple-touch-icon.png" alt="">
+    <span class="navbar-title">sparklyr</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../get-started/index.html">Get Started</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../guides/index.html" aria-current="page">Guides</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../deployment/index.html">Deployment</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/news.html">News</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/sparklyr/latest/reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../packages/index.html">Packages</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../learn-more.html">Learn more</a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sparklyr/sparklyr"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div class="quarto-toggle-container">
+                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+                  <a href="" class="quarto-reader-toggle nav-link" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+              </div>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Creating Extensions for <code>sparklyr</code></h1>
+      <button type="button" class="quarto-btn-toggle btn">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/index.html" class="sidebar-item-text sidebar-link">Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">Interacting with Spark</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/dplyr.html" class="sidebar-item-text sidebar-link">Using <code>dplyr</code></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/caching.html" class="sidebar-item-text sidebar-link">Managing Spark cache</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/connections.html" class="sidebar-item-text sidebar-link">Spark connection options</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/aws-s3.html" class="sidebar-item-text sidebar-link">Access S3 buckets</a>
+  </div>
+</li>
+    </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">Machine Learning</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/mlib.html" class="sidebar-item-text sidebar-link">Spark ML Overview</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/tidymodels.html" class="sidebar-item-text sidebar-link">Using <code>tidymodels</code></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/pipelines.html" class="sidebar-item-text sidebar-link">ML Pipelines</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/h2o.html" class="sidebar-item-text sidebar-link">H2O models</a>
+  </div>
+</li>
+    </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">Non-rectangular Data</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/streaming.html" class="sidebar-item-text sidebar-link">Streaming Data</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/textmining.html" class="sidebar-item-text sidebar-link">Text Data</a>
+  </div>
+</li>
+    </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+    <div class="sidebar-item-container"> 
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">Advanced</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </a>
+    </div>
+    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">  
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/distributed-r.html" class="sidebar-item-text sidebar-link">Run R code inside Spark</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/extensions.html" class="sidebar-item-text sidebar-link active">Create <code>sparklyr</code> extensions</a>
+  </div>
+</li>
+    </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/troubleshooting.html" class="sidebar-item-text sidebar-link">Troubleshooting</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+<ul class="collapse">
+<li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+</ul></li>
+<li><a href="#core-types" class="nav-link" data-scroll-target="#core-types">Core Types</a></li>
+<li><a href="#calling-spark-from-r" class="nav-link" data-scroll-target="#calling-spark-from-r">Calling Spark from R</a></li>
+<li><a href="#wrapper-functions" class="nav-link" data-scroll-target="#wrapper-functions">Wrapper Functions</a></li>
+<li><a href="#dependencies" class="nav-link" data-scroll-target="#dependencies">Dependencies</a>
+<ul class="collapse">
+<li><a href="#compiling-jars" class="nav-link" data-scroll-target="#compiling-jars">Compiling JARs</a></li>
+</ul></li>
+<li><a href="#data-types" class="nav-link" data-scroll-target="#data-types">Data Types</a></li>
+<li><a href="#compiling" class="nav-link" data-scroll-target="#compiling">Compiling</a></li>
+</ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<header id="title-block-header" class="quarto-title-block default">
+
+<div class="quarto-title"><h1 class="title d-none d-lg-block display-7">Creating Extensions for <code>sparklyr</code></h1></div></header>
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The sparklyr package provides a <a href="dplyr.html">dplyr</a> interface to Spark DataFrames as well as an R interface to Spark’s distributed <a href="mllib.html">machine learning</a> pipelines. However, since Spark is a general-purpose cluster computing system there are many other R interfaces that could be built (e.g.&nbsp;interfaces to custom machine learning pipelines, interfaces to 3rd party Spark packages, etc.).</p>
+<p>The facilities used internally by sparklyr for its dplyr and machine learning interfaces are available to extension packages. This guide describes how you can use these tools to create your own custom R interfaces to Spark.</p>
+<section id="examples" class="level3">
+<h3 class="anchored" data-anchor-id="examples">Examples</h3>
+<p>Here’s an example of an extension function that calls the text file line counting function available via the SparkContext:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>count_lines <span class="ot">&lt;-</span> <span class="cf">function</span>(sc, file) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"textFile"</span>, file, 1L) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"count"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
+<p>You can use this function with an existing sparklyr connection as follows:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">count_lines</span>(sc, <span class="st">"hdfs://path/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here are links to some additional examples of extension packages:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/bnosac/spark.sas7bdat"><code>spark.sas7bdat</code></a></td>
+<td>Read in SAS data in parallel into Apache Spark.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/h2oai/rsparkling"><code>rsparkling</code></a></td>
+<td>Extension for using <a href="h2o.ai">H2O</a> machine learning algorithms against Spark Data Frames.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/javierluraschi/sparkhello"><code>sparkhello</code></a></td>
+<td>Simple example of including a custom JAR file within an extension package.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/clarkfitzg/rddlist"><code>rddlist</code></a></td>
+<td>Implements some methods of an R list as a Spark RDD (resilient distributed dataset).</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/javierluraschi/sparkwarc"><code>sparkwarc</code></a></td>
+<td>Load <a href="http://commoncrawl.org/the-data/get-started/">WARC files</a> into Apache Spark with sparklyr.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/chezou/sparkavro"><code>sparkavro</code></a></td>
+<td>Load Avro data into Spark with sparklyr. It is a wrapper of <a href="https://github.com/databricks/spark-avro">spark-avro</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/AkhilNairAmey/crassy"><code>crassy</code></a></td>
+<td>Connect to Cassandra with sparklyr using the <code>Spark-Cassandra-Connector</code>.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/kevinykuo/sparklygraphs"><code>sparklygraphs</code></a></td>
+<td>R interface for <a href="https://graphframes.github.io/">GraphFrames</a> which aims to provide the functionality of <a href="http://spark.apache.org/graphx/">GraphX</a>.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://mitre.github.io/sparklyr.nested/"><code>sparklyr.nested</code></a></td>
+<td>Extension for working with nested data.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/javierluraschi/sparklyudf"><code>sparklyudf</code></a></td>
+<td>Simple example registering an Scala UDF within an extension package.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/rstudio/mleap"><code>mleap</code></a></td>
+<td>R Interface to MLeap.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/miraisolutions/sparkbq"><code>sparkbq</code></a></td>
+<td>Sparklyr extension package to connect to Google BigQuery.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/miraisolutions/sparkgeo"><code>sparkgeo</code></a></td>
+<td>Sparklyr extension package providing geospatial analytics capabilities.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/chezou/sparklytd"><code>sparklytd</code></a></td>
+<td>Spaklyr plugin for td-spark to connect TD from R.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/nathaneastwood/sparkts"><code>sparkts</code></a></td>
+<td>Extensions for the spark-timeseries framework.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/rstudio/sparkxgb"><code>sparkxgb</code></a></td>
+<td>R interface for XGBoost on Spark.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/rstudio/sparktf"><code>sparktf</code></a></td>
+<td>R interface to Spark TensorFlow Connector.</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/harryprince/geospark"><code>geospark</code></a></td>
+<td>R interface to GeoSpark to perform spatial analysis in Spark.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/Azure/mmlspark/blob/master/docs/R-setup.md"><code>mmlspark</code></a></td>
+<td>Microsoft Machine Learning for Apache Spark.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="core-types" class="level2">
+<h2 class="anchored" data-anchor-id="core-types">Core Types</h2>
+<p>Three classes are defined for representing the fundamental types of the R to Java bridge:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/spark-connections/"><code>spark_connection</code></a></td>
+<td>Connection between R and the Spark shell process</td>
+</tr>
+<tr class="even">
+<td><a href="reference/sparklyr/latest/spark_jobj.html"><code>spark_jobj</code></a></td>
+<td>Instance of a remote Spark object</td>
+</tr>
+<tr class="odd">
+<td><a href="reference/sparklyr/latest/spark_dataframe.html"><code>spark_dataframe</code></a></td>
+<td>Instance of a remote Spark DataFrame object</td>
+</tr>
+</tbody>
+</table>
+<p>S3 methods are defined for each of these classes so they can be easily converted to or from objects that contain or wrap them. Note that for any given <code>spark_jobj</code> it’s possible to discover the underlying <code>spark_connection</code>.</p>
+</section>
+<section id="calling-spark-from-r" class="level2">
+<h2 class="anchored" data-anchor-id="calling-spark-from-r">Calling Spark from R</h2>
+<p>There are several functions available for calling the methods of Java objects and static methods of Java classes:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="reference/sparklyr/latest/invoke.html"><code>invoke</code></a></td>
+<td>Call a method on an object</td>
+</tr>
+<tr class="even">
+<td><a href="reference/sparklyr/latest/invoke.html"><code>invoke_new</code></a></td>
+<td>Create a new object by invoking a constructor</td>
+</tr>
+<tr class="odd">
+<td><a href="reference/sparklyr/latest/invoke.html"><code>invoke_static</code></a></td>
+<td>Call a static method on an object</td>
+</tr>
+</tbody>
+</table>
+<p>For example, to create a new instance of the <code>java.math.BigInteger</code> class and then call the <code>longValue()</code> method on it you would use code like this:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>billionBigInteger <span class="ot">&lt;-</span> <span class="fu">invoke_new</span>(sc, <span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>billion <span class="ot">&lt;-</span> <span class="fu">invoke</span>(billionBigInteger, <span class="st">"longValue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note the <code>sc</code> argument: that’s the <code>spark_connection</code> object which is provided by the front-end package (e.g.&nbsp;sparklyr).</p>
+<p>The previous example can be re-written to be more compact and clear using <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr</a> pipes:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>billion <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke_new</span>(<span class="st">"java.math.BigInteger"</span>, <span class="st">"1000000000"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"longValue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This syntax is similar to the method-chaining syntax often used with Scala code so is generally preferred.</p>
+<p>Calling a static method of a class is also straightforward. For example, to call the <code>Math::hypot()</code> static function you would use this code:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hypot <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invoke_static</span>(<span class="st">"java.lang.Math"</span>, <span class="st">"hypot"</span>, <span class="dv">10</span>, <span class="dv">20</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="wrapper-functions" class="level2">
+<h2 class="anchored" data-anchor-id="wrapper-functions">Wrapper Functions</h2>
+<p>Creating an extension typically consists of writing R wrapper functions for a set of Spark services. In this section we’ll describe the typical form of these functions as well as how to handle special types like Spark DataFrames.</p>
+<p>Here’s the wrapper function for <code>textFile().count()</code> which we defined earlier:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>count_lines <span class="ot">&lt;-</span> <span class="cf">function</span>(sc, file) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_context</span>(sc) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke</span>(<span class="st">"textFile"</span>, file, 1L) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invoke</span>(<span class="st">"count"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>count_lines</code> function takes a <code>spark_connection</code> (<code>sc</code>) argument which enables it to obtain a reference to the <code>SparkContext</code> object, and in turn call the <code>textFile().count()</code> method.</p>
+<p>The following functions are useful for implementing wrapper functions of various kinds:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/spark-connections/"><code>spark_connection</code></a></td>
+<td>Get the Spark connection associated with an object (S3)</td>
+</tr>
+<tr class="even">
+<td><a href="reference/sparklyr/latest/spark_jobj.html"><code>spark_jobj</code></a></td>
+<td>Get the Spark jobj associated with an object (S3)</td>
+</tr>
+<tr class="odd">
+<td><a href="reference/sparklyr/latest/spark_dataframe.html"><code>spark_dataframe</code></a></td>
+<td>Get the Spark DataFrame associated with an object (S3)</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/spark-api/"><code>spark_context</code></a></td>
+<td>Get the SparkContext for a <code>spark_connection</code></td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/spark-api/"><code>hive_context</code></a></td>
+<td>Get the HiveContext for a <code>spark_connection</code></td>
+</tr>
+<tr class="even">
+<td><a href="reference/sparklyr/latest/spark_version.html"><code>spark_version</code></a></td>
+<td>Get the version of Spark (as a <code>numeric_version</code>) for a <code>spark_connection</code></td>
+</tr>
+</tbody>
+</table>
+<p>The use of these functions is illustrated in this simple example:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>analyze <span class="ot">&lt;-</span> <span class="cf">function</span>(x, features) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># normalize whatever we were passed (e.g. a dplyr tbl) into a DataFrame</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">spark_dataframe</span>(x)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get the underlying connection so we can create new objects</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  sc <span class="ot">&lt;-</span> <span class="fu">spark_connection</span>(df)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create an object to do the analysis and call its `analyze` and `summary`</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># methods (note that the df and features are passed to the analyze function)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  summary <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span>  </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">invoke_new</span>(<span class="st">"com.example.tools.Analyzer"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invoke</span>(<span class="st">"analyze"</span>, df, features) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invoke</span>(<span class="st">"summary"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return the results</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  summary</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first argument is an object that can be accessed using the Spark DataFrame API (this might be an actual reference to a DataFrame or could rather be a dplyr <code>tbl</code> which has a DataFrame reference inside it).</p>
+<p>After using the <code>spark_dataframe</code> function to normalize the reference, we extract the underlying Spark connection associated with the data frame using the <code>spark_connection</code> function. Finally, we create a new <code>Analyzer</code> object, call it’s <code>analyze</code> method with the DataFrame and list of features, and then call the <code>summary</code> method on the results of the analysis.</p>
+<p>Accepting a <code>spark_jobj</code> or <code>spark_dataframe</code> as the first argument of a function makes it very easy to incorporate into magrittr pipelines so this pattern is highly recommended when possible.</p>
+</section>
+<section id="dependencies" class="level2">
+<h2 class="anchored" data-anchor-id="dependencies">Dependencies</h2>
+<p>When creating R packages which implement interfaces to Spark you may need to include additional dependencies. Your dependencies might be a set of <a href="https://spark-packages.org/">Spark Packages</a> or might be a custom JAR file. In either case, you’ll need a way to specify that these dependencies should be included during the initialization of a Spark session. A Spark dependency is defined using the <code>spark_dependency</code> function:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="reference/sparklyr/latest/spark_dependency"><code>spark_dependency</code></a></td>
+<td>Define a Spark dependency consisting of JAR files and Spark packages</td>
+</tr>
+</tbody>
+</table>
+<p>Your extension package can specify it’s dependencies by implementing a function named <code>spark_dependencies</code> within the package (this function should <em>not</em> be publicly exported). For example, let’s say you were creating an extension package named <strong>sparkds</strong> that needs to include a custom JAR as well as the Redshift and Apache Avro packages:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>spark_dependencies <span class="ot">&lt;-</span> <span class="cf">function</span>(spark_version, scala_version, ...) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spark_dependency</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">jars =</span> <span class="fu">c</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">system.file</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">sprintf</span>(<span class="st">"java/sparkds-%s-%s.jar"</span>, spark_version, scala_version), </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">package =</span> <span class="st">"sparkds"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">packages =</span> <span class="fu">c</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"com.databricks:spark-redshift_%s:0.6.0"</span>, scala_version),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sprintf</span>(<span class="st">"com.databricks:spark-avro_%s:2.0.1"</span>, scala_version)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>.onLoad <span class="ot">&lt;-</span> <span class="cf">function</span>(libname, pkgname) {</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  sparklyr<span class="sc">::</span><span class="fu">register_extension</span>(pkgname)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>spark_version</code> argument is provided so that a package can support multiple Spark versions for it’s JARs. Note that the argument will include just the major and minor versions (e.g.&nbsp;<code>1.6</code> or <code>2.0</code>) and will not include the patch level (as JARs built for a given major/minor version are expected to work for all patch levels).</p>
+<p>The <code>scala_version</code> argument is provided so that a single package can support multiple Scala compiler versions for it’s JARs and packages (currently Scala 1.6 downloadable binaries are compiled with Scala 2.10 and Scala 2.0 downloadable binaries are compiled with Scala 2.11).</p>
+<p>The <code>...</code> argument is unused but nevertheless should be included to ensure compatibility if new arguments are added to <code>spark_dependencies</code> in the future.</p>
+<p>The <code>.onLoad</code> function registers your extension package so that it’s <code>spark_dependencies</code> function will be automatically called when new connections to Spark are made via <code>spark_connect</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparkds)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="compiling-jars" class="level3">
+<h3 class="anchored" data-anchor-id="compiling-jars">Compiling JARs</h3>
+<p>The <strong>sparklyr</strong> package includes a utility function (<code>compile_package_jars</code>) that will automatically compile a JAR file from your Scala source code for the required permutations of Spark and Scala compiler versions. To use the function just invoke it from the root directory of your R package as follows:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sparklyr<span class="sc">::</span><span class="fu">compile_package_jars</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that a prerequisite to calling <code>compile_package_jars</code> is the installation of the Scala 2.10 and 2.11 compilers to one of the following paths:</p>
+<ul>
+<li>/opt/scala</li>
+<li>/opt/local/scala</li>
+<li>/usr/local/scala</li>
+<li>~/scala (Windows-only)</li>
+</ul>
+<p>See the <a href="https://github.com/jjallaire/sparkhello">sparkhello</a> repository for a complete example of including a custom JAR within an extension package.</p>
+<section id="cran" class="level4">
+<h4 class="anchored" data-anchor-id="cran">CRAN</h4>
+<p>When including a JAR file within an R package distributed on CRAN, you should follow the guidelines provided in <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Non_002dR-scripts-in-packages">Writing R Extensions</a>:</p>
+<blockquote class="blockquote">
+<p>Java code is a special case: except for very small programs, .java files should be byte-compiled (to a .class file) and distributed as part of a .jar file: the conventional location for the .jar file(s) is <code>inst/java</code>. It is desirable (and required under an Open Source license) to make the Java source files available: this is best done in a top-level <code>java</code> directory in the package – the source files should not be installed.</p>
+</blockquote>
+</section>
+</section>
+</section>
+<section id="data-types" class="level2">
+<h2 class="anchored" data-anchor-id="data-types">Data Types</h2>
+<p>The <a href="http://spark.rstudio.com/reference/sparklyr/latest/ensure.html"><code>ensure_*</code></a> family of functions can be used to enforce specific data types that are passed to a Spark routine. For example, Spark routines that require an integer will not accept an R numeric element. Use these functions ensure certain parameters are scalar integers, or scalar doubles, and so on.</p>
+<ul>
+<li>ensure_scalar_integer</li>
+<li>ensure_scalar_double</li>
+<li>ensure_scalar_boolean</li>
+<li>ensure_scalar_character</li>
+</ul>
+<p>In order to match the correct data types while calling Scala code from R, or retrieving results from Scala back to R, consider the following types mapping:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>From R</th>
+<th>Scala</th>
+<th>To R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NULL</td>
+<td>void</td>
+<td>NULL</td>
+</tr>
+<tr class="even">
+<td>integer</td>
+<td>Int</td>
+<td>integer</td>
+</tr>
+<tr class="odd">
+<td>character</td>
+<td>String</td>
+<td>character</td>
+</tr>
+<tr class="even">
+<td>logical</td>
+<td>Boolean</td>
+<td>logical</td>
+</tr>
+<tr class="odd">
+<td>double</td>
+<td>Double</td>
+<td>double</td>
+</tr>
+<tr class="even">
+<td>numeric</td>
+<td>Double</td>
+<td>double</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Float</td>
+<td>double</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Decimal</td>
+<td>double</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Long</td>
+<td>double</td>
+</tr>
+<tr class="even">
+<td>raw</td>
+<td>Array[Byte]</td>
+<td>raw</td>
+</tr>
+<tr class="odd">
+<td>Date</td>
+<td>Date</td>
+<td>Date</td>
+</tr>
+<tr class="even">
+<td>POSIXlt</td>
+<td>Time</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>POSIXct</td>
+<td>Time</td>
+<td>POSIXct</td>
+</tr>
+<tr class="even">
+<td>list</td>
+<td>Array[T]</td>
+<td>list</td>
+</tr>
+<tr class="odd">
+<td>environment</td>
+<td>Map[String, T]</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>jobj</td>
+<td>Object</td>
+<td>jobj</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="compiling" class="level2">
+<h2 class="anchored" data-anchor-id="compiling">Compiling</h2>
+<p>Most Spark extensions won’t need to define their own compilation specification, and can instead rely on the default behavior of <code>compile_package_jars</code>. For users who would like to take more control over where the scalac compilers should be looked up, use the <a href="http://spark.rstudio.com/reference/sparklyr/latest/spark_compilation_spec.html"><code>spark_compilation_spec</code></a> fucnction. The Spark compilation specification is used when compiling Spark extension Java Archives, and defines which versions of Spark, as well as which versions of Scala, should be used for compilation.</p>
+
+
+</section>
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+    } else {
+      disableStylesheet(alternateStylesheets);
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../guides/distributed-r.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Run R code inside Spark</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../guides/troubleshooting.html" class="pagination-link">
+        <span class="nav-page-text">Troubleshooting</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+</body></html>

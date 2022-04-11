@@ -23,13 +23,17 @@ jobs:
         with:
           version: 0.9.208
 
-      - name: Insatall devtools
-        run: install.packages("devtools")
+      - name: Install pak
+        run: install.packages("pak")
         shell: Rscript {0}
 
       - name: Install ecodown
-        run: devtools::install_github("edgararuiz/ecodown")
+        run: pak::pkg_install("edgararuiz/ecodown")
         shell: Rscript {0}
+        
+      - name: Install ecodown's deps
+        run: pak::pkg_system_requirements("ecodown", "ubuntu", "20.04")
+        shell: Rscript {0}     
         
       - name: Build site
         run: ecodown::ecodown_build()

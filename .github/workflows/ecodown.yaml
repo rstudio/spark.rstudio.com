@@ -23,21 +23,34 @@ jobs:
         with:
           version: 0.9.208
 
-      - name: Install pkgdepends
-        run: install.packages("pkgdepends")
-        shell: Rscript {0}
+      - name: Install dependencies
+        run: |
+          apt-get install -y make                 
+          apt-get install -y libcurl4-openssl-dev
+          apt-get install -y libssl-dev           
+          apt-get install -y libfontconfig1-dev  
+          apt-get install -y libfreetype6-dev     
+          apt-get install -y libfribidi-dev      
+          apt-get install -y libharfbuzz-dev      
+          apt-get install -y libjpeg-dev         
+          apt-get install -y libpng-dev           
+          apt-get install -y libtiff-dev         
+          apt-get install -y libicu-dev          
+          apt-get install -y pandoc              
+          apt-get install -y libxml2-dev          
+          apt-get install -y libgit2-dev         
+          apt-get install -y libssh2-1-dev        
+          apt-get install -y zlib1g-dev          
+          apt-get install -y git   
+        shell: bash
 
-      - name: Install pak
-        run: install.packages("pak")
+      - name: Install devtools
+        run: install.packages("devtools")
         shell: Rscript {0}
 
       - name: Install ecodown
-        run: pak::pkg_install("edgararuiz/ecodown")
+        run: devtools::install_github("edgararuiz/ecodown")
         shell: Rscript {0}
-        
-      - name: Install ecodown's deps
-        run: pak::local_system_requirements(root = "ecodown/", os = "ubuntu", "20.04")
-        shell: Rscript {0}     
         
       - name: Build site
         run: ecodown::ecodown_build()
@@ -50,3 +63,5 @@ jobs:
           clean: false
           branch: site
           folder: docs
+          
+          

@@ -18,9 +18,14 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - name: Install Quarto
+        uses: quarto-dev/quarto-actions/install-quarto@main
         with:
-          extra-packages: any::devtools
+          version: 0.9.208
+
+      - name: Insatall devtools
+        run: install.packages("devtools")
+        shell: Rscript {0}
 
       - name: Install ecodown
         run: devtools::install_github("edgararuiz/ecodown")
@@ -30,7 +35,7 @@ jobs:
         run: ecodown::ecodown_build()
         shell: Rscript {0}
 
-      - name: Deploy to GitHub pages 🚀
+      - name: Deploy to GitHub pages
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:

@@ -13,6 +13,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+        fetch-depth: '0'
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -49,10 +50,6 @@ jobs:
 
       - name: Install ecodown
         run: devtools::install_github("edgararuiz/ecodown")
-        shell: Rscript {0}
-        
-      - name: Fetches origin
-        run: git2r::fetch(name = "origin")
         shell: Rscript {0}
         
       - name: Print out commits

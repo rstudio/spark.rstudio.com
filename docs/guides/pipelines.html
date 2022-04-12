@@ -425,7 +425,7 @@ Coefficients:
 <div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_dplyr_transformer</span>(sc, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>SQLTransformer (Transformer)
-&lt;dplyr_transformer__8ba1e82c_e9b0_4914_b571_2a71c8e1f4ea&gt; 
+&lt;dplyr_transformer__30d268ab_0f32_4b44_8855_3d58a90e6cdc&gt; 
  (Parameters -- Column Names)</code></pre>
 </div>
 </div>
@@ -471,23 +471,23 @@ Coefficients:
 <div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>Pipeline (Estimator) with 5 stages
-&lt;pipeline__e4745ba2_5bf8_4555_88d9_4aa66aa7b6ba&gt; 
+&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
   Stages 
   |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__e0e59acc_d897_4a93_9760_474ebc786add&gt; 
+  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
   |     (Parameters -- Column Names)
   |--2 Binarizer (Transformer)
-  |    &lt;binarizer__5b3946fe_1209_4d5d_805c_ee7c79bea1f2&gt; 
+  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
   |     (Parameters -- Column Names)
   |      input_col: dep_delay
   |      output_col: delayed
   |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__84db4fe8_4994_4ad3_9e04_a6bbb70e5cec&gt; 
+  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
   |     (Parameters -- Column Names)
   |      input_col: sched_dep_time
   |      output_col: hours
   |--4 RFormula (Estimator)
-  |    &lt;r_formula__b6e8b330_5824_4719_9417_d14bd05de34f&gt; 
+  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
@@ -497,7 +497,7 @@ Coefficients:
   |      handle_invalid: error
   |      stringIndexerOrderType: frequencyDesc
   |--5 LogisticRegression (Estimator)
-  |    &lt;logistic_regression__3991e32e_fa8c_46f8_b337_1ea749ffb337&gt; 
+  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
@@ -510,7 +510,6 @@ Coefficients:
   |      family: auto
   |      fit_intercept: TRUE
   |      max_iter: 100
-  |      maxBlockSizeInMB: 0
   |      reg_param: 0
   |      standardization: TRUE
   |      threshold: 0.5
@@ -540,30 +539,30 @@ Coefficients:
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>fitted_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>PipelineModel (Transformer) with 5 stages
-&lt;pipeline__e4745ba2_5bf8_4555_88d9_4aa66aa7b6ba&gt; 
+&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
   Stages 
   |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__e0e59acc_d897_4a93_9760_474ebc786add&gt; 
+  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
   |     (Parameters -- Column Names)
   |--2 Binarizer (Transformer)
-  |    &lt;binarizer__5b3946fe_1209_4d5d_805c_ee7c79bea1f2&gt; 
+  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
   |     (Parameters -- Column Names)
   |      input_col: dep_delay
   |      output_col: delayed
   |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__84db4fe8_4994_4ad3_9e04_a6bbb70e5cec&gt; 
+  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
   |     (Parameters -- Column Names)
   |      input_col: sched_dep_time
   |      output_col: hours
   |--4 RFormulaModel (Transformer)
-  |    &lt;r_formula__b6e8b330_5824_4719_9417_d14bd05de34f&gt; 
+  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
   |     (Transformer Info)
   |      formula:  chr "delayed ~ month + day + hours + distance" 
   |--5 LogisticRegressionModel (Transformer)
-  |    &lt;logistic_regression__3991e32e_fa8c_46f8_b337_1ea749ffb337&gt; 
+  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
@@ -571,10 +570,10 @@ Coefficients:
   |      probability_col: probability
   |      raw_prediction_col: rawPrediction
   |     (Transformer Info)
-  |      coefficient_matrix:  num [1, 1:43] 0.47246 0.8963 0.23965 0.00185 -0.03954 ... 
-  |      coefficients:  num [1:43] 0.47246 0.8963 0.23965 0.00185 -0.03954 ... 
-  |      intercept:  num -2.8 
-  |      intercept_vector:  num -2.8 
+  |      coefficient_matrix:  num [1, 1:43] 0.142 0.45 0.424 0.603 -0.126 ... 
+  |      coefficients:  num [1:43] 0.142 0.45 0.424 0.603 -0.126 ... 
+  |      intercept:  num -2.54 
+  |      intercept_vector:  num -2.54 
   |      num_classes:  int 2 
   |      num_features:  int 43 
   |      threshold:  num 0.5 
@@ -590,17 +589,16 @@ Coefficients:
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>predictions <span class="sc">%&gt;%</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(delayed, prediction) <span class="sc">%&gt;%</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tally</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(delayed, prediction) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code># Source: spark&lt;?&gt; [?? x 3]
 # Groups: delayed
   delayed prediction     n
     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
-1       0          1    35
-2       0          0  2569
-3       1          0   650
-4       1          1    56</code></pre>
+1       0          1    47
+2       0          0  2553
+3       1          0   642
+4       1          1    45</code></pre>
 </div>
 </div>
 </section>
@@ -673,30 +671,30 @@ Coefficients:
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>new_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-stdout">
 <pre><code>PipelineModel (Transformer) with 5 stages
-&lt;pipeline__e4745ba2_5bf8_4555_88d9_4aa66aa7b6ba&gt; 
+&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
   Stages 
   |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__e0e59acc_d897_4a93_9760_474ebc786add&gt; 
+  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
   |     (Parameters -- Column Names)
   |--2 Binarizer (Transformer)
-  |    &lt;binarizer__5b3946fe_1209_4d5d_805c_ee7c79bea1f2&gt; 
+  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
   |     (Parameters -- Column Names)
   |      input_col: dep_delay
   |      output_col: delayed
   |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__84db4fe8_4994_4ad3_9e04_a6bbb70e5cec&gt; 
+  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
   |     (Parameters -- Column Names)
   |      input_col: sched_dep_time
   |      output_col: hours
   |--4 RFormulaModel (Transformer)
-  |    &lt;r_formula__b6e8b330_5824_4719_9417_d14bd05de34f&gt; 
+  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
   |     (Transformer Info)
   |      formula:  chr "delayed ~ month + day + hours + distance" 
   |--5 LogisticRegressionModel (Transformer)
-  |    &lt;logistic_regression__3991e32e_fa8c_46f8_b337_1ea749ffb337&gt; 
+  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
   |     (Parameters -- Column Names)
   |      features_col: features
   |      label_col: label
@@ -704,10 +702,10 @@ Coefficients:
   |      probability_col: probability
   |      raw_prediction_col: rawPrediction
   |     (Transformer Info)
-  |      coefficient_matrix:  num [1, 1:43] 0.111 -0.798 -0.626 -0.355 -0.19 ... 
-  |      coefficients:  num [1:43] 0.111 -0.798 -0.626 -0.355 -0.19 ... 
-  |      intercept:  num -2.08 
-  |      intercept_vector:  num -2.08 
+  |      coefficient_matrix:  num [1, 1:43] 0.9287 0.4978 -0.5059 0.6783 -0.0463 ... 
+  |      coefficients:  num [1:43] 0.9287 0.4978 -0.5059 0.6783 -0.0463 ... 
+  |      intercept:  num -3.22 
+  |      intercept_vector:  num -3.22 
   |      num_classes:  int 2 
   |      num_features:  int 43 
   |      threshold:  num 0.5 

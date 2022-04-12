@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr - Option 2 - Working inside of Databricks</title>
   <style>
@@ -89,8 +89,8 @@
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +98,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -133,7 +133,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
+<body class="nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -197,17 +197,17 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-<li><a href="#advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
-<li><a href="#requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
-<li><a href="#preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a></li>
-<li><a href="#configure-ssh-access-to-the-spark-driver-node" class="nav-link" data-scroll-target="#configure-ssh-access-to-the-spark-driver-node">Configure SSH access to the Spark driver node</a></li>
-<li><a href="#connect-to-the-spark-driver-node-via-ssh" class="nav-link" data-scroll-target="#connect-to-the-spark-driver-node-via-ssh">Connect to the Spark driver node via SSH</a></li>
-<li><a href="#install-rstudio-workbench-on-the-spark-driver-node" class="nav-link" data-scroll-target="#install-rstudio-workbench-on-the-spark-driver-node">Install RStudio Workbench on the Spark driver node</a></li>
-<li><a href="#configure-rstudio-workbench" class="nav-link" data-scroll-target="#configure-rstudio-workbench">Configure RStudio Workbench</a></li>
-<li><a href="#access-rstudio-workbench" class="nav-link" data-scroll-target="#access-rstudio-workbench">Access RStudio Workbench</a></li>
-<li><a href="#configure-sparklyr" class="nav-link" data-scroll-target="#configure-sparklyr">Configure <code>sparklyr</code></a></li>
-<li><a href="#additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
+<li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#advantages-and-limitations" id="toc-advantages-and-limitations" class="nav-link" data-scroll-target="#advantages-and-limitations">Advantages and limitations</a></li>
+<li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
+<li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a></li>
+<li><a href="#configure-ssh-access-to-the-spark-driver-node" id="toc-configure-ssh-access-to-the-spark-driver-node" class="nav-link" data-scroll-target="#configure-ssh-access-to-the-spark-driver-node">Configure SSH access to the Spark driver node</a></li>
+<li><a href="#connect-to-the-spark-driver-node-via-ssh" id="toc-connect-to-the-spark-driver-node-via-ssh" class="nav-link" data-scroll-target="#connect-to-the-spark-driver-node-via-ssh">Connect to the Spark driver node via SSH</a></li>
+<li><a href="#install-rstudio-workbench-on-the-spark-driver-node" id="toc-install-rstudio-workbench-on-the-spark-driver-node" class="nav-link" data-scroll-target="#install-rstudio-workbench-on-the-spark-driver-node">Install RStudio Workbench on the Spark driver node</a></li>
+<li><a href="#configure-rstudio-workbench" id="toc-configure-rstudio-workbench" class="nav-link" data-scroll-target="#configure-rstudio-workbench">Configure RStudio Workbench</a></li>
+<li><a href="#access-rstudio-workbench" id="toc-access-rstudio-workbench" class="nav-link" data-scroll-target="#access-rstudio-workbench">Access RStudio Workbench</a></li>
+<li><a href="#configure-sparklyr" id="toc-configure-sparklyr" class="nav-link" data-scroll-target="#configure-sparklyr">Configure <code>sparklyr</code></a></li>
+<li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information</a></li>
 </ul>
 </nav>
     </div>
@@ -310,6 +310,7 @@ allow-terminal-websockets=0</code></pre>
 <section id="additional-information" class="level2">
 <h2 class="anchored" data-anchor-id="additional-information">Additional information</h2>
 <p>For more information on using RStudio Workbench inside of Databricks, refer to the sections on <a href="https://docs.databricks.com/spark/latest/sparkr/rstudio.html">RStudio on Databricks (AWS)</a> or <a href="https://docs.microsoft.com/en-us/azure/databricks/spark/latest/sparkr/rstudio">RStudio on Databricks (Azure)</a> in the Databricks documentation.</p>
+
 
 
 </section>

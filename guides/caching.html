@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr - Understanding Spark Caching</title>
   <style>
@@ -91,8 +91,8 @@
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -100,7 +100,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -135,7 +135,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="floating">
+<body class="floating nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -193,7 +193,7 @@
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Understanding Spark Caching</h1>
-      <button type="button" class="quarto-btn-toggle btn">
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
@@ -212,12 +212,12 @@
 </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">Interacting with Spark</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-interacting-with-spark" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Interacting with Spark</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-interacting-with-spark" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/dplyr.html" class="sidebar-item-text sidebar-link">Using <code>dplyr</code></a>
@@ -242,12 +242,12 @@
   </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">Machine Learning</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-machine-learning" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Machine Learning</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-machine-learning" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/mlib.html" class="sidebar-item-text sidebar-link">Spark ML Overview</a>
@@ -272,12 +272,12 @@
   </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">Non-rectangular Data</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-non-rectangular-data" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Non-rectangular Data</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-non-rectangular-data" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/streaming.html" class="sidebar-item-text sidebar-link">Streaming Data</a>
@@ -292,12 +292,12 @@
   </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">Advanced</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-advanced" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Advanced</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-advanced" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/distributed-r.html" class="sidebar-item-text sidebar-link">Run R code inside Spark</a>
@@ -323,25 +323,25 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-<li><a href="#preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a>
+<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+<li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a>
 <ul class="collapse">
-<li><a href="#download-test-data" class="nav-link" data-scroll-target="#download-test-data">Download Test Data</a></li>
-<li><a href="#start-a-spark-session" class="nav-link" data-scroll-target="#start-a-spark-session">Start a Spark session</a></li>
+<li><a href="#download-test-data" id="toc-download-test-data" class="nav-link" data-scroll-target="#download-test-data">Download Test Data</a></li>
+<li><a href="#start-a-spark-session" id="toc-start-a-spark-session" class="nav-link" data-scroll-target="#start-a-spark-session">Start a Spark session</a></li>
 </ul></li>
-<li><a href="#the-memory-argument" class="nav-link" data-scroll-target="#the-memory-argument">The Memory Argument</a></li>
-<li><a href="#loading-less-data-into-memory" class="nav-link" data-scroll-target="#loading-less-data-into-memory">Loading Less Data into Memory</a>
+<li><a href="#the-memory-argument" id="toc-the-memory-argument" class="nav-link" data-scroll-target="#the-memory-argument">The Memory Argument</a></li>
+<li><a href="#loading-less-data-into-memory" id="toc-loading-less-data-into-memory" class="nav-link" data-scroll-target="#loading-less-data-into-memory">Loading Less Data into Memory</a>
 <ul class="collapse">
-<li><a href="#lazy-transform" class="nav-link" data-scroll-target="#lazy-transform">Lazy Transform</a></li>
-<li><a href="#register-in-spark" class="nav-link" data-scroll-target="#register-in-spark">Register in Spark</a></li>
-<li><a href="#cache-into-memory" class="nav-link" data-scroll-target="#cache-into-memory">Cache into Memory</a></li>
-<li><a href="#driver-memory" class="nav-link" data-scroll-target="#driver-memory">Driver Memory</a></li>
+<li><a href="#lazy-transform" id="toc-lazy-transform" class="nav-link" data-scroll-target="#lazy-transform">Lazy Transform</a></li>
+<li><a href="#register-in-spark" id="toc-register-in-spark" class="nav-link" data-scroll-target="#register-in-spark">Register in Spark</a></li>
+<li><a href="#cache-into-memory" id="toc-cache-into-memory" class="nav-link" data-scroll-target="#cache-into-memory">Cache into Memory</a></li>
+<li><a href="#driver-memory" id="toc-driver-memory" class="nav-link" data-scroll-target="#driver-memory">Driver Memory</a></li>
 </ul></li>
-<li><a href="#process-on-the-fly" class="nav-link" data-scroll-target="#process-on-the-fly">Process on the fly</a>
+<li><a href="#process-on-the-fly" id="toc-process-on-the-fly" class="nav-link" data-scroll-target="#process-on-the-fly">Process on the fly</a>
 <ul class="collapse">
-<li><a href="#union-and-transform" class="nav-link" data-scroll-target="#union-and-transform">Union and Transform</a></li>
-<li><a href="#collect-into-r" class="nav-link" data-scroll-target="#collect-into-r">Collect into R</a></li>
-<li><a href="#plot-in-r" class="nav-link" data-scroll-target="#plot-in-r">Plot in R</a></li>
+<li><a href="#union-and-transform" id="toc-union-and-transform" class="nav-link" data-scroll-target="#union-and-transform">Union and Transform</a></li>
+<li><a href="#collect-into-r" id="toc-collect-into-r" class="nav-link" data-scroll-target="#collect-into-r">Collect into R</a></li>
+<li><a href="#plot-in-r" id="toc-plot-in-r" class="nav-link" data-scroll-target="#plot-in-r">Plot in R</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -549,6 +549,7 @@
 <div class="cell">
 <div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+
 
 
 </section>

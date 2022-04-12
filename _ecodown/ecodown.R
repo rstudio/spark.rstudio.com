@@ -1,0 +1,5 @@
+devtools::install_github("edgararuiz/ecodown")
+library(devtools)
+library(quarto)
+library(ecodown)
+renv::init()

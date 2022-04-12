@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr - Spark Standalone Deployment in AWS</title>
   <style>
@@ -90,8 +90,8 @@
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -99,7 +99,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -134,7 +134,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="floating">
+<body class="floating nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -192,7 +192,7 @@
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Spark Standalone Deployment in AWS</h1>
-      <button type="button" class="quarto-btn-toggle btn">
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
@@ -211,12 +211,12 @@
 </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">YARN (Hadoop)</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">YARN (Hadoop)</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-yarn-(hadoop" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link">Understanding Data Lakes</a>
@@ -236,12 +236,12 @@
   </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">Stand Alone Clusters</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Stand Alone Clusters</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-stand-alone-clusters" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deployment/databricks-cluster.html" class="sidebar-item-text sidebar-link">Databricks cluster</a>
@@ -267,24 +267,24 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-<li><a href="#aws-ec-instances" class="nav-link" data-scroll-target="#aws-ec-instances">AWS EC Instances</a></li>
-<li><a href="#spark" class="nav-link" data-scroll-target="#spark">Spark</a>
+<li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+<li><a href="#aws-ec-instances" id="toc-aws-ec-instances" class="nav-link" data-scroll-target="#aws-ec-instances">AWS EC Instances</a></li>
+<li><a href="#spark" id="toc-spark" class="nav-link" data-scroll-target="#spark">Spark</a>
 <ul class="collapse">
-<li><a href="#install-java-8" class="nav-link" data-scroll-target="#install-java-8">Install Java 8</a></li>
-<li><a href="#download-spark" class="nav-link" data-scroll-target="#download-spark">Download Spark</a></li>
-<li><a href="#create-and-launch-ami" class="nav-link" data-scroll-target="#create-and-launch-ami">Create and launch AMI</a></li>
+<li><a href="#install-java-8" id="toc-install-java-8" class="nav-link" data-scroll-target="#install-java-8">Install Java 8</a></li>
+<li><a href="#download-spark" id="toc-download-spark" class="nav-link" data-scroll-target="#download-spark">Download Spark</a></li>
+<li><a href="#create-and-launch-ami" id="toc-create-and-launch-ami" class="nav-link" data-scroll-target="#create-and-launch-ami">Create and launch AMI</a></li>
 </ul></li>
-<li><a href="#rstudio-server" class="nav-link" data-scroll-target="#rstudio-server">RStudio Server</a>
+<li><a href="#rstudio-server" id="toc-rstudio-server" class="nav-link" data-scroll-target="#rstudio-server">RStudio Server</a>
 <ul class="collapse">
-<li><a href="#install-r" class="nav-link" data-scroll-target="#install-r">Install R</a></li>
-<li><a href="#install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a></li>
-<li><a href="#install-dependencies" class="nav-link" data-scroll-target="#install-dependencies">Install dependencies</a></li>
-<li><a href="#add-default-user" class="nav-link" data-scroll-target="#add-default-user">Add default user</a></li>
-<li><a href="#start-the-master-node" class="nav-link" data-scroll-target="#start-the-master-node">Start the Master node</a></li>
-<li><a href="#start-worker-nodes" class="nav-link" data-scroll-target="#start-worker-nodes">Start Worker nodes</a></li>
-<li><a href="#pre-load-pacakges" class="nav-link" data-scroll-target="#pre-load-pacakges">Pre-load pacakges</a></li>
-<li><a href="#connect-to-the-spark-master" class="nav-link" data-scroll-target="#connect-to-the-spark-master">Connect to the Spark Master</a></li>
+<li><a href="#install-r" id="toc-install-r" class="nav-link" data-scroll-target="#install-r">Install R</a></li>
+<li><a href="#install-rstudio" id="toc-install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a></li>
+<li><a href="#install-dependencies" id="toc-install-dependencies" class="nav-link" data-scroll-target="#install-dependencies">Install dependencies</a></li>
+<li><a href="#add-default-user" id="toc-add-default-user" class="nav-link" data-scroll-target="#add-default-user">Add default user</a></li>
+<li><a href="#start-the-master-node" id="toc-start-the-master-node" class="nav-link" data-scroll-target="#start-the-master-node">Start the Master node</a></li>
+<li><a href="#start-worker-nodes" id="toc-start-worker-nodes" class="nav-link" data-scroll-target="#start-worker-nodes">Start Worker nodes</a></li>
+<li><a href="#pre-load-pacakges" id="toc-pre-load-pacakges" class="nav-link" data-scroll-target="#pre-load-pacakges">Pre-load pacakges</a></li>
+<li><a href="#connect-to-the-spark-master" id="toc-connect-to-the-spark-master" class="nav-link" data-scroll-target="#connect-to-the-spark-master">Connect to the Spark Master</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -449,6 +449,7 @@ sudo apt-get -y install libxml2-dev</code></pre>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">config =</span> conf,</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">spark_home =</span> <span class="st">"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/"</span></span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 
 
 </section>

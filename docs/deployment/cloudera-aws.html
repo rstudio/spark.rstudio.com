@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr - Using sparklyr with an Apache Spark cluster</title>
   <style>
@@ -91,8 +91,8 @@
   <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -100,7 +100,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -135,7 +135,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body class="floating">
+<body class="floating nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -193,7 +193,7 @@
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">Using sparklyr with an Apache Spark cluster</h1>
-      <button type="button" class="quarto-btn-toggle btn">
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
@@ -212,12 +212,12 @@
 </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">YARN (Hadoop)</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-yarn-(hadoop" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">YARN (Hadoop)</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-yarn-(hadoop" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link">Understanding Data Lakes</a>
@@ -237,12 +237,12 @@
   </li>
         <li class="sidebar-item sidebar-item-section">
     <div class="sidebar-item-container"> 
-        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">Stand Alone Clusters</a>
-      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-stand-alone-clusters" aria-expanded="true">
+        <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Stand Alone Clusters</a>
+      <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
         <i class="bi bi-chevron-right ms-2"></i>
       </a>
     </div>
-    <ul id="quarto-sidebar-section-stand-alone-clusters" class="collapse list-unstyled sidebar-section depth1 show">  
+    <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deployment/databricks-cluster.html" class="sidebar-item-text sidebar-link">Databricks cluster</a>
@@ -268,33 +268,33 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
-<li><a href="#cloudera-cluster" class="nav-link" data-scroll-target="#cloudera-cluster">Cloudera Cluster</a>
+<li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+<li><a href="#cloudera-cluster" id="toc-cloudera-cluster" class="nav-link" data-scroll-target="#cloudera-cluster">Cloudera Cluster</a>
 <ul class="collapse">
-<li><a href="#cdh-5" class="nav-link" data-scroll-target="#cdh-5">CDH 5</a></li>
-<li><a href="#spark-1.6" class="nav-link" data-scroll-target="#spark-1.6">Spark 1.6</a></li>
-<li><a href="#hive-data" class="nav-link" data-scroll-target="#hive-data">Hive data</a></li>
+<li><a href="#cdh-5" id="toc-cdh-5" class="nav-link" data-scroll-target="#cdh-5">CDH 5</a></li>
+<li><a href="#spark-1.6" id="toc-spark-1.6" class="nav-link" data-scroll-target="#spark-1.6">Spark 1.6</a></li>
+<li><a href="#hive-data" id="toc-hive-data" class="nav-link" data-scroll-target="#hive-data">Hive data</a></li>
 </ul></li>
-<li><a href="#install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a>
+<li><a href="#install-rstudio" id="toc-install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a>
 <ul class="collapse">
-<li><a href="#create-and-configure-a-user" class="nav-link" data-scroll-target="#create-and-configure-a-user">Create and configure a User</a></li>
+<li><a href="#create-and-configure-a-user" id="toc-create-and-configure-a-user" class="nav-link" data-scroll-target="#create-and-configure-a-user">Create and configure a User</a></li>
 </ul></li>
-<li><a href="#connect-to-spark" class="nav-link" data-scroll-target="#connect-to-spark">Connect to Spark</a></li>
-<li><a href="#data-analysis" class="nav-link" data-scroll-target="#data-analysis">Data analysis</a>
+<li><a href="#connect-to-spark" id="toc-connect-to-spark" class="nav-link" data-scroll-target="#connect-to-spark">Connect to Spark</a></li>
+<li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis">Data analysis</a>
 <ul class="collapse">
-<li><a href="#cache-the-tables-into-memory" class="nav-link" data-scroll-target="#cache-the-tables-into-memory">Cache the tables into memory</a></li>
-<li><a href="#create-a-model-data-set" class="nav-link" data-scroll-target="#create-a-model-data-set">Create a model data set</a></li>
-<li><a href="#train-a-linear-model" class="nav-link" data-scroll-target="#train-a-linear-model">Train a linear model</a></li>
-<li><a href="#assess-model-performance" class="nav-link" data-scroll-target="#assess-model-performance">Assess model performance</a></li>
-<li><a href="#visualize-predictions" class="nav-link" data-scroll-target="#visualize-predictions">Visualize predictions</a></li>
+<li><a href="#cache-the-tables-into-memory" id="toc-cache-the-tables-into-memory" class="nav-link" data-scroll-target="#cache-the-tables-into-memory">Cache the tables into memory</a></li>
+<li><a href="#create-a-model-data-set" id="toc-create-a-model-data-set" class="nav-link" data-scroll-target="#create-a-model-data-set">Create a model data set</a></li>
+<li><a href="#train-a-linear-model" id="toc-train-a-linear-model" class="nav-link" data-scroll-target="#train-a-linear-model">Train a linear model</a></li>
+<li><a href="#assess-model-performance" id="toc-assess-model-performance" class="nav-link" data-scroll-target="#assess-model-performance">Assess model performance</a></li>
+<li><a href="#visualize-predictions" id="toc-visualize-predictions" class="nav-link" data-scroll-target="#visualize-predictions">Visualize predictions</a></li>
 </ul></li>
-<li><a href="#share-insights" class="nav-link" data-scroll-target="#share-insights">Share Insights</a>
+<li><a href="#share-insights" id="toc-share-insights" class="nav-link" data-scroll-target="#share-insights">Share Insights</a>
 <ul class="collapse">
-<li><a href="#build-dashboard" class="nav-link" data-scroll-target="#build-dashboard">Build dashboard</a></li>
-<li><a href="#publish-dashboard" class="nav-link" data-scroll-target="#publish-dashboard">Publish dashboard</a>
+<li><a href="#build-dashboard" id="toc-build-dashboard" class="nav-link" data-scroll-target="#build-dashboard">Build dashboard</a></li>
+<li><a href="#publish-dashboard" id="toc-publish-dashboard" class="nav-link" data-scroll-target="#publish-dashboard">Publish dashboard</a>
 <ul class="collapse">
-<li><a href="#appendix-a---data-files" class="nav-link" data-scroll-target="#appendix-a---data-files">Appendix A - Data files</a></li>
-<li><a href="#hive-tables" class="nav-link" data-scroll-target="#hive-tables">Hive tables</a></li>
+<li><a href="#appendix-a---data-files" id="toc-appendix-a---data-files" class="nav-link" data-scroll-target="#appendix-a---data-files">Appendix A - Data files</a></li>
+<li><a href="#hive-tables" id="toc-hive-tables" class="nav-link" data-scroll-target="#hive-tables">Hive tables</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -688,6 +688,7 @@ Root Mean Squared Error: 17.83</code></pre>
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>STORED <span class="kw">AS</span> TEXTFILE;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>LOAD <span class="kw">DATA</span> INPATH <span class="st">'/user/admin/airports.dat'</span> <span class="kw">INTO</span> <span class="kw">TABLE</span> airports;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 
 
 </section>

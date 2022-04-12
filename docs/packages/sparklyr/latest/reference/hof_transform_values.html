@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – hof_transform_values</title>
   <style>
@@ -89,8 +89,8 @@
   <script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +98,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -133,7 +133,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../../../../styles.css">
 </head>
-<body>
+<body class="nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -197,12 +197,12 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#hof_transform_values" class="nav-link active" data-scroll-target="#hof_transform_values">hof_transform_values</a>
+<li><a href="#hof_transform_values" id="toc-hof_transform_values" class="nav-link active" data-scroll-target="#hof_transform_values">hof_transform_values</a>
 <ul class="collapse">
-<li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
-<li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
-<li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+<li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
+<li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+<li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+<li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -266,6 +266,7 @@
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.0.0"</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sdf <span class="ot">&lt;-</span> <span class="fu">sdf_len</span>(sc, <span class="dv">1</span>) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">m =</span> <span class="fu">map</span>(<span class="st">"a"</span>, 0L, <span class="st">"b"</span>, 2L, <span class="st">"c"</span>, <span class="sc">-</span>1L))</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>transformed_sdf <span class="ot">&lt;-</span> sdf <span class="sc">%&gt;%</span> <span class="fu">hof_transform_values</span>(<span class="sc">~</span> <span class="fu">CONCAT</span>(.x, <span class="st">" == "</span>, .y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 
 
 </section>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
   <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.88">
+  <meta name="generator" content="quarto-0.9.208">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>sparklyr – spark_write_tfrecord</title>
   <style>
@@ -89,8 +89,8 @@
   <script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
   <link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-  <link class="quarto-color-scheme" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
-  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
+  <link class="quarto-color-scheme" id="quarto-text-highlighting-styles" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <link class="quarto-color-scheme quarto-color-alternate" rel="prefetch" id="quarto-text-highlighting-styles" href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css">
   <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
   <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
   <link class="quarto-color-scheme" href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -98,7 +98,7 @@
   <script id="quarto-search-options" type="application/json">{
     "location": "navbar",
     "copy-button": false,
-    "collapse-after": 2,
+    "collapse-after": 3,
     "panel-placement": "end",
     "type": "overlay",
     "limit": 20,
@@ -133,7 +133,7 @@
   <![endif]-->
   <link rel="stylesheet" href="../../../../styles.css">
 </head>
-<body>
+<body class="nav-fixed">
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
@@ -197,12 +197,12 @@
         <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#spark_write_tfrecord" class="nav-link active" data-scroll-target="#spark_write_tfrecord">spark_write_tfrecord</a>
+<li><a href="#spark_write_tfrecord" id="toc-spark_write_tfrecord" class="nav-link active" data-scroll-target="#spark_write_tfrecord">spark_write_tfrecord</a>
 <ul class="collapse">
-<li><a href="#description" class="nav-link" data-scroll-target="#description">Description</a></li>
-<li><a href="#usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
-<li><a href="#arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-<li><a href="#details" class="nav-link" data-scroll-target="#details">Details</a></li>
+<li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
+<li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+<li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+<li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -263,6 +263,7 @@
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
 <p>For <code>write_locality = local</code>, each of the workers stores on the local disk a subset of the data. The subset that is stored on each worker is determined by the partitioning of the DataFrame. Each of the partitions is coalesced into a single TFRecord file and written on the node where the partition lives. This is useful in the context of distributed training, in which each of the workers gets a subset of the data to work on. When this mode is activated, the path provided to the writer is interpreted as a base path that is created on each of the worker nodes, and that will be populated with data from the DataFrame.</p>
+
 
 
 </section>

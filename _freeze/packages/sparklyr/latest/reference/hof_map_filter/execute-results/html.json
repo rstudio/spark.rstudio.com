@@ -1,0 +1,14 @@
+{
+  "hash": "0db079e1532d17165d68a914a2ec0436",
+  "result": {
+    "markdown": "---\ntitle: \"Filters a map\"\nexecute:\n  freeze: true\n---\n\n\n*R/dplyr_hof.R*\n\n## hof_map_filter\n\n## Description\nFilters entries in a map using the function specified (this is essentially a dplyr wrapper to the `map_filter(expr, func)` higher- order function, which is supported since Spark 3.0) \n\n\n## Usage\n```r\nhof_map_filter(x, func, expr = NULL, dest_col = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | The Spark data frame to be processed |\n| func | The filter function to apply (it should take (key, value) as arguments and return a boolean value, with FALSE indicating the key-value pair should be discarded and TRUE otherwise) |\n| expr | The map being filtered, could be any SQL expression evaluating to a map (default: the last column of the Spark data frame) |\n| dest_col | Column to store the filtered result (default: expr) |\n| ... | Additional params to dplyr::mutate |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\", version = \"3.0.0\") \nsdf <- sdf_len(sc, 1) %>% dplyr::mutate(m = map(1, 0, 2, 2, 3, -1)) \nfiltered_sdf <- sdf %>% hof_map_filter(~ .x > .y) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

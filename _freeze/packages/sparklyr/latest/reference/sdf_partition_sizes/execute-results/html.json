@@ -1,0 +1,14 @@
+{
+  "hash": "43dd5163668acdfecf8552a71b76a3c3",
+  "result": {
+    "markdown": "---\ntitle: \"Compute the number of records within each partition of a Spark DataFrame\"\nexecute:\n  freeze: true\n---\n\n\n*R/sdf_interface.R*\n\n## sdf_partition_sizes\n\n## Description\nCompute the number of records within each partition of a Spark DataFrame \n\n\n## Usage\n```r\nsdf_partition_sizes(x) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"spark://HOST:PORT\") \nexample_sdf <- sdf_len(sc, 100L, repartition = 10L) \nexample_sdf %>% \n  sdf_partition_sizes() %>% \n  print() \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "hash": "37400c606b2b5ff2855bfd3f42ac8236",
+  "result": {
+    "markdown": "---\ntitle: \"Transform Array Column\"\nexecute:\n  freeze: true\n---\n\n\n*R/dplyr_hof.R*\n\n## hof_transform\n\n## Description\nApply an element-wise transformation function to an array column (this is essentially a dplyr wrapper for the `transform(array<T>, function<T, U>): array<U>` and the `transform(array<T>, function<T, Int, U>): array<U>` built-in Spark SQL functions) \n\n\n## Usage\n```r\nhof_transform(x, func, expr = NULL, dest_col = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | The Spark data frame to transform |\n| func | The transformation to apply |\n| expr | The array being transformed, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame) |\n| dest_col | Column to store the transformed result (default: expr) |\n| ... | Additional params to dplyr::mutate |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\") \n# applies the (x -> x * x) transformation to elements of all arrays \ncopy_to(sc, tibble::tibble(arr = list(1:5, 21:25))) %>% \n  hof_transform(~ .x * .x) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

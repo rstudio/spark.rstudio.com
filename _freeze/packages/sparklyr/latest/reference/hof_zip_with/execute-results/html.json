@@ -1,0 +1,14 @@
+{
+  "hash": "0a280ac2f3ada70db4b17b96570239b8",
+  "result": {
+    "markdown": "---\ntitle: \"Combines 2 Array Columns\"\nexecute:\n  freeze: true\n---\n\n\n*R/dplyr_hof.R*\n\n## hof_zip_with\n\n## Description\n\nApplies an element-wise function to combine elements from 2 array columns (this is essentially a dplyr wrapper for the `zip_with(array<T>, array<U>, function<T, U, R>): array<R>`\n\nbuilt-in function in Spark SQL) \n\n\n## Usage\n```r\nhof_zip_with(x, func, dest_col = NULL, left = NULL, right = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | The Spark data frame to process |\n| func | Element-wise combining function to be applied |\n| dest_col | Column to store the query result (default: the last column of the Spark data frame) |\n| left | Any expression evaluating to an array (default: the first column of the Spark data frame) |\n| right | Any expression evaluating to an array (default: the second column of the Spark data frame) |\n| ... | Additional params to dplyr::mutate |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\") \n# compute element-wise products of 2 arrays from each row of `left` and `right` \n# and store the resuling array in `res` \ncopy_to( \n  sc, \n  tibble::tibble( \n    left = list(1:5, 21:25), \n    right = list(6:10, 16:20), \n    res = c(0, 0) \n  ) \n) %>% \n  hof_zip_with(~ .x * .y) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

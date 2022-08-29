@@ -1,0 +1,14 @@
+{
+  "hash": "ce34599d34868345482f3cdbbf4b3b4f",
+  "result": {
+    "markdown": "---\ntitle: \"Find Stream\"\nexecute:\n  freeze: true\n---\n\n\n*R/stream_operations.R*\n\n## stream_find\n\n## Description\nFinds and returns a stream based on the stream's identifier. \n\n\n## Usage\n```r\nstream_find(sc, id) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | The associated Spark connection. |\n| id | The stream identifier to find. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\") \nsdf_len(sc, 10) %>% \n  spark_write_parquet(path = \"parquet-in\") \nstream <- stream_read_parquet(sc, \"parquet-in\") %>% \n  stream_write_parquet(\"parquet-out\") \nstream_id <- stream_id(stream) \nstream_find(sc, stream_id) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

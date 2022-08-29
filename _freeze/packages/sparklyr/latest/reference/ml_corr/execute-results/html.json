@@ -1,0 +1,14 @@
+{
+  "hash": "ac8c0639d015b7dc365ae10e4ed09e19",
+  "result": {
+    "markdown": "---\ntitle: \"Compute correlation matrix\"\nexecute:\n  freeze: true\n---\n\n\n*R/ml_stat.R*\n\n## ml_corr\n\n## Description\nCompute correlation matrix \n\n\n## Usage\n```r\nml_corr(x, columns = NULL, method = c(\"pearson\", \"spearman\")) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A `tbl_spark`. |\n| columns | The names of the columns to calculate correlations of. If only one column is specified, it must be a vector column (for example, assembled using `ft_vector_assember()`). |\n| method | The method to use, either `\"pearson\"` or `\"spearman\"`. |\n\n\n\n## Value\nA correlation matrix organized as a data frame. \n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\") \niris_tbl <- sdf_copy_to(sc, iris, name = \"iris_tbl\", overwrite = TRUE) \nfeatures <- c(\"Petal_Width\", \"Petal_Length\", \"Sepal_Length\", \"Sepal_Width\") \nml_corr(iris_tbl, columns = features, method = \"pearson\") \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

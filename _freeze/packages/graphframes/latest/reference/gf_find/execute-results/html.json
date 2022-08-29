@@ -1,0 +1,14 @@
+{
+  "hash": "18952f64db417eb5f98ba359a61e230f",
+  "result": {
+    "markdown": "---\ntitle: \"Motif finding: Searching the graph for structural patterns\"\nexecute:\n  freeze: true\n---\n\n\n*R/gf_interface.R*\n\n## gf_find\n\n## Description\nMotif finding uses a simple Domain-Specific Language (DSL) for  expressing structural queries. For example,  gf_find(g, \"(a)-[e]->(b); (b)-[e2]->(a)\") will search for  pairs of vertices a,b connected by edges in both directions.  It will return a DataFrame of all such structures in the graph,  with columns for each of the named elements (vertices or edges)  in the motif. In this case, the returned columns will be in  order of the pattern: \"a, e, b, e2.\" \n\n\n## Usage\n```r\ngf_find(x, pattern) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | An object coercable to a GraphFrame (typically, a `gf_graphframe`). |\n| pattern | pattern specifying a motif to search for |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(graphframes)\ngf_friends(sc) %>% \n  gf_find(\"(a)-[e]->(b); (b)-[e2]->(a)\") \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

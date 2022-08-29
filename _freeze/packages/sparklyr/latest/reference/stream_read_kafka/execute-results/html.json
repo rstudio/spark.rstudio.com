@@ -1,0 +1,14 @@
+{
+  "hash": "14b4de566b779dabe61be3c3a73b656b",
+  "result": {
+    "markdown": "---\ntitle: \"Read Kafka Stream\"\nexecute:\n  freeze: true\n---\n\n\n*R/stream_data.R*\n\n## stream_read_kafka\n\n## Description\nReads a Kafka stream as a Spark dataframe stream. \n\n\n## Usage\n```r\nstream_read_kafka(sc, name = NULL, options = list(), ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | A `spark_connection`. |\n| name | The name to assign to the newly generated stream. |\n| options | A list of strings with additional options. |\n| ... | Optional arguments; currently unused. |\n\n## Details\nPlease note that Kafka requires installing the appropriate package by setting the `packages` parameter to `\"kafka\"` in `spark_connect()`\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\", version = \"2.3\", packages = \"kafka\") \nread_options <- list(kafka.bootstrap.servers = \"localhost:9092\", subscribe = \"topic1\") \nwrite_options <- list(kafka.bootstrap.servers = \"localhost:9092\", topic = \"topic2\") \nstream <- stream_read_kafka(sc, options = read_options) %>% \n  stream_write_kafka(options = write_options) \nstream_stop(stream) \n```\n:::\n\n\n## See Also\nOther Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

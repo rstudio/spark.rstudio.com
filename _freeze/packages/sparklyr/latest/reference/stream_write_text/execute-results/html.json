@@ -1,0 +1,14 @@
+{
+  "hash": "0d2f2254a3f16bbb15463fcf7465fec4",
+  "result": {
+    "markdown": "---\ntitle: \"Write Text Stream\"\nexecute:\n  freeze: true\n---\n\n\n*R/stream_data.R*\n\n## stream_write_text\n\n## Description\nWrites a Spark dataframe stream into a text stream. \n\n\n## Usage\n```r\nstream_write_text( \n  x, \n  path, \n  mode = c(\"append\", \"complete\", \"update\"), \n  trigger = stream_trigger_interval(), \n  checkpoint = file.path(path, \"checkpoints\", random_string(\"\")), \n  options = list(), \n  partition_by = NULL, \n  ... \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A Spark DataFrame or dplyr operation |\n| path | The destination path. Needs to be accessible from the cluster. Supports the `\"hdfs://\"`, `\"s3a://\"` and `\"file://\"` protocols. |\n| mode | Specifies how data is written to a streaming sink. Valid values are `\"append\"`, `\"complete\"` or `\"update\"`. |\n| trigger | The trigger for the stream query, defaults to micro-batches runnnig every 5 seconds. See `stream_trigger_interval` and `stream_trigger_continuous`. |\n| checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance. |\n| options | A list of strings with additional options. |\n| partition_by | Partitions the output by the given list of columns. |\n| ... | Optional arguments; currently unused. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\") \ndir.create(\"text-in\") \nwriteLines(\"A text entry\", \"text-in/text.txt\") \ntext_path <- file.path(\"file://\", getwd(), \"text-in\") \nstream <- stream_read_text(sc, text_path) %>% stream_write_text(\"text-out\") \nstream_stop(stream) \n```\n:::\n\n\n## See Also\nOther Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

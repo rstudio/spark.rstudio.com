@@ -1,0 +1,14 @@
+{
+  "hash": "2dfa3d6eea583fb423393e720a232358",
+  "result": {
+    "markdown": "---\ntitle: \"Copy an Object into Spark\"\nexecute:\n  freeze: true\n---\n\n\n*R/sdf_interface.R*\n\n## sdf_copy_to\n\n## Description\nCopy an object into Spark, and return an `R` object wrapping the copied object (typically, a Spark DataFrame). \n\n\n## Usage\n```r\nsdf_copy_to(sc, x, name, memory, repartition, overwrite, struct_columns, ...) \n\nsdf_import(x, sc, name, memory, repartition, overwrite, struct_columns, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | The associated Spark connection. |\n| x | An `R` object from which a Spark DataFrame can be generated. |\n| name | The name to assign to the copied table in Spark. |\n| memory | Boolean; should the table be cached into memory? |\n| repartition | The number of partitions to use when distributing the table across the Spark cluster. The default (0) can be used to avoid partitioning. |\n| overwrite | Boolean; overwrite a pre-existing table with the name `name`<br>if one already exists? |\n| struct_columns | (only supported with Spark 2.4.0 or higher) A list of columns from the source data frame that should be converted to Spark SQL StructType columns. The source columns can contain either json strings or nested lists. All rows within each source column should have identical schemas (because otherwise the conversion result will contain unexpected null values or missing values as Spark currently does not support schema discovery on individual rows within a struct column). |\n| ... | Optional arguments, passed to implementing methods. |\n\n\n## Section\n\n## Advanced Usage\n\n`sdf_copy_to` is an S3 generic that, by default, dispatches to `sdf_import`. Package authors that would like to implement `sdf_copy_to` for a custom object type can accomplish this by implementing the associated method on `sdf_import`. \n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"spark://HOST:PORT\") \nsdf_copy_to(sc, iris) \n```\n:::\n\n\n## See Also\nOther Spark data frames:  `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()`\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

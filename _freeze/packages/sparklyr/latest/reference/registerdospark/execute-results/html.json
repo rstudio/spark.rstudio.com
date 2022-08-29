@@ -1,0 +1,14 @@
+{
+  "hash": "b20726a7566a24166ea2eda8d574856c",
+  "result": {
+    "markdown": "---\ntitle: \"Register a Parallel Backend\"\nexecute:\n  freeze: true\n---\n\n\n*R/do_spark.R*\n\n## registerDoSpark\n\n## Description\nRegisters a parallel backend using the `foreach` package. \n\n\n## Usage\n```r\nregisterDoSpark(spark_conn, parallelism = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| spark_conn | Spark connection to use |\n| parallelism | Level of parallelism to use for task execution (if unspecified, then it will take the value of  `SparkContext.defaultParallelism()` which by default is the number  of cores available to the `sparklyr` application) |\n| ... | additional options for sparklyr parallel backend (currently only the only valid option is nocompile = T, F ) |\n\n\n\n## Value\nNone \n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\") \nregisterDoSpark(sc, nocompile = FALSE) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

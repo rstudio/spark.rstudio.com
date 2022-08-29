@@ -1,0 +1,124 @@
+---
+title: "Model tuning"
+execute:
+  eval: true
+  freeze: true
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| include: false
+
+library(sparklyr)
+library(mlbench)
+
+```
+
+
+```{r}
+library(sparklyr)
+library(mlbench)
+data("bostonhousing")
+
+sc <- spark_connect("local")
+
+tbl_ionosphere <- copy_to(sc, Ionosphere)
+```
+
+```{r}
+prep_ionosphere <- tbl_ionosphere %>% 
+  #mutate(is_good = ifelse(Class == "good", 1, 0)) %>% 
+  select(- V1, - V2)
+```
+
+```{r}
+library(corrr)
+
+prep_ionosphere %>% 
+  select(- Class) %>% 
+  correlate() %>% 
+  shave() %>% 
+  tidyr::pivot_longer(cols = contains("V")) %>% 
+  filter(!is.na(value)) %>% 
+  dplyr::arrange(value)
+```
+
+
+```{r}
+cor_tbl <- prep_ionosphere %>% 
+  select(- Class) %>% 
+  ml_corr() %>% 
+  collect()
+```
+
+```{r}
+x <- cor_tbl
+cutoff <- 0.7
+averageCorr <- colMeans(abs(x))
+averageCorr <- as.numeric(as.factor(averageCorr))
+x[lower.tri(x, diag = TRUE)] <- NA
+combsAboveCutoff <- which(abs(x) > cutoff)
+
+colsToCheck <- ceiling(combsAboveCutoff / nrow(x))
+rowsToCheck <- combsAboveCutoff %% nrow(x)
+
+colsToDiscard <- averageCorr[colsToCheck] > averageCorr[rowsToCheck]
+rowsToDiscard <- !colsToDiscard
+
+deletecol <- c(colsToCheck[colsToDiscard], rowsToCheck[rowsToDiscard])
+deletecol <- unique(deletecol)
+if (length(deletecol) > 0) {
+  deletecol <- colnames(x)[deletecol]
+}
+deletecol
+```
+
+
+```{r}
+library(recipes)
+
+nr <- Ionosphere %>% 
+  select(-V1, -V2) %>% 
+  recipe() %>% 
+  step_corr(all_numeric(), threshold = 0.8)
+
+prep(nr)
+```
+
+
+```{r}
+pipeline <- ml_pipeline(sc) %>%
+  ft_r_formula(Class ~ .) %>%
+  ml_random_forest_classifier()
+```
+
+```{r}
+cv <- ml_cross_validator(
+  sc,
+  estimator = pipeline,
+  estimator_param_maps = list(
+    random_forest = list(
+      num_trees = 1:5 * 200,
+      max_depth = c(10, 20, 30)
+    )
+  ),
+  evaluator = ml_binary_classification_evaluator(sc, metric_name = "areaUnderROC"),
+  num_folds = 10, 
+  seed = 1111,
+  parallelism = 10
+  )
+```
+
+
+```{r}
+cv_model <- ml_fit(cv, prep_ionosphere)
+
+summary(cv_model)
+```
+
+```{r}
+ml_validation_metrics(cv_model)
+```
+

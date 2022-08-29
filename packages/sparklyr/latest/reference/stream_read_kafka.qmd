@@ -1,0 +1,45 @@
+---
+title: "Read Kafka Stream"
+---
+
+*R/stream_data.R*
+
+## stream_read_kafka
+
+## Description
+Reads a Kafka stream as a Spark dataframe stream. 
+
+
+## Usage
+```r
+stream_read_kafka(sc, name = NULL, options = list(), ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | A `spark_connection`. |
+| name | The name to assign to the newly generated stream. |
+| options | A list of strings with additional options. |
+| ... | Optional arguments; currently unused. |
+
+## Details
+Please note that Kafka requires installing the appropriate package by setting the `packages` parameter to `"kafka"` in `spark_connect()`
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+library(sparklyr) 
+sc <- spark_connect(master = "local", version = "2.3", packages = "kafka") 
+read_options <- list(kafka.bootstrap.servers = "localhost:9092", subscribe = "topic1") 
+write_options <- list(kafka.bootstrap.servers = "localhost:9092", topic = "topic2") 
+stream <- stream_read_kafka(sc, options = read_options) %>% 
+  stream_write_kafka(options = write_options) 
+stream_stop(stream) 
+```
+
+## See Also
+Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+

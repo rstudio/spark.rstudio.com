@@ -1,0 +1,42 @@
+---
+title: "Read Socket Stream"
+---
+
+*R/stream_data.R*
+
+## stream_read_socket
+
+## Description
+Reads a Socket stream as a Spark dataframe stream. 
+
+
+## Usage
+```r
+stream_read_socket(sc, name = NULL, columns = NULL, options = list(), ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | A `spark_connection`. |
+| name | The name to assign to the newly generated stream. |
+| columns | A vector of column names or a named vector of column types. If specified, the elements can be `"binary"` for `BinaryType`, `"boolean"` for `BooleanType`, `"byte"` for `ByteType`, `"integer"` for `IntegerType`, `"integer64"` for `LongType`, `"double"` for `DoubleType`, `"character"` for `StringType`, `"timestamp"` for `TimestampType` and `"date"` for `DateType`. |
+| options | A list of strings with additional options. |
+| ... | Optional arguments; currently unused. |
+
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+library(sparklyr)
+sc <- spark_connect(master = "local") 
+# Start socket server from terminal, example: nc -lk 9999 
+stream <- stream_read_socket(sc, options = list(host = "localhost", port = 9999)) 
+stream 
+```
+
+## See Also
+Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+

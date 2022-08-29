@@ -1,0 +1,56 @@
+---
+title: "Write Delta Stream"
+---
+
+*R/stream_data.R*
+
+## stream_write_delta
+
+## Description
+Writes a Spark dataframe stream into a Delta Lake table. 
+
+
+## Usage
+```r
+stream_write_delta( 
+  x, 
+  path, 
+  mode = c("append", "complete", "update"), 
+  checkpoint = file.path("checkpoints", random_string("")), 
+  options = list(), 
+  partition_by = NULL, 
+  ... 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A Spark DataFrame or dplyr operation |
+| path | The path to the file. Needs to be accessible from the cluster. Supports the `"hdfs://"`, `"s3a://"` and `"file://"` protocols. |
+| mode | Specifies how data is written to a streaming sink. Valid values are `"append"`, `"complete"` or `"update"`. |
+| checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance. |
+| options | A list of strings with additional options. |
+| partition_by | Partitions the output by the given list of columns. |
+| ... | Optional arguments; currently unused. |
+
+## Details
+Please note that Delta Lake requires installing the appropriate package by setting the `packages` parameter to `"delta"` in `spark_connect()`
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+library(sparklyr) 
+sc <- spark_connect(master = "local", version = "2.4.0", packages = "delta") 
+dir.create("text-in") 
+writeLines("A text entry", "text-in/text.txt") 
+text_path <- file.path("file://", getwd(), "text-in") 
+stream <- stream_read_text(sc, text_path) %>% stream_write_delta(path = "delta-test") 
+stream_stop(stream) 
+```
+
+## See Also
+Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+

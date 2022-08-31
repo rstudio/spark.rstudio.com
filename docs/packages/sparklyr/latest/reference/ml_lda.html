@@ -246,34 +246,35 @@ ga('send', {
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_lda</span>( </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  x, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">10</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_iter =</span> <span class="dv">20</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">doc_concentration =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">topic_concentration =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsampling_rate =</span> <span class="fl">0.05</span>, </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">"online"</span>, </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">checkpoint_interval =</span> <span class="dv">10</span>, </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">keep_last_checkpoint =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">learning_decay =</span> <span class="fl">0.51</span>, </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">learning_offset =</span> <span class="dv">1024</span>, </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimize_doc_concentration =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">features_col =</span> <span class="st">"features"</span>, </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">topic_distribution_col =</span> <span class="st">"topicDistribution"</span>, </span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="fu">random_string</span>(<span class="st">"lda_"</span>), </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ... </span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_describe_topics</span>(model, <span class="at">max_terms_per_topic =</span> <span class="dv">10</span>) </span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_likelihood</span>(model, dataset) </span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_perplexity</span>(model, dataset) </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_topics_matrix</span>(model) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_lda</span>( </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">10</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_iter =</span> <span class="dv">20</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">doc_concentration =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">topic_concentration =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsampling_rate =</span> <span class="fl">0.05</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">"online"</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">checkpoint_interval =</span> <span class="dv">10</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">keep_last_checkpoint =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">learning_decay =</span> <span class="fl">0.51</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">learning_offset =</span> <span class="dv">1024</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimize_doc_concentration =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">features_col =</span> <span class="st">"features"</span>, </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">topic_distribution_col =</span> <span class="st">"topicDistribution"</span>, </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="fu">random_string</span>(<span class="st">"lda_"</span>), </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  ... </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_describe_topics</span>(model, <span class="at">max_terms_per_topic =</span> <span class="dv">10</span>) </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_likelihood</span>(model, dataset) </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_log_perplexity</span>(model, dataset) </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_topics_matrix</span>(model) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -378,53 +379,36 @@ ga('send', {
 </section>
 <section id="details" class="level2">
 <h2 class="anchored" data-anchor-id="details">Details</h2>
-<p>For <code>ml_lda.tbl_spark</code> with the formula interface, you can specify named arguments in <code>...</code> that will be passed <code>ft_regex_tokenizer()</code>, <code>ft_stop_words_remover()</code>, and <code>ft_count_vectorizer()</code>. For example, to increase the default <code>min_token_length</code>, you can use <code>ml_lda(dataset, ~ text, min_token_length = 4)</code>.</p>
-<p>Terminology for LDA:</p>
+<p>For <code>ml_lda.tbl_spark</code> with the formula interface, you can specify named arguments in <code>...</code> that will be passed <code>ft_regex_tokenizer()</code>, <code>ft_stop_words_remover()</code>, and <code>ft_count_vectorizer()</code>. For example, to increase the default <code>min_token_length</code>, you can use <code>ml_lda(dataset, ~ text, min_token_length = 4)</code>. Terminology for LDA:</p>
 <ul>
 <li><p>“term” = “word”: an element of the vocabulary</p></li>
 <li><p>“token”: instance of a term appearing in a document</p></li>
 <li><p>“topic”: multinomial distribution over terms representing some concept</p></li>
-<li><p>“document”: one piece of text, corresponding to one row in the input data</p></li>
+<li><p>“document”: one piece of text, corresponding to one row in the input data</p>
+<p>Original LDA paper (journal version): Blei, Ng, and Jordan. “Latent Dirichlet Allocation.” JMLR, 2003. Input data (<code>features_col</code>): LDA is given a collection of documents as input data, via the <code>features_col</code> parameter. Each document is specified as a Vector of length <code>vocab_size</code>, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as <code>ft_tokenizer</code> and <code>ft_count_vectorizer</code> can be useful for converting text to word count vectors</p></li>
 </ul>
-<p>Original LDA paper (journal version): Blei, Ng, and Jordan. “Latent Dirichlet Allocation.” JMLR, 2003.</p>
-<p>Input data (<code>features_col</code>): LDA is given a collection of documents as input data, via the <code>features_col</code> parameter. Each document is specified as a Vector of length <code>vocab_size</code>, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as <code>ft_tokenizer</code> and <code>ft_count_vectorizer</code> can be useful for converting text to word count vectors</p>
 </section>
 <section id="section" class="level2">
 <h2 class="anchored" data-anchor-id="section">Section</h2>
 </section>
 <section id="parameter-details" class="level2">
 <h2 class="anchored" data-anchor-id="parameter-details">Parameter details</h2>
-<p><code>doc_concentration</code></p>
-<p>This is the parameter to a Dirichlet distribution, where larger values mean more smoothing (more regularization). If not set by the user, then <code>doc_concentration</code> is set automatically. If set to singleton vector [alpha], then alpha is replicated to a vector of length k in fitting. Otherwise, the <code>doc_concentration</code> vector must be length k. (default = automatic)</p>
-<p>Optimizer-specific parameter settings:</p>
-<p>EM</p>
+<p><code>doc_concentration</code> This is the parameter to a Dirichlet distribution, where larger values mean more smoothing (more regularization). If not set by the user, then <code>doc_concentration</code> is set automatically. If set to singleton vector [alpha], then alpha is replicated to a vector of length k in fitting. Otherwise, the <code>doc_concentration</code> vector must be length k. (default = automatic) Optimizer-specific parameter settings: EM</p>
 <ul>
 <li><p>Currently only supports symmetric distributions, so all values in the vector should be the same.</p></li>
 <li><p>Values should be greater than 1.0</p></li>
-<li><p>default = uniformly (50 / k) + 1, where 50/k is common in LDA libraries and +1 follows from Asuncion et al.&nbsp;(2009), who recommend a +1 adjustment for EM.</p></li>
-</ul>
-<p>Online</p>
-<ul>
+<li><p>default = uniformly (50 / k) + 1, where 50/k is common in LDA libraries and +1 follows from Asuncion et al.&nbsp;(2009), who recommend a +1 adjustment for EM.</p>
+<p>Online</p></li>
 <li><p>Values should be greater than or equal to 0</p></li>
-<li><p>default = uniformly (1.0 / k), following the implementation from <a href="https://github.com/Blei-Lab/onlineldavb">here</a></p></li>
-</ul>
-<p><code>topic_concentration</code></p>
-<p>This is the parameter to a symmetric Dirichlet distribution.</p>
-<p>Note: The topics’ distributions over terms are called “beta” in the original LDA paper by Blei et al., but are called “phi” in many later papers such as Asuncion et al., 2009.</p>
-<p>If not set by the user, then <code>topic_concentration</code> is set automatically. (default = automatic)</p>
-<p>Optimizer-specific parameter settings:</p>
-<p>EM</p>
-<ul>
+<li><p>default = uniformly (1.0 / k), following the implementation from <a href="https://github.com/Blei-Lab/onlineldavb">here</a></p>
+<p><code>topic_concentration</code> This is the parameter to a symmetric Dirichlet distribution. Note: The topics’ distributions over terms are called “beta” in the original LDA paper by Blei et al., but are called “phi” in many later papers such as Asuncion et al., 2009. If not set by the user, then <code>topic_concentration</code> is set automatically. (default = automatic) Optimizer-specific parameter settings: EM</p></li>
 <li><p>Value should be greater than 1.0</p></li>
-<li><p>default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1 follows Asuncion et al.&nbsp;(2009), who recommend a +1 adjustment for EM.</p></li>
-</ul>
-<p>Online</p>
-<ul>
+<li><p>default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1 follows Asuncion et al.&nbsp;(2009), who recommend a +1 adjustment for EM.</p>
+<p>Online</p></li>
 <li><p>Value should be greater than or equal to 0</p></li>
-<li><p>default = (1.0 / k), following the implementation from <a href="https://github.com/Blei-Lab/onlineldavb">here</a>.</p></li>
+<li><p>default = (1.0 / k), following the implementation from <a href="https://github.com/Blei-Lab/onlineldavb">here</a>.</p>
+<p><code>topic_distribution_col</code> This uses a variational approximation following Hoffman et al.&nbsp;(2010), where the approximate distribution is called “gamma.” Technically, this method returns this approximation “gamma” for each document.</p></li>
 </ul>
-<p><code>topic_distribution_col</code></p>
-<p>This uses a variational approximation following Hoffman et al.&nbsp;(2010), where the approximate distribution is called “gamma.” Technically, this method returns this approximation “gamma” for each document.</p>
 </section>
 <section id="value" class="level2">
 <h2 class="anchored" data-anchor-id="value">Value</h2>
@@ -433,66 +417,72 @@ ga('send', {
 <li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Estimator</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
 <li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the clustering estimator appended to the pipeline.</p></li>
 <li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, an estimator is constructed then immediately fit with the input <code>tbl_spark</code>, returning a clustering model.</p></li>
-<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code></p>
-<p>is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code>ml_lda()</code>.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code> or <code>features</code> specified: When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the estimator. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>. This signature does not apply to <code>ml_lda()</code>.</p>
+<p><code>ml_describe_topics</code> returns a DataFrame with topics and their top-weighted terms. <code>ml_log_likelihood</code> calculates a lower bound on the log likelihood of the entire corpus</p></li>
 </ul>
-<p><code>ml_describe_topics</code> returns a DataFrame with topics and their top-weighted terms.</p>
-<p><code>ml_log_likelihood</code> calculates a lower bound on the log likelihood of the entire corpus</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr) </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>lines_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">austen_books</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>), ], </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"lines_tbl"</span>, </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span> </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># transform the data in a tidy form </span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>lines_tbl_tidy <span class="ot">&lt;-</span> lines_tbl <span class="sc">%&gt;%</span> </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>( </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"text"</span>, </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span> </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>( </span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>, </span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span> </span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">explode</span>(wo_stop_words)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(text <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, book) </span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>lda_model <span class="ot">&lt;-</span> lines_tbl_tidy <span class="sc">%&gt;%</span> </span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_lda</span>(<span class="sc">~</span>text, <span class="at">k =</span> <span class="dv">4</span>) </span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># vocabulary and topics </span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lda_model) </span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; New names:</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...1`</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...2`</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...3`</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...4`</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 388 × 3</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    topic term      beta</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1     0 norland  0.607</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2     0 years    0.663</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3     0 lived    2.07 </span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4     0 estate   0.615</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5     0 constant 0.703</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6     0 henry    1.96 </span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7     0 many     0.600</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8     0 family   1.54 </span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9     0 dashwood 0.585</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10     0 nephew   0.721</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 378 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>lines_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">austen_books</span>()[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>), ], </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"lines_tbl"</span>, </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># transform the data in a tidy form </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>lines_tbl_tidy <span class="ot">&lt;-</span> lines_tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>( </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"text"</span>, </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span> </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>( </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>, </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span> </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">explode</span>(wo_stop_words)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(text <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, book) </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>lda_model <span class="ot">&lt;-</span> lines_tbl_tidy <span class="sc">%&gt;%</span> </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_lda</span>(<span class="sc">~</span>text, <span class="at">k =</span> <span class="dv">4</span>) </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># vocabulary and topics </span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lda_model) </span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; New names:</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...1`</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...2`</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...3`</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • `` -&gt; `...4`</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 388 × 3</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    topic term      beta</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1     0 norland  0.607</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2     0 years    0.663</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3     0 lived    2.07 </span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4     0 estate   0.615</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5     0 constant 0.703</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6     0 henry    1.96 </span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7     0 many     0.600</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8     0 family   1.54 </span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9     0 dashwood 0.585</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10     0 nephew   0.721</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 378 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="see-also" class="level2">
 <h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>See <a href="https://spark.apache.org/docs/latest/ml-clustering.html">https://spark.apache.org/docs/latest/ml-clustering.html</a> for more information on the set of clustering algorithms.</p>
-<p>Other ml clustering algorithms: <code>ml_bisecting_kmeans()</code>, <code>ml_gaussian_mixture()</code>, <code>ml_kmeans()</code></p>
+<p>See <a href="https://spark.apache.org/docs/latest/ml-clustering.html">https://spark.apache.org/docs/latest/ml-clustering.html</a> for more information on the set of clustering algorithms. Other ml clustering algorithms: <code>ml_bisecting_kmeans()</code>, <code>ml_gaussian_mixture()</code>, <code>ml_kmeans()</code></p>
 
 
 </section>

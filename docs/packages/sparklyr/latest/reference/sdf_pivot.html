@@ -285,12 +285,22 @@ ga('send', {
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_pivot</span>(Petal_Width <span class="sc">~</span> Species, </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun.aggregate =</span> <span class="fu">list</span>(<span class="at">Petal_Length =</span> <span class="st">"mean"</span>) </span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># aggregating all observations in a list </span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="sc">%&gt;%</span> </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Petal_Width =</span> <span class="fu">ifelse</span>(Petal_Width <span class="sc">&gt;</span> <span class="fl">1.5</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_pivot</span>(Petal_Width <span class="sc">~</span> Species, </span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun.aggregate =</span> <span class="fu">list</span>(<span class="at">Petal_Length =</span> <span class="st">"collect_list"</span>) </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 4]</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Petal_Width setosa versicolor virginica</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Low           1.46       4.20      5.23</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 High         NA          4.82      5.57</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># aggregating all observations in a list </span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Petal_Width =</span> <span class="fu">ifelse</span>(Petal_Width <span class="sc">&gt;</span> <span class="fl">1.5</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sdf_pivot</span>(Petal_Width <span class="sc">~</span> Species, </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun.aggregate =</span> <span class="fu">list</span>(<span class="at">Petal_Length =</span> <span class="st">"collect_list"</span>) </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 4]</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Petal_Width setosa     versicolor virginica </span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;list&gt;     &lt;list&gt;     &lt;list&gt;    </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Low         &lt;dbl [50]&gt; &lt;dbl [45]&gt; &lt;dbl [3]&gt; </span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 High        &lt;dbl [0]&gt;  &lt;dbl [5]&gt;  &lt;dbl [47]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

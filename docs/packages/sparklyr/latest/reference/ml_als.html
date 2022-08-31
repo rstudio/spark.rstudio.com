@@ -402,7 +402,22 @@ ga('send', {
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>movies_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, movies) </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">ml_als</span>(movies_tbl, rating <span class="sc">~</span> user <span class="sc">+</span> item) </span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_predict</span>(model, movies_tbl) </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_recommend</span>(model, <span class="at">type =</span> <span class="st">"item"</span>, <span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 6]</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user  item rating features  label prediction</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;list&gt;    &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     1      3 &lt;dbl [2]&gt;     3       2.80</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2     1      1 &lt;dbl [2]&gt;     1       1.08</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0     1      2 &lt;dbl [2]&gt;     2       2.00</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1     2      4 &lt;dbl [2]&gt;     4       3.98</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     2     2      5 &lt;dbl [2]&gt;     5       4.86</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6     0     0      4 &lt;dbl [2]&gt;     4       3.88</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_recommend</span>(model, <span class="at">type =</span> <span class="st">"item"</span>, <span class="dv">1</span>) </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 4]</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    user recommendations   item rating</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;list&gt;           &lt;int&gt;  &lt;dbl&gt;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 &lt;named list [2]&gt;     2   3.98</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2 &lt;named list [2]&gt;     2   4.86</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0 &lt;named list [2]&gt;     0   3.88</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

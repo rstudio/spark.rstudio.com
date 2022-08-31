@@ -284,7 +284,12 @@ ga('send', {
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>iris_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, iris, <span class="at">name =</span> <span class="st">"iris_tbl"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>) </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Petal_Width"</span>, <span class="st">"Petal_Length"</span>, <span class="st">"Sepal_Length"</span>, <span class="st">"Sepal_Width"</span>) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_chisquare_test</span>(iris_tbl, <span class="at">features =</span> features, <span class="at">label =</span> <span class="st">"Species"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_chisquare_test</span>(iris_tbl, <span class="at">features =</span> features, <span class="at">label =</span> <span class="st">"Species"</span>) </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        feature   label      p_value degrees_of_freedom statistic</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  Petal_Width Species 0.000000e+00                 42 271.75000</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Petal_Length Species 0.000000e+00                 84 271.80000</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Sepal_Length Species 6.665987e-09                 68 156.26667</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  Sepal_Width Species 6.016031e-05                 44  89.54629</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

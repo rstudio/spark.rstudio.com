@@ -16,37 +16,38 @@ library(dplyr)
 ## ml_evaluate
 
 ## Description
-Compute performance metrics. 
+ Compute performance metrics. 
 
 
 ## Usage
 ```r
+ 
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_model_logistic_regression'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_logistic_regression_model'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_model_linear_regression'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_linear_regression_model'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_model_generalized_linear_regression'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_generalized_linear_regression_model'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_model_clustering'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_model_classification'
 ml_evaluate(x, dataset) 
-
+ 
 ## S3 method for class 'ml_evaluator'
 ml_evaluate(x, dataset) 
 ```
@@ -62,16 +63,26 @@ ml_evaluate(x, dataset)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
 sc <- spark_connect(master = "local") 
 iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
+ 
 ml_gaussian_mixture(iris_tbl, Species ~ .) %>% 
   ml_evaluate(iris_tbl) 
+ 
 ml_kmeans(iris_tbl, Species ~ .) %>% 
   ml_evaluate(iris_tbl) 
+ 
 ml_bisecting_kmeans(iris_tbl, Species ~ .) %>% 
   ml_evaluate(iris_tbl) 
+ 
+ 
 ```
 
 

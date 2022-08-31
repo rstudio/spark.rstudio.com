@@ -16,11 +16,12 @@ library(dplyr)
 ## stream_write_csv
 
 ## Description
-Writes a Spark dataframe stream into a tabular (typically, comma-separated) stream. 
+ Writes a Spark dataframe stream into a tabular (typically, comma-separated) stream. 
 
 
 ## Usage
 ```r
+ 
 stream_write_csv( 
   x, 
   path, 
@@ -62,18 +63,30 @@ stream_write_csv(
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
+ 
 sc <- spark_connect(master = "local") 
+ 
 dir.create("csv-in") 
 write.csv(iris, "csv-in/data.csv", row.names = FALSE) 
+ 
 csv_path <- file.path("file://", getwd(), "csv-in") 
+ 
 stream <- stream_read_csv(sc, csv_path) %>% stream_write_csv("csv-out") 
+ 
 stream_stop(stream) 
+ 
+ 
 ```
 
 ## See Also
-Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+ Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

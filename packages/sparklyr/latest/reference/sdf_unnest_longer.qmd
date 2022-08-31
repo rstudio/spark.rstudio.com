@@ -16,11 +16,12 @@ library(dplyr)
 ## sdf_unnest_longer
 
 ## Description
-Expand a struct column or an array column within a Spark dataframe into one or more rows, similar what to tidyr::unnest_longer does to an R dataframe. An index column, if included, will be 1-based if `col` is an array column. 
+ Expand a struct column or an array column within a Spark dataframe into one or more rows, similar what to tidyr::unnest_longer does to an R dataframe. An index column, if included, will be 1-based if `col` is an array column. 
 
 
 ## Usage
 ```r
+ 
 sdf_unnest_longer( 
   data, 
   col, 
@@ -50,9 +51,15 @@ sdf_unnest_longer(
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "2.4.0") 
+ 
 # unnesting a struct column 
 sdf <- copy_to( 
   sc, 
@@ -61,7 +68,9 @@ sdf <- copy_to(
     y = list(list(a = 1, b = 2), list(a = 3, b = 4), list(a = 5, b = 6)) 
   ) 
 ) 
+ 
 unnested <- sdf %>% sdf_unnest_longer(y, indices_to = "attr") 
+ 
 # unnesting an array column 
 sdf <- copy_to( 
   sc, 
@@ -70,7 +79,10 @@ sdf <- copy_to(
     y = list(1:10, 1:5, 1:2) 
   ) 
 ) 
+ 
 unnested <- sdf %>% sdf_unnest_longer(y, indices_to = "array_idx") 
+ 
+ 
 ```
 
 

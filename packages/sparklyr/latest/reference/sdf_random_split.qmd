@@ -16,18 +16,19 @@ library(dplyr)
 ## sdf_random_split
 
 ## Description
-Partition a Spark DataFrame into multiple groups. This routine is useful for splitting a DataFrame into, for example, training and test datasets. 
+ Partition a Spark DataFrame into multiple groups. This routine is useful for splitting a DataFrame into, for example, training and test datasets. 
 
 
 ## Usage
 ```r
+ 
 sdf_random_split( 
   x, 
   ..., 
   weights = NULL, 
   seed = sample(.Machine$integer.max, 1) 
 ) 
-
+ 
 sdf_partition(x, ..., weights = NULL, seed = sample(.Machine$integer.max, 1)) 
 ```
 
@@ -40,26 +41,26 @@ sdf_partition(x, ..., weights = NULL, seed = sample(.Machine$integer.max, 1))
 | seed | Random seed to use for randomly partitioning the dataset. Set this if you want your partitioning to be reproducible on repeated runs. |
 
 ## Details
-
-The sampling weights define the probability that a particular observation will be assigned to a particular partition, not the resulting size of the partition. This implies that partitioning a DataFrame with, for example, 
-
-`sdf_random_split(x, training = 0.5, test = 0.5)`
-
-is not guaranteed to produce `training` and `test` partitions of equal size. 
+ The sampling weights define the probability that a particular observation will be assigned to a particular partition, not the resulting size of the partition. This implies that partitioning a DataFrame with, for example,  `sdf_random_split(x, training = 0.5, test = 0.5)`  is not guaranteed to produce `training` and `test` partitions of equal size. 
 
 ## Section
 
 ## Transforming Spark DataFrames
 
-The family of functions prefixed with `sdf_` generally access the Scala Spark DataFrame API directly, as opposed to the `dplyr` interface which uses Spark SQL. These functions will 'force' any pending SQL in a `dplyr` pipeline, such that the resulting `tbl_spark` object returned will no longer have the attached 'lazy' SQL operations. Note that the underlying Spark DataFrame **does** execute its operations lazily, so that even though the pending set of operations (currently) are not exposed at the `R` level, these operations will only be executed when you explicitly `collect()` the table. 
+   The family of functions prefixed with `sdf_` generally access the Scala Spark DataFrame API directly, as opposed to the `dplyr` interface which uses Spark SQL. These functions will 'force' any pending SQL in a `dplyr` pipeline, such that the resulting `tbl_spark` object returned will no longer have the attached 'lazy' SQL operations. Note that the underlying Spark DataFrame **does** execute its operations lazily, so that even though the pending set of operations (currently) are not exposed at the `R` level, these operations will only be executed when you explicitly `collect()` the table. 
 
 ## Value
-An `R` `list` of `tbl_spark`s. 
+ An `R` `list` of `tbl_spark`s. 
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
 # randomly partition data into a 'training' and 'test' 
 # dataset, with 60% of the observations assigned to the 
 # 'training' dataset, and 40% assigned to the 'test' dataset 
@@ -68,13 +69,15 @@ diamonds_tbl <- copy_to(sc, diamonds, "diamonds")
 partitions <- diamonds_tbl %>% 
   sdf_random_split(training = 0.6, test = 0.4) 
 print(partitions) 
+ 
 # alternate way of specifying weights 
 weights <- c(training = 0.6, test = 0.4) 
 diamonds_tbl %>% sdf_random_split(weights = weights) 
+ 
 ```
 
 ## See Also
-Other Spark data frames:  `sdf_copy_to()`, `sdf_distinct()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()`
+ Other Spark data frames:  `sdf_copy_to()`, `sdf_distinct()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

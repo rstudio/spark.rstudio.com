@@ -16,15 +16,16 @@ library(dplyr)
 ## invoke
 
 ## Description
-Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from `R`. 
+ Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from `R`. 
 
 
 ## Usage
 ```r
+ 
 invoke(jobj, method, ...) 
-
+ 
 invoke_static(sc, class, method, ...) 
-
+ 
 invoke_new(sc, class, ...) 
 ```
 
@@ -38,10 +39,7 @@ invoke_new(sc, class, ...)
 | class | The name of the Java class whose methods should be invoked. |
 
 ## Details
-
-Use each of these functions in the following scenarios: 
-
-
+ Use each of these functions in the following scenarios:   
 
 
 
@@ -49,6 +47,8 @@ Use each of these functions in the following scenarios:
 ## Examples
 ```{r, eval=ecodown::examples_run()}
 library(sparklyr)
+ 
+ 
 sc <- spark_connect(master = "spark://HOST:PORT") 
 spark_context(sc) %>% 
   invoke("textFile", "file.csv", 1L) %>% 

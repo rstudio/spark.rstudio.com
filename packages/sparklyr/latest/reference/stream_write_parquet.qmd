@@ -16,11 +16,12 @@ library(dplyr)
 ## stream_write_parquet
 
 ## Description
-Writes a Spark dataframe stream into a parquet stream. 
+ Writes a Spark dataframe stream into a parquet stream. 
 
 
 ## Usage
 ```r
+ 
 stream_write_parquet( 
   x, 
   path, 
@@ -50,16 +51,27 @@ stream_write_parquet(
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
+ 
 sc <- spark_connect(master = "local") 
+ 
 sdf_len(sc, 10) %>% spark_write_parquet("parquet-in") 
+ 
 stream <- stream_read_parquet(sc, "parquet-in") %>% stream_write_parquet("parquet-out") 
+ 
 stream_stop(stream) 
+ 
+ 
 ```
 
 ## See Also
-Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_text()`
+ Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_text()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

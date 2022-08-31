@@ -16,11 +16,12 @@ library(dplyr)
 ## gf_graphframe
 
 ## Description
-Create a new GraphFrame 
+ Create a new GraphFrame 
 
 
 ## Usage
 ```r
+ 
 gf_graphframe(vertices = NULL, edges) 
 ```
 
@@ -35,8 +36,13 @@ gf_graphframe(vertices = NULL, edges)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(graphframes)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(graphframes)
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "2.3.0") 
 v_tbl <- sdf_copy_to( 
@@ -48,6 +54,7 @@ e_tbl <- sdf_copy_to(
 ) 
 gf_graphframe(v_tbl, e_tbl) 
 gf_graphframe(edges = e_tbl) 
+ 
 ```
 
 

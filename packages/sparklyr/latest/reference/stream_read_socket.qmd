@@ -16,11 +16,12 @@ library(dplyr)
 ## stream_read_socket
 
 ## Description
-Reads a Socket stream as a Spark dataframe stream. 
+ Reads a Socket stream as a Spark dataframe stream. 
 
 
 ## Usage
 ```r
+ 
 stream_read_socket(sc, name = NULL, columns = NULL, options = list(), ...) 
 ```
 
@@ -38,16 +39,25 @@ stream_read_socket(sc, name = NULL, columns = NULL, options = list(), ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
+ 
 sc <- spark_connect(master = "local") 
+ 
 # Start socket server from terminal, example: nc -lk 9999 
 stream <- stream_read_socket(sc, options = list(host = "localhost", port = 9999)) 
 stream 
+ 
+ 
 ```
 
 ## See Also
-Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+ Other Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

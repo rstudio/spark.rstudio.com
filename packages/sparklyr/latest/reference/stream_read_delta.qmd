@@ -16,11 +16,12 @@ library(dplyr)
 ## stream_read_delta
 
 ## Description
-Reads a Delta Lake table as a Spark dataframe stream. 
+ Reads a Delta Lake table as a Spark dataframe stream. 
 
 
 ## Usage
 ```r
+ 
 stream_read_delta(sc, path, name = NULL, options = list(), ...) 
 ```
 
@@ -34,23 +35,34 @@ stream_read_delta(sc, path, name = NULL, options = list(), ...)
 | ... | Optional arguments; currently unused. |
 
 ## Details
-Please note that Delta Lake requires installing the appropriate package by setting the `packages` parameter to `"delta"` in `spark_connect()`
+ Please note that Delta Lake requires installing the appropriate package by setting the `packages` parameter to `"delta"` in `spark_connect()` 
 
 
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "2.4.0", packages = "delta") 
+ 
 sdf_len(sc, 5) %>% spark_write_delta(path = "delta-test") 
+ 
 stream <- stream_read_delta(sc, "delta-test") %>% 
   stream_write_json("json-out") 
+ 
 stream_stop(stream) 
+ 
+ 
 ```
 
 ## See Also
-Other Spark stream serialization:  `stream_read_csv()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`
+ Other Spark stream serialization:  `stream_read_csv()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_read_text()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

@@ -16,11 +16,12 @@ library(dplyr)
 ## hof_array_sort
 
 ## Description
-Applies a custom comparator function to sort an array (this is essentially a dplyr wrapper to the `array_sort(expr, func)` higher- order function, which is supported since Spark 3.0) 
+ Applies a custom comparator function to sort an array (this is essentially a dplyr wrapper to the `array_sort(expr, func)` higher- order function, which is supported since Spark 3.0) 
 
 
 ## Usage
 ```r
+ 
 hof_array_sort(x, func, expr = NULL, dest_col = NULL, ...) 
 ```
 
@@ -38,7 +39,13 @@ hof_array_sort(x, func, expr = NULL, dest_col = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "3.0.0") 
 copy_to( 
@@ -50,6 +57,8 @@ copy_to(
 ) %>% 
   # now each array from x gets sorted in descending order 
   hof_array_sort(~ as.integer(sign(.y - .x))) 
+ 
+ 
 ```
 
 

@@ -16,11 +16,12 @@ library(dplyr)
 ## ml_gbt_classifier
 
 ## Description
-Perform binary classification and regression using gradient boosted trees. Multiclass classification is not supported yet. 
+ Perform binary classification and regression using gradient boosted trees. Multiclass classification is not supported yet. 
 
 
 ## Usage
 ```r
+ 
 ml_gbt_classifier( 
   x, 
   formula = NULL, 
@@ -46,7 +47,7 @@ ml_gbt_classifier(
   uid = random_string("gbt_classifier_"), 
   ... 
 ) 
-
+ 
 ml_gradient_boosted_trees( 
   x, 
   formula = NULL, 
@@ -75,7 +76,7 @@ ml_gradient_boosted_trees(
   features = NULL, 
   ... 
 ) 
-
+ 
 ml_gbt_regressor( 
   x, 
   formula = NULL, 
@@ -113,7 +114,7 @@ ml_gbt_regressor(
 | min_instances_per_node | Minimum number of instances each child must have after split. |
 | max_bins | The maximum number of bins used for discretizing continuous features and for choosing how to split on features at each node. More bins give higher granularity. |
 | min_info_gain | Minimum information gain for a split to be considered at a tree node. Should be >= 0, defaults to 0. |
-| loss_type | Loss function which GBT tries to minimize. Supported: `"squared"` (L2) and `"absolute"` (L1) (default = squared) for regression and `"logistic"` (default) for classification. For `ml_gradient_boosted_trees`, setting `"auto"`<br>will default to the appropriate loss type based on model type. |
+| loss_type | Loss function which GBT tries to minimize. Supported: `"squared"` (L2) and `"absolute"` (L1) (default = squared) for regression and `"logistic"` (default) for classification. For `ml_gradient_boosted_trees`, setting `"auto"` will default to the appropriate loss type based on model type. |
 | seed | Seed for random numbers. |
 | thresholds | Thresholds in multi-class classification to adjust the probability of predicting each class. Array must have length equal to the number of classes, with values > 0 excepting that at most one value may be 0. The class with largest value `p/t` is predicted, where `p` is the original probability of that class and `t` is the class's threshold. |
 | checkpoint_interval | Set checkpoint interval (>= 1) or disable checkpoint (-1). E.g. 10 means that the cache will get checkpointed every 10 iterations, defaults to 10. |
@@ -132,11 +133,7 @@ ml_gbt_regressor(
 
 ## Details
 
-When `x` is a `tbl_spark` and `formula` (alternatively, `response` and `features`) is specified, the function returns a `ml_model` object wrapping a `ml_pipeline_model` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument `predicted_label_col` (defaults to `"predicted_label"`) can be used to specify the name of the predicted label column. In addition to the fitted `ml_pipeline_model`, `ml_model` objects also contain a `ml_pipeline` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with `type = "pipeline"` to faciliate model refresh workflows. 
-
-The supported options for `feature_subset_strategy` are   
-
-    
+ When `x` is a `tbl_spark` and `formula` (alternatively, `response` and `features`) is specified, the function returns a `ml_model` object wrapping a `ml_pipeline_model` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument `predicted_label_col` (defaults to `"predicted_label"`) can be used to specify the name of the predicted label column. In addition to the fitted `ml_pipeline_model`, `ml_model` objects also contain a `ml_pipeline` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with `type = "pipeline"` to faciliate model refresh workflows.  The supported options for `feature_subset_strategy` are        
 
 - `"auto"`: Choose automatically for task: If `num_trees == 1`, set to `"all"`. If `num_trees > 1` (forest), set to `"sqrt"` for classification and to `"onethird"` for regression.     
 
@@ -150,52 +147,53 @@ The supported options for `feature_subset_strategy` are
 
 - `"n"`: when `n` is in the range (0, 1.0], use n * number of features. When `n` is in the range (1, number of features), use `n` features. (default = `"auto"`)     
 
-`ml_gradient_boosted_trees` is a wrapper around `ml_gbt_regressor.tbl_spark` and `ml_gbt_classifier.tbl_spark` and calls the appropriate method based on model type. 
+  `ml_gradient_boosted_trees` is a wrapper around `ml_gbt_regressor.tbl_spark` and `ml_gbt_classifier.tbl_spark` and calls the appropriate method based on model type. 
 
 
 ## Value
 
-The object returned depends on the class of `x`. 
+ The object returned depends on the class of `x`.     
 
-  
+- `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to   a Spark `Predictor` object and can be used to compose   `Pipeline` objects.    
 
-- `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to   a Spark `Predictor` object and can be used to compose   `Pipeline` objects. 
+- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the predictor appended to the pipeline.    
 
-  
+- `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then   immediately fit with the input `tbl_spark`, returning a prediction model.    
 
-- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the predictor appended to the pipeline. 
+- `tbl_spark`, with `formula`: specified When `formula`     is specified, the input `tbl_spark` is first transformed using a     `RFormula` transformer before being fit by     the predictor. The object returned in this case is a `ml_model` which is a     wrapper of a `ml_pipeline_model`. 
 
-  
-
-- `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then   immediately fit with the input `tbl_spark`, returning a prediction model. 
-
-  
-
-- `tbl_spark`, with `formula`: specified When `formula`
-
-    is specified, the input `tbl_spark` is first transformed using a     `RFormula` transformer before being fit by     the predictor. The object returned in this case is a `ml_model` which is a     wrapper of a `ml_pipeline_model`. 
+ 
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
 sc <- spark_connect(master = "local") 
 iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
+ 
 partitions <- iris_tbl %>% 
   sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
+ 
 iris_training <- partitions$training 
 iris_test <- partitions$test 
+ 
 gbt_model <- iris_training %>% 
   ml_gradient_boosted_trees(Sepal_Length ~ Petal_Length + Petal_Width) 
+ 
 pred <- ml_predict(gbt_model, iris_test) 
+ 
 ml_regression_evaluator(pred, label_col = "Sepal_Length") 
+ 
+ 
 ```
 
 ## See Also
-
-See [https://spark.apache.org/docs/latest/ml-classification-regression.html](https://spark.apache.org/docs/latest/ml-classification-regression.html) for   more information on the set of supervised learning algorithms. 
-
-Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+ See [https://spark.apache.org/docs/latest/ml-classification-regression.html](https://spark.apache.org/docs/latest/ml-classification-regression.html) for   more information on the set of supervised learning algorithms.  Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

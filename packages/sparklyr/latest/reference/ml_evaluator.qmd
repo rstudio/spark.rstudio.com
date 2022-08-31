@@ -16,11 +16,12 @@ library(dplyr)
 ## ml_evaluator
 
 ## Description
-A set of functions to calculate performance metrics for prediction models. Also see the Spark ML Documentation [https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package)
+ A set of functions to calculate performance metrics for prediction models. Also see the Spark ML Documentation [https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.ml.evaluation.package) 
 
 
 ## Usage
 ```r
+ 
 ml_binary_classification_evaluator( 
   x, 
   label_col = "label", 
@@ -29,14 +30,14 @@ ml_binary_classification_evaluator(
   uid = random_string("binary_classification_evaluator_"), 
   ... 
 ) 
-
+ 
 ml_binary_classification_eval( 
   x, 
   label_col = "label", 
   prediction_col = "prediction", 
   metric_name = "areaUnderROC" 
 ) 
-
+ 
 ml_multiclass_classification_evaluator( 
   x, 
   label_col = "label", 
@@ -45,14 +46,14 @@ ml_multiclass_classification_evaluator(
   uid = random_string("multiclass_classification_evaluator_"), 
   ... 
 ) 
-
+ 
 ml_classification_eval( 
   x, 
   label_col = "label", 
   prediction_col = "prediction", 
   metric_name = "f1" 
 ) 
-
+ 
 ml_regression_evaluator( 
   x, 
   label_col = "label", 
@@ -76,9 +77,7 @@ ml_regression_evaluator(
 
 ## Details
 
-The following metrics are supported   
-
-   
+ The following metrics are supported       
 
 - Binary Classification: `areaUnderROC` (default) or `areaUnderPR` (not available in Spark 2.X.)    
 
@@ -86,39 +85,55 @@ The following metrics are supported
 
 - Regression: `rmse` (root mean squared error, default),    `mse` (mean squared error), `r2`, or `mae` (mean absolute error.)   
 
-`ml_binary_classification_eval()` is an alias for `ml_binary_classification_evaluator()` for backwards compatibility. 
-
-`ml_classification_eval()` is an alias for `ml_multiclass_classification_evaluator()` for backwards compatibility. 
+  `ml_binary_classification_eval()` is an alias for `ml_binary_classification_evaluator()` for backwards compatibility.  `ml_classification_eval()` is an alias for `ml_multiclass_classification_evaluator()` for backwards compatibility. 
 
 
 ## Value
-The calculated performance metric 
+ The calculated performance metric 
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
 sc <- spark_connect(master = "local") 
 mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE) 
+ 
 partitions <- mtcars_tbl %>% 
   sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
+ 
 mtcars_training <- partitions$training 
 mtcars_test <- partitions$test 
+ 
 # for multiclass classification 
 rf_model <- mtcars_training %>% 
   ml_random_forest(cyl ~ ., type = "classification") 
+ 
 pred <- ml_predict(rf_model, mtcars_test) 
+ 
 ml_multiclass_classification_evaluator(pred) 
+ 
 # for regression 
 rf_model <- mtcars_training %>% 
   ml_random_forest(cyl ~ ., type = "regression") 
+ 
 pred <- ml_predict(rf_model, mtcars_test) 
+ 
 ml_regression_evaluator(pred, label_col = "cyl") 
+ 
 # for binary classification 
 rf_model <- mtcars_training %>% 
   ml_random_forest(am ~ gear + carb, type = "classification") 
+ 
 pred <- ml_predict(rf_model, mtcars_test) 
+ 
 ml_binary_classification_evaluator(pred) 
+ 
+ 
 ```
 
 

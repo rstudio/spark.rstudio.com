@@ -16,11 +16,12 @@ library(dplyr)
 ## hof_transform
 
 ## Description
-Apply an element-wise transformation function to an array column (this is essentially a dplyr wrapper for the `transform(array<T>, function<T, U>): array<U>` and the `transform(array<T>, function<T, Int, U>): array<U>` built-in Spark SQL functions) 
+ Apply an element-wise transformation function to an array column (this is essentially a dplyr wrapper for the `transform(array<T>, function<T, U>): array<U>` and the `transform(array<T>, function<T, Int, U>): array<U>` built-in Spark SQL functions) 
 
 
 ## Usage
 ```r
+ 
 hof_transform(x, func, expr = NULL, dest_col = NULL, ...) 
 ```
 
@@ -38,12 +39,20 @@ hof_transform(x, func, expr = NULL, dest_col = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local") 
 # applies the (x -> x * x) transformation to elements of all arrays 
 copy_to(sc, tibble::tibble(arr = list(1:5, 21:25))) %>% 
   hof_transform(~ .x * .x) 
+ 
+ 
 ```
 
 

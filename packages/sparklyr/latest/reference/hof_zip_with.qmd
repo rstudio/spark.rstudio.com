@@ -16,14 +16,12 @@ library(dplyr)
 ## hof_zip_with
 
 ## Description
-
-Applies an element-wise function to combine elements from 2 array columns (this is essentially a dplyr wrapper for the `zip_with(array<T>, array<U>, function<T, U, R>): array<R>`
-
-built-in function in Spark SQL) 
+ Applies an element-wise function to combine elements from 2 array columns (this is essentially a dplyr wrapper for the `zip_with(array<T>, array<U>, function<T, U, R>): array<R>` built-in function in Spark SQL) 
 
 
 ## Usage
 ```r
+ 
 hof_zip_with(x, func, dest_col = NULL, left = NULL, right = NULL, ...) 
 ```
 
@@ -42,7 +40,13 @@ hof_zip_with(x, func, dest_col = NULL, left = NULL, right = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local") 
 # compute element-wise products of 2 arrays from each row of `left` and `right` 
@@ -56,6 +60,8 @@ copy_to(
   ) 
 ) %>% 
   hof_zip_with(~ .x * .y) 
+ 
+ 
 ```
 
 

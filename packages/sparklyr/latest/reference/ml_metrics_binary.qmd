@@ -16,11 +16,12 @@ library(dplyr)
 ## ml_metrics_binary
 
 ## Description
-The function works best when passed a `tbl_spark` created by `ml_predict()`. The output `tbl_spark` will contain the correct variable types and format that the given Spark model "evaluator" expects. 
+ The function works best when passed a `tbl_spark` created by `ml_predict()`. The output `tbl_spark` will contain the correct variable types and format that the given Spark model "evaluator" expects. 
 
 
 ## Usage
 ```r
+ 
 ml_metrics_binary( 
   x, 
   truth = label, 
@@ -40,14 +41,19 @@ ml_metrics_binary(
 | ... | Optional arguments; currently unused. |
 
 ## Details
-The `ml_metrics` family of functions implement Spark's `evaluate` closer to how the `yardstick` package works. The functions expect a table containing the truth and estimate, and return a `tibble` with the results. The `tibble` has the same format and variable names as the output of the `yardstick` functions. 
+ The `ml_metrics` family of functions implement Spark's `evaluate` closer to how the `yardstick` package works. The functions expect a table containing the truth and estimate, and return a `tibble` with the results. The `tibble` has the same format and variable names as the output of the `yardstick` functions. 
 
 
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
 sc <- spark_connect("local") 
 tbl_iris <- copy_to(sc, iris) 
 prep_iris <- tbl_iris %>% 
@@ -56,6 +62,7 @@ iris_split <- sdf_random_split(prep_iris, training = 0.5, test = 0.5)
 model <- ml_logistic_regression(iris_split$training, "is_setosa ~ Sepal_Length") 
 tbl_predictions <- ml_predict(model, iris_split$test) 
 ml_metrics_binary(tbl_predictions) 
+ 
 ```
 
 

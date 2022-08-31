@@ -16,11 +16,12 @@ library(dplyr)
 ## livy_config
 
 ## Description
-Create a Spark Configuration for Livy 
+ Create a Spark Configuration for Livy 
 
 
 ## Usage
 ```r
+ 
 livy_config( 
   config = spark_config(), 
   username = NULL, 
@@ -47,15 +48,7 @@ livy_config(
 
 ## Details
 
-Extends a Spark `spark_config()` configuration with settings for Livy. For instance, `username` and `password`
-
-define the basic authentication settings for a Livy session. 
-
-The default value of `"custom_headers"` is set to `list("X-Requested-By" = "sparklyr")`
-
-in order to facilitate connection to Livy servers with CSRF protection enabled. 
-
-Additional parameters for Livy sessions are: 
+ Extends a Spark `spark_config()` configuration with settings for Livy. For instance, `username` and `password` define the basic authentication settings for a Livy session.  The default value of `"custom_headers"` is set to `list("X-Requested-By" = "sparklyr")` in order to facilitate connection to Livy servers with CSRF protection enabled.  Additional parameters for Livy sessions are:  
 
   
 
@@ -63,11 +56,15 @@ Additional parameters for Livy sessions are:
 
 User to impersonate when starting the session
 
+ 
+
   
 
 `jars`
 
 jars to be used in this session
+
+ 
 
   
 
@@ -75,11 +72,15 @@ jars to be used in this session
 
 Python files to be used in this session
 
+ 
+
   
 
 `files`
 
 files to be used in this session
+
+ 
 
   
 
@@ -87,11 +88,15 @@ files to be used in this session
 
 Amount of memory to use for the driver process
 
+ 
+
   
 
 `driver_cores`
 
 Number of cores to use for the driver process
+
+ 
 
   
 
@@ -99,11 +104,15 @@ Number of cores to use for the driver process
 
 Amount of memory to use per executor process
 
+ 
+
   
 
 `executor_cores`
 
 Number of cores to use for each executor
+
+ 
 
   
 
@@ -111,11 +120,15 @@ Number of cores to use for each executor
 
 Number of executors to launch for this session
 
+ 
+
   
 
 `archives`
 
 Archives to be used in this session
+
+ 
 
   
 
@@ -123,11 +136,15 @@ Archives to be used in this session
 
 The name of the YARN queue to which submitted
 
+ 
+
   
 
 `name`
 
 The name of this session
+
+ 
 
   
 
@@ -135,17 +152,19 @@ The name of this session
 
 Timeout in seconds to which session be orphaned
 
+ 
+
   
 
 `conf`
 
 Spark configuration properties (Map of key=value)
 
-Note that `queue` is supported only by version 0.4.0 of Livy or newer. If you are using the older one, specify queue via `config` (e.g. `config = spark_config(spark.yarn.queue = "my_queue")`). 
+   Note that `queue` is supported only by version 0.4.0 of Livy or newer. If you are using the older one, specify queue via `config` (e.g. `config = spark_config(spark.yarn.queue = "my_queue")`). 
 
 
 ## Value
-Named list with configuration data 
+ Named list with configuration data 
 
 
 

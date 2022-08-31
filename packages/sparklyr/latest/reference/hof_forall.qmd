@@ -16,11 +16,12 @@ library(dplyr)
 ## hof_forall
 
 ## Description
-Checks whether the predicate specified holds for all elements in an array (this is essentially a dplyr wrapper to the `forall(expr, pred)` higher- order function, which is supported since Spark 3.0) 
+ Checks whether the predicate specified holds for all elements in an array (this is essentially a dplyr wrapper to the `forall(expr, pred)` higher- order function, which is supported since Spark 3.0) 
 
 
 ## Usage
 ```r
+ 
 hof_forall(x, pred, expr = NULL, dest_col = NULL, ...) 
 ```
 
@@ -38,17 +39,26 @@ hof_forall(x, pred, expr = NULL, dest_col = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(sparklyr)
+ 
+ 
 sc <- spark_connect(master = "local", version = "3.0.0") 
 df <- tibble::tibble( 
   x = list(c(1, 2, 3, 4, 5), c(6, 7, 8, 9, 10)), 
   y = list(c(1, 4, 2, 8, 5), c(7, 1, 4, 2, 8)), 
 ) 
 sdf <- sdf_copy_to(sc, df, overwrite = TRUE) 
+ 
 all_positive_tbl <- sdf %>% 
   hof_forall(pred = ~ .x > 0, expr = y, dest_col = all_positive) %>% 
   dplyr::select(all_positive) 
+ 
+ 
 ```
 
 

@@ -16,11 +16,12 @@ library(dplyr)
 ## hof_map_zip_with
 
 ## Description
-Merges two maps into a single map by applying the function specified to pairs of values with the same key (this is essentially a dplyr wrapper to the `map_zip_with(map1, map2, func)` higher- order function, which is supported since Spark 3.0) 
+ Merges two maps into a single map by applying the function specified to pairs of values with the same key (this is essentially a dplyr wrapper to the `map_zip_with(map1, map2, func)` higher- order function, which is supported since Spark 3.0) 
 
 
 ## Usage
 ```r
+ 
 hof_map_zip_with(x, func, dest_col = NULL, map1 = NULL, map2 = NULL, ...) 
 ```
 
@@ -39,9 +40,16 @@ hof_map_zip_with(x, func, dest_col = NULL, map1 = NULL, map2 = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "3.0.0") 
+ 
 # create a Spark dataframe with 2 columns of type MAP<STRING, INT> 
 two_maps_tbl <- sdf_copy_to( 
   sc, 
@@ -53,13 +61,17 @@ two_maps_tbl <- sdf_copy_to(
 ) %>% 
   dplyr::mutate(m1 = from_json(m1, "MAP<STRING, INT>"), 
                 m2 = from_json(m2, "MAP<STRING, INT>")) 
+ 
 # create a 3rd column containing MAP<STRING, INT> values derived from the 
 # first 2 columns 
+ 
 transformed_two_maps_tbl <- two_maps_tbl %>% 
   hof_map_zip_with( 
     func = .(k, v1, v2) %->% (CONCAT(k, "_", v1, "_", v2)), 
     dest_col = m3 
   ) 
+ 
+ 
 ```
 
 

@@ -16,11 +16,12 @@ library(dplyr)
 ## gf_lpa
 
 ## Description
-Run static Label Propagation for detecting communities in networks. Each node in the   network is initially assigned to its own community. At every iteration, nodes send   their community affiliation to all neighbors and update their state to the mode   community affiliation of incoming messages. LPA is a standard community detection    algorithm for graphs. It is very inexpensive   computationally, although (1) convergence is not guaranteed and (2) one can   end up with trivial solutions (all nodes are identified into a single community). 
+ Run static Label Propagation for detecting communities in networks. Each node in the   network is initially assigned to its own community. At every iteration, nodes send   their community affiliation to all neighbors and update their state to the mode   community affiliation of incoming messages. LPA is a standard community detection    algorithm for graphs. It is very inexpensive   computationally, although (1) convergence is not guaranteed and (2) one can   end up with trivial solutions (all nodes are identified into a single community). 
 
 
 ## Usage
 ```r
+ 
 gf_lpa(x, max_iter, ...) 
 ```
 
@@ -36,10 +37,16 @@ gf_lpa(x, max_iter, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(graphframes)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
 library(graphframes)
+ 
 g <- gf_friends(sc) 
 gf_lpa(g, max_iter = 5) 
+ 
 ```
 
 

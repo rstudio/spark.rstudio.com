@@ -16,11 +16,12 @@ library(dplyr)
 ## hof_filter
 
 ## Description
-Apply an element-wise filtering function to an array column (this is essentially a dplyr wrapper for the `filter(array<T>, function<T, Boolean>): array<T>` built-in Spark SQL functions) 
+ Apply an element-wise filtering function to an array column (this is essentially a dplyr wrapper for the `filter(array<T>, function<T, Boolean>): array<T>` built-in Spark SQL functions) 
 
 
 ## Usage
 ```r
+ 
 hof_filter(x, func, expr = NULL, dest_col = NULL, ...) 
 ```
 
@@ -38,12 +39,20 @@ hof_filter(x, func, expr = NULL, dest_col = NULL, ...)
 
 
 ## Examples
+```{r, eval=ecodown::examples_run()}
+library(sparklyr)
+ 
+```
 ```{r, eval=ecodown::examples_not_run()}
+ 
+ 
 library(sparklyr) 
 sc <- spark_connect(master = "local") 
 # only keep odd elements in each array in `array_column` 
 copy_to(sc, tibble::tibble(array_column = list(1:5, 21:25))) %>% 
   hof_filter(~ .x %% 2 == 1) 
+ 
+ 
 ```
 
 

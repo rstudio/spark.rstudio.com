@@ -4,6 +4,13 @@ execute:
   freeze: true
 ---
 
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
 *R/dplyr_hof.R*
 
 ## %->%
@@ -37,3 +44,8 @@ a %->% (mean(a) + 1) # translates to <SQL> `a` -> (AVG(`a`) OVER () + 1.0)
 ```
 
 
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

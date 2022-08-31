@@ -1,0 +1,14 @@
+{
+  "hash": "c0f51836c5a5dbecee62de9bc48ca9ed",
+  "result": {
+    "markdown": "---\ntitle: \"Persist a Spark DataFrame\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/sdf_interface.R*\n\n## sdf_persist\n\n## Description\nPersist a Spark DataFrame, forcing any pending computations and (optionally) serializing the results to disk. \n\n\n## Usage\n```r\nsdf_persist(x, storage.level = \"MEMORY_AND_DISK\", name = NULL) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |\n| storage.level | The storage level to be used. Please view the [Spark Documentation](https://spark.apache.org/docs/latest/programming-guide.html#rdd-persistence)<br>for information on what storage levels are accepted. |\n| name | A name to assign this table. Passed to [sdf_register()]. |\n\n## Details\n\nSpark DataFrames invoke their operations lazily -- pending operations are deferred until their results are actually needed. Persisting a Spark DataFrame effectively 'forces' any pending computations, and then persists the generated Spark DataFrame as requested (to memory, to disk, or otherwise). \n\nUsers of Spark should be careful to persist the results of any computations which are non-deterministic -- otherwise, one might see that the values within a column seem to 'change' as new operations are performed on that data set. \n\n\n\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

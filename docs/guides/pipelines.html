@@ -376,28 +376,11 @@ ga('send', {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>r_pipeline <span class="ot">&lt;-</span>  . <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cyl =</span> <span class="fu">paste0</span>(<span class="st">"c"</span>, cyl)) <span class="sc">%&gt;%</span> <span class="fu">lm</span>(am <span class="sc">~</span> cyl <span class="sc">+</span> mpg, <span class="at">data =</span> .)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>r_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>Functional sequence with the following components:
-
- 1. mutate(., cyl = paste0("c", cyl))
- 2. lm(am ~ cyl + mpg, data = .)
-
-Use 'functions' to extract the individual functions. </code></pre>
-</div>
 </div>
 <p>The <code>r_pipeline</code> object has all the steps needed to transform and fit the model, but it has not yet transformed any data. The second step, is to pass data through the pipeline, which in turn will output a fitted model. That is called a <strong>PipelineModel</strong>. The <strong>PipelineModel</strong> can then be used to produce predictions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>r_model <span class="ot">&lt;-</span> <span class="fu">r_pipeline</span>(mtcars)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = am ~ cyl + mpg, data = .)
-
-Coefficients:
-(Intercept)        cylc6        cylc8          mpg  
-   -0.54388      0.03124     -0.03313      0.04767  </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>r_model <span class="ot">&lt;-</span> <span class="fu">r_pipeline</span>(mtcars)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>r_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="taking-advantage-of-pipelines-and-pipelinemodels" class="level3">
 <h3 class="anchored" data-anchor-id="taking-advantage-of-pipelines-and-pipelinemodels">Taking advantage of Pipelines and PipelineModels</h3>
@@ -412,13 +395,13 @@ Coefficients:
 <h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
 <p>An additional goal of this article is that the reader can follow along, so the data, transformations and Spark connection in this example will be kept as easy to reproduce as possible.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>spark_flights <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, flights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>spark_flights <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, flights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="feature-transformers" class="level3">
 <h3 class="anchored" data-anchor-id="feature-transformers">Feature Transformers</h3>
@@ -430,30 +413,22 @@ Coefficients:
 <p>This example will start with <code>dplyr</code> transformations, which are ultimately SQL transformations, loaded into the <code>df</code> variable.</p>
 <p>In <code>sparklyr</code>, there is one feature transformer that is not available in Spark, <code>ft_dplyr_transformer()</code>. The goal of this function is to convert the <code>dplyr</code> code to a SQL Feature Transformer that can then be used in a Pipeline.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> spark_flights <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">month =</span> <span class="fu">paste0</span>(<span class="st">"m"</span>, month),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">day =</span> <span class="fu">paste0</span>(<span class="st">"d"</span>, day)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dep_delay, sched_dep_time, month, day, distance) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> spark_flights <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">month =</span> <span class="fu">paste0</span>(<span class="st">"m"</span>, month),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">day =</span> <span class="fu">paste0</span>(<span class="st">"d"</span>, day)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dep_delay, sched_dep_time, month, day, distance) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is the resulting pipeline stage produced from the <code>dplyr</code> code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_dplyr_transformer</span>(sc, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>SQLTransformer (Transformer)
-&lt;dplyr_transformer__30d268ab_0f32_4b44_8855_3d58a90e6cdc&gt; 
- (Parameters -- Column Names)</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_dplyr_transformer</span>(sc, df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Use the <code>ml_param()</code> function to extract the “statement” attribute. That attribute contains the finalized SQL statement. Notice that the <code>flights</code> table name has been replace with <code>__THIS__</code>. This allows the pipeline to accept different table names as its source, making the pipeline very modular.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_dplyr_transformer</span>(sc, df) <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_param</span>(<span class="st">"statement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>[1] "SELECT `dep_delay`, `sched_dep_time`, CONCAT(\"m\", `month`) AS `month`, CONCAT(\"d\", `day`) AS `day`, `distance`\nFROM `__THIS__`\nWHERE (NOT(((`dep_delay`) IS NULL)))"</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ft_dplyr_transformer</span>(sc, df) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_param</span>(<span class="st">"statement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="creating-the-pipeline" class="level3">
@@ -467,72 +442,26 @@ Coefficients:
 <li>Logistic Model</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>flights_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_dplyr_transformer</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbl =</span> df</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"dep_delay"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"delayed"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">15</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_bucketizer</span>(</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"sched_dep_time"</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"hours"</span>,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">splits =</span> <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">800</span>, <span class="dv">1200</span>, <span class="dv">1600</span>, <span class="dv">2000</span>, <span class="dv">2400</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(delayed <span class="sc">~</span> month <span class="sc">+</span> day <span class="sc">+</span> hours <span class="sc">+</span> distance) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flights_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_dplyr_transformer</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbl =</span> df</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"dep_delay"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"delayed"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">threshold =</span> <span class="dv">15</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_bucketizer</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"sched_dep_time"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"hours"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">splits =</span> <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">800</span>, <span class="dv">1200</span>, <span class="dv">1600</span>, <span class="dv">2000</span>, <span class="dv">2400</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(delayed <span class="sc">~</span> month <span class="sc">+</span> day <span class="sc">+</span> hours <span class="sc">+</span> distance) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Another nice feature for ML Pipelines in <code>sparklyr</code>, is the print-out. It makes it really easy to how each stage is setup:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>Pipeline (Estimator) with 5 stages
-&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
-  Stages 
-  |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
-  |     (Parameters -- Column Names)
-  |--2 Binarizer (Transformer)
-  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: dep_delay
-  |      output_col: delayed
-  |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: sched_dep_time
-  |      output_col: hours
-  |--4 RFormula (Estimator)
-  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |     (Parameters)
-  |      force_index_label: FALSE
-  |      formula: delayed ~ month + day + hours + distance
-  |      handle_invalid: error
-  |      stringIndexerOrderType: frequencyDesc
-  |--5 LogisticRegression (Estimator)
-  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |      prediction_col: prediction
-  |      probability_col: probability
-  |      raw_prediction_col: rawPrediction
-  |     (Parameters)
-  |      aggregation_depth: 2
-  |      elastic_net_param: 0
-  |      family: auto
-  |      fit_intercept: TRUE
-  |      max_iter: 100
-  |      reg_param: 0
-  |      standardization: TRUE
-  |      threshold: 0.5
-  |      tol: 1e-06</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flights_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice that there are no <em>coefficients</em> defined yet. That’s because no data has been actually processed. Even though <code>df</code> uses <code>spark_flights()</code>, recall that the final SQL transformer makes that name, so there’s no data to process yet.</p>
 </section>
@@ -541,205 +470,87 @@ Coefficients:
 <h2 class="anchored" data-anchor-id="pipelinemodel">PipelineModel</h2>
 <p>A quick partition of the data is created for this exercise.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>partitioned_flights <span class="ot">&lt;-</span> <span class="fu">sdf_random_split</span>(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  spark_flights,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">training =</span> <span class="fl">0.01</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">testing =</span> <span class="fl">0.01</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rest =</span> <span class="fl">0.98</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>partitioned_flights <span class="ot">&lt;-</span> <span class="fu">sdf_random_split</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  spark_flights,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">training =</span> <span class="fl">0.01</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">testing =</span> <span class="fl">0.01</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rest =</span> <span class="fl">0.98</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>ml_fit()</code> function produces the PipelineModel. The <code>training</code> partition of the <code>partitioned_flights</code> data is used to train the model:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fitted_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  flights_pipeline,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  partitioned_flights<span class="sc">$</span>training</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>fitted_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>PipelineModel (Transformer) with 5 stages
-&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
-  Stages 
-  |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
-  |     (Parameters -- Column Names)
-  |--2 Binarizer (Transformer)
-  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: dep_delay
-  |      output_col: delayed
-  |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: sched_dep_time
-  |      output_col: hours
-  |--4 RFormulaModel (Transformer)
-  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |     (Transformer Info)
-  |      formula:  chr "delayed ~ month + day + hours + distance" 
-  |--5 LogisticRegressionModel (Transformer)
-  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |      prediction_col: prediction
-  |      probability_col: probability
-  |      raw_prediction_col: rawPrediction
-  |     (Transformer Info)
-  |      coefficient_matrix:  num [1, 1:43] 0.142 0.45 0.424 0.603 -0.126 ... 
-  |      coefficients:  num [1:43] 0.142 0.45 0.424 0.603 -0.126 ... 
-  |      intercept:  num -2.54 
-  |      intercept_vector:  num -2.54 
-  |      num_classes:  int 2 
-  |      num_features:  int 43 
-  |      threshold:  num 0.5 
-  |      thresholds:  num [1:2] 0.5 0.5 </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fitted_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  flights_pipeline,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  partitioned_flights<span class="sc">$</span>training</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fitted_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice that the print-out for the fitted pipeline now displays the model’s coefficients.</p>
 <p>The <code>ml_transform()</code> function can be used to run predictions, in other words it is used instead of <code>predict()</code> or <code>sdf_predict()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">ml_transform</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  fitted_pipeline,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  partitioned_flights<span class="sc">$</span>testing</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>predictions <span class="sc">%&gt;%</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(delayed, prediction) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code># Source: spark&lt;?&gt; [?? x 3]
-# Groups: delayed
-  delayed prediction     n
-    &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
-1       0          1    47
-2       0          0  2553
-3       1          0   642
-4       1          1    45</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">ml_transform</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  fitted_pipeline,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  partitioned_flights<span class="sc">$</span>testing</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>predictions <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(delayed, prediction) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="save-the-pipelines-to-disk" class="level2">
 <h2 class="anchored" data-anchor-id="save-the-pipelines-to-disk">Save the pipelines to disk</h2>
 <p>The <code>ml_save()</code> command can be used to save the Pipeline and PipelineModel to disk. The resulting output is a folder with the selected name, which contains all of the necessary Scala scripts:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  flights_pipeline,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"flights_pipeline"</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stderr">
-<pre><code>Model successfully saved.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  fitted_pipeline,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"flights_model"</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stderr">
-<pre><code>Model successfully saved.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  flights_pipeline,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"flights_pipeline"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  fitted_pipeline,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"flights_model"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="use-an-existing-pipelinemodel" class="level2">
 <h2 class="anchored" data-anchor-id="use-an-existing-pipelinemodel">Use an existing PipelineModel</h2>
 <p>The <code>ml_load()</code> command can be used to re-load Pipelines and PipelineModels. The saved ML Pipeline files can only be loaded into an open Spark session.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>reloaded_model <span class="ot">&lt;-</span> <span class="fu">ml_load</span>(sc, <span class="st">"flights_model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>reloaded_model <span class="ot">&lt;-</span> <span class="fu">ml_load</span>(sc, <span class="st">"flights_model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A simple query can be used as the table that will be used to make the new predictions. This of course, does not have to done in R, at this time the “flights_model” can be loaded into an independent Spark session outside of R.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="ot">&lt;-</span> spark_flights <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">==</span> <span class="dv">7</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    day <span class="sc">==</span> <span class="dv">5</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_transform</span>(reloaded_model, new_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code># Source: spark&lt;?&gt; [?? x 12]
-   dep_delay sched_dep_time month day   distance delayed hours features   label
-       &lt;dbl&gt;          &lt;int&gt; &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;     &lt;dbl&gt;
- 1        39           2359 m7    d5        1617       1     4 &lt;dbl [43]&gt;     1
- 2       141           2245 m7    d5        2475       1     4 &lt;dbl [43]&gt;     1
- 3         0            500 m7    d5         529       0     0 &lt;dbl [43]&gt;     0
- 4        -5            536 m7    d5        1400       0     0 &lt;dbl [43]&gt;     0
- 5        -2            540 m7    d5        1089       0     0 &lt;dbl [43]&gt;     0
- 6        -7            545 m7    d5        1416       0     0 &lt;dbl [43]&gt;     0
- 7        -3            545 m7    d5        1576       0     0 &lt;dbl [43]&gt;     0
- 8        -7            600 m7    d5        1076       0     0 &lt;dbl [43]&gt;     0
- 9        -7            600 m7    d5          96       0     0 &lt;dbl [43]&gt;     0
-10        -6            600 m7    d5         937       0     0 &lt;dbl [43]&gt;     0
-# … with more rows, and 3 more variables: rawPrediction &lt;list&gt;,
-#   probability &lt;list&gt;, prediction &lt;dbl&gt;</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="ot">&lt;-</span> spark_flights <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    month <span class="sc">==</span> <span class="dv">7</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    day <span class="sc">==</span> <span class="dv">5</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_transform</span>(reloaded_model, new_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="re-fit-an-existing-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="re-fit-an-existing-pipeline">Re-fit an existing Pipeline</h2>
 <p>First, reload the pipeline into an open Spark session:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>reloaded_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_load</span>(sc, <span class="st">"flights_pipeline"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>reloaded_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_load</span>(sc, <span class="st">"flights_pipeline"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Use <code>ml_fit()</code> again to pass new data, in this case, <code>sample_frac()</code> is used instead of <code>sdf_partition()</code> to provide the new data. The idea being that the re-fitting would happen at a later date than when the model was initially fitted.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>new_model <span class="ot">&lt;-</span>  <span class="fu">ml_fit</span>(reloaded_pipeline, <span class="fu">sample_frac</span>(spark_flights, <span class="fl">0.01</span>))</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>new_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stdout">
-<pre><code>PipelineModel (Transformer) with 5 stages
-&lt;pipeline__27a0bd5f_29d3_48b4_a0ce_43b0a07e0402&gt; 
-  Stages 
-  |--1 SQLTransformer (Transformer)
-  |    &lt;dplyr_transformer__282a34bc_05e8_4caf_870b_f42af955f9f6&gt; 
-  |     (Parameters -- Column Names)
-  |--2 Binarizer (Transformer)
-  |    &lt;binarizer__182daef2_4219_4a43_bba9_5e022e94bf19&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: dep_delay
-  |      output_col: delayed
-  |--3 Bucketizer (Transformer)
-  |    &lt;bucketizer__9fa93c5d_1d5f_45cb_99e4_3799129c1300&gt; 
-  |     (Parameters -- Column Names)
-  |      input_col: sched_dep_time
-  |      output_col: hours
-  |--4 RFormulaModel (Transformer)
-  |    &lt;r_formula__cf38d85f_5834_4bb6_a62b_6f76ae2d8805&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |     (Transformer Info)
-  |      formula:  chr "delayed ~ month + day + hours + distance" 
-  |--5 LogisticRegressionModel (Transformer)
-  |    &lt;logistic_regression__4398b77e_ce4f_47ea_aa6d_5e87d84197b0&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |      prediction_col: prediction
-  |      probability_col: probability
-  |      raw_prediction_col: rawPrediction
-  |     (Transformer Info)
-  |      coefficient_matrix:  num [1, 1:43] 0.9287 0.4978 -0.5059 0.6783 -0.0463 ... 
-  |      coefficients:  num [1:43] 0.9287 0.4978 -0.5059 0.6783 -0.0463 ... 
-  |      intercept:  num -3.22 
-  |      intercept_vector:  num -3.22 
-  |      num_classes:  int 2 
-  |      num_features:  int 43 
-  |      threshold:  num 0.5 
-  |      thresholds:  num [1:2] 0.5 0.5 </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>new_model <span class="ot">&lt;-</span>  <span class="fu">ml_fit</span>(reloaded_pipeline, <span class="fu">sample_frac</span>(spark_flights, <span class="fl">0.01</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>new_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The new model can be saved using <code>ml_save()</code>. A new name is used in this case, but the same name as the existing PipelineModel to replace it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(new_model, <span class="st">"new_flights_model"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-stderr">
-<pre><code>Model successfully saved.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_save</span>(new_model, <span class="st">"new_flights_model"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, this example is complete by closing the Spark session.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

@@ -1,0 +1,14 @@
+{
+  "hash": "e0403f901a50131509b349d05d0d086f",
+  "result": {
+    "markdown": "---\ntitle: \"Kubernetes Configuration\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/kubernetes_config.R*\n\n## spark_config_kubernetes\n\n## Description\nConvenience function to initialize a Kubernetes configuration instead of `spark_config()`, exposes common properties to set in Kubernetes clusters. \n\n\n## Usage\n```r\nspark_config_kubernetes( \n  master, \n  version = \"2.3.2\", \n  image = \"spark:sparklyr\", \n  driver = random_string(\"sparklyr-\"), \n  account = \"spark\", \n  jars = \"local:///opt/sparklyr\", \n  forward = TRUE, \n  executors = NULL, \n  conf = NULL, \n  timeout = 120, \n  ports = c(8880, 8881, 4040), \n  fix_config = identical(.Platform$OS.type, \"windows\"), \n  ... \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| master | Kubernetes url to connect to, found by running `kubectl cluster-info`. |\n| version | The version of Spark being used. |\n| image | Container image to use to launch Spark and sparklyr. Also known as `spark.kubernetes.container.image`. |\n| driver | Name of the driver pod. If not set, the driver pod name is set to \"sparklyr\" suffixed by id to avoid name conflicts. Also known as `spark.kubernetes.driver.pod.name`. |\n| account | Service account that is used when running the driver pod. The driver pod uses this service account when requesting executor pods from the API server. Also known as `spark.kubernetes.authenticate.driver.serviceAccountName`. |\n| jars | Path to the sparklyr jars; either, a local path inside the container image with the sparklyr jars copied when the image was created or, a path accesible by the container where the sparklyr jars were copied. You can find a path to the sparklyr jars by running `system.file(\"java/\", package = \"sparklyr\")`. |\n| forward | Should ports used in sparklyr be forwarded automatically through Kubernetes? Default to `TRUE` which runs `kubectl port-forward` and `pkill kubectl`<br>on disconnection. |\n| executors | Number of executors to request while connecting. |\n| conf | A named list of additional entries to add to `sparklyr.shell.conf`. |\n| timeout | Total seconds to wait before giving up on connection. |\n| ports | Ports to forward using kubectl. |\n| fix_config | Should the spark-defaults.conf get fixed? `TRUE` for Windows. |\n| ... | Additional parameters, currently not in use. |\n\n\n\n\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "hash": "b8b6e1e98d7270a423a176fd449408bc",
+  "result": {
+    "markdown": "---\ntitle: \"Read binary data into a Spark DataFrame.\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/data_interface.R*\n\n## spark_read_binary\n\n## Description\n\nRead binary files within a directory and convert each file into a record within the resulting Spark dataframe. The output will be a Spark dataframe with the following columns and possibly partition columns:   \n\n    \n\n-path: StringType \n\n    \n\n-modificationTime: TimestampType \n\n    \n\n-length: LongType \n\n    \n\n-content: BinaryType \n\n \n\n\n## Usage\n```r\nspark_read_binary( \n  sc, \n  name = NULL, \n  dir = name, \n  path_glob_filter = \"*\", \n  recursive_file_lookup = FALSE, \n  repartition = 0, \n  memory = TRUE, \n  overwrite = TRUE \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | A `spark_connection`. |\n| name | The name to assign to the newly generated table. |\n| dir | Directory to read binary files from. |\n| path_glob_filter | Glob pattern of binary files to be loaded (e.g., \"*.jpg\"). |\n| recursive_file_lookup | If FALSE (default), then partition discovery will be enabled (i.e., if a partition naming scheme is present, then partitions specified by subdirectory names such as \"date=2019-07-01\" will be created and files outside subdirectories following a partition naming scheme will be ignored). If TRUE, then all nested directories will be searched even if their names do not follow a partition naming scheme. |\n| repartition | The number of partitions used to distribute the generated table. Use 0 (the default) to avoid partitioning. |\n| memory | Boolean; should the data be loaded eagerly into memory? (That is, should the table be cached?) |\n| overwrite | Boolean; overwrite the table with the given name if it already exists? |\n\n\n\n\n\n\n## See Also\nOther Spark serialization routines:  `collect_from_rds()`, `spark_insert_table()`, `spark_load_table()`, `spark_read_avro()`, `spark_read_csv()`, `spark_read_delta()`, `spark_read_image()`, `spark_read_jdbc()`, `spark_read_json()`, `spark_read_libsvm()`, `spark_read_orc()`, `spark_read_parquet()`, `spark_read_source()`, `spark_read_table()`, `spark_read_text()`, `spark_read()`, `spark_save_table()`, `spark_write_avro()`, `spark_write_csv()`, `spark_write_delta()`, `spark_write_jdbc()`, `spark_write_json()`, `spark_write_orc()`, `spark_write_parquet()`, `spark_write_source()`, `spark_write_table()`, `spark_write_text()`\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

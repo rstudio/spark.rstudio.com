@@ -4,6 +4,13 @@ execute:
   freeze: true
 ---
 
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
 *R/sdf_unnest_longer.R*
 
 ## sdf_unnest_longer
@@ -67,3 +74,8 @@ unnested <- sdf %>% sdf_unnest_longer(y, indices_to = "array_idx")
 ```
 
 
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

@@ -4,6 +4,13 @@ execute:
   freeze: true
 ---
 
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
 *R/spark_context_config.R*
 
 ## spark_coalesce_min_num_partitions
@@ -31,3 +38,8 @@ spark_coalesce_min_num_partitions(sc, num_partitions = NULL)
 ## See Also
 Other Spark runtime configuration:  `spark_adaptive_query_execution()`, `spark_advisory_shuffle_partition_size()`, `spark_auto_broadcast_join_threshold()`, `spark_coalesce_initial_num_partitions()`, `spark_coalesce_shuffle_partitions()`, `spark_session_config()`
 
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

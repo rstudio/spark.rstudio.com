@@ -4,6 +4,13 @@ execute:
   freeze: true
 ---
 
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
 *R/ml_fpm_prefixspan.R*
 
 ## ml_prefixspan
@@ -67,3 +74,8 @@ frequent_items <- prefix_span_model$frequent_sequential_patterns(items_sdf) %>% 
 ```
 
 
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

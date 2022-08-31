@@ -4,6 +4,13 @@ execute:
   freeze: true
 ---
 
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
 *R/dplyr_hof.R*
 
 ## hof_filter
@@ -40,3 +47,8 @@ copy_to(sc, tibble::tibble(array_column = list(1:5, 21:25))) %>%
 ```
 
 
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

@@ -333,6 +333,66 @@ sub-sampling rate and impurtiy mode:
 glance(iris_model)
 ```
 
+## `yardstick`-like metrics
+
+The `metrics()` function, from the `yardstick` package, provides an easy to read
+`tibble` with the relevant metrics.  It automatically detects the type of model
+and it decides which metrics to show. 
+
+### Why use in Spark?
+
+In `sparklyr`, the family of `ml_metrics...` functions outputs a `tibble` with the 
+same structure as `yardstick::metrics()`.  The functions also expect the same 
+base arguments of `x`, `truth` and `estimate`.  In `sparklyr`, model detection is not
+available yet, so based on the type of model, there are three functions to choose
+from. 
+
+The `ml_metrics...` functions expect a `tbl_spark` that was created by the
+`ml_predict()` function.  These functions provide a `metrics` argument that allows
+us to change the metrics to calculate.  All of the metrics that have an equivalent
+in `yardstick` can be called using the same value, such as `f_meas`. For others,
+they can be requested using Spark's designation. For more information, see the
+help file of the specific `ml_metrics...` function.
+
+- [ml_metrics_binary()](/packages/sparklyr/latest/reference/ml_metrics_binary.html)
+- [ml_metrics_multiclass()](/packages/sparklyr/latest/reference/ml_metrics_multiclass.html)
+- [ml_metrics_regression()](/packages/sparklyr/latest/reference/ml_metrics_regression.html)
+
+#### How are they different form `ml_evaluate()`?
+
+It is true that both sets of functions return metrics based on the results. The 
+difference is that `ml_evaluate()` requires the original Spark model object in
+order to work. `ml_metrics...` only required a table with the predictions, 
+preferably, predictions created by `ml_predict()`.
+
+### Example
+
+Using `sdf_random_split()`, split the data into `training` and `test`. And then
+fit a model.  In this case it will be a logistic regression model.
+
+```{r}
+prep_iris <- tbl(sc, "iris") %>%
+  mutate(is_setosa = ifelse(Species == "setosa", 1, 0))
+
+iris_split <- sdf_random_split(prep_iris, training = 0.5, test = 0.5)
+
+model <- ml_logistic_regression(iris_split$training, "is_setosa ~ Sepal_Length")
+```
+
+With `ml_predict()`, create a new `tbl_spark` that contains the original data
+and additional columns needed created by the prediction process.
+
+```{r}
+tbl_predictions <- ml_predict(model, iris_split$test)
+```
+
+The `ml_metrics_binary()` outputs a `tibble` with the ROC and PR AUC.
+
+```{r}
+ml_metrics_binary(tbl_predictions)
+```
+
+
 ## Correlations using `corrr`
 
 The `corrr` package helps with exploring data correlations in R. It

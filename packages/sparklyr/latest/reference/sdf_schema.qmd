@@ -1,0 +1,49 @@
+---
+title: "Read the Schema of a Spark DataFrame"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_wrapper.R*
+
+## sdf_schema
+
+## Description
+ Read the schema of a Spark DataFrame. 
+
+
+## Usage
+```r
+ 
+sdf_schema(x, expand_nested_cols = FALSE, expand_struct_cols = FALSE) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
+| expand_nested_cols | Whether to expand columns containing nested array of structs (which are usually created by tidyr::nest on a Spark data frame) |
+| expand_struct_cols | Whether to expand columns containing structs |
+
+## Details
+ The `type` column returned gives the string representation of the underlying Spark  type for that column; for example, a vector of numeric values would be returned with the type `"DoubleType"`. Please see the [Spark Scala API Documentation](https://spark.apache.org/docs/latest/api/scala/index.html) for information on what types are available and exposed by Spark. 
+
+
+## Value
+ An `R` `list`, with each `list` element describing the   `name` and `type` of a column. 
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

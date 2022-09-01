@@ -1,0 +1,57 @@
+---
+title: "PageRank"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/gf_pagerank.R*
+
+## gf_pagerank
+
+## Description
+ PageRank 
+
+
+## Usage
+```r
+ 
+gf_pagerank(x, tol = NULL, reset_probability = 0.15, max_iter = NULL, 
+  source_id = NULL, ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | An object coercable to a GraphFrame (typically, a `gf_graphframe`). |
+| tol | Tolerance. |
+| reset_probability | Reset probability. |
+| max_iter | Maximum number of iterations. |
+| source_id | (Optional) Source vertex for a personalized pagerank. |
+| ... | Optional arguments, currently not used. |
+
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+library(graphframes)
+ 
+g <- gf_friends(sc) 
+gf_pagerank(g, reset_probability = 0.15, tol = 0.01) 
+ 
+```
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

@@ -1,0 +1,14 @@
+{
+  "hash": "0018ae49cf214b642d6d0cbf5039991b",
+  "result": {
+    "markdown": "---\ntitle: \"Sorts array using a custom comparator\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/dplyr_hof.R*\n\n## hof_array_sort\n\n## Description\n Applies a custom comparator function to sort an array (this is essentially a dplyr wrapper to the `array_sort(expr, func)` higher- order function, which is supported since Spark 3.0) \n\n\n## Usage\n```r\n \nhof_array_sort(x, func, expr = NULL, dest_col = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | The Spark data frame to be processed |\n| func | The comparator function to apply (it should take 2 array elements as arguments and return an integer, with a return value of -1 indicating the first element is less than the second, 0 indicating equality, or 1 indicating the first element is greater than the second) |\n| expr | The array being sorted, could be any SQL expression evaluating to an array (default: the last column of the Spark data frame) |\n| dest_col | Column to store the sorted result (default: expr) |\n| ... | Additional params to dplyr::mutate |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\n \n \nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\", version = \"3.0.0\") \ncopy_to( \n  sc, \n  tibble::tibble( \n    # x contains 2 arrays each having elements in ascending order \n    x = list(1:5, 6:10) \n  ) \n) %>% \n  # now each array from x gets sorted in descending order \n  hof_array_sort(~ as.integer(sign(.y - .x))) \n#> # Source: spark<?> [?? x 1]\n#>   x        \n#>   <list>   \n#> 1 <dbl [5]>\n#> 2 <dbl [5]>\n```\n:::\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,46 @@
+---
+title: "View Entries in the Spark Log"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/spark_connection.R*
+
+## spark_log
+
+## Description
+ View the most recent entries in the Spark log. This can be useful when inspecting output / errors produced by Spark during the invocation of various commands. 
+
+
+## Usage
+```r
+ 
+spark_log(sc, n = 100, filter = NULL, ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | A `spark_connection`. |
+| n | The max number of log entries to retrieve. Use `NULL` to retrieve all entries within the log. |
+| filter | Character string to filter log entries. |
+| ... | Optional arguments; currently unused. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

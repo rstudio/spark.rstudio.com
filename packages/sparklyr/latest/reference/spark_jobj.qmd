@@ -1,0 +1,46 @@
+---
+title: "Retrieve a Spark JVM Object Reference"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/core_jobj.R*
+
+## spark_jobj
+
+## Description
+ This S3 generic is used for accessing the underlying Java Virtual Machine (JVM) Spark objects associated with `R` objects. These objects act as references to Spark objects living in the JVM. Methods on these objects can be called with the `invoke` family of functions. 
+
+
+## Usage
+```r
+ 
+spark_jobj(x, ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | An `R` object containing, or wrapping, a `spark_jobj`. |
+| ... | Optional arguments; currently unused. |
+
+
+
+
+
+
+## See Also
+ `invoke`, for calling methods on Java object references. 
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

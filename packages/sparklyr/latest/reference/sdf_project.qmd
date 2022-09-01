@@ -1,0 +1,58 @@
+---
+title: "Project features onto principal components"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_ml.R*
+
+## sdf_project
+
+## Description
+ Project features onto principal components 
+
+
+## Usage
+```r
+ 
+sdf_project( 
+  object, 
+  newdata, 
+  features = dimnames(object$pc)[[1]], 
+  feature_prefix = NULL, 
+  ... 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| object | A Spark PCA model object |
+| newdata | An object coercible to a Spark DataFrame |
+| features | A vector of names of columns to be projected |
+| feature_prefix | The prefix used in naming the output features |
+| ... | Optional arguments; currently unused. |
+
+
+## Section
+
+## Transforming Spark DataFrames
+
+   The family of functions prefixed with `sdf_` generally access the Scala Spark DataFrame API directly, as opposed to the `dplyr` interface which uses Spark SQL. These functions will 'force' any pending SQL in a `dplyr` pipeline, such that the resulting `tbl_spark` object returned will no longer have the attached 'lazy' SQL operations. Note that the underlying Spark DataFrame **does** execute its operations lazily, so that even though the pending set of operations (currently) are not exposed at the `R` level, these operations will only be executed when you explicitly `collect()` the table. 
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

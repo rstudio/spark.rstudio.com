@@ -1,0 +1,45 @@
+---
+title: "Cache a Spark Table"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/tables_spark.R*
+
+## tbl_cache
+
+## Description
+ Force a Spark table with name `name` to be loaded into memory. Operations on cached tables should normally (although not always) be more performant than the same operation performed on an uncached table. 
+
+
+## Usage
+```r
+ 
+tbl_cache(sc, name, force = TRUE) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | A `spark_connection`. |
+| name | The table name. |
+| force | Force the data to be loaded into memory? This is accomplished by calling the `count` API on the associated Spark DataFrame. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

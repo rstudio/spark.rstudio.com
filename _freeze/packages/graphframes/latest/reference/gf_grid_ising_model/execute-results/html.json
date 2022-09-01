@@ -1,0 +1,14 @@
+{
+  "hash": "6c1586e2c38db78490f1aa17fc6f058b",
+  "result": {
+    "markdown": "---\ntitle: \"Generate a grid Ising model with random parameters\"\nexecute:\n  freeze: true\n---\n\n\n*R/gf_examples.R*\n\n## gf_grid_ising_model\n\n## Description\nGenerate a grid Ising model with random parameters \n\n\n## Usage\n```r\ngf_grid_ising_model(sc, n, v_std = 1, e_std = 1) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | A Spark connection. |\n| n | Length of one side of the grid. The grid will be of size n x n. |\n| v_std | Standard deviation of normal distribution used to generate vertex factors \"a\". Default of 1.0. |\n| e_std | Standard deviation of normal distribution used to generate edge factors \"b\". Default of 1.0. |\n\n## Details\n\nThis method generates a grid Ising model with random parameters. Ising models   are probabilistic graphical models over binary variables xi. Each binary   variable xi corresponds to one vertex, and it may take values -1 or +1.    The probability distribution P(X) (over all xi) is parameterized by    vertex factors ai and edge factors bij: \n\n   $P(X) = (1/Z) * exp[ \\sum_i a_i x_i + \\sum_{ij} b_{ij} x_i x_j ]$\n\n\n## Value\nGraphFrame. Vertices have columns \"id\" and \"a\". Edges have columns \"src\",   \"dst\", and \"b\". Edges are directed, but they should be treated as undirected in    any algorithms run on this model. Vertex IDs are of the form \"i,j\". E.g., vertex    \"1,3\" is in the second row and fourth column of the grid. \n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(graphframes)\ngf_grid_ising_model(sc, 5) \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

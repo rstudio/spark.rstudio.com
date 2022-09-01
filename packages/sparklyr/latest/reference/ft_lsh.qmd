@@ -1,0 +1,84 @@
+---
+title: "Feature Transformation -- LSH (Estimator)"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/ml_feature_bucketed_random_projection_lsh.R,*
+
+## ft_lsh
+
+## Description
+ Locality Sensitive Hashing functions for Euclidean distance   (Bucketed Random Projection) and Jaccard distance (MinHash). 
+
+
+## Usage
+```r
+ 
+ft_bucketed_random_projection_lsh( 
+  x, 
+  input_col = NULL, 
+  output_col = NULL, 
+  bucket_length = NULL, 
+  num_hash_tables = 1, 
+  seed = NULL, 
+  uid = random_string("bucketed_random_projection_lsh_"), 
+  ... 
+) 
+ 
+ft_minhash_lsh( 
+  x, 
+  input_col = NULL, 
+  output_col = NULL, 
+  num_hash_tables = 1L, 
+  seed = NULL, 
+  uid = random_string("minhash_lsh_"), 
+  ... 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
+| input_col | The name of the input column. |
+| output_col | The name of the output column. |
+| bucket_length | The length of each hash bucket, a larger bucket lowers the false negative rate. The number of buckets will be (max L2 norm of input vectors) / bucketLength. |
+| num_hash_tables | Number of hash tables used in LSH OR-amplification. LSH OR-amplification can be used to reduce the false negative rate. Higher values for this param lead to a reduced false negative rate, at the expense of added  computational complexity. |
+| seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. |
+| uid | A character string used to uniquely identify the feature transformer. |
+| ... | Optional arguments; currently unused. |
+
+## Details
+ In the case where `x` is a `tbl_spark`, the estimator fits against `x`   to obtain a transformer, which is then immediately used to transform `x`, returning a `tbl_spark`. 
+
+
+## Value
+
+ The object returned depends on the class of `x`.     
+
+- `spark_connection`: When `x` is a `spark_connection`, the function returns a `ml_transformer`,   a `ml_estimator`, or one of their subclasses. The object contains a pointer to   a Spark `Transformer` or `Estimator` object and can be used to compose   `Pipeline` objects.    
+
+- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the transformer or estimator appended to the pipeline.    
+
+- `tbl_spark`: When `x` is a `tbl_spark`, a transformer is constructed then   immediately applied to the input `tbl_spark`, returning a `tbl_spark` 
+
+ 
+
+
+
+## See Also
+ See [https://spark.apache.org/docs/latest/ml-features.html](https://spark.apache.org/docs/latest/ml-features.html) for   more information on the set of transformations available for DataFrame   columns in Spark.  ft_lsh_utils  Other feature transformers:  `ft_binarizer()`, `ft_bucketizer()`, `ft_chisq_selector()`, `ft_count_vectorizer()`, `ft_dct()`, `ft_elementwise_product()`, `ft_feature_hasher()`, `ft_hashing_tf()`, `ft_idf()`, `ft_imputer()`, `ft_index_to_string()`, `ft_interaction()`, `ft_max_abs_scaler()`, `ft_min_max_scaler()`, `ft_ngram()`, `ft_normalizer()`, `ft_one_hot_encoder_estimator()`, `ft_one_hot_encoder()`, `ft_pca()`, `ft_polynomial_expansion()`, `ft_quantile_discretizer()`, `ft_r_formula()`, `ft_regex_tokenizer()`, `ft_robust_scaler()`, `ft_sql_transformer()`, `ft_standard_scaler()`, `ft_stop_words_remover()`, `ft_string_indexer()`, `ft_tokenizer()`, `ft_vector_assembler()`, `ft_vector_indexer()`, `ft_vector_slicer()`, `ft_word2vec()` 
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

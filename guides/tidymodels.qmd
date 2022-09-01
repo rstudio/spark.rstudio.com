@@ -9,8 +9,8 @@ editor_options:
 ---
 
 ```{r}
-#| include: FALSE
-
+#| include: false
+options("pillar.width" = 60)
 library(sparklyr)
 library(parsnip)
 library(stringr)
@@ -81,7 +81,7 @@ vs remote). Here is an example of what the model fitting looks like
 locally in R:
 
 ```{r}
-#| eval: FALSE
+#| eval: false
 
 linear_reg() %>%
   set_engine("lm") %>%           # << Engine set to `lm`
@@ -92,7 +92,7 @@ To switch to Spark, we just need to change the engine to `spark`, and
 the training data set to the remote Spark data set:
 
 ```{r}
-#| eval: FALSE
+#| eval: false
 
 linear_reg() %>%
   set_engine("spark") %>%           # << Engine set to `spark`
@@ -105,7 +105,7 @@ There are six `parsnip` models that currently support `sparklyr`
 equivalent models. Here is the list:
 
 ```{r}
-#| include: FALSE
+#| include: false
 
 pf <- ls("package:parsnip")
 
@@ -130,7 +130,7 @@ supported_models <- spark_engines %>%
 ```
 
 ```{r}
-#| echo: FALSE
+#| echo: false
 supported_models %>% 
   gt() %>% 
   cols_label(
@@ -228,7 +228,7 @@ results in a rectangular data frame. This is very helpful when we want
 to compare different model runs side-by-side.
 
 ```{r}
-#| include: FALSE
+#| include: false
 
 
 af <- ls(getNamespace("sparklyr"), all.names = TRUE)
@@ -252,7 +252,7 @@ Currently, 20 Spark models support `broom` via `sparklyr`. Here is the
 current list of models and the corresponding `sparklyr` function:
 
 ```{r}
-#| echo: FALSE
+#| echo: false
 
 tibble(obj_name = all_tidy) %>% 
   mutate(
@@ -295,24 +295,24 @@ To view the estimates for each term simply pass `mtcars_model` to the
 `tidy()` function:
 
 ```{r}
-#| include: FALSE
+#| include: false
 tidy(mtcars_model)
 ```
 
 ```{r}
-#| warnings: FALSE
+#| warnings: false
 tidy(mtcars_model)
 ```
 
 `glance()` returns the the models R Squared, error means, and variance:
 
 ```{r}
-#| warnings: FALSE
+#| warnings: false
 glance(mtcars_model)
 ```
 
 ```{r}
-#| eval: FALSE
+#| eval: false
 
 augment(mtcars_model)
 ```
@@ -321,7 +321,7 @@ For our classification model, `tidy()` returns each feature's
 importance:
 
 ```{r}
-#| warnings: FALSE
+#| warnings: false
 tidy(iris_model)
 ```
 
@@ -329,7 +329,7 @@ The `glance()` model returns the number of trees, nodes depth,
 sub-sampling rate and impurtiy mode:
 
 ```{r}
-#| warnings: FALSE
+#| warnings: false
 glance(iris_model)
 ```
 
@@ -359,8 +359,8 @@ the correlations inside Spark, and returning the results into R. Those
 results are saved into a data frame:
 
 ```{r}
-#| message: FALSE
-#| warning: FALSE
+#| message: false
+#| warning: false
 corr_mtcars <- spark_mtcars %>% 
   correlate()
 ```
@@ -377,8 +377,8 @@ For example, `shave()` removes the duplicate correlations from the data
 set, making it easier to read:
 
 ```{r}
-#| message: FALSE
-#| warning: FALSE
+#| message: false
+#| warning: false
 corr_mtcars %>% 
   shave()
 ```
@@ -388,13 +388,13 @@ because `corr_mtcars`'s data it is currently locally in R, plotting
 requires no extra steps:
 
 ```{r}
-#| message: FALSE
-#| warning: FALSE
+#| message: false
+#| warning: false
 corr_mtcars %>% 
   rplot()
 ```
 
 ```{r}
-#| include: FALSE
+#| include: false
 spark_disconnect(sc)
 ```

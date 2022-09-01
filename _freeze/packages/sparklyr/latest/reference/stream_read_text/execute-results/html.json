@@ -1,0 +1,14 @@
+{
+  "hash": "70bf4b4a0a5a2a161b3954bc972a49c0",
+  "result": {
+    "markdown": "---\ntitle: \"Read Text Stream\"\nexecute:\n  freeze: true\n---\n\n\n*R/stream_data.R*\n\n## stream_read_text\n\n## Description\nReads a text stream as a Spark dataframe stream. \n\n\n## Usage\n```r\nstream_read_text(sc, path, name = NULL, options = list(), ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| sc | A `spark_connection`. |\n| path | The path to the file. Needs to be accessible from the cluster. Supports the `\"hdfs://\"`, `\"s3a://\"` and `\"file://\"` protocols. |\n| name | The name to assign to the newly generated stream. |\n| options | A list of strings with additional options. |\n| ... | Optional arguments; currently unused. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\nsc <- spark_connect(master = \"local\") \ndir.create(\"text-in\") \nwriteLines(\"A text entry\", \"text-in/text.txt\") \ntext_path <- file.path(\"file://\", getwd(), \"text-in\") \nstream <- stream_read_text(sc, text_path) %>% stream_write_text(\"text-out\") \nstream_stop(stream) \n```\n:::\n\n\n## See Also\nOther Spark stream serialization:  `stream_read_csv()`, `stream_read_delta()`, `stream_read_json()`, `stream_read_kafka()`, `stream_read_orc()`, `stream_read_parquet()`, `stream_read_socket()`, `stream_write_console()`, `stream_write_csv()`, `stream_write_delta()`, `stream_write_json()`, `stream_write_kafka()`, `stream_write_memory()`, `stream_write_orc()`, `stream_write_parquet()`, `stream_write_text()`\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

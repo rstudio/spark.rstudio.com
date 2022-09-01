@@ -1,0 +1,68 @@
+---
+title: "Access the Spark API"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/spark_connection.R*
+
+## spark-api
+
+## Description
+ Access the commonly-used Spark objects associated with a Spark instance. These objects provide access to different facets of the Spark API. 
+
+
+## Usage
+```r
+ 
+spark_context(sc) 
+ 
+java_context(sc) 
+ 
+hive_context(sc) 
+ 
+spark_session(sc) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | A `spark_connection`. |
+
+## Details
+ The [Scala API documentation](https://spark.apache.org/docs/latest/api/scala/) is useful for discovering what methods are available for each of these objects. Use `invoke` to call methods on these objects. 
+
+## Section
+
+## Spark Context
+
+   The main entry point for Spark functionality. The **Spark Context** represents the connection to a Spark cluster, and can be used to create `RDD`s, accumulators and broadcast variables on that cluster. 
+
+## Java Spark Context
+
+   A Java-friendly version of the aforementioned **Spark Context**. 
+
+## Hive Context
+
+   An instance of the Spark SQL execution engine that integrates with data stored in Hive. Configuration for Hive is read from `hive-site.xml` on the classpath.  Starting with Spark >= 2.0.0, the **Hive Context** class has been deprecated -- it is superceded by the **Spark Session** class, and `hive_context` will return a **Spark Session** object instead. Note that both classes share a SQL interface, and therefore one can invoke SQL through these objects. 
+
+## Spark Session
+
+   Available since Spark 2.0.0, the **Spark Session** unifies the **Spark Context** and **Hive Context** classes into a single interface. Its use is recommended over the older APIs for code targeting Spark 2.0.0 and above. 
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

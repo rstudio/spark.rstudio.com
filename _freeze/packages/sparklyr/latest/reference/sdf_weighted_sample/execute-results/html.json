@@ -1,0 +1,14 @@
+{
+  "hash": "bb0116b751c2af17a7c0e49de4603d59",
+  "result": {
+    "markdown": "---\ntitle: \"Perform Weighted Random Sampling on a Spark DataFrame\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/sdf_interface.R*\n\n## sdf_weighted_sample\n\n## Description\nDraw a random sample of rows (with or without replacement) from a Spark DataFrame If the sampling is done without replacement, then it will be conceptually equivalent to an iterative process such that in each step the probability of adding a row to the sample set is equal to its weight divided by summation of weights of all rows that are not in the sample set yet in that step. \n\n\n## Usage\n```r\nsdf_weighted_sample(x, weight_col, k, replacement = TRUE, seed = NULL) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | An object coercable to a Spark DataFrame. |\n| weight_col | Name of the weight column |\n| k | Sample set size |\n| replacement | Whether to sample with replacement |\n| seed | An (optional) integer seed |\n\n\n## Section\n\n## Transforming Spark DataFrames\n\nThe family of functions prefixed with `sdf_` generally access the Scala Spark DataFrame API directly, as opposed to the `dplyr` interface which uses Spark SQL. These functions will 'force' any pending SQL in a `dplyr` pipeline, such that the resulting `tbl_spark` object returned will no longer have the attached 'lazy' SQL operations. Note that the underlying Spark DataFrame **does** execute its operations lazily, so that even though the pending set of operations (currently) are not exposed at the `R` level, these operations will only be executed when you explicitly `collect()` the table. \n\n\n\n\n## See Also\nOther Spark data frames:  `sdf_copy_to()`, `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

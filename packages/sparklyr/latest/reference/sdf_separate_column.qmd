@@ -1,0 +1,45 @@
+---
+title: "Separate a Vector Column into Scalar Columns"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_wrapper.R*
+
+## sdf_separate_column
+
+## Description
+ Given a vector column in a Spark DataFrame, split that into `n` separate columns, each column made up of the different elements in the column `column`. 
+
+
+## Usage
+```r
+ 
+sdf_separate_column(x, column, into = NULL) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
+| column | The name of a (vector-typed) column. |
+| into | A specification of the columns that should be generated from `column`. This can either be a vector of column names, or an `R` list mapping column names to the (1-based) index at which a particular vector element should be extracted. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

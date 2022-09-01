@@ -1,0 +1,44 @@
+---
+title: "Discover the Scala Compiler"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/spark_compile.R*
+
+## find_scalac
+
+## Description
+ Find the `scalac` compiler for a particular version of `scala`, by scanning some common directories containing `scala` installations. 
+
+
+## Usage
+```r
+ 
+find_scalac(version, locations = NULL) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| version | The `scala` version to search for. Versions of the form `major.minor` will be matched against the `scalac` installation with version `major.minor.patch`; if multiple compilers are discovered the most recent one will be used. |
+| locations | Additional locations to scan. By default, the directories `/opt/scala` and `/usr/local/scala` will be scanned. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

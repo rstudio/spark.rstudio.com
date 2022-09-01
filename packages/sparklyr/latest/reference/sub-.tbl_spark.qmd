@@ -1,0 +1,55 @@
+---
+title: "Subsetting operator for Spark dataframe"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_interface.R*
+
+## [.tbl_spark
+
+## Description
+ Susetting operator for Spark dataframe allowing a subset of column(s) to be selected using syntaxes similar to those supported by R dataframes 
+
+
+## Usage
+```r
+ 
+## S3 method for class 'tbl_spark'
+[(x, i) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | The Spark dataframe |
+| i | Expression specifying subset of column(s) to include or exclude from the result (e.g., `["col1"]`, `[c("col1", "col2")]`, `[1:10]`, `[-1]`, `[NULL]`, or `[]`) |
+
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+ 
+library(sparklyr) 
+sc <- spark_connect(master = "spark://HOST:PORT") 
+example_sdf <- copy_to(sc, tibble::tibble(a = 1, b = 2)) 
+example_sdf["a"] %>% print() 
+ 
+ 
+```
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

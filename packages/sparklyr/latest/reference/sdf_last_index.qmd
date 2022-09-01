@@ -1,0 +1,44 @@
+---
+title: "Returns the last index of a Spark DataFrame"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_interface.R*
+
+## sdf_last_index
+
+## Description
+ Returns the last index of a Spark DataFrame. The Spark `mapPartitionsWithIndex` function is used to iterate through the last nonempty partition of the RDD to find the last record. 
+
+
+## Usage
+```r
+ 
+sdf_last_index(x, id = "id") 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
+| id | The name of the index column. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

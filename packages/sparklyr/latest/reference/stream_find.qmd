@@ -1,0 +1,60 @@
+---
+title: "Find Stream"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/stream_operations.R*
+
+## stream_find
+
+## Description
+ Finds and returns a stream based on the stream's identifier. 
+
+
+## Usage
+```r
+ 
+stream_find(sc, id) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| sc | The associated Spark connection. |
+| id | The stream identifier to find. |
+
+
+
+
+
+## Examples
+```{r, eval=ecodown::examples_not_run()}
+library(sparklyr)
+ 
+sc <- spark_connect(master = "local") 
+sdf_len(sc, 10) %>% 
+  spark_write_parquet(path = "parquet-in") 
+ 
+stream <- stream_read_parquet(sc, "parquet-in") %>% 
+  stream_write_parquet("parquet-out") 
+ 
+stream_id <- stream_id(stream) 
+stream_find(sc, stream_id) 
+ 
+ 
+```
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

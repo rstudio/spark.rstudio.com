@@ -1,0 +1,14 @@
+{
+  "hash": "069e3eb5d924eabede573ce154ade62e",
+  "result": {
+    "markdown": "---\ntitle: \"View Stream\"\nexecute:\n  freeze: true\n---\n\n\n*R/stream_view.R*\n\n## stream_view\n\n## Description\nOpens a Shiny gadget to visualize the given stream. \n\n\n## Usage\n```r\nstream_view(stream, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| stream | The stream to visualize. |\n| ... | Additional optional arguments. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr) \nsc <- spark_connect(master = \"local\") \ndir.create(\"iris-in\") \nwrite.csv(iris, \"iris-in/iris.csv\", row.names = FALSE) \nstream_read_csv(sc, \"iris-in/\") %>% \n  stream_write_csv(\"iris-out/\") %>% \n  stream_view() %>% \n  stream_stop() \n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

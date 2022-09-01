@@ -1,0 +1,113 @@
+---
+title: "Constructors for `ml_model` Objects"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/ml_model_helpers.R, R/ml_model_constructors.R*
+
+## ml_supervised_pipeline
+
+## Description
+ Functions for developers writing extensions for Spark ML. These functions are constructors   for `ml_model` objects that are returned when using the formula interface. 
+
+
+## Usage
+```r
+ 
+ml_supervised_pipeline(predictor, dataset, formula, features_col, label_col) 
+ 
+ml_clustering_pipeline(predictor, dataset, formula, features_col) 
+ 
+ml_construct_model_supervised( 
+  constructor, 
+  predictor, 
+  formula, 
+  dataset, 
+  features_col, 
+  label_col, 
+  ... 
+) 
+ 
+ml_construct_model_clustering( 
+  constructor, 
+  predictor, 
+  formula, 
+  dataset, 
+  features_col, 
+  ... 
+) 
+ 
+new_ml_model_prediction( 
+  pipeline_model, 
+  formula, 
+  dataset, 
+  label_col, 
+  features_col, 
+  ..., 
+  class = character() 
+) 
+ 
+new_ml_model(pipeline_model, formula, dataset, ..., class = character()) 
+ 
+new_ml_model_classification( 
+  pipeline_model, 
+  formula, 
+  dataset, 
+  label_col, 
+  features_col, 
+  predicted_label_col, 
+  ..., 
+  class = character() 
+) 
+ 
+new_ml_model_regression( 
+  pipeline_model, 
+  formula, 
+  dataset, 
+  label_col, 
+  features_col, 
+  ..., 
+  class = character() 
+) 
+ 
+new_ml_model_clustering( 
+  pipeline_model, 
+  formula, 
+  dataset, 
+  features_col, 
+  ..., 
+  class = character() 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| predictor | The pipeline stage corresponding to the ML algorithm. |
+| dataset | The training dataset. |
+| formula | The formula used for data preprocessing |
+| features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
+| label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`. |
+| constructor | The constructor function for the `ml_model`. |
+| pipeline_model | The pipeline model object returned by `ml_supervised_pipeline()`. |
+| class | Name of the subclass. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

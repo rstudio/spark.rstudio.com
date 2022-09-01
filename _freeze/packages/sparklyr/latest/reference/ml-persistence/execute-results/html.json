@@ -1,0 +1,14 @@
+{
+  "hash": "a9c5dcc45ec1501a4f0601326b97e68d",
+  "result": {
+    "markdown": "---\ntitle: \"Spark ML -- Model Persistence\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/ml_persistence.R*\n\n## ml-persistence\n\n## Description\nSave/load Spark ML objects \n\n\n## Usage\n```r\nml_save(x, path, overwrite = FALSE, ...) \n\n## S3 method for class 'ml_model'\nml_save( \n  x, \n  path, \n  overwrite = FALSE, \n  type = c(\"pipeline_model\", \"pipeline\"), \n  ... \n) \n\nml_load(sc, path) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A ML object, which could be a `ml_pipeline_stage` or a `ml_model` |\n| path | The path where the object is to be serialized/deserialized. |\n| overwrite | Whether to overwrite the existing path, defaults to `FALSE`. |\n| ... | Optional arguments; currently unused. |\n| type | Whether to save the pipeline model or the pipeline. |\n| sc | A Spark connection. |\n\n\n\n## Value\n\n`ml_save()` serializes a Spark object into a format that can be read back into `sparklyr` or by the Scala or PySpark APIs. When called on `ml_model` objects, i.e. those that were created via the `tbl_spark - formula` signature, the associated pipeline model is serialized. In other words, the saved model contains both the data processing (`RFormulaModel`) stage and the machine learning stage. \n\n`ml_load()` reads a saved Spark object into `sparklyr`. It calls the correct Scala `load` method based on parsing the saved metadata. Note that a `PipelineModel` object saved from a sparklyr `ml_model` via `ml_save()` will be read back in as an `ml_pipeline_model`, rather than the `ml_model` object. \n\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

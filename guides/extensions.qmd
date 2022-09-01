@@ -1,18 +1,13 @@
 ---
 title: "Creating Extensions for `sparklyr`"
-format:
-  html:
-    theme: default
-    toc: true
 execute:
-  eval: false
-  freeze: false
+  freeze: true
 aliases:
   - /extensions
 ---
 
 
-```{r connect, eval=FALSE, include=FALSE}
+```{r connect}
 library(sparklyr)
 sc <- spark_connect(master = "local", version = "2.0.0")
 ```
@@ -27,7 +22,7 @@ The facilities used internally by sparklyr for its dplyr and machine learning in
 
 Here's an example of an extension function that calls the text file line counting function available via the SparkContext:
 
-```{r, eval=FALSE}
+```{r}
 library(sparklyr)
 count_lines <- function(sc, file) {
   spark_context(sc) %>% 
@@ -40,7 +35,7 @@ The `count_lines` function takes a `spark_connection` (`sc`) argument which enab
 
 You can use this function with an existing sparklyr connection as follows:
 
-```{r, eval=FALSE}
+```{r}
 library(sparklyr)
 sc <- spark_connect(master = "local")
 count_lines(sc, "hdfs://path/data.csv")
@@ -215,7 +210,7 @@ The `...` argument is unused but nevertheless should be included to ensure compa
 
 The `.onLoad` function registers your extension package so that it's `spark_dependencies` function will be automatically called when new connections to Spark are made via `spark_connect`:
 
-```{r, eval=FALSE}
+```{r}
 library(sparklyr)
 library(sparkds)
 sc <- spark_connect(master = "local")

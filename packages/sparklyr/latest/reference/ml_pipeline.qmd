@@ -1,0 +1,47 @@
+---
+title: "Spark ML -- Pipelines"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/ml_pipeline.R*
+
+## ml_pipeline
+
+## Description
+ Create Spark ML Pipelines 
+
+
+## Usage
+```r
+ 
+ml_pipeline(x, ..., uid = random_string("pipeline_")) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | Either a `spark_connection` or `ml_pipeline_stage` objects |
+| ... | `ml_pipeline_stage` objects. |
+| uid | A character string used to uniquely identify the ML estimator. |
+
+
+
+## Value
+ When `x` is a `spark_connection`, `ml_pipeline()` returns an empty pipeline object. When `x` is a `ml_pipeline_stage`, `ml_pipeline()` returns an `ml_pipeline` with the stages set to `x` and any transformers or estimators given in `...`. 
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

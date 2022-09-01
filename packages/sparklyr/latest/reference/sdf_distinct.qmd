@@ -1,0 +1,52 @@
+---
+title: "Invoke distinct on a Spark DataFrame"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_distinct.R*
+
+## sdf_distinct
+
+## Description
+ Invoke distinct on a Spark DataFrame 
+
+
+## Usage
+```r
+ 
+sdf_distinct(x, ..., name) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A Spark DataFrame. |
+| ... | Optional variables to use when determining uniqueness. If there are multiple rows for a given combination of inputs, only the first row will be preserved. If omitted, will use all variables. |
+| name | A name to assign this table. Passed to [sdf_register()]. |
+
+
+## Section
+
+## Transforming Spark DataFrames
+
+   The family of functions prefixed with `sdf_` generally access the Scala Spark DataFrame API directly, as opposed to the `dplyr` interface which uses Spark SQL. These functions will 'force' any pending SQL in a `dplyr` pipeline, such that the resulting `tbl_spark` object returned will no longer have the attached 'lazy' SQL operations. Note that the underlying Spark DataFrame **does** execute its operations lazily, so that even though the pending set of operations (currently) are not exposed at the `R` level, these operations will only be executed when you explicitly `collect()` the table. 
+
+
+
+
+## See Also
+ Other Spark data frames:  `sdf_copy_to()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()` 
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

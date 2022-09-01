@@ -1,0 +1,44 @@
+---
+title: "Convert column(s) from avro format"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/sdf_interface.R*
+
+## sdf_from_avro
+
+## Description
+ Convert column(s) from avro format 
+
+
+## Usage
+```r
+ 
+sdf_from_avro(x, cols) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | An object coercible to a Spark DataFrame |
+| cols | Named list of columns to transform from Avro format plus a valid Avro schema string for each column, where column names are keys and column schema strings are values (e.g., `c(example_primitive_col = "string", example_complex_col = "{\"type\":\"record\",\"name\":\"person\",\"fields\":[ {\"name\":\"person_name\",\"type\":\"string\"}, {\"name\":\"person_id\",\"type\":\"long\"}]}")` |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

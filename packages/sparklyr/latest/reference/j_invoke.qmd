@@ -1,0 +1,51 @@
+---
+title: "Invoke a Java function."
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/spark_invoke.R*
+
+## j_invoke
+
+## Description
+ Invoke a Java function and force return value of the call to be retrieved as a Java object reference. 
+
+
+## Usage
+```r
+ 
+j_invoke(jobj, method, ...) 
+ 
+j_invoke_static(sc, class, method, ...) 
+ 
+j_invoke_new(sc, class, ...) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| jobj | An `R` object acting as a Java object reference (typically, a `spark_jobj`). |
+| method | The name of the method to be invoked. |
+| ... | Optional arguments, currently unused. |
+| sc | A `spark_connection`. |
+| class | The name of the Java class whose methods should be invoked. |
+
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

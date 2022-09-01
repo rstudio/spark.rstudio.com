@@ -1,0 +1,14 @@
+{
+  "hash": "6b7c3f862a38d428996031d2f2ff4d7d",
+  "result": {
+    "markdown": "---\ntitle: \"Evaluate the Model on a Validation Set\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/ml_evaluate.R, R/ml_evaluator.R*\n\n## ml_evaluate\n\n## Description\n Compute performance metrics. \n\n\n## Usage\n```r\n \nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_model_logistic_regression'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_logistic_regression_model'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_model_linear_regression'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_linear_regression_model'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_model_generalized_linear_regression'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_generalized_linear_regression_model'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_model_clustering'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_model_classification'\nml_evaluate(x, dataset) \n \n## S3 method for class 'ml_evaluator'\nml_evaluate(x, dataset) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | An ML model object or an evaluator object. |\n| dataset | The dataset to be validate the model on. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\n \nsc <- spark_connect(master = \"local\") \niris_tbl <- sdf_copy_to(sc, iris, name = \"iris_tbl\", overwrite = TRUE) \n \nml_gaussian_mixture(iris_tbl, Species ~ .) %>% \n  ml_evaluate(iris_tbl) \n#> # A tibble: 1 × 1\n#>   Silhouette\n#>        <dbl>\n#> 1      0.477\n \nml_kmeans(iris_tbl, Species ~ .) %>% \n  ml_evaluate(iris_tbl) \n#> # A tibble: 1 × 1\n#>   Silhouette\n#>        <dbl>\n#> 1      0.850\n \nml_bisecting_kmeans(iris_tbl, Species ~ .) %>% \n  ml_evaluate(iris_tbl) \n#> # A tibble: 1 × 1\n#>   Silhouette\n#>        <dbl>\n#> 1      0.517\n```\n:::\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

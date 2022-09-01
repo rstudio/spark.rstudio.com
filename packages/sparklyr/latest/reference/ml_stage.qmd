@@ -1,0 +1,49 @@
+---
+title: "Spark ML -- Pipeline stage extraction"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/ml_pipeline_utils.R*
+
+## ml_stage
+
+## Description
+ Extraction of stages from a Pipeline or PipelineModel object. 
+
+
+## Usage
+```r
+ 
+ml_stage(x, stage) 
+ 
+ml_stages(x, stages = NULL) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A `ml_pipeline` or a `ml_pipeline_model` object |
+| stage | The UID of a stage in the pipeline. |
+| stages | The UIDs of stages in the pipeline as a character vector. |
+
+
+
+## Value
+ For `ml_stage()`: The stage specified.  For `ml_stages()`: A list of stages. If `stages` is not set, the function returns all stages of the pipeline in a list. 
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

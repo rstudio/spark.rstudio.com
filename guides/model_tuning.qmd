@@ -1,124 +1,239 @@
 ---
 title: "Model tuning"
 execute:
-  eval: true
-  freeze: true
-editor_options: 
-  markdown: 
-    wrap: 72
+  eval: false
+  freeze: false
 ---
+
 
 ```{r}
 #| include: false
-
 library(sparklyr)
-library(mlbench)
-
 ```
 
+**Hyperparameter tuning**  is possible within Spark. `sparklyr` provides an interface
+that makes it possible to setup, train, and measure running multiple model 
+experiments in order to tune our models. 
+
+This article walks through the basics of setting up and running a cross validation 
+tuning run using the `cells` data from the `modeldata` package.
+
+```{r}
+data(cells, package = "modeldata")
+```
+
+The goal of the experiments in the example is to see at what point does the
+number of trees in the model stop improving the accuracy of the predictions.  We
+will have Spark run multiple iterations of the same model with an increasing
+number of trees.
+
+
+## Data setup
+
+For this example, we will use a local connection, using Spark 3.3.
 
 ```{r}
 library(sparklyr)
-library(mlbench)
-data("bostonhousing")
 
-sc <- spark_connect("local")
-
-tbl_ionosphere <- copy_to(sc, Ionosphere)
+sc <- spark_connect(master = "local", version = "3.3")
 ```
 
+The `cells` data is copied to the Spark session.
+
 ```{r}
-prep_ionosphere <- tbl_ionosphere %>% 
-  #mutate(is_good = ifelse(Class == "good", 1, 0)) %>% 
-  select(- V1, - V2)
+tbl_cells <- copy_to(sc, cells, name = "cells_tbl")
 ```
 
-```{r}
-library(corrr)
-
-prep_ionosphere %>% 
-  select(- Class) %>% 
-  correlate() %>% 
-  shave() %>% 
-  tidyr::pivot_longer(cols = contains("V")) %>% 
-  filter(!is.na(value)) %>% 
-  dplyr::arrange(value)
-```
-
+We will split the data into two sets, "training" and "test".  The **test** split will
+be treated as the "holdout" data to be used at the end of the process to confirm
+that we did not overfit the model.
 
 ```{r}
-cor_tbl <- prep_ionosphere %>% 
-  select(- Class) %>% 
-  ml_corr() %>% 
-  collect()
-```
-
-```{r}
-x <- cor_tbl
-cutoff <- 0.7
-averageCorr <- colMeans(abs(x))
-averageCorr <- as.numeric(as.factor(averageCorr))
-x[lower.tri(x, diag = TRUE)] <- NA
-combsAboveCutoff <- which(abs(x) > cutoff)
-
-colsToCheck <- ceiling(combsAboveCutoff / nrow(x))
-rowsToCheck <- combsAboveCutoff %% nrow(x)
-
-colsToDiscard <- averageCorr[colsToCheck] > averageCorr[rowsToCheck]
-rowsToDiscard <- !colsToDiscard
-
-deletecol <- c(colsToCheck[colsToDiscard], rowsToCheck[rowsToDiscard])
-deletecol <- unique(deletecol)
-if (length(deletecol) > 0) {
-  deletecol <- colnames(x)[deletecol]
-}
-deletecol
-```
-
-
-```{r}
-library(recipes)
-
-nr <- Ionosphere %>% 
-  select(-V1, -V2) %>% 
-  recipe() %>% 
-  step_corr(all_numeric(), threshold = 0.8)
-
-prep(nr)
-```
-
-
-```{r}
-pipeline <- ml_pipeline(sc) %>%
-  ft_r_formula(Class ~ .) %>%
-  ml_random_forest_classifier()
-```
-
-```{r}
-cv <- ml_cross_validator(
-  sc,
-  estimator = pipeline,
-  estimator_param_maps = list(
-    random_forest = list(
-      num_trees = 1:5 * 200,
-      max_depth = c(10, 20, 30)
+tbl_cells_split <- tbl_cells %>% 
+  select(-case) %>% 
+  sdf_random_split(
+    training = 0.8, 
+    test = 0.2, 
+    seed = 100
     )
-  ),
-  evaluator = ml_binary_classification_evaluator(sc, metric_name = "areaUnderROC"),
-  num_folds = 10, 
-  seed = 1111,
-  parallelism = 10
+```
+
+## Cross validator prep
+
+Preparing the cross validator requires three elements:
+
+1. An [ML Pipeline](pipelines.qmd)
+1. A `list` object containing the "grid", meaning the different parameters to test
+1. An "evaluator" that will calculate the metrics of each model run
+
+### Pipeline
+
+In this example we will use a very simple pipeline. It will contain a
+formula step and a Random Forest model.
+
+```{r}
+cells_pipeline <- sc %>% 
+  ml_pipeline() %>%
+  ft_r_formula(class ~ .) %>%
+  ml_random_forest_classifier(seed = 207336481)
+
+cells_pipeline
+```
+
+
+```
+Pipeline (Estimator) with 2 stages
+<pipeline__a1c04c2f_b955_4917_89b6_67cb576a779b> 
+  Stages 
+  |--1 RFormula (Estimator)
+  |    <r_formula__043dd75a_7fd6_48bb_85c5_f20b321b97cb> 
+  |     (Parameters -- Column Names)
+  |      features_col: features
+  |      label_col: label
+  |     (Parameters)
+  |      force_index_label: FALSE
+  |      formula: class ~ .
+  |      handle_invalid: error
+  |      stringIndexerOrderType: frequencyDesc
+  |--2 RandomForestClassifier (Estimator)
+  |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
+  |     (Parameters -- Column Names)
+  |      features_col: features
+  |      label_col: label
+  |      prediction_col: prediction
+  |      probability_col: probability
+  |      raw_prediction_col: rawPrediction
+  |     (Parameters)
+  |      bootstrap: TRUE
+  |      cache_node_ids: FALSE
+  |      checkpoint_interval: 10
+  |      feature_subset_strategy: auto
+  |      impurity: gini
+  |      leafCol: 
+  |      max_bins: 32
+  |      max_depth: 5
+  |      max_memory_in_mb: 256
+  |      min_info_gain: 0
+  |      min_instances_per_node: 1
+  |      minWeightFractionPerNode: 0
+  |      num_trees: 20
+  |      seed: 207336481
+  |      subsampling_rate: 1
+```
+
+### Grid
+
+The way we can pass the parameters to try is via a simple `list` object. `sparklyr`
+performs partial name matching to assign the list's entries to the `pipeline`
+steps and the parameters.
+
+The idea is to modify the **number of trees**  for each model run. From the output 
+of the ML Pipeline above, we see that we need to modify the following:
+
+```
+  |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
+  |     (Parameters)
+  |      num_trees: 20
+```
+
+In R, we create the grid spec using the following: 
+
+```{r}
+cells_grid <- list(
+  random_forest_classifier = list(  
+    num_trees = 1:20 * 5
+  )
+)
+
+cells_grid
+```
+
+Two things to highlight about the grid spec:
+
+- `random_forest_classifier` is used to partially match to `random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a` in the pipeline. It
+is possible to pass the entire name, but that may prevent it from working if
+a new pipeline is used. A new pipeline will have a different UID.
+- For `num_trees` we passed a vector of 20 values to test with
+
+### "Evaluator"
+
+```{r}
+cells_evaluator <- ml_multiclass_classification_evaluator(
+  x = sc,
+  metric_name = "accuracy"
   )
 ```
 
 
-```{r}
-cv_model <- ml_fit(cv, prep_ionosphere)
 
-summary(cv_model)
+- `ml_binary_classification_evaluator()`
+- `ml_binary_classification_eval()`
+- `ml_multiclass_classification_evaluator()`
+- `ml_classification_eval()`
+- `ml_regression_evaluator()`
+
+## Model tuning
+
+```{r}
+cells_cv <- ml_cross_validator(
+  x = sc,
+  estimator = cells_pipeline, 
+  estimator_param_maps = cells_grid,
+  evaluator = cells_evaluator,
+  num_folds = 3,
+  parallelism = 1
+)
+
+cells_cv
+```
+
+
+```{r}
+model_cv <- ml_fit(
+  x = cells_cv, 
+  dataset = tbl_cells_split$training
+  )
+```
+
+## Validation metrics
+
+```{r}
+cv_metrics <- ml_validation_metrics(model_cv)
+
+cv_metrics
 ```
 
 ```{r}
-ml_validation_metrics(cv_model)
+#| warnings: false
+
+library(ggplot2)
+
+cv_metrics %>% 
+  ggplot(aes(num_trees_1, accuracy)) +
+  geom_line() +
+  geom_smooth()
 ```
+
+## Model selection 
+
+```{r}
+cell_model <- ml_random_forest_classifier(
+  tbl_cells_split$training, 
+  class ~ ., 
+  num_trees = 50
+  )
+```
+
+## Holdout data metrics
+
+```{r}
+cell_model %>% 
+  ml_predict(tbl_cells_split$test) %>% 
+  ml_metrics_multiclass()
+```
+```{r}
+spark_disconnect(sc)
+```
+
+
 

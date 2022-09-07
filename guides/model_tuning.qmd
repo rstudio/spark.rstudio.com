@@ -1,8 +1,8 @@
 ---
 title: "Model tuning"
 execute:
-  eval: false
-  freeze: false
+  eval: true
+  freeze: true
 ---
 
 
@@ -11,7 +11,7 @@ execute:
 library(sparklyr)
 ```
 
-**Hyperparameter tuning**  is possible within Spark. `sparklyr` provides an interface
+**Hyper parameter tuning**  is possible within Spark. `sparklyr` provides an interface
 that makes it possible to setup, train, and measure running multiple model 
 experiments in order to tune our models. 
 
@@ -46,7 +46,7 @@ tbl_cells <- copy_to(sc, cells, name = "cells_tbl")
 
 We will split the data into two sets, "training" and "test".  The **test** split will
 be treated as the "holdout" data to be used at the end of the process to confirm
-that we did not overfit the model.
+that we did not over fit the model.
 
 ```{r}
 tbl_cells_split <- tbl_cells %>% 
@@ -77,48 +77,50 @@ cells_pipeline <- sc %>%
   ft_r_formula(class ~ .) %>%
   ml_random_forest_classifier(seed = 207336481)
 
-cells_pipeline
 ```
 
+Each step within a pipeline receives a unique identifier. This identifier is
+made up of the name of the step and a UID. The UID will change every time a new
+pipeline is created. Here is an example of the out put for `cells_pipeline`:
 
-```
-Pipeline (Estimator) with 2 stages
-<pipeline__a1c04c2f_b955_4917_89b6_67cb576a779b> 
-  Stages 
-  |--1 RFormula (Estimator)
-  |    <r_formula__043dd75a_7fd6_48bb_85c5_f20b321b97cb> 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |     (Parameters)
-  |      force_index_label: FALSE
-  |      formula: class ~ .
-  |      handle_invalid: error
-  |      stringIndexerOrderType: frequencyDesc
-  |--2 RandomForestClassifier (Estimator)
-  |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |      prediction_col: prediction
-  |      probability_col: probability
-  |      raw_prediction_col: rawPrediction
-  |     (Parameters)
-  |      bootstrap: TRUE
-  |      cache_node_ids: FALSE
-  |      checkpoint_interval: 10
-  |      feature_subset_strategy: auto
-  |      impurity: gini
-  |      leafCol: 
-  |      max_bins: 32
-  |      max_depth: 5
-  |      max_memory_in_mb: 256
-  |      min_info_gain: 0
-  |      min_instances_per_node: 1
-  |      minWeightFractionPerNode: 0
-  |      num_trees: 20
-  |      seed: 207336481
-  |      subsampling_rate: 1
+```r
+#> Pipeline (Estimator) with 2 stages
+#> <pipeline__a1c04c2f_b955_4917_89b6_67cb576a779b> 
+#>   Stages 
+#>   |--1 RFormula (Estimator)
+#>   |    <r_formula__043dd75a_7fd6_48bb_85c5_f20b321b97cb> 
+#>   |     (Parameters -- Column Names)
+#>   |      features_col: features
+#>   |      label_col: label
+#>   |     (Parameters)
+#>   |      force_index_label: FALSE
+#>   |      formula: class ~ .
+#>   |      handle_invalid: error
+#>   |      stringIndexerOrderType: frequencyDesc
+#>   |--2 RandomForestClassifier (Estimator)
+#>   |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
+#>   |     (Parameters -- Column Names)
+#>   |      features_col: features
+#>   |      label_col: label
+#>   |      prediction_col: prediction
+#>   |      probability_col: probability
+#>   |      raw_prediction_col: rawPrediction
+#>   |     (Parameters)
+#>   |      bootstrap: TRUE
+#>   |      cache_node_ids: FALSE
+#>   |      checkpoint_interval: 10
+#>   |      feature_subset_strategy: auto
+#>   |      impurity: gini
+#>   |      leafCol: 
+#>   |      max_bins: 32
+#>   |      max_depth: 5
+#>   |      max_memory_in_mb: 256
+#>   |      min_info_gain: 0
+#>   |      min_instances_per_node: 1
+#>   |      minWeightFractionPerNode: 0
+#>   |      num_trees: 20
+#>   |      seed: 207336481
+#>   |      subsampling_rate: 1
 ```
 
 ### Grid
@@ -130,10 +132,12 @@ steps and the parameters.
 The idea is to modify the **number of trees**  for each model run. From the output 
 of the ML Pipeline above, we see that we need to modify the following:
 
-```
-  |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
-  |     (Parameters)
-  |      num_trees: 20
+```r
+#>   |    <random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a> 
+#>   |                    ...
+#>   |     (Parameters)
+#>   |                    ...
+#>   |      num_trees: 20
 ```
 
 In R, we create the grid spec using the following: 
@@ -157,6 +161,12 @@ a new pipeline is used. A new pipeline will have a different UID.
 
 ### "Evaluator"
 
+A metric will have to be calculated for each validation set in the folds. The 
+model tuning function requires for that to be explicitly defined as an argument
+(`ml_cross_validator()`).  There are multiple outcomes on the `class` field in the
+`tbl_cells` table, this means that we will use `ml_multiclass_classification_evaluator()` for our 
+validation function.
+
 ```{r}
 cells_evaluator <- ml_multiclass_classification_evaluator(
   x = sc,
@@ -165,14 +175,27 @@ cells_evaluator <- ml_multiclass_classification_evaluator(
 ```
 
 
+The "evaluator" function to use is based on the type of model that is being used
+for tuning. Here is the list of the available "evaluator" functions in `sparklyr`:
 
-- `ml_binary_classification_evaluator()`
-- `ml_binary_classification_eval()`
-- `ml_multiclass_classification_evaluator()`
-- `ml_classification_eval()`
-- `ml_regression_evaluator()`
+- [`ml_binary_classification_evaluator()`](/packages/sparklyr/latest/reference/ml_evaluator.qmd)
+- [`ml_binary_classification_eval()`](/packages/sparklyr/latest/reference/ml_evaluator.qmd)
+- [`ml_multiclass_classification_evaluator()`](/packages/sparklyr/latest/reference/ml_evaluator.qmd)
+- [`ml_classification_eval()`](/packages/sparklyr/latest/reference/ml_evaluator.qmd)
+- [`ml_regression_evaluator()`](/packages/sparklyr/latest/reference/ml_evaluator.qmd)
 
 ## Model tuning
+
+All the preparations steps come together now as arguments of `ml_cross_validator()`.
+There are two additional arguments to consider:
+
+- `num_folds`: The number of folder for the cross validation. The higher the
+number, the longer it will take to complete. 
+- `parallelism`: The number of threads to use when running parallel algorithms. 
+Default is 1 for serial execution.
+
+In this example,  `cells_pipeline`, `cells_grid`, and `cells_evaluator` are
+passed to the respective arguments.
 
 ```{r}
 cells_cv <- ml_cross_validator(
@@ -187,6 +210,8 @@ cells_cv <- ml_cross_validator(
 cells_cv
 ```
 
+The `ml_fit()` function will actually run the model tuning. This is where the
+**training** split of the data is used.
 
 ```{r}
 model_cv <- ml_fit(
@@ -197,14 +222,22 @@ model_cv <- ml_fit(
 
 ## Validation metrics
 
+The `ml_validation_metrics()` function will extract the metrics from each of the
+values passed for **number of trees** parameter. If more than one parameter would
+have been used, the number of results would be the total number of combinations.
+
 ```{r}
 cv_metrics <- ml_validation_metrics(model_cv)
 
 cv_metrics
 ```
 
+For easier selection, we can use a quick plot to visualize how accuracy improves
+as more trees are used, and when does the benefit plateau.
+
 ```{r}
 #| warnings: false
+#| message: false
 
 library(ggplot2)
 
@@ -216,22 +249,37 @@ cv_metrics %>%
 
 ## Model selection 
 
+As seen in the previous section, 30 trees seems to be a good number to use. To
+finalize, a new model is fit, using that number for `num_trees`.  
+
+A Model pipeline or a regular model could be used to do this. For this example 
+we will just use the single step of fitting a new model using 
+`ml_random_forest_classifier()` directly.
+
 ```{r}
 cell_model <- ml_random_forest_classifier(
   tbl_cells_split$training, 
   class ~ ., 
-  num_trees = 50
+  num_trees = 30
   )
 ```
 
-## Holdout data metrics
+## Test data metrics
+
+The final step is to confirm that the model is not over-fitted. We use the new
+model against the **test** split, and then piping it to `ml_metrics_multiclass()`
+to confirm that the accuracy is within the expected range.
 
 ```{r}
 cell_model %>% 
   ml_predict(tbl_cells_split$test) %>% 
   ml_metrics_multiclass()
 ```
+
+
+
 ```{r}
+#| include: false
 spark_disconnect(sc)
 ```
 

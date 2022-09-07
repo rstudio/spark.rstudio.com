@@ -214,7 +214,7 @@ ga('send', {
   <li><a href="#model-tuning" id="toc-model-tuning" class="nav-link" data-scroll-target="#model-tuning">Model tuning</a></li>
   <li><a href="#validation-metrics" id="toc-validation-metrics" class="nav-link" data-scroll-target="#validation-metrics">Validation metrics</a></li>
   <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model selection</a></li>
-  <li><a href="#holdout-data-metrics" id="toc-holdout-data-metrics" class="nav-link" data-scroll-target="#holdout-data-metrics">Holdout data metrics</a></li>
+  <li><a href="#test-data-metrics" id="toc-test-data-metrics" class="nav-link" data-scroll-target="#test-data-metrics">Test data metrics</a></li>
   </ul>
 </nav>
     </div>
@@ -237,7 +237,7 @@ ga('send', {
 
 </header>
 
-<p><strong>Hyperparameter tuning</strong> is possible within Spark. <code>sparklyr</code> provides an interface that makes it possible to setup, train, and measure running multiple model experiments in order to tune our models.</p>
+<p><strong>Hyper parameter tuning</strong> is possible within Spark. <code>sparklyr</code> provides an interface that makes it possible to setup, train, and measure running multiple model experiments in order to tune our models.</p>
 <p>This article walks through the basics of setting up and running a cross validation tuning run using the <code>cells</code> data from the <code>modeldata</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(cells, <span class="at">package =</span> <span class="st">"modeldata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -255,7 +255,7 @@ ga('send', {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tbl_cells <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, cells, <span class="at">name =</span> <span class="st">"cells_tbl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will split the data into two sets, “training” and “test”. The <strong>test</strong> split will be treated as the “holdout” data to be used at the end of the process to confirm that we did not overfit the model.</p>
+<p>We will split the data into two sets, “training” and “test”. The <strong>test</strong> split will be treated as the “holdout” data to be used at the end of the process to confirm that we did not over fit the model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tbl_cells_split <span class="ot">&lt;-</span> tbl_cells <span class="sc">%&gt;%</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>case) <span class="sc">%&gt;%</span> </span>
@@ -281,55 +281,56 @@ ga('send', {
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cells_pipeline <span class="ot">&lt;-</span> sc <span class="sc">%&gt;%</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_pipeline</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(class <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_random_forest_classifier</span>(<span class="at">seed =</span> <span class="dv">207336481</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>cells_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_random_forest_classifier</span>(<span class="at">seed =</span> <span class="dv">207336481</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<pre><code>Pipeline (Estimator) with 2 stages
-&lt;pipeline__a1c04c2f_b955_4917_89b6_67cb576a779b&gt; 
-  Stages 
-  |--1 RFormula (Estimator)
-  |    &lt;r_formula__043dd75a_7fd6_48bb_85c5_f20b321b97cb&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |     (Parameters)
-  |      force_index_label: FALSE
-  |      formula: class ~ .
-  |      handle_invalid: error
-  |      stringIndexerOrderType: frequencyDesc
-  |--2 RandomForestClassifier (Estimator)
-  |    &lt;random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a&gt; 
-  |     (Parameters -- Column Names)
-  |      features_col: features
-  |      label_col: label
-  |      prediction_col: prediction
-  |      probability_col: probability
-  |      raw_prediction_col: rawPrediction
-  |     (Parameters)
-  |      bootstrap: TRUE
-  |      cache_node_ids: FALSE
-  |      checkpoint_interval: 10
-  |      feature_subset_strategy: auto
-  |      impurity: gini
-  |      leafCol: 
-  |      max_bins: 32
-  |      max_depth: 5
-  |      max_memory_in_mb: 256
-  |      min_info_gain: 0
-  |      min_instances_per_node: 1
-  |      minWeightFractionPerNode: 0
-  |      num_trees: 20
-  |      seed: 207336481
-  |      subsampling_rate: 1</code></pre>
+<p>Each step within a pipeline receives a unique identifier. This identifier is made up of the name of the step and a UID. The UID will change every time a new pipeline is created. Here is an example of the out put for <code>cells_pipeline</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Pipeline (Estimator) with 2 stages</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__a1c04c2f_b955_4917_89b6_67cb576a779b&gt; </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Stages </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--1 RFormula (Estimator)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__043dd75a_7fd6_48bb_85c5_f20b321b97cb&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      force_index_label: FALSE</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      formula: class ~ .</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      handle_invalid: error</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      stringIndexerOrderType: frequencyDesc</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--2 RandomForestClassifier (Estimator)</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a&gt; </span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      prediction_col: prediction</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      probability_col: probability</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      raw_prediction_col: rawPrediction</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters)</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      bootstrap: TRUE</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      cache_node_ids: FALSE</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      checkpoint_interval: 10</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      feature_subset_strategy: auto</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      impurity: gini</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      leafCol: </span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      max_bins: 32</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      max_depth: 5</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      max_memory_in_mb: 256</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      min_info_gain: 0</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      min_instances_per_node: 1</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      minWeightFractionPerNode: 0</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      num_trees: 20</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      seed: 207336481</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      subsampling_rate: 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="grid" class="level3">
 <h3 class="anchored" data-anchor-id="grid">Grid</h3>
 <p>The way we can pass the parameters to try is via a simple <code>list</code> object. <code>sparklyr</code> performs partial name matching to assign the list’s entries to the <code>pipeline</code> steps and the parameters.</p>
 <p>The idea is to modify the <strong>number of trees</strong> for each model run. From the output of the ML Pipeline above, we see that we need to modify the following:</p>
-<pre><code>  |    &lt;random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a&gt; 
-  |     (Parameters)
-  |      num_trees: 20</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;random_forest_classifier__52fc33ff_c4dc_44ac_b842_b873957db90a&gt; </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |                    ...</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |                    ...</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      num_trees: 20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In R, we create the grid spec using the following:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cells_grid <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
@@ -338,7 +339,11 @@ ga('send', {
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>cells_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>cells_grid</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $random_forest_classifier</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $random_forest_classifier$num_trees</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80  85  90  95</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [20] 100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Two things to highlight about the grid spec:</p>
 <ul>
@@ -348,23 +353,31 @@ ga('send', {
 </section>
 <section id="evaluator" class="level3">
 <h3 class="anchored" data-anchor-id="evaluator">“Evaluator”</h3>
+<p>A metric will have to be calculated for each validation set in the folds. The model tuning function requires for that to be explicitly defined as an argument (<code>ml_cross_validator()</code>). There are multiple outcomes on the <code>class</code> field in the <code>tbl_cells</code> table, this means that we will use <code>ml_multiclass_classification_evaluator()</code> for our validation function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cells_evaluator <span class="ot">&lt;-</span> <span class="fu">ml_multiclass_classification_evaluator</span>(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> sc,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">metric_name =</span> <span class="st">"accuracy"</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The “evaluator” function to use is based on the type of model that is being used for tuning. Here is the list of the available “evaluator” functions in <code>sparklyr</code>:</p>
 <ul>
-<li><code>ml_binary_classification_evaluator()</code></li>
-<li><code>ml_binary_classification_eval()</code></li>
-<li><code>ml_multiclass_classification_evaluator()</code></li>
-<li><code>ml_classification_eval()</code></li>
-<li><code>ml_regression_evaluator()</code></li>
+<li><a href="../packages/sparklyr/latest/reference/ml_evaluator.html"><code>ml_binary_classification_evaluator()</code></a></li>
+<li><a href="../packages/sparklyr/latest/reference/ml_evaluator.html"><code>ml_binary_classification_eval()</code></a></li>
+<li><a href="../packages/sparklyr/latest/reference/ml_evaluator.html"><code>ml_multiclass_classification_evaluator()</code></a></li>
+<li><a href="../packages/sparklyr/latest/reference/ml_evaluator.html"><code>ml_classification_eval()</code></a></li>
+<li><a href="../packages/sparklyr/latest/reference/ml_evaluator.html"><code>ml_regression_evaluator()</code></a></li>
 </ul>
 </section>
 </section>
 <section id="model-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="model-tuning">Model tuning</h2>
+<p>All the preparations steps come together now as arguments of <code>ml_cross_validator()</code>. There are two additional arguments to consider:</p>
+<ul>
+<li><code>num_folds</code>: The number of folder for the cross validation. The higher the number, the longer it will take to complete.</li>
+<li><code>parallelism</code>: The number of threads to use when running parallel algorithms. Default is 1 for serial execution.</li>
+</ul>
+<p>In this example, <code>cells_pipeline</code>, <code>cells_grid</code>, and <code>cells_evaluator</code> are passed to the respective arguments.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cells_cv <span class="ot">&lt;-</span> <span class="fu">ml_cross_validator</span>(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> sc,</span>
@@ -375,8 +388,19 @@ ga('send', {
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">parallelism =</span> <span class="dv">1</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>cells_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>cells_cv</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CrossValidator (Estimator)</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__46b71c67_08bf_4afd_b462_c65b7fc369bf&gt; </span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  (Parameters -- Tuning)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   estimator: Pipeline</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__5a108123_a1e7_42af_a2d0_e4cc7b290a56&gt; </span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   evaluator: MulticlassClassificationEvaluator</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;multiclass_classification_evaluator__ec7cad92_4702_42f3_a97a_53bce2dd021b&gt; </span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     with metric accuracy </span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   num_folds: 3 </span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [Tuned over 20 hyperparameter sets]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The <code>ml_fit()</code> function will actually run the model tuning. This is where the <strong>training</strong> split of the data is used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_cv <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> cells_cv, </span>
@@ -386,11 +410,34 @@ ga('send', {
 </section>
 <section id="validation-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="validation-metrics">Validation metrics</h2>
+<p>The <code>ml_validation_metrics()</code> function will extract the metrics from each of the values passed for <strong>number of trees</strong> parameter. If more than one parameter would have been used, the number of results would be the total number of combinations.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>cv_metrics <span class="ot">&lt;-</span> <span class="fu">ml_validation_metrics</span>(model_cv)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cv_metrics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cv_metrics</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     accuracy num_trees_1</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  0.8012555           5</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  0.8078181          10</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  0.8181159          15</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  0.8231090          20</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  0.8181751          25</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  0.8182511          30</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7  0.8175854          35</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8  0.8225095          40</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9  0.8237798          45</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 0.8151062          50</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 11 0.8170078          55</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 12 0.8218778          60</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 13 0.8158358          65</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 14 0.8169709          70</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 15 0.8176567          75</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 16 0.8182708          80</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 17 0.8175657          85</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 18 0.8189295          90</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 19 0.8200054          95</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 20 0.8170005         100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>For easier selection, we can use a quick plot to visualize how accuracy improves as more trees are used, and when does the benefit plateau.</p>
 <div class="cell" data-warnings="false">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -398,27 +445,34 @@ ga('send', {
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(num_trees_1, accuracy)) <span class="sc">+</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="model_tuning_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
 </div>
 </section>
 <section id="model-selection" class="level2">
 <h2 class="anchored" data-anchor-id="model-selection">Model selection</h2>
+<p>As seen in the previous section, 30 trees seems to be a good number to use. To finalize, a new model is fit, using that number for <code>num_trees</code>.</p>
+<p>A Model pipeline or a regular model could be used to do this. For this example we will just use the single step of fitting a new model using <code>ml_random_forest_classifier()</code> directly.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cell_model <span class="ot">&lt;-</span> <span class="fu">ml_random_forest_classifier</span>(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  tbl_cells_split<span class="sc">$</span>training, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  class <span class="sc">~</span> ., </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_trees =</span> <span class="dv">50</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_trees =</span> <span class="dv">30</span></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="holdout-data-metrics" class="level2">
-<h2 class="anchored" data-anchor-id="holdout-data-metrics">Holdout data metrics</h2>
+<section id="test-data-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="test-data-metrics">Test data metrics</h2>
+<p>The final step is to confirm that the model is not over-fitted. We use the new model against the <strong>test</strong> split, and then piping it to <code>ml_metrics_multiclass()</code> to confirm that the accuracy is within the expected range.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cell_model <span class="sc">%&gt;%</span> </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_predict</span>(tbl_cells_split<span class="sc">$</span>test) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_multiclass</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_multiclass</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 accuracy multiclass     0.823</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

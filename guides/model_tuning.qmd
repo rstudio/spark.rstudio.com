@@ -12,8 +12,7 @@ library(sparklyr)
 ```
 
 **Hyper parameter tuning**  is possible within Spark. `sparklyr` provides an interface
-that makes it possible to setup, train, and measure running multiple model 
-experiments in order to tune our models. 
+that makes it possible to setup, and run this kind of model tuning. 
 
 This article walks through the basics of setting up and running a cross validation 
 tuning run using the `cells` data from the `modeldata` package.
@@ -26,7 +25,6 @@ The goal of the experiments in the example is to see at what point does the
 number of trees in the model stop improving the accuracy of the predictions.  We
 will have Spark run multiple iterations of the same model with an increasing
 number of trees.
-
 
 ## Data setup
 
@@ -203,8 +201,8 @@ cells_cv <- ml_cross_validator(
   estimator = cells_pipeline, 
   estimator_param_maps = cells_grid,
   evaluator = cells_evaluator,
-  num_folds = 3,
-  parallelism = 1
+  num_folds = 5,
+  parallelism = 4
 )
 
 cells_cv
@@ -249,7 +247,7 @@ cv_metrics %>%
 
 ## Model selection 
 
-As seen in the previous section, 30 trees seems to be a good number to use. To
+As seen in the previous section, 50 trees seems to be a good number to use. To
 finalize, a new model is fit, using that number for `num_trees`.  
 
 A Model pipeline or a regular model could be used to do this. For this example 
@@ -260,7 +258,7 @@ we will just use the single step of fitting a new model using
 cell_model <- ml_random_forest_classifier(
   tbl_cells_split$training, 
   class ~ ., 
-  num_trees = 30
+  num_trees = 50
   )
 ```
 

@@ -1,7 +1,7 @@
 ---
 title: "Text modeling"
 execute:
-  eval: false
+  eval: true
   freeze: true
 ---
 
@@ -12,15 +12,11 @@ library(dplyr)
 library(modeldata)
 ```
 
-For this example we will use a local Spark connection, version 3.3
-
-```{r}
-library(sparklyr)
-
-sc <- spark_connect(master = "local", version = "3.3")
-```
+This article builds on the concepts and techniques contained in other articles found on this site. The example in this article goes beyond the descriptive analysis found in the [Text Mining](textmining.qmd) article. It shows how to pre-process, and then model text data. This article also expands on [ML Pipelines](pipelines.qmd), it provides a more "real life" scenario of how and why to use pipelines.
 
 ## Data
+
+This article uses text data from the `modeldata` package. The *Fine foods example* data contains reviews of fine foods from Amazon. The package contains a training and a test set. The data consist of a product code, the text of the review, and the score. The score has two values: "great", and "other".
 
 ```{r}
 library(modeldata)
@@ -32,7 +28,13 @@ training_data %>%
   as.list()
 ```
 
+We will start by starting a local session of Spark, and then copying both data sets to our new session.
+
 ```{r}
+library(sparklyr)
+
+sc <- spark_connect(master = "local", version = "3.3")
+
 sff_training_data <- copy_to(sc, training_data)
 
 sff_testing_data <- copy_to(sc, testing_data)
@@ -51,7 +53,7 @@ sff_testing_data <- copy_to(sc, testing_data)
       select(3:4)
     ```
 
-2.  There are words very common in text, words such as: "the", "and", "or", etc. These are called "stop words". Most often, stop words are not useful in analysis and modeling so it is necessary to remove them. That is exactly what `ft_stop_words_remover()` does. Spark contains a list of stop words for several languages, not only English.
+2.  There are words very common in text, words such as: "the", "and", "or", etc. These are called "stop words". Most often, stop words are not useful in analysis and modeling so it is necessary to remove them. That is exactly what `ft_stop_words_remover()` does. In addition to English, Spark has lists of stop words for several other languages.
 
     ```{r}
     sff_training_data %>% 
@@ -113,24 +115,17 @@ sff_testing_data <- copy_to(sc, testing_data)
       select(3:7) 
     ```
 
-:::{.callout-tip}
+::: callout-tip
 ## Important concept
 
-The `ft_hashing_tf()` outputs the index and frequency of each term. This can be thought of as how "dummy variables" are created for each discrete value of a
-categorical variable.  This means that for modeling, we will only need to use
-only one "column", `hashed_features`. But, we will use `normal_features` for the
-model because it is derived from `hashed_features`.
-
+The `ft_hashing_tf()` outputs the index and frequency of each term. This can be thought of as how "dummy variables" are created for each discrete value of a categorical variable. This means that for modeling, we will only need to use only one "column", `hashed_features`. But, we will use `normal_features` for the model because it is derived from `hashed_features`.
 :::
 
 ## Model
 
-
-The same set of complex transformations are needed for both modeling and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have
-to be copied to both sets of code. This makes a compelling argument for using [ML Pipelines](pipelines.qmd). 
+The same set of complex transformations are needed for both modeling and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have to be copied to both sets of code. This makes a compelling argument for using [ML Pipelines](pipelines.qmd).
 
 We can initialize a pipeline (using `ml_pipeline()`), and then pass the same exact steps used in the previous section. We then append the model via `ft_r_formula()` and then the model function, in this case `ml_logistic_regression()`
-
 
 ```{r}
 sff_pipeline <- ml_pipeline(sc) %>% 
@@ -158,12 +153,10 @@ sff_pipeline <- ml_pipeline(sc) %>%
 sff_pipeline
 ```
 
-`sff_pipeline` is a ML Pipeline, which is essentially a set of steps to take, can be think of akin to a `recipe`. In order to actually process de model we use `ml_fit()`. This executes all of the transformations, and then fits the model.  In other words, `ml_fit()` runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.
+`sff_pipeline` is a ML Pipeline, which is essentially a set of steps to take, can be think of akin to a `recipe`. In order to actually process de model we use `ml_fit()`. This executes all of the transformations, and then fits the model. In other words, `ml_fit()` runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.
 
 ```{r}
 sff_pipeline_model <- ml_fit(sff_pipeline, sff_training_data)
-
-sff_pipeline_model
 ```
 
 `sff_pipeline_model` is more than just a "fitted" model. It also contains all of the pre-processing steps. So any new data passed through it, will go through the same transformations before running the predictions. To execute the pipeline model on against the test data, we use `ml_transform()`
@@ -175,7 +168,7 @@ sff_test_predictions <- sff_pipeline_model %>%
 glimpse(sff_test_predictions)
 ```
 
-Using `ml_metrics_binary()`, we can see how well the model performed. 
+Using `ml_metrics_binary()`, we can see how well the model performed.
 
 ```{r}
 ml_metrics_binary(sff_test_predictions)

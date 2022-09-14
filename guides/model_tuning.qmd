@@ -6,9 +6,11 @@ execute:
 ---
 
 
-```{r}
+```{r setup}
 #| include: false
 library(sparklyr)
+library(dplyr)
+library(modeldata)
 ```
 
 **Hyper parameter tuning**  is possible within Spark. `sparklyr` provides an interface
@@ -276,107 +278,213 @@ cell_model %>%
 
 ## Tuning beyond model parameters
 
+This example exp
+
 ```{r}
 data("small_fine_foods")
+
 sff_training_data <- copy_to(sc, training_data)
-glimpse(sff_training_data)
 
 sff_testing_data <- copy_to(sc, testing_data)
 ```
 
+```{r}
+sff_pipeline <- sc %>% 
+  ml_pipeline() %>% 
+  ft_tokenizer("review", "word_list") %>% 
+  ft_stop_words_remover("word_list", "wo_stop_words") %>% 
+  ft_hashing_tf("wo_stop_words", "hashed_features", binary = TRUE) %>% 
+  ft_normalizer("hashed_features", "normal_features") %>% 
+  ft_r_formula(score ~ normal_features) %>% 
+  ml_logistic_regression()
+
+sff_pipeline
+```
+
+```r
+Pipeline (Estimator) with 6 stages
+<pipeline__0586a2aa_3aa2_4cdc_ab4c_4b2eb941ba75> 
+  Stages 
+  |--1 Tokenizer (Transformer)
+  |    <tokenizer__a9f4bd41_a86c_47a3_b27a_ac372cd15c5e> 
+  |     (Parameters -- Column Names)
+  |      input_col: review
+  |      output_col: word_list
+  |--2 StopWordsRemover (Transformer)
+  |    <stop_words_remover__5c180cbf_8e05_4ed2_a94b_0573f1362395> 
+  |     (Parameters -- Column Names)
+  |      input_col: word_list
+  |      output_col: wo_stop_words
+  |--3 HashingTF (Transformer)
+  |    <hashing_tf__d4b70bde_add9_4fff_8564_454fef57ecc0> 
+  |     (Parameters -- Column Names)
+  |      input_col: wo_stop_words
+  |      output_col: hashed_features
+  |--4 Normalizer (Transformer)
+  |    <normalizer__1641c9d1_a32b_482c_aed7_411f0cb6fb45> 
+  |     (Parameters -- Column Names)
+  |      input_col: hashed_features
+  |      output_col: normal_features
+  |--5 RFormula (Estimator)
+  |    <r_formula__ea0e734a_da68_4449_b8f3_c12cc43027ec> 
+  |     (Parameters -- Column Names)
+  |      features_col: features
+  |      label_col: label
+  |     (Parameters)
+  |      force_index_label: FALSE
+  |      formula: score ~ normal_features
+  |      handle_invalid: error
+  |      stringIndexerOrderType: frequencyDesc
+  |--6 LogisticRegression (Estimator)
+  |    <logistic_regression__3e723f21_273b_46c3_b3b9_ced6452e3ea2> 
+  |     (Parameters -- Column Names)
+  |      features_col: features
+  |      label_col: label
+  |      prediction_col: prediction
+  |      probability_col: probability
+  |      raw_prediction_col: rawPrediction
+  |     (Parameters)
+  |      aggregation_depth: 2
+  |      elastic_net_param: 0
+  |      family: auto
+  |      fit_intercept: TRUE
+  |      max_iter: 100
+  |      maxBlockSizeInMB: 0
+  |      reg_param: 0
+  |      standardization: TRUE
+  |      threshold: 0.5
+  |      tol: 1e-06
+```
 
 ```{r}
-new_model <- sff_training_data %>%  
-  head(100) %>% 
-  #mutate(
-    #review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
-   # score = ifelse(score == "great", 1, 0)
-  #  ) %>% 
-  ft_tokenizer(input = "review", output_col = "word_list") %>% 
-  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
-  ft_hashing_tf(input_col = "word_list", "new_features", binary = TRUE) %>% 
-  ml_logistic_regression(score ~ new_features)
-  
+sff_grid <-  list(
+    hashing_tf = list(
+      num_features = 2^c(8, 10, 12)  
+    ),
+    logistic_regression = list(
+      elastic_net_param = 10^seq(-3, 0, length = 20), # penalty
+      reg_param = seq(0, 1, length = 5) # mixture      
+    )
+  )
 
-sff_testing_data %>%  
-  #mutate(
-    #review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
-    #score = ifelse(score == "great", 1, 0)
-    #) %>% 
-  ft_tokenizer(input = "review", output_col = "word_list") %>% 
-  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
-  ft_hashing_tf(input_col = "word_list", "new_features", binary = TRUE) %>% 
-  ml_predict(new_model, .) %>% 
+sff_grid
+```
+
+```r
+$hashing_tf
+$hashing_tf$num_features
+[1]  256 1024 4096
+
+
+$logistic_regression
+$logistic_regression$elastic_net_param
+ [1] 0.001000000 0.001438450 0.002069138 0.002976351 0.004281332 0.006158482 0.008858668
+ [8] 0.012742750 0.018329807 0.026366509 0.037926902 0.054555948 0.078475997 0.112883789
+[15] 0.162377674 0.233572147 0.335981829 0.483293024 0.695192796 1.000000000
+
+$logistic_regression$reg_param
+[1] 0.00 0.25 0.50 0.75 1.00
+
+```
+
+```{r}
+sff_evaluator <- ml_binary_classification_evaluator(x = sc)
+```
+
+
+```{r}
+sff_cv <- ml_cross_validator(
+  x = sc,
+  estimator = sff_pipeline, 
+  estimator_param_maps = sff_grid,
+  evaluator = sff_evaluator,
+  num_folds = 5,
+  parallelism = 4
+)
+
+sff_cv
+```
+
+```r
+CrossValidator (Estimator)
+<cross_validator__8f7ea300_d0e8_465f_96e9_2510b017b798> 
+ (Parameters -- Tuning)
+  estimator: Pipeline
+             <pipeline__60426912_5b39_49ba_8e2e_350a97bf3a42> 
+  evaluator: BinaryClassificationEvaluator
+             <binary_classification_evaluator__6397a2f9_3a2b_4eec_aa2b_0b7712d2e201> 
+    with metric areaUnderROC 
+  num_folds: 5 
+  [Tuned over 300 hyperparameter sets]
+```
+```{r}
+sff_model <- ml_fit(
+  x = sff_cv, 
+  dataset = sff_training_data
+  )
+```
+
+```{r}
+sff_metrics <- ml_validation_metrics(sff_model)
+
+sff_metrics
+```
+```
+areaUnderROC
+<dbl>
+elastic_net_param_1
+<dbl>
+reg_param_1
+<dbl>
+num_features_2
+<int>
+0.6893548	0.001000000	0.00	256	
+0.6893548	0.001438450	0.00	256	
+0.6893548	0.002069138	0.00	256	
+0.6893548	0.002976351	0.00	256	
+0.6893548	0.004281332	0.00	256	
+0.6893548	0.006158482	0.00	256	
+0.6893548	0.008858668	0.00	256	
+0.6893548	0.012742750	0.00	256	
+0.6893548	0.018329807	0.00	256	
+0.6893548	0.026366509	0.00	256	
+```
+
+```{r}
+library(ggplot2)
+
+sff_metrics %>% 
+  mutate(reg_param_1 = as.factor(reg_param_1)) %>% 
+  ggplot() +
+  geom_line(aes(elastic_net_param_1, areaUnderROC, color = reg_param_1)) +
+  facet_wrap(~ num_features_2) +
+  theme_light()
+```
+```{r}
+library(dplyr)
+
+sff_metrics %>% 
+  arrange(desc(areaUnderROC))
+```
+```{r}
+new_sff_pipeline <- sc %>% 
+  ml_pipeline() %>% 
+  ft_tokenizer("review", "word_list") %>% 
+  ft_stop_words_remover("word_list", "wo_stop_words") %>% 
+  ft_hashing_tf("wo_stop_words", "hashed_features", binary = TRUE, num_features = 4096) %>% 
+  ft_normalizer("hashed_features", "normal_features") %>% 
+  ft_r_formula(score ~ normal_features) %>% 
+  ml_logistic_regression(elastic_net_param = 0.018, reg_param = 0.5)
+
+new_sff_fitted <- new_sff_pipeline %>% 
+  ml_fit(sff_training_data)
+```
+
+```{r}
+new_sff_fitted %>% 
+  ml_transform(sff_testing_data) %>% 
   ml_metrics_binary()
-
 ```
-
-
-```{r}
-test_set <- sff_training_data %>%   
-  mutate(
-    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
-    score = ifelse(score == "great", 1, 0)
-    ) %>% 
-  ft_tokenizer(input = "review", output_col = "word_list") %>% 
-  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
-  mutate(word = explode(wo_stop_words)) %>% 
-  select(product, word, score) %>%
-  filter(nchar(word) > 2) %>% 
-  compute("test_set")
-
-tt <- test_set %>% 
-  mutate(word = array(word)) %>% 
-  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 256) %>% 
-  compute("tt")
-
-
-```
-
-
-```{r}
-prep_sff <- sff_training_data %>%   
-  mutate(
-    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
-    score = ifelse(score == "great", 1, 0)
-    ) %>% 
-  ft_tokenizer(input = "review", output_col = "word_list") %>% 
-  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
-  mutate(word = explode(wo_stop_words)) %>% 
-  select(product, word, score) %>%
-  filter(nchar(word) > 2) %>% 
-  mutate(word = array(word)) %>% 
-  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 2000) %>% 
-  compute("prep_sff")
-
-
-```
-
-
-```{r}
-model <- ml_logistic_regression(prep_sff, score ~ new_features)
-
-sff_testing_data %>%   
-  mutate(
-    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
-    score = ifelse(score == "great", 1, 0)
-    ) %>% 
-  ft_tokenizer(input = "review", output_col = "word_list") %>% 
-  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
-  mutate(word = explode(wo_stop_words)) %>% 
-  select(product, word, score) %>%
-  filter(nchar(word) > 2) %>% 
-  mutate(word = array(word)) %>% 
-  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 2000) %>% 
-  ml_predict(model, .) %>% 
-  ml_metrics_binary()
-```
-
-
-```{r}
-prep_sff %>% count()
-```
-
 
 ```{r}
 #| include: false

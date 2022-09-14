@@ -6,12 +6,7 @@ execute:
 ---
 
 
-```{r setup}
-#| include: false
-library(sparklyr)
-library(dplyr)
-library(modeldata)
-```
+
 
 **Hyper parameter tuning**  is possible within Spark. `sparklyr` provides an interface
 that makes it possible to setup, and run this kind of model tuning. 
@@ -19,9 +14,14 @@ that makes it possible to setup, and run this kind of model tuning.
 This article walks through the basics of setting up and running a cross validation 
 tuning run using the `cells` data from the `modeldata` package.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 data(cells, package = "modeldata")
 ```
+:::
+
 
 The goal of the experiments in the example is to see at what point does the
 number of trees in the model stop improving the accuracy of the predictions.  We
@@ -32,23 +32,36 @@ number of trees.
 
 For this example, we will use a local connection, using Spark 3.3.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 library(sparklyr)
 
 sc <- spark_connect(master = "local", version = "3.3")
 ```
+:::
+
 
 The `cells` data is copied to the Spark session.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 tbl_cells <- copy_to(sc, cells, name = "cells_tbl")
 ```
+:::
+
 
 We will split the data into two sets, "training" and "test".  The **test** split will
 be treated as the "holdout" data to be used at the end of the process to confirm
 that we did not over fit the model.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 tbl_cells_split <- tbl_cells %>% 
   select(-case) %>% 
   sdf_random_split(
@@ -57,6 +70,8 @@ tbl_cells_split <- tbl_cells %>%
     seed = 100
     )
 ```
+:::
+
 
 ## Cross validator prep
 
@@ -71,13 +86,17 @@ Preparing the cross validator requires three elements:
 In this example we will use a very simple pipeline. It will contain a
 formula step and a Random Forest model.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cells_pipeline <- sc %>% 
   ml_pipeline() %>%
   ft_r_formula(class ~ .) %>%
   ml_random_forest_classifier(seed = 207336481)
-
 ```
+:::
+
 
 Each step within a pipeline receives a unique identifier. This identifier is
 made up of the name of the step and a UID. The UID will change every time a new
@@ -142,7 +161,10 @@ of the ML Pipeline above, we see that we need to modify the following:
 
 In R, we create the grid spec using the following: 
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cells_grid <- list(
   random_forest_classifier = list(  
     num_trees = 1:20 * 5
@@ -150,7 +172,13 @@ cells_grid <- list(
 )
 
 cells_grid
+#> $random_forest_classifier
+#> $random_forest_classifier$num_trees
+#>  [1]   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80  85  90  95
+#> [20] 100
 ```
+:::
+
 
 Two things to highlight about the grid spec:
 
@@ -167,12 +195,17 @@ model tuning function requires for that to be explicitly defined as an argument
 `tbl_cells` table, this means that we will use `ml_multiclass_classification_evaluator()` for our 
 validation function.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cells_evaluator <- ml_multiclass_classification_evaluator(
   x = sc,
   metric_name = "accuracy"
   )
 ```
+:::
+
 
 
 The "evaluator" function to use is based on the type of model that is being used
@@ -197,7 +230,10 @@ Default is 1 for serial execution.
 In this example,  `cells_pipeline`, `cells_grid`, and `cells_evaluator` are
 passed to the respective arguments.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cells_cv <- ml_cross_validator(
   x = sc,
   estimator = cells_pipeline, 
@@ -208,17 +244,34 @@ cells_cv <- ml_cross_validator(
 )
 
 cells_cv
+#> CrossValidator (Estimator)
+#> <cross_validator__5b695eab_98fc_46a5_a21f_016b7b4fa712> 
+#>  (Parameters -- Tuning)
+#>   estimator: Pipeline
+#>              <pipeline__f6eead6b_0bd1_4aa3_ab1b_5293c6d9fa3e> 
+#>   evaluator: MulticlassClassificationEvaluator
+#>              <multiclass_classification_evaluator__31fe19ff_6678_4389_a42a_ea07adce317a> 
+#>     with metric accuracy 
+#>   num_folds: 5 
+#>   [Tuned over 20 hyperparameter sets]
 ```
+:::
+
 
 The `ml_fit()` function will actually run the model tuning. This is where the
 **training** split of the data is used.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 model_cv <- ml_fit(
   x = cells_cv, 
   dataset = tbl_cells_split$training
   )
 ```
+:::
+
 
 ## Validation metrics
 
@@ -226,19 +279,45 @@ The `ml_validation_metrics()` function will extract the metrics from each of the
 values passed for **number of trees** parameter. If more than one parameter would
 have been used, the number of results would be the total number of combinations.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cv_metrics <- ml_validation_metrics(model_cv)
 
 cv_metrics
+#>     accuracy num_trees_1
+#> 1  0.8114324           5
+#> 2  0.8157122          10
+#> 3  0.8176925          15
+#> 4  0.8150990          20
+#> 5  0.8241812          25
+#> 6  0.8212221          30
+#> 7  0.8221358          35
+#> 8  0.8310173          40
+#> 9  0.8290158          45
+#> 10 0.8296345          50
+#> 11 0.8335203          55
+#> 12 0.8301165          60
+#> 13 0.8234423          65
+#> 14 0.8257469          70
+#> 15 0.8258069          75
+#> 16 0.8340482          80
+#> 17 0.8321753          85
+#> 18 0.8276960          90
+#> 19 0.8223973          95
+#> 20 0.8294530         100
 ```
+:::
+
 
 For easier selection, we can use a quick plot to visualize how accuracy improves
 as more trees are used, and when does the benefit plateau.
 
-```{r}
-#| warnings: false
-#| message: false
 
+::: {.cell warnings='false'}
+
+```{.r .cell-code}
 library(ggplot2)
 
 cv_metrics %>% 
@@ -246,6 +325,12 @@ cv_metrics %>%
   geom_line() +
   geom_smooth()
 ```
+
+::: {.cell-output-display}
+![](model_tuning_files/figure-html/unnamed-chunk-11-1.png){width=672}
+:::
+:::
+
 
 ## Model selection 
 
@@ -256,13 +341,18 @@ A Model pipeline or a regular model could be used to do this. For this example
 we will just use the single step of fitting a new model using 
 `ml_random_forest_classifier()` directly.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cell_model <- ml_random_forest_classifier(
   tbl_cells_split$training, 
   class ~ ., 
   num_trees = 50
   )
 ```
+:::
+
 
 ## Test data metrics
 
@@ -270,8 +360,17 @@ The final step is to confirm that the model is not over-fitted. We use the new
 model against the **test** split, and then piping it to `ml_metrics_multiclass()`
 to confirm that the accuracy is within the expected range.
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 cell_model %>% 
   ml_predict(tbl_cells_split$test) %>% 
   ml_metrics_multiclass()
+#> # A tibble: 1 × 3
+#>   .metric  .estimator .estimate
+#>   <chr>    <chr>          <dbl>
+#> 1 accuracy multiclass     0.839
 ```
+:::
+

@@ -123,7 +123,14 @@ model because it is derived from `hashed_features`.
 
 :::
 
-## Pipeline
+## Model
+
+
+The same set of complex transformations are needed for both modeling and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have
+to be copied to both sets of code. This makes a compelling argument for using [ML Pipelines](pipelines.qmd). 
+
+We can initialize a pipeline (using `ml_pipeline()`), and then pass the same exact steps used in the previous section. We then append the model via `ft_r_formula()` and then the model function, in this case `ml_logistic_regression()`
+
 
 ```{r}
 sff_pipeline <- ml_pipeline(sc) %>% 
@@ -151,11 +158,15 @@ sff_pipeline <- ml_pipeline(sc) %>%
 sff_pipeline
 ```
 
+`sff_pipeline` is a ML Pipeline, which is essentially a set of steps to take, can be think of akin to a `recipe`. In order to actually process de model we use `ml_fit()`. This executes all of the transformations, and then fits the model.  In other words, `ml_fit()` runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.
+
 ```{r}
 sff_pipeline_model <- ml_fit(sff_pipeline, sff_training_data)
 
 sff_pipeline_model
 ```
+
+`sff_pipeline_model` is more than just a "fitted" model. It also contains all of the pre-processing steps. So any new data passed through it, will go through the same transformations before running the predictions. To execute the pipeline model on against the test data, we use `ml_transform()`
 
 ```{r}
 sff_test_predictions <- sff_pipeline_model %>% 
@@ -164,10 +175,13 @@ sff_test_predictions <- sff_pipeline_model %>%
 glimpse(sff_test_predictions)
 ```
 
+Using `ml_metrics_binary()`, we can see how well the model performed. 
+
 ```{r}
 ml_metrics_binary(sff_test_predictions)
 ```
 
 ```{r}
+#| include: false
 spark_disconnect(sc)
 ```

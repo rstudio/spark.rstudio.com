@@ -1,0 +1,153 @@
+---
+title: "Text modeling"
+execute:
+  eval: false
+  freeze: true
+---
+
+
+```{r setup}
+#| include: false
+library(sparklyr)
+library(dplyr)
+library(modeldata)
+```
+
+```{r}
+library(sparklyr)
+
+sc <- spark_connect(master = "local", version = "3.3")
+```
+
+```{r}
+library(modeldata)
+
+data("small_fine_foods")
+
+sff_training_data <- copy_to(sc, training_data)
+
+sff_testing_data <- copy_to(sc, testing_data)
+```
+
+## Text transformers
+
+[Text Mining](textmining.qmd)
+
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  select(3:4)
+```
+
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  select(3:5) 
+```
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  select(3:6) 
+```
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  ft_normalizer(
+    input_col = "hashed_features", 
+    output_col = "normal_features"
+    ) %>% 
+  select(3:7) 
+```
+
+```{r}
+sff_pipeline <- ml_pipeline(sc) %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  ft_normalizer(
+    input_col = "hashed_features", 
+    output_col = "normal_features"
+    ) %>% 
+  ft_r_formula(score ~ normal_features) %>% 
+  ml_logistic_regression()  
+
+sff_pipeline
+```
+
+```{r}
+sff_pipeline_model <- ml_fit(sff_pipeline, sff_training_data)
+
+sff_pipeline_model
+```
+
+```{r}
+sff_test_predictions <- sff_pipeline_model %>% 
+  ml_transform(sff_testing_data) 
+
+glimpse(sff_test_predictions)
+```
+
+```{r}
+ml_metrics_binary(sff_test_predictions)
+```
+
+```{r}
+spark_disconnect(sc)
+```
+
+
+
+
+
+
+
+
+
+

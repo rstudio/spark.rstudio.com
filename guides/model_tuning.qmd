@@ -274,6 +274,108 @@ cell_model %>%
   ml_metrics_multiclass()
 ```
 
+## Tuning beyond model parameters
+
+```{r}
+data("small_fine_foods")
+sff_training_data <- copy_to(sc, training_data)
+glimpse(sff_training_data)
+
+sff_testing_data <- copy_to(sc, testing_data)
+```
+
+
+```{r}
+new_model <- sff_training_data %>%  
+  head(100) %>% 
+  #mutate(
+    #review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
+   # score = ifelse(score == "great", 1, 0)
+  #  ) %>% 
+  ft_tokenizer(input = "review", output_col = "word_list") %>% 
+  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
+  ft_hashing_tf(input_col = "word_list", "new_features", binary = TRUE) %>% 
+  ml_logistic_regression(score ~ new_features)
+  
+
+sff_testing_data %>%  
+  #mutate(
+    #review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
+    #score = ifelse(score == "great", 1, 0)
+    #) %>% 
+  ft_tokenizer(input = "review", output_col = "word_list") %>% 
+  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
+  ft_hashing_tf(input_col = "word_list", "new_features", binary = TRUE) %>% 
+  ml_predict(new_model, .) %>% 
+  ml_metrics_binary()
+
+```
+
+
+```{r}
+test_set <- sff_training_data %>%   
+  mutate(
+    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
+    score = ifelse(score == "great", 1, 0)
+    ) %>% 
+  ft_tokenizer(input = "review", output_col = "word_list") %>% 
+  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
+  mutate(word = explode(wo_stop_words)) %>% 
+  select(product, word, score) %>%
+  filter(nchar(word) > 2) %>% 
+  compute("test_set")
+
+tt <- test_set %>% 
+  mutate(word = array(word)) %>% 
+  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 256) %>% 
+  compute("tt")
+
+
+```
+
+
+```{r}
+prep_sff <- sff_training_data %>%   
+  mutate(
+    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
+    score = ifelse(score == "great", 1, 0)
+    ) %>% 
+  ft_tokenizer(input = "review", output_col = "word_list") %>% 
+  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
+  mutate(word = explode(wo_stop_words)) %>% 
+  select(product, word, score) %>%
+  filter(nchar(word) > 2) %>% 
+  mutate(word = array(word)) %>% 
+  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 2000) %>% 
+  compute("prep_sff")
+
+
+```
+
+
+```{r}
+model <- ml_logistic_regression(prep_sff, score ~ new_features)
+
+sff_testing_data %>%   
+  mutate(
+    review = regexp_replace(review, "[_\"\'():;,.!?\\-]", " "),
+    score = ifelse(score == "great", 1, 0)
+    ) %>% 
+  ft_tokenizer(input = "review", output_col = "word_list") %>% 
+  ft_stop_words_remover(input_col = "word_list", output_col = "wo_stop_words") %>% 
+  mutate(word = explode(wo_stop_words)) %>% 
+  select(product, word, score) %>%
+  filter(nchar(word) > 2) %>% 
+  mutate(word = array(word)) %>% 
+  ft_hashing_tf(input_col = "word", "new_features", binary = TRUE, num_features = 2000) %>% 
+  ml_predict(model, .) %>% 
+  ml_metrics_binary()
+```
+
+
+```{r}
+prep_sff %>% count()
+```
 
 
 ```{r}

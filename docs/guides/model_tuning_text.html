@@ -385,12 +385,14 @@ ga('send', {
 </section>
 <section id="recreating-tuning-text-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</h2>
-<p>The example in this article is based on the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a> article found in the <code>tidymodels</code>’ <code>tune</code> website. In that article, they use <em>Amazon’s Fine Foods Reviews</em> text data to perform hyper parameter tuning.</p>
+<p>The example in this article is based on the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a> article found in the <code>tidymodels</code>’ <code>tune</code> website. In that article, they use <em>Amazon’s Fine Food Reviews</em> text data to perform hyper parameter tuning.</p>
 <p>As its name suggest, Model Tuning has two main phases: the modeling, and the tuning. In <code>tidymodels</code>, the modeling is done using the <code>recepies</code> and <code>parsnip</code> packages, while the tuning is done with <code>tune</code>. <code>tune</code> is able to modify the the <code>recipe</code> and model’s arguments for each experiment.</p>
 <p>In Spark, the modeling is done with an ML Pipeline. In itself, preparing the data, and setting up the model can be complex enough to merit its own walk-through. For the walk-through of the model used in this article, please see <a href="../guides/textmodeling.html" target="_blank">Text Modeling</a>.</p>
+<p>The basics of the tuning part are covered in <a href="../guides/model_tuning.html" target="_blank">Model Tuning</a>. To avoid duplication, any foundational explanation will be linked back to that article.</p>
 </section>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<p>For this example, we will start a local Spark session, and then copy the <em>Fine Food Reviews</em> data to it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeldata)</span>
@@ -405,7 +407,9 @@ ga('send', {
 </section>
 <section id="pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
-<p>The <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline" target="_blank">Text Modeling</a> article was</p>
+<p>We literally copy-and-paste the ML Pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline" target="_blank">Text Modeling</a>, and then run it as-is. The reason this works, is that model tuning in Spark allows us to include the processing steps along with the model.</p>
+<p>During tuning, any parameter value used in the ML Pipeline will be overwritten with values from the <a href="#grid">grid</a>. It doesn’t matter that we use the exact same pipeline code for development, and tuning.</p>
+<p>It is also worth pointing out that if this was a “real life” exercise, <code>sff_pipeline</code> would probably already be loaded into our environment. That is because we just finished modeling and, decided to test to see if we could tune the model. Spark can re-use the exact same Ml Pipeline object for the cross validation step.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -432,6 +436,7 @@ ga('send', {
 </section>
 <section id="grid" class="level2">
 <h2 class="anchored" data-anchor-id="grid">Grid</h2>
+<p>This feature also makes it possible for the <a href="#grid">tuning grid</a> to include parameters beyond just the ones for the model, we can also modify parameters of the tokenization, cleaning, hashing and normalization steps.</p>
 <p><a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section in the <code>tidymodels</code> article.</p>
 <p>penalty = 10^seq(-3, 0, length = 20) mixture = seq(0, 1, length = 5) num_terms = 2^c(8, 10, 12)</p>
 <div class="cell">

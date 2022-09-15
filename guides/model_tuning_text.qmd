@@ -3,9 +3,10 @@ title: "Model Tuning - Part II"
 execute:
   eval: false
   freeze: true
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
-
-
 
 ```{r setup}
 #| include: false
@@ -16,31 +17,41 @@ library(modeldata)
 
 ## Goals
 
-The aim of this article is to build on the knowledge from [Model Tuning](model_tuning.qmd){target="_blank"} 
-by covering the following: 
+The aim of this article is to build on the knowledge from [Model
+Tuning](model_tuning.qmd){target="_blank"} by covering the following:
 
-- Show how to re-use the code of an existing ML Pipeline as the base 
-of the hyper-parameter tuning 
-- Show how tuning parameters are not limited to only model's parameters. We will
-cover how to tune data transformation parameters
- 
+-   Show how to re-use the code of an existing ML Pipeline as the base
+    of the hyper-parameter tuning
+-   Show how tuning parameters are not limited to only model's
+    parameters. We will cover how to tune data transformation parameters
+
 ## Recreating "Tuning Text Analysis"
 
-The example in this article is based on the [Tuning Text Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}
-article found in the `tidymodels`' `tune` website. In that article, they use 
-*Amazon's Fine Foods Reviews* text data to perform hyper parameter tuning. 
+The example in this article is based on the [Tuning Text
+Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}
+article found in the `tidymodels`' `tune` website. In that article, they
+use *Amazon's Fine Food Reviews* text data to perform hyper parameter
+tuning.
 
-As its name suggest, Model Tuning has two main phases: the modeling, and the tuning.
-In `tidymodels`, the modeling is done using the `recepies` and `parsnip` packages,
-while the tuning is done with `tune`. `tune` is able to modify the 
-the `recipe` and model's arguments for each experiment. 
+As its name suggest, Model Tuning has two main phases: the modeling, and
+the tuning. In `tidymodels`, the modeling is done using the `recepies`
+and `parsnip` packages, while the tuning is done with `tune`. `tune` is
+able to modify the the `recipe` and model's arguments for each
+experiment.
 
-In Spark, the modeling is done with an ML Pipeline. In itself, preparing the data, 
-and setting up the model can be complex enough to merit its own walk-through. 
-For the walk-through of the model used in this article, please see
-[Text Modeling](textmodeling.qmd){target="_blank"}.
+In Spark, the modeling is done with an ML Pipeline. In itself, preparing
+the data, and setting up the model can be complex enough to merit its
+own walk-through. For the walk-through of the model used in this
+article, please see [Text Modeling](textmodeling.qmd){target="_blank"}.
+
+The basics of the tuning part are covered in [Model
+Tuning](model_tuning.qmd){target="_blank"}. To avoid duplication, any
+foundational explanation will be linked back to that article.
 
 ## Setup
+
+For this example, we will start a local Spark session, and then copy the
+*Fine Food Reviews* data to it.
 
 ```{r}
 library(sparklyr)
@@ -56,8 +67,20 @@ sff_testing_data <- copy_to(sc, testing_data)
 
 ## Pipeline
 
-The [Text Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline){target="_blank"}
-article was 
+We literally copy-and-paste the ML Pipeline code from [Text
+Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline){target="_blank"},
+and then run it as-is. The reason this works, is that model tuning in
+Spark allows us to include the processing steps along with the model.
+
+During tuning, any parameter value used in the ML Pipeline will be
+overwritten with values from the [grid](#grid). It doesn't matter that
+we use the exact same pipeline code for development, and tuning.
+
+It is also worth pointing out that if this was a "real life" exercise,
+`sff_pipeline` would probably already be loaded into our environment.
+That is because we just finished modeling and, decided to test to see if
+we could tune the model. Spark can re-use the exact same Ml Pipeline
+object for the cross validation step.
 
 ```{r}
 sff_pipeline <- ml_pipeline(sc) %>% 
@@ -83,14 +106,20 @@ sff_pipeline <- ml_pipeline(sc) %>%
   ml_logistic_regression()
 ```
 
-## Grid
+## Grid {#grid}
 
-[Grid Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
-section in the `tidymodels` article. 
+This feature also makes it possible for the [tuning grid](#grid) to
+include parameters beyond just the ones for the model, we can also
+modify parameters of the tokenization, cleaning, hashing and
+normalization steps.
 
-  penalty = 10^seq(-3, 0, length = 20)
-  mixture = seq(0, 1, length = 5)
-  num_terms = 2^c(8, 10, 12)
+[Grid
+Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
+section in the `tidymodels` article.
+
+penalty = 10\^seq(-3, 0, length = 20) mixture = seq(0, 1, length = 5)
+num_terms = 2\^c(8, 10, 12)
+
 ```{r}
 sff_grid <-  list(
     hashing_tf = list(
@@ -140,7 +169,6 @@ sff_cv <- ml_cross_validator(
 sff_cv
 ```
 
-
 ```{r}
 sff_model <- ml_fit(
   x = sff_cv, 
@@ -153,7 +181,6 @@ sff_model <- ml_fit(
 ```{r}
 sff_metrics <- ml_validation_metrics(sff_model)
 ```
-
 
 ```{r}
 library(ggplot2)
@@ -221,6 +248,3 @@ new_sff_fitted %>%
 #| include: false
 spark_disconnect(sc)
 ```
-
-
-

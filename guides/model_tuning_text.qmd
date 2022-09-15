@@ -107,13 +107,11 @@ sff_model <- ml_fit(
 
 ```{r}
 sff_metrics <- ml_validation_metrics(sff_model)
-
-glimpse(sff_metrics)
 ```
 
 
 ```{r}
- thelibrary(ggplot2)
+library(ggplot2)
 
 sff_metrics %>% 
   mutate(reg_param_1 = as.factor(reg_param_1)) %>% 
@@ -128,26 +126,36 @@ library(dplyr)
 
 sff_metrics %>% 
   arrange(desc(areaUnderROC)) %>% 
-  head(r)
+  head()
 ```
 
 ## Model selection
 
 ```{r}
-new_sff_pipeline <- sc %>% 
-  ml_pipeline() %>% 
-  ft_tokenizer("review", "word_list") %>% 
-  ft_stop_words_remover("word_list", "wo_stop_words") %>% 
+new_sff_pipeline <- ml_pipeline(sc) %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 4096
+    ) %>%
+  ft_normalizer(
+    input_col = "hashed_features", 
+    output_col = "normal_features"
     ) %>% 
-  ft_normalizer("hashed_features", "normal_features") %>% 
   ft_r_formula(score ~ normal_features) %>% 
   ml_logistic_regression(elastic_net_param = 0.018, reg_param = 0.5)
+```
 
+```{r}
 new_sff_fitted <- new_sff_pipeline %>% 
   ml_fit(sff_training_data)
 ```

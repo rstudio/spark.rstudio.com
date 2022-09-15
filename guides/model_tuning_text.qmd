@@ -21,7 +21,7 @@ The aim of this article is to build on the knowledge from [Model
 Tuning](model_tuning.qmd){target="_blank"} by covering the following:
 
 -   Show how to re-use the code of an existing ML Pipeline as the base
-    of the hyper-parameter tuning
+    for the hyper-parameter tuning
 -   Show how tuning parameters are not limited to only model's
     parameters. We will cover how to tune data transformation parameters
 
@@ -67,20 +67,23 @@ sff_testing_data <- copy_to(sc, testing_data)
 
 ## Pipeline
 
-We literally copy-and-paste the ML Pipeline code from [Text
-Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline){target="_blank"},
-and then run it as-is. The reason this works, is that model tuning in
-Spark allows us to include the processing steps along with the model.
+The data preparation and modeling in [Text
+Modeling](textmodeling.qmd){target="_blank"} was based on the [Tuning
+Text
+Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}
+article. The main steps from from the [Recipe and Model
+Specification](https://tune.tidymodels.org/articles/extras/text_analysis.html#recipe-and-model-specifications-1){target="_blank"}
+section were recreated using Spark, via the `sparklyr` API. The `recipe`
+steps were recreated with Feature Transformer functions, and the
+`parsnip` model was recreated using the equivalent
+`ml_logistic_regression()` model.
 
 During tuning, any parameter value used in the ML Pipeline will be
-overwritten with values from the [grid](#grid). It doesn't matter that
-we use the exact same pipeline code for development, and tuning.
-
-It is also worth pointing out that if this was a "real life" exercise,
-`sff_pipeline` would probably already be loaded into our environment.
-That is because we just finished modeling and, decided to test to see if
-we could tune the model. Spark can re-use the exact same Ml Pipeline
-object for the cross validation step.
+overwritten with values from the [grid](#grid). This means that it
+doesn't matter that we use the exact same code for developing, and
+tuning the pipeline. We can literally copy-paste, and run the resulting
+pipeline code from [Text
+Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline).
 
 ```{r}
 sff_pipeline <- ml_pipeline(sc) %>% 
@@ -104,21 +107,50 @@ sff_pipeline <- ml_pipeline(sc) %>%
     ) %>% 
   ft_r_formula(score ~ normal_features) %>% 
   ml_logistic_regression()
+
+sff_pipeline
 ```
+
+It is also worth pointing out that in a"real life" exercise,
+`sff_pipeline` would probably already be loaded into our environment.
+That is because we just finished modeling and, decided to test to see if
+we could tune the model. Spark can re-use the exact same ML Pipeline
+object for the cross validation step.
 
 ## Grid {#grid}
 
-This feature also makes it possible for the [tuning grid](#grid) to
-include parameters beyond just the ones for the model, we can also
-modify parameters of the tokenization, cleaning, hashing and
-normalization steps.
+There is a big advantage to transforming, and modeling the data in a
+single ML Pipeline. It opens the door for Spark to also alter parameters
+used for data transformation, in addition to the model's parameters.
+This means that we can include the parameters of the tokenization,
+cleaning, hashing, and normalization steps as possible candidate for the
+model tuning.
 
-[Grid
+The *Text Analysis* article uses three tuning parameters. Two are in the
+model, and one is in the hashing step. Here are the parameters, and how
+they map between `tidymodels` and `sparklyr`:
+
+| Parameter                             | `tidymodels` | `sparklyr`          |
+|---------------------------------------|--------------|---------------------|
+| Number of Terms to Hash               | `num_terms`  | `num_features`      |
+| Amount of regularization in the model | `penalty`    | `elastic_net_param` |
+| Proportion of pure vs ridge Lasso     | `mixture`    | `reg_param`         |
+
+The values to tune with are taken from the [Grid
 Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
-section in the `tidymodels` article.
+section in the *Text Analysis* article. All that is left to do is to
+create the grid itself. Just like we did in the first [Model
+Tuning](model_tuning.html#grid){target="_blank"} article, we use partial
+name matching to the steps we want to tune:
 
-penalty = 10\^seq(-3, 0, length = 20) mixture = seq(0, 1, length = 5)
-num_terms = 2\^c(8, 10, 12)
+-   `hashing_ft` will be the name of the list object containing the
+    `num_features` values
+
+-   `logistic_regression` will be the of the list object containing the
+    values of the other two parameters
+
+Notice that the R code of the values themselves are a direct copy of the
+ones used in the *Text Analysis* article.
 
 ```{r}
 sff_grid <-  list(
@@ -128,20 +160,6 @@ sff_grid <-  list(
     logistic_regression = list(
       elastic_net_param = 10^seq(-3, 0, length = 20), 
       reg_param = seq(0, 1, length = 5)    
-    )
-  )
-
-sff_grid
-```
-
-```{r}
-sff_grid <-  list(
-    hashing_tf = list(
-      num_features = 2^c(12)  
-    ),
-    logistic_regression = list(
-      elastic_net_param = 10^seq(-3, 0, length = 5), 
-      reg_param = seq(0, 1, length = 3)    
     )
   )
 
@@ -163,7 +181,8 @@ sff_cv <- ml_cross_validator(
   estimator_param_maps = sff_grid,
   evaluator = sff_evaluator,
   num_folds = 3,
-  parallelism = 4
+  parallelism = 4,
+  seed = 100
 )
 
 sff_cv

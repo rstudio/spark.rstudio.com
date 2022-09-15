@@ -339,8 +339,15 @@ ga('send', {
    
   <ul>
   <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data">Data</a></li>
-  <li><a href="#text-transformers" id="toc-text-transformers" class="nav-link" data-scroll-target="#text-transformers">Text transformers</a></li>
-  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a></li>
+  <li><a href="#text-transformers" id="toc-text-transformers" class="nav-link" data-scroll-target="#text-transformers">Text transformers</a>
+  <ul class="collapse">
+  <li><a href="#split-into-words-tokenizer" id="toc-split-into-words-tokenizer" class="nav-link" data-scroll-target="#split-into-words-tokenizer">Split into words (tokenizer)</a></li>
+  <li><a href="#clean-up-words-stop-words" id="toc-clean-up-words-stop-words" class="nav-link" data-scroll-target="#clean-up-words-stop-words">Clean-up words (stop words)</a></li>
+  <li><a href="#index-words-hash" id="toc-index-words-hash" class="nav-link" data-scroll-target="#index-words-hash">Index words (hash)</a></li>
+  <li><a href="#normalize-results" id="toc-normalize-results" class="nav-link" data-scroll-target="#normalize-results">Normalize results</a></li>
+  </ul></li>
+  <li><a href="#prepare-the-model-with-an-ml-pipeline" id="toc-prepare-the-model-with-an-ml-pipeline" class="nav-link" data-scroll-target="#prepare-the-model-with-an-ml-pipeline">Prepare the model with an ML Pipeline</a></li>
+  <li><a href="#fit-and-predict" id="toc-fit-and-predict" class="nav-link" data-scroll-target="#fit-and-predict">Fit and predict</a></li>
   </ul>
 </nav>
     </div>
@@ -363,7 +370,7 @@ ga('send', {
 
 </header>
 
-<p>This article builds on the concepts and techniques contained in other articles found on this site. The example in this article goes beyond the descriptive analysis found in the <a href="../guides/textmining.html">Text Mining</a> article. It shows how to pre-process, and then model text data. This article also expands on <a href="../guides/pipelines.html">ML Pipelines</a>, it provides a more “real life” scenario of how and why to use pipelines.</p>
+<p>This article builds on the concepts and techniques contained in other articles found on this site. The example contained here goes beyond the <em>descriptive analysis</em> found in the <a href="../guides/textmining.html">Text Mining</a> article. It shows how to pre-process, and then <em>model</em> text data. This article also expands on <a href="../guides/pipelines.html">ML Pipelines</a>, by providing more “real life” scenario of how and why to use pipelines.</p>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <p>This article uses text data from the <code>modeldata</code> package. The <em>Fine foods example</em> data contains reviews of fine foods from Amazon. The package contains a training and a test set. The data consist of a product code, the text of the review, and the score. The score has two values: “great”, and “other”.</p>
@@ -398,8 +405,9 @@ ga('send', {
 </section>
 <section id="text-transformers" class="level2">
 <h2 class="anchored" data-anchor-id="text-transformers">Text transformers</h2>
-<ol type="1">
-<li><p>We will split each review into individual words, or tokens. The <code>ft_tokenizer()</code> function returns a in-line list containing the individual words.</p>
+<section id="split-into-words-tokenizer" class="level3">
+<h3 class="anchored" data-anchor-id="split-into-words-tokenizer">Split into words (tokenizer)</h3>
+<p>We will split each review into individual words, or tokens. The <code>ft_tokenizer()</code> function returns a in-line list containing the individual words.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sff_training_data <span class="sc">%&gt;%</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -421,8 +429,11 @@ ga('send', {
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 great &lt;list [59]&gt; </span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 great &lt;list [44]&gt; </span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p>There are words very common in text, words such as: “the”, “and”, “or”, etc. These are called “stop words”. Most often, stop words are not useful in analysis and modeling so it is necessary to remove them. That is exactly what <code>ft_stop_words_remover()</code> does. In addition to English, Spark has lists of stop words for several other languages.</p>
+</div>
+</section>
+<section id="clean-up-words-stop-words" class="level3">
+<h3 class="anchored" data-anchor-id="clean-up-words-stop-words">Clean-up words (stop words)</h3>
+<p>There are words very common in text, words such as: “the”, “and”, “or”, etc. These are called “stop words”. Most often, stop words are not useful in analysis and modeling, so it is necessary to remove them. That is exactly what <code>ft_stop_words_remover()</code> does. In addition to English, Spark has lists of stop words for several other languages. In the resulting table, notice that the number of words in the <code>wo_stop_words</code> is lower than the <code>word_list</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sff_training_data <span class="sc">%&gt;%</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -448,8 +459,11 @@ ga('send', {
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 great &lt;list [59]&gt;  &lt;list [36]&gt;  </span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 great &lt;list [44]&gt;  &lt;list [24]&gt;  </span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p>Text hashing maps a sequence of words, or “terms”, to their frequencies. The number of terms that are mapped can be controlled using the <code>num_features</code> argument in <code>ft_hashing_ft()</code>. Because we are eventually going to use a logistic regression model, we will need to override the frequencies from their original value to 1. This is accomplished by setting the <code>binary</code> argument to <code>TRUE</code>.</p>
+</div>
+</section>
+<section id="index-words-hash" class="level3">
+<h3 class="anchored" data-anchor-id="index-words-hash">Index words (hash)</h3>
+<p>Text hashing maps a sequence of words, or “terms”, to their frequencies. The number of terms that are mapped can be controlled using the <code>num_features</code> argument in <code>ft_hashing_ft()</code>. Because we are eventually going to use a logistic regression model, we will need to override the frequencies from their original value to 1. This is accomplished by setting the <code>binary</code> argument to <code>TRUE</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sff_training_data <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -481,8 +495,11 @@ ga('send', {
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 great &lt;list [59]&gt;  &lt;list [36]&gt;   &lt;dbl [1,024]&gt;  </span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 great &lt;list [44]&gt;  &lt;list [24]&gt;   &lt;dbl [1,024]&gt;  </span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p>Finally, we normalize the hashed column using <code>ft_normalizer()</code> .</p>
+</div>
+</section>
+<section id="normalize-results" class="level3">
+<h3 class="anchored" data-anchor-id="normalize-results">Normalize results</h3>
+<p>Finally, we normalize the hashed column using <code>ft_normalizer()</code> .</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sff_training_data <span class="sc">%&gt;%</span> </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -518,8 +535,7 @@ ga('send', {
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 great &lt;list [59]&gt;  &lt;list [36]&gt;   &lt;dbl [1,024]&gt;   &lt;dbl [1,024]&gt;  </span></span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 great &lt;list [44]&gt;  &lt;list [24]&gt;   &lt;dbl [1,024]&gt;   &lt;dbl [1,024]&gt;  </span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-</ol>
+</div>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -534,9 +550,10 @@ Important concept
 </div>
 </div>
 </section>
-<section id="model" class="level2">
-<h2 class="anchored" data-anchor-id="model">Model</h2>
-<p>The same set of complex transformations are needed for both modeling and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have to be copied to both sets of code. This makes a compelling argument for using <a href="../guides/pipelines.html">ML Pipelines</a>.</p>
+</section>
+<section id="prepare-the-model-with-an-ml-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-the-model-with-an-ml-pipeline">Prepare the model with an ML Pipeline</h2>
+<p>The same set of complex transformations are needed for both modeling, and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have to be copied to both sets of code. This makes a compelling argument for using <a href="../guides/pipelines.html">ML Pipelines</a>.</p>
 <p>We can initialize a pipeline (using <code>ml_pipeline()</code>), and then pass the same exact steps used in the previous section. We then append the model via <code>ft_r_formula()</code> and then the model function, in this case <code>ml_logistic_regression()</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
@@ -563,30 +580,30 @@ Important concept
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>sff_pipeline</span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Pipeline (Estimator) with 6 stages</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__f0ba5156_0aba_4476_8ce3_c8bb420cc7ec&gt; </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__ce209e5f_f912_4f46_8b42_c736ca2ee338&gt; </span></span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Stages </span></span>
 <span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--1 Tokenizer (Transformer)</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;tokenizer__4ec9d0d7_1065_47ba_97d4_65b0bfcf495a&gt; </span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;tokenizer__ba655c38_d06e_4e08_91c6_8a90cecbd95a&gt; </span></span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: review</span></span>
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: word_list</span></span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--2 StopWordsRemover (Transformer)</span></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;stop_words_remover__15d9ff5c_35cc_4e93_874f_615eb0c63d3b&gt; </span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;stop_words_remover__1cb9910b_4c33_439b_bbaf_08e2687b1442&gt; </span></span>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: word_list</span></span>
 <span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: wo_stop_words</span></span>
 <span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--3 HashingTF (Transformer)</span></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;hashing_tf__0670fe1a_dd47_4aca_ac51_6fb312ff86be&gt; </span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;hashing_tf__a82904f8_7469_4c98_9635_3613780f7dbc&gt; </span></span>
 <span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: wo_stop_words</span></span>
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: hashed_features</span></span>
 <span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--4 Normalizer (Transformer)</span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;normalizer__2acecd55_edde_4124_8cb2_dc5b45e8adff&gt; </span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;normalizer__2c500991_221f_49a7_b07c_3b251b771837&gt; </span></span>
 <span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: hashed_features</span></span>
 <span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: normal_features</span></span>
 <span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--5 RFormula (Estimator)</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__2feb6909_66d6_4275_8fcb_5fa3ea49a1e6&gt; </span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__60d2fcdc_3c54_4f3a_a687_60d35847b4fc&gt; </span></span>
 <span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
 <span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
@@ -596,7 +613,7 @@ Important concept
 <span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      handle_invalid: error</span></span>
 <span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      stringIndexerOrderType: frequencyDesc</span></span>
 <span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--6 LogisticRegression (Estimator)</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;logistic_regression__b11459a4_4994_43a6_9834_9febc33f9932&gt; </span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;logistic_regression__cce0e25a_e952_4c3b_9404_339309c28e6e&gt; </span></span>
 <span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
 <span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
@@ -615,7 +632,10 @@ Important concept
 <span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      threshold: 0.5</span></span>
 <span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      tol: 1e-06</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>sff_pipeline</code> is a ML Pipeline, which is essentially a set of steps to take, can be think of akin to a <code>recipe</code>. In order to actually process de model we use <code>ml_fit()</code>. This executes all of the transformations, and then fits the model. In other words, <code>ml_fit()</code> runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.</p>
+</section>
+<section id="fit-and-predict" class="level2">
+<h2 class="anchored" data-anchor-id="fit-and-predict">Fit and predict</h2>
+<p><code>sff_pipeline</code> is an ML Pipeline, which is essentially a set of steps to take, can be think of akin to a <code>recipe</code>. In order to actually process de model we use <code>ml_fit()</code>. This executes all of the transformations, and then fits the model. In other words, <code>ml_fit()</code> runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline_model <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(sff_pipeline, sff_training_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

@@ -1,7 +1,7 @@
 ---
 title: "Grid Search Tuning"
 execute:
-  eval: true
+  eval: false
   freeze: true
 editor_options: 
   markdown: 
@@ -15,42 +15,27 @@ library(dplyr)
 library(modeldata)
 ```
 
-The aim of this article is to build on the knowledge from [Intro to Model
-Tuning](model_tuning.qmd){target="_blank"} by covering the following:
+## Reproducing "Tuning Text Analysis" in Spark
 
--   Show how to re-use the code of an existing ML Pipeline as the base
-    for the hyper-parameter tuning
--   Show how tuning parameters are not limited to only model's
-    parameters. We will cover how to tune data transformation parameters
+In this article, we will reproduce the Grid Search tuning example found
+in the `tune` package's website: [Tuning Text
+Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}.
+That example analyzes *Amazon's Fine Food Reviews* text data to perform
+hyper parameter tuning.
 
-## Recreating "Tuning Text Analysis"
+In this site's [Text Modeling](textmodeling.qmd){target="_blank"}
+article, the data preparation and modeling are based on the same example
+from `tune`. Thanks to how modular ML Pipelines are, we are able to
+split the modeling walk-through, from the tuning walk-through found in
+this article. We also recommend to be familiar with the concepts from
+[Intro to Model Tuning](model_tuning.qmd){target="_blank"}.
 
-The example in this article is based on the [Tuning Text
-Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}
-article found in the `tidymodels`' `tune` website. In that article, they
-use *Amazon's Fine Food Reviews* text data to perform hyper parameter
-tuning.
-
-As its name suggest, Model Tuning has two main phases: the modeling, and
-the tuning. In `tidymodels`, the modeling is done using the `recepies`
-and `parsnip` packages, while the tuning is done with `tune`. `tune` is
-able to modify the the `recipe` and model's arguments for each
-experiment.
-
-In Spark, the modeling is done with an ML Pipeline. In itself, preparing
-the data, and setting up the model can be complex enough to merit its
-own walk-through. For the walk-through of the model used in this
-article, please see [Text Modeling](textmodeling.qmd){target="_blank"}.
-
-The basics of the tuning part are covered in [Intro to Model
-Tuning](model_tuning.qmd){target="_blank"}. To avoid duplication, any
-foundational explanation will be linked back to that article.
-
-## Setup
+## Spark and Data Setup
 
 For this example, we will start a local Spark session, and then copy the
-*Fine Food Reviews* data to it. For more information about the data, please 
-see the [Data](textmodeling.qmd#data) section of the *Text Modeling* article.
+*Fine Food Reviews* data to it. For more information about the data,
+please see the [Data](textmodeling.qmd#data) section of the *Text
+Modeling* article.
 
 ```{r}
 library(sparklyr)
@@ -66,22 +51,18 @@ sff_testing_data <- copy_to(sc, testing_data)
 
 ## Pipeline
 
-The data preparation and modeling in [Text
-Modeling](textmodeling.qmd){target="_blank"} was based on the [Tuning
-Text
-Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}
-article. The main steps from from the [Recipe and Model
-Specification](https://tune.tidymodels.org/articles/extras/text_analysis.html#recipe-and-model-specifications-1){target="_blank"}
-section were recreated using Spark, via the `sparklyr` API. The `recipe`
-steps were recreated with Feature Transformer functions, and the
-`parsnip` model was recreated using the equivalent
-`ml_logistic_regression()` model.
+As mentioned before, the data preparation and modeling in [Text
+Modeling](textmodeling.qmd#recipe-and-model-specifications-1){target="_blank"}
+are based on the same example from the `tune`'s website. The `recipe`
+steps, and `parsnip` model are recreated with Feature Transformers, and
+an ML model respectively.
 
-During tuning, any parameter value used in the ML Pipeline will be
-overwritten with values from the [grid](#grid). This means that it
-doesn't matter that we use the exact same code for developing, and
-tuning the pipeline. We can literally copy-paste, and run the resulting
-pipeline code from [Text
+Unlike `tidymodels`, there is no need to "pre-define" the arguments that
+will need tuning. During tuning, Spark will automatically override the
+parameters specified in the [grid](#grid). This means that it doesn't
+matter that we use the exact same code for developing, and tuning the
+pipeline. We can literally copy-paste, and run the resulting pipeline
+code from [Text
 Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline).
 
 ```{r}
@@ -122,12 +103,12 @@ There is a big advantage to transforming, and modeling the data in a
 single ML Pipeline. It opens the door for Spark to also alter parameters
 used for data transformation, in addition to the model's parameters.
 This means that we can include the parameters of the tokenization,
-cleaning, hashing, and normalization steps as possible candidate for the
-model tuning.
+cleaning, hashing, and normalization steps as possible candidates for
+the model tuning.
 
-The *Text Analysis* article uses three tuning parameters. Two are in the
-model, and one is in the hashing step. Here are the parameters, and how
-they map between `tidymodels` and `sparklyr`:
+The *Tuning Text Analysis* article uses three tuning parameters. Two are
+in the model, and one is in the hashing step. Here are the parameters,
+and how they map between `tidymodels` and `sparklyr`:
 
 | Parameter                             | `tidymodels` | `sparklyr`          |
 |---------------------------------------|--------------|---------------------|
@@ -137,8 +118,8 @@ they map between `tidymodels` and `sparklyr`:
 
 The values to tune with are taken from the [Grid
 Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
-section in the *Text Analysis* article. All that is left to do is to
-create the grid itself. Just like we did in the first [Model
+section in the *Tuning Text Analysis* article. All that is left to do is
+to create the grid itself. Just like we did in the first [Model
 Tuning](model_tuning.html#grid){target="_blank"} article, we use partial
 name matching to the steps we want to tune:
 
@@ -149,7 +130,7 @@ name matching to the steps we want to tune:
     values of the other two parameters
 
 Notice that the R code of the values themselves are a direct copy of the
-ones used in the *Text Analysis* article.
+ones used in the *Tuning Text Analysis* article.
 
 ```{r}
 sff_grid <-  list(
@@ -167,9 +148,10 @@ sff_grid
 
 ## Evaluator
 
-In the *Text Analysis* article, ROC AUC is used to measure performance.
-The is the default metric of `ml_binary_classification_evaluator()` , so
-we only need to pass the connection variable to the evaluator function.
+In the *Tuning Text Analysis* article, ROC AUC is used to measure
+performance. The is the default metric of
+`ml_binary_classification_evaluator()` , so we only need to pass the
+connection variable to the evaluator function.
 
 ```{r}
 sff_evaluator <- ml_binary_classification_evaluator(sc)
@@ -239,7 +221,7 @@ sff_metrics %>%
 We will now plot the results. We will match the approach used in the
 [Grid
 Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
-section of the *Text Analysis* article.
+section of the *Tuning Text Analysis* article.
 
 ```{r}
 library(ggplot2)
@@ -260,7 +242,7 @@ sff_metrics %>%
 
 In the plot, we can see the effects of the three parameters, and the
 values that look to be the best. These effects are very similar to the
-original *Text Analysis* article.
+original *Tuning Text Analysis* article.
 
 ## Model selection
 
@@ -322,3 +304,18 @@ Modeling* article.
 #| include: false
 spark_disconnect(sc)
 ```
+
+## Advantages of using Spark for Model Tuning
+
+Spark's capabilities, combined with `sparklyr` 's API, provide a very
+streamlined way to go from exploration, to modeling, to tuning. Even
+without a "formal" Spark cluster, it is possible to take advantage of
+these capabilities right from our personal computer.
+
+If we add an actual cluster to the mix, the advantage of using Spark
+raises dramatically. Usually we talk about Spark for "big data"
+analysis, but in this case, we can leverage it to parallelize the 900
+models across multiple machines. The ability to distribute the models
+across the cluster will cut down the tune processing time. The amount of
+time saved will depend on the resources and configuration of the
+cluster, as well as of those of the session.

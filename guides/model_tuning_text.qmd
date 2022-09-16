@@ -1,7 +1,7 @@
 ---
 title: "Model Tuning - Part II"
 execute:
-  eval: true
+  eval: false
   freeze: true
 editor_options: 
   markdown: 
@@ -168,11 +168,33 @@ sff_grid
 
 ## Evaluator
 
+In the *Text Analysis* article, ROC AUC is used to measure performance.
+The is the default metric of `ml_binary_classification_evaluator()` , so
+we only need to pass the connection variable to the evaluator function.
+
 ```{r}
 sff_evaluator <- ml_binary_classification_evaluator(sc)
 ```
 
 ## Model Tuning
+
+We will use `ml_cross_validator()` to prepare a tuning specification
+inside Spark. We recommend to set the `seed` argument in order to
+increase reproducibility.
+
+Spark will automatically create the grid combinations when tuning the
+model. In this case, `sff_grid` contains three parameters:
+
+-    `num_features` has 3 values
+
+-    `elastic_net_param` has 20 values
+
+-   `reg_parm` has 5 values
+
+This means that there will be 300 combinations for the tuning
+parameters (3 x 20 x 5). Because we set the number of folds to 3
+(`num_folds`), Spark will run a total of 900 models
+(3 x 300).
 
 ```{r}
 sff_cv <- ml_cross_validator(
@@ -187,6 +209,10 @@ sff_cv <- ml_cross_validator(
 
 sff_cv
 ```
+
+This is the step that will take the longest time. The `ml_fit()` function will 
+run the 900 models using the training data. There is no need to pre-prepare the 
+re-sampling folds, Spark will take care of that. 
 
 ```{r}
 sff_model <- ml_fit(

@@ -343,8 +343,8 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#recreating-tuning-text-analysis" id="toc-recreating-tuning-text-analysis" class="nav-link active" data-scroll-target="#recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#reproducing-tuning-text-analysis-in-spark" id="toc-reproducing-tuning-text-analysis-in-spark" class="nav-link active" data-scroll-target="#reproducing-tuning-text-analysis-in-spark">Reproducing “Tuning Text Analysis” in Spark</a></li>
+  <li><a href="#spark-and-data-setup" id="toc-spark-and-data-setup" class="nav-link" data-scroll-target="#spark-and-data-setup">Spark and Data Setup</a></li>
   <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
   <li><a href="#grid" id="toc-grid" class="nav-link" data-scroll-target="#grid">Grid</a></li>
   <li><a href="#evaluator" id="toc-evaluator" class="nav-link" data-scroll-target="#evaluator">Evaluator</a></li>
@@ -352,6 +352,7 @@ ga('send', {
   <li><a href="#validation-metrics" id="toc-validation-metrics" class="nav-link" data-scroll-target="#validation-metrics">Validation metrics</a></li>
   <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model selection</a></li>
   <li><a href="#test-data-metrics" id="toc-test-data-metrics" class="nav-link" data-scroll-target="#test-data-metrics">Test data metrics</a></li>
+  <li><a href="#advantages-of-using-spark-for-model-tuning" id="toc-advantages-of-using-spark-for-model-tuning" class="nav-link" data-scroll-target="#advantages-of-using-spark-for-model-tuning">Advantages of using Spark for Model Tuning</a></li>
   </ul>
 </nav>
     </div>
@@ -360,7 +361,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Grid Search Tuning</h1>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Grid Search Tuning</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="https://github.com/rstudio/spark.rstudio.com/tree/tune-text/source/guides/model_tuning_text.md"><i class="bi"></i> Get the code</button></div></div>
 </div>
 
 
@@ -374,20 +375,13 @@ ga('send', {
 
 </header>
 
-<p>The aim of this article is to build on the knowledge from <a href="../guides/model_tuning.html" target="_blank">Intro to Model Tuning</a> by covering the following:</p>
-<ul>
-<li>Show how to re-use the code of an existing ML Pipeline as the base for the hyper-parameter tuning</li>
-<li>Show how tuning parameters are not limited to only model’s parameters. We will cover how to tune data transformation parameters</li>
-</ul>
-<section id="recreating-tuning-text-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</h2>
-<p>The example in this article is based on the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a> article found in the <code>tidymodels</code>’ <code>tune</code> website. In that article, they use <em>Amazon’s Fine Food Reviews</em> text data to perform hyper parameter tuning.</p>
-<p>As its name suggest, Model Tuning has two main phases: the modeling, and the tuning. In <code>tidymodels</code>, the modeling is done using the <code>recepies</code> and <code>parsnip</code> packages, while the tuning is done with <code>tune</code>. <code>tune</code> is able to modify the the <code>recipe</code> and model’s arguments for each experiment.</p>
-<p>In Spark, the modeling is done with an ML Pipeline. In itself, preparing the data, and setting up the model can be complex enough to merit its own walk-through. For the walk-through of the model used in this article, please see <a href="../guides/textmodeling.html" target="_blank">Text Modeling</a>.</p>
-<p>The basics of the tuning part are covered in <a href="../guides/model_tuning.html" target="_blank">Intro to Model Tuning</a>. To avoid duplication, any foundational explanation will be linked back to that article.</p>
+<section id="reproducing-tuning-text-analysis-in-spark" class="level2">
+<h2 class="anchored" data-anchor-id="reproducing-tuning-text-analysis-in-spark">Reproducing “Tuning Text Analysis” in Spark</h2>
+<p>In this article, we will reproduce the <em>Grid Search</em> tuning example found in the <code>tune</code> package’s website: <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a>. That example analyzes <em>Amazon’s Fine Food Reviews</em> text data to perform hyper parameter tuning.</p>
+<p>In this site’s <a href="../guides/textmodeling.html" target="_blank">Text Modeling</a> article, the data preparation and modeling are based on the same example from <code>tune</code>. Thanks to how modular ML Pipelines are, we are able to split the modeling walk-through, from the tuning walk-through found in this article. We also recommend to be familiar with the concepts from <a href="../guides/model_tuning.html" target="_blank">Intro to Model Tuning</a>.</p>
 </section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<section id="spark-and-data-setup" class="level2">
+<h2 class="anchored" data-anchor-id="spark-and-data-setup">Spark and Data Setup</h2>
 <p>For this example, we will start a local Spark session, and then copy the <em>Fine Food Reviews</em> data to it. For more information about the data, please see the <a href="../guides/textmodeling.html#data">Data</a> section of the <em>Text Modeling</em> article.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
@@ -403,8 +397,8 @@ ga('send', {
 </section>
 <section id="pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
-<p>The data preparation and modeling in <a href="../guides/textmodeling.html" target="_blank">Text Modeling</a> was based on the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a> article. The main steps from from the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#recipe-and-model-specifications-1" target="_blank">Recipe and Model Specification</a> section were recreated using Spark, via the <code>sparklyr</code> API. The <code>recipe</code> steps were recreated with Feature Transformer functions, and the <code>parsnip</code> model was recreated using the equivalent <code>ml_logistic_regression()</code> model.</p>
-<p>During tuning, any parameter value used in the ML Pipeline will be overwritten with values from the <a href="#grid">grid</a>. This means that it doesn’t matter that we use the exact same code for developing, and tuning the pipeline. We can literally copy-paste, and run the resulting pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline">Text Modeling</a>.</p>
+<p>As mentioned before, the data preparation and modeling in <a href="../guides/textmodeling.html#recipe-and-model-specifications-1" target="_blank">Text Modeling</a> are based on the same example from the <code>tune</code>’s website. The <code>recipe</code> steps, and <code>parsnip</code> model are recreated with Feature Transformers, and an ML model respectively.</p>
+<p>Unlike <code>tidymodels</code>, there is no need to “pre-define” the arguments that will need tuning. During tuning, Spark will automatically override the parameters specified in the <a href="#grid">grid</a>. This means that it doesn’t matter that we use the exact same code for developing, and tuning the pipeline. We can literally copy-paste, and run the resulting pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline">Text Modeling</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -428,66 +422,14 @@ ga('send', {
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(score <span class="sc">~</span> normal_features) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>()</span>
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>sff_pipeline</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Pipeline (Estimator) with 6 stages</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__a238a35e_541a_43f7_b22a_7d8a9b2754ef&gt; </span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Stages </span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--1 Tokenizer (Transformer)</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;tokenizer__89f703c6_d2eb_4504_ab09_56afa00534bc&gt; </span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: review</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: word_list</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--2 StopWordsRemover (Transformer)</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;stop_words_remover__e20da5c1_fbc5_451c_a25d_7281e4b253c2&gt; </span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: word_list</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: wo_stop_words</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--3 HashingTF (Transformer)</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;hashing_tf__cce2290c_85c2_4eb0_af37_760b691d98a2&gt; </span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: wo_stop_words</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: hashed_features</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--4 Normalizer (Transformer)</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;normalizer__7ccc5def_3af6_4625_9a81_e62b79315067&gt; </span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: hashed_features</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: normal_features</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--5 RFormula (Estimator)</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__7bf5f9e7_e76a_46ed_8ccd_fa322d9e4cb5&gt; </span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters)</span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      force_index_label: FALSE</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      formula: score ~ normal_features</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      handle_invalid: error</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      stringIndexerOrderType: frequencyDesc</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--6 LogisticRegression (Estimator)</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;logistic_regression__5e40252e_fe78_4b47_aa2c_1494567736cf&gt; </span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      prediction_col: prediction</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      probability_col: probability</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      raw_prediction_col: rawPrediction</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters)</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      aggregation_depth: 2</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      elastic_net_param: 0</span></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      family: auto</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      fit_intercept: TRUE</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      max_iter: 100</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      maxBlockSizeInMB: 0</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      reg_param: 0</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      standardization: TRUE</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      threshold: 0.5</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      tol: 1e-06</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>sff_pipeline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It is also worth pointing out that in a”real life” exercise, <code>sff_pipeline</code> would probably already be loaded into our environment. That is because we just finished modeling and, decided to test to see if we could tune the model. Spark can re-use the exact same ML Pipeline object for the cross validation step.</p>
 </section>
 <section id="grid" class="level2">
 <h2 class="anchored" data-anchor-id="grid">Grid</h2>
-<p>There is a big advantage to transforming, and modeling the data in a single ML Pipeline. It opens the door for Spark to also alter parameters used for data transformation, in addition to the model’s parameters. This means that we can include the parameters of the tokenization, cleaning, hashing, and normalization steps as possible candidate for the model tuning.</p>
-<p>The <em>Text Analysis</em> article uses three tuning parameters. Two are in the model, and one is in the hashing step. Here are the parameters, and how they map between <code>tidymodels</code> and <code>sparklyr</code>:</p>
+<p>There is a big advantage to transforming, and modeling the data in a single ML Pipeline. It opens the door for Spark to also alter parameters used for data transformation, in addition to the model’s parameters. This means that we can include the parameters of the tokenization, cleaning, hashing, and normalization steps as possible candidates for the model tuning.</p>
+<p>The <em>Tuning Text Analysis</em> article uses three tuning parameters. Two are in the model, and one is in the hashing step. Here are the parameters, and how they map between <code>tidymodels</code> and <code>sparklyr</code>:</p>
 <table class="table">
 <colgroup>
 <col style="width: 52%">
@@ -519,12 +461,12 @@ ga('send', {
 </tr>
 </tbody>
 </table>
-<p>The values to tune with are taken from the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section in the <em>Text Analysis</em> article. All that is left to do is to create the grid itself. Just like we did in the first <a href="model_tuning.html#grid" target="_blank">Model Tuning</a> article, we use partial name matching to the steps we want to tune:</p>
+<p>The values to tune with are taken from the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section in the <em>Tuning Text Analysis</em> article. All that is left to do is to create the grid itself. Just like we did in the first <a href="model_tuning.html#grid" target="_blank">Model Tuning</a> article, we use partial name matching to the steps we want to tune:</p>
 <ul>
 <li><p><code>hashing_ft</code> will be the name of the list object containing the <code>num_features</code> values</p></li>
 <li><p><code>logistic_regression</code> will be the of the list object containing the values of the other two parameters</p></li>
 </ul>
-<p>Notice that the R code of the values themselves are a direct copy of the ones used in the <em>Text Analysis</em> article.</p>
+<p>Notice that the R code of the values themselves are a direct copy of the ones used in the <em>Tuning Text Analysis</em> article.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sff_grid <span class="ot">&lt;-</span>  <span class="fu">list</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">hashing_tf =</span> <span class="fu">list</span>(</span>
@@ -536,26 +478,12 @@ ga('send', {
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>sff_grid</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $hashing_tf</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $hashing_tf$num_features</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  256 1024 4096</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $logistic_regression</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $logistic_regression$elastic_net_param</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 0.001000000 0.001438450 0.002069138 0.002976351 0.004281332 0.006158482</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] 0.008858668 0.012742750 0.018329807 0.026366509 0.037926902 0.054555948</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] 0.078475997 0.112883789 0.162377674 0.233572147 0.335981829 0.483293024</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] 0.695192796 1.000000000</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $logistic_regression$reg_param</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.00 0.25 0.50 0.75 1.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>sff_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="evaluator" class="level2">
 <h2 class="anchored" data-anchor-id="evaluator">Evaluator</h2>
-<p>In the <em>Text Analysis</em> article, ROC AUC is used to measure performance. The is the default metric of <code>ml_binary_classification_evaluator()</code> , so we only need to pass the connection variable to the evaluator function.</p>
+<p>In the <em>Tuning Text Analysis</em> article, ROC AUC is used to measure performance. The is the default metric of <code>ml_binary_classification_evaluator()</code> , so we only need to pass the connection variable to the evaluator function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sff_evaluator <span class="ot">&lt;-</span> <span class="fu">ml_binary_classification_evaluator</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -581,17 +509,7 @@ ga('send', {
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">100</span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sff_cv</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CrossValidator (Estimator)</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__557f14fd_e0a5_4ed6_a76c_d4648fe44d28&gt; </span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  (Parameters -- Tuning)</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   estimator: Pipeline</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__a238a35e_541a_43f7_b22a_7d8a9b2754ef&gt; </span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   evaluator: BinaryClassificationEvaluator</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;binary_classification_evaluator__51964c1a_ecd3_40a8_89ea_4cf4e2f81490&gt; </span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     with metric areaUnderROC </span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   num_folds: 3 </span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [Tuned over 300 hyperparameter sets]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sff_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is the step that will take the longest time. The <code>ml_fit()</code> function will run the 900 models using the training data. There is no need to pre-prepare the re-sampling folds, Spark will take care of that.</p>
 <div class="cell">
@@ -611,16 +529,9 @@ ga('send', {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>sff_metrics <span class="sc">%&gt;%</span> </span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(areaUnderROC)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   areaUnderROC reg_param_1 elastic_net_param_1 num_features_2</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    0.7858727        0.25          0.05455595           4096</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    0.7847232        0.50          0.02636651           4096</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    0.7835850        0.75          0.01832981           4096</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    0.7830411        0.50          0.01832981           4096</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5    0.7830230        0.25          0.03792690           4096</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6    0.7828651        0.75          0.01274275           4096</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will now plot the results. We will match the approach used in the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section of the <em>Text Analysis</em> article.</p>
+<p>We will now plot the results. We will match the approach used in the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section of the <em>Tuning Text Analysis</em> article.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -636,11 +547,8 @@ ga('send', {
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> num_features_2) <span class="sc">+</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>(<span class="at">base_size =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="model_tuning_text_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<p>In the plot, we can see the effects of the three parameters, and the values that look to be the best. These effects are very similar to the original <em>Text Analysis</em> article.</p>
+<p>In the plot, we can see the effects of the three parameters, and the values that look to be the best. These effects are very similar to the original <em>Tuning Text Analysis</em> article.</p>
 </section>
 <section id="model-selection" class="level2">
 <h2 class="anchored" data-anchor-id="model-selection">Model selection</h2>
@@ -683,14 +591,14 @@ ga('send', {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(sff_testing_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_binary</span>()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   .metric .estimator .estimate</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 roc_auc binary         0.783</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 pr_auc  binary         0.653</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_binary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The results show an increase performance in contrast with running the ML Pipeline Model, those results are in <a href="../guides/textmodeling.html#fit-and-predict">Fit and Predict</a> section of the <em>Text Modeling</em> article.</p>
+</section>
+<section id="advantages-of-using-spark-for-model-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="advantages-of-using-spark-for-model-tuning">Advantages of using Spark for Model Tuning</h2>
+<p>Spark’s capabilities, combined with <code>sparklyr</code> ’s API, provide a very streamlined way to go from exploration, to modeling, to tuning. Even without a “formal” Spark cluster, it is possible to take advantage of these capabilities right from our personal computer.</p>
+<p>If we add an actual cluster to the mix, the advantage of using Spark raises dramatically. Usually we talk about Spark for “big data” analysis, but in this case, we can leverage it to parallelize the 900 models across multiple machines. The ability to distribute the models across the cluster will cut down the tune processing time. The amount of time saved will depend on the resources and configuration of the cluster, as well as of those of the session.</p>
 
 
 </section>
@@ -847,6 +755,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Model Tuning - Part II</title>
+<title>sparklyr - Grid Search Tuning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -198,7 +198,7 @@ ga('send', {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Model Tuning - Part II</h1>
+      <h1 class="quarto-secondary-nav-title">Grid Search Tuning</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -276,12 +276,12 @@ ga('send', {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/model_tuning.html" class="sidebar-item-text sidebar-link">Model tuning - Part I</a>
+  <a href="../guides/model_tuning.html" class="sidebar-item-text sidebar-link">Intro to Model Tuning</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/model_tuning_text.html" class="sidebar-item-text sidebar-link active">Model tuning - Part II</a>
+  <a href="../guides/model_tuning_text.html" class="sidebar-item-text sidebar-link active">Grid Search Tuning</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -343,8 +343,7 @@ ga('send', {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#recreating-tuning-text-analysis" id="toc-recreating-tuning-text-analysis" class="nav-link" data-scroll-target="#recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</a></li>
+  <li><a href="#recreating-tuning-text-analysis" id="toc-recreating-tuning-text-analysis" class="nav-link active" data-scroll-target="#recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
   <li><a href="#grid" id="toc-grid" class="nav-link" data-scroll-target="#grid">Grid</a></li>
@@ -361,7 +360,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Model Tuning - Part II</h1>
+<h1 class="title d-none d-lg-block">Grid Search Tuning</h1>
 </div>
 
 
@@ -375,20 +374,17 @@ ga('send', {
 
 </header>
 
-<section id="goals" class="level2">
-<h2 class="anchored" data-anchor-id="goals">Goals</h2>
-<p>The aim of this article is to build on the knowledge from <a href="../guides/model_tuning.html" target="_blank">Model Tuning</a> by covering the following:</p>
+<p>The aim of this article is to build on the knowledge from <a href="../guides/model_tuning.html" target="_blank">Intro to Model Tuning</a> by covering the following:</p>
 <ul>
 <li>Show how to re-use the code of an existing ML Pipeline as the base for the hyper-parameter tuning</li>
 <li>Show how tuning parameters are not limited to only model’s parameters. We will cover how to tune data transformation parameters</li>
 </ul>
-</section>
 <section id="recreating-tuning-text-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="recreating-tuning-text-analysis">Recreating “Tuning Text Analysis”</h2>
 <p>The example in this article is based on the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a> article found in the <code>tidymodels</code>’ <code>tune</code> website. In that article, they use <em>Amazon’s Fine Food Reviews</em> text data to perform hyper parameter tuning.</p>
 <p>As its name suggest, Model Tuning has two main phases: the modeling, and the tuning. In <code>tidymodels</code>, the modeling is done using the <code>recepies</code> and <code>parsnip</code> packages, while the tuning is done with <code>tune</code>. <code>tune</code> is able to modify the the <code>recipe</code> and model’s arguments for each experiment.</p>
 <p>In Spark, the modeling is done with an ML Pipeline. In itself, preparing the data, and setting up the model can be complex enough to merit its own walk-through. For the walk-through of the model used in this article, please see <a href="../guides/textmodeling.html" target="_blank">Text Modeling</a>.</p>
-<p>The basics of the tuning part are covered in <a href="../guides/model_tuning.html" target="_blank">Model Tuning</a>. To avoid duplication, any foundational explanation will be linked back to that article.</p>
+<p>The basics of the tuning part are covered in <a href="../guides/model_tuning.html" target="_blank">Intro to Model Tuning</a>. To avoid duplication, any foundational explanation will be linked back to that article.</p>
 </section>
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
@@ -531,9 +527,17 @@ ga('send', {
 </section>
 <section id="validation-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="validation-metrics">Validation metrics</h2>
+<p>We can now extract the metrics from <code>sff_model</code> using <code>ml_validation_metrics()</code>. The ROC AUC values will be in a column called <code>areaUnderROC</code>. We can then take a look at the best performing models using <code>dplyr</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sff_metrics <span class="ot">&lt;-</span> <span class="fu">ml_validation_metrics</span>(sff_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sff_metrics <span class="ot">&lt;-</span> <span class="fu">ml_validation_metrics</span>(sff_model)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>sff_metrics <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(areaUnderROC)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We will now plot the results. We will match the approach used in the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank">Grid Search</a> section of the <em>Text Analysis</em> article.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -550,51 +554,52 @@ ga('send', {
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> num_features_2) <span class="sc">+</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>(<span class="at">base_size =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sff_metrics <span class="sc">%&gt;%</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(areaUnderROC)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>In the plot, we can see the effects of the three parameters, and the values that look to be the best. These effects are very similar to the original <em>Text Analysis</em> article.</p>
 </section>
 <section id="model-selection" class="level2">
 <h2 class="anchored" data-anchor-id="model-selection">Model selection</h2>
+<p>We can create a new ML Pipeline using the same code as the original pipeline. We only need to change the 3 parameters values, with values that performed best.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>new_sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"review"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>(</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>, </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_hashing_tf</span>(</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"wo_stop_words"</span>, </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"hashed_features"</span>, </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">binary =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_features =</span> <span class="dv">4096</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_normalizer</span>(</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"hashed_features"</span>, </span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"normal_features"</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(score <span class="sc">~</span> normal_features) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>(<span class="at">elastic_net_param =</span> <span class="fl">0.05</span>, <span class="at">reg_param =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>new_sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"review"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>, </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_hashing_tf</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"wo_stop_words"</span>, </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"hashed_features"</span>, </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">binary =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_features =</span> <span class="dv">4096</span>      </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_normalizer</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"hashed_features"</span>, </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"normal_features"</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_r_formula</span>(score <span class="sc">~</span> normal_features) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>(</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">elastic_net_param =</span> <span class="fl">0.05</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">reg_param =</span> <span class="fl">0.25</span>  </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Now, we create a final model using the new ML Pipeline.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="ot">&lt;-</span> new_sff_pipeline <span class="sc">%&gt;%</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fit</span>(sff_training_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="ot">&lt;-</span> new_sff_pipeline <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fit</span>(sff_training_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="test-data-metrics" class="level2">
 <h2 class="anchored" data-anchor-id="test-data-metrics">Test data metrics</h2>
+<p>The test data set is now used to confirm that the performance gains hold. We use it to run predictions with thew new ML Pipeline Model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="sc">%&gt;%</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(sff_testing_data) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_binary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(sff_testing_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_metrics_binary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The results show an increase performance in contrast with running the ML Pipeline Model, those results are in <a href="../guides/textmodeling.html#fit-and-predict">Fit and Predict</a> section of the <em>Text Modeling</em> article.</p>
 
 
 </section>
@@ -803,7 +808,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../guides/model_tuning.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Model tuning - Part I</span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Intro to Model Tuning</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

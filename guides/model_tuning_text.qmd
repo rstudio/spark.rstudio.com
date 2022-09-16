@@ -1,5 +1,5 @@
 ---
-title: "Model Tuning - Part II"
+title: "Grid Search Tuning"
 execute:
   eval: false
   freeze: true
@@ -15,9 +15,7 @@ library(dplyr)
 library(modeldata)
 ```
 
-## Goals
-
-The aim of this article is to build on the knowledge from [Model
+The aim of this article is to build on the knowledge from [Intro to Model
 Tuning](model_tuning.qmd){target="_blank"} by covering the following:
 
 -   Show how to re-use the code of an existing ML Pipeline as the base
@@ -44,7 +42,7 @@ the data, and setting up the model can be complex enough to merit its
 own walk-through. For the walk-through of the model used in this
 article, please see [Text Modeling](textmodeling.qmd){target="_blank"}.
 
-The basics of the tuning part are covered in [Model
+The basics of the tuning part are covered in [Intro to Model
 Tuning](model_tuning.qmd){target="_blank"}. To avoid duplication, any
 foundational explanation will be linked back to that article.
 
@@ -185,16 +183,15 @@ increase reproducibility.
 Spark will automatically create the grid combinations when tuning the
 model. In this case, `sff_grid` contains three parameters:
 
--    `num_features` has 3 values
+-   `num_features` has 3 values
 
--    `elastic_net_param` has 20 values
+-   `elastic_net_param` has 20 values
 
 -   `reg_parm` has 5 values
 
-This means that there will be 300 combinations for the tuning
-parameters (3 x 20 x 5). Because we set the number of folds to 3
-(`num_folds`), Spark will run a total of 900 models
-(3 x 300).
+This means that there will be 300 combinations for the tuning parameters
+(3 x 20 x 5). Because we set the number of folds to 3 (`num_folds`),
+Spark will run a total of 900 models (3 x 300).
 
 ```{r}
 sff_cv <- ml_cross_validator(
@@ -210,9 +207,9 @@ sff_cv <- ml_cross_validator(
 sff_cv
 ```
 
-This is the step that will take the longest time. The `ml_fit()` function will 
-run the 900 models using the training data. There is no need to pre-prepare the 
-re-sampling folds, Spark will take care of that. 
+This is the step that will take the longest time. The `ml_fit()`
+function will run the 900 models using the training data. There is no
+need to pre-prepare the re-sampling folds, Spark will take care of that.
 
 ```{r}
 sff_model <- ml_fit(
@@ -223,9 +220,25 @@ sff_model <- ml_fit(
 
 ## Validation metrics
 
+We can now extract the metrics from `sff_model` using
+`ml_validation_metrics()`. The ROC AUC values will be in a column called
+`areaUnderROC`. We can then take a look at the best performing models
+using `dplyr`.
+
 ```{r}
 sff_metrics <- ml_validation_metrics(sff_model)
+
+library(dplyr)
+
+sff_metrics %>% 
+  arrange(desc(areaUnderROC)) %>% 
+  head()
 ```
+
+We will now plot the results. We will match the approach used in the
+[Grid
+Search](https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1){target="_blank"}
+section of the *Text Analysis* article.
 
 ```{r}
 library(ggplot2)
@@ -244,15 +257,15 @@ sff_metrics %>%
   theme_light(base_size = 9)
 ```
 
-```{r}
-library(dplyr)
-
-sff_metrics %>% 
-  arrange(desc(areaUnderROC)) %>% 
-  head()
-```
+In the plot, we can see the effects of the three parameters, and the
+values that look to be the best. These effects are very similar to the
+original *Text Analysis* article.
 
 ## Model selection
+
+We can create a new ML Pipeline using the same code as the original
+pipeline. We only need to change the 3 parameters values, with values
+that performed best.
 
 ```{r}
 new_sff_pipeline <- ml_pipeline(sc) %>% 
@@ -268,15 +281,20 @@ new_sff_pipeline <- ml_pipeline(sc) %>%
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
-    num_features = 4096
+    num_features = 4096      
     ) %>%
   ft_normalizer(
     input_col = "hashed_features", 
     output_col = "normal_features"
     ) %>% 
   ft_r_formula(score ~ normal_features) %>% 
-  ml_logistic_regression(elastic_net_param = 0.05, reg_param = 0.25)
+  ml_logistic_regression(
+    elastic_net_param = 0.05,
+    reg_param = 0.25  
+    )
 ```
+
+Now, we create a final model using the new ML Pipeline.
 
 ```{r}
 new_sff_fitted <- new_sff_pipeline %>% 
@@ -285,11 +303,19 @@ new_sff_fitted <- new_sff_pipeline %>%
 
 ## Test data metrics
 
+The test data set is now used to confirm that the performance gains
+hold. We use it to run predictions with thew new ML Pipeline Model.
+
 ```{r}
 new_sff_fitted %>% 
   ml_transform(sff_testing_data) %>% 
   ml_metrics_binary()
 ```
+
+The results show an increase performance in contrast with running the ML
+Pipeline Model, those results are in [Fit and
+Predict](textmodeling.qmd#fit-and-predict) section of the *Text
+Modeling* article.
 
 ```{r}
 #| include: false

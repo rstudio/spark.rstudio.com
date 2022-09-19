@@ -9,8 +9,9 @@ editor_options:
 format:
   html: 
     code-tools:
-      caption: Get the code
-      source: https://github.com/rstudio/spark.rstudio.com/tree/tune-text/source/guides/model_tuning_text.md
+      source: https://github.com/rstudio/spark.rstudio.com/blob/tune-text/source/guides/model_tuning_text.md
+      toggle: false
+      caption: none
 ---
 
 ```{r setup}
@@ -19,6 +20,36 @@ library(sparklyr)
 library(dplyr)
 library(modeldata)
 ```
+
+```{mermaid}
+%%| fig-width: 6.5
+flowchart LR
+  subgraph id1 [ ]
+    subgraph id2 [ ]
+      subgraph id3 [ML Pipeline]
+        d[Prepare] --> m[Model]
+      end
+      subgraph id4 [Grid Search Tuning]
+        m --> gv[Grid]
+        gv-- Combo 1 -->ft1[Fit]
+        ft1 --> ev1[Evaluate]
+        gv-- Combo 2 -->ft2[Fit]
+        ft2 --> ev2[Evaluate]     
+        gv-- Combo n -->ft3[Fit]
+        ft3 --> ev3[Evaluate]    
+      end
+    end
+  end
+  style id1 fill:#eee,stroke:#eee
+  style id2 fill:#eee,stroke:#eee
+  style d fill:#99ccff,stroke#666
+  style m fill:#ccff33,stroke:#666
+  style gv fill:#ffcc99,stroke:#666
+  style ft1 fill:#99ffcc,stroke:#666
+  style ft2 fill:#99ffcc,stroke:#666
+  style ft3 fill:#99ffcc,stroke:#666
+```
+
 
 ## Reproducing "Tuning Text Analysis" in Spark
 
@@ -54,7 +85,7 @@ sff_training_data <- copy_to(sc, training_data)
 sff_testing_data <- copy_to(sc, testing_data)
 ```
 
-## Pipeline
+## ML Pipeline
 
 As mentioned before, the data preparation and modeling in [Text
 Modeling](textmodeling.qmd#recipe-and-model-specifications-1){target="_blank"}
@@ -151,7 +182,7 @@ sff_grid <-  list(
 sff_grid
 ```
 
-## Evaluator
+## Evaluate
 
 In the *Tuning Text Analysis* article, ROC AUC is used to measure
 performance. The is the default metric of
@@ -162,7 +193,7 @@ connection variable to the evaluator function.
 sff_evaluator <- ml_binary_classification_evaluator(sc)
 ```
 
-## Model Tuning
+## Model Tuning (Fit)
 
 We will use `ml_cross_validator()` to prepare a tuning specification
 inside Spark. We recommend to set the `seed` argument in order to

@@ -135,6 +135,9 @@ ga('send', {
   'anonymizeIp': true,
 });
 </script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -345,10 +348,10 @@ ga('send', {
   <ul>
   <li><a href="#reproducing-tuning-text-analysis-in-spark" id="toc-reproducing-tuning-text-analysis-in-spark" class="nav-link active" data-scroll-target="#reproducing-tuning-text-analysis-in-spark">Reproducing “Tuning Text Analysis” in Spark</a></li>
   <li><a href="#spark-and-data-setup" id="toc-spark-and-data-setup" class="nav-link" data-scroll-target="#spark-and-data-setup">Spark and Data Setup</a></li>
-  <li><a href="#pipeline" id="toc-pipeline" class="nav-link" data-scroll-target="#pipeline">Pipeline</a></li>
+  <li><a href="#ml-pipeline" id="toc-ml-pipeline" class="nav-link" data-scroll-target="#ml-pipeline">ML Pipeline</a></li>
   <li><a href="#grid" id="toc-grid" class="nav-link" data-scroll-target="#grid">Grid</a></li>
-  <li><a href="#evaluator" id="toc-evaluator" class="nav-link" data-scroll-target="#evaluator">Evaluator</a></li>
-  <li><a href="#model-tuning" id="toc-model-tuning" class="nav-link" data-scroll-target="#model-tuning">Model Tuning</a></li>
+  <li><a href="#evaluate" id="toc-evaluate" class="nav-link" data-scroll-target="#evaluate">Evaluate</a></li>
+  <li><a href="#model-tuning-fit" id="toc-model-tuning-fit" class="nav-link" data-scroll-target="#model-tuning-fit">Model Tuning (Fit)</a></li>
   <li><a href="#validation-metrics" id="toc-validation-metrics" class="nav-link" data-scroll-target="#validation-metrics">Validation metrics</a></li>
   <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model selection</a></li>
   <li><a href="#test-data-metrics" id="toc-test-data-metrics" class="nav-link" data-scroll-target="#test-data-metrics">Test data metrics</a></li>
@@ -361,7 +364,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Grid Search Tuning</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="https://github.com/rstudio/spark.rstudio.com/tree/tune-text/source/guides/model_tuning_text.md"><i class="bi"></i> Get the code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Grid Search Tuning</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="https://github.com/rstudio/spark.rstudio.com/blob/tune-text/source/guides/model_tuning_text.md"><i class="bi"></i></button></div></div>
 </div>
 
 
@@ -375,6 +378,43 @@ ga('send', {
 
 </header>
 
+<div class="cell" data-fig-width="6.5">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+  subgraph id1 [ ]
+    subgraph id2 [ ]
+      subgraph id3 [ML Pipeline]
+        d[Prepare] --&gt; m[Model]
+      end
+      subgraph id4 [Grid Search Tuning]
+        m --&gt; gv[Grid]
+        gv-- Combo 1 --&gt;ft1[Fit]
+        ft1 --&gt; ev1[Evaluate]
+        gv-- Combo 2 --&gt;ft2[Fit]
+        ft2 --&gt; ev2[Evaluate]     
+        gv-- Combo n --&gt;ft3[Fit]
+        ft3 --&gt; ev3[Evaluate]    
+      end
+    end
+  end
+  style id1 fill:#eee,stroke:#eee
+  style id2 fill:#eee,stroke:#eee
+  style d fill:#99ccff,stroke#666
+  style m fill:#ccff33,stroke:#666
+  style gv fill:#ffcc99,stroke:#666
+  style ft1 fill:#99ffcc,stroke:#666
+  style ft2 fill:#99ffcc,stroke:#666
+  style ft3 fill:#99ffcc,stroke:#666
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
 <section id="reproducing-tuning-text-analysis-in-spark" class="level2">
 <h2 class="anchored" data-anchor-id="reproducing-tuning-text-analysis-in-spark">Reproducing “Tuning Text Analysis” in Spark</h2>
 <p>In this article, we will reproduce the <em>Grid Search</em> tuning example found in the <code>tune</code> package’s website: <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a>. That example analyzes <em>Amazon’s Fine Food Reviews</em> text data to perform hyper parameter tuning.</p>
@@ -395,8 +435,8 @@ ga('send', {
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>sff_testing_data <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, testing_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="pipeline" class="level2">
-<h2 class="anchored" data-anchor-id="pipeline">Pipeline</h2>
+<section id="ml-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="ml-pipeline">ML Pipeline</h2>
 <p>As mentioned before, the data preparation and modeling in <a href="../guides/textmodeling.html#recipe-and-model-specifications-1" target="_blank">Text Modeling</a> are based on the same example from the <code>tune</code>’s website. The <code>recipe</code> steps, and <code>parsnip</code> model are recreated with Feature Transformers, and an ML model respectively.</p>
 <p>Unlike <code>tidymodels</code>, there is no need to “pre-define” the arguments that will need tuning. During tuning, Spark will automatically override the parameters specified in the <a href="#grid">grid</a>. This means that it doesn’t matter that we use the exact same code for developing, and tuning the pipeline. We can literally copy-paste, and run the resulting pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline">Text Modeling</a>.</p>
 <div class="cell">
@@ -481,15 +521,15 @@ ga('send', {
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>sff_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="evaluator" class="level2">
-<h2 class="anchored" data-anchor-id="evaluator">Evaluator</h2>
+<section id="evaluate" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate">Evaluate</h2>
 <p>In the <em>Tuning Text Analysis</em> article, ROC AUC is used to measure performance. The is the default metric of <code>ml_binary_classification_evaluator()</code> , so we only need to pass the connection variable to the evaluator function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sff_evaluator <span class="ot">&lt;-</span> <span class="fu">ml_binary_classification_evaluator</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="model-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="model-tuning">Model Tuning</h2>
+<section id="model-tuning-fit" class="level2">
+<h2 class="anchored" data-anchor-id="model-tuning-fit">Model Tuning (Fit)</h2>
 <p>We will use <code>ml_cross_validator()</code> to prepare a tuning specification inside Spark. We recommend to set the <code>seed</code> argument in order to increase reproducibility.</p>
 <p>Spark will automatically create the grid combinations when tuning the model. In this case, <code>sff_grid</code> contains three parameters:</p>
 <ul>

@@ -1,17 +1,11 @@
 ---
 title: "Grid Search Tuning"
 execute:
-  eval: false
+  eval: true
   freeze: true
 editor_options: 
   markdown: 
     wrap: 72
-format:
-  html: 
-    code-tools:
-      source: https://github.com/rstudio/spark.rstudio.com/blob/tune-text/source/guides/model_tuning_text.md
-      toggle: false
-      caption: none
 ---
 
 ```{r setup}
@@ -21,6 +15,52 @@ library(dplyr)
 library(modeldata)
 ```
 
+## Background
+
+Spark and `sparklyr` provide an easy way to go from exploration, to
+modeling, to tuning. Even without a "formal" Spark cluster, it is
+possible to take advantage of these capabilities right from our personal
+computer.
+
+If we add an actual cluster to the mix, the advantage of using Spark
+raises dramatically. **Usually, we talk about Spark for "big data"
+analysis, but in this case, we can leverage it to "parallelize" hundreds
+of models across multiple machines.** The ability to distribute the
+models across the cluster will cut down the tuning processing time. The
+resources available to the cluster, and the given Spark session, will
+also determine the the amount of time saved.
+
+## Grid Search Tuning
+
+The main goal of hyper-parameter tuning is to find the ideal set of
+parameters to use when fitting our model. For example, finding out the
+ideal number of trees to use for a model. We use model tuning to try
+several specific, and increasing, number of trees. That will tell us at
+what point a higher number of trees does not improve the model's
+performance.
+
+In Grid Search, we provide a provide a set of specific parameters, and
+specific values to test for each parameter. The total number of
+combinations will be the product of all the specific values of each
+parameter.
+
+For example, suppose we are going to try two parameters. For the first
+parameter we provide 5 values to try, and for the second parameter we
+provide 10 values to try. The total number of combinations will be 50.
+The number of combinations grows quickly the more parameters we use. In
+our example, adding a third parameter, with only 2 values, our number of
+combinations would double to 100 (5x10x2).
+
+The model tuning will then return a performance metric result for each
+combination. We can then compare the results, and decide which
+combination we will use for our final model.
+
+In Spark, we use an ML Pipeline model, and a list of the parameters and
+the values to try. We also specify the metric it should use to measure
+performance. Spark will then take care of figuring out the combinations,
+and fits the corresponding models.
+
+::: {#fig-grid}
 ```{mermaid}
 %%| fig-width: 6.5
 flowchart LR
@@ -53,6 +93,34 @@ flowchart LR
   style ft4 fill:#ccff99,stroke:#666
 ```
 
+Grid Search Tuning in Spark
+:::
+
+## Cross Validation
+
+In the previous section, we only referred to combinations, not a fitted
+model. That is because with Cross Validation, multiple models are fitted
+with the same combination of parameters. The difference is the data used
+for training, and validation. These are called folds. The training data,
+and the validation data is different for each fold, that is called
+re-sampling.
+
+The model is fitted with the current fold's training data, and then it
+is evaluated using the validation data. The average of the evaluation
+results become the official metric value of the combination of
+parameters. @fig-cv, is a "zoomed" look of what happens inside
+`Fit Models` of @fig-grid.
+
+The total number of models, will be the total number of combinations
+times the number of folds. For example, if we use 3 parameters, with 5
+values each, that would be 125 combinations. If tune with 3 folds, Cross
+Validation will fit, and validate, 375 models total.
+
+In Spark, running the 375 discrete models can be distributed across the
+entire cluster, thus significantly reducing the amount of time we would
+have to wait to see the results.
+
+::: {#fig-cv}
 ```{mermaid}
 %%| fig-width: 6.5
 flowchart LR
@@ -86,6 +154,9 @@ flowchart LR
   style eva fill:#ffff66,stroke:#666
 ```
 
+Cross Validation in Spark
+:::
+
 ## Reproducing "Tuning Text Analysis" in Spark
 
 In this article, we will reproduce the *Grid Search* tuning example
@@ -94,12 +165,12 @@ Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target
 That example analyzes *Amazon's Fine Food Reviews* text data to perform
 hyper parameter tuning.
 
-In this site's [Text Modeling](textmodeling.qmd){target="_blank"}
-article, the data preparation and modeling are based on the same example
-from `tune`. Thanks to how modular ML Pipelines are, we are able to
-split the modeling walk-through, from the tuning walk-through found in
-this article. We also recommend to be familiar with the concepts from
-[Intro to Model Tuning](model_tuning.qmd){target="_blank"}.
+The [Text Modeling](textmodeling.qmd){target="_blank"} article, the data
+preparation and modeling are based on the same example from `tune`.
+Thanks to how modular ML Pipelines are, we are able to split the
+modeling walk-through, from the tuning walk-through found in this
+article. We also recommend to be familiar with the concepts from [Intro
+to Model Tuning](model_tuning.qmd){target="_blank"}.
 
 ## Spark and Data Setup
 
@@ -228,7 +299,7 @@ connection variable to the evaluator function.
 sff_evaluator <- ml_binary_classification_evaluator(sc)
 ```
 
-## Model Tuning (Fit)
+## Model Tuning
 
 We will use `ml_cross_validator()` to prepare a tuning specification
 inside Spark. We recommend to set the `seed` argument in order to
@@ -272,7 +343,7 @@ sff_model <- ml_fit(
   )
 ```
 
-## Validation metrics
+## Metrics
 
 We can now extract the metrics from `sff_model` using
 `ml_validation_metrics()`. The ROC AUC values will be in a column called
@@ -375,18 +446,3 @@ Modeling* article.
 #| include: false
 spark_disconnect(sc)
 ```
-
-## Advantages of using Spark for Model Tuning
-
-Spark's capabilities, combined with `sparklyr` 's API, provide a very
-streamlined way to go from exploration, to modeling, to tuning. Even
-without a "formal" Spark cluster, it is possible to take advantage of
-these capabilities right from our personal computer.
-
-If we add an actual cluster to the mix, the advantage of using Spark
-raises dramatically. Usually we talk about Spark for "big data"
-analysis, but in this case, we can leverage it to parallelize the 900
-models across multiple machines. The ability to distribute the models
-across the cluster will cut down the tune processing time. The amount of
-time saved will depend on the resources and configuration of the
-cluster, as well as of those of the session.

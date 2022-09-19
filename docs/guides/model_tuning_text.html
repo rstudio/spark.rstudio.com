@@ -390,25 +390,69 @@ ga('send', {
       end
       subgraph id4 [Grid Search Tuning]
         m --&gt; gv[Grid]
-        gv-- Combo 1 --&gt;ft1[Fit]
-        ft1 --&gt; ev1[Evaluate]
-        gv-- Combo 2 --&gt;ft2[Fit]
-        ft2 --&gt; ev2[Evaluate]     
-        gv-- Combo n --&gt;ft3[Fit]
-        ft3 --&gt; ev3[Evaluate]    
+        gv-- Combo 1 --&gt;ft1[Fit Models]
+        ft1 --&gt; ev1[Metric]
+        gv-- Combo 2 --&gt;ft2[Fit Models]
+        ft2 --&gt; ev2[Metric]     
+        gv-- Combo 3 --&gt;ft3[Fit Models]
+        ft3 --&gt; ev3[Metric]  
+        gv-- Combo n --&gt;ft4[Fit Models]
+        ft4 --&gt; ev4[Metric]          
       end
     end
   end
   style id1 fill:#eee,stroke:#eee
   style id2 fill:#eee,stroke:#eee
   style d fill:#99ccff,stroke#666
-  style m fill:#ccff33,stroke:#666
+  style m fill:#99ffcc,stroke:#666
   style gv fill:#ffcc99,stroke:#666
-  style ft1 fill:#99ffcc,stroke:#666
-  style ft2 fill:#99ffcc,stroke:#666
-  style ft3 fill:#99ffcc,stroke:#666
+  style ft1 fill:#ccff99,stroke:#666
+  style ft2 fill:#ccff99,stroke:#666
+  style ft3 fill:#ccff99,stroke:#666
+  style ft4 fill:#ccff99,stroke:#666
 </pre>
 <div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<div class="cell" data-fig-width="6.5">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-2">flowchart LR
+  subgraph id1 [ ]
+    subgraph id2 [ ]
+      gv[Grid] -- Combo n --&gt;re[Resample]
+      re -- Fold 1 --&gt; ft1[Fit]
+      subgraph id4 [Fit Models with Cross Validation]
+        re -- Fold 2 --&gt; ft2[Fit]
+        re -- Fold 3 --&gt; ft3[Fit]
+        ft1 --&gt; ev1[Evaluate]
+        ft2 --&gt; ev2[Evaluate]     
+        ft3 --&gt; ev3[Evaluate]  
+        ev1 --&gt; eva[Avgerage]
+        ev2 --&gt; eva
+        ev3 --&gt; eva
+      end
+      eva --&gt; mt[Metric]
+    end
+  end
+  style id1 fill:#eee,stroke:#eee
+  style id4 fill:#ccff99,stroke:#666
+  style gv fill:#ffcc99,stroke:#666
+  style ft1 fill:#ccffff,stroke:#666
+  style ft2 fill:#ccffff,stroke:#666
+  style ft3 fill:#ccffff,stroke:#666
+  style re fill:#ffccff,stroke:#666
+  style ev1 fill:#ffff99,stroke:#666
+  style ev2 fill:#ffff99,stroke:#666
+  style ev3 fill:#ffff99,stroke:#666
+  style eva fill:#ffff66,stroke:#666
+</pre>
+<div id="mermaid-tooltip-2" class="mermaidTooltip">
 
 </div>
 <p></p>

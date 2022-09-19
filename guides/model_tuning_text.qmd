@@ -31,25 +31,60 @@ flowchart LR
       end
       subgraph id4 [Grid Search Tuning]
         m --> gv[Grid]
-        gv-- Combo 1 -->ft1[Fit]
-        ft1 --> ev1[Evaluate]
-        gv-- Combo 2 -->ft2[Fit]
-        ft2 --> ev2[Evaluate]     
-        gv-- Combo n -->ft3[Fit]
-        ft3 --> ev3[Evaluate]    
+        gv-- Combo 1 -->ft1[Fit Models]
+        ft1 --> ev1[Metric]
+        gv-- Combo 2 -->ft2[Fit Models]
+        ft2 --> ev2[Metric]     
+        gv-- Combo 3 -->ft3[Fit Models]
+        ft3 --> ev3[Metric]  
+        gv-- Combo n -->ft4[Fit Models]
+        ft4 --> ev4[Metric]          
       end
     end
   end
   style id1 fill:#eee,stroke:#eee
   style id2 fill:#eee,stroke:#eee
   style d fill:#99ccff,stroke#666
-  style m fill:#ccff33,stroke:#666
+  style m fill:#99ffcc,stroke:#666
   style gv fill:#ffcc99,stroke:#666
-  style ft1 fill:#99ffcc,stroke:#666
-  style ft2 fill:#99ffcc,stroke:#666
-  style ft3 fill:#99ffcc,stroke:#666
+  style ft1 fill:#ccff99,stroke:#666
+  style ft2 fill:#ccff99,stroke:#666
+  style ft3 fill:#ccff99,stroke:#666
+  style ft4 fill:#ccff99,stroke:#666
 ```
 
+```{mermaid}
+%%| fig-width: 6.5
+flowchart LR
+  subgraph id1 [ ]
+    subgraph id2 [ ]
+      gv[Grid] -- Combo n -->re[Resample]
+      re -- Fold 1 --> ft1[Fit]
+      subgraph id4 [Fit Models with Cross Validation]
+        re -- Fold 2 --> ft2[Fit]
+        re -- Fold 3 --> ft3[Fit]
+        ft1 --> ev1[Evaluate]
+        ft2 --> ev2[Evaluate]     
+        ft3 --> ev3[Evaluate]  
+        ev1 --> eva[Avgerage]
+        ev2 --> eva
+        ev3 --> eva
+      end
+      eva --> mt[Metric]
+    end
+  end
+  style id1 fill:#eee,stroke:#eee
+  style id4 fill:#ccff99,stroke:#666
+  style gv fill:#ffcc99,stroke:#666
+  style ft1 fill:#ccffff,stroke:#666
+  style ft2 fill:#ccffff,stroke:#666
+  style ft3 fill:#ccffff,stroke:#666
+  style re fill:#ffccff,stroke:#666
+  style ev1 fill:#ffff99,stroke:#666
+  style ev2 fill:#ffff99,stroke:#666
+  style ev3 fill:#ffff99,stroke:#666
+  style eva fill:#ffff66,stroke:#666
+```
 
 ## Reproducing "Tuning Text Analysis" in Spark
 

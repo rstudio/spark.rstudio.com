@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Model tuning</title>
+<title>sparklyr - Intro to Model Tuning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -88,7 +88,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../guides/h2o.html" rel="next">
+<link href="../guides/model_tuning_text.html" rel="next">
 <link href="../guides/textmodeling.html" rel="prev">
 <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
@@ -198,7 +198,7 @@ ga('send', {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Model tuning</h1>
+      <h1 class="quarto-secondary-nav-title">Intro to Model Tuning</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -276,7 +276,12 @@ ga('send', {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/model_tuning.html" class="sidebar-item-text sidebar-link active">Model tuning</a>
+  <a href="../guides/model_tuning.html" class="sidebar-item-text sidebar-link active">Intro to Model Tuning</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/model_tuning_text.html" class="sidebar-item-text sidebar-link">Grid Search Tuning</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -357,7 +362,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Model tuning</h1>
+<h1 class="title d-none d-lg-block">Intro to Model Tuning</h1>
 </div>
 
 
@@ -524,12 +529,12 @@ ga('send', {
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>cells_cv</span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CrossValidator (Estimator)</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__ec69f1d9_f6ed_41ed_8bb2_3ab347638969&gt; </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__5efce189_b365_4d96_af6e_14172c733372&gt; </span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  (Parameters -- Tuning)</span></span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   estimator: Pipeline</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__8f76aeb5_4929_4b72_adf4_c66325fbc307&gt; </span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__70e03d4c_ae3f_4b78_970e_99b209fce2fb&gt; </span></span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   evaluator: MulticlassClassificationEvaluator</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;multiclass_classification_evaluator__f5e6d38f_9d66_4b81_8dba_44cd171b7aa1&gt; </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;multiclass_classification_evaluator__add09dd3_1143_49e6_a923_c8bff6fb942f&gt; </span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     with metric accuracy </span></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   num_folds: 5 </span></span>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [Tuned over 20 hyperparameter sets]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -580,7 +585,7 @@ ga('send', {
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="model_tuning_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<p><img src="model_tuning_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -820,8 +825,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../guides/h2o.html" class="pagination-link">
-        <span class="nav-page-text">H2O models</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../guides/model_tuning_text.html" class="pagination-link">
+        <span class="nav-page-text">Grid Search Tuning</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

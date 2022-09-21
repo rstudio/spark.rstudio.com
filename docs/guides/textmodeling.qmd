@@ -1,0 +1,193 @@
+---
+title: "Text modeling"
+execute:
+  eval: true
+  freeze: true
+---
+
+```{r setup}
+#| include: false
+library(sparklyr)
+library(dplyr)
+library(modeldata)
+```
+
+This article builds on the concepts and techniques contained in other articles found on this site. The example contained here goes beyond the *descriptive analysis* found in the [Text Mining](textmining.qmd) article. It shows how to pre-process, and then *model* text data. This article also expands on [ML Pipelines](pipelines.qmd), by providing more "real life" scenario of how and why to use pipelines.
+
+## Data
+
+This article uses text data from the `modeldata` package. The *Fine foods example* data contains reviews of fine foods from Amazon. The package contains a training and a test set. The data consist of a product code, the text of the review, and the score. The score has two values: "great", and "other".
+
+```{r}
+library(modeldata)
+
+data("small_fine_foods")
+
+training_data %>% 
+  head(1) %>% 
+  as.list()
+```
+
+We will start by starting a local session of Spark, and then copying both data sets to our new session.
+
+```{r}
+library(sparklyr)
+
+sc <- spark_connect(master = "local", version = "3.3")
+
+sff_training_data <- copy_to(sc, training_data)
+
+sff_testing_data <- copy_to(sc, testing_data)
+```
+
+## Text transformers
+
+### Split into words (tokenizer)
+
+We will split each review into individual words, or tokens. The `ft_tokenizer()` function returns a in-line list containing the individual words.
+
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  select(3:4)
+```
+
+### Clean-up words (stop words)
+
+There are words very common in text, words such as: "the", "and", "or", etc. These are called "stop words". Most often, stop words are not useful in analysis and modeling, so it is necessary to remove them. That is exactly what `ft_stop_words_remover()` does. In addition to English, Spark has lists of stop words for several other languages. In the resulting table, notice that the number of words in the `wo_stop_words` is lower than the `word_list`.
+
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  select(3:5) 
+```
+
+### Index words (hash)
+
+Text hashing maps a sequence of words, or "terms", to their frequencies. The number of terms that are mapped can be controlled using the `num_features` argument in `ft_hashing_ft()`. Because we are eventually going to use a logistic regression model, we will need to override the frequencies from their original value to 1. This is accomplished by setting the `binary` argument to `TRUE`.
+
+```{r}
+sff_training_data %>%
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  select(3:6) 
+```
+
+### Normalize results
+
+Finally, we normalize the hashed column using `ft_normalizer()` .
+
+```{r}
+sff_training_data %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  ft_normalizer(
+    input_col = "hashed_features", 
+    output_col = "normal_features"
+    ) %>% 
+  select(3:7) 
+```
+
+::: callout-tip
+## Important concept
+
+The `ft_hashing_tf()` outputs the index and frequency of each term. This can be thought of as how "dummy variables" are created for each discrete value of a categorical variable. This means that for modeling, we will only need to use only one "column", `hashed_features`. But, we will use `normal_features` for the model because it is derived from `hashed_features`.
+:::
+
+## Prepare the model with an ML Pipeline
+
+The same set of complex transformations are needed for both modeling, and predictions. This means that we will have to duplicate the code for both. This is not ideal when developing, because any change in the transformation will have to be copied to both sets of code. This makes a compelling argument for using [ML Pipelines](pipelines.qmd).
+
+We can initialize a pipeline (using `ml_pipeline()`), and then pass the same exact steps used in the previous section. We then append the model via `ft_r_formula()` and then the model function, in this case `ml_logistic_regression()`
+
+```{r}
+sff_pipeline <- ml_pipeline(sc) %>% 
+  ft_tokenizer(
+    input_col = "review",
+    output_col = "word_list"
+  ) %>% 
+  ft_stop_words_remover(
+    input_col = "word_list", 
+    output_col = "wo_stop_words"
+    ) %>% 
+  ft_hashing_tf(
+    input_col = "wo_stop_words", 
+    output_col = "hashed_features", 
+    binary = TRUE, 
+    num_features = 1024
+    ) %>%
+  ft_normalizer(
+    input_col = "hashed_features", 
+    output_col = "normal_features"
+    ) %>% 
+  ft_r_formula(score ~ normal_features) %>% 
+  ml_logistic_regression()  
+
+sff_pipeline
+```
+
+## Fit and predict
+
+`sff_pipeline` is an ML Pipeline, which is essentially a set of steps to take, can be think of akin to a `recipe`. In order to actually process de model we use `ml_fit()`. This executes all of the transformations, and then fits the model. In other words, `ml_fit()` runs all of the steps in the pipeline. The output will be considered an ML Pipeline Model.
+
+```{r}
+sff_pipeline_model <- ml_fit(sff_pipeline, sff_training_data)
+```
+
+`sff_pipeline_model` is more than just a "fitted" model. It also contains all of the pre-processing steps. So any new data passed through it, will go through the same transformations before running the predictions. To execute the pipeline model on against the test data, we use `ml_transform()`
+
+```{r}
+sff_test_predictions <- sff_pipeline_model %>% 
+  ml_transform(sff_testing_data) 
+
+glimpse(sff_test_predictions)
+```
+
+Using `ml_metrics_binary()`, we can see how well the model performed.
+
+```{r}
+ml_metrics_binary(sff_test_predictions)
+```
+
+## Tune the model (optional)
+
+The performance of the model may be acceptable, but there could be a desire to improve it. Hyper parameter tuning can be applied to figure if there are better function arguments to use. A big advantage of using an ML Pipeline for the initial model, is that we can **literally use the exact same pipeline code** to perform the tuning. The [Grid Search Tuning](model_tuning_text.qmd) article shows how to do this.
+
+```{r}
+#| include: false
+spark_disconnect(sc)
+```

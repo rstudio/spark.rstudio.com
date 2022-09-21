@@ -15,26 +15,24 @@ library(dplyr)
 library(modeldata)
 ```
 
-This article will cover the following:
+In this article, will cover the following four points:
 
--   Overview of Grid Search, and Cross Validation
+1.  Overview of Grid Search, and Cross Validation
 
--   Through an example, show how easy it is to setup and run this kind
-    of validation
+2.  Show how easy it is to run Grid Search model tuning in Spark
 
--   Provide a compelling reason to use ML Pipelines in our daily work
+3.  Provide a compelling reason to use ML Pipelines in our daily work
 
--   Highlight the advantages of using Spark, and `sparklyr`, for model
+4.  Highlight the advantages of using Spark, and `sparklyr`, for model
     tuning
 
-## Grid Search 
+## Grid Search
 
 The main goal of hyper-parameter tuning is to find the ideal set of
-parameters to use when fitting our model. For example, finding out the
-ideal number of trees to use for a model. We use model tuning to try
-several specific, and increasing, number of trees. That will tell us at
-what point a higher number of trees does not improve the model's
-performance.
+model parameter values. For example, finding out the ideal number of
+trees to use for a model. We use model tuning to try several, and
+increasing values. That will tell us at what point a increasing the
+number of trees does not improve the model's performance.
 
 In Grid Search, we provide a provide a set of specific parameters, and
 specific values to test for each parameter. The total number of
@@ -45,7 +43,7 @@ For example, suppose we are going to try **two** parameters. For the
 first parameter we provide 5 values to try, and for the second parameter
 we provide 10 values to try. The total number of combinations will be
 50. The number of combinations grows quickly the more parameters we use.
-In our example, adding a **third** parameter, with only 2 values, the
+Adding a **third** parameter, with only 2 values, will mean that the
 number of combinations would double to 100 (5x10x2).
 
 The model tuning returns a performance metric for each combination. We
@@ -107,8 +105,8 @@ parameters. @fig-cv, is a "zoomed" look of what happens inside
 
 The total number of models, will be the total number of combinations
 times the number of folds. For example, if we use 3 parameters, with 5
-values each, that would be 125 combinations. If tune with 3 folds, Cross
-Validation will fit, and validate, a total of 375 models.
+values each, that would be 125 combinations. If tuning with 3 folds,
+Cross Validation will fit, and validate, a total of 375 models.
 
 In Spark, running **the 375 discrete models can be distributed across
 the entire cluster**, thus significantly reducing the amount of time we
@@ -158,7 +156,7 @@ found in the `tune` package's website: [Tuning Text
 Analysis](https://tune.tidymodels.org/articles/extras/text_analysis.html){target="_blank"}.
 That example analyzes *Amazon's Fine Food Reviews* text data. The goal
 is to tune the model using the exact same tuning parameters, and values,
-that were used in the `tune`'s website examle.
+that were used in the `tune`'s website example.
 
 ::: callout-tip
 This article builds on the knowledge of two previous articles, [Text
@@ -196,12 +194,12 @@ article. The `recipe` steps, and `parsnip` model are recreated with
 Feature Transformers, and an ML model respectively.
 
 Unlike `tidymodels`, there is no need to "pre-define" the arguments that
-will need tuning. At execution, Spark will automatically override the
-parameters specified in the [grid](#grid). *This means that it doesn't
+will need tuning. **At execution, Spark will automatically override the
+parameters specified in the [grid](#grid).** This means that it doesn't
 matter that we use the exact same code for developing, and tuning the
-pipeline. We can literally copy-paste, and run the resulting pipeline
+pipeline. **We can literally copy-paste, and run the resulting pipeline
 code from [Text
-Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline)*.
+Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline).**
 
 ```{r}
 sff_pipeline <- ml_pipeline(sc) %>% 
@@ -232,8 +230,8 @@ sff_pipeline
 It is also worth pointing out that in a"real life" exercise,
 `sff_pipeline` would probably already be loaded into our environment.
 That is because we just finished modeling and, decided to test to see if
-we could tune the model. Spark can re-use the exact same ML Pipeline
-object for the cross validation step.
+we could tune the model (See @fig-pipeline). Spark can re-use the exact
+same ML Pipeline object for the cross validation step.
 
 ## Grid {#grid}
 
@@ -244,9 +242,9 @@ This means that we can include the parameters of the tokenization,
 cleaning, hashing, and normalization steps as possible candidates for
 the model tuning.
 
-The *Tuning Text Analysis* article uses three tuning parameters. Two are
-in the model, and one is in the hashing step. Here are the parameters,
-and how they map between `tidymodels` and `sparklyr`:
+The *Tuning Text Analysis* article uses three tuning parameters. Two
+parameters are in the model, and one is in the hashing step. Here are
+the parameters, and how they map between `tidymodels` and `sparklyr`:
 
 | Parameter                             | `tidymodels` | `sparklyr`          |
 |---------------------------------------|--------------|---------------------|
@@ -260,8 +258,8 @@ to tune:
 -   `hashing_ft` will be the name of the list object containing the
     `num_features` values
 
--   `logistic_regression` will be the of the list object containing the
-    values of the other two parameters
+-   `logistic_regression` will be the of the list object with the model
+    parameters
 
 For more about partial name matching, see in the [Intro Model
 Tuning](model_tuning.qmd#grid) article. For the parameters values, we
@@ -297,21 +295,19 @@ sff_evaluator <- ml_binary_classification_evaluator(sc)
 ## Model Tuning
 
 We will use `ml_cross_validator()` to prepare a tuning specification
-inside Spark. We recommend to set the `seed` argument in order to
-increase reproducibility.
+inside Spark. Spark will automatically create the parameter combinations
+when tuning the model. In this case, `sff_grid` contains three
+parameters:
 
-Spark will automatically create the grid combinations when tuning the
-model. In this case, `sff_grid` contains three parameters:
+-   `num_features` with 3 values
 
--   `num_features` has 3 values
+-   `elastic_net_param` with 20 values
 
--   `elastic_net_param` has 20 values
+-   `reg_parm` with 5 values
 
--   `reg_parm` has 5 values
-
-This means that there will be 300 combinations for the tuning parameters
-(3 x 20 x 5). Because we set the number of folds to 3 (`num_folds`),
-Spark will run a total of 900 models (3 x 300).
+This means that there will be **300 combinations** for the tuning
+parameters (3 x 20 x 5). Because we set the number of folds to 3
+(`num_folds`), Spark will run a total of **900 models** (3 x 300).
 
 ```{r}
 sff_cv <- ml_cross_validator(
@@ -326,6 +322,11 @@ sff_cv <- ml_cross_validator(
 
 sff_cv
 ```
+
+::: callout-tip
+We recommend to set the `seed` argument in order to increase
+reproducibility.
+:::
 
 This is the step that will take the longest time. The `ml_fit()`
 function will run the 900 models using the training data. There is no
@@ -421,10 +422,8 @@ new_sff_fitted <- new_sff_pipeline %>%
   ml_fit(sff_training_data)
 ```
 
-## Test data metrics
-
 The test data set is now used to confirm that the performance gains
-hold. We use it to run predictions with thew new ML Pipeline Model.
+hold. We use it to run predictions with the new ML Pipeline Model.
 
 ```{r}
 new_sff_fitted %>% 
@@ -432,26 +431,68 @@ new_sff_fitted %>%
   ml_metrics_binary()
 ```
 
-The results show an increase performance in contrast with running the ML
-Pipeline Model, those results are in [Fit and
-Predict](textmodeling.qmd#fit-and-predict) section of the *Text
-Modeling* article.
+## Benefits of ML Pipelines for everyday work
 
-## Advantages of Spark
+In the previous section, the metrics show an increase performance
+compared to the model in the [Text
+Modeling](textmodeling.qmd#fit-and-predict) article.
 
-We will show that Spark, and `sparklyr`, provide an easy way to go from
-exploration, to modeling, to tuning. Even without a "formal" Spark
-cluster, it is possible to take advantage of these capabilities right
-from our personal computer.
+The gains in performance were easy to obtain. **We literally took the
+exact same pipeline we used in developing the model, and ran it through
+the tuning process**. All we had to create was a simple grid, and a
+provide the metric function.
+
+This highlights an advantage of using ML Pipelines. Because
+transitioning from modeling to tuning in Spark, will be a simple
+operation. An operation that has the potential to yield great benefits,
+with little cost of effort.
+
+::: {#fig-pipeline}
+```{mermaid}
+%%| fig-width: 6.5
+flowchart LR
+  subgraph id1 [ ]
+  subgraph id2 [ ]
+    subgraph si [ML Pipeline]
+      dm[Data prep<br> & model] 
+    end
+    dm -- Development<br>cycle --> t[Test] 
+    t --> dm
+    t -- Selected<br>ML Pipeline  --> tn[Tune]
+    gm[Grid & Metric] --> tn
+    subgraph sp [ML Pipeline]
+      fm[Final model] 
+    end
+    tn -- Best<br>parameters --> fm
+  end
+  end
+  style t fill:#ffcc00,stroke:#000
+  style tn fill:#ffcc99,stroke:#000
+  style dm fill:#ffff99,stroke:#000
+  style fm fill:#ffff99,stroke:#000
+  style id1 fill:#eee,stroke:#eee
+  style id2 fill:#eee,stroke:#eee
+  style gm fill:#fff,stroke:#000
+```
+
+Developing models with ML Pipelines
+:::
+
+## Accelerate model tuning with Spark
+
+As highlighter in the previous section, Spark, and `sparklyr`, provide
+an easy way to go from exploration, to modeling, and tuning. Even
+without a "formal" Spark cluster, it is possible to take advantage of
+these capabilities right from our personal computer.
 
 If we add an actual cluster to the mix, the advantage of using Spark
 raises dramatically. **Usually, we talk about Spark for "big data"
 analysis, but in this case, we can leverage it to "parallelize" hundreds
 of models across multiple machines.** The ability to distribute the
-models across the cluster will cut down the tuning processing time (@fig-cluster). The
-resources available to the cluster, and the given Spark session, will
-also determine the the amount of time saved. There is really no other
-open-source technology that is capable of this.
+models across the cluster will cut down the tuning processing time
+(@fig-cluster). The resources available to the cluster, and the given
+Spark session, will also determine the the amount of time saved. There
+is really no other open-source technology that is capable of this.
 
 ::: {#fig-cluster}
 ```{mermaid}
@@ -490,7 +531,8 @@ classDiagram
   Driver --> Node4
 
 ```
-Model tuning in Spark
+
+Model tuning in a Spark cluster
 :::
 
 ```{r}

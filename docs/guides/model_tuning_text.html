@@ -356,8 +356,8 @@ ga('send', {
   <li><a href="#model-tuning" id="toc-model-tuning" class="nav-link" data-scroll-target="#model-tuning">Model Tuning</a></li>
   <li><a href="#metrics" id="toc-metrics" class="nav-link" data-scroll-target="#metrics">Metrics</a></li>
   <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection">Model selection</a></li>
-  <li><a href="#test-data-metrics" id="toc-test-data-metrics" class="nav-link" data-scroll-target="#test-data-metrics">Test data metrics</a></li>
-  <li><a href="#advantages-of-spark" id="toc-advantages-of-spark" class="nav-link" data-scroll-target="#advantages-of-spark">Advantages of Spark</a></li>
+  <li><a href="#benefits-of-ml-pipelines-for-everyday-work" id="toc-benefits-of-ml-pipelines-for-everyday-work" class="nav-link" data-scroll-target="#benefits-of-ml-pipelines-for-everyday-work">Benefits of ML Pipelines for everyday work</a></li>
+  <li><a href="#accelerate-model-tuning-with-spark" id="toc-accelerate-model-tuning-with-spark" class="nav-link" data-scroll-target="#accelerate-model-tuning-with-spark">Accelerate model tuning with Spark</a></li>
   </ul>
 </nav>
     </div>
@@ -380,18 +380,18 @@ ga('send', {
 
 </header>
 
-<p>This article will cover the following:</p>
-<ul>
+<p>In this article, will cover the following four points:</p>
+<ol type="1">
 <li><p>Overview of Grid Search, and Cross Validation</p></li>
-<li><p>Through an example, show how easy it is to setup and run this kind of validation</p></li>
+<li><p>Show how easy it is to run Grid Search model tuning in Spark</p></li>
 <li><p>Provide a compelling reason to use ML Pipelines in our daily work</p></li>
 <li><p>Highlight the advantages of using Spark, and <code>sparklyr</code>, for model tuning</p></li>
-</ul>
+</ol>
 <section id="grid-search" class="level2">
 <h2 class="anchored" data-anchor-id="grid-search">Grid Search</h2>
-<p>The main goal of hyper-parameter tuning is to find the ideal set of parameters to use when fitting our model. For example, finding out the ideal number of trees to use for a model. We use model tuning to try several specific, and increasing, number of trees. That will tell us at what point a higher number of trees does not improve the model’s performance.</p>
+<p>The main goal of hyper-parameter tuning is to find the ideal set of model parameter values. For example, finding out the ideal number of trees to use for a model. We use model tuning to try several, and increasing values. That will tell us at what point a increasing the number of trees does not improve the model’s performance.</p>
 <p>In Grid Search, we provide a provide a set of specific parameters, and specific values to test for each parameter. The total number of combinations will be the product of all the specific values of each parameter.</p>
-<p>For example, suppose we are going to try <strong>two</strong> parameters. For the first parameter we provide 5 values to try, and for the second parameter we provide 10 values to try. The total number of combinations will be 50. The number of combinations grows quickly the more parameters we use. In our example, adding a <strong>third</strong> parameter, with only 2 values, the number of combinations would double to 100 (5x10x2).</p>
+<p>For example, suppose we are going to try <strong>two</strong> parameters. For the first parameter we provide 5 values to try, and for the second parameter we provide 10 values to try. The total number of combinations will be 50. The number of combinations grows quickly the more parameters we use. Adding a <strong>third</strong> parameter, with only 2 values, will mean that the number of combinations would double to 100 (5x10x2).</p>
 <p>The model tuning returns a performance metric for each combination. We can compare the results, and decide which model to use.</p>
 <p>In Spark, we use an <strong>ML Pipeline</strong>, and a list of the parameters and the values to try (<strong>Grid</strong>). We also specify the <strong>metric</strong> it should use to measure performance (See <a href="#fig-grid">Figure&nbsp;1</a>). Spark will then take care of figuring out the combinations, and fits the corresponding models.</p>
 <div id="fig-grid" class="quarto-figure quarto-figure-center anchored">
@@ -444,7 +444,7 @@ ga('send', {
 <h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
 <p>In Cross Validation, multiple models are fitted with the same combination of parameters. The difference is the data used for training, and validation. These are called folds. The training data, and the validation data is different for each fold, that is called re-sampling.</p>
 <p>The model is fitted with the current fold’s training data, and then it is evaluated using the validation data. The average of the evaluation results become the official metric value of the combination of parameters. <a href="#fig-cv">Figure&nbsp;2</a>, is a “zoomed” look of what happens inside <code>Fit Models</code> of <a href="#fig-grid">Figure&nbsp;1</a>.</p>
-<p>The total number of models, will be the total number of combinations times the number of folds. For example, if we use 3 parameters, with 5 values each, that would be 125 combinations. If tune with 3 folds, Cross Validation will fit, and validate, a total of 375 models.</p>
+<p>The total number of models, will be the total number of combinations times the number of folds. For example, if we use 3 parameters, with 5 values each, that would be 125 combinations. If tuning with 3 folds, Cross Validation will fit, and validate, a total of 375 models.</p>
 <p>In Spark, running <strong>the 375 discrete models can be distributed across the entire cluster</strong>, thus significantly reducing the amount of time we would have to wait to see the results.</p>
 <div id="fig-cv" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -495,7 +495,7 @@ ga('send', {
 </section>
 <section id="reproducing-tuning-text-analysis-in-spark" class="level2">
 <h2 class="anchored" data-anchor-id="reproducing-tuning-text-analysis-in-spark">Reproducing “Tuning Text Analysis” in Spark</h2>
-<p>In this article, we will reproduce the <em>Grid Search</em> tuning example found in the <code>tune</code> package’s website: <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a>. That example analyzes <em>Amazon’s Fine Food Reviews</em> text data. The goal is to tune the model using the exact same tuning parameters, and values, that were used in the <code>tune</code>’s website examle.</p>
+<p>In this article, we will reproduce the <em>Grid Search</em> tuning example found in the <code>tune</code> package’s website: <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank">Tuning Text Analysis</a>. That example analyzes <em>Amazon’s Fine Food Reviews</em> text data. The goal is to tune the model using the exact same tuning parameters, and values, that were used in the <code>tune</code>’s website example.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -528,7 +528,7 @@ Tip
 <section id="ml-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="ml-pipeline">ML Pipeline</h2>
 <p>As mentioned before, the data preparation and modeling in <a href="../guides/textmodeling.html#recipe-and-model-specifications-1" target="_blank">Text Modeling</a> are based on the same example from the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html" target="_blank"><code>tune</code> website</a>’s article. The <code>recipe</code> steps, and <code>parsnip</code> model are recreated with Feature Transformers, and an ML model respectively.</p>
-<p>Unlike <code>tidymodels</code>, there is no need to “pre-define” the arguments that will need tuning. At execution, Spark will automatically override the parameters specified in the <a href="#grid">grid</a>. <em>This means that it doesn’t matter that we use the exact same code for developing, and tuning the pipeline. We can literally copy-paste, and run the resulting pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline">Text Modeling</a></em>.</p>
+<p>Unlike <code>tidymodels</code>, there is no need to “pre-define” the arguments that will need tuning. <strong>At execution, Spark will automatically override the parameters specified in the <a href="#grid">grid</a>.</strong> This means that it doesn’t matter that we use the exact same code for developing, and tuning the pipeline. <strong>We can literally copy-paste, and run the resulting pipeline code from <a href="../guides/textmodeling.html#prepare-the-model-with-an-ml-pipeline">Text Modeling</a>.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
@@ -554,30 +554,30 @@ Tip
 <span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>sff_pipeline</span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Pipeline (Estimator) with 6 stages</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__446ecae5_835a_4814_89fd_bd3a69c16930&gt; </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;pipeline__c7250a3b_c9b7_4044_a703_f8f34cd5f2dc&gt; </span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Stages </span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--1 Tokenizer (Transformer)</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;tokenizer__39822f1c_8ab0_49d6_9ffc_ccfa27f5eddf&gt; </span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;tokenizer__e31ec209_4195_47ca_a4a8_5542416ccb7d&gt; </span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: review</span></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: word_list</span></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--2 StopWordsRemover (Transformer)</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;stop_words_remover__4710871f_fb93_4c16_8ce4_22a5ac3d35ef&gt; </span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;stop_words_remover__eff48a9a_213e_48b1_adef_fb62d1d4584f&gt; </span></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: word_list</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: wo_stop_words</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--3 HashingTF (Transformer)</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;hashing_tf__db6289ce_c0b3_4120_973d_09acd24bf2f4&gt; </span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;hashing_tf__6724db71_5ce1_4899_b74e_af3b3a6650d3&gt; </span></span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: wo_stop_words</span></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: hashed_features</span></span>
 <span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--4 Normalizer (Transformer)</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;normalizer__92d5682c_7a37_4094_bf26_f3ada353b0ab&gt; </span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;normalizer__a587f0dc_2a99_48ed_a0a8_5cc49720e0dc&gt; </span></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      input_col: hashed_features</span></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      output_col: normal_features</span></span>
 <span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--5 RFormula (Estimator)</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__07231e4f_5f23_46c6_805a_a0f426e7fea6&gt; </span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;r_formula__d4ab2b8a_089a_4202_9a15_691e8ebff15f&gt; </span></span>
 <span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
@@ -587,7 +587,7 @@ Tip
 <span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      handle_invalid: error</span></span>
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      stringIndexerOrderType: frequencyDesc</span></span>
 <span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |--6 LogisticRegression (Estimator)</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;logistic_regression__ab9bfeb3_d76c_4ca3_b799_fc2db28a86a1&gt; </span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |    &lt;logistic_regression__d5fae7f2_ced7_4c34_b3c5_23397f0bdda8&gt; </span></span>
 <span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |     (Parameters -- Column Names)</span></span>
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      features_col: features</span></span>
 <span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      label_col: label</span></span>
@@ -606,12 +606,12 @@ Tip
 <span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      threshold: 0.5</span></span>
 <span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   |      tol: 1e-06</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>It is also worth pointing out that in a”real life” exercise, <code>sff_pipeline</code> would probably already be loaded into our environment. That is because we just finished modeling and, decided to test to see if we could tune the model. Spark can re-use the exact same ML Pipeline object for the cross validation step.</p>
+<p>It is also worth pointing out that in a”real life” exercise, <code>sff_pipeline</code> would probably already be loaded into our environment. That is because we just finished modeling and, decided to test to see if we could tune the model (See <a href="#fig-pipeline">Figure&nbsp;3</a>). Spark can re-use the exact same ML Pipeline object for the cross validation step.</p>
 </section>
 <section id="grid" class="level2">
 <h2 class="anchored" data-anchor-id="grid">Grid</h2>
 <p>There is a big advantage to transforming, and modeling the data in a single ML Pipeline. It opens the door for Spark to also alter parameters used for data transformation, in addition to the model’s parameters. This means that we can include the parameters of the tokenization, cleaning, hashing, and normalization steps as possible candidates for the model tuning.</p>
-<p>The <em>Tuning Text Analysis</em> article uses three tuning parameters. Two are in the model, and one is in the hashing step. Here are the parameters, and how they map between <code>tidymodels</code> and <code>sparklyr</code>:</p>
+<p>The <em>Tuning Text Analysis</em> article uses three tuning parameters. Two parameters are in the model, and one is in the hashing step. Here are the parameters, and how they map between <code>tidymodels</code> and <code>sparklyr</code>:</p>
 <table class="table">
 <colgroup>
 <col style="width: 52%">
@@ -646,7 +646,7 @@ Tip
 <p>Using partial name matching, we map the parameters to the steps we want to tune:</p>
 <ul>
 <li><p><code>hashing_ft</code> will be the name of the list object containing the <code>num_features</code> values</p></li>
-<li><p><code>logistic_regression</code> will be the of the list object containing the values of the other two parameters</p></li>
+<li><p><code>logistic_regression</code> will be the of the list object with the model parameters</p></li>
 </ul>
 <p>For more about partial name matching, see in the <a href="../guides/model_tuning.html#grid">Intro Model Tuning</a> article. For the parameters values, we can copy the exact same values from the <a href="https://tune.tidymodels.org/articles/extras/text_analysis.html#grid-search-1" target="_blank"><code>tune</code> website</a></p>
 <div class="cell">
@@ -686,14 +686,13 @@ Tip
 </section>
 <section id="model-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="model-tuning">Model Tuning</h2>
-<p>We will use <code>ml_cross_validator()</code> to prepare a tuning specification inside Spark. We recommend to set the <code>seed</code> argument in order to increase reproducibility.</p>
-<p>Spark will automatically create the grid combinations when tuning the model. In this case, <code>sff_grid</code> contains three parameters:</p>
+<p>We will use <code>ml_cross_validator()</code> to prepare a tuning specification inside Spark. Spark will automatically create the parameter combinations when tuning the model. In this case, <code>sff_grid</code> contains three parameters:</p>
 <ul>
-<li><p><code>num_features</code> has 3 values</p></li>
-<li><p><code>elastic_net_param</code> has 20 values</p></li>
-<li><p><code>reg_parm</code> has 5 values</p></li>
+<li><p><code>num_features</code> with 3 values</p></li>
+<li><p><code>elastic_net_param</code> with 20 values</p></li>
+<li><p><code>reg_parm</code> with 5 values</p></li>
 </ul>
-<p>This means that there will be 300 combinations for the tuning parameters (3 x 20 x 5). Because we set the number of folds to 3 (<code>num_folds</code>), Spark will run a total of 900 models (3 x 300).</p>
+<p>This means that there will be <strong>300 combinations</strong> for the tuning parameters (3 x 20 x 5). Because we set the number of folds to 3 (<code>num_folds</code>), Spark will run a total of <strong>900 models</strong> (3 x 300).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sff_cv <span class="ot">&lt;-</span> <span class="fu">ml_cross_validator</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> sc,</span>
@@ -707,15 +706,28 @@ Tip
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sff_cv</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; CrossValidator (Estimator)</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__0f3039f9_8869_48de_932d_0b037693527d&gt; </span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;cross_validator__67cd03ee_c0fb_4701_9c0a_a78d3b4dbdd5&gt; </span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  (Parameters -- Tuning)</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   estimator: Pipeline</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__446ecae5_835a_4814_89fd_bd3a69c16930&gt; </span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;pipeline__c7250a3b_c9b7_4044_a703_f8f34cd5f2dc&gt; </span></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   evaluator: BinaryClassificationEvaluator</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;binary_classification_evaluator__c791acef_d5d1_4d71_852e_8a6f06947514&gt; </span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              &lt;binary_classification_evaluator__dc64a965_481d_4d51_bc01_aa51625b8d6a&gt; </span></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     with metric areaUnderROC </span></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   num_folds: 3 </span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [Tuned over 300 hyperparameter sets]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We recommend to set the <code>seed</code> argument in order to increase reproducibility.</p>
+</div>
 </div>
 <p>This is the step that will take the longest time. The <code>ml_fit()</code> function will run the 900 models using the training data. There is no need to pre-prepare the re-sampling folds, Spark will take care of that.</p>
 <div class="cell">
@@ -800,10 +812,7 @@ Tip
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="ot">&lt;-</span> new_sff_pipeline <span class="sc">%&gt;%</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_fit</span>(sff_training_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="test-data-metrics" class="level2">
-<h2 class="anchored" data-anchor-id="test-data-metrics">Test data metrics</h2>
-<p>The test data set is now used to confirm that the performance gains hold. We use it to run predictions with thew new ML Pipeline Model.</p>
+<p>The test data set is now used to confirm that the performance gains hold. We use it to run predictions with the new ML Pipeline Model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_sff_fitted <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(sff_testing_data) <span class="sc">%&gt;%</span> </span>
@@ -814,19 +823,64 @@ Tip
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 roc_auc binary         0.783</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 pr_auc  binary         0.653</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The results show an increase performance in contrast with running the ML Pipeline Model, those results are in <a href="../guides/textmodeling.html#fit-and-predict">Fit and Predict</a> section of the <em>Text Modeling</em> article.</p>
 </section>
-<section id="advantages-of-spark" class="level2">
-<h2 class="anchored" data-anchor-id="advantages-of-spark">Advantages of Spark</h2>
-<p>We will show that Spark, and <code>sparklyr</code>, provide an easy way to go from exploration, to modeling, to tuning. Even without a “formal” Spark cluster, it is possible to take advantage of these capabilities right from our personal computer.</p>
-<p>If we add an actual cluster to the mix, the advantage of using Spark raises dramatically. <strong>Usually, we talk about Spark for “big data” analysis, but in this case, we can leverage it to “parallelize” hundreds of models across multiple machines.</strong> The ability to distribute the models across the cluster will cut down the tuning processing time (<a href="#fig-cluster">Figure&nbsp;3</a>). The resources available to the cluster, and the given Spark session, will also determine the the amount of time saved. There is really no other open-source technology that is capable of this.</p>
+<section id="benefits-of-ml-pipelines-for-everyday-work" class="level2">
+<h2 class="anchored" data-anchor-id="benefits-of-ml-pipelines-for-everyday-work">Benefits of ML Pipelines for everyday work</h2>
+<p>In the previous section, the metrics show an increase performance compared to the model in the <a href="../guides/textmodeling.html#fit-and-predict">Text Modeling</a> article.</p>
+<p>The gains in performance were easy to obtain. <strong>We literally took the exact same pipeline we used in developing the model, and ran it through the tuning process</strong>. All we had to create was a simple grid, and a provide the metric function.</p>
+<p>This highlights an advantage of using ML Pipelines. Because transitioning from modeling to tuning in Spark, will be a simple operation. An operation that has the potential to yield great benefits, with little cost of effort.</p>
+<div id="fig-pipeline" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="cell" data-fig-width="6.5">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-3">flowchart LR
+  subgraph id1 [ ]
+  subgraph id2 [ ]
+    subgraph si [ML Pipeline]
+      dm[Data prep<br> &amp; model] 
+    end
+    dm -- Development<br>cycle --&gt; t[Test] 
+    t --&gt; dm
+    t -- Selected<br>ML Pipeline  --&gt; tn[Tune]
+    gm[Grid &amp; Metric] --&gt; tn
+    subgraph sp [ML Pipeline]
+      fm[Final model] 
+    end
+    tn -- Best<br>parameters --&gt; fm
+  end
+  end
+  style t fill:#ffcc00,stroke:#000
+  style tn fill:#ffcc99,stroke:#000
+  style dm fill:#ffff99,stroke:#000
+  style fm fill:#ffff99,stroke:#000
+  style id1 fill:#eee,stroke:#eee
+  style id2 fill:#eee,stroke:#eee
+  style gm fill:#fff,stroke:#000
+</pre>
+<div id="mermaid-tooltip-3" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure 3: Developing models with ML Pipelines</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="accelerate-model-tuning-with-spark" class="level2">
+<h2 class="anchored" data-anchor-id="accelerate-model-tuning-with-spark">Accelerate model tuning with Spark</h2>
+<p>As highlighter in the previous section, Spark, and <code>sparklyr</code>, provide an easy way to go from exploration, to modeling, and tuning. Even without a “formal” Spark cluster, it is possible to take advantage of these capabilities right from our personal computer.</p>
+<p>If we add an actual cluster to the mix, the advantage of using Spark raises dramatically. <strong>Usually, we talk about Spark for “big data” analysis, but in this case, we can leverage it to “parallelize” hundreds of models across multiple machines.</strong> The ability to distribute the models across the cluster will cut down the tuning processing time (<a href="#fig-cluster">Figure&nbsp;4</a>). The resources available to the cluster, and the given Spark session, will also determine the the amount of time saved. There is really no other open-source technology that is capable of this.</p>
 <div id="fig-cluster" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <div class="cell" data-fig-width="6">
 <div class="cell-output-display">
 <div>
 <p>
-</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-3">classDiagram
+</p><pre class="mermaid" data-tooltip-selector="#mermaid-tooltip-4">classDiagram
   class Driver {
   }
   class Node1{
@@ -859,14 +913,14 @@ Tip
   Driver --&gt; Node4
 
 </pre>
-<div id="mermaid-tooltip-3" class="mermaidTooltip">
+<div id="mermaid-tooltip-4" class="mermaidTooltip">
 
 </div>
 <p></p>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption">Figure 3: Model tuning in Spark</figcaption><p></p>
+<p></p><figcaption class="figure-caption">Figure 4: Model tuning in a Spark cluster</figcaption><p></p>
 </figure>
 </div>
 

@@ -1,5 +1,5 @@
 ---
-title: "Spark Connect and Databrick Connect v2"
+title: "Spark Connect, and Databrick Connect v2"
 format:
   html:
     theme: default
@@ -7,6 +7,142 @@ format:
 execute:
     eval: false
     freeze: false
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
-## Overview
+```{r}
+#| include: false
+
+install_github("sparklyr/sparklyr")
+install_github("mlverse/pysparklyr")
+
+library(remotes)
+library(dplyr)
+library(dbplyr)
+library(sparklyr)
+library(pysparklyr)
+
+# install_pyspark()
+```
+
+
+## Installation
+
+To access the new capabilities, you will need the development versions of the
+`sparklyr`, and `pysparklyr`, packages. These versions are available in their
+respective GitHub repositories. To install use: 
+
+``` r
+library(remotes)
+
+install_github("sparklyr/sparklyr")
+install_github("mlverse/pysparklyr")
+```
+
+## Setup
+
+Aside from PySpark, there are several Python libraries needed for the
+integration to work. `pysparklyr` has a helper function
+(`install_pyspark()`) that sets up a new Python Virtual Environment, and
+installs the needed libraries:
+
+``` r
+pysparklyr::install_pyspark()
+```
+
+## Databricks Connect (ML 13+)
+
+### Connecting
+
+For convenience, and safety, you can save your authentication token
+(PAT), and your company's Databrick's URL in a environment variable. The
+two variables are:
+
+-   `DATABRICKS_TOKEN`
+-   `DATABRICKS_HOST`
+
+This will prevent your token to be shown in plain text in your code. You
+can set the environment variables at the beginning of your R session
+using `Sys.setenv()`. Preferably, the two variables can be set for all R
+sessions by saving them to the `.Renviron` file. The `usethis` package
+has a handy function that opens the file so you can edit it:
+`usethis::edit_r_environ()`. Just add the two entries to your
+`.Renviron` file.
+
+After that, use `spark_connect()` to open the connection to Databricks.
+You will need to only pass the `cluster_id` of your cluster, and tell
+`sparklyr` that you are connecting to a cluster version ML 13+ by using
+`method = "databricks_connect"`
+
+```{r}
+library(sparklyr)
+
+sc <- spark_connect(
+  cluster_id = "0608-170338-jwkec0wi",
+  method = "databricks_connect"
+)
+```
+
+### RStudio's Connection pane
+
+Thanks to the new way we are integrating with Spark, it is now possible to 
+display the same structure that you would see in the  Databricks website under
+**Data Explorer**. In Databricks, the current data structure levels are:
+
+- Catalog
+  - Database
+    - Table
+
+In RStudio, you can navigate the data structure by expanding from the top level,
+all the way down to the table you wish to explore. Once expanded, the table's 
+fields, and their types are displayed. 
+
+![](/images/deployment/connect/rstudio-connection.png)
+
+In the Connection Pane, you can click on the **table** icon, situated to the
+right of the table name, to preview the first 1,000 rows:
+
+![](/images/deployment/connect/preview.png)
+
+
+### Using 
+
+Through `pysparklyr`, `sparklyr` is able to display the navigation to
+the full data catalog accessible to your user in Databricks. That will
+be displayed in the RStudio's Connections Pane, as shown below.
+
+You can use `dbplyr`'s `in_catalog()` function to access the different
+tables inside your data catalog. After pointing `tbl()` to a specific
+table, you can use `dplyr`.
+
+```{r}
+library(dplyr)
+library(dbplyr)
+
+trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
+
+trips
+```
+
+```{r}
+trips %>%
+  group_by(pickup_zip) %>%
+  summarise(
+    count = n(),
+    avg_distance = mean(trip_distance, na.rm = TRUE)
+  )
+```
+
+```{r}
+spark_disconnect(sc)
+```
+
+## Spark Connect
+
+### Connecting
+
+### Using
+
+

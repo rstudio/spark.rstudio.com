@@ -27,10 +27,28 @@ library(pysparklyr)
 # install_pyspark()
 ```
 
+## Intro
 
-## Installation
+Intoduced in Spark 3.4, [Spark
+Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html) is a new
+architecture that enables remote connectivity to Spark Clusters.  Spark Connect
+will make it much easier for R users to interact with Spark clusters right from
+their laptops.
+[Databricks Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), 
+available in Databricks Runtime version 13 and above, is based on this new
+architecture. 
 
-To access the new capabilities, you will need the development versions of the
+Because it is a new architecture, the way `sparklyr` currently integrates with 
+Spark does not work with Connect.  This is why we are working on a solution that
+extends `sparklyr`'s capabilities in order to enable R users to work within the 
+Connect framework.
+
+
+
+## Package Installation
+
+As mentioned above, we are still working integrating `sparklyr` with Connect.
+For now, to access the new capabilities, you will need the development versions of the
 `sparklyr`, and `pysparklyr`, packages. These versions are available in their
 respective GitHub repositories. To install use: 
 
@@ -41,7 +59,7 @@ install_github("sparklyr/sparklyr")
 install_github("mlverse/pysparklyr")
 ```
 
-## Setup
+## Initial Setup
 
 To communicate with Connect, `sparklyr` needs specific Python components.
 We provide a helper function that installs those components. 
@@ -51,7 +69,7 @@ You should only need to run this command the first time you install `pysparklyr`
 pysparklyr::install_pyspark()
 ```
 
-### More background 
+### Additional setup details
 
 The function will attempt to install Python if one is not found. It will also
 create a new Python Virtual Environment. The new virtual environment will contain

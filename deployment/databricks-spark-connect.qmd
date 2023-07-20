@@ -151,10 +151,10 @@ can set the environment variables at the beginning of your R session
 with `Sys.setenv()`.
 
 Preferably, the two variables can be set for all R
-sessions by saving them to the `.Renviron` file. The `usethis` package
+sessions by saving them to the **.Renviron** file. The `usethis` package
 has a handy function that opens the file so you can edit it:
 `usethis::edit_r_environ()`. Then simply append the two entries to your
-`.Renviron` file.
+**.Renviron** file.
 
 After that, use `spark_connect()` to open the connection to Databricks.
 You will need to only pass the `cluster_id` of your cluster, and tell
@@ -172,7 +172,7 @@ sc <- spark_connect(
 
 If you wish to further remove identifying values from your connection code,
 you can also save the `cluster_id` in the `DATABRICKS_CLUSTER_ID` environment
-variable.  After you save it using `Sys.setenv()`, or by updating your `.Renviron`
+variable.  After you save it using `Sys.setenv()`, or by updating your **.Renviron**
 file, your connection code will look like this:
 
 ```r
@@ -243,6 +243,35 @@ spark_disconnect(sc)
 
 ### Connecting
 
-### Using
+To start a session with a open source Spark cluster, via Spark Connect, you will
+need to set the `host`, and `method`.  The `host` will be an IP, and maybe a
+port that you will need to pass. The protocol to use to put together the proper
+connection URL is "sc://".  For `method`, use "spark_connect". Here is an example:
+
+```r
+library(sparklyr)
+
+sc <- spark_connect(
+  host = "sc://[Host IP(:Host Port - optional)]", 
+  method = "spark_connect"
+  )
+```
+
+### Run locally 
+
+It is possible to test Spark Connect inside your machine. To do so, download Spark 
+version 3.4 or above, and follow the instructions in this [article](https://spark.apache.org/docs/latest/spark-connect-overview.html#download-and-start-spark-server-with-spark-connect), to learn
+how to start and stop the service. 
+
+Once started, you can start a session with Spark Connect using the following code:
+
+```r
+library(sparklyr)
+
+sc <- spark_connect(
+  host = "sc://localhost", 
+  method = "spark_connect"
+  )
+```
 
 ## What is supported

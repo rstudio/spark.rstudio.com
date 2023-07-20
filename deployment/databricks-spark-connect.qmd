@@ -104,10 +104,25 @@ capabilities of
 By default, `sparklyr` will use whatever virtual environment is currently loaded
 in your session. If none is loaded, then `sparklyr` will load the one installed
 by `install_pyspark()`.  The default name of the Virtual Environment that `sparklyr`
-uses is `r-sparklyr`.  If you wish to use your own Python environment, then 
+uses is `r-sparklyr`.  
+
+If you wish to use your own Python environment, then 
 just make sure to load it before calling `spark_connect()`. If there is a
 Python environment already loaded when you connect to your Spark cluster, then
-`sparklyr` will use that environment instead.
+`sparklyr` will use that environment instead. If you use your own Python environment
+you will need the following libraries installed:
+
+- `pyspark`
+- `pandas`
+- `PyArrow` 
+- `grpcio`
+- `google-api-python-client`
+- `grpcio_status`
+
+If connecting to Databrics Connect, you will also need:
+
+- `databricks-connect` 
+- `delta-spark`
 
 
 ## Databricks Connect (ML 13+)
@@ -275,3 +290,39 @@ sc <- spark_connect(
 ```
 
 ## What is supported
+
+Here is a list of what we currently support, and do not support via `sparklyr`
+and Connect:
+
+**Supported**:
+
+- Integration with most of the `dplyr`, and `DBI`, APIs
+- Integration with the `invoke()` command
+- RStudio Connections Pane navigation
+- Support for Personal Access Token security authentication for Databricks Connect
+- Support for most read and write commands. These have only been tested in
+  Spark Connect.
+
+
+**Not supported**:
+
+- **ML functions** - All functions, in `sparklyr`, that have the `ml_` and `ft_`
+are currently not supported. The reason is that Spark 3.4 does not currently 
+support MLlib.  We expect that some ML support will be available in Spark 3.5. 
+At that time we  will work on integrating the new ML routines from Connect into 
+`sparklyr`.
+
+- **SDF functions** - Most of these functions require SparkSession, which is
+currently not supported in Spark 3.4.
+
+- **`tidyr`** - This is ongoing work that we are focusing on in `sparklyr`. We
+are implementing these functions using PySpark DataFrame commands, instead of 
+depending on the Scala implementation.
+
+A more detailed list of our progress, which includes individual functions we
+have confirmed that work, do not work, or will work differently, is available here:
+[`pysparklyr` progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)
+
+
+
+

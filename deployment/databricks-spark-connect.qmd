@@ -27,6 +27,8 @@ library(pysparklyr)
 # install_pyspark()
 ```
 
+*Last updated: `r lubridate::date()`*
+
 ## Intro
 
 Intoduced in Spark 3.4, [Spark
@@ -43,6 +45,26 @@ Spark does not work with Connect.  This is why we are working on a solution that
 extends `sparklyr`'s capabilities in order to enable R users to work within the 
 Connect framework.
 
+## The Solution
+
+`sparklyr` integrates with Spark using the Spark Shell. In order for the Spark 
+Shell to work in your laptop, or server, you would need to setup Java.
+
+As mentioned in the previous section, `sparklyr` cannot use its current method
+to integrate with Connect. It requires the use of a remote procedure call
+framework called gRPC.  The Spark team are developing solutions to integrate with
+Connect via Python, and Scala. These solutions interact directly with gRPC.  
+
+In `sparklyr`, we will use `reticulate` to interact with the Python solution. At
+this time, `reticulate` offers a very robust integration with Python, that is very
+easy to setup and use.  While it is possible to use the `reticulate` package to start
+and interact with Connect directly, the additional functionality that `sparklyr`
+offers would not be present. Such functionality includes: `dplyr` back-end, `DBI` back-end,
+RStudio's Connections pane integration, and others.
+
+In order to quickly iterate enhancements and bug fixes, we have decided to isolate
+the Python integration into its own package. The new package, called `pysparklyr`,
+is an extension of `sparklyr`. 
 
 
 ## Package Installation
@@ -182,4 +204,4 @@ spark_disconnect(sc)
 
 ### Using
 
-
+## What is supported

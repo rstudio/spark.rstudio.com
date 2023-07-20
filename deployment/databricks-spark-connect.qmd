@@ -43,14 +43,33 @@ install_github("mlverse/pysparklyr")
 
 ## Setup
 
-Aside from PySpark, there are several Python libraries needed for the
-integration to work. `pysparklyr` has a helper function
-(`install_pyspark()`) that sets up a new Python Virtual Environment, and
-installs the needed libraries:
+To communicate with Connect, `sparklyr` needs specific Python components.
+We provide a helper function that installs those components. 
+You should only need to run this command the first time you install `pysparklyr`:
 
 ``` r
 pysparklyr::install_pyspark()
 ```
+
+### More background 
+
+The function will attempt to install Python if one is not found. It will also
+create a new Python Virtual Environment. The new virtual environment will contain
+the necessary Python libraries that `sparklyr` will use to interact with Connect. 
+In addition, `install_pyspark()` installs specific versions of the libraries in order
+to insure compatability. It does this by taking advantage of the snapshot
+capabilities of 
+[Posit's Package Manager](https://packagemanager.posit.co/client/#/repos/5/packages/appdirs).
+
+By default, `sparklyr` will use whatever virtual environment is currently loaded
+in your session. If none is loaded, then `sparklyr` will load the one installed
+by `install_pyspark()`.  The default name of the Virtual Environment that `sparklyr`
+uses is `r-sparklyr`.  If you wish to use your own Python environment, then 
+just make sure to load it before calling `spark_connect()`. If there is a
+Python environment already loaded when you connect to your Spark cluster, then
+`sparklyr` will use that environment instead.
+
+
 
 ## Databricks Connect (ML 13+)
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Spark Connect, and Databrick Connect v2</title>
+<title>sparklyr - Spark Connect, and Databricks Connect v2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Spark Connect, and Databrick Connect v2</h1>
+      <h1 class="quarto-secondary-nav-title">Spark Connect, and Databricks Connect v2</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -326,7 +326,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Spark Connect, and Databrick Connect v2</h1>
+<h1 class="title d-none d-lg-block">Spark Connect, and Databricks Connect v2</h1>
 </div>
 
 
@@ -341,16 +341,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p><em>Last updated: Tue Jul 25 15:57:54 2023</em></p>
+<p><em>Last updated: Tue Jul 25 16:31:44 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p>Intoduced in Spark 3.4, <a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> is a new architecture that enables remote connectivity to Spark Clusters. Spark Connect will make it much easier for R users to interact with Spark clusters right from their laptops. <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
-<p>Because it is a new architecture, the way <code>sparklyr</code> currently integrates with Spark does not work with Connect. This is why we are working on a solution that extends <code>sparklyr</code>’s capabilities in order to enable R users to work within the Connect framework.</p>
+<p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise. <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
+<p>We are working on enhancing <code>sparklyr</code> so that it can bring the benefits of Spark Connect to the R user community.</p>
 </section>
 <section id="the-solution" class="level2">
 <h2 class="anchored" data-anchor-id="the-solution">The Solution</h2>
-<p><code>sparklyr</code> integrates with Spark using the Spark Shell. In order for the Spark Shell to work in your laptop, or server, you would need to setup Java.</p>
-<p>As mentioned in the previous section, <code>sparklyr</code> cannot use its current method to integrate with Connect. It requires the use of a remote procedure call framework called gRPC. The Spark team are developing solutions to integrate with Connect via Python, and Scala. These solutions interact directly with gRPC.</p>
+<p>Currently, <code>sparklyr</code> integrates with Spark using the Spark Shell. Interacting with Spark Connect requires the use of a remote procedure call framework called gRPC.<br>
+The Apache Spark team are developing solutions to integrate with Connect via Python, and Scala, which interact directly with gRPC.</p>
 <p>In <code>sparklyr</code>, we will use <code>reticulate</code> to interact with the Python solution. At this time, <code>reticulate</code> offers a very robust integration with Python, that is very easy to setup and use. While it is possible to use the <code>reticulate</code> package to start and interact with Connect directly, the additional functionality that <code>sparklyr</code> offers would not be present. Such functionality includes: <code>dplyr</code> back-end, <code>DBI</code> back-end, RStudio’s Connections pane integration, and others.</p>
 <p>In order to quickly iterate enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called <code>pysparklyr</code>, is an extension of <code>sparklyr</code>.</p>
 </section>

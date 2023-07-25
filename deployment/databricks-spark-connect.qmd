@@ -1,5 +1,5 @@
 ---
-title: "Spark Connect, and Databrick Connect v2"
+title: "Spark Connect, and Databricks Connect v2"
 format:
   html:
     theme: default
@@ -31,29 +31,25 @@ library(pysparklyr)
 
 ## Intro
 
-Intoduced in Spark 3.4, [Spark
-Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html) is a new
-architecture that enables remote connectivity to Spark Clusters.  Spark Connect
-will make it much easier for R users to interact with Spark clusters right from
-their laptops.
-[Databricks Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), 
+[Spark
+Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html) 
+introduced a decoupled client-server architecture that allows  remote
+connectivity to Spark clusters using the DataFrame API. The separation between 
+client and server allows Spark to be leveraged from everywhere, and this would 
+allow R users to interact with a cluster from the comfort of their preferred 
+environment, laptop or otherwise.  [Databricks Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), 
 available in Databricks Runtime version 13 and above, is based on this new
 architecture. 
 
-Because it is a new architecture, the way `sparklyr` currently integrates with 
-Spark does not work with Connect.  This is why we are working on a solution that
-extends `sparklyr`'s capabilities in order to enable R users to work within the 
-Connect framework.
+We are working on enhancing `sparklyr` so that it can bring the benefits of 
+Spark Connect to the R user community.
 
 ## The Solution
 
-`sparklyr` integrates with Spark using the Spark Shell. In order for the Spark 
-Shell to work in your laptop, or server, you would need to setup Java.
-
-As mentioned in the previous section, `sparklyr` cannot use its current method
-to integrate with Connect. It requires the use of a remote procedure call
-framework called gRPC.  The Spark team are developing solutions to integrate with
-Connect via Python, and Scala. These solutions interact directly with gRPC.  
+Currently, `sparklyr` integrates with Spark using the Spark Shell. Interacting with
+Spark Connect requires the use of a remote procedure call framework called gRPC.  
+The Apache Spark team are developing solutions to integrate with Connect via Python,
+and Scala, which interact directly with gRPC.  
 
 In `sparklyr`, we will use `reticulate` to interact with the Python solution. At
 this time, `reticulate` offers a very robust integration with Python, that is very

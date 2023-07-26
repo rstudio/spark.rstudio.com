@@ -341,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p><em>Last updated: Tue Jul 25 16:31:44 2023</em></p>
+<p><em>Last updated: Wed Jul 26 10:41:26 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise. <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
@@ -349,10 +349,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="the-solution" class="level2">
 <h2 class="anchored" data-anchor-id="the-solution">The Solution</h2>
-<p>Currently, <code>sparklyr</code> integrates with Spark using the Spark Shell. Interacting with Spark Connect requires the use of a remote procedure call framework called gRPC.<br>
-The Apache Spark team are developing solutions to integrate with Connect via Python, and Scala, which interact directly with gRPC.</p>
-<p>In <code>sparklyr</code>, we will use <code>reticulate</code> to interact with the Python solution. At this time, <code>reticulate</code> offers a very robust integration with Python, that is very easy to setup and use. While it is possible to use the <code>reticulate</code> package to start and interact with Connect directly, the additional functionality that <code>sparklyr</code> offers would not be present. Such functionality includes: <code>dplyr</code> back-end, <code>DBI</code> back-end, RStudio’s Connections pane integration, and others.</p>
-<p>In order to quickly iterate enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called <code>pysparklyr</code>, is an extension of <code>sparklyr</code>.</p>
+<p>Spark Connect requires the use of a remote procedure call framework called gRPC. At this time, the Spark team provides two higher level APIs that interact with gRPC. One is Scala based, and the other Python based.</p>
+<p>In the development version of <code>sparklyr</code>, we are using <code>reticulate</code> to interact with the Python API. <code>sparklyr</code> extends the functionality, and user experience, by providing the <code>dplyr</code>back-end, <code>DBI</code> back-end, RStudio’s Connection pane integration.</p>
+<p>In order to quickly iterate on enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called <code>pysparklyr</code>, is an extension of <code>sparklyr</code>.</p>
 </section>
 <section id="package-installation" class="level2">
 <h2 class="anchored" data-anchor-id="package-installation">Package Installation</h2>
@@ -415,7 +414,7 @@ The Apache Spark team are developing solutions to integrate with Connect via Pyt
 <li><code>DATABRICKS_HOST</code></li>
 </ul>
 <p>This will prevent your token to be shown in plain text in your code. You can set the environment variables at the beginning of your R session with <code>Sys.setenv()</code>.</p>
-<p>Preferably, the two variables can be set for all R sessions by saving them to the <strong>.Renviron</strong> file. The <code>usethis</code> package has a handy function that opens the file so you can edit it: <code>usethis::edit_r_environ()</code>. Then simply append the two entries to your <strong>.Renviron</strong> file.</p>
+<p>Preferably, the two variables can be set for all R sessions by saving them to the <strong>.Renviron</strong> file. The <code>usethis</code> package has a handy function that opens the file so you can edit it: <code>usethis::edit_r_environ()</code>. Then simply append the two entries to your <strong>.Renviron</strong> file. Once you are done, save the <strong>.Renviron</strong> file, and restart R.</p>
 <p>After that, use <code>spark_connect()</code> to open the connection to Databricks. You will need to only pass the <code>cluster_id</code> of your cluster, and tell <code>sparklyr</code> that you are connecting to a Spark cluster with run time 13 or above:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>

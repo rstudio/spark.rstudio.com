@@ -1,0 +1,334 @@
+---
+title: "Spark Connect, and Databricks Connect v2"
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+    eval: true
+    freeze: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| include: false
+
+library(remotes)
+
+install_github("sparklyr/sparklyr")
+install_github("mlverse/pysparklyr")
+
+library(dplyr)
+library(dbplyr)
+library(sparklyr)
+library(pysparklyr)
+
+# install_pyspark()
+```
+
+*Last updated: `r lubridate::date()`*
+
+## Intro
+
+[Spark
+Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html)
+introduced a decoupled client-server architecture that allows remote
+connectivity to Spark clusters using the DataFrame API. The separation
+between client and server allows Spark to be leveraged from everywhere,
+and this would allow R users to interact with a cluster from the comfort
+of their preferred environment, laptop or otherwise. [Databricks
+Connect](https://docs.databricks.com/dev-tools/databricks-connect.html),
+available in Databricks Runtime version 13 and above, is based on this
+new architecture.
+
+We are working on enhancing `sparklyr` so that it can bring the benefits
+of Spark Connect to the R user community.
+
+## The Solution
+
+Spark Connect requires the use of a remote procedure call framework
+called gRPC. At this time, the Spark team provides two higher level APIs
+that interact with gRPC. One is Scala based, and the other Python based.
+
+In the development version of `sparklyr`, we are using `reticulate` to
+interact with the Python API. `sparklyr` extends the functionality, and
+user experience, by providing the `dplyr`back-end, `DBI` back-end,
+RStudio's Connection pane integration.
+
+In order to quickly iterate on enhancements and bug fixes, we have
+decided to isolate the Python integration into its own package. The new
+package, called `pysparklyr`, is an extension of `sparklyr`.
+
+## Package Installation
+
+As mentioned above, we are still working integrating `sparklyr` with
+Connect. For now, to access the new capabilities, you will need the
+development versions of the `sparklyr`, and `pysparklyr`, packages.
+These versions are available in their respective GitHub repositories. To
+install use:
+
+``` r
+library(remotes)
+
+install_github("sparklyr/sparklyr")
+install_github("mlverse/pysparklyr")
+```
+
+## Initial Setup
+
+To communicate with Connect, `sparklyr` needs specific Python
+components. We provide a helper function that installs those components.
+You should only need to run this command the first time you install
+`pysparklyr`:
+
+``` r
+pysparklyr::install_pyspark()
+```
+
+### Additional setup details
+
+The function will attempt to install Python if one is not found. It will
+also create a new Python Virtual Environment. The new virtual
+environment will contain the necessary Python libraries that `sparklyr`
+will use to interact with Connect. In addition, `install_pyspark()`
+installs specific versions of the libraries in order to insure
+compatability. It does this by taking advantage of the snapshot
+capabilities of [Posit's Package
+Manager](https://packagemanager.posit.co/client/#/repos/5/packages/appdirs).
+
+By default, `sparklyr` will use whatever virtual environment is
+currently loaded in your session. If none is loaded, then `sparklyr`
+will load the one installed by `install_pyspark()`. The default name of
+the Virtual Environment that `sparklyr` uses is `r-sparklyr`.
+
+If you wish to use your own Python environment, then just make sure to
+load it before calling `spark_connect()`. If there is a Python
+environment already loaded when you connect to your Spark cluster, then
+`sparklyr` will use that environment instead. If you use your own Python
+environment you will need the following libraries installed:
+
+-   `pyspark`
+-   `pandas`
+-   `PyArrow`
+-   `grpcio`
+-   `google-api-python-client`
+-   `grpcio_status`
+
+If connecting to Databrics Connect, you will also need:
+
+-   `databricks-connect`
+-   `delta-spark`
+
+## Databricks Connect (ML 13+)
+
+### Getting started
+
+To use with Databricks Connect, in run-time 13 or above, you will need
+three configuration items:
+
+-   Your [Workspace Instance
+    URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
+-   The ID of a currently running
+    [cluster](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+    within your workspace
+-   Authentication setup. At this time, `sparklyr` supports
+    [PAT](https://docs.databricks.com/dev-tools/auth.html#pat)
+
+In `spark_connect()` those items can be passed as function arguments.
+Also note that to let `sparklyr` know that you are attempting to use
+Databricks Connect, use `method = databricks_connect`:
+
+``` r
+library(sparklyr)
+
+sc <- spark_connect(
+ host = "[Your Workspace Instance URL]", 
+ cluster_id = "[Cluster ID]"
+ token = "[Your PAT - Please do not include 
+          it as plain text here,  please refer 
+          to the next section]"
+  )
+```
+
+### Safely connect
+
+For your safety and convenience, you can save your authentication token
+(PAT), and your Workspace Instance URL in a environment variable. The
+two variables are:
+
+-   `DATABRICKS_TOKEN`
+-   `DATABRICKS_HOST`
+
+This will prevent your token to be shown in plain text in your code. You
+can set the environment variables at the beginning of your R session
+with `Sys.setenv()`.
+
+Preferably, the two variables can be set for all R sessions by saving
+them to the **.Renviron** file. The `usethis` package has a handy
+function that opens the file so you can edit it:
+`usethis::edit_r_environ()`. Then simply append the two entries to your
+**.Renviron** file. Once you are done, save the **.Renviron** file, and
+restart R.
+
+After that, use `spark_connect()` to open the connection to Databricks.
+You will need to only pass the `cluster_id` of your cluster, and tell
+`sparklyr` that you are connecting to a Spark cluster with run time 13
+or above:
+
+``` r
+library(sparklyr)
+
+sc <- spark_connect(
+  cluster_id = "0608-170338-jwkec0wi",
+  method = "databricks_connect"
+)
+```
+
+If you wish to further remove identifying values from your connection
+code, you can also save the `cluster_id` in the `DATABRICKS_CLUSTER_ID`
+environment variable. After you save it using `Sys.setenv()`, or by
+updating your **.Renviron** file, your connection code will look like
+this:
+
+``` {r}
+library(sparklyr)
+
+sc <- spark_connect(
+  method = "databricks_connect"
+)
+```
+
+### RStudio's Connection pane
+
+Thanks to the new way we are integrating with Spark, it is now possible
+to display the same structure displayed in the Databricks Data Explorer
+page. In Databricks, the current data structure levels are:
+
+-   Catalog
+    -   Database
+        -   Table
+
+In RStudio, you can navigate the data structure by expanding from the
+top level, all the way down to the table you wish to explore. Once
+expanded, the table's fields, and their types are displayed.
+
+![](/images/deployment/connect/rstudio-connection.png)
+
+In the Connection Pane, you can click on the **table** icon, situated to
+the right of the table name, to preview the first 1,000 rows:
+
+![](/images/deployment/connect/preview.png)
+
+### Using the Connection to Access Data
+
+After connecting, you can use `dbplyr`'s `in_catalog()` function to
+access any table in your data catalog. You will only need to pass the
+respective names of the three levels as comma separated character
+entries to `in_catalog()` in this order: Catalog, Database, and Table.
+
+Here is an example of using `tbl()` and `in_catalog()` to point to the
+**trips** table, which is inside **nyctaxi** database, which is a
+database inside the **samples** catalog:
+
+```{r}
+library(dplyr)
+library(dbplyr)
+
+trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
+
+trips
+```
+
+After pointing `tbl()` to that specific table, you can then use `dplyr`.
+
+```{r}
+trips %>%
+  group_by(pickup_zip) %>%
+  summarise(
+    count = n(),
+    avg_distance = mean(trip_distance, na.rm = TRUE)
+  )
+```
+
+When you are done with you queries and computations, you should
+disconnect from the cluster.
+
+```{r}
+spark_disconnect(sc)
+```
+
+## Spark Connect
+
+### Connecting
+
+To start a session with a open source Spark cluster, via Spark Connect,
+you will need to set the `host`, and `method`. The `host` will be an IP,
+and maybe a port that you will need to pass. The protocol to use to put
+together the proper connection URL is "sc://". For `method`, use
+"spark_connect". Here is an example:
+
+``` r
+library(sparklyr)
+
+sc <- spark_connect(
+  host = "sc://[Host IP(:Host Port - optional)]", 
+  method = "spark_connect"
+  )
+```
+
+### Run locally
+
+It is possible to test Spark Connect inside your machine. To do so,
+download Spark version 3.4 or above, and follow the instructions in this
+[article](https://spark.apache.org/docs/latest/spark-connect-overview.html#download-and-start-spark-server-with-spark-connect),
+to learn how to start and stop the service.
+
+Once started, you can start a session with Spark Connect using the
+following code:
+
+``` r
+library(sparklyr)
+
+sc <- spark_connect(
+  host = "sc://localhost", 
+  method = "spark_connect"
+  )
+```
+
+## What is supported
+
+Here is a list of what we currently support, and do not support via
+`sparklyr` and Connect:
+
+**Supported**:
+
+-   Integration with most of the `dplyr`, and `DBI`, APIs
+-   Integration with the `invoke()` command
+-   RStudio Connections Pane navigation
+-   Support for Personal Access Token security authentication for
+    Databricks Connect
+-   Support for most read and write commands. These have only been
+    tested in Spark Connect.
+
+**Not supported**:
+
+-   **ML functions** - All functions, in `sparklyr`, that have the `ml_`
+    and `ft_` are currently not supported. The reason is that Spark 3.4
+    does not currently support MLlib. We expect that some ML support
+    will be available in Spark 3.5. At that time we will work on
+    integrating the new ML routines from Connect into `sparklyr`.
+
+-   **SDF functions** - Most of these functions require SparkSession,
+    which is currently not supported in Spark 3.4.
+
+-   **`tidyr`** - This is ongoing work that we are focusing on in
+    `sparklyr`. We are implementing these functions using PySpark
+    DataFrame commands, instead of depending on the Scala
+    implementation.
+
+A more detailed list of our progress, which includes individual
+functions we have confirmed that work, do not work, or will work
+differently, is available here: [`pysparklyr`
+progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)

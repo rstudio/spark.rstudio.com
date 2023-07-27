@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -15,10 +15,11 @@ editor:
 ```{r}
 #| include: false
 
+library(remotes)
+
 install_github("sparklyr/sparklyr")
 install_github("mlverse/pysparklyr")
 
-library(remotes)
 library(dplyr)
 library(dbplyr)
 library(sparklyr)
@@ -191,7 +192,7 @@ environment variable. After you save it using `Sys.setenv()`, or by
 updating your **.Renviron** file, your connection code will look like
 this:
 
-``` r
+``` {r}
 library(sparklyr)
 
 sc <- spark_connect(

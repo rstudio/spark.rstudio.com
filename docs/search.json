@@ -893,7 +893,7 @@
     "href": "deployment/databricks-spark-connect.html",
     "title": "Spark Connect, and Databricks Connect v2",
     "section": "",
-    "text": "Last updated: Mon Jul 31 12:17:01 2023"
+    "text": "Last updated: Wed Aug 2 16:20:01 2023"
   },
   {
     "objectID": "deployment/databricks-spark-connect.html#intro",
@@ -935,7 +935,7 @@
     "href": "deployment/databricks-spark-connect.html#spark-connect",
     "title": "Spark Connect, and Databricks Connect v2",
     "section": "Spark Connect",
-    "text": "Spark Connect\n\nConnecting\nTo start a session with a open source Spark cluster, via Spark Connect, you will need to set the host, and method. The host will be an IP, and maybe a port that you will need to pass. The protocol to use to put together the proper connection URL is “sc://”. For method, use “spark_connect”. Here is an example:\nlibrary(sparklyr)\n\nsc <- spark_connect(\n  host = \"sc://[Host IP(:Host Port - optional)]\", \n  method = \"spark_connect\"\n  )\n\n\nRun locally\nIt is possible to test Spark Connect inside your machine. To do so, download Spark version 3.4 or above, and follow the instructions in this article, to learn how to start and stop the service.\nOnce started, you can start a session with Spark Connect using the following code:\nlibrary(sparklyr)\n\nsc <- spark_connect(\n  host = \"sc://localhost\", \n  method = \"spark_connect\"\n  )"
+    "text": "Spark Connect\n\nConnecting\nTo start a session with a open source Spark cluster, via Spark Connect, you will need to set the host, and method. The host will be an IP, and maybe a port that you will need to pass. The protocol to use to put together the proper connection URL is “sc://”. For method, use “spark_connect”. Here is an example:\nlibrary(sparklyr)\n\nsc <- spark_connect(\n  host = \"sc://[Host IP(:Host Port - optional)]\", \n  method = \"spark_connect\"\n  )\n\n\nRun locally\nIt is possible to run Spark Connect in your machine We provide helper functions that let you setup, and start/stop the services in locally.\nIf you wish to try this out, first install Spark 3.4 or above:\nspark_install(\"3.4\")\nAfter installing, start the Spark Connect using:\npysparklyr::spark_connect_service_start()\nTo connect to your local Spark Connect, use localhost as the address for master:\nsc <- spark_connect(\n  master = \"sc://localhost\", \n  method = \"spark_connect\"\n  )\nNow, you are able to interact with your local Spark session:\nlibrary(dplyr)\n\ntbl_mtcars <- copy_to(sc, mtcars)\n\ntbl_mtcars %>% \n  group_by(am) %>% \n  summarise(mpg = mean(mpg, na.rm = TRUE))\nWhen done, you can disconnect from Spark Connect:\nspark_disconnect(sc)\nThe regular version of local Spark would terminate the local cluster when the you pass spark_disconnect(). For Spark Connect, the local cluster needs to be stopped independently.\npysparklyr::spark_connect_service_stop()"
   },
   {
     "objectID": "deployment/databricks-spark-connect.html#what-is-supported",

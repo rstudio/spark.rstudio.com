@@ -192,7 +192,7 @@ environment variable. After you save it using `Sys.setenv()`, or by
 updating your **.Renviron** file, your connection code will look like
 this:
 
-``` {r}
+```{r}
 library(sparklyr)
 
 sc <- spark_connect(
@@ -280,21 +280,55 @@ sc <- spark_connect(
 
 ### Run locally
 
-It is possible to test Spark Connect inside your machine. To do so,
-download Spark version 3.4 or above, and follow the instructions in this
-[article](https://spark.apache.org/docs/latest/spark-connect-overview.html#download-and-start-spark-server-with-spark-connect),
-to learn how to start and stop the service.
+It is possible to run Spark Connect in your machine We provide helper
+functions that let you setup, and start/stop the services in locally.
 
-Once started, you can start a session with Spark Connect using the
-following code:
+If you wish to try this out, first install Spark 3.4 or above:
 
 ``` r
-library(sparklyr)
+spark_install("3.4")
+```
 
+After installing, start the Spark Connect using:
+
+``` r
+pysparklyr::spark_connect_service_start()
+```
+
+To connect to your local Spark Connect, use **localhost** as the address
+for `master`:
+
+``` r
 sc <- spark_connect(
-  host = "sc://localhost", 
+  master = "sc://localhost", 
   method = "spark_connect"
   )
+```
+
+Now, you are able to interact with your local Spark session:
+
+``` r
+library(dplyr)
+
+tbl_mtcars <- copy_to(sc, mtcars)
+
+tbl_mtcars %>% 
+  group_by(am) %>% 
+  summarise(mpg = mean(mpg, na.rm = TRUE))
+```
+
+When done, you can disconnect from Spark Connect:
+
+``` r
+spark_disconnect(sc)
+```
+
+The regular version of local Spark would terminate the local cluster
+when the you pass `spark_disconnect()`. For Spark Connect, the local
+cluster needs to be stopped independently.
+
+``` r
+pysparklyr::spark_connect_service_stop()
 ```
 
 ## What is supported
@@ -320,17 +354,12 @@ Here is a list of what we currently support, and do not support via
     will be available in Spark 3.5. At that time we will work on
     integrating the new ML routines from Connect into `sparklyr`.
 
--   **SDF functions** - Most of these functions require SparkSession,
-    which is currently not supported in Spark 3.4.
+-   **Most `tidyr` functions** - This is ongoing work that we are
+    focusing on in `sparklyr`. We are implementing these functions using
+    PySpark DataFrame commands, instead of depending on the Scala
+    implementation.
 
--   **`tidyr`** - This is ongoing work that we are focusing on in
-    `sparklyr`. We are implementing these functions using PySpark
-    DataFrame commands, instead of depending on the Scala
-    implementation. **Update** - `pivot_longer()` is now available,
-    the 'ptypes', 'transform', and 'names_repair' arguments are
-    not supported yet. 
-
--   **`spark_apply()`** 
+-   **`spark_apply()`**
 
 A more detailed list of our progress, which includes individual
 functions we have confirmed that work, do not work, or will work

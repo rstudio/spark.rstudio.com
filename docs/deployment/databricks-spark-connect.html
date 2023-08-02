@@ -341,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p><em>Last updated: Wed Aug 2 16:20:01 2023</em></p>
+<p><em>Last updated: Wed Aug 2 16:50:34 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise. <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
@@ -557,8 +557,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Not supported</strong>:</p>
 <ul>
 <li><p><strong>ML functions</strong> - All functions, in <code>sparklyr</code>, that have the <code>ml_</code> and <code>ft_</code> are currently not supported. The reason is that Spark 3.4 does not currently support MLlib. We expect that some ML support will be available in Spark 3.5. At that time we will work on integrating the new ML routines from Connect into <code>sparklyr</code>.</p></li>
-<li><p><strong>SDF functions</strong> - Most of these functions require SparkSession, which is currently not supported in Spark 3.4.</p></li>
-<li><p><strong><code>tidyr</code></strong> - This is ongoing work that we are focusing on in <code>sparklyr</code>. We are implementing these functions using PySpark DataFrame commands, instead of depending on the Scala implementation. <strong>Update</strong> - <code>pivot_longer()</code> is now available, the ‘ptypes’, ‘transform’, and ‘names_repair’ arguments are not supported yet.</p></li>
+<li><p><strong>Most <code>tidyr</code> functions</strong> - This is ongoing work that we are focusing on in <code>sparklyr</code>. We are implementing these functions using PySpark DataFrame commands, instead of depending on the Scala implementation.</p></li>
 <li><p><strong><code>spark_apply()</code></strong></p></li>
 </ul>
 <p>A more detailed list of our progress, which includes individual functions we have confirmed that work, do not work, or will work differently, is available here: <a href="https://github.com/mlverse/pysparklyr/blob/main/progress.md"><code>pysparklyr</code> progress</a></p>

@@ -49,8 +49,8 @@ of Spark Connect to the R user community.
 ## The Solution
 
 Spark Connect requires the use of a remote procedure call framework
-called gRPC. At this time, the Spark team provides two higher level APIs
-that interact with gRPC. One is Scala based, and the other Python based.
+called *gRPC.* At this time, the Spark team provides two higher level APIs
+that interact with *gRPC.* One is Scala based, and the other Python based.
 
 In the development version of `sparklyr`, we are using `reticulate` to
 interact with the Python API. `sparklyr` extends the functionality, and
@@ -69,7 +69,7 @@ Connect. To access the new capabilities, you will need `sparklyr` version
 install use:
 
 ``` r
-install_github("sparklyr/sparklyr")
+install.packages("sparklyr")
 remotes::install_github("mlverse/pysparklyr")
 ```
 
@@ -112,6 +112,8 @@ environment you will need the following libraries installed:
 -   `grpcio`
 -   `google-api-python-client`
 -   `grpcio_status`
+-   `torch` *(Spark 3.5+)*
+-   `torcheval` *(Spark 3.5+)*
 
 If connecting to Databrics Connect, you will also need:
 
@@ -277,21 +279,56 @@ sc <- spark_connect(
 
 ### Run locally
 
-It is possible to test Spark Connect inside your machine. To do so,
-download Spark version 3.4 or above, and follow the instructions in this
-[article](https://spark.apache.org/docs/latest/spark-connect-overview.html#download-and-start-spark-server-with-spark-connect),
-to learn how to start and stop the service.
+It is possible to run Spark Connect in your machine We provide helper
+functions that let you setup, and start/stop the services in locally.
 
-Once started, you can start a session with Spark Connect using the
-following code:
+If you wish to try this out, first install Spark 3.4 or above:
 
 ``` r
-library(sparklyr)
+spark_install("3.4")
+```
 
+After installing, start the Spark Connect using:
+
+```r
+pysparklyr::spark_connect_service_start()
+```
+
+To connect to your local Spark Connect, use **localhost** as the address for 
+`master`:
+
+
+```r
 sc <- spark_connect(
-  host = "sc://localhost", 
+  master = "sc://localhost", 
   method = "spark_connect"
   )
+```
+
+Now, you are able to interact with your local Spark session:
+
+```r
+library(dplyr)
+
+tbl_mtcars <- copy_to(sc, mtcars)
+
+tbl_mtcars %>% 
+  group_by(am) %>% 
+  summarise(mpg = mean(mpg, na.rm = TRUE))
+```
+
+When done, you can disconnect from Spark Connect:
+
+```r
+spark_disconnect(sc)
+```
+
+The regular version of local Spark would terminate the local cluster
+when the you pass `spark_disconnect()`. For Spark Connect, the local
+cluster needs to be stopped independently.
+
+```r
+pysparklyr::spark_connect_service_stop()
 ```
 
 ## What is supported

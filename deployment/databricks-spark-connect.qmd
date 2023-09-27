@@ -17,8 +17,8 @@ editor:
 
 library(remotes)
 
-install_github("sparklyr/sparklyr")
-install_github("mlverse/pysparklyr")
+#install.packages("sparklyr")
+#install_github("mlverse/pysparklyr")
 
 library(dplyr)
 library(dbplyr)
@@ -143,7 +143,7 @@ Databricks Connect, use `method = databricks_connect`:
 library(sparklyr)
 
 sc <- spark_connect(
- host = "[Your Workspace Instance URL]", 
+ master = "[Your Workspace Instance URL]", 
  cluster_id = "[Cluster ID]"
  token = "[Your PAT - Please do not include 
           it as plain text here,  please refer 
@@ -263,7 +263,7 @@ spark_disconnect(sc)
 ### Connecting
 
 To start a session with a open source Spark cluster, via Spark Connect,
-you will need to set the `host`, and `method`. The `host` will be an IP,
+you will need to set the `master`, and `method`. The `master` will be an IP,
 and maybe a port that you will need to pass. The protocol to use to put
 together the proper connection URL is "sc://". For `method`, use
 "spark_connect". Here is an example:
@@ -272,7 +272,7 @@ together the proper connection URL is "sc://". For `method`, use
 library(sparklyr)
 
 sc <- spark_connect(
-  host = "sc://[Host IP(:Host Port - optional)]", 
+  master = "sc://[Host IP(:Host Port - optional)]", 
   method = "spark_connect"
   )
 ```

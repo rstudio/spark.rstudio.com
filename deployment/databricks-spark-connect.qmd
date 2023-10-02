@@ -174,11 +174,26 @@ Databricks Connect, use `method = databricks_connect`:
 library(sparklyr)
 
 sc <- spark_connect(
- master = "[Your Workspace Instance URL]", 
- cluster_id = "[Cluster ID]"
- token = "[Your PAT - Please do not include 
-          it as plain text here,  please refer 
-          to the next section]"
+  master = "[Your Workspace Instance URL]", 
+  cluster_id = "[Cluster ID]"
+  token = "[Your PAT - Please do not include 
+           it as plain text here,  please refer 
+           to the next section]",
+  method = "databricks_connect"
+  )
+```
+
+`sparklyr` will get retrieve the cluster's DBR version, and automatically choose
+the Python environment that has the matching version of `databricks.connect`. If
+it does not find a matching version, it will use the most recent version installed
+in your machine. If you wish, you can specify the version by setting the
+`dbr_version` argument. 
+
+```r
+sc <- spark_connect(
+  cluster_id = "[Cluster ID]",
+  method = "databricks_connect",
+  dbr_version = "14.0"
   )
 ```
 

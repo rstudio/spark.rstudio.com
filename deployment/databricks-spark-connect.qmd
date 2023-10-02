@@ -25,8 +25,6 @@ library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
 
-sc <- spark_connect(method = "databricks_connect")
-
 # install_pyspark()
 ```
 
@@ -54,14 +52,9 @@ Spark Connect requires the use of a remote procedure call framework
 called *gRPC.* At this time, the Spark team provides two higher level APIs
 that interact with *gRPC.* One is Scala based, and the other Python based.
 
-In the development version of `sparklyr`, we are using `reticulate` to
-interact with the Python API. `sparklyr` extends the functionality, and
-user experience, by providing the `dplyr`back-end, `DBI` back-end,
-RStudio's Connection pane integration.
-
-In order to quickly iterate on enhancements and bug fixes, we have
-decided to isolate the Python integration into its own package. The new
-package, called `pysparklyr`, is an extension of `sparklyr`.
+We are using `reticulate` to interact with the Python API. `sparklyr` extends 
+the functionality, and user experience, by providing the `dplyr`back-end, `DBI` 
+back-end, RStudio's Connection pane integration.
 
 ::: {#fig-connect}
 ```{mermaid}
@@ -89,6 +82,10 @@ flowchart LR
 
 How `sparklyr` communicates with Spark Connect, and Databricks Connect
 :::
+
+In order to quickly iterate on enhancements and bug fixes, we have
+decided to isolate the Python integration into its own package. The new
+package, called `pysparklyr`, is an extension of `sparklyr`.
 
 ## Package Installation
 
@@ -121,6 +118,9 @@ To install the latest versions of all the libraries, use:
 pysparklyr::install_databricks()
 ```
 
+`sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
+and installs that version.
+
 It is recommended that the version of the `databricks.connect` library matches 
 the DBR version of your cluster.  To do this, pass the DBR version in the 
 `version` argument, for example:
@@ -143,12 +143,12 @@ cluster and get the DBR version:
 pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
 ```
 
-:::{.callout-note}
+:::{.callout-important}
 
 This step needs only to be done one time. If you need to connect to a different
 cluster, but that has the same DBR version, `sparklyr` will use the same
 Python environment.  If the new cluster has a different DBR version, then it is
-recommended that you run the installation function using the new version or
+recommended that you run the installation function using the new DBR version, or
 cluster ID.
 
 :::
@@ -222,14 +222,19 @@ You will need to only pass the `cluster_id` of your cluster, and tell
 `sparklyr` that you are connecting to a Spark cluster with run time 13
 or above:
 
-``` r
+``` {r}
 library(sparklyr)
 
 sc <- spark_connect(
-  cluster_id = "[Cluster ID]",
+  cluster_id = "0914-200113-rc8v8keb",
   method = "databricks_connect"
 )
 ```
+
+`sparklyr` will provide console message while initiating the connection. As
+seen above, we are informed that `sparklyr` is getting the DBR version from the
+cluster, the version returned by the cluster, and which Python environment 
+it used to connect.
 
 ### RStudio's Connection pane
 
@@ -292,6 +297,39 @@ spark_disconnect(sc)
 
 ## Spark Connect
 
+### Initial setup
+
+`sparklyr` will need specific Python libraries in order to connect, and interact
+with Spark Connect. We provide a convenience function that will automatically
+do the following:
+
+- Create, or re-create, a Python environment. Based on your OS, it will choose
+to create a Virtual Environment, or Conda. 
+
+- Install the needed Python libraries
+
+To install the latest versions of all the libraries, use:
+
+```r
+pysparklyr::install_pyspark()
+```
+
+`sparklyr` will query PyPi.org to get the latest version of PySpark
+and installs that version.
+
+It is recommended that the version of the PySpark library matches 
+the Spark version of your cluster.  To do this, pass the Spark version in the 
+`version` argument, for example:
+
+```r
+pysparklyr::install_pyspark("3.4")
+```
+
+We have seen where a newer version of PySpark will crash when used against an
+older version of Spark. If you are having issues with your connection, 
+definitely consider running the `install_pyspark()` for the cluster's specific
+version.
+
 ### Connecting
 
 To start a session with a open source Spark cluster, via Spark Connect,
@@ -306,8 +344,13 @@ library(sparklyr)
 sc <- spark_connect(
   master = "sc://[Host IP(:Host Port - optional)]", 
   method = "spark_connect"
+  version = "[Version that matches your cluster]"
   )
 ```
+
+If `version` is not passed, then `sparklyr` will automatically choose the 
+installed Python environment with the highest PySpark version. In a console 
+message, `sparklyr` will let you know which environment it will use.
 
 ### Run locally
 
@@ -416,8 +459,8 @@ environment you will need the following libraries installed:
 -   `torch` *(Spark 3.5+)*
 -   `torcheval` *(Spark 3.5+)*
 
-If connecting to Databrics Connect, you will also need. Avoid installing 
-`pyspark`:
+If connecting to Databrics Connect avoid installing `pyspark`, and install 
+these instead: 
 
 -   `databricks-connect`
 -   `delta-spark`

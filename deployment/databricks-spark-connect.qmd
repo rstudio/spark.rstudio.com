@@ -119,20 +119,18 @@ pysparklyr::install_databricks()
 ```
 
 `sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
-and installs that version.
-
-It is recommended that the version of the `databricks.connect` library matches 
-the DBR version of your cluster.  To do this, pass the DBR version in the 
-`version` argument, for example:
+and installs that version. It is recommended that the version of the 
+`databricks.connect` library, matches  the DBR version of your cluster.  
+To do this, pass the DBR version in the `version` argument, for example:
 
 ```r
 pysparklyr::install_databricks("14.0")
 ```
 
 This will create a Python environment and install `databricks.connect` version
-14.0.  It will automatically name it `r-sparklyr-databricks-14.0`.  This way
-it will allow `sparklyr` choose the Python environment with the right 
-library version. 
+14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
+this name, `sparklyr` is able to know what version of `databricks.connect` is
+available inside this particular Python environment.
 
 If you are not sure about the version of the cluster you want to interact with,
 then use the `cluster_id` argument. We have added a way to pull the cluster's
@@ -315,20 +313,19 @@ pysparklyr::install_pyspark()
 ```
 
 `sparklyr` will query PyPi.org to get the latest version of PySpark
-and installs that version.
-
-It is recommended that the version of the PySpark library matches 
-the Spark version of your cluster.  To do this, pass the Spark version in the 
-`version` argument, for example:
+and installs that version. It is recommended that the version of the
+PySpark library matches the Spark version of your cluster. 
+To do this, pass the Spark version in the  `version` argument, for example:
 
 ```r
 pysparklyr::install_pyspark("3.4")
 ```
 
-We have seen where a newer version of PySpark will crash when used against an
-older version of Spark. If you are having issues with your connection, 
-definitely consider running the `install_pyspark()` for the cluster's specific
-version.
+We have seen Spark sessions crash, when the version of PySpark and the version
+of Spark do not match. Specially, when using a newer version of PySpark is used
+against an older version of Spark.  If you are having issues with your connection, 
+definitely consider running the `install_pyspark()` to match that cluster's 
+specific Spark version.
 
 ### Connecting
 

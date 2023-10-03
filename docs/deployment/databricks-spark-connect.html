@@ -329,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Mon Oct 2 18:50:31 2023</em></p>
+<p><em>Last updated: Tue Oct 3 08:51:00 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise. <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
@@ -392,10 +392,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>To install the latest versions of all the libraries, use:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version.</p>
-<p>It is recommended that the version of the <code>databricks.connect</code> library matches the DBR version of your cluster. To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
+<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version. It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster.<br>
+To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0. It will automatically name it <code>r-sparklyr-databricks-14.0</code>. This way it will allow <code>sparklyr</code> choose the Python environment with the right library version.</p>
+<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p>
 <p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -545,10 +545,9 @@ Important
 </ul>
 <p>To install the latest versions of all the libraries, use:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_pyspark</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>sparklyr</code> will query PyPi.org to get the latest version of PySpark and installs that version.</p>
-<p>It is recommended that the version of the PySpark library matches the Spark version of your cluster. To do this, pass the Spark version in the <code>version</code> argument, for example:</p>
+<p><code>sparklyr</code> will query PyPi.org to get the latest version of PySpark and installs that version. It is recommended that the version of the PySpark library matches the Spark version of your cluster. To do this, pass the Spark version in the <code>version</code> argument, for example:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_pyspark</span>(<span class="st">"3.4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We have seen where a newer version of PySpark will crash when used against an older version of Spark. If you are having issues with your connection, definitely consider running the <code>install_pyspark()</code> for the cluster’s specific version.</p>
+<p>We have seen Spark sessions crash, when the version of PySpark and the version of Spark do not match. Specially, when using a newer version of PySpark is used against an older version of Spark. If you are having issues with your connection, definitely consider running the <code>install_pyspark()</code> to match that cluster’s specific Spark version.</p>
 </section>
 <section id="connecting-1" class="level3">
 <h3 class="anchored" data-anchor-id="connecting-1">Connecting</h3>

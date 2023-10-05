@@ -111,6 +111,20 @@ to create a Virtual Environment, or Conda.
 
 - Install the needed Python libraries
 
+::: {.callout-important} 
+## WINDOWS USERS PLEASE READ
+
+Some issues have been reported using the CRAN version of `reticulate` on
+**Windows**.  If you are using this OS, please install the development
+version of `reticulate`:
+
+```r
+install.packages("pak")
+pak::pak("rstudio/reticulate")
+```
+
+:::
+
 To install the latest versions of all the libraries, use:
 
 ```r
@@ -140,15 +154,13 @@ cluster and get the DBR version:
 pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
 ```
 
-:::{.callout-important}
 
-This step needs only to be done one time. If you need to connect to a different
+**Important** -  This step needs only to be **done one time**. If you need to connect to a different
 cluster, but that has the same DBR version, `sparklyr` will use the same
 Python environment.  If the new cluster has a different DBR version, then it is
 recommended that you run the installation function using the new DBR version, or
 cluster ID.
 
-:::
 
 ### Connecting
 

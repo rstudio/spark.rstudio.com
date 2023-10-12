@@ -245,6 +245,161 @@ seen above, we are informed that `sparklyr` is getting the DBR version from the
 cluster, the version returned by the cluster, and which Python environment 
 it used to connect.
 
+### Reported Problems
+
+As it is with any nascent implementations, we are seeing some early adopters report
+issues with their installation or connections. 
+
+Here are some of the issues that have been reported to us, and the recommended
+solution, or workaround. Each issue is **collapsed**, just expand it to see the
+background and recommendation. Each one is titled based on the full error message 
+or, the distinctive part of the error message: 
+
+::: {.callout-note collapse="true"}
+## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
+
+Error message contains:
+
+```r
+... reticulate can only bind to copies of Python built with '--enable-shared'.
+```
+
+This is happening because there is no Python installation that `reticulate` 
+can use. `pysparklyr` depends on that package to function. 
+
+### Solution
+
+The best way to resolve is to install an acceptable version of Python. You can run:
+
+```r
+reticulate::install_python()
+```
+
+If the output mentions `--skip-existing [version number]` then you will have two options:
+
+1. If you're ok with replacing the existing Python, then use:
+   ```r
+    reticulate::install_python(version = "[version number]", force = TRUE)
+   ``` 
+
+2. If you would like to keep that installation of Python then use a different version number:
+   ```r
+    reticulate::install_python(version = "[slightly different version number]")
+   ``` 
+    For example, if the version number is `3.9.12`, then use `3.9.18`: 
+  
+    ```r
+    reticulate::install_python(version = "3.9.18")
+    ``` 
+:::
+
+::: {.callout-note collapse="true"}
+## `Error: Unable to find conda binary. Is Anaconda installed?`
+
+When trying to connect, this error is returned:
+
+```r
+Error: Unable to find conda binary. Is Anaconda installed?
+```
+
+Here is a code example when this error will generally show up:
+
+```r
+library(sparklyr)
+sc <- spark_connect(cluster_id="xxxx", method = "databricks_connect")
+## ! Retrieving version from cluster 'xxxx'
+## ✔ Cluster version: '14.0'
+## Error: Unable to find conda binary. Is Anaconda installed?
+```
+
+### Solution
+
+This is an issue with `pysparklyr` in CRAN, there is a fix for it currently 
+in the dev version (`0.1.9000` and above). Run the following to install:
+
+```r
+install.packages("pak")
+pak::pak("mlverse/pysparklyr")
+```
+:::
+
+::: {.callout-note collapse="true"}
+## `Error in envs[[1]] : subscript out of bounds`
+
+This is because there is no "standardly named" virtual environment is found. 
+
+```r
+> sc <- spark_connect(method = "databricks_connect")
+Error in envs[[1]] : subscript out of bounds
+```
+
+### Solution
+
+To resolve, there are 2 options:
+
+1. Run `pysparklyr::install_databricks(cluster_id = "[your cluster's id]")`
+2. If you want to use a environment you've setup, pass it as part of your connection code: `sc <- spark_connect(method = "databricks_connect", envname = "my-customer-environment"))`
+
+In `pysaprklyr`, we'll add a message that says: "no environment was found, and to please use `envname`
+:::
+
+::: {.callout-note collapse="true"}
+## `! Version '' does not exist`
+
+When you try to install Databricks using the cluster ID, and the Host ID is invalid, this error appears:
+
+```r
+> Sys.setenv("DATABRICKS_HOST" = "https://rstudio-partner-posit-default.cloud.databricks.com/o=notvalid")
+> pysparklyr::install_databricks(cluster_id = "0914-200113-rc8v8keb")
+! Retrieving version from cluster '0914-200113-rc8v8keb'
+✔ Checking if provided version is valid against PyPi.org
+Error in `install_environment()`:
+! Version '' does not exist
+Run `rlang::last_trace()` to see where the error occurred.
+```
+
+### Solution
+
+Remove any parameters, and leading forward slashes, from the URL. 
+
+In the future, we'll check for that going forward and provide clearer warnings
+or errors.
+
+:::
+
+::: {.callout-note collapse="true"}
+## `An error occurred while the 'sparklyr' package was updating the RStudio Connections pane`
+
+Whenever there is additional information in the Databricks Host value, as in, 
+any parameters, a Connections pane issue is raised. This is because the 
+Host needs to be the base url, with out any parameters
+
+```r
+Sys.setenv("DATABRICKS_HOST" = "https://rstudio-partner-posit-default.cloud.databricks.com/o=notvalid")
+
+sc <- spark_connect(
+        master = Sys.getenv("DATABRICKS_HOST"),
+        cluster_id = "[Your cluster ID]",
+        method = "databricks_connect"
+        )
+# ! Retrieving version from cluster '0914-200113-rc8v8keb'
+# ... more info ...
+# Error in if (spark_connection_is_yarn(scon)) {: argument is of length zero
+# Error in     actions <- c(actions, list(YARN = list(icon = file.path(icons, : argument is of length zero
+# Error in         "yarn-ui.png"), callback = function() {: argument is of length zero
+# Error in         browse_url(spark_connection_yarn_ui(scon)): argument is of length zero
+# Error in     }))): argument is of length zero
+# Error in }: argument is of length zero
+# If necessary, these warnings can be squelched by setting `options(rstudio.connectionObserver.errorsSuppressed = TRUE)`.
+```
+
+### Solution
+
+Remove any parameters, and leading forward slashes, from the URL.  In the
+package, we'll check for that going forward and provide clearer warnings
+
+:::
+
 ### RStudio's Connection pane
 
 Thanks to the new way we are integrating with Spark, it is now possible

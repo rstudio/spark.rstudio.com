@@ -251,8 +251,9 @@ As it is with any nascent implementations, we are seeing some early adopters rep
 issues with their installation or connections. 
 
 Here are some of the issues that have been reported to us, and the recommended
-solution or workaround. Each issue is **collapsed**, just expand it to see the
-background and recommendation: 
+solution, or workaround. Each issue is **collapsed**, just expand it to see the
+background and recommendation. Each one is titled based on the full error message 
+or, the distinctive part of the error message: 
 
 ::: {.callout-note collapse="true"}
 ## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
@@ -320,6 +321,50 @@ in the dev version (`0.1.9000` and above). Run the following to install:
 install.packages("pak")
 pak::pak("mlverse/pysparklyr")
 ```
+:::
+
+::: {.callout-note collapse="true"}
+## `Error in envs[[1]] : subscript out of bounds`
+
+This is because there is no "standardly named" virtual environment is found. 
+
+```r
+> sc <- spark_connect(method = "databricks_connect")
+Error in envs[[1]] : subscript out of bounds
+```
+
+### Solution
+
+To resolve, there are 2 options:
+
+1. Run `pysparklyr::install_databricks(cluster_id = "[your cluster's id]")`
+2. If you want to use a environment you've setup, pass it as part of your connection code: `sc <- spark_connect(method = "databricks_connect", envname = "my-customer-environment"))`
+
+In `pysaprklyr`, we'll add a message that says: "no environment was found, and to please use `envname`
+:::
+
+::: {.callout-note collapse="true"}
+## `! Version '' does not exist`
+
+When you try to install Databricks using the cluster ID, and the Host ID is invalid, this error appears:
+
+```r
+> Sys.setenv("DATABRICKS_HOST" = "https://rstudio-partner-posit-default.cloud.databricks.com/o=notvalid")
+> pysparklyr::install_databricks(cluster_id = "0914-200113-rc8v8keb")
+! Retrieving version from cluster '0914-200113-rc8v8keb'
+✔ Checking if provided version is valid against PyPi.org
+Error in `install_environment()`:
+! Version '' does not exist
+Run `rlang::last_trace()` to see where the error occurred.
+```
+
+### Solution
+
+Remove any parameters, and leading forward slashes, from the URL. 
+
+In the future, we'll check for that going forward and provide clearer warnings
+or errors.
+
 :::
 
 ### RStudio's Connection pane

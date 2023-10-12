@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -244,6 +244,83 @@ sc <- spark_connect(
 seen above, we are informed that `sparklyr` is getting the DBR version from the
 cluster, the version returned by the cluster, and which Python environment 
 it used to connect.
+
+### Reported Problems
+
+As it is with any nascent implementations, we are seeing some early adopters report
+issues with their installation or connections. 
+
+Here are some of the issues that have been reported to us, and the recommended
+solution or workaround. Each issue is **collapsed**, just expand it to see the
+background and recommendation: 
+
+::: {.callout-note collapse="true"}
+## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
+
+Error message contains:
+
+```r
+... reticulate can only bind to copies of Python built with '--enable-shared'.
+```
+
+This is happening because there is no Python installation that `reticulate` 
+can use. `pysparklyr` depends on that package to function. 
+
+### Solution
+
+The best way to resolve is to install an acceptable version of Python. You can run:
+
+```r
+reticulate::install_python()
+```
+
+If the output mentions `--skip-existing [version number]` then you will have two options:
+
+1. If you're ok with replacing the existing Python, then use:
+   ```r
+    reticulate::install_python(version = "[version number]", force = TRUE)
+   ``` 
+
+2. If you would like to keep that installation of Python then use a different version number:
+   ```r
+    reticulate::install_python(version = "[slightly different version number]")
+   ``` 
+    For example, if the version number is `3.9.12`, then use `3.9.18`: 
+  
+    ```r
+    reticulate::install_python(version = "3.9.18")
+    ``` 
+:::
+
+::: {.callout-note collapse="true"}
+## `Error: Unable to find conda binary. Is Anaconda installed?`
+
+When trying to connect, this error is returned:
+
+```r
+Error: Unable to find conda binary. Is Anaconda installed?
+```
+
+Here is a code example when this error will generally show up:
+
+```r
+library(sparklyr)
+sc <- spark_connect(cluster_id="xxxx", method = "databricks_connect")
+## ! Retrieving version from cluster 'xxxx'
+## ✔ Cluster version: '14.0'
+## Error: Unable to find conda binary. Is Anaconda installed?
+```
+
+### Solution
+
+This is an issue with `pysparklyr` in CRAN, there is a fix for it currently 
+in the dev version (`0.1.9000` and above). Run the following to install:
+
+```r
+install.packages("pak")
+pak::pak("mlverse/pysparklyr")
+```
+:::
 
 ### RStudio's Connection pane
 

@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -364,6 +364,39 @@ Remove any parameters, and leading forward slashes, from the URL.
 
 In the future, we'll check for that going forward and provide clearer warnings
 or errors.
+
+:::
+
+::: {.callout-note collapse="true"}
+## `An error occurred while the 'sparklyr' package was updating the RStudio Connections pane`
+
+Whenever there is additional information in the Databricks Host value, as in, 
+any parameters, a Connections pane issue is raised. This is because the 
+Host needs to be the base url, with out any parameters
+
+```r
+Sys.setenv("DATABRICKS_HOST" = "https://rstudio-partner-posit-default.cloud.databricks.com/o=notvalid")
+
+sc <- spark_connect(
+        master = Sys.getenv("DATABRICKS_HOST"),
+        cluster_id = "[Your cluster ID]",
+        method = "databricks_connect"
+        )
+# ! Retrieving version from cluster '0914-200113-rc8v8keb'
+# ... more info ...
+# Error in if (spark_connection_is_yarn(scon)) {: argument is of length zero
+# Error in     actions <- c(actions, list(YARN = list(icon = file.path(icons, : argument is of length zero
+# Error in         "yarn-ui.png"), callback = function() {: argument is of length zero
+# Error in         browse_url(spark_connection_yarn_ui(scon)): argument is of length zero
+# Error in     }))): argument is of length zero
+# Error in }: argument is of length zero
+# If necessary, these warnings can be squelched by setting `options(rstudio.connectionObserver.errorsSuppressed = TRUE)`.
+```
+
+### Solution
+
+Remove any parameters, and leading forward slashes, from the URL.  In the
+package, we'll check for that going forward and provide clearer warnings
 
 :::
 

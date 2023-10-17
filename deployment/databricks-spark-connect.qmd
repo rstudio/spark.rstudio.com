@@ -201,6 +201,19 @@ sc <- spark_connect(
   )
 ```
 
+
+
+For cases when the Python environment created by `install_databricks()` will not
+be used, then pass it to `spark_connect()` via the `envname` argument:
+
+```r
+sc <- spark_connect(
+  cluster_id = "[Cluster ID]",
+  method = "databricks_connect",
+  envname = "[your Python environment's name]"
+  )
+```
+
 ### Safely connect
 
 For your safety and convenience, you can save your authentication token
@@ -240,14 +253,115 @@ seen above, we are informed that `sparklyr` is getting the DBR version from the
 cluster, the version returned by the cluster, and which Python environment 
 it used to connect.
 
+### RStudio's Connection pane
+
+Thanks to the new way we are integrating with Spark, it is now possible
+to display the same structure displayed in the Databricks Data Explorer
+page. In Databricks, the current data structure levels are:
+
+-   Catalog
+    -   Database
+        -   Table
+
+In RStudio, you can navigate the data structure by expanding from the
+top level, all the way down to the table you wish to explore. Once
+expanded, the table's fields, and their types are displayed.
+
+![](/images/deployment/connect/rstudio-connection.png)
+
+In the Connection Pane, you can click on the **table** icon, situated to
+the right of the table name, to preview the first 1,000 rows:
+
+![](/images/deployment/connect/preview.png)
+
+### Using the Connection to Access Data
+
+After connecting, you can use `dbplyr`'s `in_catalog()` function to
+access any table in your data catalog. You will only need to pass the
+respective names of the three levels as comma separated character
+entries to `in_catalog()` in this order: Catalog, Database, and Table.
+
+Here is an example of using `tbl()` and `in_catalog()` to point to the
+**trips** table, which is inside **nyctaxi** database, which is a
+database inside the **samples** catalog:
+
+```{r}
+library(dplyr)
+library(dbplyr)
+
+trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
+
+trips
+```
+
+After pointing `tbl()` to that specific table, you can then use `dplyr`.
+
+```{r}
+trips %>%
+  group_by(pickup_zip) %>%
+  summarise(
+    count = n(),
+    avg_distance = mean(trip_distance, na.rm = TRUE)
+  )
+```
+
+When you are done with you queries and computations, you should
+disconnect from the cluster.
+
+```{r}
+spark_disconnect(sc)
+```
+
+### Restricted Python environments 
+
+If your organization restricts Python environment creation, you can 
+point `sparklyr` to the designated Python installation.  To do this, you will 
+have to set the `RETICULATE_PYTHON` environment variable, and **before** 
+attempting to connect to the cluster: 
+
+```r
+library(sparklyr)
+
+Sys.setenv("RETICULATE_PYTHON" = "[path to the desired python path]")
+
+sc <- spark_connect(
+  method = "databricks_connect",
+  cluster_id = "[your cluster id]"
+  )
+```
+
+To successfully connect to a Databricks cluster, you will need to match the
+proper version of the `databricks.connect` Python library, to the Databricks
+Runtime (DBR) version in the cluster. For example, if you are trying to use a
+Databricks cluster with a DBR version 14.0, then `databricks.connect` will also
+need to be version 14.0. Failure to do so, can result in instability, or even
+the inability to connect. 
+
+Besides `datbricks.connect`, the Python environment will also need to have other
+Python libraries installed. The full list is in the [Additional setup details](#additional-setup-details)
+section.
+
+:::{.callout-important}
+If your server, or machine, has only one Python installation and, no ability to create
+Conda or Virtual environments, then you will encounter issues when connecting to
+a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
+:::
+
+Additionally, avoid setting `RETICULATE_PYTHON` for the entire server (`Rprofile.site`).
+The same goes for your user profile level (`Home\.Renviron`).  For example, 
+If you are working on two projects, using two different Databricks clusters, 
+and with two different Databricks Runtime (DBR) versions, will mean that you 
+will need two different versions of `databricks.connect`. The recommendation is 
+to set the `.Renviron` file at the project level, or to set it at the beginning 
+of your R session via the code shown above. 
+
 ### Reported Problems
 
-As it is with any nascent implementations, we are seeing some early adopters report
-issues with their installation or connections. 
-
-Here are some of the issues that have been reported to us, and the recommended
-solution, or workaround. Each issue is **collapsed**, just expand it to see the
-background and recommendation. Each one is titled based on the full error message 
+As it is with any new implementations, we are seeing some early adopters report
+issues with their installation or connections.  Here are some of the issues that 
+have been reported to us, and the recommended solution, or workaround.
+Each issue is **collapsed**, just expand it to see the background and 
+recommendation. Each one is titled based on the full error message 
 or, the distinctive part of the error message: 
 
 ::: {.callout-note collapse="true"}
@@ -395,64 +509,82 @@ package, we'll check for that going forward and provide clearer warnings
 
 :::
 
-### RStudio's Connection pane
+::: {.callout-note collapse="true"}
+## `...will be ignored because  the environment variable RETICULATE_PYTHON is set to...`
 
-Thanks to the new way we are integrating with Spark, it is now possible
-to display the same structure displayed in the Databricks Data Explorer
-page. In Databricks, the current data structure levels are:
+`reticulate` will use `RETICULATE_PYTHON` as the first way to find the Python
+installation to use, see [`reticulate` - Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery).
+This means that any Python environment you created, via `install_databricks()` or 
+otherwise, will not be used. Full message says:
 
--   Catalog
-    -   Database
-        -   Table
-
-In RStudio, you can navigate the data structure by expanding from the
-top level, all the way down to the table you wish to explore. Once
-expanded, the table's fields, and their types are displayed.
-
-![](/images/deployment/connect/rstudio-connection.png)
-
-In the Connection Pane, you can click on the **table** icon, situated to
-the right of the table name, to preview the first 1,000 rows:
-
-![](/images/deployment/connect/preview.png)
-
-### Using the Connection to Access Data
-
-After connecting, you can use `dbplyr`'s `in_catalog()` function to
-access any table in your data catalog. You will only need to pass the
-respective names of the three levels as comma separated character
-entries to `in_catalog()` in this order: Catalog, Database, and Table.
-
-Here is an example of using `tbl()` and `in_catalog()` to point to the
-**trips** table, which is inside **nyctaxi** database, which is a
-database inside the **samples** catalog:
-
-```{r}
-library(dplyr)
-library(dbplyr)
-
-trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
-
-trips
+```r
+# Warning message:
+# The request to `use_python("[path to your new environment]")` will be ignored because the  environment variable RETICULATE_PYTHON is set to "[whatever that variable is set to]" 
 ```
 
-After pointing `tbl()` to that specific table, you can then use `dplyr`.
 
-```{r}
-trips %>%
-  group_by(pickup_zip) %>%
-  summarise(
-    count = n(),
-    avg_distance = mean(trip_distance, na.rm = TRUE)
+### Solution
+
+The workaround is to unset the environment variable. This will allow `reticulate`
+to use the your newly created Python environment:
+
+```r
+library(sparklyr)
+
+# You will need to do this every time you connect
+Sys.unsetenv("RETICULATE_PYTHON")
+
+sc <- spark_connect(
+  method = "databricks_connect",
+  cluster_id = "[your cluster id]"
   )
 ```
 
-When you are done with you queries and computations, you should
-disconnect from the cluster.
+:::
 
-```{r}
-spark_disconnect(sc)
+
+::: {.callout-note collapse="true"}
+## The RStudio IDE Connections Pane is stuck on "Loading Objects"
+
+The RStudio IDE Connections Pane is stuck on "Loading Objects", additionally,
+the connection seems to have been successful, but no catalogs or tables show 
+up in the Connections Pane. 
+
+The likely root cause is that you have access to a vast amount of catalogs, 
+databases, and tables.  This issue is reported most often by Databricks 
+internal users. 
+
+### Solution
+
+The best workaround we have found is to load the Unity Catalog data into the
+Connections Pane. In other words, we will filter out the content from the
+Hive Metastore (HMS). To do this, `pysparklyr` will look at a new environment
+variable called: `SPARKLYR_RSTUDIO_CP_VIEW`, to "uc_only":
+
+```r
+Sys.setenv("SPARKLYR_RSTUDIO_CP_VIEW" = "uc_only")
+
+library(sparklyr)
+sc <- spark_connect(
+  method = "databricks_connect",
+    cluster_id = "[Your cluster's ID]"
+)
 ```
+
+If you prefer, you can set this variable at your profile or project's level.
+
+To access this functionality, you will need `pysparklyr` version **0.1.9001** or
+above, which is currently in development: 
+
+```r
+install.packages("pak")
+pak::pak("mlverse/pysparklyr")
+```
+
+
+
+
+:::
 
 ## Spark Connect
 

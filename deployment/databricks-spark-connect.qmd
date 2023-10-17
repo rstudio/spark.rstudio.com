@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -201,6 +201,19 @@ sc <- spark_connect(
   )
 ```
 
+
+
+For cases when the Python environment created by `install_databricks()` will not
+be used, then pass it to `spark_connect()` via the `envname` argument:
+
+```r
+sc <- spark_connect(
+  cluster_id = "[Cluster ID]",
+  method = "databricks_connect",
+  envname = "[your Python environment's name]"
+  )
+```
+
 ### Safely connect
 
 For your safety and convenience, you can save your authentication token
@@ -242,39 +255,46 @@ it used to connect.
 
 ### Restricted Python environments 
 
-There is a way for `sparklyr` to use a specific Python installation. This is in
-case your organization restricts Python environment creation.  To get `sparklyr`
-working, you will have to set the `RETICULATE_PYTHON` environment variable, 
-**before** attempting to connect to the cluster: 
+If your organization restricts Python environment creation, you can 
+point `sparklyr` to the designated Python installation.  To do this, you will 
+have to set the `RETICULATE_PYTHON` environment variable, and **before** 
+attempting to connect to the cluster: 
 
 ```r
 library(sparklyr)
+
 Sys.setenv("RETICULATE_PYTHON" = "[path to the desired python path]")
-sc <- spark_connect(method = "databricks_connect", cluster_id = "[your cluster id]")
+
+sc <- spark_connect(
+  method = "databricks_connect",
+  cluster_id = "[your cluster id]"
+  )
 ```
 
-Successfully connecting to a Databricks cluster, will depend on matching to the
+To successfully connect to a Databricks cluster, you will need to match the
 proper version of the `databricks.connect` Python library, to the Databricks
 Runtime (DBR) version in the cluster. For example, if you are trying to use a
-Databricks cluster with a DBR version 14.0, you will need for `databricks.connect` 
-version to also be 14.0. Failure to do so, can result in instability, or even
-inability to connect. 
+Databricks cluster with a DBR version 14.0, then `databricks.connect` will also
+need to be version 14.0. Failure to do so, can result in instability, or even
+the inability to connect. 
 
 Besides `datbricks.connect`, the Python environment will also need to have other
 Python libraries installed. The full list is in the [Additional setup details](#additional-setup-details)
 section.
 
+:::{.callout-important}
 If your server, or machine, has only one Python installation and, no ability to create
 Conda or Virtual environments, then you will encounter issues when connecting to
 a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
+:::
 
-Additionally, please do not set the `RETICULATE_PYTHON` for the entire server (`Rprofile.site`),
-or even at your user profile level (`Home\.Renviron`).  For example, If you are working on two
-projects, using two different Databricks clusters, and with two different Databricks
-Runtime (DBR) versions, will mean that you will need two different versions
-of `databricks.connect`. The recommendation is to set the `.Renviron` file at the
-project level, or to set it at the beginning of your R session via the code shown 
-above. 
+Additionally, avoid setting `RETICULATE_PYTHON` for the entire server (`Rprofile.site`).
+The same goes for your user profile level (`Home\.Renviron`).  For example, 
+If you are working on two projects, using two different Databricks clusters, 
+and with two different Databricks Runtime (DBR) versions, will mean that you 
+will need two different versions of `databricks.connect`. The recommendation is 
+to set the `.Renviron` file at the project level, or to set it at the beginning 
+of your R session via the code shown above. 
 
 ### Reported Problems
 

@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -512,28 +512,26 @@ package, we'll check for that going forward and provide clearer warnings
 ::: {.callout-note collapse="true"}
 ## `...will be ignored because  the environment variable RETICULATE_PYTHON is set to...`
 
-Full message says:
+`reticulate` will use `RETICULATE_PYTHON` as the first way to find the Python
+installation to use, see [`reticulate` - Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery).
+This means that any Python environment you created, via `install_databricks()` or 
+otherwise, will not be used. Full message says:
 
 ```r
 # Warning message:
 # The request to `use_python("[path to your new environment]")` will be ignored because the  environment variable RETICULATE_PYTHON is set to "[whatever that variable is set to]" 
 ```
 
-### Background
-
-`reticulate` will use `RETICULATE_PYTHON` as the first way to find the Python
-installation to use, see [`reticulate` - Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery).
-This means that any Python environment you created, via `install_databricks()` or 
-otherwise, will not be used.
 
 ### Solution
 
-To override this, unset the environment variable 
-before connecting:
+The workaround is to unset the environment variable. This will allow `reticulate`
+to use the your newly created Python environment:
 
 ```r
 library(sparklyr)
 
+# You will need to do this every time you connect
 Sys.unsetenv("RETICULATE_PYTHON")
 
 sc <- spark_connect(

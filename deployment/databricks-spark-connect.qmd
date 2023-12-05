@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -87,9 +87,10 @@ package, called `pysparklyr`, is an extension of `sparklyr`.
 
 ## Package Installation
 
-As mentioned above, we are still working integrating `sparklyr` with
-Connect. To access the new capabilities, you will need `sparklyr` version
-**1.8.3** or higher, and `pysparklyr`. To install use:
+To access Spark Connect, you will need the following two packages:
+
+- `sparklyr` - 1.8.4
+- `pysparklyr` - 0.1.2
 
 ``` r
 install.packages("sparklyr")
@@ -98,7 +99,7 @@ install.packages("pysparklyr")
 
 ## Databricks Connect (ML 13+) 
 
-### Connecting
+### Getting Started
 
 To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
@@ -137,10 +138,13 @@ DATABRICKS_HOST="Enter here your Workspace URL"
 DATABRICKS_TOKEN="Enter here your personal token"
 ```
 
-This is a one time operation. After saving and closing the file, restart your
+**This is a one time operation.** After saving and closing the file, restart your
 R session. 
 
-You can now connect by simply providing the cluster ID, and the method to 
+### First time connecting
+
+After setting up your Host and Token environment variables, you can now connect
+to your cluster by simply providing the cluster's ID, and the method to 
 `spark_connect()`:
 
 ``` r
@@ -153,8 +157,9 @@ sc <- spark_connect(
 ```
 
 In order to connect and interact with Databricks, you will need a specific set
-of [Python libraries](#additional-setup-details). To make it easier to get started, we provide functionality
-that will automatically do the following:
+of [Python libraries](#additional-setup-details) installed and available. 
+To make it easier to get started, we provide functionality that will 
+automatically do the following:
 
 - Create, or re-create, a Python environment. Based on your OS, it will choose 
 to create a Virtual Environment, or Conda.

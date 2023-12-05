@@ -288,7 +288,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#package-installation" id="toc-package-installation" class="nav-link" data-scroll-target="#package-installation">Package Installation</a></li>
   <li><a href="#databricks-connect-ml-13" id="toc-databricks-connect-ml-13" class="nav-link" data-scroll-target="#databricks-connect-ml-13">Databricks Connect (ML 13+)</a>
   <ul class="collapse">
-  <li><a href="#connecting" id="toc-connecting" class="nav-link" data-scroll-target="#connecting">Connecting</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#first-time-connecting" id="toc-first-time-connecting" class="nav-link" data-scroll-target="#first-time-connecting">First time connecting</a></li>
   <li><a href="#rstudios-connection-pane" id="toc-rstudios-connection-pane" class="nav-link" data-scroll-target="#rstudios-connection-pane">RStudio’s Connection pane</a></li>
   <li><a href="#using-the-connection-to-access-data" id="toc-using-the-connection-to-access-data" class="nav-link" data-scroll-target="#using-the-connection-to-access-data">Using the Connection to Access Data</a></li>
   <li><a href="#restricted-python-environments" id="toc-restricted-python-environments" class="nav-link" data-scroll-target="#restricted-python-environments">Restricted Python environments</a></li>
@@ -299,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#spark-connect" id="toc-spark-connect" class="nav-link" data-scroll-target="#spark-connect">Spark Connect</a>
   <ul class="collapse">
   <li><a href="#initial-setup-1" id="toc-initial-setup-1" class="nav-link" data-scroll-target="#initial-setup-1">Initial setup</a></li>
-  <li><a href="#connecting-1" id="toc-connecting-1" class="nav-link" data-scroll-target="#connecting-1">Connecting</a></li>
+  <li><a href="#connecting" id="toc-connecting" class="nav-link" data-scroll-target="#connecting">Connecting</a></li>
   <li><a href="#run-locally" id="toc-run-locally" class="nav-link" data-scroll-target="#run-locally">Run locally</a></li>
   </ul></li>
   <li><a href="#what-is-supported" id="toc-what-is-supported" class="nav-link" data-scroll-target="#what-is-supported">What is supported</a></li>
@@ -332,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Tue Dec 5 15:57:39 2023</em></p>
+<p><em>Last updated: Tue Dec 5 16:16:24 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise.</p>
@@ -348,7 +349,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <div>
-
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph lp[User's machine]
+    sr[sparklyr]
+    rt[reticulate]
+    ps[PySpark]
+    g1[gRPC]
+  end
+  sp[Spark]
+  
+  sr --&gt; rt
+  rt --&gt; ps
+  g1 &lt;-. Network .-&gt; sp
+  ps --&gt; g1
+  
+  style sr  fill:#d0efb1,stroke:#666
+  style rt  fill:#d0efb1,stroke:#666
+  style ps  fill:#eff,stroke:#666
+  style lp  fill:#fff,stroke:#666
+  style sp  fill:#f4c430,stroke:#666
+  style g1  fill:#447099,stroke:#666,color:#fff
+</pre>
 </div>
 </div>
 </div>
@@ -361,14 +382,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="package-installation" class="level2">
 <h2 class="anchored" data-anchor-id="package-installation">Package Installation</h2>
-<p>As mentioned above, we are still working integrating <code>sparklyr</code> with Connect. To access the new capabilities, you will need <code>sparklyr</code> version <strong>1.8.3</strong> or higher, and <code>pysparklyr</code>. To install use:</p>
+<p>To access Spark Connect, you will need the following two packages:</p>
+<ul>
+<li><code>sparklyr</code> - 1.8.4</li>
+<li><code>pysparklyr</code> - 0.1.2</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sparklyr"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"pysparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="databricks-connect-ml-13" class="level2">
 <h2 class="anchored" data-anchor-id="databricks-connect-ml-13">Databricks Connect (ML 13+)</h2>
-<section id="connecting" class="level3">
-<h3 class="anchored" data-anchor-id="connecting">Connecting</h3>
+<section id="getting-started" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started">Getting Started</h3>
 <p>To use with Databricks Connect, in run-time 13 or above, you will need three configuration items:</p>
 <ol type="1">
 <li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#workspace-url">Workspace Instance URL</a></li>
@@ -385,15 +410,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>That command will open a text file that controls the environment variables at the <strong>user level</strong>. If missing, insert the entries for the two variables:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_HOST</span><span class="op">=</span><span class="st">"Enter here your Workspace URL"</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_TOKEN</span><span class="op">=</span><span class="st">"Enter here your personal token"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This is a one time operation. After saving and closing the file, restart your R session.</p>
-<p>You can now connect by simply providing the cluster ID, and the method to <code>spark_connect()</code>:</p>
+<p><strong>This is a one time operation.</strong> After saving and closing the file, restart your R session.</p>
+</section>
+<section id="first-time-connecting" class="level3">
+<h3 class="anchored" data-anchor-id="first-time-connecting">First time connecting</h3>
+<p>After setting up your Host and Token environment variables, you can now connect to your cluster by simply providing the cluster’s ID, and the method to <code>spark_connect()</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"Enter here your cluster ID"</span>,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In order to connect and interact with Databricks, you will need a specific set of <a href="#additional-setup-details">Python libraries</a>. To make it easier to get started, we provide functionality that will automatically do the following:</p>
+<p>In order to connect and interact with Databricks, you will need a specific set of <a href="#additional-setup-details">Python libraries</a> installed and available. To make it easier to get started, we provide functionality that will automatically do the following:</p>
 <ul>
 <li><p>Create, or re-create, a Python environment. Based on your OS, it will choose to create a Virtual Environment, or Conda.</p></li>
 <li><p>Install the needed Python libraries</p></li>
@@ -465,10 +493,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>,</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>trips</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Sanitizing Databricks Host (`master`) entry:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Original: rstudio-partner-posit-default.cloud.databricks.com</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Using: https://rstudio-partner-posit-default.cloud.databricks.com</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Set `host_sanitize = FALSE` in `spark_connect()` to avoid this change</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Retrieving version from cluster '1026-175310-7cpsh3g8'</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Cluster version: '14.1'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Using the 'r-sparklyr-databricks-14.1' Python environment</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>trips</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;trips&gt; [?? x 6]</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    tpep_pickup_datetime tpep_dropoff_datetime trip_distance fare_amount</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dttm&gt;               &lt;dttm&gt;                        &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 2016-02-14 10:52:13  2016-02-14 11:16:04            4.94        19  </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 2016-02-04 12:44:19  2016-02-04 12:46:00            0.28         3.5</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 2016-02-17 11:13:57  2016-02-17 11:17:55            0.7          5  </span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 2016-02-18 04:36:07  2016-02-18 04:41:45            0.8          6  </span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 2016-02-22 08:14:41  2016-02-22 08:31:52            4.51        17  </span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 2016-02-05 00:45:02  2016-02-05 00:50:26            1.8          7  </span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 2016-02-15 09:03:28  2016-02-15 09:18:45            2.58        12  </span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 2016-02-25 13:09:26  2016-02-25 13:24:50            1.4         11  </span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 2016-02-13 10:28:18  2016-02-13 10:36:36            1.21         7.5</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 2016-02-13 18:03:48  2016-02-13 18:10:24            0.6          6  </span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: pickup_zip &lt;int&gt;, dropoff_zip &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After pointing <code>tbl()</code> to that specific table, you can then use <code>dplyr</code>.</p>
 <div class="cell">
@@ -477,7 +528,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_distance =</span> <span class="fu">mean</span>(trip_distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 3]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    pickup_zip count avg_distance</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1      10032    15         4.49</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2      10013   273         2.98</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3      10022   519         2.00</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4      10162   414         2.19</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5      10018  1012         2.60</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6      11106    39         2.03</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7      10011  1129         2.29</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8      11103    16         2.75</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9      11237    15         3.31</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10      11422   429        15.5 </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When you are done with you queries and computations, you should disconnect from the cluster.</p>
 <div class="cell">
@@ -590,8 +655,8 @@ To do this, pass the DBR version in the <code>version</code> argument, for examp
 <div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_pyspark</span>(<span class="st">"3.4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We have seen Spark sessions crash, when the version of PySpark and the version of Spark do not match. Specially, when using a newer version of PySpark is used against an older version of Spark. If you are having issues with your connection, definitely consider running the <code>install_pyspark()</code> to match that cluster’s specific Spark version.</p>
 </section>
-<section id="connecting-1" class="level3">
-<h3 class="anchored" data-anchor-id="connecting-1">Connecting</h3>
+<section id="connecting" class="level3">
+<h3 class="anchored" data-anchor-id="connecting">Connecting</h3>
 <p>To start a session with a open source Spark cluster, via Spark Connect, you will need to set the <code>master</code>, and <code>method</code>. The <code>master</code> will be an IP, and maybe a port that you will need to pass. The protocol to use to put together the proper connection URL is “sc://”. For <code>method</code>, use “spark_connect”. Here is an example:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>

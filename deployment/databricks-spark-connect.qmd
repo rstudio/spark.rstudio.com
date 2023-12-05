@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -16,16 +16,11 @@ editor:
 #| include: false
 
 library(remotes)
-
-#install.packages("sparklyr")
-#install_github("mlverse/pysparklyr")
-
 library(dplyr)
 library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
 
-# install_pyspark()
 ```
 
 *Last updated: `r lubridate::date()`*
@@ -157,12 +152,25 @@ sc <- spark_connect(
 )
 ```
 
+In order to connect and interact with Databricks, you will need a specific set
+of [Python libraries](#additional-setup-details). To make it easier to get started, we provide functionality
+that will automatically do the following:
+
+- Create, or re-create, a Python environment. Based on your OS, it will choose 
+to create a Virtual Environment, or Conda.
+
+- Install the needed Python libraries
+
+`spark_connect()` will check to see if you have the expected Python environment,
+and prompt you to accept its installation if missing. Here is an example of 
+the code and output you would expect to see: 
 
 ```r
 sc <- spark_connect(
     cluster_id = "1026-175310-7cpsh3g8",
     method = "databricks_connect"
 )
+
 #> ! Retrieving version from cluster '1026-175310-7cpsh3g8' 
 #> Cluster version: '14.1' 
 #> ! No viable Python Environment was identified for Databricks Connect version 14.1 
@@ -175,6 +183,10 @@ sc <- spark_connect(
 #> Selection: 1 
 ```
 
+After accepting, the Python environment will be created with a specific name,
+and all of the needed Python libraries will be installed within. After it is done,
+it will attempt to connect to your cluster. Here is an abbreviated example of the
+output that occurs when selecting "Yes": 
 
 ```r
 #> ✔ Automatically naming the environment:'r-sparklyr-databricks-14.1' 
@@ -190,9 +202,9 @@ sc <- spark_connect(
 #> Collecting wheel 
 #> Using cached wheel-0.42.0-py3-none-any.whl (65 kB) 
 #> Requirement already satisfied: setuptools in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (65.5.0) 
-#> .
-#> .
-#> .
+...
+...
+...
 #> Successfully installed PyArrow-14.0.1 cachetools-5.3.2 certifi-2023.11.17 charset-normalizer-3.3.2 databricks-connect-14.1.0 databricks-sdk-0.14.0 google-api-core-2.14.0 google-api-python-client-2.109.0 google-auth-2.25.0 google-auth-httplib2-0.1.1 googleapis-common-protos-1.61.0 grpcio-1.59.3 grpcio_status-1.59.3 httplib2-0.22.0 idna-3.6 numpy-1.26.2 pandas-2.1.3 protobuf-4.25.1 py4j-0.10.9.7 pyasn1-0.5.1 pyasn1-modules-0.3.0 pyparsing-3.1.1 python-dateutil-2.8.2 pytz-2023.3.post1 requests-2.31.0 rsa-4.9 six-1.16.0 tzdata-2023.3 uritemplate-4.1.1 urllib3-2.1.0 
 #> ✔ Using the 'r-sparklyr-databricks-14.1' Python environment 
 #> Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python 

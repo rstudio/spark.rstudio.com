@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -125,14 +125,16 @@ look for these environment variables:
 -   `DATABRICKS_TOKEN` - Your Personal Authentication Token
 
 Environment variables work well, because they rarely vary between projects. The 
-thing that will change more often is the cluster you are connecting to.  We
-recommend that you set these two variables at your **user level**. To do this run:
+thing that will change more often is the cluster you are connecting to. It also 
+makes connection safer, because the token's contents will not be in your code in
+plain text. We recommend that you set  these two variables at your **user level**. 
+To do this run:
 
 ```r
 usethis::edit_r_environ()
 ```
 
-That command will open the file that controls the environment variables at
+That command will open a text file that controls the environment variables at
 the **user level**. If missing, insert the entries for the two variables:
 
 ```bash
@@ -140,45 +142,61 @@ DATABRICKS_HOST="Enter here your Workspace URL"
 DATABRICKS_TOKEN="Enter here your personal token"
 ```
 
+This is a one time operation. After saving and closing the file, restart your
+R session. 
 
-### Safely connect
+You can now connect by simply providing the cluster ID, and the method to 
+`spark_connect()`:
 
-For your safety and convenience, you can save your authentication token
-(PAT), and your Workspace Instance URL in a environment variable. The
-two variables are:
-
--   `DATABRICKS_TOKEN`
--   `DATABRICKS_HOST`
-
-This will prevent your token to be shown in plain text in your code. You
-can set the environment variables at the beginning of your R session
-with `Sys.setenv()`.
-
-Preferably, the two variables can be set for all R sessions by saving
-them to the **.Renviron** file. The `usethis` package has a handy
-function that opens the file so you can edit it:
-`usethis::edit_r_environ()`. Then simply append the two entries to your
-**.Renviron** file. Once you are done, save the **.Renviron** file, and
-restart R.
-
-After that, use `spark_connect()` to open the connection to Databricks.
-You will need to only pass the `cluster_id` of your cluster, and tell
-`sparklyr` that you are connecting to a Spark cluster with run time 13
-or above:
-
-``` {r}
+``` r
 library(sparklyr)
 
 sc <- spark_connect(
-  cluster_id = "1026-175310-7cpsh3g8",
+  cluster_id = "Enter here your cluster ID",
   method = "databricks_connect"
 )
 ```
 
-`sparklyr` will provide console message while initiating the connection. As
-seen above, we are informed that `sparklyr` is getting the DBR version from the
-cluster, the version returned by the cluster, and which Python environment 
-it used to connect.
+
+```r
+sc <- spark_connect(
+    cluster_id = "1026-175310-7cpsh3g8",
+    method = "databricks_connect"
+)
+#> ! Retrieving version from cluster '1026-175310-7cpsh3g8' 
+#> Cluster version: '14.1' 
+#> ! No viable Python Environment was identified for Databricks Connect version 14.1 
+#> Do you wish to install Databricks Connect version 14.1? 
+#>  
+#> 1: Yes 
+#> 2: No 
+#> 3: Cancel 
+#>  
+#> Selection: 1 
+```
+
+
+```r
+#> ✔ Automatically naming the environment:'r-sparklyr-databricks-14.1' 
+#> Using Python: /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 
+#> Creating virtual environment 'r-sparklyr-databricks-14.1' ... 
+#> + /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 -m venv /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1 
+#> Done! 
+#>   Installing packages: pip, wheel, setuptools 
+#> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade pip wheel setuptools 
+#> Requirement already satisfied: pip in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (23.0.1) 
+#> Collecting pip 
+#> Using cached pip-23.3.1-py3-none-any.whl (2.1 MB) 
+#> Collecting wheel 
+#> Using cached wheel-0.42.0-py3-none-any.whl (65 kB) 
+#> Requirement already satisfied: setuptools in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (65.5.0) 
+#> .
+#> .
+#> .
+#> Successfully installed PyArrow-14.0.1 cachetools-5.3.2 certifi-2023.11.17 charset-normalizer-3.3.2 databricks-connect-14.1.0 databricks-sdk-0.14.0 google-api-core-2.14.0 google-api-python-client-2.109.0 google-auth-2.25.0 google-auth-httplib2-0.1.1 googleapis-common-protos-1.61.0 grpcio-1.59.3 grpcio_status-1.59.3 httplib2-0.22.0 idna-3.6 numpy-1.26.2 pandas-2.1.3 protobuf-4.25.1 py4j-0.10.9.7 pyasn1-0.5.1 pyasn1-modules-0.3.0 pyparsing-3.1.1 python-dateutil-2.8.2 pytz-2023.3.post1 requests-2.31.0 rsa-4.9 six-1.16.0 tzdata-2023.3 uritemplate-4.1.1 urllib3-2.1.0 
+#> ✔ Using the 'r-sparklyr-databricks-14.1' Python environment 
+#> Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python 
+```
 
 ### RStudio's Connection pane
 
@@ -215,6 +233,12 @@ database inside the **samples** catalog:
 ```{r}
 library(dplyr)
 library(dbplyr)
+library(sparklyr)
+
+sc <- spark_connect(
+    cluster_id = "1026-175310-7cpsh3g8",
+    method = "databricks_connect"
+)
 
 trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
 
@@ -388,6 +412,10 @@ cluster, but that has the same DBR version, `sparklyr` will use the same
 Python environment.  If the new cluster has a different DBR version, then it is
 recommended that you run the installation function using the new DBR version, or
 cluster ID.
+
+### Safely connect
+
+
 
 
 ## Spark Connect

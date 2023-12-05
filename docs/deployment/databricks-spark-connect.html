@@ -333,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Tue Dec 5 16:16:24 2023</em></p>
+<p><em>Last updated: Tue Dec 5 16:38:17 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise.</p>
@@ -551,15 +551,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="restricted-python-environments" class="level3">
 <h3 class="anchored" data-anchor-id="restricted-python-environments">Restricted Python environments</h3>
-<p>If your organization restricts Python environment creation, you can point <code>sparklyr</code> to the designated Python installation. To do this, you will have to set the <code>RETICULATE_PYTHON</code> environment variable, and <strong>before</strong> attempting to connect to the cluster:</p>
+<p>If your organization restricts Python environment creation, you can point <code>sparklyr</code> to the designated Python installation. To do this, pass the path to the environment in the <code>envname</code> argument of <code>spark_connect()</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="st">"RETICULATE_PYTHON"</span> <span class="ot">=</span> <span class="st">"[path to the desired python path]"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"databricks_connect"</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"[your cluster id]"</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"databricks_connect"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"Enter here your cluster ID"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">envname =</span> <span class="st">"Enter here the path to your Python environment"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To successfully connect to a Databricks cluster, you will need to match the proper version of the <code>databricks.connect</code> Python library, to the Databricks Runtime (DBR) version in the cluster. For example, if you are trying to use a Databricks cluster with a DBR version 14.0, then <code>databricks.connect</code> will also need to be version 14.0. Failure to do so, can result in instability, or even the inability to connect.</p>
 <p>Besides <code>datbricks.connect</code>, the Python environment will also need to have other Python libraries installed. The full list is in the <a href="#additional-setup-details">Additional setup details</a> section.</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -575,7 +574,6 @@ Important
 <p>If your server, or machine, has only one Python installation and, no ability to create Conda or Virtual environments, then you will encounter issues when connecting to a Databricks cluster with a mismatched version of <code>databricks.connect</code> to DBR.</p>
 </div>
 </div>
-<p>Additionally, avoid setting <code>RETICULATE_PYTHON</code> for the entire server (<code>Rprofile.site</code>). The same goes for your user profile level (<code>Home\.Renviron</code>). For example, If you are working on two projects, using two different Databricks clusters, and with two different Databricks Runtime (DBR) versions, will mean that you will need two different versions of <code>databricks.connect</code>. The recommendation is to set the <code>.Renviron</code> file at the project level, or to set it at the beginning of your R session via the code shown above.</p>
 </section>
 <section id="reported-problems" class="level3">
 <h3 class="anchored" data-anchor-id="reported-problems">Reported Problems</h3>
@@ -735,7 +733,6 @@ To do this, pass the DBR version in the <code>version</code> argument, for examp
 <h2 class="anchored" data-anchor-id="todo">TODO</h2>
 <ul>
 <li>Posit Connect write up</li>
-<li>Update restricted environments, envname instead of environment variable</li>
 <li>ML Section (including the installation prompt)</li>
 <li></li>
 </ul>

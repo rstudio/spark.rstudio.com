@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -38,8 +38,11 @@ introduced a decoupled client-server architecture that allows remote
 connectivity to Spark clusters using the DataFrame API. The separation
 between client and server allows Spark to be leveraged from everywhere,
 and this would allow R users to interact with a cluster from the comfort
-of their preferred environment, laptop or otherwise. [Databricks
-Connect](https://docs.databricks.com/dev-tools/databricks-connect.html),
+of their preferred environment, laptop or otherwise. 
+
+The new [Databricks
+Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), often 
+referred to as "Databricks Connect v2", 
 available in Databricks Runtime version 13 and above, is based on this
 new architecture.
 
@@ -48,13 +51,9 @@ of Spark Connect to the R user community.
 
 ## The Solution
 
-Spark Connect requires the use of a remote procedure call framework
-called *gRPC.* At this time, the Spark team provides two higher level APIs
-that interact with *gRPC.* One is Scala based, and the other Python based.
-
-We are using `reticulate` to interact with the Python API. `sparklyr` extends 
-the functionality, and user experience, by providing the `dplyr`back-end, `DBI` 
-back-end, RStudio's Connection pane integration.
+The Spark Connect API is very different than the "legacy" Spark, using the
+Spark shell is no longer an option. We have decided to use Python as the
+interface to this new API. In turn, Python uses *gRPC* to interact with Spark. 
 
 ::: {#fig-connect}
 ```{mermaid}
@@ -83,6 +82,10 @@ flowchart LR
 How `sparklyr` communicates with Spark Connect, and Databricks Connect
 :::
 
+We are using `reticulate` to interact with the Python API. `sparklyr` extends 
+the functionality, and user experience, by providing the `dplyr`back-end, `DBI` 
+back-end, RStudio's Connection pane integration.
+
 In order to quickly iterate on enhancements and bug fixes, we have
 decided to isolate the Python integration into its own package. The new
 package, called `pysparklyr`, is an extension of `sparklyr`.
@@ -98,121 +101,45 @@ install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
-## Databricks Connect (ML 13+)
-
-### Initial setup
-
-`sparklyr` will need specific Python libraries in order to connect, and interact
-with Databricks Connect. We provide a convenience function that will automatically
-do the following:
-
-- Create, or re-create, a Python environment. Based on your OS, it will choose
-to create a Virtual Environment, or Conda. 
-
-- Install the needed Python libraries
-
-::: {.callout-important} 
-## WINDOWS USERS PLEASE READ
-
-Some issues have been reported using **older** CRAN version of `reticulate`.
-Please make sure to have the latest version installed. At this time that
-version number is **1.34.0**. 
-
-:::
-
-To install the latest versions of all the libraries, use:
-
-```r
-pysparklyr::install_databricks()
-```
-
-`sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
-and installs that version. It is recommended that the version of the 
-`databricks.connect` library, matches  the DBR version of your cluster.  
-To do this, pass the DBR version in the `version` argument, for example:
-
-```r
-pysparklyr::install_databricks("14.0")
-```
-
-This will create a Python environment and install `databricks.connect` version
-14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
-this name, `sparklyr` is able to know what version of `databricks.connect` is
-available inside this particular Python environment.
-
-If you are not sure about the version of the cluster you want to interact with,
-then use the `cluster_id` argument. We have added a way to pull the cluster's
-information, without starting a Spark connect. This allows us to query the
-cluster and get the DBR version:
-
-```r
-pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
-```
-
-
-**Important** -  This step needs only to be **done one time**. If you need to connect to a different
-cluster, but that has the same DBR version, `sparklyr` will use the same
-Python environment.  If the new cluster has a different DBR version, then it is
-recommended that you run the installation function using the new DBR version, or
-cluster ID.
-
+## Databricks Connect (ML 13+) 
 
 ### Connecting
 
 To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
 
--   Your [Workspace Instance
-    URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
--   The ID of a currently running
-    [cluster](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
-    within your workspace
--   Authentication setup. At this time, `sparklyr` supports
-    [PAT](https://docs.databricks.com/dev-tools/auth.html#pat)
+1.  Your [Workspace Instance
+    URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url) 
+1.  Your 
+    [Personal Authentication Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT)
+1.   Your 
+    [cluster's](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+    ID 
 
-In `spark_connect()` those items can be passed as function arguments.
-Also note that to let `sparklyr` know that you are attempting to use
-Databricks Connect, use `method = databricks_connect`:
+We have developed this solution to align with other R, and non-R, applications that 
+integrate with Databricks. All applications need, at minimum, a work space *(1)*, 
+and the authentication token *(2)*. For default values, those applications initially 
+look for these environment variables: 
 
-``` r
-library(sparklyr)
+-   `DATABRICKS_HOST` - Your Workspace Instance URL
+-   `DATABRICKS_TOKEN` - Your Personal Authentication Token
 
-sc <- spark_connect(
-  master = "[Your Workspace Instance URL]", 
-  cluster_id = "[Cluster ID]"
-  token = "[Your PAT - Please do not include 
-           it as plain text here,  please refer 
-           to the next section]",
-  method = "databricks_connect"
-  )
-```
-
-`sparklyr` will get retrieve the cluster's DBR version, and automatically choose
-the Python environment that has the matching version of `databricks.connect`. If
-it does not find a matching version, it will use the most recent version installed
-in your machine. If you wish, you can specify the version by setting the
-`dbr_version` argument. 
+Environment variables work well, because they rarely vary between projects. The 
+thing that will change more often is the cluster you are connecting to.  We
+recommend that you set these two variables at your **user level**. To do this run:
 
 ```r
-sc <- spark_connect(
-  cluster_id = "[Cluster ID]",
-  method = "databricks_connect",
-  dbr_version = "14.0"
-  )
+usethis::edit_r_environ()
 ```
 
+That command will open the file that controls the environment variables at
+the **user level**. If missing, insert the entries for the two variables:
 
-
-For cases when the Python environment created by `install_databricks()` will not
-be used, then pass it to `spark_connect()` via the `envname` argument:
-
-```r
-sc <- spark_connect(
-  cluster_id = "[Cluster ID]",
-  method = "databricks_connect",
-  envname = "[your Python environment's name]"
-  )
+```bash
+DATABRICKS_HOST="Enter here your Workspace URL"
+DATABRICKS_TOKEN="Enter here your personal token"
 ```
+
 
 ### Safely connect
 
@@ -368,7 +295,7 @@ Before reviewing the issues, please make sure to have the latest versions of
 `sparklyr`, and `pysparklyr` from CRAN. These are the current version levels:
 
 - `sparklyr` - 1.8.4
-- `pysparklyr` - 0.1.1
+- `pysparklyr` - 0.1.2
 
 
 ::: {.callout-note collapse="true"}
@@ -409,38 +336,58 @@ If the output mentions `--skip-existing [version number]` then you will have two
     ``` 
 :::
 
-::: {.callout-note collapse="true"}
-## `...will be ignored because  the environment variable RETICULATE_PYTHON is set to...`
 
-`reticulate` will use `RETICULATE_PYTHON` as the first way to find the Python
-installation to use, see [`reticulate` - Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery).
-This means that any Python environment you created, via `install_databricks()` or 
-otherwise, will not be used. Full message says:
+### Initial setup
+
+Starting with `pysparklyr` version 0.1.2, this step is no longer needed. You 
+will be prompted to install the proper Python environment if one is not found. 
+If this is the first time you are using this solution, please go to the 
+[Connecting](#connecting) section. 
+
+`sparklyr` will need specific Python libraries in order to connect, and interact
+with Databricks Connect. We provide a convenience function that will automatically
+do the following:
+
+- Create, or re-create, a Python environment. Based on your OS, it will choose
+to create a Virtual Environment, or Conda. 
+
+- Install the needed Python libraries
+
+To install the latest versions of all the libraries, use:
 
 ```r
-# Warning message:
-# The request to `use_python("[path to your new environment]")` will be ignored because the  environment variable RETICULATE_PYTHON is set to "[whatever that variable is set to]" 
+pysparklyr::install_databricks()
+```
+
+`sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
+and installs that version. It is recommended that the version of the 
+`databricks.connect` library, matches  the DBR version of your cluster.  
+To do this, pass the DBR version in the `version` argument, for example:
+
+```r
+pysparklyr::install_databricks("14.0")
+```
+
+This will create a Python environment and install `databricks.connect` version
+14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
+this name, `sparklyr` is able to know what version of `databricks.connect` is
+available inside this particular Python environment.
+
+If you are not sure about the version of the cluster you want to interact with,
+then use the `cluster_id` argument. We have added a way to pull the cluster's
+information, without starting a Spark connect. This allows us to query the
+cluster and get the DBR version:
+
+```r
+pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
 ```
 
 
-### Solution
-
-The workaround is to unset the environment variable. This will allow `reticulate`
-to use the your newly created Python environment:
-
-```r
-library(sparklyr)
-
-# You will need to do this every time you connect
-Sys.unsetenv("RETICULATE_PYTHON")
-
-sc <- spark_connect(
-  method = "databricks_connect",
-  cluster_id = "[your cluster id]"
-  )
-```
-
-:::
+**Important** -  This step needs only to be **done one time**. If you need to connect to a different
+cluster, but that has the same DBR version, `sparklyr` will use the same
+Python environment.  If the new cluster has a different DBR version, then it is
+recommended that you run the installation function using the new DBR version, or
+cluster ID.
 
 
 ## Spark Connect
@@ -611,3 +558,11 @@ these instead:
 
 -   `databricks-connect`
 -   `delta-spark`
+
+
+## TODO
+
+- Posit Connect write up
+- Update restricted environments, envname instead of environment variable
+- ML Section (including the installation prompt)
+- 

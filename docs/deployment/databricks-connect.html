@@ -327,11 +327,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Wed Dec 6 11:40:30 2023</em></p>
+<p><em>Last updated: Wed Dec 6 12:05:06 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred mathine environment. The new <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, often referred to as <strong>“Databricks Connect v2”</strong>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
-<p>We are working on enhancing <code>sparklyr</code> so that it can bring the benefits of Spark Connect to the R user community.</p>
 <section id="solution-architecture" class="level4">
 <h4 class="anchored" data-anchor-id="solution-architecture">Solution architecture</h4>
 <p>The Spark Connect API is very different than the “legacy” Spark, using the Spark shell is no longer an option. We have decided to use Python as the interface to this new API. In turn, Python uses <em>gRPC</em> to interact with Spark.</p>
@@ -348,8 +347,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     ps[PySpark]
     g1[gRPC]
   end
-  sp[Spark]
-  
+  subgraph db[Databricks]
+    sp[Spark]   
+  end
   sr --&gt; rt
   rt --&gt; ps
   g1 &lt;-. Network .-&gt; sp
@@ -359,6 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   style rt  fill:#d0efb1,stroke:#666
   style ps  fill:#eff,stroke:#666
   style lp  fill:#fff,stroke:#666
+  style db  fill:#fff,stroke:#666
   style sp  fill:#f4c430,stroke:#666
   style g1  fill:#447099,stroke:#666,color:#fff
 </pre>
@@ -366,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> communicates with Spark Connect, and Databricks Connect</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect</figcaption>
 </figure>
 </div>
 <p>We are using <code>reticulate</code> to interact with the Python API. <code>sparklyr</code> extends the functionality, and user experience, by providing the <code>dplyr</code>back-end, <code>DBI</code> back-end, RStudio’s Connection pane integration.</p>
@@ -377,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
 <section id="package-installation" class="level3">
 <h3 class="anchored" data-anchor-id="package-installation">Package Installation</h3>
-<p>To access Spark Connect, you will need the following two packages:</p>
+<p>To access Databricks Connect, you will need the following two packages:</p>
 <ul>
 <li><code>sparklyr</code> - 1.8.4</li>
 <li><code>pysparklyr</code> - 0.1.2</li>

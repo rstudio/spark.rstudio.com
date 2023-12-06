@@ -327,7 +327,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Wed Dec 6 12:05:06 2023</em></p>
+<p><em>Last updated: Wed Dec 6 16:29:09 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred mathine environment. The new <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, often referred to as <strong>“Databricks Connect v2”</strong>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
@@ -336,32 +336,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The Spark Connect API is very different than the “legacy” Spark, using the Spark shell is no longer an option. We have decided to use Python as the interface to this new API. In turn, Python uses <em>gRPC</em> to interact with Spark.</p>
 <div id="fig-connect" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<div class="cell">
+<div class="cell" data-fig-width="12">
 <div class="cell-output-display">
 <div>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-  subgraph lp[User's machine]
-    sr[sparklyr]
-    rt[reticulate]
-    ps[PySpark]
-    g1[gRPC]
-  end
+  subgraph lp[test]
+    subgraph r[R]
+      sr[sparklyr]
+      rt[reticulate]
+    end
+    subgraph  ps[Python]
+      dc[Databricks Connect]
+      g1[gRPC]
+    end
+  end   
   subgraph db[Databricks]
     sp[Spark]   
   end
-  sr --&gt; rt
-  rt --&gt; ps
+  sr &lt;--&gt; rt
+  rt &lt;--&gt; dc
   g1 &lt;-. Network .-&gt; sp
-  ps --&gt; g1
+  dc &lt;--&gt; g1
   
-  style sr  fill:#d0efb1,stroke:#666
-  style rt  fill:#d0efb1,stroke:#666
-  style ps  fill:#eff,stroke:#666
-  style lp  fill:#fff,stroke:#666
-  style db  fill:#fff,stroke:#666
-  style sp  fill:#f4c430,stroke:#666
-  style g1  fill:#447099,stroke:#666,color:#fff
+  style r   fill:#cff,stroke:#666
+  style sr  fill:#444,stroke:#666,color:#fff
+  style rt  fill:#036,stroke:#666,color:#fff
+  style ps  fill:#ffc,stroke:#666
+  style lp  fill:#fff,stroke:#666,color:#fff
+  style db  fill:#c66,stroke:#666,color:#fff
+  style sp  fill:#fcc,stroke:#666,color:#000
+  style g1  fill:#ff0,stroke:#666
+  style dc  fill:#ff0,stroke:#666
 </pre>
 </div>
 </div>
@@ -621,14 +627,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="environments">Environments</h2>
 <section id="install-different-version-of-databricks.connect" class="level3">
 <h3 class="anchored" data-anchor-id="install-different-version-of-databricks.connect">Install different version of <code>databricks.connect</code></h3>
-<p>To install the latest versions of all the libraries, use:</p>
+<p>Here are three different options to create a custom Python environment, that will contain the needed Python libraries to interact with Databricks Connect:</p>
+<ul>
+<li><p>To install the latest versions of all the needed libraries, use:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version. It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster.<br>
-To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
+<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version.</p></li>
+<li><p>It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster. To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p>
-<p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p></li>
+<li><p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
 </section>
 <section id="restricted-python-environments" class="level3">
 <h3 class="anchored" data-anchor-id="restricted-python-environments">Restricted Python environments</h3>

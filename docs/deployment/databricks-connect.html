@@ -289,16 +289,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#rstudios-connection-pane" id="toc-rstudios-connection-pane" class="nav-link" data-scroll-target="#rstudios-connection-pane">RStudio’s Connection pane</a></li>
   <li><a href="#using-the-connection-to-access-data" id="toc-using-the-connection-to-access-data" class="nav-link" data-scroll-target="#using-the-connection-to-access-data">Using the Connection to Access Data</a></li>
+  <li><a href="#machine-learning" id="toc-machine-learning" class="nav-link" data-scroll-target="#machine-learning">Machine Learning</a></li>
   </ul></li>
   <li><a href="#reported-problems" id="toc-reported-problems" class="nav-link" data-scroll-target="#reported-problems">Reported Problems</a></li>
   <li><a href="#environments" id="toc-environments" class="nav-link" data-scroll-target="#environments">Environments</a>
   <ul class="collapse">
-  <li><a href="#restricted-python-environments" id="toc-restricted-python-environments" class="nav-link" data-scroll-target="#restricted-python-environments">Restricted Python environments</a></li>
   <li><a href="#install-different-version-of-databricks.connect" id="toc-install-different-version-of-databricks.connect" class="nav-link" data-scroll-target="#install-different-version-of-databricks.connect">Install different version of <code>databricks.connect</code></a></li>
+  <li><a href="#restricted-python-environments" id="toc-restricted-python-environments" class="nav-link" data-scroll-target="#restricted-python-environments">Restricted Python environments</a></li>
   <li><a href="#python-libraries" id="toc-python-libraries" class="nav-link" data-scroll-target="#python-libraries">Python Libraries</a></li>
   </ul></li>
+  <li><a href="#deploying-to-posit-connect" id="toc-deploying-to-posit-connect" class="nav-link" data-scroll-target="#deploying-to-posit-connect">Deploying to Posit Connect</a></li>
   <li><a href="#what-is-supported" id="toc-what-is-supported" class="nav-link" data-scroll-target="#what-is-supported">What is supported</a></li>
-  <li><a href="#todo" id="toc-todo" class="nav-link" data-scroll-target="#todo">TODO</a></li>
   </ul>
 </nav>
     </div>
@@ -326,11 +327,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Wed Dec 6 11:05:16 2023</em></p>
+<p><em>Last updated: Wed Dec 6 11:40:30 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise.</p>
-<p>The new <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, often referred to as <strong>“Databricks Connect v2”</strong>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
+<p><a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a> introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred mathine environment. The new <a href="https://docs.databricks.com/dev-tools/databricks-connect.html">Databricks Connect</a>, often referred to as <strong>“Databricks Connect v2”</strong>, available in Databricks Runtime version 13 and above, is based on this new architecture.</p>
 <p>We are working on enhancing <code>sparklyr</code> so that it can bring the benefits of Spark Connect to the R user community.</p>
 <section id="solution-architecture" class="level4">
 <h4 class="anchored" data-anchor-id="solution-architecture">Solution architecture</h4>
@@ -341,7 +341,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <div>
-
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph lp[User's machine]
+    sr[sparklyr]
+    rt[reticulate]
+    ps[PySpark]
+    g1[gRPC]
+  end
+  sp[Spark]
+  
+  sr --&gt; rt
+  rt --&gt; ps
+  g1 &lt;-. Network .-&gt; sp
+  ps --&gt; g1
+  
+  style sr  fill:#d0efb1,stroke:#666
+  style rt  fill:#d0efb1,stroke:#666
+  style ps  fill:#eff,stroke:#666
+  style lp  fill:#fff,stroke:#666
+  style sp  fill:#f4c430,stroke:#666
+  style g1  fill:#447099,stroke:#666,color:#fff
+</pre>
 </div>
 </div>
 </div>
@@ -469,10 +489,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>,</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>trips</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Sanitizing Databricks Host (`master`) entry:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Original: rstudio-partner-posit-default.cloud.databricks.com</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Using: https://rstudio-partner-posit-default.cloud.databricks.com</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Set `host_sanitize = FALSE` in `spark_connect()` to avoid this change</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Retrieving version from cluster '1026-175310-7cpsh3g8'</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Cluster version: '14.1'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Using the 'r-sparklyr-databricks-14.1' Python environment</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>trips</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;trips&gt; [?? x 6]</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    tpep_pickup_datetime tpep_dropoff_datetime trip_distance fare_amount</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dttm&gt;               &lt;dttm&gt;                        &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 2016-02-14 10:52:13  2016-02-14 11:16:04            4.94        19  </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 2016-02-04 12:44:19  2016-02-04 12:46:00            0.28         3.5</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 2016-02-17 11:13:57  2016-02-17 11:17:55            0.7          5  </span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 2016-02-18 04:36:07  2016-02-18 04:41:45            0.8          6  </span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 2016-02-22 08:14:41  2016-02-22 08:31:52            4.51        17  </span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 2016-02-05 00:45:02  2016-02-05 00:50:26            1.8          7  </span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 2016-02-15 09:03:28  2016-02-15 09:18:45            2.58        12  </span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 2016-02-25 13:09:26  2016-02-25 13:24:50            1.4         11  </span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 2016-02-13 10:28:18  2016-02-13 10:36:36            1.21         7.5</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 2016-02-13 18:03:48  2016-02-13 18:10:24            0.6          6  </span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: pickup_zip &lt;int&gt;, dropoff_zip &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After pointing <code>tbl()</code> to that specific table, you can then use <code>dplyr</code>.</p>
 <div class="cell">
@@ -481,8 +524,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_distance =</span> <span class="fu">mean</span>(trip_distance, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source: spark&lt;?&gt; [?? x 3]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    pickup_zip count avg_distance</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1      10032    15         4.49</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2      10013   273         2.98</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3      10022   519         2.00</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4      10162   414         2.19</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5      10018  1012         2.60</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6      11106    39         2.03</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7      10011  1129         2.29</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8      11103    16         2.75</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9      11237    15         3.31</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10      11422   429        15.5 </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="machine-learning" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning">Machine Learning</h3>
+<p>TODO</p>
 <p>When you are done with you queries and computations, you should disconnect from the cluster.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -548,7 +609,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This happens when <code>pysparklyr</code> gets the cluster DBR version automatically. Usually when running <code>spark_connect()</code> or <code>install_databricks()</code>. This occurs because the latest version of DBR, as of today 14.2, is ahead of what the <code>databricks.connect</code> version available in <code>databricks.connect</code>.</p>
 <section id="solution-1" class="level3">
 <h3 class="anchored" data-anchor-id="solution-1">Solution</h3>
-<p>Current workaound is to say “No” when prompted to install version 14.2. And if missing in your machine, install 14.1 using:</p>
+<p>Current workdaround is to say “No” when prompted to install version 14.2. And if missing in your machine, install 14.1 using:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </div>
@@ -557,16 +618,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="environments" class="level2">
 <h2 class="anchored" data-anchor-id="environments">Environments</h2>
+<section id="install-different-version-of-databricks.connect" class="level3">
+<h3 class="anchored" data-anchor-id="install-different-version-of-databricks.connect">Install different version of <code>databricks.connect</code></h3>
+<p>To install the latest versions of all the libraries, use:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version. It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster.<br>
+To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p>
+<p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="restricted-python-environments" class="level3">
 <h3 class="anchored" data-anchor-id="restricted-python-environments">Restricted Python environments</h3>
 <p>If your organization restricts Python environment creation, you can point <code>sparklyr</code> to the designated Python installation. To do this, pass the path to the environment in the <code>envname</code> argument of <code>spark_connect()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"databricks_connect"</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"Enter here your cluster ID"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">envname =</span> <span class="st">"Enter here the path to your Python environment"</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"databricks_connect"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"Enter here your cluster ID"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">envname =</span> <span class="st">"Enter here the path to your Python environment"</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To successfully connect to a Databricks cluster, you will need to match the proper version of the <code>databricks.connect</code> Python library, to the Databricks Runtime (DBR) version in the cluster. For example, if you are trying to use a Databricks cluster with a DBR version 14.0, then <code>databricks.connect</code> will also need to be version 14.0. Failure to do so, can result in instability, or even the inability to connect.</p>
 <p>Besides <code>datbricks.connect</code>, the Python environment will also need to have other Python libraries installed. The full list is in the <a href="#additional-setup-details">Additional setup details</a> section.</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -582,23 +654,6 @@ Important
 <p>If your server, or machine, has only one Python installation and, no ability to create Conda or Virtual environments, then you will encounter issues when connecting to a Databricks cluster with a mismatched version of <code>databricks.connect</code> to DBR.</p>
 </div>
 </div>
-</section>
-<section id="install-different-version-of-databricks.connect" class="level3">
-<h3 class="anchored" data-anchor-id="install-different-version-of-databricks.connect">Install different version of <code>databricks.connect</code></h3>
-<p>Starting with <code>pysparklyr</code> version 0.1.2, this step is no longer needed. You will be prompted to install the proper Python environment if one is not found. If this is the first time you are using this solution, please go to the <a href="#connecting">Connecting</a> section.</p>
-<p><code>sparklyr</code> will need specific Python libraries in order to connect, and interact with Databricks Connect. We provide a convenience function that will automatically do the following:</p>
-<ul>
-<li><p>Create, or re-create, a Python environment. Based on your OS, it will choose to create a Virtual Environment, or Conda.</p></li>
-<li><p>Install the needed Python libraries</p></li>
-</ul>
-<p>To install the latest versions of all the libraries, use:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version. It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster.<br>
-To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p>
-<p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Important</strong> - This step needs only to be <strong>done one time</strong>. If you need to connect to a different cluster, but that has the same DBR version, <code>sparklyr</code> will use the same Python environment. If the new cluster has a different DBR version, then it is recommended that you run the installation function using the new DBR version, or cluster ID.</p>
 </section>
 <section id="python-libraries" class="level3">
@@ -622,6 +677,10 @@ To do this, pass the DBR version in the <code>version</code> argument, for examp
 </ul>
 </section>
 </section>
+<section id="deploying-to-posit-connect" class="level2">
+<h2 class="anchored" data-anchor-id="deploying-to-posit-connect">Deploying to Posit Connect</h2>
+<p>TODO</p>
+</section>
 <section id="what-is-supported" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-supported">What is supported</h2>
 <p>Here is a list of what we currently support, and do not support via <code>sparklyr</code> and Connect:</p>
@@ -638,15 +697,6 @@ To do this, pass the DBR version in the <code>version</code> argument, for examp
 <li><p><strong>ML functions</strong> - All functions, in <code>sparklyr</code>, that have the <code>ml_</code> and <code>ft_</code> are currently not supported. The reason is that Spark 3.4 does not currently support MLlib. We expect that some ML support will be available in Spark 3.5. At that time we will work on integrating the new ML routines from Connect into <code>sparklyr</code>.</p></li>
 <li><p><strong>SDF functions</strong> - Most of these functions require SparkSession, which is currently not supported in Spark 3.4.</p></li>
 <li><p><strong><code>tidyr</code></strong> - This is ongoing work that we are focusing on in <code>sparklyr</code>. We are implementing these functions using PySpark DataFrame commands, instead of depending on the Scala implementation.</p></li>
-</ul>
-<p>A more detailed list of our progress, which includes individual functions we have confirmed that work, do not work, or will work differently, is available here: <a href="https://github.com/mlverse/pysparklyr/blob/main/progress.md"><code>pysparklyr</code> progress</a></p>
-</section>
-<section id="todo" class="level2">
-<h2 class="anchored" data-anchor-id="todo">TODO</h2>
-<ul>
-<li>Posit Connect write up</li>
-<li>ML Section (including the installation prompt)</li>
-<li></li>
 </ul>
 
 

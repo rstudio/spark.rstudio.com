@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -40,9 +40,7 @@ introduced a decoupled client-server architecture that allows remote
 connectivity to Spark clusters using the DataFrame API. The separation
 between client and server allows Spark to be leveraged from everywhere,
 and this would allow R users to interact with a cluster from the comfort
-of their preferred environment, laptop or otherwise. 
-
-The new [Databricks
+of their preferred mathine environment. The new [Databricks
 Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), often 
 referred to as **"Databricks Connect v2"**, 
 available in Databricks Runtime version 13 and above, is based on this
@@ -284,6 +282,10 @@ trips %>%
   )
 ```
 
+### Machine Learning 
+
+TODO
+
 When you are done with you queries and computations, you should
 disconnect from the cluster.
 
@@ -363,7 +365,7 @@ version available in `databricks.connect`.
 
 ### Solution
 
-Current workaound is to say "No" when prompted to install version 14.2. And if 
+Current workdaround is to say "No" when prompted to install version 14.2. And if 
 missing in your machine, install 14.1 using: 
 
 ```r
@@ -374,6 +376,37 @@ pysparklyr::install_databricks("14.1")
 
 
 ## Environments
+
+### Install different version of `databricks.connect`
+
+To install the latest versions of all the libraries, use:
+
+```r
+pysparklyr::install_databricks()
+```
+
+`sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
+and installs that version. It is recommended that the version of the 
+`databricks.connect` library, matches  the DBR version of your cluster.  
+To do this, pass the DBR version in the `version` argument, for example:
+
+```r
+pysparklyr::install_databricks("14.0")
+```
+
+This will create a Python environment and install `databricks.connect` version
+14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
+this name, `sparklyr` is able to know what version of `databricks.connect` is
+available inside this particular Python environment.
+
+If you are not sure about the version of the cluster you want to interact with,
+then use the `cluster_id` argument. We have added a way to pull the cluster's
+information, without starting a Spark connect. This allows us to query the
+cluster and get the DBR version:
+
+```r
+pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
+```
 
 ### Restricted Python environments 
 
@@ -409,50 +442,7 @@ a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
 :::
 
 
-### Install different version of `databricks.connect`
 
-Starting with `pysparklyr` version 0.1.2, this step is no longer needed. You 
-will be prompted to install the proper Python environment if one is not found. 
-If this is the first time you are using this solution, please go to the 
-[Connecting](#connecting) section. 
-
-`sparklyr` will need specific Python libraries in order to connect, and interact
-with Databricks Connect. We provide a convenience function that will automatically
-do the following:
-
-- Create, or re-create, a Python environment. Based on your OS, it will choose
-to create a Virtual Environment, or Conda. 
-
-- Install the needed Python libraries
-
-To install the latest versions of all the libraries, use:
-
-```r
-pysparklyr::install_databricks()
-```
-
-`sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
-and installs that version. It is recommended that the version of the 
-`databricks.connect` library, matches  the DBR version of your cluster.  
-To do this, pass the DBR version in the `version` argument, for example:
-
-```r
-pysparklyr::install_databricks("14.0")
-```
-
-This will create a Python environment and install `databricks.connect` version
-14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
-this name, `sparklyr` is able to know what version of `databricks.connect` is
-available inside this particular Python environment.
-
-If you are not sure about the version of the cluster you want to interact with,
-then use the `cluster_id` argument. We have added a way to pull the cluster's
-information, without starting a Spark connect. This allows us to query the
-cluster and get the DBR version:
-
-```r
-pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
-```
 
 
 **Important** -  This step needs only to be **done one time**. If you need to connect to a different
@@ -481,6 +471,9 @@ ML libraries (Optional):
 - `torcheval`
 - `scikit-learn`
 
+## Deploying to Posit Connect
+
+TODO
 
 ## What is supported
 
@@ -513,15 +506,3 @@ Here is a list of what we currently support, and do not support via
     DataFrame commands, instead of depending on the Scala
     implementation.
 
-A more detailed list of our progress, which includes individual
-functions we have confirmed that work, do not work, or will work
-differently, is available here: [`pysparklyr`
-progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)
-
-
-
-## TODO
-
-- Posit Connect write up
-- ML Section (including the installation prompt)
-- 

@@ -6,7 +6,7 @@ format:
     toc: true
 execute:
     eval: true
-    freeze: true
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -46,9 +46,6 @@ referred to as **"Databricks Connect v2"**,
 available in Databricks Runtime version 13 and above, is based on this
 new architecture.
 
-We are working on enhancing `sparklyr` so that it can bring the benefits
-of Spark Connect to the R user community.
-
 #### Solution architecture 
 
 The Spark Connect API is very different than the "legacy" Spark, using the
@@ -64,8 +61,9 @@ flowchart LR
     ps[PySpark]
     g1[gRPC]
   end
-  sp[Spark]
-  
+  subgraph db[Databricks]
+    sp[Spark]   
+  end
   sr --> rt
   rt --> ps
   g1 <-. Network .-> sp
@@ -79,7 +77,7 @@ flowchart LR
   style g1  fill:#447099,stroke:#666,color:#fff
 ```
 
-How `sparklyr` communicates with Spark Connect, and Databricks Connect
+How `sparklyr` communicates with Databricks Connect
 :::
 
 We are using `reticulate` to interact with the Python API. `sparklyr` extends 
@@ -96,7 +94,7 @@ package, called `pysparklyr`, is an extension of `sparklyr`.
 
 ### Package Installation
 
-To access Spark Connect, you will need the following two packages:
+To access Databricks Connect, you will need the following two packages:
 
 - `sparklyr` - 1.8.4
 - `pysparklyr` - 0.1.2

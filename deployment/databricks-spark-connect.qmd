@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -573,26 +573,37 @@ progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)
 
 ## Additional setup details
 
-If you wish to use your own Python environment, then just make sure to
-load it before calling `spark_connect()`. If there is a Python
-environment already loaded when you connect to your Spark cluster, then
-`sparklyr` will use that environment instead. If you use your own Python
-environment you will need the following libraries installed:
+### Python Libraries
 
--   `pyspark`
--   `pandas`
--   `PyArrow`
--   `grpcio`
--   `google-api-python-client`
--   `grpcio_status`
--   `torch` *(Spark 3.5+)*
--   `torcheval` *(Spark 3.5+)*
+Here is the list of the Python libraries needed in order to work with the cluster:
 
-If connecting to Databrics Connect avoid installing `pyspark`, and install 
-these instead: 
+Required libraries: 
 
--   `databricks-connect`
--   `delta-spark`
+- `pandas`
+- `PyArrow`
+- `grpcio`
+- `google-api-python-client`
+- `grpcio_status`
+
+ML libraries (Optional): 
+
+- `torch` 
+- `torcheval`
+- `scikit-learn`
+
+If using Databricks Connect:
+
+- `databricks-connect`
+- `delta-spark` 
+
+:::{.callout-important} 
+Do not install `pyspark`, it will conflict with `databricks-connect`
+:::
+
+
+If using Spark Connect: 
+
+- `pyspark` 
 
 
 ## TODO

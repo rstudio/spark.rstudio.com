@@ -1,5 +1,5 @@
 ---
-title: "Spark Connect, and Databricks Connect v2"
+title: Databricks Connect v2
 format:
   html:
     theme: default
@@ -10,6 +10,13 @@ execute:
 editor: 
   markdown: 
     wrap: 72
+aliases:
+  - /examples/databricks-cluster
+  - /deployment/databricks-cluster.html
+  - /deployment/databricks-cluster-odbc.html  
+  - /deployment/databricks-cluster-local.html
+  - /deployment/databricks-cluster-remote.html
+  - /deployment/databricks-spark-connect.html  
 ---
 
 ```{r}
@@ -37,14 +44,14 @@ of their preferred environment, laptop or otherwise.
 
 The new [Databricks
 Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), often 
-referred to as "Databricks Connect v2", 
+referred to as **"Databricks Connect v2"**, 
 available in Databricks Runtime version 13 and above, is based on this
 new architecture.
 
 We are working on enhancing `sparklyr` so that it can bring the benefits
 of Spark Connect to the R user community.
 
-## The Solution
+#### Solution architecture 
 
 The Spark Connect API is very different than the "legacy" Spark, using the
 Spark shell is no longer an option. We have decided to use Python as the
@@ -85,7 +92,11 @@ In order to quickly iterate on enhancements and bug fixes, we have
 decided to isolate the Python integration into its own package. The new
 package, called `pysparklyr`, is an extension of `sparklyr`.
 
-## Package Installation
+
+
+## Getting Started
+
+### Package Installation
 
 To access Spark Connect, you will need the following two packages:
 
@@ -97,9 +108,7 @@ install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
-## Databricks Connect (ML 13+) 
-
-### Getting Started
+### Setup credentials
 
 To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
@@ -215,6 +224,8 @@ output that occurs when selecting "Yes":
 #> Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python 
 ```
 
+## Interacting with the cluster
+
 ### RStudio's Connection pane
 
 Thanks to the new way we are integrating with Spark, it is now possible
@@ -280,40 +291,7 @@ disconnect from the cluster.
 spark_disconnect(sc)
 ```
 
-### Restricted Python environments 
-
-If your organization restricts Python environment creation, you can 
-point `sparklyr` to the designated Python installation.  To do this, pass the
-path to the environment in the `envname` argument of `spark_connect()`:
-
-```r
-library(sparklyr)
-
-sc <- spark_connect(
-  method = "databricks_connect",
-  cluster_id = "Enter here your cluster ID",
-  envname = "Enter here the path to your Python environment"
-)
-```
-
-To successfully connect to a Databricks cluster, you will need to match the
-proper version of the `databricks.connect` Python library, to the Databricks
-Runtime (DBR) version in the cluster. For example, if you are trying to use a
-Databricks cluster with a DBR version 14.0, then `databricks.connect` will also
-need to be version 14.0. Failure to do so, can result in instability, or even
-the inability to connect. 
-
-Besides `datbricks.connect`, the Python environment will also need to have other
-Python libraries installed. The full list is in the [Additional setup details](#additional-setup-details)
-section.
-
-:::{.callout-important}
-If your server, or machine, has only one Python installation and, no ability to create
-Conda or Virtual environments, then you will encounter issues when connecting to
-a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
-:::
-
-### Reported Problems
+## Reported Problems
 
 As it is with any new implementations, we are seeing some early adopters report
 issues with their installation or connections.  Here are some of the issues that 
@@ -367,8 +345,71 @@ If the output mentions `--skip-existing [version number]` then you will have two
     ``` 
 :::
 
+::: {.callout-note collapse="true"}
+##  `spark_connect()` returns `! Version '14.2' does not exist`
 
-### Initial setup
+Error message contains: 
+
+```r
+  Checking if provided version is valid against PyPi.org
+  Error in `install_environment()`
+  ! Version '14.2' does not exist
+```
+
+This happens when `pysparklyr` gets the cluster DBR version automatically. Usually
+when running `spark_connect()` or `install_databricks()`. This occurs because
+the latest version of DBR, as of today 14.2, is ahead of what the `databricks.connect`
+version available in `databricks.connect`.
+
+### Solution
+
+Current workaound is to say "No" when prompted to install version 14.2. And if 
+missing in your machine, install 14.1 using: 
+
+```r
+pysparklyr::install_databricks("14.1")
+```
+
+:::
+
+
+## Environments
+
+### Restricted Python environments 
+
+If your organization restricts Python environment creation, you can 
+point `sparklyr` to the designated Python installation.  To do this, pass the
+path to the environment in the `envname` argument of `spark_connect()`:
+
+```r
+library(sparklyr)
+
+sc <- spark_connect(
+  method = "databricks_connect",
+  cluster_id = "Enter here your cluster ID",
+  envname = "Enter here the path to your Python environment"
+)
+```
+
+To successfully connect to a Databricks cluster, you will need to match the
+proper version of the `databricks.connect` Python library, to the Databricks
+Runtime (DBR) version in the cluster. For example, if you are trying to use a
+Databricks cluster with a DBR version 14.0, then `databricks.connect` will also
+need to be version 14.0. Failure to do so, can result in instability, or even
+the inability to connect. 
+
+Besides `datbricks.connect`, the Python environment will also need to have other
+Python libraries installed. The full list is in the [Additional setup details](#additional-setup-details)
+section.
+
+:::{.callout-important}
+If your server, or machine, has only one Python installation and, no ability to create
+Conda or Virtual environments, then you will encounter issues when connecting to
+a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
+:::
+
+
+### Install different version of `databricks.connect`
 
 Starting with `pysparklyr` version 0.1.2, this step is no longer needed. You 
 will be prompted to install the proper Python environment if one is not found. 
@@ -420,120 +461,26 @@ Python environment.  If the new cluster has a different DBR version, then it is
 recommended that you run the installation function using the new DBR version, or
 cluster ID.
 
-### Safely connect
+### Python Libraries
 
+Here is the list of the Python libraries needed in order to work with the cluster:
 
+Required libraries: 
 
+- `databricks-connect`
+- `delta-spark` 
+- `pandas`
+- `PyArrow`
+- `grpcio`
+- `google-api-python-client`
+- `grpcio_status`
 
-## Spark Connect
+ML libraries (Optional): 
 
-### Initial setup
+- `torch` 
+- `torcheval`
+- `scikit-learn`
 
-`sparklyr` will need specific Python libraries in order to connect, and interact
-with Spark Connect. We provide a convenience function that will automatically
-do the following:
-
-- Create, or re-create, a Python environment. Based on your OS, it will choose
-to create a Virtual Environment, or Conda. 
-
-- Install the needed Python libraries
-
-To install the latest versions of all the libraries, use:
-
-```r
-pysparklyr::install_pyspark()
-```
-
-`sparklyr` will query PyPi.org to get the latest version of PySpark
-and installs that version. It is recommended that the version of the
-PySpark library matches the Spark version of your cluster. 
-To do this, pass the Spark version in the  `version` argument, for example:
-
-```r
-pysparklyr::install_pyspark("3.4")
-```
-
-We have seen Spark sessions crash, when the version of PySpark and the version
-of Spark do not match. Specially, when using a newer version of PySpark is used
-against an older version of Spark.  If you are having issues with your connection, 
-definitely consider running the `install_pyspark()` to match that cluster's 
-specific Spark version.
-
-### Connecting
-
-To start a session with a open source Spark cluster, via Spark Connect,
-you will need to set the `master`, and `method`. The `master` will be an IP,
-and maybe a port that you will need to pass. The protocol to use to put
-together the proper connection URL is "sc://". For `method`, use
-"spark_connect". Here is an example:
-
-``` r
-library(sparklyr)
-
-sc <- spark_connect(
-  master = "sc://[Host IP(:Host Port - optional)]", 
-  method = "spark_connect"
-  version = "[Version that matches your cluster]"
-  )
-```
-
-If `version` is not passed, then `sparklyr` will automatically choose the 
-installed Python environment with the highest PySpark version. In a console 
-message, `sparklyr` will let you know which environment it will use.
-
-### Run locally
-
-It is possible to run Spark Connect in your machine We provide helper
-functions that let you setup, and start/stop the services in locally.
-
-If you wish to try this out, first install Spark 3.4 or above:
-
-``` r
-spark_install("3.4")
-```
-
-After installing, start the Spark Connect using:
-
-```r
-pysparklyr::spark_connect_service_start()
-```
-
-To connect to your local Spark Connect, use **localhost** as the address for 
-`master`:
-
-
-```r
-sc <- spark_connect(
-  master = "sc://localhost", 
-  method = "spark_connect"
-  )
-```
-
-Now, you are able to interact with your local Spark session:
-
-```r
-library(dplyr)
-
-tbl_mtcars <- copy_to(sc, mtcars)
-
-tbl_mtcars %>% 
-  group_by(am) %>% 
-  summarise(mpg = mean(mpg, na.rm = TRUE))
-```
-
-When done, you can disconnect from Spark Connect:
-
-```r
-spark_disconnect(sc)
-```
-
-The regular version of local Spark would terminate the local cluster
-when the you pass `spark_disconnect()`. For Spark Connect, the local
-cluster needs to be stopped independently.
-
-```r
-pysparklyr::spark_connect_service_stop()
-```
 
 ## What is supported
 
@@ -571,39 +518,6 @@ functions we have confirmed that work, do not work, or will work
 differently, is available here: [`pysparklyr`
 progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)
 
-## Additional setup details
-
-### Python Libraries
-
-Here is the list of the Python libraries needed in order to work with the cluster:
-
-Required libraries: 
-
-- `pandas`
-- `PyArrow`
-- `grpcio`
-- `google-api-python-client`
-- `grpcio_status`
-
-ML libraries (Optional): 
-
-- `torch` 
-- `torcheval`
-- `scikit-learn`
-
-If using Databricks Connect:
-
-- `databricks-connect`
-- `delta-spark` 
-
-:::{.callout-important} 
-Do not install `pyspark`, it will conflict with `databricks-connect`
-:::
-
-
-If using Spark Connect: 
-
-- `pyspark` 
 
 
 ## TODO

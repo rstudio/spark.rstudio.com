@@ -27,35 +27,27 @@ library(dplyr)
 library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
-# %%| eval: true
 ```
 
 *Last updated: `r lubridate::date()`*
 
 ## Intro
 
-[Spark
-Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html)
-introduced a decoupled client-server architecture that allows remote
-connectivity to Spark clusters using the DataFrame API. The separation
-between client and server allows Spark to be leveraged from everywhere,
-and this would allow R users to interact with a cluster from the comfort
-of their preferred mathine environment. The new [Databricks
-Connect](https://docs.databricks.com/dev-tools/databricks-connect.html), often 
-referred to as **"Databricks Connect v2"**, 
-available in Databricks Runtime version 13 and above, is based on this
-new architecture.
+Databricks Connect enables the interaction with Spark clusters remotely.
+It is based on Spark Connect, which enables remote connectivity thanks
+to its new decoupled client-server architecture. This allows users to
+interact with the Spark cluster without having to run the jobs from a
+node. Additionally, it removes the requirement of having Java components
+installed in the use's machine.
 
-#### Solution architecture 
-
-The Spark Connect API is very different than the "legacy" Spark, using the
-Spark shell is no longer an option. We have decided to use Python as the
-interface to this new API. In turn, Python uses *gRPC* to interact with Spark. 
+The API is very different than the "legacy" Spark, using the Spark shell
+is no longer an option. We have decided to use Python as the new
+interface. In turn, Python uses *gRPC* to interact with Spark.
 
 ::: {#fig-connect}
-
 ```{mermaid}
 %%| fig-width: 10
+%%| eval: true
 flowchart LR
   subgraph lp[test]
     subgraph r[R]
@@ -89,15 +81,13 @@ flowchart LR
 How `sparklyr` communicates with Databricks Connect
 :::
 
-We are using `reticulate` to interact with the Python API. `sparklyr` extends 
-the functionality, and user experience, by providing the `dplyr`back-end, `DBI` 
-back-end, RStudio's Connection pane integration.
+We are using `reticulate` to interact with the Python API. `sparklyr`
+extends the functionality, and user experience, by providing the
+`dplyr`back-end, `DBI` back-end, RStudio's Connection pane integration.
 
 In order to quickly iterate on enhancements and bug fixes, we have
 decided to isolate the Python integration into its own package. The new
 package, called `pysparklyr`, is an extension of `sparklyr`.
-
-
 
 ## Getting Started
 
@@ -105,8 +95,8 @@ package, called `pysparklyr`, is an extension of `sparklyr`.
 
 To access Databricks Connect, you will need the following two packages:
 
-- `sparklyr` - 1.8.4
-- `pysparklyr` - 0.1.2
+-   `sparklyr` - 1.8.4
+-   `pysparklyr` - 0.1.2
 
 ``` r
 install.packages("sparklyr")
@@ -119,47 +109,49 @@ To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
 
 1.  Your [Workspace Instance
-    URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url) 
-1.  Your 
-    [Personal Authentication Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT)
-1.   Your 
+    URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
+2.  Your [Personal Authentication
+    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT)
+3.  Your
     [cluster's](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
-    ID 
+    ID
 
-We have developed this solution to align with other R, and non-R, applications that 
-integrate with Databricks. All applications need, at minimum, a work space *(1)*, 
-and the authentication token *(2)*. For default values, those applications initially 
-look for these environment variables: 
+We have developed this solution to align with other R, and non-R,
+applications that integrate with Databricks. All applications need, at
+minimum, a work space *(1)*, and the authentication token *(2)*. For
+default values, those applications initially look for these environment
+variables:
 
 -   `DATABRICKS_HOST` - Your Workspace Instance URL
 -   `DATABRICKS_TOKEN` - Your Personal Authentication Token
 
-Environment variables work well, because they rarely vary between projects. The 
-thing that will change more often is the cluster you are connecting to. It also 
-makes connection safer, because the token's contents will not be in your code in
-plain text. We recommend that you set  these two variables at your **user level**. 
-To do this run:
+Environment variables work well, because they rarely vary between
+projects. The thing that will change more often is the cluster you are
+connecting to. It also makes connection safer, because the token's
+contents will not be in your code in plain text. We recommend that you
+set these two variables at your **user level**. To do this run:
 
-```r
+``` r
 usethis::edit_r_environ()
 ```
 
-That command will open a text file that controls the environment variables at
-the **user level**. If missing, insert the entries for the two variables:
+That command will open a text file that controls the environment
+variables at the **user level**. If missing, insert the entries for the
+two variables:
 
-```bash
+``` bash
 DATABRICKS_HOST="Enter here your Workspace URL"
 DATABRICKS_TOKEN="Enter here your personal token"
 ```
 
-**This is a one time operation.** After saving and closing the file, restart your
-R session. 
+**This is a one time operation.** After saving and closing the file,
+restart your R session.
 
 ### First time connecting
 
-After setting up your Host and Token environment variables, you can now connect
-to your cluster by simply providing the cluster's ID, and the method to 
-`spark_connect()`:
+After setting up your Host and Token environment variables, you can now
+connect to your cluster by simply providing the cluster's ID, and the
+method to `spark_connect()`:
 
 ``` r
 library(sparklyr)
@@ -170,21 +162,21 @@ sc <- spark_connect(
 )
 ```
 
-In order to connect and interact with Databricks, you will need a specific set
-of [Python libraries](#python-libraries) installed and available. 
-To make it easier to get started, we provide functionality that will 
-automatically do the following:
+In order to connect and interact with Databricks, you will need a
+specific set of [Python libraries](#python-libraries) installed and
+available. To make it easier to get started, we provide functionality
+that will automatically do the following:
 
-- Create, or re-create, a Python environment. Based on your OS, it will choose 
-to create a Virtual Environment, or Conda.
+-   Create, or re-create, a Python environment. Based on your OS, it
+    will choose to create a Virtual Environment, or Conda.
 
-- Install the needed Python libraries
+-   Install the needed Python libraries
 
-`spark_connect()` will check to see if you have the expected Python environment,
-and prompt you to accept its installation if missing. Here is an example of 
-the code and output you would expect to see: 
+`spark_connect()` will check to see if you have the expected Python
+environment, and prompt you to accept its installation if missing. Here
+is an example of the code and output you would expect to see:
 
-```r
+``` r
 sc <- spark_connect(
     cluster_id = "1026-175310-7cpsh3g8",
     method = "databricks_connect"
@@ -202,12 +194,12 @@ sc <- spark_connect(
 #> Selection: 1 
 ```
 
-After accepting, the Python environment will be created with a specific name,
-and all of the needed Python libraries will be installed within. After it is done,
-it will attempt to connect to your cluster. Here is an abbreviated example of the
-output that occurs when selecting "Yes": 
+After accepting, the Python environment will be created with a specific
+name, and all of the needed Python libraries will be installed within.
+After it is done, it will attempt to connect to your cluster. Here is an
+abbreviated example of the output that occurs when selecting "Yes":
 
-```r
+``` r
 #> ✔ Automatically naming the environment:'r-sparklyr-databricks-14.1' 
 #> Using Python: /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 
 #> Creating virtual environment 'r-sparklyr-databricks-14.1' ... 
@@ -291,28 +283,29 @@ trips %>%
   )
 ```
 
-## Machine Learning 
+## Machine Learning
 
-Machine Learning capabilities are currently available starting with Databricks
-Runtime version 14.1.  Compared to "legacy" Spark, Spark Connect's ML capabilities
-are limited. At this time, there is only one supported model, Logistic Regression,
-and two scaler transformers, namely Standard Scaler and Max Abs Scaler. `sparklyr`
-makes that functionality available. 
+Machine Learning capabilities are currently available starting with
+Databricks Runtime version 14.1. Compared to "legacy" Spark, Spark
+Connect's ML capabilities are limited. At this time, there is only one
+supported model, Logistic Regression, and two scaler transformers,
+namely Standard Scaler and Max Abs Scaler. `sparklyr` makes that
+functionality available.
 
 ### Using for the first time
 
-By default, the Python environment that `sparklyr` creates, does not include
-the libraries that relate to Machine Learning. These include Torch, and 
-"scikit-learn". Some of the libraries are large in size, and sometimes they
-may have some Python requirements that may make it challenging to new users.
-Additionally , we have noticed that, at this time, there are not many users
-that need to utilize ML capabilities. 
+By default, the Python environment that `sparklyr` creates, does not
+include the libraries that relate to Machine Learning. These include
+Torch, and "scikit-learn". Some of the libraries are large in size, and
+sometimes they may have some Python requirements that may make it
+challenging to new users. Additionally , we have noticed that, at this
+time, there are not many users that need to utilize ML capabilities.
 
-The first time an ML function is accessed through `sparklyr`, you will be prompted
-to install the additional Python libraries which are needed to access such
-ML capabilities.
+The first time an ML function is accessed through `sparklyr`, you will
+be prompted to install the additional Python libraries which are needed
+to access such ML capabilities.
 
-```r
+``` r
 ml_logistic_regression(tbl_mtcars, am ~ .)
 #> ! Required Python libraries to run ML functions are missing
 #>   Could not find: torch, torcheval, and scikit-learn
@@ -328,48 +321,48 @@ ml_logistic_regression(tbl_mtcars, am ~ .)
 ...
 ```
 
-::: {.callout-note}
-It is possible to install the ML libraries along with the required libraries. 
-There may be several reasons to do this, including trying to recreate the environment
-after upgrading Python in your machine. Just pass `install_ml=TRUE` to the
-installation function:
+::: callout-note
+It is possible to install the ML libraries along with the required
+libraries. There may be several reasons to do this, including trying to
+recreate the environment after upgrading Python in your machine. Just
+pass `install_ml=TRUE` to the installation function:
 
-```r
+``` r
 install_databricks(cluster_id = "Enter your cluster's ID", install_ml = TRUE)
 ```
 
 or
 
-```r
+``` r
 install_databricks(version = "14.1", install_ml = TRUE)
 ```
-
 :::
 
 ### Easily fit and use
 
-At this time, Logistic Regression is the only model supported. As usual, there
-are specific data preparation steps in order to run. `sparklyr` automates those
-steps, so all you have to do is pass the Spark data frame, and the formula
-to use:
+At this time, Logistic Regression is the only model supported. As usual,
+there are specific data preparation steps in order to run. `sparklyr`
+automates those steps, so all you have to do is pass the Spark data
+frame, and the formula to use:
 
 ```{r}
 tbl_mtcars <- copy_to(sc, mtcars)
 
 model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
-``` 
+```
 
-The output for Spark Connect based models has been upgraded. It will display the
-model parameters. 
+The output for Spark Connect based models has been upgraded. It will
+display the model parameters.
 
 ```{r}
 model1
 ```
 
-As shown in the following screenshot, the new output features a first-of-its-kind
-tooltip, it will popup the description of the parameter when hovered over. This 
-functionality works when used in RStudio, and any console that supports this kind
-of enhanced user experience.
+As shown in the following screenshot, the new output features a
+first-of-its-kind tooltip, it will popup the description of the
+parameter when hovered over. This functionality works when used in
+RStudio, and any console that supports this kind of enhanced user
+experience.
 
 ![](/images/deployment/databricks/model-output.png)
 
@@ -379,17 +372,16 @@ To use the model, you can run `ml_predict()`:
 ml_predict(model1, tbl_mtcars)
 ```
 
-### Using feature transformers 
+### Using feature transformers
 
 These are the two feature transformers currently supported:
 
-- Standard Scaler - `ft_standard_scaler()`
-- Max Abs Caler - `ft_max_abs_scaler()`
+-   Standard Scaler - `ft_standard_scaler()`
+-   Max Abs Scaler - `ft_max_abs_scaler()`
 
-To access simply call the function by passing a vector of column names. 
-Please note that it will create a single column with an array field that 
+To access simply call the function by passing a vector of column names.
+Please note that it will create a single column with an array field that
 contains all of the newly scaled values.
-
 
 ```{r}
 tbl_mtcars %>% 
@@ -406,127 +398,140 @@ spark_disconnect(sc)
 
 ## Reported Problems
 
-As it is with any new implementations, we are seeing some early adopters report
-issues with their installation or connections.  Here are some of the issues that 
-have been reported to us, and the recommended solution, or workaround.
-Each issue is **collapsed**, just expand it to see the background and 
-recommendation. Each one is titled based on the full error message 
-or, the distinctive part of the error message.
+As it is with any new implementations, we are seeing some early adopters
+report issues with their installation or connections. Here are some of
+the issues that have been reported to us, and the recommended solution,
+or workaround. Each issue is **collapsed**, just expand it to see the
+background and recommendation. Each one is titled based on the full
+error message or, the distinctive part of the error message.
 
-Before reviewing the issues, please make sure to have the latest versions of 
-`sparklyr`, and `pysparklyr` from CRAN. These are the current version levels:
+Before reviewing the issues, please make sure to have the latest
+versions of `sparklyr`, and `pysparklyr` from CRAN. These are the
+current version levels:
 
-- `sparklyr` - 1.8.4
-- `pysparklyr` - 0.1.2
-
+-   `sparklyr` - 1.8.4
+-   `pysparklyr` - 0.1.2
 
 ::: {.callout-note collapse="true"}
 ## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
 
 Error message contains:
 
-```r
+``` r
 ... reticulate can only bind to copies of Python built with '--enable-shared'.
 ```
 
-This is happening because there is no Python installation that `reticulate` 
-can use. `pysparklyr` depends on that package to function. 
+This is happening because there is no Python installation that
+`reticulate` can use. `pysparklyr` depends on that package to function.
 
 ### Solution
 
-The best way to resolve is to install an acceptable version of Python. You can run:
+The best way to resolve is to install an acceptable version of Python.
+You can run:
 
-```r
+``` r
 reticulate::install_python()
 ```
 
-If the output mentions `--skip-existing [version number]` then you will have two options:
+If the output mentions `--skip-existing [version number]` then you will
+have two options:
 
-1. If you're ok with replacing the existing Python, then use:
-   ```r
-    reticulate::install_python(version = "[version number]", force = TRUE)
-   ``` 
+1.  If you're ok with replacing the existing Python, then use:
 
-2. If you would like to keep that installation of Python then use a different version number:
-   ```r
-    reticulate::install_python(version = "[slightly different version number]")
-   ``` 
-    For example, if the version number is `3.9.12`, then use `3.9.18`: 
-  
-    ```r
+    ``` r
+     reticulate::install_python(version = "[version number]", force = TRUE)
+    ```
+
+2.  If you would like to keep that installation of Python then use a
+    different version number:
+
+    ``` r
+     reticulate::install_python(version = "[slightly different version number]")
+    ```
+
+    For example, if the version number is `3.9.12`, then use `3.9.18`:
+
+    ``` r
     reticulate::install_python(version = "3.9.18")
-    ``` 
+    ```
 :::
 
 ::: {.callout-note collapse="true"}
-##  `spark_connect()` returns `! Version '14.2' does not exist`
+## `spark_connect()` returns `! Version '14.2' does not exist`
 
-Error message contains: 
+Error message contains:
 
-```r
+``` r
   Checking if provided version is valid against PyPi.org
   Error in `install_environment()`
   ! Version '14.2' does not exist
 ```
 
-This happens when `pysparklyr` gets the cluster DBR version automatically. Usually
-when running `spark_connect()` or `install_databricks()`. This occurs because
-the latest version of DBR, as of today 14.2, is ahead of what the `databricks.connect`
-version available in `databricks.connect`.
+This happens when `pysparklyr` gets the cluster DBR version
+automatically. Usually when running `spark_connect()` or
+`install_databricks()`. This occurs because the latest version of DBR,
+as of today 14.2, is ahead of what the `databricks.connect` version
+available in `databricks.connect`.
 
 ### Solution
 
-Current workdaround is to say "No" when prompted to install version 14.2. And if 
-missing in your machine, install 14.1 using: 
+Current workaround is to say "No" when prompted to install version 14.2.
+And if missing in your machine, install 14.1 using:
 
-```r
+``` r
 pysparklyr::install_databricks("14.1")
 ```
-
 :::
 
 ## Environments
 
 ### Install different version of `databricks.connect`
 
-Here are three different options to create a custom Python environment, that
-will contain the needed Python libraries to interact with Databricks Connect:
+Here are three different options to create a custom Python environment,
+that will contain the needed Python libraries to interact with
+Databricks Connect:
 
-- To install the latest versions of all the needed libraries, use:
-  ```r
-  pysparklyr::install_databricks()
-  ```
-  `sparklyr` will query PyPi.org to get the latest version of `databricks.connect`
-  and installs that version. 
+-   To install the latest versions of all the needed libraries, use:
 
+    ``` r
+    pysparklyr::install_databricks()
+    ```
 
-- It is recommended that the version of the `databricks.connect` library, matches 
-the DBR version of your cluster.   To do this, pass the DBR version in the
-`version` argument, for example:
-  ```r
-  pysparklyr::install_databricks("14.0")
-  ```
-  This will create a Python environment and install `databricks.connect` version
-  14.0, and it will automatically name it `r-sparklyr-databricks-14.0`.  By using
-  this name, `sparklyr` is able to know what version of `databricks.connect` is
-  available inside this particular Python environment.
+    `sparklyr` will query PyPi.org to get the latest version of
+    `databricks.connect` and installs that version.
 
-- If you are not sure about the version of the cluster you want to interact with,
-then use the `cluster_id` argument. We have added a way to pull the cluster's
-information, without starting a Spark connect. This allows us to query the
-cluster and get the DBR version:
+-   It is recommended that the version of the `databricks.connect`
+    library, matches the DBR version of your cluster. To do this, pass
+    the DBR version in the `version` argument, for example:
 
-  ```r
-  pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
-  ```
+    ``` r
+    pysparklyr::install_databricks("14.0")
+    ```
 
-### Restricted Python environments 
+    This will create a Python environment and install
+    `databricks.connect` version 14.0, and it will automatically name it
+    `r-sparklyr-databricks-14.0`. By using this name, `sparklyr` is able
+    to know what version of `databricks.connect` is available inside
+    this particular Python environment.
 
-If your organization restricts Python environment creation, you can 
-point `sparklyr` to the designated Python installation.  To do this, pass the
-path to the environment in the `envname` argument of `spark_connect()`:
+-   If you are not sure about the version of the cluster you want to
+    interact with, then use the `cluster_id` argument. We have added a
+    way to pull the cluster's information, without starting a Spark
+    connect. This allows us to query the cluster and get the DBR
+    version:
 
-```r
+    ``` r
+    pysparklyr::install_databricks(cluster_id = "[Your cluster's ID]")
+    ```
+
+### Restricted Python environments
+
+If your organization restricts Python environment creation, you can
+point `sparklyr` to the designated Python installation. To do this, pass
+the path to the environment in the `envname` argument of
+`spark_connect()`:
+
+``` r
 library(sparklyr)
 
 sc <- spark_connect(
@@ -536,52 +541,160 @@ sc <- spark_connect(
 )
 ```
 
-To successfully connect to a Databricks cluster, you will need to match the
-proper version of the `databricks.connect` Python library, to the Databricks
-Runtime (DBR) version in the cluster. For example, if you are trying to use a
-Databricks cluster with a DBR version 14.0, then `databricks.connect` will also
-need to be version 14.0. Failure to do so, can result in instability, or even
-the inability to connect. 
+To successfully connect to a Databricks cluster, you will need to match
+the proper version of the `databricks.connect` Python library, to the
+Databricks Runtime (DBR) version in the cluster. For example, if you are
+trying to use a Databricks cluster with a DBR version 14.0, then
+`databricks.connect` will also need to be version 14.0. Failure to do
+so, can result in instability, or even the inability to connect.
 
-Besides `datbricks.connect`, the Python environment will also need to have other
-Python libraries installed. The full list is in the [Python Libraries](#python-libraries)
-section.
+Besides `datbricks.connect`, the Python environment will also need to
+have other Python libraries installed. The full list is in the [Python
+Libraries](#python-libraries) section.
 
-:::{.callout-important}
-If your server, or machine, has only one Python installation and, no ability to create
-Conda or Virtual environments, then you will encounter issues when connecting to
-a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
+::: callout-important
+If your server, or machine, has only one Python installation and, no
+ability to create Conda or Virtual environments, then you will encounter
+issues when connecting to a Databricks cluster with a mismatched version
+of `databricks.connect` to DBR.
 :::
 
-**Important** -  This step needs only to be **done one time**. If you need to connect to a different
-cluster, but that has the same DBR version, `sparklyr` will use the same
-Python environment.  If the new cluster has a different DBR version, then it is
-recommended that you run the installation function using the new DBR version, or
-cluster ID.
+**Important** - This step needs only to be **done one time**. If you
+need to connect to a different cluster, but that has the same DBR
+version, `sparklyr` will use the same Python environment. If the new
+cluster has a different DBR version, then it is recommended that you run
+the installation function using the new DBR version, or cluster ID.
 
-### Python Libraries
+### Python Libraries {#python-libraries}
 
-Here is the list of the Python libraries needed in order to work with the cluster:
+Here is the list of the Python libraries needed in order to work with
+the cluster:
 
-Required libraries: 
+Required libraries:
 
-- `databricks-connect`
-- `delta-spark` 
-- `pandas`
-- `PyArrow`
-- `grpcio`
-- `google-api-python-client`
-- `grpcio_status`
+-   `databricks-connect`
+-   `delta-spark`
+-   `pandas`
+-   `PyArrow`
+-   `grpcio`
+-   `google-api-python-client`
+-   `grpcio_status`
 
-ML libraries (Optional): 
+ML libraries (Optional):
 
-- `torch` 
-- `torcheval`
-- `scikit-learn`
+-   `torch`
+-   `torcheval`
+-   `scikit-learn`
 
 ## Deploying to Posit Connect
 
-TODO
+We recommend that for simply accessing data from the Unity Catalog, such
+as in a Shiny app, use an ODBC connection instead of a Spark session.
+The advantage of this, is that a connection to the Databricks Warehouse
+does not require a running cluster. For more information about creating
+dashboards with databases visit [Database with R
+site](https://solutions.posit.co/connections/db/best-practices/dashboards/).
+
+However, there are cases when it is necessary to deploy a solution that
+requires a Spark session. For example, when there is a long running job
+that needs to run on a schedule. Those kinds of jobs could be put inside
+a Quarto document, and published to Posit Connect, where they can run on
+specific date/time intervals. Posit Connect supports Python
+environments, so it is an ideal platform to deploy these kinds of
+solutions.
+
+### Preparing for deployment
+
+When deploying to Posit Connect, there are specific pieces of
+information that we need to make sure are sent over:
+
+-   Your **cluster's ID**
+-   Your **workspace URL**
+-   Your **token**
+-   Your **Python environment**'s location
+-   To use the `pysparklyr` extension
+
+Based on the recommendations in this article, the **cluster's ID**
+should be in the code of your document, the **workspace URL** and
+**token** should already be inside the `DATABRICKS_HOST`, and
+`DATABRICKS_TOKEN` environment variables.
+
+Make sure that your document has a `library(pysparklyr`) call. This will
+let Posit Connect deployment process know that it needs to install this
+package, and its dependencies, such as `reticulate`.
+
+The Python environment location can be copied from the output of
+`spark_connect()`. In the following example, you can see how we are
+loading `pysparklyr`. Note that at the bottom of the output from
+`spark_connect()`, the **path** to your local Python environment is
+displayed, copy this path. The next section will explain why this is
+important to retain.
+
+``` r
+library(sparklyr)
+library(pyspaklyr)
+
+sc <- spark_connect(
+    cluster_id = "1026-175310-7cpsh3g8",
+    method = "databricks_connect"
+)
+#> ! Retrieving version from cluster '1026-175310-7cpsh3g8'
+#>   Cluster version: '14.1'
+#> ✔ Using the 'r-sparklyr-databricks-14.1' Python environment
+#>   Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python <<-- COPY THIS
+```
+
+### Using `deployApp()`
+
+Posit Connect will recreate your Python environment so that any content,
+that uses Python, works properly. Because we do not use the default
+Python environment to connect to Databricks, we need a way to tell Posit
+Connect which environment to recreate.
+
+Additionally, to avoid changing the code we used to create the document,
+we want to share with Posit Connect the contents of our Databricks
+environment variables.
+
+The `deployApp()` function from the `rsconnect` package allows us to
+easily do all this:
+
+``` r
+rsconnect::deployApp(
+  python = "Enter the Python environment to recreate",
+  envVars = c("DATABRICKS_HOST", "DATABRICKS_TOKEN"),
+  lint = FALSE
+)
+```
+
+In the `python` argument, paste the value from the 'Path:' output
+`spark_connect()` used when you were testing your document locally. The
+`envVars` argument will let Posit Connect know to create those
+environment variables, and to use the values from your machine.
+
+**Important:** Please note that `deployApp()` is not called from inside
+your document. It needs to be something you call outside, in your R
+console for example. If you wish to create an **R script** in your
+project that contains your deployment call, **do not place it in the
+same folder as your document**.
+
+Here is an sample of how a `deployApp()` call. There are some additional
+notes, as code comments, to further explain how and why to use:
+
+``` r
+rsconnect::deployApp(
+  # Title to show for your document
+  appTitle = "My cool document", 
+  # The path for your document within your project
+  appDir = here::here("cool-document"),
+  # Pasted from previous section's output
+  python = "/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python", 
+  # Passing host and token environment variables
+  envVars = c("DATABRICKS_HOST", "DATABRICKS_TOKEN"),
+  # Avoids unnecessary code check, leaving TRUE may cause issues such as this
+  # error: "paths should be to files within the project directory"
+  lint = FALSE
+)
+```
 
 ## What is supported
 
@@ -600,10 +713,10 @@ Here is a list of what we currently support, and do not support via
 
 **Not supported**:
 
--   **ML functions** - Very few functions, in `sparklyr`, that have the `ml_`
-    and `ft_` are currently not supported. The reason is that Spark 3.4
-    does not currently support MLlib. We expect that some ML support
-    will be available in Spark 3.5. At that time we will work on
+-   **ML functions** - Very few functions, in `sparklyr`, that have the
+    `ml_` and `ft_` are currently not supported. The reason is that
+    Spark 3.4 does not currently support MLlib. We expect that some ML
+    support will be available in Spark 3.5. At that time we will work on
     integrating the new ML routines from Connect into `sparklyr`.
 
 -   **SDF functions** - Most of these functions require SparkSession,
@@ -613,4 +726,3 @@ Here is a list of what we currently support, and do not support via
     `sparklyr`. We are implementing these functions using PySpark
     DataFrame commands, instead of depending on the Scala
     implementation.
-

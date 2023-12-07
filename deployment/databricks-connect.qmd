@@ -5,7 +5,7 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
+    eval: true
     freeze: true
 editor: 
   markdown: 
@@ -27,7 +27,7 @@ library(dplyr)
 library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
-
+# %%| eval: true
 ```
 
 *Last updated: `r lubridate::date()`*
@@ -55,7 +55,6 @@ interface to this new API. In turn, Python uses *gRPC* to interact with Spark.
 ::: {#fig-connect}
 
 ```{mermaid}
-%%| eval: true
 %%| fig-width: 10
 flowchart LR
   subgraph lp[test]
@@ -172,7 +171,7 @@ sc <- spark_connect(
 ```
 
 In order to connect and interact with Databricks, you will need a specific set
-of [Python libraries](#additional-setup-details) installed and available. 
+of [Python libraries](#python-libraries) installed and available. 
 To make it easier to get started, we provide functionality that will 
 automatically do the following:
 
@@ -290,9 +289,38 @@ trips %>%
   )
 ```
 
-### Machine Learning 
+## Machine Learning 
 
-TODO
+### Using for the first time
+
+```r
+#> ! Required Python libraries to run ML functions are missing
+#>   Could not find: torch, torcheval, and scikit-learn
+#>   Do you wish to install? (This will be a one time operation)
+#> 
+#> 1: Yes
+#> 2: Cancel
+#> 
+#> Selection: 1
+#> Using virtual environment '/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1' ...
+#> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade --no-user torch torcheval scikit-learn
+#> Collecting torch
+```
+
+### Simple model 
+
+```{r}
+tbl_mtcars <- copy_to(sc, mtcars)
+
+model <- ml_logistic_regression(tbl_mtcars, am ~ .)
+
+model
+```
+
+![](/images/deployment/databricks/model-output.png)
+```{r}
+ml_predict(model, tbl_mtcars)
+```
 
 When you are done with you queries and computations, you should
 disconnect from the cluster.
@@ -441,7 +469,7 @@ need to be version 14.0. Failure to do so, can result in instability, or even
 the inability to connect. 
 
 Besides `datbricks.connect`, the Python environment will also need to have other
-Python libraries installed. The full list is in the [Additional setup details](#additional-setup-details)
+Python libraries installed. The full list is in the [Python Libraries](#python-libraries)
 section.
 
 :::{.callout-important}

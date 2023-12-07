@@ -254,6 +254,17 @@ the right of the table name, to preview the first 1,000 rows:
 
 ### Using the Connection to Access Data
 
+```{r}
+library(dplyr)
+library(dbplyr)
+library(sparklyr)
+
+sc <- spark_connect(
+    cluster_id = "1026-175310-7cpsh3g8",
+    method = "databricks_connect"
+)
+```
+
 After connecting, you can use `dbplyr`'s `in_catalog()` function to
 access any table in your data catalog. You will only need to pass the
 respective names of the three levels as comma separated character
@@ -264,15 +275,6 @@ Here is an example of using `tbl()` and `in_catalog()` to point to the
 database inside the **samples** catalog:
 
 ```{r}
-library(dplyr)
-library(dbplyr)
-library(sparklyr)
-
-sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
-    method = "databricks_connect"
-)
-
 trips <- tbl(sc, in_catalog("samples", "nyctaxi", "trips"))
 
 trips
@@ -291,9 +293,27 @@ trips %>%
 
 ## Machine Learning 
 
+Machine Learning capabilities are currently available starting with Databricks
+Runtime version 14.1.  Compared to "legacy" Spark, Spark Connect's ML capabilities
+are limited. At this time, there is only one supported model, Logistic Regression,
+and two scaler transformers, namely Standard Scaler and Max Abs Scaler. `sparklyr`
+makes that functionality available. 
+
 ### Using for the first time
 
+By default, the Python environment that `sparklyr` creates, does not include
+the libraries that relate to Machine Learning. These include Torch, and 
+"scikit-learn". Some of the libraries are large in size, and sometimes they
+may have some Python requirements that may make it challenging to new users.
+Additionally , we have noticed that, at this time, there are not many users
+that need to utilize ML capabilities. 
+
+The first time an ML function is accessed through `sparklyr`, you will be prompted
+to install the additional Python libraries which are needed to access such
+ML capabilities.
+
 ```r
+ml_logistic_regression(tbl_mtcars, am ~ .)
 #> ! Required Python libraries to run ML functions are missing
 #>   Could not find: torch, torcheval, and scikit-learn
 #>   Do you wish to install? (This will be a one time operation)
@@ -305,21 +325,75 @@ trips %>%
 #> Using virtual environment '/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1' ...
 #> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade --no-user torch torcheval scikit-learn
 #> Collecting torch
+...
 ```
 
-### Simple model 
+::: {.callout-note}
+It is possible to install the ML libraries along with the required libraries. 
+There may be several reasons to do this, including trying to recreate the environment
+after upgrading Python in your machine. Just pass `install_ml=TRUE` to the
+installation function:
+
+```r
+install_databricks(cluster_id = "Enter your cluster's ID", install_ml = TRUE)
+```
+
+or
+
+```r
+install_databricks(version = "14.1", install_ml = TRUE)
+```
+
+:::
+
+### Easily fit and use
+
+At this time, Logistic Regression is the only model supported. As usual, there
+are specific data preparation steps in order to run. `sparklyr` automates those
+steps, so all you have to do is pass the Spark data frame, and the formula
+to use:
 
 ```{r}
 tbl_mtcars <- copy_to(sc, mtcars)
 
-model <- ml_logistic_regression(tbl_mtcars, am ~ .)
+model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
+``` 
 
-model
+The output for Spark Connect based models has been upgraded. It will display the
+model parameters. 
+
+```{r}
+model1
 ```
 
+As shown in the following screenshot, the new output features a first-of-its-kind
+tooltip, it will popup the description of the parameter when hovered over. This 
+functionality works when used in RStudio, and any console that supports this kind
+of enhanced user experience.
+
 ![](/images/deployment/databricks/model-output.png)
+To use the model, you can run `ml_predict()`:
+
 ```{r}
-ml_predict(model, tbl_mtcars)
+ml_predict(model1, tbl_mtcars)
+```
+
+### Using feature transformers 
+
+These are the two feature transformers currently supported:
+
+- Standard Scaler - `ft_standard_scaler()`
+- Max Abs Caler - `ft_max_abs_scaler()`
+
+To access simply call the function by passing a vector of column names. 
+Please note that it will create a single column with an array field that 
+contains all of the newly scaled values.
+
+
+```{r}
+tbl_mtcars %>% 
+  ft_standard_scaler(c("wt", "mpg"), "features") %>% 
+  select(wt, mpg, features)
 ```
 
 When you are done with you queries and computations, you should
@@ -478,10 +552,6 @@ Conda or Virtual environments, then you will encounter issues when connecting to
 a Databricks cluster with a mismatched version of `databricks.connect` to DBR.
 :::
 
-
-
-
-
 **Important** -  This step needs only to be **done one time**. If you need to connect to a different
 cluster, but that has the same DBR version, `sparklyr` will use the same
 Python environment.  If the new cluster has a different DBR version, then it is
@@ -529,7 +599,7 @@ Here is a list of what we currently support, and do not support via
 
 **Not supported**:
 
--   **ML functions** - All functions, in `sparklyr`, that have the `ml_`
+-   **ML functions** - Very few functions, in `sparklyr`, that have the `ml_`
     and `ft_` are currently not supported. The reason is that Spark 3.4
     does not currently support MLlib. We expect that some ML support
     will be available in Spark 3.5. At that time we will work on

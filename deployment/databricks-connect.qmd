@@ -5,7 +5,7 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
+    eval: false
     freeze: true
 editor: 
   markdown: 
@@ -53,15 +53,17 @@ Spark shell is no longer an option. We have decided to use Python as the
 interface to this new API. In turn, Python uses *gRPC* to interact with Spark. 
 
 ::: {#fig-connect}
+
 ```{mermaid}
-%%| fig-width: 12
+%%| eval: true
+%%| fig-width: 10
 flowchart LR
   subgraph lp[test]
     subgraph r[R]
       sr[sparklyr]
       rt[reticulate]
     end
-    subgraph  ps[Python]
+    subgraph ps[Python]
       dc[Databricks Connect]
       g1[gRPC]
     end
@@ -71,18 +73,18 @@ flowchart LR
   end
   sr <--> rt
   rt <--> dc
-  g1 <-. Network .-> sp
+  g1 <-- Internet<br>Connection --> sp
   dc <--> g1
   
-  style r   fill:#cff,stroke:#666
-  style sr  fill:#444,stroke:#666,color:#fff
-  style rt  fill:#036,stroke:#666,color:#fff
-  style ps  fill:#ffc,stroke:#666
+  style r   fill:#fff,stroke:#666,color:#000
+  style sr  fill:#fff,stroke:#666,color:#000
+  style rt  fill:#fff,stroke:#666,color:#000
+  style ps  fill:#fff,stroke:#666,color:#000
   style lp  fill:#fff,stroke:#666,color:#fff
-  style db  fill:#c66,stroke:#666,color:#fff
-  style sp  fill:#fcc,stroke:#666,color:#000
-  style g1  fill:#ff0,stroke:#666
-  style dc  fill:#ff0,stroke:#666
+  style db  fill:#fff,stroke:#666,color:#000
+  style sp  fill:#fff,stroke:#666,color:#000
+  style g1  fill:#fff,stroke:#666,color:#000
+  style dc  fill:#fff,stroke:#666,color:#000
 ```
 
 How `sparklyr` communicates with Databricks Connect

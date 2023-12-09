@@ -336,11 +336,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Thu Dec 7 16:28:19 2023</em></p>
+<p><em>Last updated: Fri Dec 8 18:11:41 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Databricks Connect enables the interaction with Spark clusters remotely. It is based on Spark Connect, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the use’s machine.</p>
-<p>The API is very different than the “legacy” Spark, using the Spark shell is no longer an option. We have decided to use Python as the new interface. In turn, Python uses <em>gRPC</em> to interact with Spark.</p>
+<p>The API is very different than the “legacy” Spark and using the Spark shell is no longer an option. We have decided to use Python as the new interface. In turn, Python uses <em>gRPC</em> to interact with Spark.</p>
 <div id="fig-connect" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <div class="cell" data-fig-width="10" data-eval="true">
@@ -383,8 +383,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect</figcaption>
 </figure>
 </div>
-<p>We are using <code>reticulate</code> to interact with the Python API. <code>sparklyr</code> extends the functionality, and user experience, by providing the <code>dplyr</code>back-end, <code>DBI</code> back-end, RStudio’s Connection pane integration.</p>
-<p>In order to quickly iterate on enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called <code>pysparklyr</code>, is an extension of <code>sparklyr</code>.</p>
+<p>We are using <code>reticulate</code> to interact with the Python API. <code>sparklyr</code> extends the functionality, and user experience, by providing the <code>dplyr</code>back-end, <code>DBI</code> back-end, and integration with RStudio’s Connection pane.</p>
+<p>In order to quickly iterate on enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called <a href="https://github.com/mlverse/pysparklyr"><code>pysparklyr</code></a>, is an extension of <code>sparklyr</code>.</p>
 </section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
@@ -404,14 +404,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#workspace-url">Workspace Instance URL</a></li>
 <li>Your <a href="https://docs.databricks.com/dev-tools/auth.html#pat">Personal Authentication Token</a> (PAT)</li>
-<li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id">cluster’s</a> ID</li>
+<li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id">Cluster ID</a></li>
 </ol>
-<p>We have developed this solution to align with other R, and non-R, applications that integrate with Databricks. All applications need, at minimum, a work space <em>(1)</em>, and the authentication token <em>(2)</em>. For default values, those applications initially look for these environment variables:</p>
+<p>We have developed this solution to align with other applications that integrate with Databricks. All applications need, at minimum, a work space <em>(1)</em>, and an authentication token <em>(2)</em>. For default values, those applications initially look for these environment variables:</p>
 <ul>
 <li><code>DATABRICKS_HOST</code> - Your Workspace Instance URL</li>
 <li><code>DATABRICKS_TOKEN</code> - Your Personal Authentication Token</li>
 </ul>
-<p>Environment variables work well, because they rarely vary between projects. The thing that will change more often is the cluster you are connecting to. It also makes connection safer, because the token’s contents will not be in your code in plain text. We recommend that you set these two variables at your <strong>user level</strong>. To do this run:</p>
+<p>Environment variables work well, because they rarely vary between projects. The thing that will change more often is the cluster you are connecting to. Using environment variables also makes connection safer, because token contents will not be in your code in plain text. We recommend that you set these two variables at your <strong>user level</strong>. To do this run:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_environ</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>That command will open a text file that controls the environment variables at the <strong>user level</strong>. If missing, insert the entries for the two variables:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_HOST</span><span class="op">=</span><span class="st">"Enter here your Workspace URL"</span></span>
@@ -429,10 +429,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In order to connect and interact with Databricks, you will need a specific set of <a href="#python-libraries">Python libraries</a> installed and available. To make it easier to get started, we provide functionality that will automatically do the following:</p>
 <ul>
-<li><p>Create, or re-create, a Python environment. Based on your OS, it will choose to create a Virtual Environment, or Conda.</p></li>
-<li><p>Install the needed Python libraries</p></li>
+<li><p>Create or re-create the necessary Python environment. Based on your OS, it will choose to create a Virtual Environment or use Conda.</p></li>
+<li><p>Install the needed Python libraries into the new environment.</p></li>
 </ul>
-<p><code>spark_connect()</code> will check to see if you have the expected Python environment, and prompt you to accept its installation if missing. Here is an example of the code and output you would expect to see:</p>
+<p><code>spark_connect()</code> will check to see if you have the expected Python environment and prompt you to accept its installation if missing. Here is an example of the code and output you would expect to see:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
@@ -474,7 +474,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="interacting-with-the-cluster">Interacting with the cluster</h2>
 <section id="rstudios-connection-pane" class="level3">
 <h3 class="anchored" data-anchor-id="rstudios-connection-pane">RStudio’s Connection pane</h3>
-<p>Thanks to the new way we are integrating with Spark, it is now possible to display the same structure displayed in the Databricks Data Explorer page. In Databricks, the current data structure levels are:</p>
+<p>Thanks to the new way we are integrating with Spark, it is now possible to display the same structure displayed in the Databricks Data Explorer. In Databricks, the current data structure levels are:</p>
 <ul>
 <li>Catalog
 <ul>
@@ -484,9 +484,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul></li>
 </ul>
-<p>In RStudio, you can navigate the data structure by expanding from the top level, all the way down to the table you wish to explore. Once expanded, the table’s fields, and their types are displayed.</p>
+<p>In the RStudio Connections Pane, you can navigate the data structure by expanding from the top level, all the way down to the table you wish to explore. Once expanded, the table’s fields and their types are displayed.</p>
 <p><img src="../images/deployment/connect/rstudio-connection.png" class="img-fluid"></p>
-<p>In the Connection Pane, you can click on the <strong>table</strong> icon, situated to the right of the table name, to preview the first 1,000 rows:</p>
+<p>You can also click on the <strong>table</strong> icon, situated to the right of the table name, to preview the first 1,000 rows:</p>
 <p><img src="../images/deployment/connect/preview.png" class="img-fluid"></p>
 </section>
 <section id="using-the-connection-to-access-data" class="level3">
@@ -510,7 +510,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After connecting, you can use <code>dbplyr</code>’s <code>in_catalog()</code> function to access any table in your data catalog. You will only need to pass the respective names of the three levels as comma separated character entries to <code>in_catalog()</code> in this order: Catalog, Database, and Table.</p>
-<p>Here is an example of using <code>tbl()</code> and <code>in_catalog()</code> to point to the <strong>trips</strong> table, which is inside <strong>nyctaxi</strong> database, which is a database inside the <strong>samples</strong> catalog:</p>
+<p>Here is an example of using <code>tbl()</code> and <code>in_catalog()</code> to point to the <strong>trips</strong> table, which is inside <strong>nyctaxi</strong> database, which is inside the *<strong>samples</strong> catalog:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trips <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sc, <span class="fu">in_catalog</span>(<span class="st">"samples"</span>, <span class="st">"nyctaxi"</span>, <span class="st">"trips"</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -531,7 +531,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: pickup_zip &lt;int&gt;, dropoff_zip &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After pointing <code>tbl()</code> to that specific table, you can then use <code>dplyr</code>.</p>
+<p>After pointing <code>tbl()</code> to that specific table, you can then use <code>dplyr</code> to execute queries against the data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>trips <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pickup_zip) <span class="sc">%&gt;%</span></span>
@@ -561,7 +561,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Machine Learning capabilities are currently available starting with Databricks Runtime version 14.1. Compared to “legacy” Spark, Spark Connect’s ML capabilities are limited. At this time, there is only one supported model, Logistic Regression, and two scaler transformers, namely Standard Scaler and Max Abs Scaler. <code>sparklyr</code> makes that functionality available.</p>
 <section id="using-for-the-first-time" class="level3">
 <h3 class="anchored" data-anchor-id="using-for-the-first-time">Using for the first time</h3>
-<p>By default, the Python environment that <code>sparklyr</code> creates, does not include the libraries that relate to Machine Learning. These include Torch, and “scikit-learn”. Some of the libraries are large in size, and sometimes they may have some Python requirements that may make it challenging to new users. Additionally , we have noticed that, at this time, there are not many users that need to utilize ML capabilities.</p>
+<p>By default, the Python environment that <code>sparklyr</code> creates does not include libraries that relate to Machine Learning. These include Torch and “scikit-learn”. Some of the libraries are large in size and they may have Python requirements that are challenging to new users. Additionally, we have noticed there are not many users that need to utilize ML capabilities at this time.</p>
 <p>The first time an ML function is accessed through <code>sparklyr</code>, you will be prompted to install the additional Python libraries which are needed to access such ML capabilities.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_logistic_regression</span>(tbl_mtcars, am <span class="sc">~</span> .)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Required Python libraries to run ML functions are missing</span></span>
@@ -595,7 +595,7 @@ Note
 </section>
 <section id="easily-fit-and-use" class="level3">
 <h3 class="anchored" data-anchor-id="easily-fit-and-use">Easily fit and use</h3>
-<p>At this time, Logistic Regression is the only model supported. As usual, there are specific data preparation steps in order to run. <code>sparklyr</code> automates those steps, so all you have to do is pass the Spark data frame, and the formula to use:</p>
+<p>At this time, Logistic Regression is the only model supported. As usual, there are specific data preparation steps in order to run. <code>sparklyr</code> automates those steps, so all you have to do is pass the Spark data frame and the formula to use:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tbl_mtcars <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, mtcars)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -673,8 +673,8 @@ Note
 </section>
 <section id="reported-problems" class="level2">
 <h2 class="anchored" data-anchor-id="reported-problems">Reported Problems</h2>
-<p>As it is with any new implementations, we are seeing some early adopters report issues with their installation or connections. Here are some of the issues that have been reported to us, and the recommended solution, or workaround. Each issue is <strong>collapsed</strong>, just expand it to see the background and recommendation. Each one is titled based on the full error message or, the distinctive part of the error message.</p>
-<p>Before reviewing the issues, please make sure to have the latest versions of <code>sparklyr</code>, and <code>pysparklyr</code> from CRAN. These are the current version levels:</p>
+<p>As it is with any new implementation, we are seeing some early adopters report issues with their installation or connection. Here are some of the issues that have been reported and the recommended solution or workaround. Each issue is <strong>collapsed</strong>, just expand it to see the background and recommendation. Each one is titled based on the full error message or the distinctive part of the error message.</p>
+<p>Before reviewing the issues, please make sure to have the latest versions of <code>sparklyr</code> and <code>pysparklyr</code> from CRAN. These are the current version levels:</p>
 <ul>
 <li><code>sparklyr</code> - 1.8.4</li>
 <li><code>pysparklyr</code> - 0.1.2</li>
@@ -727,10 +727,10 @@ Note
 <div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>  Checking <span class="cf">if</span> provided version is valid against PyPi.org</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  Error <span class="cf">in</span> <span class="st">`</span><span class="at">install_environment()</span><span class="st">`</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span> Version <span class="st">'14.2'</span> does not exist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This happens when <code>pysparklyr</code> gets the cluster DBR version automatically. Usually when running <code>spark_connect()</code> or <code>install_databricks()</code>. This occurs because the latest version of DBR, as of today 14.2, is ahead of what the <code>databricks.connect</code> version available in <code>databricks.connect</code>.</p>
+<p>This happens when <code>pysparklyr</code> gets the cluster DBR version automatically. Usually when running <code>spark_connect()</code> or <code>install_databricks()</code>. This occurs because the latest version of DBR, as of today 14.2, is ahead of the <code>databricks.connect</code> version available in <code>databricks.connect</code>.</p>
 <section id="solution-1" class="level3">
 <h3 class="anchored" data-anchor-id="solution-1">Solution</h3>
-<p>Current workaround is to say “No” when prompted to install version 14.2. And if missing in your machine, install 14.1 using:</p>
+<p>Current workaround is to say “No” when prompted to install version 14.2 and, if not already installed, install 14.1 using:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 </div>
@@ -746,10 +746,10 @@ Note
 <li><p>To install the latest versions of all the needed libraries, use:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>sparklyr</code> will query PyPi.org to get the latest version of <code>databricks.connect</code> and installs that version.</p></li>
-<li><p>It is recommended that the version of the <code>databricks.connect</code> library, matches the DBR version of your cluster. To do this, pass the DBR version in the <code>version</code> argument, for example:</p>
+<li><p>It is recommended that the version of the <code>databricks.connect</code> library matches the DBR version of your cluster. To do this, pass the DBR version in the <code>version</code> argument:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="st">"14.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will create a Python environment and install <code>databricks.connect</code> version 14.0, and it will automatically name it <code>r-sparklyr-databricks-14.0</code>. By using this name, <code>sparklyr</code> is able to know what version of <code>databricks.connect</code> is available inside this particular Python environment.</p></li>
-<li><p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information, without starting a Spark connect. This allows us to query the cluster and get the DBR version:</p>
+<li><p>If you are not sure about the version of the cluster you want to interact with, then use the <code>cluster_id</code> argument. We have added a way to pull the cluster’s information without starting Spark Connect. This allows us to query the cluster and get the DBR version:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">install_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"[Your cluster's ID]"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </section>
@@ -763,7 +763,7 @@ Note
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_id =</span> <span class="st">"Enter here your cluster ID"</span>,</span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">envname =</span> <span class="st">"Enter here the path to your Python environment"</span></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To successfully connect to a Databricks cluster, you will need to match the proper version of the <code>databricks.connect</code> Python library, to the Databricks Runtime (DBR) version in the cluster. For example, if you are trying to use a Databricks cluster with a DBR version 14.0, then <code>databricks.connect</code> will also need to be version 14.0. Failure to do so, can result in instability, or even the inability to connect.</p>
+<p>To successfully connect to a Databricks cluster, you will need to match the proper version of the <code>databricks.connect</code> Python library to the Databricks Runtime (DBR) version in the cluster. For example, if you are trying to use a Databricks cluster with a DBR version 14.0 then <code>databricks.connect</code> will also need to be version 14.0. Failure to do so can result in instability or even the inability to connect.</p>
 <p>Besides <code>datbricks.connect</code>, the Python environment will also need to have other Python libraries installed. The full list is in the <a href="#python-libraries">Python Libraries</a> section.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -775,10 +775,10 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If your server, or machine, has only one Python installation and, no ability to create Conda or Virtual environments, then you will encounter issues when connecting to a Databricks cluster with a mismatched version of <code>databricks.connect</code> to DBR.</p>
+<p>If your server, or machine, has only one Python installation and no ability to create Conda or Virtual environments, then you will encounter issues when connecting to a Databricks cluster with a mismatched version of <code>databricks.connect</code> to DBR.</p>
 </div>
 </div>
-<p><strong>Important</strong> - This step needs only to be <strong>done one time</strong>. If you need to connect to a different cluster, but that has the same DBR version, <code>sparklyr</code> will use the same Python environment. If the new cluster has a different DBR version, then it is recommended that you run the installation function using the new DBR version, or cluster ID.</p>
+<p><strong>Important</strong> - This step needs only to be <strong>done one time</strong>. If you need to connect to a different cluster that has the same DBR version, <code>sparklyr</code> will use the same Python environment. If the new cluster has a different DBR version, then it is recommended that you run the installation function using the new DBR version or cluster ID.</p>
 </section>
 <section id="python-libraries" class="level3">
 <h3 class="anchored" data-anchor-id="python-libraries">Python Libraries</h3>
@@ -803,8 +803,8 @@ Important
 </section>
 <section id="deploying-to-posit-connect" class="level2">
 <h2 class="anchored" data-anchor-id="deploying-to-posit-connect">Deploying to Posit Connect</h2>
-<p>We recommend that for simply accessing data from the Unity Catalog, such as in a Shiny app, use an ODBC connection instead of a Spark session. The advantage of this, is that a connection to the Databricks Warehouse does not require a running cluster. For more information about creating dashboards with databases visit <a href="https://solutions.posit.co/connections/db/best-practices/dashboards/">Database with R site</a>.</p>
-<p>However, there are cases when it is necessary to deploy a solution that requires a Spark session. For example, when there is a long running job that needs to run on a schedule. Those kinds of jobs could be put inside a Quarto document, and published to Posit Connect, where they can run on specific date/time intervals. Posit Connect supports Python environments, so it is an ideal platform to deploy these kinds of solutions.</p>
+<p>We recommend that for simply accessing data from the Unity Catalog, such as in a Shiny app, use an ODBC connection instead of a Spark session. The advantage of this is that a connection to the Databricks Warehouse does not require a running cluster. For more information about creating dashboards with databases visit <a href="https://solutions.posit.co/connections/db/best-practices/dashboards/">Database with R site</a>.</p>
+<p>However, there are cases when it is necessary to deploy a solution that requires a Spark session. For example, when there is a long running job that needs to run on a schedule. Those kinds of jobs could be put inside a Quarto document and published to Posit Connect, where they can run on specific date/time intervals. Posit Connect supports Python environments, so it is an ideal platform to deploy these kinds of solutions.</p>
 <section id="preparing-for-deployment" class="level3">
 <h3 class="anchored" data-anchor-id="preparing-for-deployment">Preparing for deployment</h3>
 <p>When deploying to Posit Connect, there are specific pieces of information that we need to make sure are sent over:</p>
@@ -816,10 +816,10 @@ Important
 <li>To use the <code>pysparklyr</code> extension</li>
 </ul>
 <p>Based on the recommendations in this article, the <strong>cluster’s ID</strong> should be in the code of your document, the <strong>workspace URL</strong> and <strong>token</strong> should already be inside the <code>DATABRICKS_HOST</code>, and <code>DATABRICKS_TOKEN</code> environment variables.</p>
-<p>Make sure that your document has a <code>library(pysparklyr</code>) call. This will let Posit Connect deployment process know that it needs to install this package, and its dependencies, such as <code>reticulate</code>.</p>
-<p>The Python environment location can be copied from the output of <code>spark_connect()</code>. In the following example, you can see how we are loading <code>pysparklyr</code>. Note that at the bottom of the output from <code>spark_connect()</code>, the <strong>path</strong> to your local Python environment is displayed, copy this path. The next section will explain why this is important to retain.</p>
+<p>Make sure that your document has a <code>library(pysparklyr)</code> call. This will let Posit Connect deployment process know that it needs to install this package and its dependencies, such as <code>reticulate</code>.</p>
+<p>The Python environment location can be copied from the output of <code>spark_connect()</code>. In the following example, you can see how we are loading <code>pysparklyr</code>. Note that at the bottom of the output from <code>spark_connect()</code>, the <strong>path</strong> to your local Python environment is displayed. Copy this path. The next section will explain why this is important to retain.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pyspaklyr)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pysparklyr)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>,</span>
@@ -832,7 +832,7 @@ Important
 </section>
 <section id="using-deployapp" class="level3">
 <h3 class="anchored" data-anchor-id="using-deployapp">Using <code>deployApp()</code></h3>
-<p>Posit Connect will recreate your Python environment so that any content, that uses Python, works properly. Because we do not use the default Python environment to connect to Databricks, we need a way to tell Posit Connect which environment to recreate.</p>
+<p>Posit Connect will recreate your Python environment so that any content that uses Python works properly. Because we do not use the default Python environment to connect to Databricks, we need a way to tell Posit Connect which environment to recreate.</p>
 <p>Additionally, to avoid changing the code we used to create the document, we want to share with Posit Connect the contents of our Databricks environment variables.</p>
 <p>The <code>deployApp()</code> function from the <code>rsconnect</code> package allows us to easily do all this:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rsconnect<span class="sc">::</span><span class="fu">deployApp</span>(</span>
@@ -840,9 +840,9 @@ Important
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">envVars =</span> <span class="fu">c</span>(<span class="st">"DATABRICKS_HOST"</span>, <span class="st">"DATABRICKS_TOKEN"</span>),</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">lint =</span> <span class="cn">FALSE</span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In the <code>python</code> argument, paste the value from the ‘Path:’ output <code>spark_connect()</code> used when you were testing your document locally. The <code>envVars</code> argument will let Posit Connect know to create those environment variables, and to use the values from your machine.</p>
+<p>In the <code>python</code> argument, paste the value from the ‘Path:’ output <code>spark_connect()</code> used when you were testing your document locally. The <code>envVars</code> argument will let Posit Connect know to create those environment variables and to use the values from your machine.</p>
 <p><strong>Important:</strong> Please note that <code>deployApp()</code> is not called from inside your document. It needs to be something you call outside, in your R console for example. If you wish to create an <strong>R script</strong> in your project that contains your deployment call, <strong>do not place it in the same folder as your document</strong>.</p>
-<p>Here is an sample of how a <code>deployApp()</code> call. There are some additional notes, as code comments, to further explain how and why to use:</p>
+<p>Here is a sample of a <code>deployApp()</code> call. There are some additional notes, as code comments, to further explain how and why to use:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rsconnect<span class="sc">::</span><span class="fu">deployApp</span>(</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Title to show for your document</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">appTitle =</span> <span class="st">"My cool document"</span>, </span>
@@ -860,7 +860,7 @@ Important
 </section>
 <section id="what-is-supported" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-supported">What is supported</h2>
-<p>Here is a list of what we currently support, and do not support via <code>sparklyr</code> and Connect:</p>
+<p>Here is a list of what we currently support, and do not support via <code>sparklyr</code> and Databricks Connect:</p>
 <p><strong>Supported</strong>:</p>
 <ul>
 <li>Integration with most of the <code>dplyr</code>, and <code>DBI</code>, APIs</li>
@@ -871,9 +871,9 @@ Important
 </ul>
 <p><strong>Not supported</strong>:</p>
 <ul>
-<li><p><strong>ML functions</strong> - Very few functions, in <code>sparklyr</code>, that have the <code>ml_</code> and <code>ft_</code> are currently not supported. The reason is that Spark 3.4 does not currently support MLlib. We expect that some ML support will be available in Spark 3.5. At that time we will work on integrating the new ML routines from Connect into <code>sparklyr</code>.</p></li>
+<li><p><strong>ML functions</strong> - Very few functions, in <code>sparklyr</code>, that have the <code>ml_</code> and <code>ft_</code> are currently supported. The reason is that Spark 3.4 does not currently support MLlib. We expect that some ML support will be available in Spark 3.5. At that time we will work on integrating the new ML routines from Connect into <code>sparklyr</code>.</p></li>
 <li><p><strong>SDF functions</strong> - Most of these functions require SparkSession, which is currently not supported in Spark 3.4.</p></li>
-<li><p><strong><code>tidyr</code></strong> - This is ongoing work that we are focusing on in <code>sparklyr</code>. We are implementing these functions using PySpark DataFrame commands, instead of depending on the Scala implementation.</p></li>
+<li><p><strong><code>tidyr</code></strong> - This is ongoing work that we are focusing on in <code>sparklyr</code>. We are implementing these functions using PySpark DataFrame commands instead of depending on the Scala implementation.</p></li>
 </ul>
 
 

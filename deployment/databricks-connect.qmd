@@ -643,31 +643,30 @@ sc <- spark_connect(
 
 The `deploy_databricks()` function makes it easier to deploy your
 content to Posit Connect. It does its best to gather all of the pieces
-of information mentioned above, and builds the correct command to
+of information mentioned above and builds the correct command to
 publish.
 
 The path to your content is the last piece of information we need.
-Ideally, your content is either located in its own folder inside your
-project, or it is at the root level of your project. There are three
-ways that you can let `deploy_databricks()` the path to use:
+Ideally your content is either located in its own folder inside your
+project or it is at the root level of your project. There are three
+ways that you can let `deploy_databricks()` know the path to use:
 
--   If you are in RStudio, and the document you wish to publish is open,
-    `deploy_databricks()` will use the RStudio's API to get the path of
-    that document, and then use its containing folder as the content's
-    location. Our hope is that for most time, this will be how you
-    deploy.
+-   If you are in RStudio and the document you wish to publish is open,
+    `deploy_databricks()` will use the RStudio API to get the path of
+    that document and then use its containing folder as the content's
+    location. This is the preferred method for deployment.
 
--   Use the `appDir` argument to pass the folder path to be used.
+-   Use the `appDir` argument to pass the path to be used.
     Something such as `here::here("my-cool-document")` would work.
 
--   If no document is opened in RStudio, and `appDir` is left empty,
-    then whatever `getwd()` returns is what will be used
+-   If no document is opened in RStudio and `appDir` is left empty,
+    then `getwd()` will be used
 
-The aim of of the new function is to be as flexible, and helpful. It
+The aim of the new function is to be both flexible and helpful. It
 will gather your document location, credentials, and URLs. The
-**Python** location is what you will need to define at the time of
+**Python** location needs to defined when
 calling `deploy_databricks()`. If you are in RStudio, and your document
-is opened, here are several ways to use:
+is opened, here are several ways to do this:
 
 -   If you know the cluster's DBR version:
 
@@ -675,7 +674,7 @@ is opened, here are several ways to use:
     pysparklyr::deploy_databricks(version = "14.1")
     ```
 
--   The cluster's ID can also be used, so `pysparklyr` pulls the DBR
+-   The cluster's ID can also be used and `pysparklyr` will automatically determine the required DBR
     version:
 
     ``` r
@@ -683,10 +682,10 @@ is opened, here are several ways to use:
     ```
 
 -   If you just ran the code of the content you plan to deploy, then the
-    **Python** environment should already be loaded in the R session.
-    The function will validate that the path of that Python environment
-    conforms to one that `pysparklyr` creates, and uses that. This will
-    happen if no `version`, `cluster_id`, or `python` is passed. At that
+    **Python** environment will already be loaded in the R session.
+   `deploy_databricks()` will validate that the path of that Python environment
+    conforms to one that `pysparklyr` creates and use that. This will
+    happen if no `version`, `cluster_id`, or `python` argument is provided. At that
     point simply run:
 
     ``` r
@@ -702,10 +701,10 @@ is opened, here are several ways to use:
 
 Here is an example of the output returned when using
 `deploy_databricks()`. Before submitting your content, you will be
-prompted to confirm that the information that it was able to gathered is
-correct. Also notice, that if you have more than one Posit Connect
+prompted to confirm that the information gathered is
+correct. Also notice that if you have more than one Posit Connect
 server setup in your RStudio IDE, it will choose the top one as the
-default, and let you easily change it by selecting, in this case 3:
+default but allow you to easily change it if necessary:
 
 ``` r
 pysparklyr::deploy_databricks(version = "14.1")

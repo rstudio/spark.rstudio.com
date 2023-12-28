@@ -307,6 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#preparing-for-deployment" id="toc-preparing-for-deployment" class="nav-link" data-scroll-target="#preparing-for-deployment">Preparing for deployment</a></li>
   <li><a href="#using-deploy_databricks" id="toc-using-deploy_databricks" class="nav-link" data-scroll-target="#using-deploy_databricks">Using <code>deploy_databricks()</code></a></li>
+  <li><a href="#alternatives-to-environment-variables" id="toc-alternatives-to-environment-variables" class="nav-link" data-scroll-target="#alternatives-to-environment-variables">Alternatives to Environment Variables</a></li>
   </ul></li>
   <li><a href="#what-is-supported" id="toc-what-is-supported" class="nav-link" data-scroll-target="#what-is-supported">What is supported</a></li>
   </ul>
@@ -336,7 +337,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Thu Dec 21 10:56:03 2023</em></p>
+<p><em>Last updated: Thu Dec 28 11:02:33 2023</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Databricks Connect enables the interaction with Spark clusters remotely. It is based on Spark Connect, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the use’s machine.</p>
@@ -501,14 +502,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Changing host URL to: https://rstudio-partner-posit-default.cloud.databricks.com</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Set `host_sanitize = FALSE` in `spark_connect()` to avoid changing it</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'1026-175310-7cpsh3g8'</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Retrieving info for cluster:'1026-175310-7cpsh3g8' [418ms]</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Using the 'r-sparklyr-databricks-14.1' Python environment</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Connecting to '14.1 cluster' (DBR '14.1')</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connecting to '14.1 cluster' (DBR '14.1') [520ms]</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'1026-175310-7cpsh3g8'</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '1026-175310-7cpsh3g8' | DBR: '14.1' [478ms]</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Attempting to load 'r-sparklyr-databricks-14.1'</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-14.1' [1.9s]</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Connecting to '14.1 cluster'</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: '14.1 cluster' [14ms]</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After connecting, you can use <code>dbplyr</code>’s <code>in_catalog()</code> function to access any table in your data catalog. You will only need to pass the respective names of the three levels as comma separated character entries to <code>in_catalog()</code> in this order: Catalog, Database, and Table.</p>
@@ -813,7 +814,7 @@ Important
 <li>Your <strong>Python environment</strong></li>
 <li>To use the <code>pysparklyr</code> extension</li>
 </ul>
-<p>Based on the recommendations in this article, the <strong>cluster’s ID</strong> should be in the code of your document, the <strong>workspace URL</strong> and <strong>token</strong> should already be inside the <code>DATABRICKS_HOST</code>, and <code>DATABRICKS_TOKEN</code> environment variables.</p>
+<p>Based on the recommendations in this article, the <strong>cluster’s ID</strong> should be in the code of your document, the <strong>workspace URL</strong> and <strong>token</strong> should already be inside the <code>DATABRICKS_HOST</code>, and <code>DATABRICKS_TOKEN</code> environment variables. If you are using something other than these environment variables to authenticate, then see the section <a href="#alternatives-to-environment-variables">Alternatives to Environment Variables</a>.</p>
 <p><strong>Make sure that your document has a <code>library(pysparklyr)</code> call.</strong> This will let Posit Connect deployment process know that it needs to install this package and its dependencies, such as <code>reticulate</code>.</p>
 <p>The next section will introduce a function that will ease finding the <strong>Python environment</strong>.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
@@ -862,6 +863,29 @@ Important
 <span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
 <span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span>
 <span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span> Change Publishing <span class="fu">Target</span> (Posit Connect server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="alternatives-to-environment-variables" class="level3">
+<h3 class="anchored" data-anchor-id="alternatives-to-environment-variables">Alternatives to Environment Variables</h3>
+<p>The <code>deploy_databricks()</code> function has a <code>host</code>, and <code>token</code> arguments. These arguments take precedent over the environment variables, if set.</p>
+<p>There are a variety of reasons for you to set these arguments when publishing. For example, locally you authenticate with a Databricks configuration file, but when deploying, you will need to let <code>deploy_databricks()</code> what values to use for the PAT and Host URL. Another example could be that your deployed content may need to use a <a href="https://docs.databricks.com/en/dev-tools/service-principals.html">service account</a>, that differs from the credentials you use when developing.</p>
+<p>As usual, we recommend that you avoid using open text values with your credentials in your code. An effective way of managing local-vs-remote credentials is with the <a href="https://rstudio.github.io/config/articles/rsconnect.html"><code>config</code></a> package. Here is an example:</p>
+<p><strong><em>config.yml</em></strong></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Token]"</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsconnect</span><span class="kw">:</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Service Token]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong><em>R script</em></strong></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> config<span class="sc">::</span><span class="fu">get</span>()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"14.1"</span>, </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> config<span class="sc">$</span>host_url,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> config<span class="sc">$</span>token</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The integration with Posit Connect and <code>config</code>, allows your deployed content to automatically use the values under the <code>rsconnect</code> section in the YAML file, instead of the values from the <code>default</code> section.</p>
 </section>
 </section>
 <section id="what-is-supported" class="level2">

@@ -620,7 +620,10 @@ information that we need to make sure are sent over:
 Based on the recommendations in this article, the **cluster's ID**
 should be in the code of your document, the **workspace URL** and
 **token** should already be inside the `DATABRICKS_HOST`, and
-`DATABRICKS_TOKEN` environment variables.
+`DATABRICKS_TOKEN` environment variables. If you are using something
+other than these environment variables to authenticate, then see the
+section [Alternatives to Environment
+Variables](#alternatives-to-environment-variables).
 
 **Make sure that your document has a `library(pysparklyr)` call.** This
 will let Posit Connect deployment process know that it needs to install
@@ -725,6 +728,54 @@ Does everything look correct?
 2: No
 3: Change Publishing Target (Posit Connect server)
 ```
+
+### Alternatives to Environment Variables
+
+The `deploy_databricks()` function has a `host`, and `token` arguments.
+These arguments take precedent over the environment variables, if set.
+
+There are a variety of reasons for you to set these arguments when
+publishing. For example, locally you authenticate with a Databricks
+configuration file, but when deploying, you will need to let
+`deploy_databricks()` what values to use for the PAT and Host URL.
+Another example could be that your deployed content may need to use a
+[service
+account](https://docs.databricks.com/en/dev-tools/service-principals.html),
+that differs from the credentials you use when developing.
+
+As usual, we recommend that you avoid using open text values with your
+credentials in your code. An effective way of managing local-vs-remote
+credentials is with the
+[`config`](https://rstudio.github.io/config/articles/rsconnect.html)
+package. Here is an example:
+
+***config.yml***
+
+``` yaml
+default:
+  host_url: "[Your Host URL]"
+  token: "[Your Token]"
+
+rsconnect:
+  host_url: "[Your Host URL]"
+  token: "[Service Token]"
+```
+
+***R script***
+
+``` r
+config <- config::get()
+
+pysparklyr::deploy_databricks(
+  version = "14.1", 
+  host = config$host_url,
+  token = config$token
+  )
+```
+
+The integration with Posit Connect and `config`, allows your deployed
+content to automatically use the values under the `rsconnect` section in
+the YAML file, instead of the values from the `default` section.
 
 ## What is supported
 

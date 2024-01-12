@@ -337,10 +337,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Thu Dec 28 11:02:33 2023</em></p>
+<p><em>Last updated: Fri Jan 12 15:27:40 2024</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p>Databricks Connect enables the interaction with Spark clusters remotely. It is based on Spark Connect, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the use’s machine.</p>
+<p>Databricks Connect enables the interaction with Spark clusters remotely. It is based on Spark Connect, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the user’s machine.</p>
 <p>The API is very different than the “legacy” Spark and using the Spark shell is no longer an option. We have decided to use Python as the new interface. In turn, Python uses <em>gRPC</em> to interact with Spark.</p>
 <div id="fig-connect" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -503,13 +503,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! Changing host URL to: https://rstudio-partner-posit-default.cloud.databricks.com</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'1026-175310-7cpsh3g8'</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '1026-175310-7cpsh3g8' | DBR: '14.1' [478ms]</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '1026-175310-7cpsh3g8' | DBR: '14.1' [506ms]</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Attempting to load 'r-sparklyr-databricks-14.1'</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-14.1' [1.9s]</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Connecting to '14.1 cluster'</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: '14.1 cluster' [14ms]</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: '14.1 cluster' [8ms]</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After connecting, you can use <code>dbplyr</code>’s <code>in_catalog()</code> function to access any table in your data catalog. You will only need to pass the respective names of the three levels as comma separated character entries to <code>in_catalog()</code> in this order: Catalog, Database, and Table.</p>
@@ -844,25 +844,34 @@ Important
 <div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>You can also pass the path to the Python environment to use by setting the <code>python</code> argument:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">python =</span> <span class="st">"/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>You can use <code>DATABRICKS_CLUSTER_ID</code> environment variable. If you have it set, simply run:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 <p>Here is an example of the output returned when using <code>deploy_databricks()</code>. Before submitting your content, you will be prompted to confirm that the information gathered is correct. Also notice that if you have more than one Posit Connect server setup in your RStudio IDE, it will choose the top one as the default but allow you to easily change it if necessary:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">version =</span> <span class="st">"14.1"</span>)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>── Starting deployment ────────────────────────────────────────────────────</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> App and Spark <span class="sc">-</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>ℹ Source<span class="sc">:</span> <span class="st">'/Users/edgar/r_projects/practice/test-deploy'</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>✔ Python<span class="sc">:</span><span class="st">'/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python'</span> [<span class="fl">1.5</span>s]</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span> Publishing target <span class="sc">-</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>ℹ Server<span class="sc">:</span> colorado.posit.co <span class="sc">|</span> Account<span class="sc">:</span> edgar</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>ℹ Environment variables<span class="sc">:</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span><span class="sc">-</span> Host<span class="sc">:</span> rstudio<span class="sc">-</span>partner<span class="sc">-</span>posit<span class="sc">-</span>default.cloud.databricks.com</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|-</span> Token<span class="sc">:</span> <span class="st">'&lt;REDACTED&gt;'</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>Does everything look correct?</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span> Change Publishing <span class="fu">Target</span> (Posit Connect server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">version =</span> <span class="st">"14.1"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>ℹ Source directory<span class="sc">:</span> <span class="er">/</span>Users<span class="sc">/</span>edgar<span class="sc">/</span>r_projects<span class="sc">/</span>practice<span class="sc">/</span>test<span class="sc">-</span>deploy</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>ℹ Python<span class="sc">:</span> <span class="er">/</span>Users<span class="sc">/</span>edgar<span class="sc">/</span>.virtualenvs<span class="sc">/</span>r<span class="sc">-</span>sparklyr<span class="sc">-</span>databricks<span class="fl">-14.1</span><span class="sc">/</span>bin<span class="sc">/</span>python</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>ℹ Posit server<span class="sc">:</span> colorado.posit.co</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  Account name<span class="sc">:</span> edgar</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>ℹ Host URL<span class="sc">:</span> rstudio<span class="sc">-</span>partner<span class="sc">-</span>posit<span class="sc">-</span>default.cloud.databricks.com</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  Token<span class="sc">:</span> <span class="st">'&lt;REDACTED&gt;'</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>Does everything look correct?</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span> Change <span class="st">'Posit server'</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>Selection<span class="sc">:</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The first time that you publish, the function will check to see if you have a <code>requirements.txt</code> file. If you do not have the file, it will ask you if you wish to create it. The <code>requirements.txt</code> file contains the list of the your current Python environment, as well as its versions. This will help when you re-publish your content, because you will not need to pass the <code>version</code>.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>Would you like to create the <span class="st">'requirements.txt'</span> file?</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>Why consider? This will allow you to skip using <span class="st">`</span><span class="at">version</span><span class="st">`</span> or <span class="st">`</span><span class="at">cluster_id</span><span class="st">`</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you select <strong>No</strong>, <code>deploy_databricks()</code> will not ask you again when you re-deploy.</p>
 </section>
 <section id="alternatives-to-environment-variables" class="level3">
 <h3 class="anchored" data-anchor-id="alternatives-to-environment-variables">Alternatives to Environment Variables</h3>
@@ -870,21 +879,21 @@ Important
 <p>There are a variety of reasons for you to set these arguments when publishing. For example, locally you authenticate with a Databricks configuration file, but when deploying, you will need to let <code>deploy_databricks()</code> what values to use for the PAT and Host URL. Another example could be that your deployed content may need to use a <a href="https://docs.databricks.com/en/dev-tools/service-principals.html">service account</a>, that differs from the credentials you use when developing.</p>
 <p>As usual, we recommend that you avoid using open text values with your credentials in your code. An effective way of managing local-vs-remote credentials is with the <a href="https://rstudio.github.io/config/articles/rsconnect.html"><code>config</code></a> package. Here is an example:</p>
 <p><strong><em>config.yml</em></strong></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Token]"</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsconnect</span><span class="kw">:</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Service Token]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Token]"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsconnect</span><span class="kw">:</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Service Token]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong><em>R script</em></strong></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> config<span class="sc">::</span><span class="fu">get</span>()</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"14.1"</span>, </span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> config<span class="sc">$</span>host_url,</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> config<span class="sc">$</span>token</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> config<span class="sc">::</span><span class="fu">get</span>()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"14.1"</span>, </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> config<span class="sc">$</span>host_url,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> config<span class="sc">$</span>token</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The integration with Posit Connect and <code>config</code>, allows your deployed content to automatically use the values under the <code>rsconnect</code> section in the YAML file, instead of the values from the <code>default</code> section.</p>
 </section>
 </section>

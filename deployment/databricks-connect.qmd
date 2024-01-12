@@ -702,6 +702,13 @@ this:
     pysparklyr::deploy_databricks(python = "/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1")
     ```
 
+-   You can use `DATABRICKS_CLUSTER_ID` environment variable. If you
+    have it set, simply run:
+
+    ``` r         
+    pysparklyr::deploy_databricks()
+    ```
+
 Here is an example of the output returned when using
 `deploy_databricks()`. Before submitting your content, you will be
 prompted to confirm that the information gathered is correct. Also
@@ -710,26 +717,44 @@ RStudio IDE, it will choose the top one as the default but allow you to
 easily change it if necessary:
 
 ``` r
-pysparklyr::deploy_databricks(version = "14.1")
+> pysparklyr::deploy_databricks(version = "14.1")
 
-── Starting deployment ────────────────────────────────────────────────────
-- App and Spark -
-ℹ Source: '/Users/edgar/r_projects/practice/test-deploy'
-✔ Python:'/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python' [1.5s]
-- Publishing target -
-ℹ Server: colorado.posit.co | Account: edgar
-ℹ Environment variables:
-  |- Host: rstudio-partner-posit-default.cloud.databricks.com
-  |- Token: '<REDACTED>'
+── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────
+ℹ Source directory: /Users/edgar/r_projects/practice/test-deploy
+ℹ Python: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python
+ℹ Posit server: colorado.posit.co
+  Account name: edgar
+ℹ Host URL: rstudio-partner-posit-default.cloud.databricks.com
+  Token: '<REDACTED>'
 
 Does everything look correct?
 
 1: Yes
 2: No
-3: Change Publishing Target (Posit Connect server)
+3: Change 'Posit server'
+
+Selection: 1
 ```
 
-### Alternatives to Environment Variables
+The first time that you publish, the function will check to see if you
+have a `requirements.txt` file. If you do not have the file, it will ask
+you if you wish to create it. The `requirements.txt` file contains the
+list of the your current Python environment, as well as its versions.
+This will help when you re-publish your content, because you will not
+need to pass the `version`.
+
+``` r
+Would you like to create the 'requirements.txt' file?
+Why consider? This will allow you to skip using `version` or `cluster_id`
+
+1: Yes
+2: No
+```
+
+If you select **No**, `deploy_databricks()` will not ask you again when
+you re-deploy.
+
+### Alternatives to Environment Variables {#alternatives-to-environment-variables}
 
 The `deploy_databricks()` function has a `host`, and `token` arguments.
 These arguments take precedent over the environment variables, if set.

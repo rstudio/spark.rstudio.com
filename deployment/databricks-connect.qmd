@@ -101,7 +101,7 @@ is an extension of `sparklyr`.
 To access Databricks Connect, you will need the following two packages:
 
 -   `sparklyr` - 1.8.4
--   `pysparklyr` - 0.1.2
+-   `pysparklyr` - 0.1.3
 
 ``` r
 install.packages("sparklyr")
@@ -413,7 +413,7 @@ error message or the distinctive part of the error message.
 
 Before reviewing the issues, please make sure to have the latest
 versions of `sparklyr` and `pysparklyr` from CRAN. These are the current
-version levels: - `sparklyr` - 1.8.4 - `pysparklyr` - 0.1.2
+version levels: - `sparklyr` - 1.8.4 - `pysparklyr` - 0.1.3
 
 ::: {.callout-note collapse="true"}
 ## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
@@ -457,33 +457,6 @@ have two options:
     ``` r
     reticulate::install_python(version = "3.9.18")
     ```
-:::
-
-::: {.callout-note collapse="true"}
-## `spark_connect()` returns `! Version '14.2' does not exist`
-
-Error message contains:
-
-``` r
-  Checking if provided version is valid against PyPi.org
-  Error in `install_environment()`
-  ! Version '14.2' does not exist
-```
-
-This happens when `pysparklyr` gets the cluster DBR version
-automatically. Usually when running `spark_connect()` or
-`install_databricks()`. This occurs because the latest version of DBR,
-as of today 14.2, is ahead of the `databricks.connect` version available
-in `databricks.connect`.
-
-### Solution
-
-Current workaround is to say "No" when prompted to install version 14.2
-and, if not already installed, install 14.1 using:
-
-``` r
-pysparklyr::install_databricks("14.1")
-```
 :::
 
 ## Environments

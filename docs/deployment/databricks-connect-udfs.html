@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Deployment</title>
+<title>sparklyr - Run R inside Databricks Connect</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../deployment/data-lakes.html" rel="next">
+<link href="../deployment/qubole-overview.html" rel="next">
+<link href="../deployment/databricks-connect.html" rel="prev">
 <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -143,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/index.html">Overview</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/databricks-connect.html">Databricks Connect (v2)</a></li><li class="breadcrumb-item"><a href="../deployment/databricks-connect-udfs.html">Run R code in Databricks Connect</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -157,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../deployment/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
@@ -207,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/databricks-connect-udfs.html" class="sidebar-item-text sidebar-link">
+  <a href="../deployment/databricks-connect-udfs.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Run R code in Databricks Connect</span></a>
   </div>
 </li>
@@ -242,7 +243,13 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#initial-setup" id="toc-initial-setup" class="nav-link active" data-scroll-target="#initial-setup">Initial setup</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -253,7 +260,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deployment</h1>
+<h1 class="title">Run R inside Databricks Connect</h1>
 </div>
 
 
@@ -268,36 +275,12 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<section id="yarn-hadoop" class="level3 quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<h3 class="anchored" data-anchor-id="yarn-hadoop">YARN (Hadoop)</h3>
-<ul>
-<li><a href="../deployment/data-lakes.html">Understanding Data Lakes</a></li>
-<li><a href="../deployment/yarn-cluster-emr.html">Setting up an AWS EMR Cluster</a></li>
-<li><a href="../deployment/cloudera-aws.html">Setting up a Cloudera cluster in AWS</a></li>
-</ul>
-</section>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<section id="stand-alone" class="level3">
-<h3 class="anchored" data-anchor-id="stand-alone">Stand Alone</h3>
-<ul>
-<li><a href="../deployment/qubole-overview.html">Qubole cluster</a></li>
-<li><a href="../deployment/stand-alone-aws.html">Setting up a Standalone Cluster in AWS EC2</a></li>
-</ul>
-</section>
-<section id="databricks" class="level3">
-<h3 class="anchored" data-anchor-id="databricks">Databricks</h3>
-<ul>
-<li><a href="../deployment/databricks-connect.html">Databrick Connect v2</a><br>
-</li>
-</ul>
-</section>
-</div>
-</div>
-</div>
+<p><em>Last updated: Sat Feb 3 15:24:55 2024</em></p>
+<section id="initial-setup" class="level2">
+<h2 class="anchored" data-anchor-id="initial-setup">Initial setup</h2>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -650,10 +633,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../deployment/databricks-connect.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../deployment/data-lakes.html" class="pagination-link">
-        <span class="nav-page-text">Understanding Data Lakes</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../deployment/qubole-overview.html" class="pagination-link">
+        <span class="nav-page-text">Qubole cluster</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

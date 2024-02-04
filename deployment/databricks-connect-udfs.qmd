@@ -24,4 +24,54 @@ library(pysparklyr)
 
 *Last updated: `r lubridate::date()`*
 
-## Initial setup
+## Background
+
+Support for `spark_apply()` is currently available in the development
+versions of `sparklyr`, and `pysparklyr`. To install, run the following:
+
+``` r
+remotes::install_github("sparklyr/sparklyr")
+remotes::install_github("mlverse/pysparklyr")
+```
+
+Databricks Connect is now able to run regular Python code inside Spark.
+`sparklyr` takes advantage of this capability by having Python transport
+and run the R code. It does this via the `rpy2` Python library. Using
+this library guarantees Arrow suport.
+
+::: {#fig-connect}
+```{mermaid}
+%%| fig-width: 10
+%%| eval: true
+flowchart LR
+  subgraph lp[test]
+    subgraph r[R]
+      sr[sparklyr]
+      rt[reticulate]
+    end
+    subgraph ps[Python]
+      dc[Databricks Connect]
+      g1[gRPC]
+    end
+  end   
+  subgraph db[Databricks]
+    sp[Spark]   
+  end
+  sr <--> rt
+  rt <--> dc
+  g1 <-- Internet<br>Connection --> sp
+  dc <--> g1
+  
+  style r   fill:#fff,stroke:#666,color:#000
+  style sr  fill:#fff,stroke:#666,color:#000
+  style rt  fill:#fff,stroke:#666,color:#000
+  style ps  fill:#fff,stroke:#666,color:#000
+  style lp  fill:#fff,stroke:#666,color:#fff
+  style db  fill:#fff,stroke:#666,color:#000
+  style sp  fill:#fff,stroke:#666,color:#000
+  style g1  fill:#fff,stroke:#666,color:#000
+  style dc  fill:#fff,stroke:#666,color:#000
+```
+
+How `sparklyr` communicates with Databricks Connect
+:::

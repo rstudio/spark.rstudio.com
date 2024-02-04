@@ -8152,7 +8152,7 @@
     "href": "deployment/databricks-connect-udfs.html",
     "title": "Run R inside Databricks Connect",
     "section": "",
-    "text": "Last updated: Sat Feb 3 15:24:55 2024"
+    "text": "Last updated: Sun Feb 4 15:01:56 2024"
   },
   {
     "objectID": "deployment/databricks-connect-udfs.html#initial-setup",
@@ -17575,5 +17575,12 @@
     "title": "Install",
     "section": "Clusters",
     "text": "Clusters\nHere are some examples of how to use spark_connect() to connect to different types of Spark clusters:\nHadoop YARN:\nsc &lt;- spark_connect(master = \"yarn\")\nMesos:\nsc &lt;- spark_connect(master = \"mesos://host:port\")\nKubernetes:\nsc &lt;- spark_connect(master = \"k8s://https://server\")\nApache Livy:\nsc &lt;- spark_connect(master = \"http://server/livy\", method = \"livy\")\nStand Alone:\nsc &lt;- spark_connect(master = \"spark://master-url:7077\")\nQubole: (for more info visit the Qubole page on this site)\nsc &lt;- spark_connect(method = \"qubole\")\nDatabricks - Visit the Databricks page on this site to review the connection options"
+  },
+  {
+    "objectID": "deployment/databricks-connect-udfs.html#background",
+    "href": "deployment/databricks-connect-udfs.html#background",
+    "title": "Run R inside Databricks Connect",
+    "section": "Background",
+    "text": "Background\nSupport for spark_apply() is currently available in the development versions of sparklyr, and pysparklyr. To install, run the following:\nremotes::install_github(\"sparklyr/sparklyr\")\nremotes::install_github(\"mlverse/pysparklyr\")\nDatabricks Connect is now able to run regular Python code inside Spark. sparklyr takes advantage of this capability by having Python transport and run the R code. It does this via the rpy2 Python library. Using this library guarantees Arrow suport.\n\n\n\n\n\n\nflowchart LR\n  subgraph lp[test]\n    subgraph r[R]\n      sr[sparklyr]\n      rt[reticulate]\n    end\n    subgraph ps[Python]\n      dc[Databricks Connect]\n      g1[gRPC]\n    end\n  end   \n  subgraph db[Databricks]\n    sp[Spark]   \n  end\n  sr &lt;--&gt; rt\n  rt &lt;--&gt; dc\n  g1 &lt;-- Internet&lt;br&gt;Connection --&gt; sp\n  dc &lt;--&gt; g1\n  \n  style r   fill:#fff,stroke:#666,color:#000\n  style sr  fill:#fff,stroke:#666,color:#000\n  style rt  fill:#fff,stroke:#666,color:#000\n  style ps  fill:#fff,stroke:#666,color:#000\n  style lp  fill:#fff,stroke:#666,color:#fff\n  style db  fill:#fff,stroke:#666,color:#000\n  style sp  fill:#fff,stroke:#666,color:#000\n  style g1  fill:#fff,stroke:#666,color:#000\n  style dc  fill:#fff,stroke:#666,color:#000\n\n\n\n\n\nFigure 1: How sparklyr communicates with Databricks Connect"
   }
 ]

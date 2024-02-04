@@ -37,41 +37,39 @@ remotes::install_github("mlverse/pysparklyr")
 Databricks Connect is now able to run regular Python code inside Spark.
 `sparklyr` takes advantage of this capability by having Python transport
 and run the R code. It does this via the `rpy2` Python library. Using
-this library guarantees Arrow suport.
+this library also guarantees Arrow support.
 
 ::: {#fig-connect}
 ```{mermaid}
-%%| fig-width: 10
+%%| fig-width: 6
 %%| eval: true
 flowchart LR
-  subgraph lp[test]
-    subgraph r[R]
-      sr[sparklyr]
-      rt[reticulate]
-    end
-    subgraph ps[Python]
-      dc[Databricks Connect]
-      g1[gRPC]
-    end
-  end   
-  subgraph db[Databricks]
-    sp[Spark]   
+  subgraph mm[My machine]
+    sp[R <br> **********  <br>sparklyr]
+    rp[Python<br> **************** <br>rpy2 'packages'<br> the R code]
   end
-  sr <--> rt
-  rt <--> dc
-  g1 <-- Internet<br>Connection --> sp
-  dc <--> g1
-  
-  style r   fill:#fff,stroke:#666,color:#000
-  style sr  fill:#fff,stroke:#666,color:#000
-  style rt  fill:#fff,stroke:#666,color:#000
-  style ps  fill:#fff,stroke:#666,color:#000
-  style lp  fill:#fff,stroke:#666,color:#fff
-  style db  fill:#fff,stroke:#666,color:#000
-  style sp  fill:#fff,stroke:#666,color:#000
-  style g1  fill:#fff,stroke:#666,color:#000
-  style dc  fill:#fff,stroke:#666,color:#000
+  subgraph db[Databricks]
+    subgraph sr[Spark]
+      pt[Python<br> ********************* <br>rpy2 runs the R code]
+    end
+  end
+
+sp --> rp
+rp --> sr
+
+style mm   fill:#fff,stroke:#666,color:#000
+style sp   fill:#fff,stroke:#666,color:#000
+style rp   fill:#fff,stroke:#666,color:#000
+style db   fill:#fff,stroke:#666,color:#000
+style sr   fill:#fff,stroke:#666,color:#000
+style pt   fill:#fff,stroke:#666,color:#000
 ```
 
-How `sparklyr` communicates with Databricks Connect
+How `sparklyr` uses rpy2 to run R code in Databricks Connect
 :::
+
+In Python, `sparklyr` uses the `mapInPandas()` and `applyInPandas()` to
+run the Python code, that in turn, runs the R code. `mapInPandas()` is
+used to run R code against un-grouped data, and `applyInPandas()` is
+used for grouped data, meaning when the `group_by` argument, in
+`spark_apply()` is used.

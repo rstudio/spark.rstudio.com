@@ -24,7 +24,7 @@ library(pysparklyr)
 
 *Last updated: `r lubridate::date()`*
 
-## Background
+## Intro
 
 Support for `spark_apply()` is currently available in the development
 versions of `sparklyr`, and `pysparklyr`. To install, run the following:
@@ -73,3 +73,21 @@ run the Python code, that in turn, runs the R code. `mapInPandas()` is
 used to run R code against un-grouped data, and `applyInPandas()` is
 used for grouped data, meaning when the `group_by` argument, in
 `spark_apply()` is used.
+
+## Getting started
+
+If you have been using `sparklyr` with Databricks Connect v2 already,
+then after upgrading the packages, you will be prompted to install
+`rpy2` in your Python environment. The prompt will occur the first time
+you use `spark_apply()` in an interactive R session. If this is the
+first time you are using `sparklyr` with Databricks Connect v2, please
+refer to our intro article["Databricks Connect
+v2"](/deployment/databricks-connect.qmd) to learn how to setup your
+environment.
+
+As shown in the diagram on the previous section, `rpy2` is needed on the
+Databricks cluster you plan to use. This means that you will need to
+"manually" install the library. This is a simple operation that is done
+via your Databricks web portal. Here are the instructions to accomplish
+that: [Databricks - Cluster
+Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).

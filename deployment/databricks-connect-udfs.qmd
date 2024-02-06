@@ -101,7 +101,7 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 | `columns`                     | Yes        | Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: `long`, `decimal`, `string`, `datetime` and `bool`. Example: `columns = "x long, y string"`. If not provided, `sparklyr` will automatically create one, by examining the first 10 records of `x`, and it will provide a `columns` spec you can use when running `spark_apply()` again. |
 | `memory`                      | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `group_by`                    | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `packages`                    | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `packages`                    | **No**     | You will need to pre-install the needed R packages in your cluster via the Databricks web portal, see [R packages](#r-packages)                                                                                                                                                                                                                                                                       |
 | `context`                     | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `name`                        | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `barrier`                     | Yes        | Supports only on not-grouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                  |
@@ -122,3 +122,18 @@ option. In the vast majority of cases, the remote machine will be on
 different a Operating System than the cluster. Additionally,
 transmitting the unpacked, compiled, R packages would take a long time
 over a broadband Internet connection.
+
+If your `spark_apply()` call uses specific R packages, you will need to
+pre-install those specific packages in your target cluster. This is a
+simple operation, because you can do this via your Databricks web
+portal, please see [Databricks - Cluster
+Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html)
+to learn how to do this.
+
+::: callout-caution
+## Only CRAN packages supported
+
+The Databricks cluster library interface is able to source packages from
+CRAN only. This means that packages installed from GitHub, or another
+alternative sources, will not be available.
+:::

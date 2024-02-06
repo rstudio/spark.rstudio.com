@@ -110,3 +110,15 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 | `arrow_max_records_per_batch` | Yes        | Supports only on not-grouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                  |
 | `auto_deps`                   | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `...`                         |            |                                                                                                                                                                                                                                                                                                                                                                                                       |
+
+## R packages
+
+In previous implementation, `spark_apply()` was able to easily copy the
+locally installed R packages in order to ensure that your code will run
+in the cluster. This was possible because R, and RStudio, was running in
+one of the matching servers in the Spark cluster. Because `sparklyr` is
+running on a remote machine, more likely a laptop, this is no longer an
+option. In the vast majority of cases, the remote machine will be on
+different a Operating System than the cluster. Additionally,
+transmitting the unpacked, compiled, R packages would take a long time
+over a broadband Internet connection.

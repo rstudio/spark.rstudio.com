@@ -181,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/databricks-connect.html">Databricks Connect (v2)</a></li><li class="breadcrumb-item"><a href="../deployment/databricks-connect-udfs.html">Run R code in Databricks Connect</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/databricks-connect.html">Databricks Connect (v2)</a></li><li class="breadcrumb-item"><a href="../deployment/databricks-connect-udfs.html">Run R code in Databricks</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -246,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../deployment/databricks-connect-udfs.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Run R code in Databricks Connect</span></a>
+ <span class="menu-text">Run R code in Databricks</span></a>
   </div>
 </li>
       </ul>
@@ -284,7 +284,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#what-is-supported" id="toc-what-is-supported" class="nav-link" data-scroll-target="#what-is-supported">What is supported</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R packages</a>
+  <ul class="collapse">
+  <li><a href="#additional-info" id="toc-additional-info" class="nav-link" data-scroll-target="#additional-info">Additional info</a></li>
+  </ul></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
   </ul>
 </nav>
     </div>
@@ -312,55 +319,161 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Sun Feb 4 15:01:56 2024</em></p>
-<section id="background" class="level2">
-<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p><em>Last updated: Tue Feb 6 11:50:14 2024</em></p>
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Support for <code>spark_apply()</code> is currently available in the development versions of <code>sparklyr</code>, and <code>pysparklyr</code>. To install, run the following:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"sparklyr/sparklyr"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"mlverse/pysparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Databricks Connect is now able to run regular Python code inside Spark. <code>sparklyr</code> takes advantage of this capability by having Python transport and run the R code. It does this via the <code>rpy2</code> Python library. Using this library guarantees Arrow suport.</p>
+<p>Databricks Connect is now able to run regular Python code inside Spark. <code>sparklyr</code> takes advantage of this capability by having Python transport and run the R code. It does this via the <code>rpy2</code> Python library. Using this library also guarantees Arrow support.</p>
 <div id="fig-connect" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<div class="cell" data-fig-width="10" data-eval="true">
+<div class="cell" data-fig-width="6" data-eval="true">
 <div class="cell-output-display">
 <div>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-  subgraph lp[test]
-    subgraph r[R]
-      sr[sparklyr]
-      rt[reticulate]
-    end
-    subgraph ps[Python]
-      dc[Databricks Connect]
-      g1[gRPC]
-    end
-  end   
-  subgraph db[Databricks]
-    sp[Spark]   
+  subgraph mm[My machine]
+    sp[R &lt;br&gt; **********  &lt;br&gt;sparklyr]
+    rp[Python&lt;br&gt; **************** &lt;br&gt;rpy2 'packages'&lt;br&gt; the R code]
   end
-  sr &lt;--&gt; rt
-  rt &lt;--&gt; dc
-  g1 &lt;-- Internet&lt;br&gt;Connection --&gt; sp
-  dc &lt;--&gt; g1
-  
-  style r   fill:#fff,stroke:#666,color:#000
-  style sr  fill:#fff,stroke:#666,color:#000
-  style rt  fill:#fff,stroke:#666,color:#000
-  style ps  fill:#fff,stroke:#666,color:#000
-  style lp  fill:#fff,stroke:#666,color:#fff
-  style db  fill:#fff,stroke:#666,color:#000
-  style sp  fill:#fff,stroke:#666,color:#000
-  style g1  fill:#fff,stroke:#666,color:#000
-  style dc  fill:#fff,stroke:#666,color:#000
+  subgraph db[Databricks]
+    subgraph sr[Spark]
+      pt[Python&lt;br&gt; ********************* &lt;br&gt;rpy2 runs the R code]
+    end
+  end
+
+sp --&gt; rp
+rp --&gt; sr
+
+style mm   fill:#fff,stroke:#666,color:#000
+style sp   fill:#fff,stroke:#666,color:#000
+style rp   fill:#fff,stroke:#666,color:#000
+style db   fill:#fff,stroke:#666,color:#000
+style sr   fill:#fff,stroke:#666,color:#000
+style pt   fill:#fff,stroke:#666,color:#000
 </pre>
 </div>
 </div>
 </div>
 </div>
-<figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect</figcaption>
+<figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> uses rpy2 to run R code in Databricks Connect</figcaption>
 </figure>
 </div>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
+<p>If you have been using <code>sparklyr</code> with Databricks Connect v2 already, then after upgrading the packages, you will be prompted to install <code>rpy2</code> in your Python environment. The prompt will occur the first time you use <code>spark_apply()</code> in an interactive R session. If this is the first time you are using <code>sparklyr</code> with Databricks Connect v2, please refer to our intro article<a href="../deployment/databricks-connect.html">“Databricks Connect v2”</a> to learn how to setup your environment.</p>
+<p>As shown in the diagram on the previous section, <code>rpy2</code> is needed on the Databricks cluster you plan to use. This means that you will need to “manually” install the library in the cluster. This is a simple operation that is done via your Databricks web portal. Here are the instructions that shows you how to do that: <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Databricks - Cluster Libraries</a>.</p>
+</section>
+<section id="what-is-supported" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-supported">What is supported</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Supported?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>f</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>columns</code></td>
+<td>Yes</td>
+<td>Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: <code>long</code>, <code>decimal</code>, <code>string</code>, <code>datetime</code> and <code>bool</code>. Example: <code>columns = "x long, y string"</code>. If not provided, <code>sparklyr</code> will automatically create one, by examining the first 10 records of <code>x</code>, and it will provide a <code>columns</code> spec you can use when running <code>spark_apply()</code> again.</td>
+</tr>
+<tr class="even">
+<td><code>memory</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>group_by</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>packages</code></td>
+<td><strong>No</strong></td>
+<td>You will need to pre-install the needed R packages in your cluster via the Databricks web portal, see <a href="#r-packages">R packages</a></td>
+</tr>
+<tr class="odd">
+<td><code>context</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>barrier</code></td>
+<td>Yes</td>
+<td>Supports only on not-grouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+</tr>
+<tr class="even">
+<td><code>fetch_result_as_sdf</code></td>
+<td>Yes</td>
+<td>At this time, <code>spark_apply()</code> inside Databricks Connect only supports rectangular data, so seeing to <code>FALSE</code> will always return a data frame.</td>
+</tr>
+<tr class="odd">
+<td><code>partition_index_param</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>arrow_max_records_per_batch</code></td>
+<td>Yes</td>
+<td>Supports only on not-grouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+</tr>
+<tr class="odd">
+<td><code>auto_deps</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">R packages</h2>
+<p>If your <code>spark_apply()</code> call uses specific R packages, you will need to pre-install those specific packages in your target cluster. This is a simple operation, because you can do this via your Databricks web portal, please see <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Databricks - Cluster Libraries</a> to learn how to do this.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Only CRAN packages supported
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Databricks cluster library interface is able to source packages from CRAN only. This means that packages installed from GitHub, or another alternative sources, will not be available.</p>
+</div>
+</div>
+<section id="additional-info" class="level3">
+<h3 class="anchored" data-anchor-id="additional-info">Additional info</h3>
+<p>In previous implementation, <code>spark_apply()</code> was able to easily copy the locally installed R packages in order to ensure that your code will run in the cluster. This was possible because R, and RStudio, was running in one of the matching servers in the Spark cluster. Because <code>sparklyr</code> is running on a remote machine, more likely a laptop, this is no longer an option. In the vast majority of cases, the remote machine will be on different a Operating System than the cluster. Additionally, transmitting the unpacked, compiled, R packages would take a long time over a broadband Internet connection.</p>
+</section>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p><code>spark_apply()</code> <strong>will only work on Databricks “Single Access” mode</strong>. “Shared Access” mode does not currently support <code>mapInPandas()</code>, and <code>applyInPandas()</code> (see <a href="https://docs.databricks.com/en/compute/access-mode-limitations.html#udf-limitations-for-unity-catalog-shared-access-mode">Databricks - Access mode limitations</a>). These are the Python functions that <code>sparklyr</code> uses to run the Python code, which in turn runs the R code via <code>rpy2</code>.</p>
 
 
 </section>

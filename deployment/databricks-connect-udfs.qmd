@@ -68,12 +68,6 @@ style pt   fill:#fff,stroke:#666,color:#000
 How `sparklyr` uses rpy2 to run R code in Databricks Connect
 :::
 
-In Python, `sparklyr` uses the `mapInPandas()` and `applyInPandas()` to
-run the Python code, that in turn, runs the R code. `mapInPandas()` is
-used to run R code against un-grouped data, and `applyInPandas()` is
-used for grouped data, meaning when the `group_by` argument, in
-`spark_apply()` is used.
-
 ## Getting started
 
 If you have been using `sparklyr` with Databricks Connect v2 already,
@@ -113,16 +107,6 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 
 ## R packages
 
-In previous implementation, `spark_apply()` was able to easily copy the
-locally installed R packages in order to ensure that your code will run
-in the cluster. This was possible because R, and RStudio, was running in
-one of the matching servers in the Spark cluster. Because `sparklyr` is
-running on a remote machine, more likely a laptop, this is no longer an
-option. In the vast majority of cases, the remote machine will be on
-different a Operating System than the cluster. Additionally,
-transmitting the unpacked, compiled, R packages would take a long time
-over a broadband Internet connection.
-
 If your `spark_apply()` call uses specific R packages, you will need to
 pre-install those specific packages in your target cluster. This is a
 simple operation, because you can do this via your Databricks web
@@ -137,3 +121,24 @@ The Databricks cluster library interface is able to source packages from
 CRAN only. This means that packages installed from GitHub, or another
 alternative sources, will not be available.
 :::
+
+### Additional info
+
+In previous implementation, `spark_apply()` was able to easily copy the
+locally installed R packages in order to ensure that your code will run
+in the cluster. This was possible because R, and RStudio, was running in
+one of the matching servers in the Spark cluster. Because `sparklyr` is
+running on a remote machine, more likely a laptop, this is no longer an
+option. In the vast majority of cases, the remote machine will be on
+different a Operating System than the cluster. Additionally,
+transmitting the unpacked, compiled, R packages would take a long time
+over a broadband Internet connection.
+
+## Limitations
+
+`spark_apply()` **will only work on Databricks "Single Access" mode**.
+"Shared Access" mode does not currently support `mapInPandas()`, and
+`applyInPandas()` (see [Databricks - Access mode
+limitations](https://docs.databricks.com/en/compute/access-mode-limitations.html#udf-limitations-for-unity-catalog-shared-access-mode)).
+These are the Python functions that `sparklyr` uses to run the Python
+code, which in turn runs the R code via `rpy2`.

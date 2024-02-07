@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: true
+    eval: false
+    freeze: false
 editor: 
   markdown: 
     wrap: 72
@@ -20,6 +20,16 @@ library(dplyr)
 library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
+
+sc <- spark_connect(method = "databricks_connect", cluster_id = "1026-175310-7cpsh3g8")
+
+tbl_mtcars <- copy_to(sc, mtcars)
+
+spark_apply(
+  tbl_mtcars,
+  nrow,
+  group_by = "am"
+)
 ```
 
 *Last updated: `r lubridate::date()`*
@@ -122,7 +132,7 @@ CRAN only. This means that packages installed from GitHub, or another
 alternative sources, will not be available.
 :::
 
-### Additional info
+#### Additional background
 
 In previous implementation, `spark_apply()` was able to easily copy the
 locally installed R packages in order to ensure that your code will run
@@ -133,6 +143,56 @@ option. In the vast majority of cases, the remote machine will be on
 different a Operating System than the cluster. Additionally,
 transmitting the unpacked, compiled, R packages would take a long time
 over a broadband Internet connection.
+
+## Examples
+
+```{r}
+#| eval: false 
+#| 
+library(sparklyr)
+library(dplyr)
+library(dbplyr)
+
+sc <- spark_connect(
+  method = "databricks_connect", 
+  cluster_id = "1026-175310-7cpsh3g8"
+  )
+
+tbl_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
+
+
+```
+
+### `columns` argument
+
+If `columns` is not passed, then you will receive a message that starts:
+"To increase performance...", and will provide you the spec it used for
+your `spark_apply()` call. You can copy and use if you plan to run the
+same exact call again.
+
+```{r}
+spark_apply(
+  tbl_mtcars,
+  nrow,
+  group_by = "am"
+)
+```
+
+Passing a `columns` spec will make`spark_apply()` run faster. If not
+provided, `sparklyr` has to collect the first 10 rows, and run the R
+code in order to try and determine the names and types of your resulting
+data set.
+
+```{r}
+spark_apply(
+  tbl_mtcars,
+  nrow,
+  group_by = "am", 
+  columns = "am double, x long"
+)
+```
+
+### 
 
 ## Limitations
 

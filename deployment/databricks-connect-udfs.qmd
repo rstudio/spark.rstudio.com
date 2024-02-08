@@ -5,7 +5,7 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
+    eval: true
     freeze: false
 editor: 
   markdown: 
@@ -96,24 +96,24 @@ operation that is done via your Databricks web portal. Here are the
 instructions that shows you how to do that: [Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 
-## What is supported
+## What is supported in `spark_apply()` - At a glance
 
-| Argument                      | Supported? | Notes                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Argument                      | Supported? | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |------------------------|------------|------------------------------------|
-| `x`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `f`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `columns`                     | Yes        | Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: `long`, `decimal`, `string`, `datetime` and `bool`. Example: `columns = "x long, y string"`. If not provided, `sparklyr` will automatically create one, by examining the first 10 records of `x`, and it will provide a `columns` spec you can use when running `spark_apply()` again. |
-| `memory`                      | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `group_by`                    | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `packages`                    | **No**     | You will need to pre-install the needed R packages in your cluster via the Databricks web portal, see [R packages](#r-packages)                                                                                                                                                                                                                                                                       |
-| `context`                     | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `name`                        | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `barrier`                     | Yes        | Supports only on not-grouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                  |
-| `fetch_result_as_sdf`         | Yes        | At this time, `spark_apply()` inside Databricks Connect only supports rectangular data, so seeing to `FALSE` will always return a data frame.                                                                                                                                                                                                                                                         |
-| `partition_index_param`       | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `arrow_max_records_per_batch` | Yes        | Supports only on not-grouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                  |
-| `auto_deps`                   | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `...`                         |            |                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `x`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `f`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `columns`                     | Yes        | Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: `long`, `decimal`, `string`, `datetime` and `bool`. Example: `columns = "x long, y string"`. If not provided, `sparklyr` will automatically create one, by examining the first 10 records of `x`, and it will provide a `columns` spec you can use when running `spark_apply()` again. See: [Providing a schema](#providing-a-schema) |
+| `memory`                      | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `group_by`                    | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `packages`                    | **No**     | You will need to pre-install the needed R packages in your cluster via the Databricks web portal, see [R packages](#r-packages)                                                                                                                                                                                                                                                                                                                      |
+| `context`                     | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `name`                        | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `barrier`                     | Yes        | Support only on ungrouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                                                                    |
+| `fetch_result_as_sdf`         | Yes        | At this time, `spark_apply()` inside Databricks Connect only supports rectangular data, so seeing to `FALSE` will always return a data frame.                                                                                                                                                                                                                                                                                                        |
+| `partition_index_param`       | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `arrow_max_records_per_batch` | Yes        | Support only on ungrouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                                                                    |
+| `auto_deps`                   | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `...`                         |            |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 ## R packages
 
@@ -144,31 +144,18 @@ different a Operating System than the cluster. Additionally,
 transmitting the unpacked, compiled, R packages would take a long time
 over a broadband Internet connection.
 
-## Examples
+## Providing a schema
 
-```{r}
-#| eval: false 
-#| 
-library(sparklyr)
-library(dplyr)
-library(dbplyr)
+Spark requires the schema of the data that your R code will output. It
+expects the name, and type of each field. The python
 
-sc <- spark_connect(
-  method = "databricks_connect", 
-  cluster_id = "1026-175310-7cpsh3g8"
-  )
-
-tbl_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
-
-
-```
-
-### `columns` argument
-
-If `columns` is not passed, then you will receive a message that starts:
-"To increase performance...", and will provide you the spec it used for
-your `spark_apply()` call. You can copy and use if you plan to run the
-same exact call again.
+Passing a schema in `columns` will make`spark_apply()` run faster.
+Because if not provided, `sparklyr` has to collect the first 10 rows,
+and run the R code in order to try and determine the names and types of
+your resulting data set. As a convenience, `sparklyr` will output a
+message with the schema it used as the schema. If you are going to rerun
+your `spark_apply()` command again, you can copy and paste the output of
+the message to you code.
 
 ```{r}
 spark_apply(
@@ -178,10 +165,7 @@ spark_apply(
 )
 ```
 
-Passing a `columns` spec will make`spark_apply()` run faster. If not
-provided, `sparklyr` has to collect the first 10 rows, and run the R
-code in order to try and determine the names and types of your resulting
-data set.
+Passing the `columns` argument, silences the message:
 
 ```{r}
 spark_apply(
@@ -192,9 +176,30 @@ spark_apply(
 )
 ```
 
-### 
+## Partition data 
 
-## Limitations
+Typically, with un-grouped data, the number of parallel jobs will
+correspond with the number of partitions of the data. For Databricks
+connections, `sparklyr` will, by default, attempt to use Apache Arrow.
+The Databricks Connect clusters come with Arrow installed. This approach
+also changes how Spark will partition your data. Instead of the number
+of partitions, Spark will use the value in the "Arrow Max Records per
+Bach" option. This option can be controlled directly in the
+`spark_apply()` call by setting the `arrow_max_records_per_batch`.
+
+```{r}
+spark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 4, columns = "x long")
+```
+
+If you pass a different Arrow Batch size than what the option is set to
+currently, `sparklyr` will change the value of that option, and will
+notify you of that:
+
+```{r}
+spark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 2, columns = "x long")
+```
+
+##   Limitations
 
 `spark_apply()` **will only work on Databricks "Single Access" mode**.
 "Shared Access" mode does not currently support `mapInPandas()`, and

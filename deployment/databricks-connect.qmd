@@ -94,9 +94,7 @@ decided to isolate the Python integration into its own package. The new
 package, called [`pysparklyr`](https://github.com/mlverse/pysparklyr),
 is an extension of `sparklyr`.
 
-## Getting Started
-
-### Package Installation
+## Package Installation
 
 To access Databricks Connect, you will need the following two packages:
 
@@ -108,21 +106,7 @@ install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
-### Setup credentials
-
-::: callout-note
-Posit Workbench can manage Databricks credentials on behalf of the user. For
-users of Posit Workbench, this is the recommended approach to setting up
-credentials as it provides an additional layer of security. Details for how to
-setup and configure this feature can be found
-[here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
-
-For users who have signed into a Databricks Workspace via Posit Workbench, the
-credentials will be automatically configured and no additional setup is
-required. The only thing that still needs to be supplied when making a |>
-connection to Databricks is the cluster ID.
-![](/images/deployment/databricks/workbench-session-start.png)
-:::
+## Setup credentials
 
 To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
@@ -130,9 +114,29 @@ three configuration items:
 1.  Your [Workspace Instance
     URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
 2.  Your [Personal Authentication
-    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT)
+    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT), or a 
+    Posit Workbench instance configured to manage with Databricks services (see next section)
 3.  Your [Cluster
     ID](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+
+### Posit Workbench
+
+Posit Workbench can manage Databricks credentials on behalf of the user.
+For users of Posit Workbench, this is the recommended approach to
+setting up credentials as it provides an additional layer of security. If you
+are not currently using Posit Workbench, feel free to skip this section. 
+
+Details for how to setup and configure this feature can be found
+[here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
+
+For users who have signed into a Databricks Workspace via Posit
+Workbench, the credentials will be automatically configured and no
+additional setup is required. The only thing that still needs to be
+supplied when making a connection to Databricks is the cluster ID.
+
+![](/images/deployment/databricks/workbench-session-start.png){width="600"}
+
+### Environment Variables
 
 We have developed this solution to align with other applications that
 integrate with Databricks. All applications need, at minimum, a work
@@ -140,7 +144,7 @@ space *(1)*, and an authentication token *(2)*. For default values,
 those applications initially look for these environment variables:
 
 -   `DATABRICKS_HOST` - Your Workspace Instance URL
--   `DATABRICKS_TOKEN` - Your Personal Authentication Token
+-   `DATABRICKS_TOKEN` - Your Personal Authentication Token *(Not needed if using Posit Workbench)*
 
 Environment variables work well, because they rarely vary between
 projects. The thing that will change more often is the cluster you are
@@ -159,13 +163,13 @@ two variables:
 
 ``` bash
 DATABRICKS_HOST="Enter here your Workspace URL"
-DATABRICKS_TOKEN="Enter here your personal token"
+DATABRICKS_TOKEN="Enter here your personal token" # Not needed if using Posit Workbench
 ```
 
 **This is a one time operation.** After saving and closing the file,
 restart your R session.
 
-### First time connecting
+## First time connecting
 
 After setting up your Host and Token environment variables, you can now
 connect to your cluster by simply providing the cluster's ID, and the
@@ -241,12 +245,6 @@ abbreviated example of the output that occurs when selecting "Yes":
 
 ## Interacting with the cluster
 
-::: callout-note
-Posit Workbench provides users with a Databricks pane for direct access to available Databricks clusters. From this pane, users can view details about Databricks clusters and connect directly to them. More details about this feature can be found [here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
-
-![](/images/deployment/databricks/workbench-databricks-pane.png)
-:::
-
 ### RStudio's Connection pane
 
 Thanks to the new way we are integrating with Spark, it is now possible
@@ -308,6 +306,17 @@ trips %>%
     avg_distance = mean(trip_distance, na.rm = TRUE)
   )
 ```
+
+### Posit Workench's 'Databricks Pane'
+
+Posit Workbench provides users with a Databricks pane for direct access
+to available Databricks clusters. From this pane, users can view details
+about Databricks clusters and connect directly to them. More details
+about this feature can be found
+[here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
+
+![](/images/deployment/databricks/workbench-databricks-pane.png){width="500"}
+
 
 ## Machine Learning
 
@@ -422,62 +431,6 @@ disconnect from the cluster.
 spark_disconnect(sc)
 ```
 
-## Reported Problems
-
-As it is with any new implementation, we are seeing some early adopters
-report issues with their installation or connection. Here are some of
-the issues that have been reported and the recommended solution or
-workaround. Each issue is **collapsed**, just expand it to see the
-background and recommendation. Each one is titled based on the full
-error message or the distinctive part of the error message.
-
-Before reviewing the issues, please make sure to have the latest
-versions of `sparklyr` and `pysparklyr` from CRAN. These are the current
-version levels: - `sparklyr` - 1.8.4 - `pysparklyr` - 0.1.3
-
-::: {.callout-note collapse="true"}
-## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
-
-Error message contains:
-
-``` r
-... reticulate can only bind to copies of Python built with '--enable-shared'.
-```
-
-This is happening because there is no Python installation that
-`reticulate` can use. `pysparklyr` depends on that package to function.
-
-### Solution
-
-The best way to resolve is to install an acceptable version of Python.
-You can run:
-
-``` r
-reticulate::install_python()
-```
-
-If the output mentions `--skip-existing [version number]` then you will
-have two options:
-
-1.  If you're ok with replacing the existing Python, then use:
-
-    ``` r
-     reticulate::install_python(version = "[version number]", force = TRUE)
-    ```
-
-2.  If you would like to keep that installation of Python then use a
-    different version number:
-
-    ``` r
-     reticulate::install_python(version = "[slightly different version number]")
-    ```
-
-    For example, if the version number is `3.9.12`, then use `3.9.18`:
-
-    ``` r
-    reticulate::install_python(version = "3.9.18")
-    ```
-:::
 
 ## Environments
 
@@ -561,7 +514,7 @@ need to connect to a different cluster that has the same DBR version,
 a different DBR version, then it is recommended that you run the
 installation function using the new DBR version or cluster ID.
 
-### Python Libraries {#python-libraries}
+## Python Libraries {#python-libraries}
 
 Here is the list of the Python libraries needed in order to work with
 the cluster:
@@ -582,218 +535,10 @@ ML libraries (Optional):
 -   `torcheval`
 -   `scikit-learn`
 
-## Deploying to Posit Connect
+To enable R User Defined Functions (UDFs):
 
-We recommend that for simply accessing data from the Unity Catalog, such
-as in a Shiny app, use an ODBC connection instead of a Spark session.
-The advantage of this is that a connection to the Databricks Warehouse
-does not require a running cluster. For more information about creating
-dashboards with databases visit [Database with R
-site](https://solutions.posit.co/connections/db/best-practices/dashboards/).
-
-However, there are cases when it is necessary to deploy a solution that
-requires a Spark session. For example, when there is a long running job
-that needs to run on a schedule. Those kinds of jobs could be put inside
-a Quarto document and published to Posit Connect, where they can run on
-specific date/time intervals. Posit Connect supports Python
-environments, so it is an ideal platform to deploy these kinds of
-solutions.
-
-### Preparing for deployment
-
-When deploying to Posit Connect, there are specific pieces of
-information that we need to make sure are sent over:
-
--   Your **cluster's ID**
--   Your **workspace URL**
--   Your **token**
--   Your **Python environment**
--   To use the `pysparklyr` extension
-
-Based on the recommendations in this article, the **cluster's ID**
-should be in the code of your document, the **workspace URL** and
-**token** should already be inside the `DATABRICKS_HOST`, and
-`DATABRICKS_TOKEN` environment variables. If you are using something
-other than these environment variables to authenticate, then see the
-section [Alternatives to Environment
-Variables](#alternatives-to-environment-variables).
-
-**Make sure that your document has a `library(pysparklyr)` call.** This
-will let Posit Connect deployment process know that it needs to install
-this package and its dependencies, such as `reticulate`.
-
-The next section will introduce a function that will ease finding the
-**Python environment**.
-
-``` r
-library(sparklyr)
-library(pysparklyr)
-
-sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
-    method = "databricks_connect"
-)
-```
-
-### Using `deploy_databricks()`
-
-The `deploy_databricks()` function makes it easier to deploy your
-content to Posit Connect. It does its best to gather all of the pieces
-of information mentioned above and builds the correct command to
-publish.
-
-The path to your content is the last piece of information we need.
-Ideally your content is either located in its own folder inside your
-project or it is at the root level of your project. There are three ways
-that you can let `deploy_databricks()` know the path to use:
-
--   If you are in RStudio and the document you wish to publish is open,
-    `deploy_databricks()` will use the RStudio API to get the path of
-    that document and then use its containing folder as the content's
-    location. This is the preferred method for deployment.
-
--   Use the `appDir` argument to pass the path to be used. Something
-    such as `here::here("my-cool-document")` would work.
-
--   If no document is opened in RStudio and `appDir` is left empty, then
-    `getwd()` will be used
-
-The aim of the new function is to be both flexible and helpful. It will
-gather your document location, credentials, and URLs. The **Python**
-location needs to defined when calling `deploy_databricks()`. If you are
-in RStudio, and your document is opened, here are several ways to do
-this:
-
--   If you know the cluster's DBR version:
-
-    ``` r
-    pysparklyr::deploy_databricks(version = "14.1")
-    ```
-
--   The cluster's ID can also be used and `pysparklyr` will
-    automatically determine the required DBR version:
-
-    ``` r
-    pysparklyr::deploy_databricks(cluster_id = "1026-175310-7cpsh3g8")
-    ```
-
--   If you just ran the code of the content you plan to deploy, then the
-    **Python** environment will already be loaded in the R session.
-    `deploy_databricks()` will validate that the path of that Python
-    environment conforms to one that `pysparklyr` creates and use that.
-    This will happen if no `version`, `cluster_id`, or `python` argument
-    is provided. At that point simply run:
-
-    ``` r
-    pysparklyr::deploy_databricks()
-    ```
-
--   You can also pass the path to the Python environment to use by
-    setting the `python` argument:
-
-    ``` r
-    pysparklyr::deploy_databricks(python = "/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1")
-    ```
-
--   You can use `DATABRICKS_CLUSTER_ID` environment variable. If you
-    have it set, simply run:
-
-    ``` r         
-    pysparklyr::deploy_databricks()
-    ```
-
-Here is an example of the output returned when using
-`deploy_databricks()`. Before submitting your content, you will be
-prompted to confirm that the information gathered is correct. Also
-notice that if you have more than one Posit Connect server setup in your
-RStudio IDE, it will choose the top one as the default but allow you to
-easily change it if necessary:
-
-``` r
-> pysparklyr::deploy_databricks(version = "14.1")
-
-── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────
-ℹ Source directory: /Users/edgar/r_projects/practice/test-deploy
-ℹ Python: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python
-ℹ Posit server: colorado.posit.co
-  Account name: edgar
-ℹ Host URL: rstudio-partner-posit-default.cloud.databricks.com
-  Token: '<REDACTED>'
-
-Does everything look correct?
-
-1: Yes
-2: No
-3: Change 'Posit server'
-
-Selection: 1
-```
-
-The first time that you publish, the function will check to see if you
-have a `requirements.txt` file. If you do not have the file, it will ask
-you if you wish to create it. The `requirements.txt` file contains the
-list of the your current Python environment, as well as its versions.
-This will help when you re-publish your content, because you will not
-need to pass the `version`.
-
-``` r
-Would you like to create the 'requirements.txt' file?
-Why consider? This will allow you to skip using `version` or `cluster_id`
-
-1: Yes
-2: No
-```
-
-If you select **No**, `deploy_databricks()` will not ask you again when
-you re-deploy.
-
-### Alternatives to Environment Variables {#alternatives-to-environment-variables}
-
-The `deploy_databricks()` function has a `host`, and `token` arguments.
-These arguments take precedent over the environment variables, if set.
-
-There are a variety of reasons for you to set these arguments when
-publishing. For example, locally you authenticate with a Databricks
-configuration file, but when deploying, you will need to let
-`deploy_databricks()` what values to use for the PAT and Host URL.
-Another example could be that your deployed content may need to use a
-[service
-account](https://docs.databricks.com/en/dev-tools/service-principals.html),
-that differs from the credentials you use when developing.
-
-As usual, we recommend that you avoid using open text values with your
-credentials in your code. An effective way of managing local-vs-remote
-credentials is with the
-[`config`](https://rstudio.github.io/config/articles/rsconnect.html)
-package. Here is an example:
-
-***config.yml***
-
-``` yaml
-default:
-  host_url: "[Your Host URL]"
-  token: "[Your Token]"
-
-rsconnect:
-  host_url: "[Your Host URL]"
-  token: "[Service Token]"
-```
-
-***R script***
-
-``` r
-config <- config::get()
-
-pysparklyr::deploy_databricks(
-  version = "14.1", 
-  host = config$host_url,
-  token = config$token
-  )
-```
-
-The integration with Posit Connect and `config`, allows your deployed
-content to automatically use the values under the `rsconnect` section in
-the YAML file, instead of the values from the `default` section.
+-   `rpy2` (see [Run R code in
+    Databricks](/deployment/databricks-connect-udfs.qmd))
 
 ## What is supported
 
@@ -811,12 +556,6 @@ Here is a list of what we currently support, and do not support via
     tested in Spark Connect.
 
 **Not supported**:
-
--   **ML functions** - Very few functions, in `sparklyr`, that have the
-    `ml_` and `ft_` are currently supported. The reason is that Spark
-    3.4 does not currently support MLlib. We expect that some ML support
-    will be available in Spark 3.5. At that time we will work on
-    integrating the new ML routines from Connect into `sparklyr`.
 
 -   **SDF functions** - Most of these functions require SparkSession,
     which is currently not supported in Spark 3.4.

@@ -5,7 +5,7 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
+    eval: false
     freeze: true
 editor: 
   markdown: 
@@ -94,9 +94,7 @@ decided to isolate the Python integration into its own package. The new
 package, called [`pysparklyr`](https://github.com/mlverse/pysparklyr),
 is an extension of `sparklyr`.
 
-## Getting Started
-
-### Package Installation
+## Package Installation
 
 To access Databricks Connect, you will need the following two packages:
 
@@ -108,21 +106,7 @@ install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
-### Setup credentials
-
-::: callout-note
-Posit Workbench can manage Databricks credentials on behalf of the user. For
-users of Posit Workbench, this is the recommended approach to setting up
-credentials as it provides an additional layer of security. Details for how to
-setup and configure this feature can be found
-[here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
-
-For users who have signed into a Databricks Workspace via Posit Workbench, the
-credentials will be automatically configured and no additional setup is
-required. The only thing that still needs to be supplied when making a |>
-connection to Databricks is the cluster ID.
-![](/images/deployment/databricks/workbench-session-start.png)
-:::
+## Setup credentials
 
 To use with Databricks Connect, in run-time 13 or above, you will need
 three configuration items:
@@ -130,9 +114,29 @@ three configuration items:
 1.  Your [Workspace Instance
     URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
 2.  Your [Personal Authentication
-    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT)
+    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT), or a 
+    Posit Workbench instance configured to manage with Databricks services (see next section)
 3.  Your [Cluster
     ID](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+
+### Posit Workbench
+
+Posit Workbench can manage Databricks credentials on behalf of the user.
+For users of Posit Workbench, this is the recommended approach to
+setting up credentials as it provides an additional layer of security. If you
+are not currently using Posit Workbench, feel free to skip this section. 
+
+Details for how to setup and configure this feature can be found
+[here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
+
+For users who have signed into a Databricks Workspace via Posit
+Workbench, the credentials will be automatically configured and no
+additional setup is required. The only thing that still needs to be
+supplied when making a connection to Databricks is the cluster ID.
+
+![](/images/deployment/databricks/workbench-session-start.png){width="600"}
+
+### Environment Variables
 
 We have developed this solution to align with other applications that
 integrate with Databricks. All applications need, at minimum, a work
@@ -140,7 +144,7 @@ space *(1)*, and an authentication token *(2)*. For default values,
 those applications initially look for these environment variables:
 
 -   `DATABRICKS_HOST` - Your Workspace Instance URL
--   `DATABRICKS_TOKEN` - Your Personal Authentication Token
+-   `DATABRICKS_TOKEN` - Your Personal Authentication Token *(Not needed if using Posit Workbench)*
 
 Environment variables work well, because they rarely vary between
 projects. The thing that will change more often is the cluster you are
@@ -159,13 +163,13 @@ two variables:
 
 ``` bash
 DATABRICKS_HOST="Enter here your Workspace URL"
-DATABRICKS_TOKEN="Enter here your personal token"
+DATABRICKS_TOKEN="Enter here your personal token" # Not needed if using Posit Workbench
 ```
 
 **This is a one time operation.** After saving and closing the file,
 restart your R session.
 
-### First time connecting
+## First time connecting
 
 After setting up your Host and Token environment variables, you can now
 connect to your cluster by simply providing the cluster's ID, and the
@@ -242,7 +246,11 @@ abbreviated example of the output that occurs when selecting "Yes":
 ## Interacting with the cluster
 
 ::: callout-note
-Posit Workbench provides users with a Databricks pane for direct access to available Databricks clusters. From this pane, users can view details about Databricks clusters and connect directly to them. More details about this feature can be found [here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
+Posit Workbench provides users with a Databricks pane for direct access
+to available Databricks clusters. From this pane, users can view details
+about Databricks clusters and connect directly to them. More details
+about this feature can be found
+[here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
 
 ![](/images/deployment/databricks/workbench-databricks-pane.png)
 :::
@@ -582,6 +590,11 @@ ML libraries (Optional):
 -   `torcheval`
 -   `scikit-learn`
 
+To enable R User Defined Functions (UDFs):
+
+-   `rpy2` (see [Run R code in
+    Databricks](/deployment/databricks-connect-udfs.qmd))
+
 ## What is supported
 
 Here is a list of what we currently support, and do not support via
@@ -598,7 +611,6 @@ Here is a list of what we currently support, and do not support via
     tested in Spark Connect.
 
 **Not supported**:
-
 
 -   **SDF functions** - Most of these functions require SparkSession,
     which is currently not supported in Spark 3.4.

@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: true
-    freeze: false
+    eval: true 
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -99,7 +99,7 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 ## What is supported in `spark_apply()` - At a glance
 
 | Argument                      | Supported? | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|------------------------|------------|------------------------------------|
+|---------|---------|------------------------------------------------------|
 | `x`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `f`                           | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `columns`                     | Yes        | Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: `long`, `decimal`, `string`, `datetime` and `bool`. Example: `columns = "x long, y string"`. If not provided, `sparklyr` will automatically create one, by examining the first 10 records of `x`, and it will provide a `columns` spec you can use when running `spark_apply()` again. See: [Providing a schema](#providing-a-schema) |
@@ -115,7 +115,7 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 | `auto_deps`                   | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `...`                         |            |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
-## R packages
+## R packages {#r-packages}
 
 If your `spark_apply()` call uses specific R packages, you will need to
 pre-install those specific packages in your target cluster. This is a
@@ -144,7 +144,7 @@ different a Operating System than the cluster. Additionally,
 transmitting the unpacked, compiled, R packages would take a long time
 over a broadband Internet connection.
 
-## Providing a schema
+## Providing a schema {#providing-a-schema}
 
 Spark requires the schema of the data that your R code will output. It
 expects the name, and type of each field. The python
@@ -176,7 +176,7 @@ spark_apply(
 )
 ```
 
-## Partition data 
+## Partition data
 
 Typically, with un-grouped data, the number of parallel jobs will
 correspond with the number of partitions of the data. For Databricks
@@ -199,7 +199,7 @@ notify you of that:
 spark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 2, columns = "x long")
 ```
 
-##   Limitations
+## Limitations
 
 `spark_apply()` **will only work on Databricks "Single Access" mode**.
 "Shared Access" mode does not currently support `mapInPandas()`, and

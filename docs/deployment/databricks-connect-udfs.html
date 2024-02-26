@@ -286,11 +286,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
-  <li><a href="#what-is-supported" id="toc-what-is-supported" class="nav-link" data-scroll-target="#what-is-supported">What is supported</a></li>
-  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R packages</a>
-  <ul class="collapse">
-  <li><a href="#additional-info" id="toc-additional-info" class="nav-link" data-scroll-target="#additional-info">Additional info</a></li>
-  </ul></li>
+  <li><a href="#what-is-supported-in-spark_apply---at-a-glance" id="toc-what-is-supported-in-spark_apply---at-a-glance" class="nav-link" data-scroll-target="#what-is-supported-in-spark_apply---at-a-glance">What is supported in <code>spark_apply()</code> - At a glance</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R packages</a></li>
+  <li><a href="#providing-a-schema" id="toc-providing-a-schema" class="nav-link" data-scroll-target="#providing-a-schema">Providing a schema</a></li>
+  <li><a href="#partition-data" id="toc-partition-data" class="nav-link" data-scroll-target="#partition-data">Partition data</a></li>
   <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
   </ul>
 </nav>
@@ -319,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Last updated: Tue Feb 6 11:50:14 2024</em></p>
+<p><em>Last updated: Mon Feb 26 13:17:50 2024</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Support for <code>spark_apply()</code> is currently available in the development versions of <code>sparklyr</code>, and <code>pysparklyr</code>. To install, run the following:</p>
@@ -366,8 +365,8 @@ style pt   fill:#fff,stroke:#666,color:#000
 <p>If you have been using <code>sparklyr</code> with Databricks Connect v2 already, then after upgrading the packages, you will be prompted to install <code>rpy2</code> in your Python environment. The prompt will occur the first time you use <code>spark_apply()</code> in an interactive R session. If this is the first time you are using <code>sparklyr</code> with Databricks Connect v2, please refer to our intro article<a href="../deployment/databricks-connect.html">“Databricks Connect v2”</a> to learn how to setup your environment.</p>
 <p>As shown in the diagram on the previous section, <code>rpy2</code> is needed on the Databricks cluster you plan to use. This means that you will need to “manually” install the library in the cluster. This is a simple operation that is done via your Databricks web portal. Here are the instructions that shows you how to do that: <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Databricks - Cluster Libraries</a>.</p>
 </section>
-<section id="what-is-supported" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-supported">What is supported</h2>
+<section id="what-is-supported-in-spark_apply---at-a-glance" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-supported-in-spark_apply---at-a-glance">What is supported in <code>spark_apply()</code> - At a glance</h2>
 <table class="table">
 <thead>
 <tr class="header">
@@ -390,7 +389,7 @@ style pt   fill:#fff,stroke:#666,color:#000
 <tr class="odd">
 <td><code>columns</code></td>
 <td>Yes</td>
-<td>Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: <code>long</code>, <code>decimal</code>, <code>string</code>, <code>datetime</code> and <code>bool</code>. Example: <code>columns = "x long, y string"</code>. If not provided, <code>sparklyr</code> will automatically create one, by examining the first 10 records of <code>x</code>, and it will provide a <code>columns</code> spec you can use when running <code>spark_apply()</code> again.</td>
+<td>Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: <code>long</code>, <code>decimal</code>, <code>string</code>, <code>datetime</code> and <code>bool</code>. Example: <code>columns = "x long, y string"</code>. If not provided, <code>sparklyr</code> will automatically create one, by examining the first 10 records of <code>x</code>, and it will provide a <code>columns</code> spec you can use when running <code>spark_apply()</code> again. See: <a href="#providing-a-schema">Providing a schema</a></td>
 </tr>
 <tr class="even">
 <td><code>memory</code></td>
@@ -420,7 +419,7 @@ style pt   fill:#fff,stroke:#666,color:#000
 <tr class="odd">
 <td><code>barrier</code></td>
 <td>Yes</td>
-<td>Supports only on not-grouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+<td>Support only on ungrouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
 </tr>
 <tr class="even">
 <td><code>fetch_result_as_sdf</code></td>
@@ -435,7 +434,7 @@ style pt   fill:#fff,stroke:#666,color:#000
 <tr class="even">
 <td><code>arrow_max_records_per_batch</code></td>
 <td>Yes</td>
-<td>Supports only on not-grouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+<td>Support only on ungrouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
 </tr>
 <tr class="odd">
 <td><code>auto_deps</code></td>
@@ -466,10 +465,85 @@ Only CRAN packages supported
 <p>The Databricks cluster library interface is able to source packages from CRAN only. This means that packages installed from GitHub, or another alternative sources, will not be available.</p>
 </div>
 </div>
-<section id="additional-info" class="level3">
-<h3 class="anchored" data-anchor-id="additional-info">Additional info</h3>
+<section id="additional-background" class="level4">
+<h4 class="anchored" data-anchor-id="additional-background">Additional background</h4>
 <p>In previous implementation, <code>spark_apply()</code> was able to easily copy the locally installed R packages in order to ensure that your code will run in the cluster. This was possible because R, and RStudio, was running in one of the matching servers in the Spark cluster. Because <code>sparklyr</code> is running on a remote machine, more likely a laptop, this is no longer an option. In the vast majority of cases, the remote machine will be on different a Operating System than the cluster. Additionally, transmitting the unpacked, compiled, R packages would take a long time over a broadband Internet connection.</p>
 </section>
+</section>
+<section id="providing-a-schema" class="level2">
+<h2 class="anchored" data-anchor-id="providing-a-schema">Providing a schema</h2>
+<p>Spark requires the schema of the data that your R code will output. It expects the name, and type of each field. The python</p>
+<p>Passing a schema in <code>columns</code> will make<code>spark_apply()</code> run faster. Because if not provided, <code>sparklyr</code> has to collect the first 10 rows, and run the R code in order to try and determine the names and types of your resulting data set. As a convenience, <code>sparklyr</code> will output a message with the schema it used as the schema. If you are going to rerun your <code>spark_apply()</code> command again, you can copy and paste the output of the message to you code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tbl_mtcars,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  nrow,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"am"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To increase performance, use the following schema:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; columns = "am double, x long"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_74ef0c15_0631_43ce_b0e4_43f6fd6d3f7c&gt; [2 x 2]</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0    19</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1    13</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Passing the <code>columns</code> argument, silences the message:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  tbl_mtcars,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  nrow,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"am"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="st">"am double, x long"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_fb407bf9_94ac_4b57_9426_37ad2f56b9e4&gt; [2 x 2]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0    19</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1    13</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="partition-data" class="level2">
+<h2 class="anchored" data-anchor-id="partition-data">Partition data</h2>
+<p>Typically, with un-grouped data, the number of parallel jobs will correspond with the number of partitions of the data. For Databricks connections, <code>sparklyr</code> will, by default, attempt to use Apache Arrow. The Databricks Connect clusters come with Arrow installed. This approach also changes how Spark will partition your data. Instead of the number of partitions, Spark will use the value in the “Arrow Max Records per Bach” option. This option can be controlled directly in the <code>spark_apply()</code> call by setting the <code>arrow_max_records_per_batch</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">4</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 4</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_9cdf51c8_0af6_40c0_ba78_49f1fa696224&gt; [8 x 1]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       x</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     4</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     4</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     4</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     4</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6     4</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7     4</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8     4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you pass a different Arrow Batch size than what the option is set to currently, <code>sparklyr</code> will change the value of that option, and will notify you of that:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">2</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_b81ab0ff_ac22_4a1e_9ab7_22e4961525fd&gt; [?? x 1]</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        x</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dbl&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1     2</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2     2</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3     2</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4     2</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5     2</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6     2</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7     2</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8     2</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9     2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10     2</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="limitations" class="level2">
 <h2 class="anchored" data-anchor-id="limitations">Limitations</h2>

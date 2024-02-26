@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Data Lakes</title>
+<title>sparklyr - Deploying to Posit Connect</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../deployment/yarn-cluster-emr.html" rel="next">
-<link href="../deployment/index.html" rel="prev">
+<link href="../deployment/qubole-overview.html" rel="next">
+<link href="../deployment/databricks-connect-udfs.html" rel="prev">
 <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -144,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/data-lakes.html">YARN (Hadoop)</a></li><li class="breadcrumb-item"><a href="../deployment/data-lakes.html">Understanding Data Lakes</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/databricks-connect.html">Databricks Connect (v2)</a></li><li class="breadcrumb-item"><a href="../deployment/databricks-posit-connect.html">Deploying to Posit Connect</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -173,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Understanding Data Lakes</span></a>
   </div>
 </li>
@@ -214,7 +248,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/databricks-posit-connect.html" class="sidebar-item-text sidebar-link">
+  <a href="../deployment/databricks-posit-connect.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Deploying to Posit Connect</span></a>
   </div>
 </li>
@@ -253,14 +287,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#audience" id="toc-audience" class="nav-link active" data-scroll-target="#audience">Audience</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#r-for-data-science" id="toc-r-for-data-science" class="nav-link" data-scroll-target="#r-for-data-science">R for Data Science</a></li>
-  <li><a href="#hadoop-as-a-data-source" id="toc-hadoop-as-a-data-source" class="nav-link" data-scroll-target="#hadoop-as-a-data-source">Hadoop as a Data Source</a></li>
-  <li><a href="#spark-as-an-analysis-engine" id="toc-spark-as-an-analysis-engine" class="nav-link" data-scroll-target="#spark-as-an-analysis-engine">Spark as an Analysis Engine</a></li>
-  <li><a href="#cluster-setup" id="toc-cluster-setup" class="nav-link" data-scroll-target="#cluster-setup">Cluster Setup</a></li>
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations">Considerations</a></li>
-  <li><a href="#r-for-data-science-toolchain-with-spark" id="toc-r-for-data-science-toolchain-with-spark" class="nav-link" data-scroll-target="#r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</a></li>
+  <li><a href="#preparing-for-deployment" id="toc-preparing-for-deployment" class="nav-link active" data-scroll-target="#preparing-for-deployment">Preparing for deployment</a></li>
+  <li><a href="#using-deploy_databricks" id="toc-using-deploy_databricks" class="nav-link" data-scroll-target="#using-deploy_databricks">Using <code>deploy_databricks()</code></a></li>
+  <li><a href="#alternatives-to-environment-variables" id="toc-alternatives-to-environment-variables" class="nav-link" data-scroll-target="#alternatives-to-environment-variables">Alternatives to Environment Variables</a></li>
   </ul>
 </nav>
     </div>
@@ -273,7 +302,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Lakes</h1>
+<h1 class="title">Deploying to Posit Connect</h1>
 </div>
 
 
@@ -285,70 +314,102 @@ ul.task-list li input[type="checkbox"] {
     
   </div>
   
-<div>
-  <div class="abstract">
-    <div class="abstract-title">Abstract</div>
-    Explains how to take advantage of Apache Spark inside organizations that have a Hadoop based Big Data Lake
-  </div>
-</div>
 
 </header>
 
-<section id="audience" class="level2">
-<h2 class="anchored" data-anchor-id="audience">Audience</h2>
-<p>This article explains how to take advantage of Apache Spark at organizations that have a Hadoop based Big Data Lake.</p>
-</section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>We have noticed that the types of questions we field after a demo of <code>sparklyr</code> to our customers were more about high-level architecture than how the package works. To answer those questions, we put together a set of slides that illustrate and discuss important concepts, to help customers see where Spark, R, and <code>sparklyr</code> fit in a Big Data Platform implementation. In this article, we’ll review those slides and provide a narrative that will help you better envision how you can take advantage of our products.</p>
-</section>
-<section id="r-for-data-science" class="level2">
-<h2 class="anchored" data-anchor-id="r-for-data-science">R for Data Science</h2>
-<p>It is very important to preface the Use Case review with some background information about where RStudio focuses its efforts when developing packages and products. Many vendors offer <em>R integration</em>, but in most cases, what this means is that they will add a model built in R to their pipeline or interface, and pass new inputs to that model to generate outputs that can be used in the next step in the pipeline, or in a calculation for the interface.</p>
-<p>In contrast, our focus is on the process that happens before that: the discipline that produces the model, meaning <strong>Data Science</strong>.</p>
-<p><img src="../images/guides/data-lakes/slide-1.png" class="img-fluid"></p>
-<p>In their <a href="http://r4ds.had.co.nz/">R for Data Science</a> book, Hadley Wickham and Garrett Grolemund provide a great diagram that nicely illustrates the Data Science process:</p>
+<p>We recommend that for simply accessing data from the Unity Catalog, such as in a Shiny app, use an ODBC connection instead of a Spark session. The advantage of this is that a connection to the Databricks Warehouse does not require a running cluster. For more information about creating dashboards with databases visit <a href="https://solutions.posit.co/connections/db/best-practices/dashboards/">Database with R site</a>.</p>
+<p>However, there are cases when it is necessary to deploy a solution that requires a Spark session. For example, when there is a long running job that needs to run on a schedule. Those kinds of jobs could be put inside a Quarto document and published to Posit Connect, where they can run on specific date/time intervals. Posit Connect supports Python environments, so it is an ideal platform to deploy these kinds of solutions.</p>
+<section id="preparing-for-deployment" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-for-deployment">Preparing for deployment</h2>
+<p>When deploying to Posit Connect, there are specific pieces of information that we need to make sure are sent over:</p>
 <ul>
-<li><p>We <strong>import</strong> data into memory with R</p></li>
-<li><p>Clean and <strong>tidy</strong> the data</p></li>
-<li><p>Dive into a cyclical process called <strong>understand</strong>, which helps us to get to know our data, and hopefully find the answer to the question we started with. This cycle typically involves making <strong>transformations</strong> to our tidied data, using the transformed data to fit <strong>models</strong>, and <strong>visualizing</strong> results.</p></li>
-<li><p>Once we find an answer to our question, we then <strong>communicate</strong> the results.</p></li>
+<li>Your <strong>cluster’s ID</strong></li>
+<li>Your <strong>workspace URL</strong></li>
+<li>Your <strong>token</strong></li>
+<li>Your <strong>Python environment</strong></li>
+<li>To use the <code>pysparklyr</code> extension</li>
 </ul>
-<p>Data Scientists like using R because it allows them to complete a Data Science project from beginning to end inside the R environment, and in memory.</p>
+<p>Based on the recommendations in this article, the <strong>cluster’s ID</strong> should be in the code of your document, the <strong>workspace URL</strong> and <strong>token</strong> should already be inside the <code>DATABRICKS_HOST</code>, and <code>DATABRICKS_TOKEN</code> environment variables. If you are using something other than these environment variables to authenticate, then see the section <a href="#alternatives-to-environment-variables">Alternatives to Environment Variables</a>.</p>
+<p><strong>Make sure that your document has a <code>library(pysparklyr)</code> call.</strong> This will let Posit Connect deployment process know that it needs to install this package and its dependencies, such as <code>reticulate</code>.</p>
+<p>The next section will introduce a function that will ease finding the <strong>Python environment</strong>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pysparklyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="hadoop-as-a-data-source" class="level2">
-<h2 class="anchored" data-anchor-id="hadoop-as-a-data-source">Hadoop as a Data Source</h2>
-<p>What happens when the data that needs to be analyzed is very large, like the data sets found in a Hadoop cluster? It would be impossible to fit these in memory, so workarounds are normally used. Possible workarounds include using a comparatively minuscule data sample, or download as much data as possible. This becomes disruptive to Data Scientists because either the small sample may not be representative, or they have to wait a long time in every iteration of importing a lot of data, exploring a lot of data, and modeling a lot of data.</p>
-<p><img src="../images/guides/data-lakes/slide-2.png" class="img-fluid"></p>
-</section>
-<section id="spark-as-an-analysis-engine" class="level2">
-<h2 class="anchored" data-anchor-id="spark-as-an-analysis-engine">Spark as an Analysis Engine</h2>
-<p>We noticed that a very important mental leap to make is to see Spark not just as a gateway to Hadoop (or worse, as an additional data source), but as a computing engine. As such, it is an excellent vehicle to scale our analytics. Spark has many capabilities that makes it ideal for Data Science in a data lake, such as close integration with Hadoop and Hive, the ability to cache data into memory across multiple nodes, data transformers, and its Machine Learning libraries.</p>
-<p>The approach, then, is to <strong>push as much compute</strong> to the cluster as possible, using R primarily as an interface to Spark for the Data Scientist, which will then <strong>collect as few results</strong> as possible back into R memory, mostly to <strong>visualize</strong> and <strong>communicate</strong>. As shown in the slide, the more <strong>import</strong>, <strong>tidy</strong>, <strong>transform</strong> and <strong>modeling</strong> work we can push to Spark, the faster we can analyze very large data sets.</p>
-<p><img src="../images/guides/data-lakes/slide-3.png" class="img-fluid"></p>
-</section>
-<section id="cluster-setup" class="level2">
-<h2 class="anchored" data-anchor-id="cluster-setup">Cluster Setup</h2>
-<p>Here is an illustration of how R, RStudio, and <code>sparklyr</code> can be added to the YARN managed cluster. The highlights are:</p>
+<section id="using-deploy_databricks" class="level2">
+<h2 class="anchored" data-anchor-id="using-deploy_databricks">Using <code>deploy_databricks()</code></h2>
+<p>The <code>deploy_databricks()</code> function makes it easier to deploy your content to Posit Connect. It does its best to gather all of the pieces of information mentioned above and builds the correct command to publish.</p>
+<p>The path to your content is the last piece of information we need. Ideally your content is either located in its own folder inside your project or it is at the root level of your project. There are three ways that you can let <code>deploy_databricks()</code> know the path to use:</p>
 <ul>
-<li>R, RStudio, and <code>sparklyr</code> need to be installed on one node only, typically an edge node</li>
-<li>The Data Scientist can access R, Spark, and the cluster via a web browser by navigating to the RStudio IDE inside the edge node</li>
+<li><p>If you are in RStudio and the document you wish to publish is open, <code>deploy_databricks()</code> will use the RStudio API to get the path of that document and then use its containing folder as the content’s location. This is the preferred method for deployment.</p></li>
+<li><p>Use the <code>appDir</code> argument to pass the path to be used. Something such as <code>here::here("my-cool-document")</code> would work.</p></li>
+<li><p>If no document is opened in RStudio and <code>appDir</code> is left empty, then <code>getwd()</code> will be used</p></li>
 </ul>
-<p><img src="../images/guides/data-lakes/slide-4.png" class="img-fluid"></p>
-</section>
-<section id="considerations" class="level2">
-<h2 class="anchored" data-anchor-id="considerations">Considerations</h2>
-<p>There are some important considerations to keep in mind when combining your Data Lake and R for large scale analytics:</p>
+<p>The aim of the new function is to be both flexible and helpful. It will gather your document location, credentials, and URLs. The <strong>Python</strong> location needs to defined when calling <code>deploy_databricks()</code>. If you are in RStudio, and your document is opened, here are several ways to do this:</p>
 <ul>
-<li><p>Spark’s Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a <code>sparklyr</code> extension such as <a href="http://spark.rstudio.com/extensions.html">H2O</a>, or collecting a sample of the data into R memory for modeling.</p></li>
-<li><p>Spark does not have visualization functionality; currently, the best approach is to collect pre-calculated data into R for plotting. A good way to drastically reduce the number of rows being brought back into memory is to push as much computation as possible to Spark, and return just the results to be plotted. For example, the bins of a Histogram can be calculated in Spark, so that only the final bucket values would be returned to R for visualization.</p></li>
-<li><p>A particular use case may require a different way of scaling analytics. We have published an article that provides a very good overview of the options that are available: <a href="https://rviews.rstudio.com/2016/12/21/r-for-enterprise-how-to-scale-your-analytics-using-r/">R for Enterprise: How to Scale Your Analytics Using R</a></p></li>
+<li><p>If you know the cluster’s DBR version:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">version =</span> <span class="st">"14.1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>The cluster’s ID can also be used and <code>pysparklyr</code> will automatically determine the required DBR version:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">cluster_id =</span> <span class="st">"1026-175310-7cpsh3g8"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>If you just ran the code of the content you plan to deploy, then the <strong>Python</strong> environment will already be loaded in the R session. <code>deploy_databricks()</code> will validate that the path of that Python environment conforms to one that <code>pysparklyr</code> creates and use that. This will happen if no <code>version</code>, <code>cluster_id</code>, or <code>python</code> argument is provided. At that point simply run:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>You can also pass the path to the Python environment to use by setting the <code>python</code> argument:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">python =</span> <span class="st">"/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>You can use <code>DATABRICKS_CLUSTER_ID</code> environment variable. If you have it set, simply run:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
+<p>Here is an example of the output returned when using <code>deploy_databricks()</code>. Before submitting your content, you will be prompted to confirm that the information gathered is correct. Also notice that if you have more than one Posit Connect server setup in your RStudio IDE, it will choose the top one as the default but allow you to easily change it if necessary:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(<span class="at">version =</span> <span class="st">"14.1"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ℹ Source directory<span class="sc">:</span> <span class="er">/</span>Users<span class="sc">/</span>edgar<span class="sc">/</span>r_projects<span class="sc">/</span>practice<span class="sc">/</span>test<span class="sc">-</span>deploy</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ℹ Python<span class="sc">:</span> <span class="er">/</span>Users<span class="sc">/</span>edgar<span class="sc">/</span>.virtualenvs<span class="sc">/</span>r<span class="sc">-</span>sparklyr<span class="sc">-</span>databricks<span class="fl">-14.1</span><span class="sc">/</span>bin<span class="sc">/</span>python</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ℹ Posit server<span class="sc">:</span> colorado.posit.co</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  Account name<span class="sc">:</span> edgar</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ℹ Host URL<span class="sc">:</span> rstudio<span class="sc">-</span>partner<span class="sc">-</span>posit<span class="sc">-</span>default.cloud.databricks.com</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  Token<span class="sc">:</span> <span class="st">'&lt;REDACTED&gt;'</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>Does everything look correct?</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">:</span> Change <span class="st">'Posit server'</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>Selection<span class="sc">:</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The first time that you publish, the function will check to see if you have a <code>requirements.txt</code> file. If you do not have the file, it will ask you if you wish to create it. The <code>requirements.txt</code> file contains the list of the your current Python environment, as well as its versions. This will help when you re-publish your content, because you will not need to pass the <code>version</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Would you like to create the <span class="st">'requirements.txt'</span> file?</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Why consider? This will allow you to skip using <span class="st">`</span><span class="at">version</span><span class="st">`</span> or <span class="st">`</span><span class="at">cluster_id</span><span class="st">`</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> Yes</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">:</span> No</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you select <strong>No</strong>, <code>deploy_databricks()</code> will not ask you again when you re-deploy.</p>
 </section>
-<section id="r-for-data-science-toolchain-with-spark" class="level2">
-<h2 class="anchored" data-anchor-id="r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</h2>
-<p>With sparklyr, the Data Scientist will be able to access the Data Lake’s data, and also gain an additional, very powerful <strong>understand</strong> layer via Spark. sparklyr, along with the <a href="https://www.rstudio.com/products/rstudio/">RStudio IDE</a> and the <a href="http://tidyverse.org/">tidyverse</a> packages, provides the Data Scientist with an excellent toolbox to analyze data, big and small.</p>
-<p><img src="../images/guides/data-lakes/slide-5.png" class="img-fluid"></p>
+<section id="alternatives-to-environment-variables" class="level2">
+<h2 class="anchored" data-anchor-id="alternatives-to-environment-variables">Alternatives to Environment Variables</h2>
+<p>The <code>deploy_databricks()</code> function has a <code>host</code>, and <code>token</code> arguments. These arguments take precedent over the environment variables, if set.</p>
+<p>There are a variety of reasons for you to set these arguments when publishing. For example, locally you authenticate with a Databricks configuration file, but when deploying, you will need to let <code>deploy_databricks()</code> what values to use for the PAT and Host URL. Another example could be that your deployed content may need to use a <a href="https://docs.databricks.com/en/dev-tools/service-principals.html">service account</a>, that differs from the credentials you use when developing.</p>
+<p>As usual, we recommend that you avoid using open text values with your credentials in your code. An effective way of managing local-vs-remote credentials is with the <a href="https://rstudio.github.io/config/articles/rsconnect.html"><code>config</code></a> package. Here is an example:</p>
+<p><strong><em>config.yml</em></strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Token]"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsconnect</span><span class="kw">:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">host_url</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Your Host URL]"</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">token</span><span class="kw">:</span><span class="at"> </span><span class="st">"[Service Token]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong><em>R script</em></strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>config <span class="ot">&lt;-</span> config<span class="sc">::</span><span class="fu">get</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>pysparklyr<span class="sc">::</span><span class="fu">deploy_databricks</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"14.1"</span>, </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> config<span class="sc">$</span>host_url,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> config<span class="sc">$</span>token</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The integration with Posit Connect and <code>config</code>, allows your deployed content to automatically use the values under the <code>rsconnect</code> section in the YAML file, instead of the values from the <code>default</code> section.</p>
 
 
 </section>
@@ -704,13 +765,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../deployment/index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      <a href="../deployment/databricks-connect-udfs.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Run R code in Databricks</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../deployment/yarn-cluster-emr.html" class="pagination-link">
-        <span class="nav-page-text">EMR cluster</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../deployment/qubole-overview.html" class="pagination-link">
+        <span class="nav-page-text">Qubole cluster</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

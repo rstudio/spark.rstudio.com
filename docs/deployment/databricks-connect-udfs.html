@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Data Lakes</title>
+<title>sparklyr - Run R inside Databricks Connect</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../deployment/yarn-cluster-emr.html" rel="next">
-<link href="../deployment/index.html" rel="prev">
+<link href="../deployment/databricks-posit-connect.html" rel="next">
+<link href="../deployment/databricks-connect.html" rel="prev">
 <link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -67,6 +101,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- Google Tag Manager (noscript) -->
  <noscript></noscript></head><body class="nav-sidebar floating nav-fixed"><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHBDBW7" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 <!-- End Google Tag Manager (noscript) -->
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../styles.css">
@@ -144,7 +181,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/data-lakes.html">YARN (Hadoop)</a></li><li class="breadcrumb-item"><a href="../deployment/data-lakes.html">Understanding Data Lakes</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../deployment/databricks-connect.html">Databricks Connect (v2)</a></li><li class="breadcrumb-item"><a href="../deployment/databricks-connect-udfs.html">Run R code in Databricks</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -173,7 +210,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link active">
+  <a href="../deployment/data-lakes.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Understanding Data Lakes</span></a>
   </div>
 </li>
@@ -208,7 +245,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../deployment/databricks-connect-udfs.html" class="sidebar-item-text sidebar-link">
+  <a href="../deployment/databricks-connect-udfs.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Run R code in Databricks</span></a>
   </div>
 </li>
@@ -253,14 +290,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#audience" id="toc-audience" class="nav-link active" data-scroll-target="#audience">Audience</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#r-for-data-science" id="toc-r-for-data-science" class="nav-link" data-scroll-target="#r-for-data-science">R for Data Science</a></li>
-  <li><a href="#hadoop-as-a-data-source" id="toc-hadoop-as-a-data-source" class="nav-link" data-scroll-target="#hadoop-as-a-data-source">Hadoop as a Data Source</a></li>
-  <li><a href="#spark-as-an-analysis-engine" id="toc-spark-as-an-analysis-engine" class="nav-link" data-scroll-target="#spark-as-an-analysis-engine">Spark as an Analysis Engine</a></li>
-  <li><a href="#cluster-setup" id="toc-cluster-setup" class="nav-link" data-scroll-target="#cluster-setup">Cluster Setup</a></li>
-  <li><a href="#considerations" id="toc-considerations" class="nav-link" data-scroll-target="#considerations">Considerations</a></li>
-  <li><a href="#r-for-data-science-toolchain-with-spark" id="toc-r-for-data-science-toolchain-with-spark" class="nav-link" data-scroll-target="#r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#what-is-supported-in-spark_apply---at-a-glance" id="toc-what-is-supported-in-spark_apply---at-a-glance" class="nav-link" data-scroll-target="#what-is-supported-in-spark_apply---at-a-glance">What is supported in <code>spark_apply()</code> - At a glance</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R packages</a></li>
+  <li><a href="#providing-a-schema" id="toc-providing-a-schema" class="nav-link" data-scroll-target="#providing-a-schema">Providing a schema</a></li>
+  <li><a href="#partition-data" id="toc-partition-data" class="nav-link" data-scroll-target="#partition-data">Partition data</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
   </ul>
 </nav>
     </div>
@@ -273,7 +309,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Lakes</h1>
+<h1 class="title">Run R inside Databricks Connect</h1>
 </div>
 
 
@@ -285,70 +321,239 @@ ul.task-list li input[type="checkbox"] {
     
   </div>
   
-<div>
-  <div class="abstract">
-    <div class="abstract-title">Abstract</div>
-    Explains how to take advantage of Apache Spark inside organizations that have a Hadoop based Big Data Lake
-  </div>
-</div>
 
 </header>
 
-<section id="audience" class="level2">
-<h2 class="anchored" data-anchor-id="audience">Audience</h2>
-<p>This article explains how to take advantage of Apache Spark at organizations that have a Hadoop based Big Data Lake.</p>
+<p><em>Last updated: Mon Feb 26 13:17:50 2024</em></p>
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<p>Support for <code>spark_apply()</code> is currently available in the development versions of <code>sparklyr</code>, and <code>pysparklyr</code>. To install, run the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"sparklyr/sparklyr"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"mlverse/pysparklyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Databricks Connect is now able to run regular Python code inside Spark. <code>sparklyr</code> takes advantage of this capability by having Python transport and run the R code. It does this via the <code>rpy2</code> Python library. Using this library also guarantees Arrow support.</p>
+<div id="fig-connect" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="cell" data-fig-width="6" data-eval="true">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  subgraph mm[My machine]
+    sp[R &lt;br&gt; **********  &lt;br&gt;sparklyr]
+    rp[Python&lt;br&gt; **************** &lt;br&gt;rpy2 'packages'&lt;br&gt; the R code]
+  end
+  subgraph db[Databricks]
+    subgraph sr[Spark]
+      pt[Python&lt;br&gt; ********************* &lt;br&gt;rpy2 runs the R code]
+    end
+  end
+
+sp --&gt; rp
+rp --&gt; sr
+
+style mm   fill:#fff,stroke:#666,color:#000
+style sp   fill:#fff,stroke:#666,color:#000
+style rp   fill:#fff,stroke:#666,color:#000
+style db   fill:#fff,stroke:#666,color:#000
+style sr   fill:#fff,stroke:#666,color:#000
+style pt   fill:#fff,stroke:#666,color:#000
+</pre>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="figure-caption">Figure&nbsp;1: How <code>sparklyr</code> uses rpy2 to run R code in Databricks Connect</figcaption>
+</figure>
+</div>
 </section>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>We have noticed that the types of questions we field after a demo of <code>sparklyr</code> to our customers were more about high-level architecture than how the package works. To answer those questions, we put together a set of slides that illustrate and discuss important concepts, to help customers see where Spark, R, and <code>sparklyr</code> fit in a Big Data Platform implementation. In this article, we’ll review those slides and provide a narrative that will help you better envision how you can take advantage of our products.</p>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
+<p>If you have been using <code>sparklyr</code> with Databricks Connect v2 already, then after upgrading the packages, you will be prompted to install <code>rpy2</code> in your Python environment. The prompt will occur the first time you use <code>spark_apply()</code> in an interactive R session. If this is the first time you are using <code>sparklyr</code> with Databricks Connect v2, please refer to our intro article<a href="../deployment/databricks-connect.html">“Databricks Connect v2”</a> to learn how to setup your environment.</p>
+<p>As shown in the diagram on the previous section, <code>rpy2</code> is needed on the Databricks cluster you plan to use. This means that you will need to “manually” install the library in the cluster. This is a simple operation that is done via your Databricks web portal. Here are the instructions that shows you how to do that: <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Databricks - Cluster Libraries</a>.</p>
 </section>
-<section id="r-for-data-science" class="level2">
-<h2 class="anchored" data-anchor-id="r-for-data-science">R for Data Science</h2>
-<p>It is very important to preface the Use Case review with some background information about where RStudio focuses its efforts when developing packages and products. Many vendors offer <em>R integration</em>, but in most cases, what this means is that they will add a model built in R to their pipeline or interface, and pass new inputs to that model to generate outputs that can be used in the next step in the pipeline, or in a calculation for the interface.</p>
-<p>In contrast, our focus is on the process that happens before that: the discipline that produces the model, meaning <strong>Data Science</strong>.</p>
-<p><img src="../images/guides/data-lakes/slide-1.png" class="img-fluid"></p>
-<p>In their <a href="http://r4ds.had.co.nz/">R for Data Science</a> book, Hadley Wickham and Garrett Grolemund provide a great diagram that nicely illustrates the Data Science process:</p>
-<ul>
-<li><p>We <strong>import</strong> data into memory with R</p></li>
-<li><p>Clean and <strong>tidy</strong> the data</p></li>
-<li><p>Dive into a cyclical process called <strong>understand</strong>, which helps us to get to know our data, and hopefully find the answer to the question we started with. This cycle typically involves making <strong>transformations</strong> to our tidied data, using the transformed data to fit <strong>models</strong>, and <strong>visualizing</strong> results.</p></li>
-<li><p>Once we find an answer to our question, we then <strong>communicate</strong> the results.</p></li>
-</ul>
-<p>Data Scientists like using R because it allows them to complete a Data Science project from beginning to end inside the R environment, and in memory.</p>
+<section id="what-is-supported-in-spark_apply---at-a-glance" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-supported-in-spark_apply---at-a-glance">What is supported in <code>spark_apply()</code> - At a glance</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Supported?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>f</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>columns</code></td>
+<td>Yes</td>
+<td>Requires a string entry that contains the name of the column and its Spark variable type. Accepted values are: <code>long</code>, <code>decimal</code>, <code>string</code>, <code>datetime</code> and <code>bool</code>. Example: <code>columns = "x long, y string"</code>. If not provided, <code>sparklyr</code> will automatically create one, by examining the first 10 records of <code>x</code>, and it will provide a <code>columns</code> spec you can use when running <code>spark_apply()</code> again. See: <a href="#providing-a-schema">Providing a schema</a></td>
+</tr>
+<tr class="even">
+<td><code>memory</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>group_by</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>packages</code></td>
+<td><strong>No</strong></td>
+<td>You will need to pre-install the needed R packages in your cluster via the Databricks web portal, see <a href="#r-packages">R packages</a></td>
+</tr>
+<tr class="odd">
+<td><code>context</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>name</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>barrier</code></td>
+<td>Yes</td>
+<td>Support only on ungrouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+</tr>
+<tr class="even">
+<td><code>fetch_result_as_sdf</code></td>
+<td>Yes</td>
+<td>At this time, <code>spark_apply()</code> inside Databricks Connect only supports rectangular data, so seeing to <code>FALSE</code> will always return a data frame.</td>
+</tr>
+<tr class="odd">
+<td><code>partition_index_param</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>arrow_max_records_per_batch</code></td>
+<td>Yes</td>
+<td>Support only on ungrouped data. In other words, it is valid when the <code>group_by</code> argument is used.</td>
+</tr>
+<tr class="odd">
+<td><code>auto_deps</code></td>
+<td><strong>No</strong></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>...</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="hadoop-as-a-data-source" class="level2">
-<h2 class="anchored" data-anchor-id="hadoop-as-a-data-source">Hadoop as a Data Source</h2>
-<p>What happens when the data that needs to be analyzed is very large, like the data sets found in a Hadoop cluster? It would be impossible to fit these in memory, so workarounds are normally used. Possible workarounds include using a comparatively minuscule data sample, or download as much data as possible. This becomes disruptive to Data Scientists because either the small sample may not be representative, or they have to wait a long time in every iteration of importing a lot of data, exploring a lot of data, and modeling a lot of data.</p>
-<p><img src="../images/guides/data-lakes/slide-2.png" class="img-fluid"></p>
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">R packages</h2>
+<p>If your <code>spark_apply()</code> call uses specific R packages, you will need to pre-install those specific packages in your target cluster. This is a simple operation, because you can do this via your Databricks web portal, please see <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Databricks - Cluster Libraries</a> to learn how to do this.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Only CRAN packages supported
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Databricks cluster library interface is able to source packages from CRAN only. This means that packages installed from GitHub, or another alternative sources, will not be available.</p>
+</div>
+</div>
+<section id="additional-background" class="level4">
+<h4 class="anchored" data-anchor-id="additional-background">Additional background</h4>
+<p>In previous implementation, <code>spark_apply()</code> was able to easily copy the locally installed R packages in order to ensure that your code will run in the cluster. This was possible because R, and RStudio, was running in one of the matching servers in the Spark cluster. Because <code>sparklyr</code> is running on a remote machine, more likely a laptop, this is no longer an option. In the vast majority of cases, the remote machine will be on different a Operating System than the cluster. Additionally, transmitting the unpacked, compiled, R packages would take a long time over a broadband Internet connection.</p>
 </section>
-<section id="spark-as-an-analysis-engine" class="level2">
-<h2 class="anchored" data-anchor-id="spark-as-an-analysis-engine">Spark as an Analysis Engine</h2>
-<p>We noticed that a very important mental leap to make is to see Spark not just as a gateway to Hadoop (or worse, as an additional data source), but as a computing engine. As such, it is an excellent vehicle to scale our analytics. Spark has many capabilities that makes it ideal for Data Science in a data lake, such as close integration with Hadoop and Hive, the ability to cache data into memory across multiple nodes, data transformers, and its Machine Learning libraries.</p>
-<p>The approach, then, is to <strong>push as much compute</strong> to the cluster as possible, using R primarily as an interface to Spark for the Data Scientist, which will then <strong>collect as few results</strong> as possible back into R memory, mostly to <strong>visualize</strong> and <strong>communicate</strong>. As shown in the slide, the more <strong>import</strong>, <strong>tidy</strong>, <strong>transform</strong> and <strong>modeling</strong> work we can push to Spark, the faster we can analyze very large data sets.</p>
-<p><img src="../images/guides/data-lakes/slide-3.png" class="img-fluid"></p>
 </section>
-<section id="cluster-setup" class="level2">
-<h2 class="anchored" data-anchor-id="cluster-setup">Cluster Setup</h2>
-<p>Here is an illustration of how R, RStudio, and <code>sparklyr</code> can be added to the YARN managed cluster. The highlights are:</p>
-<ul>
-<li>R, RStudio, and <code>sparklyr</code> need to be installed on one node only, typically an edge node</li>
-<li>The Data Scientist can access R, Spark, and the cluster via a web browser by navigating to the RStudio IDE inside the edge node</li>
-</ul>
-<p><img src="../images/guides/data-lakes/slide-4.png" class="img-fluid"></p>
+<section id="providing-a-schema" class="level2">
+<h2 class="anchored" data-anchor-id="providing-a-schema">Providing a schema</h2>
+<p>Spark requires the schema of the data that your R code will output. It expects the name, and type of each field. The python</p>
+<p>Passing a schema in <code>columns</code> will make<code>spark_apply()</code> run faster. Because if not provided, <code>sparklyr</code> has to collect the first 10 rows, and run the R code in order to try and determine the names and types of your resulting data set. As a convenience, <code>sparklyr</code> will output a message with the schema it used as the schema. If you are going to rerun your <code>spark_apply()</code> command again, you can copy and paste the output of the message to you code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tbl_mtcars,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  nrow,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"am"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To increase performance, use the following schema:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; columns = "am double, x long"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_74ef0c15_0631_43ce_b0e4_43f6fd6d3f7c&gt; [2 x 2]</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0    19</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1    13</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Passing the <code>columns</code> argument, silences the message:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  tbl_mtcars,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  nrow,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"am"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="st">"am double, x long"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_fb407bf9_94ac_4b57_9426_37ad2f56b9e4&gt; [2 x 2]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0    19</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1    13</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="considerations" class="level2">
-<h2 class="anchored" data-anchor-id="considerations">Considerations</h2>
-<p>There are some important considerations to keep in mind when combining your Data Lake and R for large scale analytics:</p>
-<ul>
-<li><p>Spark’s Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a <code>sparklyr</code> extension such as <a href="http://spark.rstudio.com/extensions.html">H2O</a>, or collecting a sample of the data into R memory for modeling.</p></li>
-<li><p>Spark does not have visualization functionality; currently, the best approach is to collect pre-calculated data into R for plotting. A good way to drastically reduce the number of rows being brought back into memory is to push as much computation as possible to Spark, and return just the results to be plotted. For example, the bins of a Histogram can be calculated in Spark, so that only the final bucket values would be returned to R for visualization.</p></li>
-<li><p>A particular use case may require a different way of scaling analytics. We have published an article that provides a very good overview of the options that are available: <a href="https://rviews.rstudio.com/2016/12/21/r-for-enterprise-how-to-scale-your-analytics-using-r/">R for Enterprise: How to Scale Your Analytics Using R</a></p></li>
-</ul>
+<section id="partition-data" class="level2">
+<h2 class="anchored" data-anchor-id="partition-data">Partition data</h2>
+<p>Typically, with un-grouped data, the number of parallel jobs will correspond with the number of partitions of the data. For Databricks connections, <code>sparklyr</code> will, by default, attempt to use Apache Arrow. The Databricks Connect clusters come with Arrow installed. This approach also changes how Spark will partition your data. Instead of the number of partitions, Spark will use the value in the “Arrow Max Records per Bach” option. This option can be controlled directly in the <code>spark_apply()</code> call by setting the <code>arrow_max_records_per_batch</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">4</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 4</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_9cdf51c8_0af6_40c0_ba78_49f1fa696224&gt; [8 x 1]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       x</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     4</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     4</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     4</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     4</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6     4</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7     4</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8     4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you pass a different Arrow Batch size than what the option is set to currently, <code>sparklyr</code> will change the value of that option, and will notify you of that:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">2</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;sparklyr_tmp_table_b81ab0ff_ac22_4a1e_9ab7_22e4961525fd&gt; [?? x 1]</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        x</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dbl&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1     2</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2     2</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3     2</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4     2</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5     2</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6     2</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7     2</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8     2</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9     2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10     2</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # ℹ more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="r-for-data-science-toolchain-with-spark" class="level2">
-<h2 class="anchored" data-anchor-id="r-for-data-science-toolchain-with-spark">R for Data Science Toolchain with Spark</h2>
-<p>With sparklyr, the Data Scientist will be able to access the Data Lake’s data, and also gain an additional, very powerful <strong>understand</strong> layer via Spark. sparklyr, along with the <a href="https://www.rstudio.com/products/rstudio/">RStudio IDE</a> and the <a href="http://tidyverse.org/">tidyverse</a> packages, provides the Data Scientist with an excellent toolbox to analyze data, big and small.</p>
-<p><img src="../images/guides/data-lakes/slide-5.png" class="img-fluid"></p>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p><code>spark_apply()</code> <strong>will only work on Databricks “Single Access” mode</strong>. “Shared Access” mode does not currently support <code>mapInPandas()</code>, and <code>applyInPandas()</code> (see <a href="https://docs.databricks.com/en/compute/access-mode-limitations.html#udf-limitations-for-unity-catalog-shared-access-mode">Databricks - Access mode limitations</a>). These are the Python functions that <code>sparklyr</code> uses to run the Python code, which in turn runs the R code via <code>rpy2</code>.</p>
 
 
 </section>
@@ -704,13 +909,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../deployment/index.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      <a href="../deployment/databricks-connect.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../deployment/yarn-cluster-emr.html" class="pagination-link">
-        <span class="nav-page-text">EMR cluster</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../deployment/databricks-posit-connect.html" class="pagination-link">
+        <span class="nav-page-text">Deploying to Posit Connect</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

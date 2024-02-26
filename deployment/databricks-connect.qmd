@@ -5,7 +5,7 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
+    eval: true
     freeze: true
 editor: 
   markdown: 
@@ -245,16 +245,6 @@ abbreviated example of the output that occurs when selecting "Yes":
 
 ## Interacting with the cluster
 
-::: callout-note
-Posit Workbench provides users with a Databricks pane for direct access
-to available Databricks clusters. From this pane, users can view details
-about Databricks clusters and connect directly to them. More details
-about this feature can be found
-[here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
-
-![](/images/deployment/databricks/workbench-databricks-pane.png)
-:::
-
 ### RStudio's Connection pane
 
 Thanks to the new way we are integrating with Spark, it is now possible
@@ -316,6 +306,17 @@ trips %>%
     avg_distance = mean(trip_distance, na.rm = TRUE)
   )
 ```
+
+### Posit Workench's 'Databricks Pane'
+
+Posit Workbench provides users with a Databricks pane for direct access
+to available Databricks clusters. From this pane, users can view details
+about Databricks clusters and connect directly to them. More details
+about this feature can be found
+[here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
+
+![](/images/deployment/databricks/workbench-databricks-pane.png){width="500"}
+
 
 ## Machine Learning
 
@@ -430,62 +431,6 @@ disconnect from the cluster.
 spark_disconnect(sc)
 ```
 
-## Reported Problems
-
-As it is with any new implementation, we are seeing some early adopters
-report issues with their installation or connection. Here are some of
-the issues that have been reported and the recommended solution or
-workaround. Each issue is **collapsed**, just expand it to see the
-background and recommendation. Each one is titled based on the full
-error message or the distinctive part of the error message.
-
-Before reviewing the issues, please make sure to have the latest
-versions of `sparklyr` and `pysparklyr` from CRAN. These are the current
-version levels: - `sparklyr` - 1.8.4 - `pysparklyr` - 0.1.3
-
-::: {.callout-note collapse="true"}
-## `...reticulate can only bind to copies of Python built with '--enable-shared'.`
-
-Error message contains:
-
-``` r
-... reticulate can only bind to copies of Python built with '--enable-shared'.
-```
-
-This is happening because there is no Python installation that
-`reticulate` can use. `pysparklyr` depends on that package to function.
-
-### Solution
-
-The best way to resolve is to install an acceptable version of Python.
-You can run:
-
-``` r
-reticulate::install_python()
-```
-
-If the output mentions `--skip-existing [version number]` then you will
-have two options:
-
-1.  If you're ok with replacing the existing Python, then use:
-
-    ``` r
-     reticulate::install_python(version = "[version number]", force = TRUE)
-    ```
-
-2.  If you would like to keep that installation of Python then use a
-    different version number:
-
-    ``` r
-     reticulate::install_python(version = "[slightly different version number]")
-    ```
-
-    For example, if the version number is `3.9.12`, then use `3.9.18`:
-
-    ``` r
-    reticulate::install_python(version = "3.9.18")
-    ```
-:::
 
 ## Environments
 
@@ -569,7 +514,7 @@ need to connect to a different cluster that has the same DBR version,
 a different DBR version, then it is recommended that you run the
 installation function using the new DBR version or cluster ID.
 
-### Python Libraries {#python-libraries}
+## Python Libraries {#python-libraries}
 
 Here is the list of the Python libraries needed in order to work with
 the cluster:

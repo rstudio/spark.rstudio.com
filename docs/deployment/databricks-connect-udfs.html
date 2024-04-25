@@ -333,7 +333,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>Last updated: Fri Apr 19 08:47:30 2024</em></p>
+<p><em>Last updated: Thu Apr 25 12:38:27 2024</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p>Support for <code>spark_apply()</code> is available starting with the following package versions:</p>
@@ -351,25 +351,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
-  subgraph mm[My machine]
-    sp[R &lt;br&gt; **********  &lt;br&gt;sparklyr]
-    rp[Python&lt;br&gt; **************** &lt;br&gt;rpy2 'packages'&lt;br&gt; the R code]
+  subgraph mm ["My machine"]
+  nb1("` `")
+    subgraph mmr["`R _(sparklyr)_`"]
+    nb2("` `")
+      subgraph mmrr["`reticulate`"]
+      nb3("` `")
+        subgraph mmp["`Python`"]
+          nb4("` `")
+          subgraph mmrp2["`rpy2`"]
+             nb5("`_rpy2 'packages' the R code_`")
+             mmrc["R code"]
+          end
+        end
+      end
+    end
   end
+  
   subgraph db[Databricks]
+    nb6("` `")
     subgraph sr[Spark]
-      pt[Python&lt;br&gt; ********************* &lt;br&gt;rpy2 runs the R code]
+      nb7("` `")
+      subgraph pt[Python]
+        nb8("` `")
+        subgraph dbrp2[rpy2]
+          nb9("`_rpy2 runs the R code_`")
+          subgraph dbr[R]
+            dbrc["R code"]
+          end
+        end
+      end
     end
   end
 
-sp --&gt; rp
-rp --&gt; sr
 
-style mm   fill:#fff,stroke:#666,color:#000
-style sp   fill:#fff,stroke:#666,color:#000
-style rp   fill:#fff,stroke:#666,color:#000
-style db   fill:#fff,stroke:#666,color:#000
-style sr   fill:#fff,stroke:#666,color:#000
-style pt   fill:#fff,stroke:#666,color:#000
+mmrc --&gt; dbrc
+
+style nb1 fill:#fff,stroke-width:0
+style nb2 fill:#fff,stroke-width:0
+style nb3 fill:#fff,stroke-width:0
+style nb4 fill:#fff,stroke-width:0
+style nb5 fill:#fff,stroke-width:0
+style nb6 fill:#fff,stroke-width:0
+style nb7 fill:#fff,stroke-width:0
+style nb8 fill:#fff,stroke-width:0
+style nb9 fill:#fff,stroke-width:0
+style mm  fill:#fff,stroke:#666,color:#000
+style mmr fill:#fff,stroke:#666,color:#000
+style mmrr fill:#fff,stroke:#666,color:#000
+style mmp fill:#fff,stroke:#666,color:#000
+style mmrp2 fill:#fff,stroke:#666,color:#000
+style mmr fill:#fff,stroke:#666,color:#000
+style db fill:#fff,stroke:#666,color:#000
+style sr fill:#fff,stroke:#666,color:#000
+style pt fill:#fff,stroke:#666,color:#000
+style dbr fill:#fff,stroke:#666,color:#000
+style dbrp2 fill:#fff,stroke:#666,color:#000
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -504,7 +541,7 @@ Only CRAN packages supported
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To increase performance, use the following schema:</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; columns = "am double, x long"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_b84460ea_b1d3_471b_9cef_b13f339819b6`&gt; [2 x 2]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_fa5389aa_0761_4a6a_abf5_1da699868ffc`&gt; [2 x 2]</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
@@ -519,7 +556,7 @@ Only CRAN packages supported
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_by =</span> <span class="st">"am"</span>, </span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="st">"am double, x long"</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_e2b75205_e82e_43c1_ad5b_60944ed8ed65`&gt; [2 x 2]</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_87ef961e_1009_42f8_abdb_2a04c2a5ad38`&gt; [2 x 2]</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      am     x</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
@@ -533,7 +570,7 @@ Only CRAN packages supported
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">4</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 4</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_cb0e87af_2c9a_459d_9dd0_05a7522c4c21`&gt; [8 x 1]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_c2866f69_faf7_49e5_a343_707862ec3dcc`&gt; [8 x 1]</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       x</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt;</span></span>
@@ -550,7 +587,7 @@ Only CRAN packages supported
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_apply</span>(tbl_mtcars, nrow, <span class="at">arrow_max_records_per_batch =</span> <span class="dv">2</span>, <span class="at">columns =</span> <span class="st">"x long"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 2</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_c3e3e281_a330_4f32_91cd_ffe27c456247`&gt; [?? x 1]</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Source:   table&lt;`sparklyr_tmp_table_a09a5277_7841_4746_bde1_c583aeee4baf`&gt; [?? x 1]</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # Database: spark_connection</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        x</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dbl&gt;</span></span>

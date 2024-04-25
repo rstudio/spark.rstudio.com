@@ -52,25 +52,62 @@ this library also guarantees Arrow support.
 %%| fig-width: 6
 %%| eval: true
 flowchart LR
-  subgraph mm[My machine]
-    sp[R <br> **********  <br>sparklyr]
-    rp[Python<br> **************** <br>rpy2 'packages'<br> the R code]
+  subgraph mm ["My machine"]
+  nb1("` `")
+    subgraph mmr["`R _(sparklyr)_`"]
+    nb2("` `")
+      subgraph mmrr["`reticulate`"]
+      nb3("` `")
+        subgraph mmp["`Python`"]
+          nb4("` `")
+          subgraph mmrp2["`rpy2`"]
+             nb5("`_rpy2 'packages' the R code_`")
+             mmrc["R code"]
+          end
+        end
+      end
+    end
   end
+  
   subgraph db[Databricks]
+    nb6("` `")
     subgraph sr[Spark]
-      pt[Python<br> ********************* <br>rpy2 runs the R code]
+      nb7("` `")
+      subgraph pt[Python]
+        nb8("` `")
+        subgraph dbrp2[rpy2]
+          nb9("`_rpy2 runs the R code_`")
+          subgraph dbr[R]
+            dbrc["R code"]
+          end
+        end
+      end
     end
   end
 
-sp --> rp
-rp --> sr
 
-style mm   fill:#fff,stroke:#666,color:#000
-style sp   fill:#fff,stroke:#666,color:#000
-style rp   fill:#fff,stroke:#666,color:#000
-style db   fill:#fff,stroke:#666,color:#000
-style sr   fill:#fff,stroke:#666,color:#000
-style pt   fill:#fff,stroke:#666,color:#000
+mmrc --> dbrc
+
+style nb1 fill:#fff,stroke-width:0
+style nb2 fill:#fff,stroke-width:0
+style nb3 fill:#fff,stroke-width:0
+style nb4 fill:#fff,stroke-width:0
+style nb5 fill:#fff,stroke-width:0
+style nb6 fill:#fff,stroke-width:0
+style nb7 fill:#fff,stroke-width:0
+style nb8 fill:#fff,stroke-width:0
+style nb9 fill:#fff,stroke-width:0
+style mm  fill:#fff,stroke:#666,color:#000
+style mmr fill:#fff,stroke:#666,color:#000
+style mmrr fill:#fff,stroke:#666,color:#000
+style mmp fill:#fff,stroke:#666,color:#000
+style mmrp2 fill:#fff,stroke:#666,color:#000
+style mmr fill:#fff,stroke:#666,color:#000
+style db fill:#fff,stroke:#666,color:#000
+style sr fill:#fff,stroke:#666,color:#000
+style pt fill:#fff,stroke:#666,color:#000
+style dbr fill:#fff,stroke:#666,color:#000
+style dbrp2 fill:#fff,stroke:#666,color:#000
 ```
 
 How `sparklyr` uses rpy2 to run R code in Databricks Connect

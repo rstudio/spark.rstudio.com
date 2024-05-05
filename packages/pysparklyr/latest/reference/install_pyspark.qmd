@@ -1,0 +1,74 @@
+---
+title: "Installs PySpark and Python dependencies"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/python-install.R*
+
+## install_pyspark
+
+## Description
+ Installs PySpark and Python dependencies  Installs Databricks Connect and Python dependencies 
+
+
+## Usage
+```r
+ 
+install_pyspark( 
+  version = NULL, 
+  envname = NULL, 
+  python_version = NULL, 
+  new_env = TRUE, 
+  method = c("auto", "virtualenv", "conda"), 
+  as_job = TRUE, 
+  install_ml = FALSE, 
+  ... 
+) 
+ 
+install_databricks( 
+  version = NULL, 
+  cluster_id = NULL, 
+  envname = NULL, 
+  python_version = NULL, 
+  new_env = TRUE, 
+  method = c("auto", "virtualenv", "conda"), 
+  as_job = TRUE, 
+  install_ml = FALSE, 
+  ... 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| version | Version of 'databricks.connect' to install. Defaults to `NULL`. If `NULL`, it will check against PyPi to get the current library version. |
+| envname | The name of the Python Environment to use to install the Python libraries. Defaults to `NULL.` If `NULL`, a name will automatically be assigned based on the version that will be installed |
+| python_version | The minimum required version of Python to use to create the Python environment. Defaults to `NULL`. If `NULL`, it will check against PyPi to get the minimum required Python version. |
+| new_env | If `TRUE`, any existing Python virtual environment and/or Conda environment specified by `envname` is deleted first. |
+| method | The installation method to use. If creating a new environment, `"auto"` (the default) is equivalent to `"virtualenv"`. Otherwise `"auto"` infers the installation method based on the type of Python environment specified by `envname`. |
+| as_job | Runs the installation if using this function within the RStudio IDE. |
+| install_ml | Installs ML related Python libraries. Defaults to TRUE. This is mainly for machines with limited storage to avoid installing the rather large 'torch' library if the ML features are not going to be used. This will apply to any environment backed by 'Spark' version 3.5 or above. |
+| ... | Passed on to `reticulate::py_install()` |
+| cluster_id | Target of the cluster ID that will be used with. If provided, this value will be used to extract the cluster's version |
+
+
+
+## Value
+ It returns no value to the R session. This function purpose is to create the 'Python' environment, and install the appropriate set of 'Python' libraries inside the new environment. During runtime, this function will send messages to the console describing the steps that the function is taking. For example, it will let the user know if it is getting the latest version of the Python library from 'PyPi.org', and the result of such query. 
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

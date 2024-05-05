@@ -202,7 +202,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sparkxgb-0.1.2" id="toc-sparkxgb-0.1.2" class="nav-link active" data-scroll-target="#sparkxgb-0.1.2">sparkxgb 0.1.2</a></li>
+  <li><a href="#sparkxgb-0.2" id="toc-sparkxgb-0.2" class="nav-link active" data-scroll-target="#sparkxgb-0.2">sparkxgb 0.2</a>
+  <ul class="collapse">
+  <li><a href="#fixes" id="toc-fixes" class="nav-link" data-scroll-target="#fixes">Fixes</a></li>
+  <li><a href="#internal-improvements" id="toc-internal-improvements" class="nav-link" data-scroll-target="#internal-improvements">Internal improvements</a></li>
+  </ul></li>
   <li><a href="#sparkxgb-0.1.1" id="toc-sparkxgb-0.1.1" class="nav-link" data-scroll-target="#sparkxgb-0.1.1">sparkxgb 0.1.1</a></li>
   </ul>
 </nav>
@@ -217,11 +221,37 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="sparkxgb-0.1.2" class="level1">
-<h1>sparkxgb 0.1.2</h1>
+<section id="sparkxgb-0.2" class="level1">
+<h1>sparkxgb 0.2</h1>
+<section id="fixes" class="level3">
+<h3 class="anchored" data-anchor-id="fixes">Fixes</h3>
 <ul>
-<li>Edgar Ruiz (https://github.com/edgararuiz) will be the new maintainer of this package moving forward.</li>
+<li><p>Avoids sending two deprecated parameters to XGBoost. The default arguments in the R function are NULL, and it will return an error message if the call intends to use them:</p>
+<ul>
+<li><p>Sketch EPS - No longer supported since XGBoost version 1.6</p></li>
+<li><p>Timeout Request Updates - No long supported since XGBoost version 1.7</p></li>
+</ul></li>
+<li><p>Adds setMissing param handler for XGBoostRegressor in the Scala code. The <code>missing</code> parameter in <code>xgboost_regressor()</code> was not working.</p></li>
+<li><p>Creates the JAR for Scala version 2.12 only. The code is simple enough that it does not seem to need multiple Spark version compiling. This also means that Scala 2.11 is not supported at this time.</p></li>
 </ul>
+</section>
+<section id="internal-improvements" class="level3">
+<h3 class="anchored" data-anchor-id="internal-improvements">Internal improvements</h3>
+<ul>
+<li><p>Modernizes the entire <code>testthat</code> suite, it also expands it to provide more coverage</p></li>
+<li><p>Modernizes and expands CI testing. The single CI job is now expanded to three:</p>
+<ul>
+<li>R package check, with no testing against the three major OS’s</li>
+<li><code>testthat</code> tests against Spark version 3.5</li>
+<li>Coverage testing, also against Spark version 3.5</li>
+</ul></li>
+<li><p>Removes <code>forge</code> dependency</p></li>
+<li><p>Improves download, preparation and building of the JAR</p></li>
+<li><p>Improves and cleans up the code that selects the JAR and Maven package to use. It now depends on a text file created by the script the updates the JARS.</p></li>
+<li><p>Updates Roxygen and <code>testthat</code> versions</p></li>
+<li><p>Edgar Ruiz (https://github.com/edgararuiz) will be the new maintainer of this package moving forward.</p></li>
+</ul>
+</section>
 </section>
 <section id="sparkxgb-0.1.1" class="level1">
 <h1>sparkxgb 0.1.1</h1>

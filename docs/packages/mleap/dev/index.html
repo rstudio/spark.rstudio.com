@@ -190,7 +190,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#r-interface-for-mleap" id="toc-r-interface-for-mleap" class="nav-link active" data-scroll-target="#r-interface-for-mleap">R interface for MLeap</a>
   <ul class="collapse">
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
+  <li><a href="#what-is-mleap" id="toc-what-is-mleap" class="nav-link" data-scroll-target="#what-is-mleap">What is MLeap?</a></li>
+  <li><a href="#the-mleap-package" id="toc-the-mleap-package" class="nav-link" data-scroll-target="#the-mleap-package">The <code>mleap</code> package</a></li>
+  <li><a href="#use-cases" id="toc-use-cases" class="nav-link" data-scroll-target="#use-cases">Use Cases</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a>
+  <ul class="collapse">
+  <li><a href="#steps" id="toc-steps" class="nav-link" data-scroll-target="#steps">Steps</a></li>
+  </ul></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a>
+  <ul class="collapse">
+  <li><a href="#create-the-pipeline" id="toc-create-the-pipeline" class="nav-link" data-scroll-target="#create-the-pipeline">Create the pipeline</a></li>
+  <li><a href="#loading-an-mleap-bundle-to-r-without-spark-dependencies" id="toc-loading-an-mleap-bundle-to-r-without-spark-dependencies" class="nav-link" data-scroll-target="#loading-an-mleap-bundle-to-r-without-spark-dependencies">Loading an MLeap bundle to R (without Spark dependencies)</a></li>
+  </ul></li>
+  <li><a href="#known-limitations" id="toc-known-limitations" class="nav-link" data-scroll-target="#known-limitations">Known limitations</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -207,77 +219,219 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="r-interface-for-mleap" class="level1">
 <h1>R interface for MLeap</h1>
-<p><a href="https://travis-ci.org/rstudio/mleap"><img src="https://travis-ci.org/rstudio/mleap.svg?branch=master" class="img-fluid" alt="Travis build status"></a> <a href="https://codecov.io/github/rstudio/mleap?branch=master"><img src="https://codecov.io/gh/rstudio/mleap/branch/master/graph/badge.svg" class="img-fluid" alt="Coverage status"></a> <a href="https://cran.r-project.org/package=mleap"><img src="https://www.r-pkg.org/badges/version/mleap.png" class="img-fluid" alt="CRAN status"></a></p>
-<p><strong>mleap</strong> is a <a href="http://spark.rstudio.com/">sparklyr</a> extension that provides an interface to <a href="https://github.com/combust/mleap">MLeap</a>, which allows us to take Spark pipelines to production.</p>
+<!-- badges: start -->
+<p><a href="https://github.com/rstudio/mleap/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/rstudio/mleap/actions/workflows/R-CMD-check.yaml/badge.svg" class="img-fluid" alt="R-CMD-check"></a> <a href="https://github.com/rstudio/mleap/actions/workflows/mleap-tests.yaml"><img src="https://github.com/rstudio/mleap/actions/workflows/mleap-tests.yaml/badge.svg" class="img-fluid" alt="MLeap-Tests"></a> <a href="https://codecov.io/github/rstudio/mleap?branch=master"><img src="https://codecov.io/gh/rstudio/mleap/branch/master/graph/badge.svg" class="img-fluid" alt="Coverage status"></a> <a href="https://cran.r-project.org/package=mleap"><img src="https://www.r-pkg.org/badges/version/mleap.png" class="img-fluid" alt="CRAN status"></a> <!-- badges: end --></p>
+<section id="what-is-mleap" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-mleap">What is MLeap?</h2>
+<p><a href="https://github.com/combust/mleap">MLeap</a> allows us to take Spark pipelines to production. The MLeap runtime can recreate most of Spark’s feature transformers and model predictions. This allows for the ML Pipeline to be <strong>deployed with no Spark dependencies</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="man/readme/mleap-fit.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1 - Train in Spark</figcaption>
+</figure>
+</div>
+<p>In practice, we can save the ML Pipeline Model (fitted model) as an MLeap bundle (see Figure 1). MLeap serializes the pipeline steps and model. The resulting Zip file can then be used in an external environment that has MLeap. Once the MLeap bundle is loaded in the new environment, new data can be passed to obtain predictions (see Figure 2).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="man/readme/mleap-predict.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 2 - Deploy with MLeap</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-mleap-package" class="level2">
+<h2 class="anchored" data-anchor-id="the-mleap-package">The <code>mleap</code> package</h2>
+<p>The goal of the <code>mleap</code> package is twofold:</p>
+<ol type="1">
+<li><p>Convert an ML Pipeline Model created in <code>sparklyr</code>, into an MLeap bundle file</p></li>
+<li><p>Load an MLeap bundle file into an R session, and then use the loaded bundle for predictions</p></li>
+</ol>
+<p>Additionally, the <code>mleap</code> package allows us to load an existing MLeap bundle into a Spark session. This would typically be to re-train, or modify a previously created ML Pipeline Model.</p>
+<p>The primary functions in <code>mleap</code> are:</p>
+<ul>
+<li><p><code>ml_write_to_bundle_transformed()</code> - Writes an MLeap bundle. It depends on data that has been trained using the pipeline</p></li>
+<li><p><code>mleap_load_bundle()</code> - Loads an MLeap bundle file into R</p></li>
+<li><p><code>mleap_transform()</code> - Runs the MLeap bundle steps against new data in R</p></li>
+</ul>
+<p>Additional operational functions in <code>mleap</code> are:</p>
+<ul>
+<li><p><code>ml_read_bundle()</code> - Loads an MLeap bundle file into Spark, via a <code>sparklyr</code> session</p></li>
+<li><p><code>ml_write_bundle()</code> - Writes an MLeap bundle. It depends on a sample of the training data to re-train the pipeline</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="man/readme/mleap-functions.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 3 - mleap functions</figcaption>
+</figure>
+</div>
+</section>
+<section id="use-cases" class="level2">
+<h2 class="anchored" data-anchor-id="use-cases">Use Cases</h2>
+<p>Here are couple of use cases to consider using MLeap, with <code>mleap</code>:</p>
+<ul>
+<li><p>It opens the door to <strong>collaborate with non-R, and even non-Spark, teams</strong>. The resulting MLeap bundle can be used as the integration for those teams to use the model in other environments.</p></li>
+<li><p><strong>Deploy a Shiny app, or a <code>plumber</code> API, with no dependencies on Spark</strong>. Using <code>mleap</code>, the model can be loaded into the R environment, and then used for predictions within the R artifact.</p></li>
+</ul>
+</section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">Getting started</h2>
-<p><strong>mleap</strong> can be installed from CRAN via</p>
+<p>In order for the R package to work, we will need a local installation of MLeap. Maven is required to install MLeap. <code>mleap</code> contains functions to take care of that.</p>
+<section id="steps" class="level3">
+<h3 class="anchored" data-anchor-id="steps">Steps</h3>
+<ol type="1">
+<li><p><strong>Install <code>mleap</code>.</strong> For the CRAN version use:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"mleap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>or, for the latest development version from GitHub, using</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/mleap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Once mleap has been installed, we can install the external dependencies using</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mleap)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install_maven</span>()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, if you already have Maven installed, you can </span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  set options(maven.home = "path/to/maven")</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install_mleap</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>We can now export Spark ML pipelines from sparklyr.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"2.4.0"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>mtcars_tbl <span class="ot">&lt;-</span> <span class="fu">sdf_copy_to</span>(sc, mtcars, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a pipeline and fit it</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_binarizer</span>(<span class="st">"hp"</span>, <span class="st">"big_hp"</span>, <span class="at">threshold =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_vector_assembler</span>(<span class="fu">c</span>(<span class="st">"big_hp"</span>, <span class="st">"wt"</span>, <span class="st">"qsec"</span>), <span class="st">"features"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_gbt_regressor</span>(<span class="at">label_col =</span> <span class="st">"mpg"</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>pipeline_model <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(pipeline, mtcars_tbl)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Export model</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>model_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"mtcars_model.zip"</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_write_bundle</span>(pipeline_model, <span class="at">sample_input =</span> mtcars_tbl, <span class="at">path =</span> model_path)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnect from Spark</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>## NULL</code></pre>
-<p>At this point, we can share <code>mtcars_model.zip</code> with our deployment/implementation engineers, and they would be able to embed the model in another application. See the <a href="http://mleap-docs.combust.ml/">MLeap docs</a> for details.</p>
-<p>We also provide R functions for testing that the saved models behave as expected. Here we load the previously saved model:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">mleap_load_bundle</span>(model_path)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>## MLeap Transformer
-## &lt;7e2f61ed-154b-4c9e-9926-85fa326d69ef&gt; 
-##   Name: pipeline_c1754f374a53 
-##   Format: json 
-##   MLeap Version: 0.14.0</code></pre>
-<p>We can retrieve the schema associated with the model:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mleap_model_schema</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>## # A tibble: 6 x 5
-##   name       type   nullable dimension io    
-##   &lt;chr&gt;      &lt;chr&gt;  &lt;lgl&gt;    &lt;chr&gt;     &lt;chr&gt; 
-## 1 qsec       double TRUE     &lt;NA&gt;      input 
-## 2 hp         double FALSE    &lt;NA&gt;      input 
-## 3 wt         double TRUE     &lt;NA&gt;      input 
-## 4 big_hp     double FALSE    &lt;NA&gt;      output
-## 5 features   double TRUE     (3)       output
-## 6 prediction double FALSE    &lt;NA&gt;      output</code></pre>
-<p>Then, we create a new data frame to be scored, and make predictions using our model:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>qsec, <span class="sc">~</span>hp, <span class="sc">~</span>wt,</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fl">16.2</span>,  <span class="dv">101</span>, <span class="fl">2.68</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fl">18.1</span>,  <span class="dv">99</span>,  <span class="fl">3.08</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the data frame</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>transformed_df <span class="ot">&lt;-</span> <span class="fu">mleap_transform</span>(model, newdata)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">glimpse</span>(transformed_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre><code>## Observations: 2
-## Variables: 6
-## $ qsec       &lt;dbl&gt; 16.2, 18.1
-## $ hp         &lt;dbl&gt; 101, 99
-## $ wt         &lt;dbl&gt; 2.68, 3.08
-## $ big_hp     &lt;dbl&gt; 1, 0
-## $ features   &lt;list&gt; [[[1, 2.68, 16.2], [3]], [[0, 3.08, 18.1], [3]]]
-## $ prediction &lt;dbl&gt; 21.00084, 20.56445</code></pre>
+<p>For the development version, use:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rstudio/mleap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Install Maven.</strong> If you already have Maven installed, you can let <code>mleap</code> know by setting an R option:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">maven.home =</span> <span class="st">"path/to/maven"</span>)<span class="st">`</span><span class="at">:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If no installation of Maven exists, use:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mleap<span class="sc">::</span><span class="fu">install_maven</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Install MLeap.</strong> There are a couple of considerations regarding the version of MLeap to install:</p>
+<ul>
+<li><p>If using Spark, the version of MLeap to install and use will be that closest to the recommended one by the developers of MLeap. The <code>mleap_dep_versions_table()</code> contains the combinations of Spark and MLeap versions as reference.</p></li>
+<li><p>If not using Spark, meaning, that we are using <code>mleap</code> to load an existing bundle, then we would need to match the version of MLeap in which the bundle was originally created.</p></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mleap<span class="sc">::</span><span class="fu">install_mleap</span>(<span class="at">version =</span> <span class="st">"0.20.0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<p>For the example, we will use the <em>Fine Foods</em> example data. It contains reviews of foods. We will use an ML Pipeline Model to predict if the verbiage in the review can tell us if the customer thinks if the product is “great”.</p>
+<section id="create-the-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="create-the-pipeline">Create the pipeline</h3>
+<ol type="1">
+<li><p>We will use a local version of Spark, version 3.2:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeldata)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"small_fine_foods"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>, <span class="at">version =</span> <span class="st">"3.2"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>sff_training_data <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, training_data)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>sff_testing_data <span class="ot">&lt;-</span> <span class="fu">copy_to</span>(sc, testing_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>We will create an ML Pipeline. We will index the outcome varaible (<strong>score</strong>), and then use several text feature transformers to create the <strong>features</strong> column which will be used as our predictor:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline <span class="ot">&lt;-</span> <span class="fu">ml_pipeline</span>(sc) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_string_indexer</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"score"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"label"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">handle_invalid =</span> <span class="st">"keep"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">string_order_type =</span> <span class="st">"alphabetDesc"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_tokenizer</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"review"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"word_list"</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_stop_words_remover</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"word_list"</span>, </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"wo_stop_words"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_hashing_tf</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"wo_stop_words"</span>, </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"hashed_features"</span>, </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_features =</span> <span class="dv">4096</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">binary =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ft_normalizer</span>(</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">input_col =</span> <span class="st">"hashed_features"</span>, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_col =</span> <span class="st">"features"</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_logistic_regression</span>(<span class="at">elastic_net_param =</span> <span class="fl">0.05</span>, <span class="at">reg_param =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>An ML Pipeline Model is now created after running the training data through the pipeline created in the previous step:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sff_pipeline_model <span class="ot">&lt;-</span> <span class="fu">ml_fit</span>(sff_pipeline, sff_training_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Assuming we are happy with the results. We run the same pipeline using the hold-out set (<code>sff_testing_data</code>). The idea, is that we can use this last transformed data set as a base for our MLeap bundle.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sff_test_predictions <span class="ot">&lt;-</span> sff_pipeline_model <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ml_transform</span>(sff_testing_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Using <code>ml_write_to_bundle_transformed()</code> from <code>mleap</code>, we save the new ML Pipeline Model as an MLeap bundle. We also pass the transformed data set we created with the hold-out test set.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ml_write_to_bundle_transformed</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> sff_pipeline_model,  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">transformed_dataset =</span> sff_test_predictions,  </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"sff.zip"</span>, </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Model successfully exported.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>We can now close the Spark connection</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_disconnect</span>(sc) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+<section id="loading-an-mleap-bundle-to-r-without-spark-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="loading-an-mleap-bundle-to-r-without-spark-dependencies">Loading an MLeap bundle to R (without Spark dependencies)</h3>
+<ol type="1">
+<li><p>We can use the same bundle created in the previous section to load into R. Simply pass the path to the Zip file to <code>ml_load_bundle()</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sff_mleap_model <span class="ot">&lt;-</span> <span class="fu">mleap_load_bundle</span>(<span class="st">"sff.zip"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sff_mleap_model</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; MLeap Transformer</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;d04e078a-2786-4e5e-923b-cea0ba0ca392&gt; </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Name: pipeline__4ac614f9_18a1_48f0_ac53_d4d03ca86464 </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Format: json </span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   MLeap Version: 0.20.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>We can use <code>mleap_model_schema()</code> to view more information about the contents of the bundle:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mleap_model_schema</span>(sff_mleap_model)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 × 5</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    name            type   nullable dimension io    </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;  &lt;lgl&gt;    &lt;chr&gt;     &lt;chr&gt; </span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 review          string FALSE    &lt;NA&gt;      input </span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 score           string TRUE     &lt;NA&gt;      input </span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 wo_stop_words   string TRUE     &lt;NA&gt;      output</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 word_list       string TRUE     &lt;NA&gt;      output</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 features        double TRUE     (4096)    output</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 label           double FALSE    &lt;NA&gt;      output</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 hashed_features double TRUE     (4096)    output</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 prediction      double FALSE    &lt;NA&gt;      output</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 rawPrediction   double TRUE     (3)       output</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 probability     double TRUE     (3)       output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><code>mleap_transform()</code> can process the model and new data. Pass a <code>tibble</code> with the expected <strong>input</strong> variables:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">review =</span> <span class="st">"worst bad thing I will never buy again"</span>, <span class="at">score =</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mleap_transform</span>(sff_mleap_model, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 10</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ review          &lt;chr&gt; "worst bad thing I will never buy again"</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ score           &lt;chr&gt; ""</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ label           &lt;dbl&gt; 2</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ word_list       &lt;list&gt; ["worst", "bad", "thing", "i", "will", "never", "buy",…</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ wo_stop_words   &lt;list&gt; ["worst", "bad", "thing", "never", "buy"]</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ hashed_features &lt;list&gt; [[[433], [768], [2020], [3081], [4092]], [1, 1, 1, 1, …</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ features        &lt;list&gt; [[[433], [768], [2020], [3081], [4092]], [0.4472136, 0…</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rawPrediction   &lt;list&gt; [[6.00653, 5.469893, -11.47642], [3]]</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ probability     &lt;list&gt; [[0.6310298, 0.3689702, 1.611768e-08], [3]]</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ prediction      &lt;dbl&gt; 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">review =</span> <span class="st">"I really loved the proudct best product"</span>, <span class="at">score =</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mleap_transform</span>(sff_mleap_model, .) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Columns: 10</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ review          &lt;chr&gt; "I really loved the proudct best product"</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ score           &lt;chr&gt; ""</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ label           &lt;dbl&gt; 2</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ word_list       &lt;list&gt; ["i", "really", "loved", "the", "proudct", "best", "pr…</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ wo_stop_words   &lt;list&gt; ["really", "loved", "proudct", "best", "product"]</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ hashed_features &lt;list&gt; [[[2187], [2365], [3229], [3727], [3984]], [1, 1, 1, 1…</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ features        &lt;list&gt; [[[2187], [2365], [3229], [3727], [3984]], [0.4472136,…</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ rawPrediction   &lt;list&gt; [[4.768167, 6.708236, -11.47642], [3]]</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ probability     &lt;list&gt; [[0.1256402, 0.8743598, 1.107122e-08], [3]]</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $ prediction      &lt;dbl&gt; 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+</section>
+</section>
+<section id="known-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="known-limitations">Known limitations</h2>
+<p>MLeap translates the feature transformer and models into its own code base. Not everything available in Spark is translated.</p>
+<p>This means two layering things:</p>
+<ol type="1">
+<li><p>No <code>dplyr</code> transformation is available. Only models and feature transformers are available. In <code>sparklyr</code>, feature transformers are functions that start with <code>ft_</code>.</p></li>
+<li><p>Not every Spark Feature Transformer and model are supported. Please refer to the MLeap documentation to see a concise view of what is available: <a href="https://combust.github.io/mleap-docs/core-concepts/transformers/support.html">MLeap Supported Transformers &amp; Models</a>.</p></li>
+</ol>
+<p>Most notably, the following three transformers are not supported:</p>
+<ul>
+<li><code>ft_dplyr_transformer()</code></li>
+<li><code>ft_sql_transformer()</code></li>
+<li><code>ft_r_formula()</code></li>
+</ul>
+<p>There is a <strong>workaround for <code>ft_r_formula()</code></strong>. It involves using the ML Pipeline “way” of setting up the outcome and predictors. For the predictors, use <code>ft_vector_assembler()</code> if the final stage of the predictors is not a single vectorized variable. For outcomes, anything numeric works fine, but anything categorical will not. Use <code>ft_string_indexer()</code> on top of the outcome variable, before passing it to the modeling step (See the Example section).</p>
 
 
 </section>

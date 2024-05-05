@@ -1,0 +1,15 @@
+{
+  "hash": "663ba54598d40acba8f306c836975bed",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Export a Spark pipeline for serving\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/write-bundle.R*\n\n## ml_write_to_bundle_transformed\n\n## Description\n This functions serializes a Spark pipeline model into an MLeap bundle. \n\n\n## Usage\n```r\n \nml_write_to_bundle_transformed(x, transformed_dataset, path, overwrite = FALSE) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A Spark ML Pipeline Model object. |\n| transformed_dataset | A Spark data frame created by the ML Pipeline Model (`x`) |\n| path | Where to save the bundle. |\n| overwrite | Whether to overwrite an existing file, defaults to `FALSE`. |\n\n\n\n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(mleap)\n \nlibrary(sparklyr) \n \nsc <- spark_connect(master = \"local\") \n \nmtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE) \n \npipeline <- ml_pipeline(sc) %>% \n  ft_binarizer(\"hp\", \"big_hp\", threshold = 100) %>% \n  ft_vector_assembler(c(\"big_hp\", \"wt\", \"qsec\"), \"features\") %>% \n  ml_gbt_regressor(label_col = \"mpg\") \n \npipeline_model <- ml_fit(pipeline, mtcars_tbl) \n \npreds <- ml_transform(pipeline_model, mtcars_tbl) \n \nmodel_path <- file.path(tempdir(), \"mtcars_model.zip\") \n \nml_write_bundle( \n  x = pipeline_model, \n  transformed_dataset = preds, \n  path = model_path, \n  overwrite = TRUE \n) \n \n \n```\n:::\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

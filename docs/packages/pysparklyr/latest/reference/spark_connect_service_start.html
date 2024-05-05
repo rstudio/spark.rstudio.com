@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Packages</title>
+<title>sparklyr - Starts and stops Spark Connect locally</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,28 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- End Google Tag Manager (noscript) -->
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 
 
 
@@ -84,10 +118,10 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../images/favicon/apple-touch-icon.png" alt="" class="navbar-logo">
+    <a href="../../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../../images/favicon/apple-touch-icon.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">sparklyr</span>
     </a>
   </div>
@@ -98,31 +132,31 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../get-started/index.html"> 
+    <a class="nav-link" href="../../../../get-started/index.html"> 
 <span class="menu-text">Get Started</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../guides/index.html"> 
+    <a class="nav-link" href="../../../../guides/index.html"> 
 <span class="menu-text">Guides</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../deployment/index.html"> 
+    <a class="nav-link" href="../../../../deployment/index.html"> 
 <span class="menu-text">Deployment</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../packages/sparklyr/latest/news.html"> 
+    <a class="nav-link" href="../../../../packages/sparklyr/latest/news.html"> 
 <span class="menu-text">News</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../packages/sparklyr/latest/reference/index.html"> 
+    <a class="nav-link" href="../../../../packages/sparklyr/latest/reference/index.html"> 
 <span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../packages/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../packages/index.html"> 
 <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../learn-more.html"> 
+    <a class="nav-link" href="../../../../learn-more.html"> 
 <span class="menu-text">Learn more</span></a>
   </li>  
 </ul>
@@ -154,8 +188,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#on-cran" id="toc-on-cran" class="nav-link active" data-scroll-target="#on-cran">On CRAN</a></li>
-  <li><a href="#on-github" id="toc-on-github" class="nav-link" data-scroll-target="#on-github">On Github</a></li>
+  <li><a href="#spark_connect_service_start" id="toc-spark_connect_service_start" class="nav-link active" data-scroll-target="#spark_connect_service_start">spark_connect_service_start</a></li>
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+  <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
+  <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
   </ul>
 </nav>
     </div>
@@ -168,7 +205,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Packages</h1>
+<h1 class="title">Starts and stops Spark Connect locally</h1>
 </div>
 
 
@@ -185,51 +222,62 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="on-cran" class="level2">
-<h2 class="anchored" data-anchor-id="on-cran">On CRAN</h2>
+<p><em>R/start-stop-service.R</em></p>
+<section id="spark_connect_service_start" class="level2">
+<h2 class="anchored" data-anchor-id="spark_connect_service_start">spark_connect_service_start</h2>
+</section>
+<section id="description" class="level2">
+<h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>Starts and stops Spark Connect locally</p>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_connect_service_start</span>( </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"3.5"</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">scala_version =</span> <span class="st">"2.12"</span>, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">include_args =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  ... </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_connect_service_stop</span>(<span class="at">version =</span> <span class="st">"3.5"</span>, ...) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="arguments" class="level2">
+<h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
 <table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Package</th>
+<th>Arguments</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="../packages/pysparklyr/latest/index.html">pysparklyr</a></td>
-<td>Integrate <code>sparklyr</code> with Spark Connect and Databricks Connect (v2)</td>
+<td>version</td>
+<td>Spark version to use (3.4 or above)</td>
 </tr>
 <tr class="even">
-<td><a href="../packages/sparkxgb/latest/index.html"><code>sparkxgb</code></a></td>
-<td>A <code>sparklyr</code> extension that provides an interface to <a href="https://github.com/dmlc/xgboost">XGBoost</a> on Spark.</td>
+<td>scala_version</td>
+<td>Acceptable Scala version of packages to be loaded</td>
 </tr>
 <tr class="odd">
-<td><a href="../packages/graphframes/latest/index.html"><code>graphframes</code></a></td>
-<td>Enables graph analysis in Spark via GraphFrames</td>
+<td>include_args</td>
+<td>Flag that indicates whether to add the additional arguments to the command that starts the service. At this time, only the ‘packages’ argument is submitted.</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>Optional arguments; currently unused</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="on-github" class="level2">
-<h2 class="anchored" data-anchor-id="on-github">On Github</h2>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Package</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="../packages/sparktf/latest/index.html"><code>sparktf</code></a></td>
-<td>Allows writing of Spark DataFrame’s to TFRecord, the recommended format for persisting data to be used in training with TensorFlow</td>
-</tr>
-<tr class="even">
-<td><a href="../packages/mleap/latest/index.html"><code>mleap</code></a></td>
-<td>A <code>sparklyr</code> extension that provides an interface to <a href="https://github.com/combust/mleap">MLeap</a>, which allows us to take Spark pipelines to production.</td>
-</tr>
-</tbody>
-</table>
+<section id="value" class="level2">
+<h2 class="anchored" data-anchor-id="value">Value</h2>
+<p>It returns messages to the console with the status of starting, and stopping the local Spark Connect service.</p>
 
 
 </section>

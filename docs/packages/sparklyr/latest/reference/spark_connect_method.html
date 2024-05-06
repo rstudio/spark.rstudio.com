@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Read files created by the stream</title>
+<title>sparklyr - Function that negotiates the connection with the Spark back-end</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -188,12 +188,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#stream_read_csv" id="toc-stream_read_csv" class="nav-link active" data-scroll-target="#stream_read_csv">stream_read_csv</a></li>
+  <li><a href="#spark_connect_method" id="toc-spark_connect_method" class="nav-link active" data-scroll-target="#spark_connect_method">spark_connect_method</a></li>
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
   </ul>
 </nav>
     </div>
@@ -206,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Read CSV Stream</h1>
+<h1 class="title">Function that negotiates the connection with the Spark back-end</h1>
 </div>
 
 
@@ -223,28 +221,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>R/stream_data.R</em></p>
-<section id="stream_read_csv" class="level2">
-<h2 class="anchored" data-anchor-id="stream_read_csv">stream_read_csv</h2>
+<p><em>R/connection_spark.R</em></p>
+<section id="spark_connect_method" class="level2">
+<h2 class="anchored" data-anchor-id="spark_connect_method">spark_connect_method</h2>
 </section>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Reads a CSV stream as a Spark dataframe stream.</p>
+<p>Function that negotiates the connection with the Spark back-end</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_read_csv</span>( </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  sc, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  path, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">header =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">delimiter =</span> <span class="st">","</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">quote =</span> <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">escape =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">"</span>, </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">charset =</span> <span class="st">"UTF-8"</span>, </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">null_value =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(), </span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_connect_method</span>( </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  method, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  master, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  spark_home, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  config, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  app_name, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  version, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  hadoop_version, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  extensions, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  scala_version, </span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  ... </span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
@@ -263,71 +261,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>sc</td>
-<td>A <code>spark_connection</code>.</td>
+<td>x</td>
+<td>A dummy method object to determine which code to use to connect</td>
 </tr>
 <tr class="even">
-<td>path</td>
-<td>The path to the file. Needs to be accessible from the cluster. Supports the <code>"hdfs://"</code>, <code>"s3a://"</code> and <code>"file://"</code> protocols.</td>
+<td>method</td>
+<td>The method used to connect to Spark. Default connection method is <code>"shell"</code> to connect using spark-submit, use <code>"livy"</code> to perform remote connections using HTTP, or <code>"databricks"</code> when using a Databricks clusters.</td>
 </tr>
 <tr class="odd">
-<td>name</td>
-<td>The name to assign to the newly generated stream.</td>
+<td>master</td>
+<td>Spark cluster url to connect to. Use <code>"local"</code> to connect to a local instance of Spark installed via <code>spark_install</code>.</td>
 </tr>
 <tr class="even">
-<td>header</td>
-<td>Boolean; should the first row of data be used as a header? Defaults to <code>TRUE</code>.</td>
+<td>spark_home</td>
+<td>The path to a Spark installation. Defaults to the path provided by the <code>SPARK_HOME</code> environment variable. If <code>SPARK_HOME</code> is defined, it will always be used unless the <code>version</code> parameter is specified to force the use of a locally installed version.</td>
 </tr>
 <tr class="odd">
-<td>columns</td>
-<td>A vector of column names or a named vector of column types. If specified, the elements can be <code>"binary"</code> for <code>BinaryType</code>, <code>"boolean"</code> for <code>BooleanType</code>, <code>"byte"</code> for <code>ByteType</code>, <code>"integer"</code> for <code>IntegerType</code>, <code>"integer64"</code> for <code>LongType</code>, <code>"double"</code> for <code>DoubleType</code>, <code>"character"</code> for <code>StringType</code>, <code>"timestamp"</code> for <code>TimestampType</code> and <code>"date"</code> for <code>DateType</code>.</td>
+<td>config</td>
+<td>Custom configuration for the generated Spark connection. See <code>spark_config</code> for details.</td>
 </tr>
 <tr class="even">
-<td>delimiter</td>
-<td>The character used to delimit each column. Defaults to <code>','</code>.</td>
+<td>app_name</td>
+<td>The application name to be used while running in the Spark cluster.</td>
 </tr>
 <tr class="odd">
-<td>quote</td>
-<td>The character used as a quote. Defaults to <code>'"'</code>.</td>
+<td>version</td>
+<td>The version of Spark to use. Required for <code>"local"</code> Spark connections, optional otherwise.</td>
 </tr>
 <tr class="even">
-<td>escape</td>
-<td>The character used to escape other characters. Defaults to <code>'\'</code>.</td>
+<td>hadoop_version</td>
+<td>Version of Hadoop to use</td>
 </tr>
 <tr class="odd">
-<td>charset</td>
-<td>The character set. Defaults to <code>"UTF-8"</code>.</td>
+<td>extensions</td>
+<td>Extension R packages to enable for this connection. By default, all packages enabled through the use of <code>sparklyr::register_extension</code> will be passed here.</td>
 </tr>
 <tr class="even">
-<td>null_value</td>
-<td>The character to use for null, or missing, values. Defaults to <code>NULL</code>.</td>
+<td>scala_version</td>
+<td>Load the sparklyr jar file that is built with the version of Scala specified (this currently only makes sense for Spark 2.4, where sparklyr will by default assume Spark 2.4 on current host is built with Scala 2.11, and therefore <code>scala_version = '2.12'</code> is needed if sparklyr is connecting to Spark 2.4 built with Scala 2.12)</td>
 </tr>
 <tr class="odd">
-<td>options</td>
-<td>A list of strings with additional options.</td>
-</tr>
-<tr class="even">
 <td>…</td>
-<td>Optional arguments; currently unused.</td>
+<td>Additional params to be passed to each <code>spark_disconnect()</code> call (e.g., <code>terminate = TRUE</code>)</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"csv-in"</span>) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iris, <span class="st">"csv-in/data.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"file://"</span>, <span class="fu">getwd</span>(), <span class="st">"csv-in"</span>) </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, csv_path) <span class="sc">%&gt;%</span> <span class="fu">stream_write_csv</span>(<span class="st">"csv-out"</span>) </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="see-also" class="level2">
-<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>Other Spark stream serialization: <code>stream_read_delta()</code>, <code>stream_read_json()</code>, <code>stream_read_kafka()</code>, <code>stream_read_orc()</code>, <code>stream_read_parquet()</code>, <code>stream_read_socket()</code>, <code>stream_read_text()</code>, <code>stream_write_console()</code>, <code>stream_write_csv()</code>, <code>stream_write_delta()</code>, <code>stream_write_json()</code>, <code>stream_write_kafka()</code>, <code>stream_write_memory()</code>, <code>stream_write_orc()</code>, <code>stream_write_parquet()</code>, <code>stream_write_text()</code></p>
 
 
 </section>

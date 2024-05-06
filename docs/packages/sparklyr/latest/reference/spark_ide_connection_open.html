@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Read files created by the stream</title>
+<title>sparklyr - Set of functions to provide integration with the RStudio IDE</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -188,12 +188,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#stream_read_csv" id="toc-stream_read_csv" class="nav-link active" data-scroll-target="#stream_read_csv">stream_read_csv</a></li>
+  <li><a href="#spark_ide_connection_open" id="toc-spark_ide_connection_open" class="nav-link active" data-scroll-target="#spark_ide_connection_open">spark_ide_connection_open</a></li>
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
+  <li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
   </ul>
 </nav>
     </div>
@@ -206,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Read CSV Stream</h1>
+<h1 class="title">Set of functions to provide integration with the RStudio IDE</h1>
 </div>
 
 
@@ -223,30 +222,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>R/stream_data.R</em></p>
-<section id="stream_read_csv" class="level2">
-<h2 class="anchored" data-anchor-id="stream_read_csv">stream_read_csv</h2>
+<p><em>R/spark_ide.R</em></p>
+<section id="spark_ide_connection_open" class="level2">
+<h2 class="anchored" data-anchor-id="spark_ide_connection_open">spark_ide_connection_open</h2>
 </section>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Reads a CSV stream as a Spark dataframe stream.</p>
+<p>Set of functions to provide integration with the RStudio IDE</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_read_csv</span>( </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  sc, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  path, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">header =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">delimiter =</span> <span class="st">","</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">quote =</span> <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">escape =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">"</span>, </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">charset =</span> <span class="st">"UTF-8"</span>, </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">null_value =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(), </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  ... </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_connection_open</span>(con, env, connect_call) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_connection_closed</span>(con) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_connection_updated</span>(con, hint) </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_connection_actions</span>(con) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_objects</span>(con, catalog, schema, name, type) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_columns</span>( </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  con, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">view =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">catalog =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">schema =</span> <span class="cn">NULL</span> </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">spark_ide_preview</span>( </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  con, </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  rowLimit, </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">table =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">view =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">catalog =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">schema =</span> <span class="cn">NULL</span> </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -263,71 +275,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>sc</td>
-<td>A <code>spark_connection</code>.</td>
+<td>con</td>
+<td>Valid Spark connection</td>
 </tr>
 <tr class="even">
-<td>path</td>
-<td>The path to the file. Needs to be accessible from the cluster. Supports the <code>"hdfs://"</code>, <code>"s3a://"</code> and <code>"file://"</code> protocols.</td>
+<td>env</td>
+<td>R environment of the interactive R session</td>
+</tr>
+<tr class="odd">
+<td>connect_call</td>
+<td>R code that can be used to re-connect to the Spark connection</td>
+</tr>
+<tr class="even">
+<td>hint</td>
+<td>Name of the Spark connection that the RStudio IDE can use as reference.</td>
+</tr>
+<tr class="odd">
+<td>catalog</td>
+<td>Name of the top level of the requested table or view</td>
+</tr>
+<tr class="even">
+<td>schema</td>
+<td>Name of the second most top level of the requested level or view</td>
 </tr>
 <tr class="odd">
 <td>name</td>
-<td>The name to assign to the newly generated stream.</td>
+<td>The new of the view or table being requested</td>
 </tr>
 <tr class="even">
-<td>header</td>
-<td>Boolean; should the first row of data be used as a header? Defaults to <code>TRUE</code>.</td>
+<td>type</td>
+<td>Type of the object being requested, ‘view’ or ‘table’</td>
 </tr>
 <tr class="odd">
-<td>columns</td>
-<td>A vector of column names or a named vector of column types. If specified, the elements can be <code>"binary"</code> for <code>BinaryType</code>, <code>"boolean"</code> for <code>BooleanType</code>, <code>"byte"</code> for <code>ByteType</code>, <code>"integer"</code> for <code>IntegerType</code>, <code>"integer64"</code> for <code>LongType</code>, <code>"double"</code> for <code>DoubleType</code>, <code>"character"</code> for <code>StringType</code>, <code>"timestamp"</code> for <code>TimestampType</code> and <code>"date"</code> for <code>DateType</code>.</td>
+<td>table</td>
+<td>Name of the requested table</td>
 </tr>
 <tr class="even">
-<td>delimiter</td>
-<td>The character used to delimit each column. Defaults to <code>','</code>.</td>
+<td>view</td>
+<td>Name of the requested view</td>
 </tr>
 <tr class="odd">
-<td>quote</td>
-<td>The character used as a quote. Defaults to <code>'"'</code>.</td>
-</tr>
-<tr class="even">
-<td>escape</td>
-<td>The character used to escape other characters. Defaults to <code>'\'</code>.</td>
-</tr>
-<tr class="odd">
-<td>charset</td>
-<td>The character set. Defaults to <code>"UTF-8"</code>.</td>
-</tr>
-<tr class="even">
-<td>null_value</td>
-<td>The character to use for null, or missing, values. Defaults to <code>NULL</code>.</td>
-</tr>
-<tr class="odd">
-<td>options</td>
-<td>A list of strings with additional options.</td>
-</tr>
-<tr class="even">
-<td>…</td>
-<td>Optional arguments; currently unused.</td>
+<td>rowLimit</td>
+<td>The number of rows to show in the ‘Preview’ pane of the RStudio IDE</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"csv-in"</span>) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iris, <span class="st">"csv-in/data.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"file://"</span>, <span class="fu">getwd</span>(), <span class="st">"csv-in"</span>) </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, csv_path) <span class="sc">%&gt;%</span> <span class="fu">stream_write_csv</span>(<span class="st">"csv-out"</span>) </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="see-also" class="level2">
-<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>Other Spark stream serialization: <code>stream_read_delta()</code>, <code>stream_read_json()</code>, <code>stream_read_kafka()</code>, <code>stream_read_orc()</code>, <code>stream_read_parquet()</code>, <code>stream_read_socket()</code>, <code>stream_read_text()</code>, <code>stream_write_console()</code>, <code>stream_write_csv()</code>, <code>stream_write_delta()</code>, <code>stream_write_json()</code>, <code>stream_write_kafka()</code>, <code>stream_write_memory()</code>, <code>stream_write_orc()</code>, <code>stream_write_parquet()</code>, <code>stream_write_text()</code></p>
+<section id="details" class="level2">
+<h2 class="anchored" data-anchor-id="details">Details</h2>
+<p>These function are meant for downstream packages, that provide additional backends to <code>sparklyr</code>, to override the opening, closing, update, and preview functionality. The arguments are driven by what the RStudio IDE API expects them to be, so this is the reason why some use <code>type</code> to designated views or tables, and others have one argument for <code>table</code>, and another for <code>view</code>.</p>
 
 
 </section>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sparklyr - Read files created by the stream</title>
+<title>sparklyr - XGBoost Regressor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,25 +57,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../../">
-<link href="../../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
-<script src="../../../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../images/favicon/apple-touch-icon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- End Google Tag Manager (noscript) -->
 
 
-<link rel="stylesheet" href="../../../../styles.css">
+<link rel="stylesheet" href="../../../styles.css">
 
 
 
@@ -118,10 +118,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../../../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../../../images/favicon/apple-touch-icon.png" alt="" class="navbar-logo">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../images/favicon/apple-touch-icon.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../../../../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">sparklyr</span>
     </a>
   </div>
@@ -132,31 +132,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../get-started/index.html"> 
+    <a class="nav-link" href="../../../get-started/index.html"> 
 <span class="menu-text">Get Started</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../guides/index.html"> 
+    <a class="nav-link" href="../../../guides/index.html"> 
 <span class="menu-text">Guides</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../deployment/index.html"> 
+    <a class="nav-link" href="../../../deployment/index.html"> 
 <span class="menu-text">Deployment</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../packages/sparklyr/latest/news.html"> 
+    <a class="nav-link" href="../../../packages/sparklyr/latest/news.html"> 
 <span class="menu-text">News</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../packages/sparklyr/latest/reference/index.html"> 
+    <a class="nav-link" href="../../../packages/sparklyr/latest/reference/index.html"> 
 <span class="menu-text">Reference</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../packages/index.html"> 
+    <a class="nav-link" href="../../../packages/index.html"> 
 <span class="menu-text">Packages</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../learn-more.html"> 
+    <a class="nav-link" href="../../../learn-more.html"> 
 <span class="menu-text">Learn more</span></a>
   </li>  
 </ul>
@@ -188,12 +188,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#stream_read_csv" id="toc-stream_read_csv" class="nav-link active" data-scroll-target="#stream_read_csv">stream_read_csv</a></li>
+  <li><a href="#xgboost_regressor" id="toc-xgboost_regressor" class="nav-link active" data-scroll-target="#xgboost_regressor">xgboost_regressor</a></li>
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
   <li><a href="#arguments" id="toc-arguments" class="nav-link" data-scroll-target="#arguments">Arguments</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
-  <li><a href="#see-also" id="toc-see-also" class="nav-link" data-scroll-target="#see-also">See Also</a></li>
+  <li><a href="#details" id="toc-details" class="nav-link" data-scroll-target="#details">Details</a></li>
+  <li><a href="#value" id="toc-value" class="nav-link" data-scroll-target="#value">Value</a></li>
   </ul>
 </nav>
     </div>
@@ -206,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Read CSV Stream</h1>
+<h1 class="title">XGBoost Regressor</h1>
 </div>
 
 
@@ -223,30 +223,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>R/stream_data.R</em></p>
-<section id="stream_read_csv" class="level2">
-<h2 class="anchored" data-anchor-id="stream_read_csv">stream_read_csv</h2>
+<p><em>R/xgboost_regressor.R</em></p>
+<section id="xgboost_regressor" class="level2">
+<h2 class="anchored" data-anchor-id="xgboost_regressor">xgboost_regressor</h2>
 </section>
 <section id="description" class="level2">
 <h2 class="anchored" data-anchor-id="description">Description</h2>
-<p>Reads a CSV stream as a Spark dataframe stream.</p>
+<p>XGBoost regressor for Spark.</p>
 </section>
 <section id="usage" class="level2">
 <h2 class="anchored" data-anchor-id="usage">Usage</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_read_csv</span>( </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  sc, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  path, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">header =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">delimiter =</span> <span class="st">","</span>, </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">quote =</span> <span class="st">"</span><span class="sc">\"</span><span class="st">"</span>, </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">escape =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">"</span>, </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">charset =</span> <span class="st">"UTF-8"</span>, </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">null_value =</span> <span class="cn">NULL</span>, </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(), </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  ... </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">xgboost_regressor</span>( </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  x, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">eta =</span> <span class="fl">0.3</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">gamma =</span> <span class="dv">0</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_depth =</span> <span class="dv">6</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_child_weight =</span> <span class="dv">1</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_delta_step =</span> <span class="dv">0</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">grow_policy =</span> <span class="st">"depthwise"</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_bins =</span> <span class="dv">16</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">subsample =</span> <span class="dv">1</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bytree =</span> <span class="dv">1</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">colsample_bylevel =</span> <span class="dv">1</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda =</span> <span class="dv">1</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="dv">0</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree_method =</span> <span class="st">"auto"</span>, </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">sketch_eps =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">scale_pos_weight =</span> <span class="dv">1</span>, </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_type =</span> <span class="st">"uniform"</span>, </span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">normalize_type =</span> <span class="st">"tree"</span>, </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">rate_drop =</span> <span class="dv">0</span>, </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">skip_drop =</span> <span class="dv">0</span>, </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">lambda_bias =</span> <span class="dv">0</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">tree_limit =</span> <span class="dv">0</span>, </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_round =</span> <span class="dv">1</span>, </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_workers =</span> <span class="dv">1</span>, </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">nthread =</span> <span class="dv">1</span>, </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_external_memory =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">silent =</span> <span class="dv">0</span>, </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">custom_obj =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">custom_eval =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing =</span> <span class="cn">NaN</span>, </span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">0</span>, </span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">timeout_request_workers =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">checkpoint_path =</span> <span class="st">""</span>, </span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">checkpoint_interval =</span> <span class="sc">-</span><span class="dv">1</span>, </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective =</span> <span class="st">"reg:linear"</span>, </span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_score =</span> <span class="fl">0.5</span>, </span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">train_test_ratio =</span> <span class="dv">1</span>, </span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">num_early_stopping_rounds =</span> <span class="dv">0</span>, </span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective_type =</span> <span class="st">"regression"</span>, </span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">eval_metric =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">maximize_evaluation_metrics =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_margin_col =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">weight_col =</span> <span class="cn">NULL</span>, </span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">features_col =</span> <span class="st">"features"</span>, </span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_col =</span> <span class="st">"label"</span>, </span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">prediction_col =</span> <span class="st">"prediction"</span>, </span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="fu">random_string</span>(<span class="st">"xgboost_regressor_"</span>), </span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  ... </span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="arguments" class="level2">
 <h2 class="anchored" data-anchor-id="arguments">Arguments</h2>
@@ -263,71 +301,217 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>sc</td>
-<td>A <code>spark_connection</code>.</td>
+<td>x</td>
+<td>A <code>spark_connection</code>, <code>ml_pipeline</code>, or a <code>tbl_spark</code>.</td>
 </tr>
 <tr class="even">
-<td>path</td>
-<td>The path to the file. Needs to be accessible from the cluster. Supports the <code>"hdfs://"</code>, <code>"s3a://"</code> and <code>"file://"</code> protocols.</td>
+<td>formula</td>
+<td>Used when <code>x</code> is a <code>tbl_spark</code>. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details.</td>
 </tr>
 <tr class="odd">
-<td>name</td>
-<td>The name to assign to the newly generated stream.</td>
+<td>eta</td>
+<td>Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features and eta actually shrinks the feature weights to make the boosting process more conservative. [default=0.3] range: [0,1]</td>
 </tr>
 <tr class="even">
-<td>header</td>
-<td>Boolean; should the first row of data be used as a header? Defaults to <code>TRUE</code>.</td>
+<td>gamma</td>
+<td>Minimum loss reduction required to make a further partition on a leaf node of the tree. the larger, the more conservative the algorithm will be. [default=0]</td>
 </tr>
 <tr class="odd">
-<td>columns</td>
-<td>A vector of column names or a named vector of column types. If specified, the elements can be <code>"binary"</code> for <code>BinaryType</code>, <code>"boolean"</code> for <code>BooleanType</code>, <code>"byte"</code> for <code>ByteType</code>, <code>"integer"</code> for <code>IntegerType</code>, <code>"integer64"</code> for <code>LongType</code>, <code>"double"</code> for <code>DoubleType</code>, <code>"character"</code> for <code>StringType</code>, <code>"timestamp"</code> for <code>TimestampType</code> and <code>"date"</code> for <code>DateType</code>.</td>
+<td>max_depth</td>
+<td>Maximum depth of a tree, increase this value will make model more complex / likely to be overfitting. [default=6]</td>
 </tr>
 <tr class="even">
-<td>delimiter</td>
-<td>The character used to delimit each column. Defaults to <code>','</code>.</td>
+<td>min_child_weight</td>
+<td>Minimum sum of instance weight(hessian) needed in a child. If the tree partition step results in a leaf node with the sum of instance weight less than min_child_weight, then the building process will give up further partitioning. In linear regression mode, this simply corresponds to minimum number of instances needed to be in each node. The larger, the more conservative the algorithm will be. [default=1]</td>
 </tr>
 <tr class="odd">
-<td>quote</td>
-<td>The character used as a quote. Defaults to <code>'"'</code>.</td>
+<td>max_delta_step</td>
+<td>Maximum delta step we allow each tree’s weight estimation to be. If the value is set to 0, it means there is no constraint. If it is set to a positive value, it can help making the update step more conservative. Usually this parameter is not needed, but it might help in logistic regression when class is extremely imbalanced. Set it to value of 1-10 might help control the update. [default=0]</td>
 </tr>
 <tr class="even">
-<td>escape</td>
-<td>The character used to escape other characters. Defaults to <code>'\'</code>.</td>
+<td>grow_policy</td>
+<td>Growth policy for fast histogram algorithm.</td>
 </tr>
 <tr class="odd">
-<td>charset</td>
-<td>The character set. Defaults to <code>"UTF-8"</code>.</td>
+<td>max_bins</td>
+<td>Maximum number of bins in histogram.</td>
 </tr>
 <tr class="even">
-<td>null_value</td>
-<td>The character to use for null, or missing, values. Defaults to <code>NULL</code>.</td>
+<td>subsample</td>
+<td>Subsample ratio of the training instance. Setting it to 0.5 means that XGBoost randomly collected half of the data instances to grow trees and this will prevent overfitting. [default=1] range:(0,1]</td>
 </tr>
 <tr class="odd">
-<td>options</td>
-<td>A list of strings with additional options.</td>
+<td>colsample_bytree</td>
+<td>Subsample ratio of columns when constructing each tree. [default=1] range: (0,1]</td>
 </tr>
 <tr class="even">
+<td>colsample_bylevel</td>
+<td>Subsample ratio of columns for each split, in each level. [default=1] range: (0,1]</td>
+</tr>
+<tr class="odd">
+<td>lambda</td>
+<td>L2 regularization term on weights, increase this value will make model more conservative. [default=1]</td>
+</tr>
+<tr class="even">
+<td>alpha</td>
+<td>L1 regularization term on weights, increase this value will make model more conservative, defaults to 0.</td>
+</tr>
+<tr class="odd">
+<td>tree_method</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’ or’approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>sketch_eps</td>
+<td>No longer supported as of XGBoost 1.6.0. Consider using ‘max_bins’ instead.</td>
+</tr>
+<tr class="odd">
+<td>scale_pos_weight</td>
+<td>Control the balance of positive and negative weights, useful for unbalanced classes. A typical value to consider: sum(negative cases) / sum(positive cases). [default=1]</td>
+</tr>
+<tr class="even">
+<td>sample_type</td>
+<td>Parameter for Dart booster. Type of sampling algorithm. “uniform”: dropped trees are selected uniformly. “weighted”: dropped trees are selected in proportion to weight. [default=“uniform”]</td>
+</tr>
+<tr class="odd">
+<td>normalize_type</td>
+<td>Parameter of Dart booster. type of normalization algorithm, options: ‘tree’, or ‘forest’. [default=“tree”]</td>
+</tr>
+<tr class="even">
+<td>rate_drop</td>
+<td>Parameter of Dart booster. dropout rate. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="odd">
+<td>skip_drop</td>
+<td>Parameter of Dart booster. probability of skip dropout. If a dropout is skipped, new trees are added in the same manner as gbtree. [default=0.0] range: [0.0, 1.0]</td>
+</tr>
+<tr class="even">
+<td>lambda_bias</td>
+<td>Parameter of linear booster L2 regularization term on bias, default 0 (no L1 reg on bias because it is not important.)</td>
+</tr>
+<tr class="odd">
+<td>tree_limit</td>
+<td>Limit number of trees in the prediction; defaults to 0 (use all trees.)</td>
+</tr>
+<tr class="even">
+<td>num_round</td>
+<td>The number of rounds for boosting.</td>
+</tr>
+<tr class="odd">
+<td>num_workers</td>
+<td>number of workers used to train xgboost model. Defaults to 1.</td>
+</tr>
+<tr class="even">
+<td>nthread</td>
+<td>Number of threads used by per worker. Defaults to 1.</td>
+</tr>
+<tr class="odd">
+<td>use_external_memory</td>
+<td>The tree construction algorithm used in XGBoost. options: ‘auto’, ‘exact’ or ‘approx’ [default=‘auto’]</td>
+</tr>
+<tr class="even">
+<td>silent</td>
+<td>0 means printing running messages, 1 means silent mode. default: 0</td>
+</tr>
+<tr class="odd">
+<td>custom_obj</td>
+<td>Customized objective function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="even">
+<td>custom_eval</td>
+<td>Customized evaluation function provided by user. Currently unsupported.</td>
+</tr>
+<tr class="odd">
+<td>missing</td>
+<td>The value treated as missing. default: Float.NaN</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>Random seed for the C++ part of XGBoost and train/test splitting.</td>
+</tr>
+<tr class="odd">
+<td>timeout_request_workers</td>
+<td>No longer supported as of XGBoost 1.7.0.</td>
+</tr>
+<tr class="even">
+<td>checkpoint_path</td>
+<td>The hdfs folder to load and save checkpoint boosters.</td>
+</tr>
+<tr class="odd">
+<td>checkpoint_interval</td>
+<td>Param for set checkpoint interval (&gt;= 1) or disable checkpoint (-1). E.g. 10 means that the trained model will get checkpointed every 10 iterations. Note: checkpoint_path must also be set if the checkpoint interval is greater than 0.</td>
+</tr>
+<tr class="even">
+<td>objective</td>
+<td>Specify the learning task and the corresponding learning objective. options: reg:linear, reg:logistic, binary:logistic, binary:logitraw, count:poisson, multi:softmax, multi:softprob, rank:pairwise, reg:gamma. default: reg:linear.</td>
+</tr>
+<tr class="odd">
+<td>base_score</td>
+<td>Param for initial prediction (aka base margin) column name. Defaults to 0.5.</td>
+</tr>
+<tr class="even">
+<td>train_test_ratio</td>
+<td>Fraction of training points to use for testing.</td>
+</tr>
+<tr class="odd">
+<td>num_early_stopping_rounds</td>
+<td>If non-zero, the training will be stopped after a specified number of consecutive increases in any evaluation metric.</td>
+</tr>
+<tr class="even">
+<td>objective_type</td>
+<td>The learning objective type of the specified custom objective and eval. Corresponding type will be assigned if custom objective is defined options: regression, classification.</td>
+</tr>
+<tr class="odd">
+<td>eval_metric</td>
+<td>Evaluation metrics for validation data, a default metric will be assigned according to objective(rmse for regression, and error for classification, mean average precision for ranking). options: rmse, mae, logloss, error, merror, mlogloss, auc, aucpr, ndcg, map, gamma-deviance</td>
+</tr>
+<tr class="even">
+<td>maximize_evaluation_metrics</td>
+<td>Whether to maximize evaluation metrics. Defaults to FALSE (for minization.)</td>
+</tr>
+<tr class="odd">
+<td>base_margin_col</td>
+<td>Param for initial prediction (aka base margin) column name.</td>
+</tr>
+<tr class="even">
+<td>weight_col</td>
+<td>Weight column.</td>
+</tr>
+<tr class="odd">
+<td>features_col</td>
+<td>Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="even">
+<td>label_col</td>
+<td>Label column name. The column should be a numeric column. Usually this column is output by <code>ft_r_formula</code>.</td>
+</tr>
+<tr class="odd">
+<td>prediction_col</td>
+<td>Prediction column name.</td>
+</tr>
+<tr class="even">
+<td>uid</td>
+<td>A character string used to uniquely identify the ML estimator.</td>
+</tr>
+<tr class="odd">
 <td>…</td>
-<td>Optional arguments; currently unused.</td>
+<td>Optional arguments; see Details.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">spark_connect</span>(<span class="at">master =</span> <span class="st">"local"</span>) </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"csv-in"</span>) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iris, <span class="st">"csv-in/data.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"file://"</span>, <span class="fu">getwd</span>(), <span class="st">"csv-in"</span>) </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>stream <span class="ot">&lt;-</span> <span class="fu">stream_read_csv</span>(sc, csv_path) <span class="sc">%&gt;%</span> <span class="fu">stream_write_csv</span>(<span class="st">"csv-out"</span>) </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">stream_stop</span>(stream) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="details" class="level2">
+<h2 class="anchored" data-anchor-id="details">Details</h2>
+<p>When <code>x</code> is a <code>tbl_spark</code> and <code>formula</code> (alternatively, <code>response</code> and <code>features</code>) is specified, the function returns a <code>ml_model</code> object wrapping a <code>ml_pipeline_model</code> which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument <code>predicted_label_col</code> (defaults to <code>"predicted_label"</code>) can be used to specify the name of the predicted label column. In addition to the fitted <code>ml_pipeline_model</code>, <code>ml_model</code> objects also contain a <code>ml_pipeline</code> object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by <code>ml_save</code> with <code>type = "pipeline"</code> to facilitate model refresh workflows.</p>
 </section>
-<section id="see-also" class="level2">
-<h2 class="anchored" data-anchor-id="see-also">See Also</h2>
-<p>Other Spark stream serialization: <code>stream_read_delta()</code>, <code>stream_read_json()</code>, <code>stream_read_kafka()</code>, <code>stream_read_orc()</code>, <code>stream_read_parquet()</code>, <code>stream_read_socket()</code>, <code>stream_read_text()</code>, <code>stream_write_console()</code>, <code>stream_write_csv()</code>, <code>stream_write_delta()</code>, <code>stream_write_json()</code>, <code>stream_write_kafka()</code>, <code>stream_write_memory()</code>, <code>stream_write_orc()</code>, <code>stream_write_parquet()</code>, <code>stream_write_text()</code></p>
+<section id="value" class="level2">
+<h2 class="anchored" data-anchor-id="value">Value</h2>
+<p>The object returned depends on the class of <code>x</code>.</p>
+<ul>
+<li><p><code>spark_connection</code>: When <code>x</code> is a <code>spark_connection</code>, the function returns an instance of a <code>ml_estimator</code> object. The object contains a pointer to a Spark <code>Predictor</code> object and can be used to compose <code>Pipeline</code> objects.</p></li>
+<li><p><code>ml_pipeline</code>: When <code>x</code> is a <code>ml_pipeline</code>, the function returns a <code>ml_pipeline</code> with the predictor appended to the pipeline.</p></li>
+<li><p><code>tbl_spark</code>: When <code>x</code> is a <code>tbl_spark</code>, a predictor is constructed then immediately fit with the input <code>tbl_spark</code>, returning a prediction model.</p></li>
+<li><p><code>tbl_spark</code>, with <code>formula</code>: specified When <code>formula</code> is specified, the input <code>tbl_spark</code> is first transformed using a <code>RFormula</code> transformer before being fit by the predictor. The object returned in this case is a <code>ml_model</code> which is a wrapper of a <code>ml_pipeline_model</code>.</p></li>
+</ul>
 
 
 </section>

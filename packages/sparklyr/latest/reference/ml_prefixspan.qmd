@@ -39,7 +39,7 @@ ml_freq_seq_patterns(model)
 |Arguments|Description|
 |---|---|
 | x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
-| seq_col | The name of the sequence column in dataset (default “sequence”). Rows with nulls in this column are ignored. |
+| seq_col | The name of the sequence column in dataset (defaults to "sequence"). Rows with nulls in this column are ignored. |
 | min_support | The minimum support required to be considered a frequent sequential pattern. |
 | max_pattern_length | The maximum length of a frequent sequential pattern. Any frequent pattern exceeding this length will not be included in the results. |
 | max_local_proj_db_size | The maximum number of items allowed in a prefix-projected database before local iterative processing of the projected database begins. This parameter should be tuned with respect to the size of your executors. |
@@ -57,7 +57,7 @@ ml_freq_seq_patterns(model)
 library(sparklyr) 
 sc <- spark_connect(master = "local", version = "2.4.0") 
  
-items_df <- tibble::tibble( 
+items_df <- dplyr::tibble( 
   seq = list( 
     list(list(1, 2), list(3)), 
     list(list(1), list(3, 2), list(1, 2)), 

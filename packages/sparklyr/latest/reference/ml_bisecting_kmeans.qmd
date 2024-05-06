@@ -48,23 +48,10 @@ ml_bisecting_kmeans(
 | features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
 | prediction_col | Prediction column name. |
 | uid | A character string used to uniquely identify the ML estimator. |
-| ... | Optional arguments, see Details. |
+| ... | Optional arguments, see Details. #' @return The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. |
 
 
 
-## Value
-
- The object returned depends on the class of `x`.     
-
-- `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to   a Spark `Estimator` object and can be used to compose   `Pipeline` objects.    
-
-- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the clustering estimator appended to the pipeline.    
-
-- `tbl_spark`: When `x` is a `tbl_spark`, an estimator is constructed then   immediately fit with the input `tbl_spark`, returning a clustering model.    
-
-- `tbl_spark`, with `formula` or `features` specified: When `formula`     is specified, the input `tbl_spark` is first transformed using a     `RFormula` transformer before being fit by     the estimator. The object returned in this case is a `ml_model` which is a     wrapper of a `ml_pipeline_model`. This signature does not apply to `ml_lda()`. 
-
- 
 
 
 ## Examples
@@ -83,8 +70,6 @@ iris_tbl %>%
  
 ```
 
-## See Also
- See [https://spark.apache.org/docs/latest/ml-clustering.html](https://spark.apache.org/docs/latest/ml-clustering.html) for   more information on the set of clustering algorithms.  Other ml clustering algorithms:  `ml_gaussian_mixture()`, `ml_kmeans()`, `ml_lda()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

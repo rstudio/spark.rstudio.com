@@ -1,0 +1,15 @@
+{
+  "hash": "988b567b072d44daa44df9334a666e4a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Write Stream to Table\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/stream_data.R*\n\n## stream_write_table\n\n## Description\n Writes a Spark dataframe stream into a table. \n\n\n## Usage\n```r\n \nstream_write_table( \n  x, \n  path, \n  format = NULL, \n  mode = c(\"append\", \"complete\", \"update\"), \n  checkpoint = file.path(\"checkpoints\", random_string(\"\")), \n  options = list(), \n  partition_by = NULL, \n  ... \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A Spark DataFrame or dplyr operation |\n| path | The path to the file. Needs to be accessible from the cluster. Supports the `\"hdfs://\"`, `\"s3a://\"` and `\"file://\"` protocols. |\n| format | Specifies format of data written to table E.g. `\"delta\"`, `\"parquet\"`. Defaults to `NULL` which will use system default format. |\n| mode | Specifies how data is written to a streaming sink. Valid values are `\"append\"`, `\"complete\"` or `\"update\"`. |\n| checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance. |\n| options | A list of strings with additional options. |\n| partition_by | Partitions the output by the given list of columns. |\n| ... | Optional arguments; currently unused. |\n\n\n\n\n\n\n## See Also\n Other Spark stream serialization:  `stream_write_csv()`, `stream_write_memory()` \n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

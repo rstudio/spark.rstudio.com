@@ -16,7 +16,7 @@ library(dplyr)
 ## ml_naive_bayes
 
 ## Description
- Naive Bayes Classifiers. It supports Multinomial NB (see [here](http://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html)) which can handle finitely supported discrete data. For example, by converting documents into TF-IDF vectors, it can be used for document classification. By making every vector a binary (0/1) data, it can also be used as Bernoulli NB (see [here](http://nlp.stanford.edu/IR-book/html/htmledition/the-bernoulli-model-1.html)). The input feature values must be nonnegative. 
+ Naive Bayes Classifiers. It supports Multinomial NB (see [here](https://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html)) which can handle finitely supported discrete data. For example, by converting documents into TF-IDF vectors, it can be used for document classification. By making every vector a binary (0/1) data, it can also be used as Bernoulli NB (see [here](http://nlp.stanford.edu/IR-book/html/htmledition/the-bernoulli-model-1.html)). The input feature values must be nonnegative. 
 
 
 ## Usage
@@ -56,23 +56,10 @@ ml_naive_bayes(
 | uid | A character string used to uniquely identify the ML estimator. |
 | ... | Optional arguments; see Details. |
 
-## Details
- When `x` is a `tbl_spark` and `formula` (alternatively, `response` and `features`) is specified, the function returns a `ml_model` object wrapping a `ml_pipeline_model` which contains data pre-processing transformers, the ML predictor, and, for classification models, a post-processing transformer that converts predictions into class labels. For classification, an optional argument `predicted_label_col` (defaults to `"predicted_label"`) can be used to specify the name of the predicted label column. In addition to the fitted `ml_pipeline_model`, `ml_model` objects also contain a `ml_pipeline` object where the ML predictor stage is an estimator ready to be fit against data. This is utilized by `ml_save` with `type = "pipeline"` to faciliate model refresh workflows. 
 
 
 ## Value
-
- The object returned depends on the class of `x`.     
-
-- `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to   a Spark `Predictor` object and can be used to compose   `Pipeline` objects.    
-
-- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the predictor appended to the pipeline.    
-
-- `tbl_spark`: When `x` is a `tbl_spark`, a predictor is constructed then   immediately fit with the input `tbl_spark`, returning a prediction model.    
-
-- `tbl_spark`, with `formula`: specified When `formula`     is specified, the input `tbl_spark` is first transformed using a     `RFormula` transformer before being fit by     the predictor. The object returned in this case is a `ml_model` which is a     wrapper of a `ml_pipeline_model`. 
-
- 
+ The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
 
 
 ## Examples
@@ -99,7 +86,7 @@ ml_multiclass_classification_evaluator(pred)
 ```
 
 ## See Also
- See [https://spark.apache.org/docs/latest/ml-classification-regression.html](https://spark.apache.org/docs/latest/ml-classification-regression.html) for   more information on the set of supervised learning algorithms.  Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+ Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

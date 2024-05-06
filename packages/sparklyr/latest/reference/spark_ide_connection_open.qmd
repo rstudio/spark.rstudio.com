@@ -1,0 +1,80 @@
+---
+title: "Set of functions to provide integration with the RStudio IDE"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/spark_ide.R*
+
+## spark_ide_connection_open
+
+## Description
+ Set of functions to provide integration with the RStudio IDE 
+
+
+## Usage
+```r
+ 
+spark_ide_connection_open(con, env, connect_call) 
+ 
+spark_ide_connection_closed(con) 
+ 
+spark_ide_connection_updated(con, hint) 
+ 
+spark_ide_connection_actions(con) 
+ 
+spark_ide_objects(con, catalog, schema, name, type) 
+ 
+spark_ide_columns( 
+  con, 
+  table = NULL, 
+  view = NULL, 
+  catalog = NULL, 
+  schema = NULL 
+) 
+ 
+spark_ide_preview( 
+  con, 
+  rowLimit, 
+  table = NULL, 
+  view = NULL, 
+  catalog = NULL, 
+  schema = NULL 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| con | Valid Spark connection |
+| env | R environment of the interactive R session |
+| connect_call | R code that can be used to re-connect to the Spark connection |
+| hint | Name of the Spark connection that the RStudio IDE can use as reference. |
+| catalog | Name of the top level of the requested table or view |
+| schema | Name of the second most top level of the requested level or view |
+| name | The new of the view or table being requested |
+| type | Type of the object being requested, 'view' or 'table' |
+| table | Name of the requested table |
+| view | Name of the requested view |
+| rowLimit | The number of rows to show in the 'Preview' pane of the RStudio IDE |
+
+## Details
+ These function are meant for downstream packages, that provide additional backends to `sparklyr`, to override the opening, closing, update, and preview functionality. The arguments are driven by what the RStudio IDE API expects them to be, so this is the reason why some use `type` to designated views or tables, and others have one argument for `table`, and another for `view`. 
+
+
+
+
+
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

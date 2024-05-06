@@ -1,0 +1,15 @@
+{
+  "hash": "650f11f3247651c42f21be4b1f80c862",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Set of functions to provide integration with the RStudio IDE\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/spark_ide.R*\n\n## spark_ide_connection_open\n\n## Description\n Set of functions to provide integration with the RStudio IDE \n\n\n## Usage\n```r\n \nspark_ide_connection_open(con, env, connect_call) \n \nspark_ide_connection_closed(con) \n \nspark_ide_connection_updated(con, hint) \n \nspark_ide_connection_actions(con) \n \nspark_ide_objects(con, catalog, schema, name, type) \n \nspark_ide_columns( \n  con, \n  table = NULL, \n  view = NULL, \n  catalog = NULL, \n  schema = NULL \n) \n \nspark_ide_preview( \n  con, \n  rowLimit, \n  table = NULL, \n  view = NULL, \n  catalog = NULL, \n  schema = NULL \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| con | Valid Spark connection |\n| env | R environment of the interactive R session |\n| connect_call | R code that can be used to re-connect to the Spark connection |\n| hint | Name of the Spark connection that the RStudio IDE can use as reference. |\n| catalog | Name of the top level of the requested table or view |\n| schema | Name of the second most top level of the requested level or view |\n| name | The new of the view or table being requested |\n| type | Type of the object being requested, 'view' or 'table' |\n| table | Name of the requested table |\n| view | Name of the requested view |\n| rowLimit | The number of rows to show in the 'Preview' pane of the RStudio IDE |\n\n## Details\n These function are meant for downstream packages, that provide additional backends to `sparklyr`, to override the opening, closing, update, and preview functionality. The arguments are driven by what the RStudio IDE API expects them to be, so this is the reason why some use `type` to designated views or tables, and others have one argument for `table`, and another for `view`. \n\n\n\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

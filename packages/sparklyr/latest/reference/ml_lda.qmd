@@ -70,16 +70,16 @@ ml_topics_matrix(model)
 | optimize_doc_concentration | (For Online optimizer only) Indicates whether the `doc_concentration` (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: `FALSE` |
 | seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. |
 | features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
-| topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called "theta" in the literature). Returns a vector of zeros for an empty document. |
+| topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called "theta" in the  literature). Returns a vector of zeros for an empty document. |
 | uid | A character string used to uniquely identify the ML estimator. |
-| ... | Optional arguments, see Details. |
+| ... | Optional arguments, see Details. #' @return The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. |
 | model | A fitted LDA model returned by `ml_lda()`. |
 | max_terms_per_topic | Maximum number of terms to collect for each topic. Default value of 10. |
 | dataset | test corpus to use for calculating log likelihood or log perplexity |
 
 ## Details
 
- For `ml_lda.tbl_spark` with the formula interface, you can specify named arguments in `...` that will   be passed `ft_regex_tokenizer()`, `ft_stop_words_remover()`, and `ft_count_vectorizer()`. For example, to increase the   default `min_token_length`, you can use `ml_lda(dataset, ~ text, min_token_length = 4)`.  Terminology for LDA:    
+ For `ml_lda.tbl_spark` with the formula interface, you can specify named arguments in `...` that will be passed `ft_regex_tokenizer()`, `ft_stop_words_remover()`, and `ft_count_vectorizer()`. For example, to increase the default `min_token_length`, you can use `ml_lda(dataset, ~ text, min_token_length = 4)`.  Terminology for LDA:    
 
 - "term" = "word": an element of the vocabulary   
 
@@ -87,27 +87,27 @@ ml_topics_matrix(model)
 
 - "topic": multinomial distribution over terms representing some concept   
 
-- "document": one piece of text, corresponding to one row in the input data 
+- "document": one piece of text, corresponding to one row in the input   data 
 
-  Original LDA paper (journal version): Blei, Ng, and Jordan. "Latent Dirichlet Allocation." JMLR, 2003.  Input data (`features_col`): LDA is given a collection of documents as input data, via the `features_col` parameter. Each document is specified as a Vector of length `vocab_size`, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as `ft_tokenizer` and `ft_count_vectorizer` can be useful for converting text to word count vectors 
+  Original LDA paper (journal version): Blei, Ng, and Jordan. "Latent Dirichlet  Allocation." JMLR, 2003.  Input data (`features_col`): LDA is given a collection of documents as input data, via the `features_col` parameter. Each document is specified  as a Vector of length `vocab_size`, where each entry is the count for  the corresponding term (word) in the document. Feature transformers such as  `ft_tokenizer` and `ft_count_vectorizer` can be  useful for converting text to word count vectors 
 
 ## Section
 
 ## Parameter details
 
-   `doc_concentration`   This is the parameter to a Dirichlet distribution, where larger values mean more smoothing (more regularization). If not set by the user, then `doc_concentration` is set automatically. If set to singleton vector [alpha], then alpha is replicated to a vector of length k in fitting. Otherwise, the `doc_concentration` vector must be length k. (default = automatic)    Optimizer-specific parameter settings:  EM     
+   `doc_concentration`   This is the parameter to a Dirichlet distribution, where larger values mean   more smoothing (more regularization). If not set by the user, then    `doc_concentration` is set automatically. If set to singleton vector     [alpha], then alpha is replicated to a vector of length k in fitting.      Otherwise, the `doc_concentration` vector must be length k.      (default = automatic)    Optimizer-specific parameter settings:  EM     
 
-- Currently only supports symmetric distributions, so all values in the vector should be the same.   
+- Currently only supports symmetric distributions, so all values in   the vector should be the same.   
 
 - Values should be greater than 1.0   
 
-- default = uniformly (50 / k) + 1, where 50/k is common in LDA libraries and +1 follows from Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
+- default = uniformly (50 / k) + 1, where 50/k is common in LDA   libraries and +1 follows from Asuncion et al. (2009), who recommend a +1    adjustment for EM. 
 
   Online     
 
 - Values should be greater than or equal to 0   
 
-- default = uniformly (1.0 / k), following the implementation from [here](https://github.com/Blei-Lab/onlineldavb)   
+- default = uniformly (1.0 / k), following the implementation from   [here](https://github.com/Blei-Lab/onlineldavb)   
 
  
 
@@ -115,33 +115,22 @@ ml_topics_matrix(model)
 
 - Value should be greater than 1.0   
 
-- default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1 follows Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
+- default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1   follows Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
 
   Online     
 
 - Value should be greater than or equal to 0   
 
-- default = (1.0 / k), following the implementation from [here](https://github.com/Blei-Lab/onlineldavb).   
+- default = (1.0 / k), following the implementation from   [here](https://github.com/Blei-Lab/onlineldavb).   
 
  
 
-  `topic_distribution_col`   This uses a variational approximation following Hoffman et al. (2010), where the approximate distribution is called "gamma." Technically, this method returns this approximation "gamma" for each document. 
+  `topic_distribution_col`   This uses a variational approximation following Hoffman et al. (2010),   where the approximate distribution is called "gamma." Technically, this    method returns this approximation "gamma" for each document. 
 
  
 
 ## Value
-
- The object returned depends on the class of `x`.     
-
-- `spark_connection`: When `x` is a `spark_connection`, the function returns an instance of a `ml_estimator` object. The object contains a pointer to   a Spark `Estimator` object and can be used to compose   `Pipeline` objects.    
-
-- `ml_pipeline`: When `x` is a `ml_pipeline`, the function returns a `ml_pipeline` with   the clustering estimator appended to the pipeline.    
-
-- `tbl_spark`: When `x` is a `tbl_spark`, an estimator is constructed then   immediately fit with the input `tbl_spark`, returning a clustering model.    
-
-- `tbl_spark`, with `formula` or `features` specified: When `formula`     is specified, the input `tbl_spark` is first transformed using a     `RFormula` transformer before being fit by     the estimator. The object returned in this case is a `ml_model` which is a     wrapper of a `ml_pipeline_model`. This signature does not apply to `ml_lda()`. 
-
-  `ml_describe_topics` returns a DataFrame with topics and their top-weighted terms.  `ml_log_likelihood` calculates a lower bound on the log likelihood of   the entire corpus 
+ `ml_describe_topics` returns a DataFrame with topics and their top-weighted terms.  `ml_log_likelihood` calculates a lower bound on the log likelihood of   the entire corpus 
 
 
 ## Examples
@@ -181,8 +170,6 @@ tidy(lda_model)
  
 ```
 
-## See Also
- See [https://spark.apache.org/docs/latest/ml-clustering.html](https://spark.apache.org/docs/latest/ml-clustering.html) for   more information on the set of clustering algorithms.  Other ml clustering algorithms:  `ml_bisecting_kmeans()`, `ml_gaussian_mixture()`, `ml_kmeans()` 
 
 
 ```{r, eval=ecodown::examples_not_run()}

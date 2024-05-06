@@ -1,0 +1,61 @@
+---
+title: "Write Stream to Table"
+execute:
+  freeze: true
+---
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+options("pillar.width" = 60)
+library(sparklyr) 
+library(dplyr)
+```
+
+*R/stream_data.R*
+
+## stream_write_table
+
+## Description
+ Writes a Spark dataframe stream into a table. 
+
+
+## Usage
+```r
+ 
+stream_write_table( 
+  x, 
+  path, 
+  format = NULL, 
+  mode = c("append", "complete", "update"), 
+  checkpoint = file.path("checkpoints", random_string("")), 
+  options = list(), 
+  partition_by = NULL, 
+  ... 
+) 
+```
+
+## Arguments
+|Arguments|Description|
+|---|---|
+| x | A Spark DataFrame or dplyr operation |
+| path | The path to the file. Needs to be accessible from the cluster. Supports the `"hdfs://"`, `"s3a://"` and `"file://"` protocols. |
+| format | Specifies format of data written to table E.g. `"delta"`, `"parquet"`. Defaults to `NULL` which will use system default format. |
+| mode | Specifies how data is written to a streaming sink. Valid values are `"append"`, `"complete"` or `"update"`. |
+| checkpoint | The location where the system will write all the checkpoint information to guarantee end-to-end fault-tolerance. |
+| options | A list of strings with additional options. |
+| partition_by | Partitions the output by the given list of columns. |
+| ... | Optional arguments; currently unused. |
+
+
+
+
+
+
+## See Also
+ Other Spark stream serialization:  `stream_write_csv()`, `stream_write_memory()` 
+
+
+```{r, eval=ecodown::examples_not_run()}
+#| include: false
+spark_disconnect_all()
+```

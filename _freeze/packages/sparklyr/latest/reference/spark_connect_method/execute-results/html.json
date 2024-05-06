@@ -1,0 +1,15 @@
+{
+  "hash": "4d81527e8d1ba7abd2585168b1c6aa07",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Function that negotiates the connection with the Spark back-end\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/connection_spark.R*\n\n## spark_connect_method\n\n## Description\n Function that negotiates the connection with the Spark back-end \n\n\n## Usage\n```r\n \nspark_connect_method( \n  x, \n  method, \n  master, \n  spark_home, \n  config, \n  app_name, \n  version, \n  hadoop_version, \n  extensions, \n  scala_version, \n  ... \n) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| x | A dummy method object to determine which code to use to connect |\n| method | The method used to connect to Spark. Default connection method is `\"shell\"` to connect using spark-submit, use `\"livy\"` to perform remote connections using HTTP, or `\"databricks\"` when using a Databricks clusters. |\n| master | Spark cluster url to connect to. Use `\"local\"` to connect to a local instance of Spark installed via `spark_install`. |\n| spark_home | The path to a Spark installation. Defaults to the path provided by the `SPARK_HOME` environment variable. If `SPARK_HOME` is defined, it will always be used unless the `version` parameter is specified to force the use of a locally installed version. |\n| config | Custom configuration for the generated Spark connection. See `spark_config` for details. |\n| app_name | The application name to be used while running in the Spark cluster. |\n| version | The version of Spark to use. Required for `\"local\"` Spark connections, optional otherwise. |\n| hadoop_version | Version of Hadoop to use |\n| extensions | Extension R packages to enable for this connection. By default, all packages enabled through the use of `sparklyr::register_extension` will be passed here. |\n| scala_version | Load the sparklyr jar file that is built with the version of Scala specified (this currently only makes sense for Spark 2.4, where sparklyr will by default assume Spark 2.4 on current host is built with Scala 2.11, and therefore `scala_version = '2.12'` is needed if sparklyr is connecting to Spark 2.4 built with Scala 2.12) |\n| ... | Additional params to be passed to each `spark_disconnect()` call (e.g., `terminate = TRUE`) |\n\n\n\n\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

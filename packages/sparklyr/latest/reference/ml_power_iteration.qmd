@@ -37,10 +37,10 @@ ml_power_iteration(
 ## Arguments
 |Arguments|Description|
 |---|---|
-| x | A ‘spark_connection’  or a ‘tbl_spark’. |
+| x | A `spark_connection`  or a `tbl_spark`. |
 | k | The number of clusters to create. |
 | max_iter | The maximum number of iterations to run. |
-| init_mode | This can be either “random”, which is the default, to use a random vector as vertex properties, or “degree” to use normalized sum similarities. |
+| init_mode | This can be either "random", which is the default, to use a random vector as vertex properties, or "degree" to use normalized sum similarities. |
 | src_col | Column in the input Spark dataframe containing 0-based indexes of all source vertices in the affinity matrix described in the PIC paper. |
 | dst_col | Column in the input Spark dataframe containing 0-based indexes of all destination vertices in the affinity matrix described in the PIC paper. |
 | weight_col | Column in the input Spark dataframe containing non-negative edge weights in the affinity matrix described in the PIC paper. |
@@ -105,7 +105,7 @@ gen_pic_data <- function() {
     } 
   } 
  
-  tibble::tibble(src = src, dst = dst, sim = sim) 
+  dplyr::tibble(src = src, dst = dst, sim = sim) 
 } 
  
 pic_data <- copy_to(sc, gen_pic_data()) 

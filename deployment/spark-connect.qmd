@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -15,17 +15,11 @@ editor:
 ```{r}
 #| include: false
 
-library(remotes)
-
-#install.packages("sparklyr")
-#install_github("mlverse/pysparklyr")
-
 library(dplyr)
 library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
 
-# install_pyspark()
 ```
 
 *Last updated: `r lubridate::date()`*
@@ -52,29 +46,39 @@ back-end, RStudio's Connection pane integration.
 
 ::: {#fig-connect}
 ```{mermaid}
+%%| fig-width: 10
+%%| eval: true
 flowchart LR
-  subgraph lp[User's machine]
-    sr[sparklyr]
-    rt[reticulate]
-    ps[PySpark]
-    g1[gRPC]
+  subgraph lp[test]
+    subgraph r[R]
+      sr[sparklyr]
+      rt[reticulate]
+    end
+    subgraph ps[Python]
+      dc[Databricks Connect]
+      g1[gRPC]
+    end
+  end   
+  subgraph db[Databricks]
+    sp[Spark]   
   end
-  sp[Spark]
+  sr <--> rt
+  rt <--> dc
+  g1 <-- Internet<br>Connection --> sp
+  dc <--> g1
   
-  sr --> rt
-  rt --> ps
-  g1 <-. Network .-> sp
-  ps --> g1
-  
-  style sr  fill:#d0efb1,stroke:#666
-  style rt  fill:#d0efb1,stroke:#666
-  style ps  fill:#eff,stroke:#666
-  style lp  fill:#fff,stroke:#666
-  style sp  fill:#f4c430,stroke:#666
-  style g1  fill:#447099,stroke:#666,color:#fff
+  style r   fill:#fff,stroke:#666,color:#000
+  style sr  fill:#fff,stroke:#666,color:#000
+  style rt  fill:#fff,stroke:#666,color:#000
+  style ps  fill:#fff,stroke:#666,color:#000
+  style lp  fill:#fff,stroke:#666,color:#fff
+  style db  fill:#fff,stroke:#666,color:#000
+  style sp  fill:#fff,stroke:#666,color:#000
+  style g1  fill:#fff,stroke:#666,color:#000
+  style dc  fill:#fff,stroke:#666,color:#000
 ```
 
-How `sparklyr` communicates with Spark Connect, and Databricks Connect
+How `sparklyr` communicates with Databricks Connect
 :::
 
 
@@ -90,9 +94,7 @@ install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
-## Spark Connect
-
-### Initial setup
+## Initial setup
 
 `sparklyr` will need specific Python libraries in order to connect, and interact
 with Spark Connect. We provide a convenience function that will automatically
@@ -115,7 +117,7 @@ PySpark library matches the Spark version of your cluster.
 To do this, pass the Spark version in the  `version` argument, for example:
 
 ```r
-pysparklyr::install_pyspark("3.4")
+pysparklyr::install_pyspark("3.5")
 ```
 
 We have seen Spark sessions crash, when the version of PySpark and the version
@@ -124,7 +126,7 @@ against an older version of Spark.  If you are having issues with your connectio
 definitely consider running the `install_pyspark()` to match that cluster's 
 specific Spark version.
 
-### Connecting
+## Connecting
 
 To start a session with a open source Spark cluster, via Spark Connect,
 you will need to set the `master`, and `method`. The `master` will be an IP,
@@ -146,7 +148,7 @@ If `version` is not passed, then `sparklyr` will automatically choose the
 installed Python environment with the highest PySpark version. In a console 
 message, `sparklyr` will let you know which environment it will use.
 
-### Run locally
+## Run locally
 
 It is possible to run Spark Connect in your machine We provide helper
 functions that let you setup, and start/stop the services in locally.
@@ -154,29 +156,30 @@ functions that let you setup, and start/stop the services in locally.
 If you wish to try this out, first install Spark 3.4 or above:
 
 ``` r
-spark_install("3.4")
+spark_install("3.5")
 ```
 
 After installing, start the Spark Connect using:
 
-```r
-pysparklyr::spark_connect_service_start()
+```{r}
+pysparklyr::spark_connect_service_start("3.5")
 ```
 
 To connect to your local Spark Connect, use **localhost** as the address for 
 `master`:
 
 
-```r
+```{r}
 sc <- spark_connect(
   master = "sc://localhost", 
-  method = "spark_connect"
+  method = "spark_connect", 
+  version = "3.5"
   )
 ```
 
 Now, you are able to interact with your local Spark session:
 
-```r
+```{r}
 library(dplyr)
 
 tbl_mtcars <- copy_to(sc, mtcars)
@@ -188,7 +191,7 @@ tbl_mtcars %>%
 
 When done, you can disconnect from Spark Connect:
 
-```r
+```{r}
 spark_disconnect(sc)
 ```
 
@@ -196,45 +199,9 @@ The regular version of local Spark would terminate the local cluster
 when the you pass `spark_disconnect()`. For Spark Connect, the local
 cluster needs to be stopped independently.
 
-```r
+```{r}
 pysparklyr::spark_connect_service_stop()
 ```
-
-## What is supported
-
-Here is a list of what we currently support, and do not support via
-`sparklyr` and Connect:
-
-**Supported**:
-
--   Integration with most of the `dplyr`, and `DBI`, APIs
--   Integration with the `invoke()` command
--   RStudio Connections Pane navigation
--   Support for Personal Access Token security authentication for
-    Databricks Connect
--   Support for most read and write commands. These have only been
-    tested in Spark Connect.
-
-**Not supported**:
-
--   **ML functions** - All functions, in `sparklyr`, that have the `ml_`
-    and `ft_` are currently not supported. The reason is that Spark 3.4
-    does not currently support MLlib. We expect that some ML support
-    will be available in Spark 3.5. At that time we will work on
-    integrating the new ML routines from Connect into `sparklyr`.
-
--   **SDF functions** - Most of these functions require SparkSession,
-    which is currently not supported in Spark 3.4.
-
--   **`tidyr`** - This is ongoing work that we are focusing on in
-    `sparklyr`. We are implementing these functions using PySpark
-    DataFrame commands, instead of depending on the Scala
-    implementation.
-
-A more detailed list of our progress, which includes individual
-functions we have confirmed that work, do not work, or will work
-differently, is available here: [`pysparklyr`
-progress](https://github.com/mlverse/pysparklyr/blob/main/progress.md)
 
 ## Additional setup details
 
@@ -253,8 +220,8 @@ environment you will need the following libraries installed:
 -   `torch` *(Spark 3.5+)*
 -   `torcheval` *(Spark 3.5+)*
 
-If connecting to Databrics Connect avoid installing `pyspark`, and install 
-these instead: 
+ML libraries (Optional):
 
--   `databricks-connect`
--   `delta-spark`
+-   `torch`
+-   `torcheval`
+-   `scikit-learn`

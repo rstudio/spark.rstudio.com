@@ -1,5 +1,5 @@
 ---
-title: Databricks Connect v2
+title: Databricks
 format:
   html:
     theme: default
@@ -36,14 +36,15 @@ library(pysparklyr)
 
 ## Intro
 
-Databricks Connect enables the interaction with Spark clusters remotely.
-It is based on Spark Connect, which enables remote connectivity thanks
-to its new decoupled client-server architecture. This allows users to
-interact with the Spark cluster without having to run the jobs from a
-node. Additionally, it removes the requirement of having Java components
-installed in the user's machine.
+[Databricks Connect](https://docs.databricks.com/en/dev-tools/databricks-connect/index.html#)
+enables the interaction with Spark clusters remotely. It is based on [Spark
+Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html),
+which enables remote connectivity thanks to its new decoupled client-server
+architecture. This allows users to interact with the Spark cluster without
+having to run the jobs from a node. Additionally, it removes the requirement of
+having Java components installed in the user's machine.
 
-The API is very different than the "legacy" Spark and using the Spark
+The API is very different than "legacy" Spark and using the Spark
 shell is no longer an option. We have decided to use Python as the new
 interface. In turn, Python uses *gRPC* to interact with Spark.
 
@@ -126,7 +127,7 @@ For users of Posit Workbench, this is the recommended approach to
 setting up credentials as it provides an additional layer of security. If you
 are not currently using Posit Workbench, feel free to skip this section. 
 
-Details for how to setup and configure this feature can be found
+Details for how to setup and configure the Databricks integration can be found
 [here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
 
 For users who have signed into a Databricks Workspace via Posit
@@ -144,7 +145,7 @@ space *(1)*, and an authentication token *(2)*. For default values,
 those applications initially look for these environment variables:
 
 -   `DATABRICKS_HOST` - Your Workspace Instance URL
--   `DATABRICKS_TOKEN` - Your Personal Authentication Token *(Not needed if using Posit Workbench)*
+-   `DATABRICKS_TOKEN` - Your Personal Authentication Token
 
 Environment variables work well, because they rarely vary between
 projects. The thing that will change more often is the cluster you are
@@ -168,6 +169,11 @@ DATABRICKS_TOKEN="Enter here your personal token" # Not needed if using Posit Wo
 
 **This is a one time operation.** After saving and closing the file,
 restart your R session.
+
+::: callout-note
+If you are using Posit Workbench and have signed into your Databricks Workspace
+when starting your session, you do not need to set these environment variables.
+:::
 
 ## First time connecting
 

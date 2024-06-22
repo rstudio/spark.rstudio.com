@@ -36,7 +36,7 @@ of their preferred environment, laptop or otherwise.
 
 ## The Solution
 
-The API is very different than the "legacy" Spark and using the Spark
+The API is very different than "legacy" Spark and using the Spark
 shell is no longer an option. We have decided to use Python as the new
 interface. In turn, Python uses *gRPC* to interact with Spark.
 
@@ -55,11 +55,11 @@ flowchart LR
       rt[reticulate]
     end
     subgraph ps[Python]
-      dc[Databricks Connect]
+      dc[Spark Connect]
       g1[gRPC]
     end
   end   
-  subgraph db[Databricks]
+  subgraph db[Compute Cluster]
     sp[Spark]   
   end
   sr <--> rt
@@ -78,13 +78,13 @@ flowchart LR
   style dc  fill:#fff,stroke:#666,color:#000
 ```
 
-How `sparklyr` communicates with Databricks Connect
+How `sparklyr` communicates with Spark Connect
 :::
 
 
 ## Package Installation
 
-To access Databricks Connect, you will need the following two packages:
+To access Spark Connect, you will need the following two packages:
 
 -   `sparklyr` - 1.8.4
 -   `pysparklyr` - 0.1.3
@@ -120,16 +120,16 @@ To do this, pass the Spark version in the  `version` argument, for example:
 pysparklyr::install_pyspark("3.5")
 ```
 
-We have seen Spark sessions crash, when the version of PySpark and the version
-of Spark do not match. Specially, when using a newer version of PySpark is used
-against an older version of Spark.  If you are having issues with your connection, 
-definitely consider running the `install_pyspark()` to match that cluster's 
+We have seen Spark sessions crash when the version of PySpark and the version
+of Spark do not match. Specifically when a newer version of PySpark is used
+against an older version of Spark.  If you are having issues with your
+connection, consider running `install_pyspark()` to match the cluster's
 specific Spark version.
 
 ## Connecting
 
-To start a session with a open source Spark cluster, via Spark Connect,
-you will need to set the `master`, and `method`. The `master` will be an IP,
+To start a session with an open source Spark cluster, via Spark Connect, you
+will need to set the `master` and `method` values. The `master` will be an IP
 and maybe a port that you will need to pass. The protocol to use to put
 together the proper connection URL is "sc://". For `method`, use
 "spark_connect". Here is an example:
@@ -150,8 +150,8 @@ message, `sparklyr` will let you know which environment it will use.
 
 ## Run locally
 
-It is possible to run Spark Connect in your machine We provide helper
-functions that let you setup, and start/stop the services in locally.
+It is possible to run Spark Connect in your machin. We provide helper
+functions that let you setup and start/stop the services locally.
 
 If you wish to try this out, first install Spark 3.4 or above:
 
@@ -159,14 +159,14 @@ If you wish to try this out, first install Spark 3.4 or above:
 spark_install("3.5")
 ```
 
-After installing, start the Spark Connect using:
+After installing, start Spark Connect using:
 
 ```{r}
 pysparklyr::spark_connect_service_start("3.5")
 ```
 
-To connect to your local Spark Connect, use **localhost** as the address for 
-`master`:
+To connect to your local Spark cluster using SPark Connect, use **localhost**
+as the address for `master`:
 
 
 ```{r}
@@ -197,7 +197,7 @@ spark_disconnect(sc)
 
 The regular version of local Spark would terminate the local cluster
 when the you pass `spark_disconnect()`. For Spark Connect, the local
-cluster needs to be stopped independently.
+cluster needs to be stopped independently:
 
 ```{r}
 pysparklyr::spark_connect_service_stop()

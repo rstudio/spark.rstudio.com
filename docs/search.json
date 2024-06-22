@@ -8019,8 +8019,7 @@
     "section": "",
     "text": "Last updated: Thu Apr 25 12:38:27 2024",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8031,8 +8030,7 @@
     "section": "Intro",
     "text": "Intro\nSupport for spark_apply() is available starting with the following package versions:\n\nsparklyr - 1.8.5\npysparklyr - 0.1.4\n\nDatabricks Connect is now able to run regular Python code inside Spark. sparklyr takes advantage of this capability by having Python transport and run the R code. It does this via the rpy2 Python library. Using this library also guarantees Arrow support.\n\n\n\n\n\n\n\n\nflowchart LR\n  subgraph mm [\"My machine\"]\n  nb1(\"` `\")\n    subgraph mmr[\"`R _(sparklyr)_`\"]\n    nb2(\"` `\")\n      subgraph mmrr[\"`reticulate`\"]\n      nb3(\"` `\")\n        subgraph mmp[\"`Python`\"]\n          nb4(\"` `\")\n          subgraph mmrp2[\"`rpy2`\"]\n             nb5(\"`_rpy2 'packages' the R code_`\")\n             mmrc[\"R code\"]\n          end\n        end\n      end\n    end\n  end\n  \n  subgraph db[Databricks]\n    nb6(\"` `\")\n    subgraph sr[Spark]\n      nb7(\"` `\")\n      subgraph pt[Python]\n        nb8(\"` `\")\n        subgraph dbrp2[rpy2]\n          nb9(\"`_rpy2 runs the R code_`\")\n          subgraph dbr[R]\n            dbrc[\"R code\"]\n          end\n        end\n      end\n    end\n  end\n\n\nmmrc --&gt; dbrc\n\nstyle nb1 fill:#fff,stroke-width:0\nstyle nb2 fill:#fff,stroke-width:0\nstyle nb3 fill:#fff,stroke-width:0\nstyle nb4 fill:#fff,stroke-width:0\nstyle nb5 fill:#fff,stroke-width:0\nstyle nb6 fill:#fff,stroke-width:0\nstyle nb7 fill:#fff,stroke-width:0\nstyle nb8 fill:#fff,stroke-width:0\nstyle nb9 fill:#fff,stroke-width:0\nstyle mm  fill:#fff,stroke:#666,color:#000\nstyle mmr fill:#fff,stroke:#666,color:#000\nstyle mmrr fill:#fff,stroke:#666,color:#000\nstyle mmp fill:#fff,stroke:#666,color:#000\nstyle mmrp2 fill:#fff,stroke:#666,color:#000\nstyle mmr fill:#fff,stroke:#666,color:#000\nstyle db fill:#fff,stroke:#666,color:#000\nstyle sr fill:#fff,stroke:#666,color:#000\nstyle pt fill:#fff,stroke:#666,color:#000\nstyle dbr fill:#fff,stroke:#666,color:#000\nstyle dbrp2 fill:#fff,stroke:#666,color:#000\n\n\n\n\n\n\n\n\nFigure 1: How sparklyr uses rpy2 to run R code in Databricks Connect",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8043,8 +8041,7 @@
     "section": "Getting started",
     "text": "Getting started\nIf you have been using sparklyr with Databricks Connect v2 already, then after upgrading the packages, you will be prompted to install rpy2 in your Python environment. The prompt will occur the first time you use spark_apply() in an interactive R session. If this is the first time you are using sparklyr with Databricks Connect v2, please refer to our intro article“Databricks Connect v2” to learn how to setup your environment.\nAs shown in the diagram on the previous section, rpy2 is needed on the Databricks cluster you plan to use. This means that you will need to “manually” install the library in the cluster. This is a simple operation that is done via your Databricks web portal. Here are the instructions that shows you how to do that: Databricks - Cluster Libraries.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8055,8 +8052,7 @@
     "section": "What is supported in spark_apply() - At a glance",
     "text": "What is supported in spark_apply() - At a glance\n\n\n\nArgument\nSupported?\nNotes\n\n\n\n\nx\nYes\n\n\n\nf\nYes\n\n\n\ncolumns\nYes\nRequires a string entry that contains the name of the column and its Spark variable type. Accepted values are: long, decimal, string, datetime and bool. Example: columns = \"x long, y string\". If not provided, sparklyr will automatically create one, by examining the first 10 records of x, and it will provide a columns spec you can use when running spark_apply() again. See: Providing a schema\n\n\nmemory\nYes\n\n\n\ngroup_by\nYes\n\n\n\npackages\nNo\nYou will need to pre-install the needed R packages in your cluster via the Databricks web portal, see R packages\n\n\ncontext\nNo\n\n\n\nname\nYes\n\n\n\nbarrier\nYes\nSupport only on ungrouped data. In other words, it is valid when the group_by argument is used.\n\n\nfetch_result_as_sdf\nYes\nAt this time, spark_apply() inside Databricks Connect only supports rectangular data, so seeing to FALSE will always return a data frame.\n\n\npartition_index_param\nNo\n\n\n\narrow_max_records_per_batch\nYes\nSupport only on ungrouped data. In other words, it is valid when the group_by argument is used.\n\n\nauto_deps\nNo\n\n\n\n...",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8067,8 +8063,7 @@
     "section": "R packages",
     "text": "R packages\nIf your spark_apply() call uses specific R packages, you will need to pre-install those specific packages in your target cluster. This is a simple operation, because you can do this via your Databricks web portal, please see Databricks - Cluster Libraries to learn how to do this.\n\n\n\n\n\n\nOnly CRAN packages supported\n\n\n\nThe Databricks cluster library interface is able to source packages from CRAN only. This means that packages installed from GitHub, or another alternative sources, will not be available.\n\n\n\nAdditional background\nIn previous implementation, spark_apply() was able to easily copy the locally installed R packages in order to ensure that your code will run in the cluster. This was possible because R, and RStudio, was running in one of the matching servers in the Spark cluster. Because sparklyr is running on a remote machine, more likely a laptop, this is no longer an option. In the vast majority of cases, the remote machine will be on different a Operating System than the cluster. Additionally, transmitting the unpacked, compiled, R packages would take a long time over a broadband Internet connection.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8079,8 +8074,7 @@
     "section": "Providing a schema",
     "text": "Providing a schema\nPassing a schema in columns will makespark_apply() run faster. Because if not provided, sparklyr has to collect the first 10 rows, and run the R code in order to try and determine the names and types of your resulting data set. As a convenience, sparklyr will output a message with the schema it used as the schema. If you are going to rerun your spark_apply() command again, you can copy and paste the output of the message to you code.\n\nspark_apply(\n  tbl_mtcars,\n  nrow,\n  group_by = \"am\"\n)\n#&gt; To increase performance, use the following schema:\n#&gt; columns = \"am double, x long\"\n#&gt; # Source:   table&lt;`sparklyr_tmp_table_fa5389aa_0761_4a6a_abf5_1da699868ffc`&gt; [2 x 2]\n#&gt; # Database: spark_connection\n#&gt;      am     x\n#&gt;   &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1     0    19\n#&gt; 2     1    13\n\nPassing the columns argument, silences the message:\n\nspark_apply(\n  tbl_mtcars,\n  nrow,\n  group_by = \"am\", \n  columns = \"am double, x long\"\n)\n#&gt; # Source:   table&lt;`sparklyr_tmp_table_87ef961e_1009_42f8_abdb_2a04c2a5ad38`&gt; [2 x 2]\n#&gt; # Database: spark_connection\n#&gt;      am     x\n#&gt;   &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1     0    19\n#&gt; 2     1    13",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8091,8 +8085,7 @@
     "section": "Partition data",
     "text": "Partition data\nTypically, with un-grouped data, the number of parallel jobs will correspond with the number of partitions of the data. For Databricks connections, sparklyr will, by default, attempt to use Apache Arrow. The Databricks Connect clusters come with Arrow installed. This approach also changes how Spark will partition your data. Instead of the number of partitions, Spark will use the value in the “Arrow Max Records per Bach” option. This option can be controlled directly in the spark_apply() call by setting the arrow_max_records_per_batch.\n\nspark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 4, columns = \"x long\")\n#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 4\n#&gt; # Source:   table&lt;`sparklyr_tmp_table_c2866f69_faf7_49e5_a343_707862ec3dcc`&gt; [8 x 1]\n#&gt; # Database: spark_connection\n#&gt;       x\n#&gt;   &lt;dbl&gt;\n#&gt; 1     4\n#&gt; 2     4\n#&gt; 3     4\n#&gt; 4     4\n#&gt; 5     4\n#&gt; 6     4\n#&gt; 7     4\n#&gt; 8     4\n\nIf you pass a different Arrow Batch size than what the option is set to currently, sparklyr will change the value of that option, and will notify you of that:\n\nspark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 2, columns = \"x long\")\n#&gt; Changing spark.sql.execution.arrow.maxRecordsPerBatch to: 2\n#&gt; # Source:   table&lt;`sparklyr_tmp_table_a09a5277_7841_4746_bde1_c583aeee4baf`&gt; [?? x 1]\n#&gt; # Database: spark_connection\n#&gt;        x\n#&gt;    &lt;dbl&gt;\n#&gt;  1     2\n#&gt;  2     2\n#&gt;  3     2\n#&gt;  4     2\n#&gt;  5     2\n#&gt;  6     2\n#&gt;  7     2\n#&gt;  8     2\n#&gt;  9     2\n#&gt; 10     2\n#&gt; # ℹ more rows",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8103,8 +8096,7 @@
     "section": "Limitations",
     "text": "Limitations\nspark_apply() will only work on Databricks “Single Access” mode. “Shared Access” mode does not currently support mapInPandas(), and applyInPandas() (see Databricks - Access mode limitations). These are the Python functions that sparklyr uses to run the Python code, which in turn runs the R code via rpy2.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Run R code in Databricks"
     ]
   },
@@ -8115,7 +8107,7 @@
     "section": "",
     "text": "Last updated: Wed Jun 19 10:17:24 2024",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8127,7 +8119,7 @@
     "section": "Intro",
     "text": "Intro\nSpark Connect introduced a decoupled client-server architecture that allows remote connectivity to Spark clusters using the DataFrame API. The separation between client and server allows Spark to be leveraged from everywhere, and this would allow R users to interact with a cluster from the comfort of their preferred environment, laptop or otherwise.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8139,7 +8131,7 @@
     "section": "The Solution",
     "text": "The Solution\nThe API is very different than the “legacy” Spark and using the Spark shell is no longer an option. We have decided to use Python as the new interface. In turn, Python uses gRPC to interact with Spark.\nWe are using reticulate to interact with the Python API. sparklyr extends the functionality, and user experience, by providing the dplyrback-end, DBI back-end, RStudio’s Connection pane integration.\n\n\n\n\n\n\n\n\nflowchart LR\n  subgraph lp[test]\n    subgraph r[R]\n      sr[sparklyr]\n      rt[reticulate]\n    end\n    subgraph ps[Python]\n      dc[Databricks Connect]\n      g1[gRPC]\n    end\n  end   \n  subgraph db[Databricks]\n    sp[Spark]   \n  end\n  sr &lt;--&gt; rt\n  rt &lt;--&gt; dc\n  g1 &lt;-- Internet&lt;br&gt;Connection --&gt; sp\n  dc &lt;--&gt; g1\n  \n  style r   fill:#fff,stroke:#666,color:#000\n  style sr  fill:#fff,stroke:#666,color:#000\n  style rt  fill:#fff,stroke:#666,color:#000\n  style ps  fill:#fff,stroke:#666,color:#000\n  style lp  fill:#fff,stroke:#666,color:#fff\n  style db  fill:#fff,stroke:#666,color:#000\n  style sp  fill:#fff,stroke:#666,color:#000\n  style g1  fill:#fff,stroke:#666,color:#000\n  style dc  fill:#fff,stroke:#666,color:#000\n\n\n\n\n\n\n\n\nFigure 1: How sparklyr communicates with Databricks Connect",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8151,7 +8143,7 @@
     "section": "Package Installation",
     "text": "Package Installation\nTo access Databricks Connect, you will need the following two packages:\n\nsparklyr - 1.8.4\npysparklyr - 0.1.3\n\ninstall.packages(\"sparklyr\")\ninstall.packages(\"pysparklyr\")",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8163,7 +8155,7 @@
     "section": "Initial setup",
     "text": "Initial setup\nsparklyr will need specific Python libraries in order to connect, and interact with Spark Connect. We provide a convenience function that will automatically do the following:\n\nCreate, or re-create, a Python environment. Based on your OS, it will choose to create a Virtual Environment, or Conda.\nInstall the needed Python libraries\n\nTo install the latest versions of all the libraries, use:\npysparklyr::install_pyspark()\nsparklyr will query PyPi.org to get the latest version of PySpark and installs that version. It is recommended that the version of the PySpark library matches the Spark version of your cluster. To do this, pass the Spark version in the version argument, for example:\npysparklyr::install_pyspark(\"3.5\")\nWe have seen Spark sessions crash, when the version of PySpark and the version of Spark do not match. Specially, when using a newer version of PySpark is used against an older version of Spark. If you are having issues with your connection, definitely consider running the install_pyspark() to match that cluster’s specific Spark version.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8175,7 +8167,7 @@
     "section": "Connecting",
     "text": "Connecting\nTo start a session with a open source Spark cluster, via Spark Connect, you will need to set the master, and method. The master will be an IP, and maybe a port that you will need to pass. The protocol to use to put together the proper connection URL is “sc://”. For method, use “spark_connect”. Here is an example:\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  master = \"sc://[Host IP(:Host Port - optional)]\", \n  method = \"spark_connect\"\n  version = \"[Version that matches your cluster]\"\n  )\nIf version is not passed, then sparklyr will automatically choose the installed Python environment with the highest PySpark version. In a console message, sparklyr will let you know which environment it will use.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8187,7 +8179,7 @@
     "section": "Run locally",
     "text": "Run locally\nIt is possible to run Spark Connect in your machine We provide helper functions that let you setup, and start/stop the services in locally.\nIf you wish to try this out, first install Spark 3.4 or above:\nspark_install(\"3.5\")\nAfter installing, start the Spark Connect using:\n\npysparklyr::spark_connect_service_start(\"3.5\")\n#&gt; Starting Spark Connect locally ...\n#&gt;   org.apache.spark.sql.connect.service.SparkConnectServer running as process\n#&gt;   12573.  Stop it first.\n\nTo connect to your local Spark Connect, use localhost as the address for master:\n\nsc &lt;- spark_connect(\n  master = \"sc://localhost\", \n  method = \"spark_connect\", \n  version = \"3.5\"\n  )\n#&gt; ℹ Attempting to load 'r-sparklyr-pyspark-3.5'\n#&gt; ✔ Python environment: 'r-sparklyr-pyspark-3.5' [315ms]\n#&gt; \n\nNow, you are able to interact with your local Spark session:\n\nlibrary(dplyr)\n\ntbl_mtcars &lt;- copy_to(sc, mtcars)\n\ntbl_mtcars %&gt;% \n  group_by(am) %&gt;% \n  summarise(mpg = mean(mpg, na.rm = TRUE))\n#&gt; # Source:   SQL [2 x 2]\n#&gt; # Database: spark_connection\n#&gt;      am   mpg\n#&gt;   &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1     0  17.1\n#&gt; 2     1  24.4\n\nWhen done, you can disconnect from Spark Connect:\n\nspark_disconnect(sc)\n\nThe regular version of local Spark would terminate the local cluster when the you pass spark_disconnect(). For Spark Connect, the local cluster needs to be stopped independently.\n\npysparklyr::spark_connect_service_stop()\n#&gt; \n#&gt; ── Stopping Spark Connect\n#&gt;   - Shutdown command sent",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8199,7 +8191,7 @@
     "section": "Additional setup details",
     "text": "Additional setup details\nIf you wish to use your own Python environment, then just make sure to load it before calling spark_connect(). If there is a Python environment already loaded when you connect to your Spark cluster, then sparklyr will use that environment instead. If you use your own Python environment you will need the following libraries installed:\n\npyspark\npandas\nPyArrow\ngrpcio\ngoogle-api-python-client\ngrpcio_status\ntorch (Spark 3.5+)\ntorcheval (Spark 3.5+)\n\nML libraries (Optional):\n\ntorch\ntorcheval\nscikit-learn",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Spark Connect",
       "Getting Started"
     ]
@@ -8211,8 +8203,7 @@
     "section": "",
     "text": "We recommend that for simply accessing data from the Unity Catalog, such as in a Shiny app, use an ODBC connection instead of a Spark session. The advantage of this is that a connection to the Databricks Warehouse does not require a running cluster. For more information about creating dashboards with databases visit Database with R site.\nHowever, there are cases when it is necessary to deploy a solution that requires a Spark session. For example, when there is a long running job that needs to run on a schedule. Those kinds of jobs could be put inside a Quarto document and published to Posit Connect, where they can run on specific date/time intervals. Posit Connect supports Python environments, so it is an ideal platform to deploy these kinds of solutions.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Deploying to Posit Connect"
     ]
   },
@@ -8223,8 +8214,7 @@
     "section": "Preparing for deployment",
     "text": "Preparing for deployment\nWhen deploying to Posit Connect, there are specific pieces of information that we need to make sure are sent over:\n\nYour cluster’s ID\nYour workspace URL\nYour token\nYour Python environment\nTo use the pysparklyr extension\n\nBased on the recommendations in this article, the cluster’s ID should be in the code of your document, the workspace URL and token should already be inside the DATABRICKS_HOST, and DATABRICKS_TOKEN environment variables. If you are using something other than these environment variables to authenticate, then see the section Alternatives to Environment Variables.\nMake sure that your document has a library(pysparklyr) call. This will let Posit Connect deployment process know that it needs to install this package and its dependencies, such as reticulate.\nThe next section will introduce a function that will ease finding the Python environment.\nlibrary(sparklyr)\nlibrary(pysparklyr)\n\nsc &lt;- spark_connect(\n    cluster_id = \"1026-175310-7cpsh3g8\",\n    method = \"databricks_connect\"\n)",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Deploying to Posit Connect"
     ]
   },
@@ -8235,8 +8225,7 @@
     "section": "Using deploy_databricks()",
     "text": "Using deploy_databricks()\nThe deploy_databricks() function makes it easier to deploy your content to Posit Connect. It does its best to gather all of the pieces of information mentioned above and builds the correct command to publish.\nThe path to your content is the last piece of information we need. Ideally your content is either located in its own folder inside your project or it is at the root level of your project. There are three ways that you can let deploy_databricks() know the path to use:\n\nIf you are in RStudio and the document you wish to publish is open, deploy_databricks() will use the RStudio API to get the path of that document and then use its containing folder as the content’s location. This is the preferred method for deployment.\nUse the appDir argument to pass the path to be used. Something such as here::here(\"my-cool-document\") would work.\nIf no document is opened in RStudio and appDir is left empty, then getwd() will be used\n\nThe aim of the new function is to be both flexible and helpful. It will gather your document location, credentials, and URLs. The Python location needs to defined when calling deploy_databricks(). If you are in RStudio, and your document is opened, here are several ways to do this:\n\nIf you know the cluster’s DBR version:\npysparklyr::deploy_databricks(version = \"14.1\")\nThe cluster’s ID can also be used and pysparklyr will automatically determine the required DBR version:\npysparklyr::deploy_databricks(cluster_id = \"1026-175310-7cpsh3g8\")\nIf you just ran the code of the content you plan to deploy, then the Python environment will already be loaded in the R session. deploy_databricks() will validate that the path of that Python environment conforms to one that pysparklyr creates and use that. This will happen if no version, cluster_id, or python argument is provided. At that point simply run:\npysparklyr::deploy_databricks()\nYou can also pass the path to the Python environment to use by setting the python argument:\npysparklyr::deploy_databricks(python = \"/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1\")\nYou can use DATABRICKS_CLUSTER_ID environment variable. If you have it set, simply run:\npysparklyr::deploy_databricks()\n\nHere is an example of the output returned when using deploy_databricks(). Before submitting your content, you will be prompted to confirm that the information gathered is correct. Also notice that if you have more than one Posit Connect server setup in your RStudio IDE, it will choose the top one as the default but allow you to easily change it if necessary:\n&gt; pysparklyr::deploy_databricks(version = \"14.1\")\n\n── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────\nℹ Source directory: /Users/edgar/r_projects/practice/test-deploy\nℹ Python: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python\nℹ Posit server: colorado.posit.co\n  Account name: edgar\nℹ Host URL: rstudio-partner-posit-default.cloud.databricks.com\n  Token: '&lt;REDACTED&gt;'\n\nDoes everything look correct?\n\n1: Yes\n2: No\n3: Change 'Posit server'\n\nSelection: 1\nThe first time that you publish, the function will check to see if you have a requirements.txt file. If you do not have the file, it will ask you if you wish to create it. The requirements.txt file contains the list of the your current Python environment, as well as its versions. This will help when you re-publish your content, because you will not need to pass the version.\nWould you like to create the 'requirements.txt' file?\nWhy consider? This will allow you to skip using `version` or `cluster_id`\n\n1: Yes\n2: No\nIf you select No, deploy_databricks() will not ask you again when you re-deploy.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Deploying to Posit Connect"
     ]
   },
@@ -8247,8 +8236,7 @@
     "section": "Alternatives to Environment Variables",
     "text": "Alternatives to Environment Variables\nThe deploy_databricks() function has a host, and token arguments. These arguments take precedent over the environment variables, if set.\nThere are a variety of reasons for you to set these arguments when publishing. For example, locally you authenticate with a Databricks configuration file, but when deploying, you will need to let deploy_databricks() what values to use for the PAT and Host URL. Another example could be that your deployed content may need to use a service account, that differs from the credentials you use when developing.\nAs usual, we recommend that you avoid using open text values with your credentials in your code. An effective way of managing local-vs-remote credentials is with the config package. Here is an example:\nconfig.yml\ndefault:\n  host_url: \"[Your Host URL]\"\n  token: \"[Your Token]\"\n\nrsconnect:\n  host_url: \"[Your Host URL]\"\n  token: \"[Service Token]\"\nR script\nconfig &lt;- config::get()\n\npysparklyr::deploy_databricks(\n  version = \"14.1\", \n  host = config$host_url,\n  token = config$token\n  )\nThe integration with Posit Connect and config, allows your deployed content to automatically use the values under the rsconnect section in the YAML file, instead of the values from the default section.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Deploying to Posit Connect"
     ]
   },
@@ -8259,7 +8247,7 @@
     "section": "",
     "text": "This documentation demonstrates how to use sparklyr with Apache Spark in Qubole along with RStudio Server Pro and RStudio Connect.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Qubole cluster"
     ]
@@ -8271,7 +8259,7 @@
     "section": "",
     "text": "This documentation demonstrates how to use sparklyr with Apache Spark in Qubole along with RStudio Server Pro and RStudio Connect.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Qubole cluster"
     ]
@@ -8283,7 +8271,7 @@
     "section": "Best practices for working with Qubole",
     "text": "Best practices for working with Qubole\n\nManage packages via Qubole Environments - Packages installed via install.packages() are not available on cluster restart. Packages managed through Qubole Environments are persistent.\nRestrict workloads to interactive analysis - Only perform workloads related to exploratory or interactive analysis with Spark, then write the results to a database, file system, or cloud storage for more efficient retrieval in apps, reports, and APIs.\nLoad and query results efficiently - Because of the nature of Spark computations and the associated overhead, Shiny apps that use Spark on the backend tend to have performance and runtime issues; consider reading the results from a database, file system, or cloud storage instead.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Qubole cluster"
     ]
@@ -8295,7 +8283,7 @@
     "section": "Using RStudio Workbench with Qubole",
     "text": "Using RStudio Workbench with Qubole\nThe Qubole platform includes RStudio Workbench. More details about how to request RStudio Workbench and access it from within a Qubole cluster are available from Qubole.\nTo steps for running RStudio Workbench inside Qubole go to the follow article: Qubole cluster",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Qubole cluster"
     ]
@@ -8307,7 +8295,7 @@
     "section": "Using RStudio Connect with Qubole",
     "text": "Using RStudio Connect with Qubole\nThe best configuration for working with Qubole and RStudio Connect is to install RStudio Connect outside of the Qubole cluster and connect to Qubole remotely. This is accomplished using the Qubole ODBC Driver.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Qubole cluster"
     ]
@@ -8319,7 +8307,7 @@
     "section": "",
     "text": "This document demonstrates how to use sparklyr with an Cloudera Hadoop & Spark cluster. Data are downloaded from the web and stored in Hive tables on HDFS across multiple worker nodes. RStudio Server is installed on the master node and orchestrates the analysis in spark.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8331,7 +8319,7 @@
     "section": "CDH 5",
     "text": "CDH 5\nWe will start with a Cloudera cluster CDH version 5.8.2 (free version) with an underlaying Ubuntu Linux distribution.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8343,7 +8331,7 @@
     "section": "Spark 1.6",
     "text": "Spark 1.6\nThe default Spark 1.6.0 parcel is in installed and running",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8355,7 +8343,7 @@
     "section": "Hive data",
     "text": "Hive data\nFor this demo, we have created and populated 3 tables in Hive. The table names are: flights, airlines and airports. Using Hue, we can see the loaded tables. For the links to the data files and their Hive import scripts please see Appendix A.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8367,7 +8355,7 @@
     "section": "Cache the tables into memory",
     "text": "Cache the tables into memory\nUse tbl_cache to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.\n\n# Cache flights Hive table into Spark\ntbl_cache(sc, 'flights')\nflights_tbl &lt;- tbl(sc, 'flights')\n\n# Cache airlines Hive table into Spark\ntbl_cache(sc, 'airlines')\nairlines_tbl &lt;- tbl(sc, 'airlines')\n\n# Cache airports Hive table into Spark\ntbl_cache(sc, 'airports')\nairports_tbl &lt;- tbl(sc, 'airports')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8379,7 +8367,7 @@
     "section": "Create a model data set",
     "text": "Create a model data set\nFilter the data to contain only the records to be used in the fitted model. Join carrier descriptions for reference. Create a new variable called gain which represents the amount of time gained (or lost) in flight.\n\n# Filter records and create target variable 'gain'\nmodel_data &lt;- flights_tbl %&gt;%\n  filter(!is.na(arrdelay) & !is.na(depdelay) & !is.na(distance)) %&gt;%\n  filter(depdelay &gt; 15 & depdelay &lt; 240) %&gt;%\n  filter(arrdelay &gt; -60 & arrdelay &lt; 360) %&gt;%\n  filter(year &gt;= 2003 & year &lt;= 2007) %&gt;%\n  left_join(airlines_tbl, by = c(\"uniquecarrier\" = \"code\")) %&gt;%\n  mutate(gain = depdelay - arrdelay) %&gt;%\n  select(year, month, arrdelay, depdelay, distance, uniquecarrier, description, gain)\n\n# Summarize data by carrier\nmodel_data %&gt;%\n  group_by(uniquecarrier) %&gt;%\n  summarize(description = min(description), gain=mean(gain), \n            distance=mean(distance), depdelay=mean(depdelay)) %&gt;%\n  select(description, gain, distance, depdelay) %&gt;%\n  arrange(gain)\n\nSource:   query [?? x 4]\nDatabase: spark connection master=yarn-client app=sparklyr local=FALSE\n\n                    description       gain  distance depdelay\n                          &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1        ATA Airlines d/b/a ATA -5.5679651 1240.7219 61.84391\n2       Northwest Airlines Inc. -3.1134556  779.1926 48.84979\n3                     Envoy Air -2.2056576  437.0883 54.54923\n4             PSA Airlines Inc. -1.9267647  500.6955 55.60335\n5  ExpressJet Airlines Inc. (1) -1.5886314  537.3077 61.58386\n6               JetBlue Airways -1.3742524 1087.2337 59.80750\n7         SkyWest Airlines Inc. -1.1265678  419.6489 54.04198\n8          Delta Air Lines Inc. -0.9829374  956.9576 50.19338\n9        American Airlines Inc. -0.9631200 1066.8396 56.78222\n10  AirTran Airways Corporation -0.9411572  665.6574 53.38363\n# ... with more rows",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8391,7 +8379,7 @@
     "section": "Train a linear model",
     "text": "Train a linear model\nPredict time gained or lost in flight as a function of distance, departure delay, and airline carrier.\n\n# Partition the data into training and validation sets\nmodel_partition &lt;- model_data %&gt;% \n  sdf_partition(train = 0.8, valid = 0.2, seed = 5555)\n\n# Fit a linear model\nml1 &lt;- model_partition$train %&gt;%\n  ml_linear_regression(gain ~ distance + depdelay + uniquecarrier)\n\n# Summarize the linear model\nsummary(ml1)\n\nCall: ml_linear_regression(., gain ~ distance + depdelay + uniquecarrier)\n\nDeviance Residuals: (approximate):\n     Min       1Q   Median       3Q      Max \n-302.343   -5.669    2.714    9.832  104.130 \n\nCoefficients:\n                    Estimate  Std. Error  t value  Pr(&gt;|t|)    \n(Intercept)      -1.26566581  0.10385870 -12.1864 &lt; 2.2e-16 ***\ndistance          0.00308711  0.00002404 128.4155 &lt; 2.2e-16 ***\ndepdelay         -0.01397013  0.00028816 -48.4812 &lt; 2.2e-16 ***\nuniquecarrier_AA -2.18483090  0.10985406 -19.8885 &lt; 2.2e-16 ***\nuniquecarrier_AQ  3.14330242  0.29114487  10.7964 &lt; 2.2e-16 ***\nuniquecarrier_AS  0.09210380  0.12825003   0.7182 0.4726598    \nuniquecarrier_B6 -2.66988794  0.12682192 -21.0523 &lt; 2.2e-16 ***\nuniquecarrier_CO -1.11611186  0.11795564  -9.4621 &lt; 2.2e-16 ***\nuniquecarrier_DL -1.95206198  0.11431110 -17.0767 &lt; 2.2e-16 ***\nuniquecarrier_EV  1.70420830  0.11337215  15.0320 &lt; 2.2e-16 ***\nuniquecarrier_F9 -1.03178176  0.15384863  -6.7065 1.994e-11 ***\nuniquecarrier_FL -0.99574060  0.12034738  -8.2739 2.220e-16 ***\nuniquecarrier_HA -1.16970713  0.34894788  -3.3521 0.0008020 ***\nuniquecarrier_MQ -1.55569040  0.10975613 -14.1741 &lt; 2.2e-16 ***\nuniquecarrier_NW -3.58502418  0.11534938 -31.0797 &lt; 2.2e-16 ***\nuniquecarrier_OH -1.40654797  0.12034858 -11.6873 &lt; 2.2e-16 ***\nuniquecarrier_OO -0.39069404  0.11132164  -3.5096 0.0004488 ***\nuniquecarrier_TZ -7.26285217  0.34428509 -21.0955 &lt; 2.2e-16 ***\nuniquecarrier_UA -0.56995737  0.11186757  -5.0949 3.489e-07 ***\nuniquecarrier_US -0.52000028  0.11218498  -4.6352 3.566e-06 ***\nuniquecarrier_WN  4.22838982  0.10629405  39.7801 &lt; 2.2e-16 ***\nuniquecarrier_XE -1.13836940  0.11332176 -10.0455 &lt; 2.2e-16 ***\nuniquecarrier_YV  3.17149538  0.11709253  27.0854 &lt; 2.2e-16 ***\n---\nSignif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n\nR-Squared: 0.02301\nRoot Mean Squared Error: 17.83",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8403,7 +8391,7 @@
     "section": "Assess model performance",
     "text": "Assess model performance\nCompare the model performance using the validation data.\n\n# Calculate average gains by predicted decile\nmodel_deciles &lt;- lapply(model_partition, function(x) {\n  sdf_predict(ml1, x) %&gt;%\n    mutate(decile = ntile(desc(prediction), 10)) %&gt;%\n    group_by(decile) %&gt;%\n    summarize(gain = mean(gain)) %&gt;%\n    select(decile, gain) %&gt;%\n    collect()\n})\n\n# Create a summary dataset for plotting\ndeciles &lt;- rbind(\n  data.frame(data = 'train', model_deciles$train),\n  data.frame(data = 'valid', model_deciles$valid),\n  make.row.names = FALSE\n)\n\n# Plot average gains by predicted decile\ndeciles %&gt;%\n  ggplot(aes(factor(decile), gain, fill = data)) +\n  geom_bar(stat = 'identity', position = 'dodge') +\n  labs(title = 'Average gain by predicted decile', x = 'Decile', y = 'Minutes')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8415,7 +8403,7 @@
     "section": "Visualize predictions",
     "text": "Visualize predictions\nCompare actual gains to predicted gains for an out of time sample.\n\n# Select data from an out of time sample\ndata_2008 &lt;- flights_tbl %&gt;%\n  filter(!is.na(arrdelay) & !is.na(depdelay) & !is.na(distance)) %&gt;%\n  filter(depdelay &gt; 15 & depdelay &lt; 240) %&gt;%\n  filter(arrdelay &gt; -60 & arrdelay &lt; 360) %&gt;%\n  filter(year == 2008) %&gt;%\n  left_join(airlines_tbl, by = c(\"uniquecarrier\" = \"code\")) %&gt;%\n  mutate(gain = depdelay - arrdelay) %&gt;%\n  select(year, month, arrdelay, depdelay, distance, uniquecarrier, description, gain, origin,dest)\n\n# Summarize data by carrier\ncarrier &lt;- sdf_predict(ml1, data_2008) %&gt;%\n  group_by(description) %&gt;%\n  summarize(gain = mean(gain), prediction = mean(prediction), freq = n()) %&gt;%\n  filter(freq &gt; 10000) %&gt;%\n  collect\n\n# Plot actual gains and predicted gains by airline carrier\nggplot(carrier, aes(gain, prediction)) + \n  geom_point(alpha = 0.75, color = 'red', shape = 3) +\n  geom_abline(intercept = 0, slope = 1, alpha = 0.15, color = 'blue') +\n  geom_text(aes(label = substr(description, 1, 20)), size = 3, alpha = 0.75, vjust = -1) +\n  labs(title='Average Gains Forecast', x = 'Actual', y = 'Predicted')\n\n\nSome carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8427,7 +8415,7 @@
     "section": "Build dashboard",
     "text": "Build dashboard\nAggregate the scored data by origin, destination, and airline. Save the aggregated data.\n\n# Summarize by origin, destination, and carrier\nsummary_2008 &lt;- sdf_predict(ml1, data_2008) %&gt;%\n  rename(carrier = uniquecarrier, airline = description) %&gt;%\n  group_by(origin, dest, carrier, airline) %&gt;%\n  summarize(\n    flights = n(),\n    distance = mean(distance),\n    avg_dep_delay = mean(depdelay),\n    avg_arr_delay = mean(arrdelay),\n    avg_gain = mean(gain),\n    pred_gain = mean(prediction)\n    )\n\n# Collect and save objects\npred_data &lt;- collect(summary_2008)\nairports &lt;- collect(select(airports_tbl, name, faa, lat, lon))\nml1_summary &lt;- capture.output(summary(ml1))\nsave(pred_data, airports, ml1_summary, file = 'flights_pred_2008.RData')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -8439,7 +8427,7 @@
     "section": "Publish dashboard",
     "text": "Publish dashboard\nUse the saved data to build an R Markdown flexdashboard. Publish the flexdashboard\n\n#Appendix\n\nAppendix A - Data files\nRun the following script to download data from the web onto your master node. Download the yearly flight data and the airlines lookup table.\n\n# Make download directory\nmkdir /tmp/flights\n\n# Download flight data by year\nfor i in {2006..2008}\n  do\n    echo \"$(date) $i Download\"\n    fnam=$i.csv.bz2\n    wget -O /tmp/flights/$fnam http://stat-computing.org/dataexpo/2009/$fnam\n    echo \"$(date) $i Unzip\"\n    bunzip2 /tmp/flights/$fnam\n  done\n\n# Download airline carrier data\nwget -O /tmp/airlines.csv http://www.transtats.bts.gov/Download_Lookup.asp?Lookup=L_UNIQUE_CARRIERS\n\n# Download airports data\nwget -O /tmp/airports.csv https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat\n\n\n\nHive tables\nWe used the Hue interface, logged in as ‘admin’ to load the data into HDFS and then into Hive.\nCREATE EXTERNAL TABLE IF NOT EXISTS flights\n(\nyear int,\nmonth int,\ndayofmonth int,\ndayofweek int,\ndeptime int,\ncrsdeptime int,\narrtime int, \ncrsarrtime int,\nuniquecarrier string,\nflightnum int,\ntailnum string, \nactualelapsedtime int,\ncrselapsedtime int,\nairtime string,\narrdelay int,\ndepdelay int, \norigin string,\ndest string,\ndistance int,\ntaxiin string,\ntaxiout string,\ncancelled int,\ncancellationcode string,\ndiverted int,\ncarrierdelay string,\nweatherdelay string,\nnasdelay string,\nsecuritydelay string,\nlateaircraftdelay string\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nLINES TERMINATED BY '\\n'\nTBLPROPERTIES(\"skip.header.line.count\"=\"1\");\nLOAD DATA INPATH '/user/admin/flights/2006.csv/' INTO TABLE flights;\nLOAD DATA INPATH '/user/admin/flights/2007.csv/' INTO TABLE flights;\nLOAD DATA INPATH '/user/admin/flights/2008.csv/' INTO TABLE flights;\n# Create metadata for airlines\nCREATE EXTERNAL TABLE IF NOT EXISTS airlines\n(\nCode string,\nDescription string\n)\nROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'\nWITH SERDEPROPERTIES\n(\n\"separatorChar\" = '\\,',\n\"quoteChar\"     = '\\\"'\n)\nSTORED AS TEXTFILE\ntblproperties(\"skip.header.line.count\"=\"1\");\nLOAD DATA INPATH '/user/admin/L_UNIQUE_CARRIERS.csv' INTO TABLE airlines;\nCREATE EXTERNAL TABLE IF NOT EXISTS airports\n(\nid string,\nname string,\ncity string,\ncountry string,\nfaa string,\nicao string,\nlat double,\nlon double,\nalt int,\ntz_offset double,\ndst string,\ntz_name string\n)\nROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'\nWITH SERDEPROPERTIES\n(\n\"separatorChar\" = '\\,',\n\"quoteChar\"     = '\\\"'\n)\nSTORED AS TEXTFILE;\nLOAD DATA INPATH '/user/admin/airports.dat' INTO TABLE airports;",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Cloudera cluster"
     ]
@@ -9914,9 +9902,9 @@
     "href": "deployment/index.html",
     "title": "Deployment",
     "section": "",
-    "text": "YARN (Hadoop)\n\nUnderstanding Data Lakes\nSetting up an AWS EMR Cluster\nSetting up a Cloudera cluster in AWS\n\n\n\n\nStand Alone\n\nQubole cluster\nSetting up a Standalone Cluster in AWS EC2\nSpark Connect\n\n\n\nDatabricks Connect (v2)\n\nGetting Started\n\nRun R code in Databricks\nDeploying to Posit Connect",
+    "text": "YARN (Hadoop)\n\nUnderstanding Data Lakes\nSetting up an AWS EMR Cluster\nSetting up a Cloudera cluster in AWS\n\n\n\n\nStand Alone\n\nQubole cluster\nSetting up a Standalone Cluster in AWS EC2\nSpark Connect\n\n\n\nDatabricks\n\nGetting Started\n\nRun R code in Databricks\nDeploying to Posit Connect",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Overview"
     ]
   },
@@ -9927,7 +9915,7 @@
     "section": "",
     "text": "This article explains how to take advantage of Apache Spark at organizations that have a Hadoop based Big Data Lake.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9939,7 +9927,7 @@
     "section": "",
     "text": "This article explains how to take advantage of Apache Spark at organizations that have a Hadoop based Big Data Lake.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9951,7 +9939,7 @@
     "section": "Introduction",
     "text": "Introduction\nWe have noticed that the types of questions we field after a demo of sparklyr to our customers were more about high-level architecture than how the package works. To answer those questions, we put together a set of slides that illustrate and discuss important concepts, to help customers see where Spark, R, and sparklyr fit in a Big Data Platform implementation. In this article, we’ll review those slides and provide a narrative that will help you better envision how you can take advantage of our products.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9963,7 +9951,7 @@
     "section": "R for Data Science",
     "text": "R for Data Science\nIt is very important to preface the Use Case review with some background information about where RStudio focuses its efforts when developing packages and products. Many vendors offer R integration, but in most cases, what this means is that they will add a model built in R to their pipeline or interface, and pass new inputs to that model to generate outputs that can be used in the next step in the pipeline, or in a calculation for the interface.\nIn contrast, our focus is on the process that happens before that: the discipline that produces the model, meaning Data Science.\n\nIn their R for Data Science book, Hadley Wickham and Garrett Grolemund provide a great diagram that nicely illustrates the Data Science process:\n\nWe import data into memory with R\nClean and tidy the data\nDive into a cyclical process called understand, which helps us to get to know our data, and hopefully find the answer to the question we started with. This cycle typically involves making transformations to our tidied data, using the transformed data to fit models, and visualizing results.\nOnce we find an answer to our question, we then communicate the results.\n\nData Scientists like using R because it allows them to complete a Data Science project from beginning to end inside the R environment, and in memory.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9975,7 +9963,7 @@
     "section": "Hadoop as a Data Source",
     "text": "Hadoop as a Data Source\nWhat happens when the data that needs to be analyzed is very large, like the data sets found in a Hadoop cluster? It would be impossible to fit these in memory, so workarounds are normally used. Possible workarounds include using a comparatively minuscule data sample, or download as much data as possible. This becomes disruptive to Data Scientists because either the small sample may not be representative, or they have to wait a long time in every iteration of importing a lot of data, exploring a lot of data, and modeling a lot of data.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9987,7 +9975,7 @@
     "section": "Spark as an Analysis Engine",
     "text": "Spark as an Analysis Engine\nWe noticed that a very important mental leap to make is to see Spark not just as a gateway to Hadoop (or worse, as an additional data source), but as a computing engine. As such, it is an excellent vehicle to scale our analytics. Spark has many capabilities that makes it ideal for Data Science in a data lake, such as close integration with Hadoop and Hive, the ability to cache data into memory across multiple nodes, data transformers, and its Machine Learning libraries.\nThe approach, then, is to push as much compute to the cluster as possible, using R primarily as an interface to Spark for the Data Scientist, which will then collect as few results as possible back into R memory, mostly to visualize and communicate. As shown in the slide, the more import, tidy, transform and modeling work we can push to Spark, the faster we can analyze very large data sets.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -9999,7 +9987,7 @@
     "section": "Cluster Setup",
     "text": "Cluster Setup\nHere is an illustration of how R, RStudio, and sparklyr can be added to the YARN managed cluster. The highlights are:\n\nR, RStudio, and sparklyr need to be installed on one node only, typically an edge node\nThe Data Scientist can access R, Spark, and the cluster via a web browser by navigating to the RStudio IDE inside the edge node",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -10011,7 +9999,7 @@
     "section": "Considerations",
     "text": "Considerations\nThere are some important considerations to keep in mind when combining your Data Lake and R for large scale analytics:\n\nSpark’s Machine Learning libraries may not contain specific models that a Data Scientist needs. For those cases, workarounds would include using a sparklyr extension such as H2O, or collecting a sample of the data into R memory for modeling.\nSpark does not have visualization functionality; currently, the best approach is to collect pre-calculated data into R for plotting. A good way to drastically reduce the number of rows being brought back into memory is to push as much computation as possible to Spark, and return just the results to be plotted. For example, the bins of a Histogram can be calculated in Spark, so that only the final bucket values would be returned to R for visualization.\nA particular use case may require a different way of scaling analytics. We have published an article that provides a very good overview of the options that are available: R for Enterprise: How to Scale Your Analytics Using R",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -10023,7 +10011,7 @@
     "section": "R for Data Science Toolchain with Spark",
     "text": "R for Data Science Toolchain with Spark\nWith sparklyr, the Data Scientist will be able to access the Data Lake’s data, and also gain an additional, very powerful understand layer via Spark. sparklyr, along with the RStudio IDE and the tidyverse packages, provides the Data Scientist with an excellent toolbox to analyze data, big and small.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "Understanding Data Lakes"
     ]
@@ -10035,7 +10023,7 @@
     "section": "",
     "text": "The plan is to launch 4 identical EC2 server instances. One server will be the Master node and the other 3 the worker nodes. In one of the worker nodes, we will install RStudio server.\nWhat makes a server the Master node is only the fact that it is running the master service, while the other machines are running the slave service and are pointed to that first master. This simple setup, allows us to install the same Spark components on all 4 servers and then just add RStudio to one of them.\nThe topology will look something like this:",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Standalone cluster using AWS EC2"
     ]
@@ -10047,7 +10035,7 @@
     "section": "",
     "text": "The plan is to launch 4 identical EC2 server instances. One server will be the Master node and the other 3 the worker nodes. In one of the worker nodes, we will install RStudio server.\nWhat makes a server the Master node is only the fact that it is running the master service, while the other machines are running the slave service and are pointed to that first master. This simple setup, allows us to install the same Spark components on all 4 servers and then just add RStudio to one of them.\nThe topology will look something like this:",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Standalone cluster using AWS EC2"
     ]
@@ -10059,7 +10047,7 @@
     "section": "AWS EC Instances",
     "text": "AWS EC Instances\nHere are the details of the EC2 instance, just deploy one at this point:\n\nType: t2.medium\nOS: Ubuntu 16.04 LTS\nDisk space: At least 20GB\nSecurity group: Open the following ports: 8080 (Spark UI), 4040 (Spark Worker UI), 8088 (sparklyr UI) and 8787 (RStudio). Also open All TCP ports for the machines inside the security group.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Standalone cluster using AWS EC2"
     ]
@@ -10071,7 +10059,7 @@
     "section": "Spark",
     "text": "Spark\nPerform the steps in this section on all of the servers that will be part of the cluster.\n\nInstall Java 8\n\nWe will add the Java 8 repository, install it and set it as default\n\n\nsudo apt-add-repository ppa:webupd8team/java\nsudo apt-get update\nsudo apt-get install oracle-java8-installer\nsudo apt-get install oracle-java8-set-default\nsudo apt-get update\nor alternatively, run\nsudo apt install openjdk-8-jdk\nto install Open JDK version 8.\n\n\nDownload Spark\n\nDownload and unpack a pre-compiled version of Spark. Here’s is the link to the official Spark download page\n\n\nwget http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz\ntar -xvzf spark-2.1.0-bin-hadoop2.7.tgz\ncd spark-2.1.0-bin-hadoop2.7\n\n\nCreate and launch AMI\n\nWe will create an image of the server. In Amazon, these are called AMIs, for information please see the User Guide.\nLaunch 3 instances of the AMI",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Standalone cluster using AWS EC2"
     ]
@@ -10083,7 +10071,7 @@
     "section": "RStudio Server",
     "text": "RStudio Server\nSelect one of the nodes to execute this section. Please check the RStudio download page for the latest version\n\nInstall R\n\nIn order to get the latest R core, we will need to update the source list in Ubuntu.\n\n\nsudo sh -c 'echo \"deb http://cran.rstudio.com/bin/linux/ubuntu xenial/\" &gt;&gt; /etc/apt/sources.list'\ngpg --keyserver keyserver.ubuntu.com --recv-key 0x517166190x51716619e084dab9\ngpg -a --export 0x517166190x51716619e084dab9 | sudo apt-key add -\nsudo apt-get update\n\nNow we can install R\n\n\nsudo apt-get install r-base\nsudo apt-get install gdebi-core\n\n\nInstall RStudio\n\nWe will download and install 1.044 of RStudio Server. To find the latest version, please visit the RStudio website. In order to get the enhanced integration with Spark, RStudio version 1.044 or later will be needed.\n\n\nwget https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb\nsudo gdebi rstudio-server-1.0.153-amd64.deb\n\n\nInstall dependencies\n\nRun the following commands\n\n\nsudo apt-get -y install libcurl4-gnutls-dev\nsudo apt-get -y install libssl-dev\nsudo apt-get -y install libxml2-dev\n\n\nAdd default user\n\nRun the following command to add a default user\n\n\nsudo adduser rstudio-user\n\n\nStart the Master node\n\nSelect one of the servers to become your Master node\nRun the command that starts the master service\n\n\nsudo spark-2.1.0-bin-hadoop2.7/sbin/start-master.sh\n\nClose the terminal connection (optional)\n\n\n\nStart Worker nodes\n\nStart the “slave” service. Important: Use dots not dashes as separators for the Spark Master node’s address\n\n\nsudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://[Master node's IP address]:7077\nsudo spark-2.1.0-bin-hadoop2.7/sbin/start-slave.sh spark://ip-172-30-1-94.us-west-2.compute.internal:7077\n\nClose the terminal connection (optional)\n\n\n\nPre-load pacakges\n\nLog into RStudio (port 8787)\nUse ‘rstudio-user’\n\ninstall.packages(\"sparklyr\")\n\n\nConnect to the Spark Master\n\nNavigate to the Spark Master’s UI, typically on port 8080\n\n\n\nNote the Spark Master URL\nLogon to RStudio\nRun the following code\n\nlibrary(sparklyr)\n\nconf &lt;- spark_config()\nconf$spark.executor.memory &lt;- \"2GB\"\nconf$spark.memory.fraction &lt;- 0.9\n\nsc &lt;- spark_connect(master=\"[Spark Master URL]\",\n              version = \"2.1.0\",\n              config = conf,\n              spark_home = \"/home/ubuntu/spark-2.1.0-bin-hadoop2.7/\"\n              )",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "Stand Alone Clusters",
       "Standalone cluster using AWS EC2"
     ]
@@ -10095,8 +10083,7 @@
     "section": "",
     "text": "Last updated: Mon Feb 26 14:01:47 2024",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10107,8 +10094,7 @@
     "section": "Intro",
     "text": "Intro\nDatabricks Connect enables the interaction with Spark clusters remotely. It is based on Spark Connect, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the user’s machine.\nThe API is very different than the “legacy” Spark and using the Spark shell is no longer an option. We have decided to use Python as the new interface. In turn, Python uses gRPC to interact with Spark.\n\n\n\n\n\n\n\n\nflowchart LR\n  subgraph lp[test]\n    subgraph r[R]\n      sr[sparklyr]\n      rt[reticulate]\n    end\n    subgraph ps[Python]\n      dc[Databricks Connect]\n      g1[gRPC]\n    end\n  end   \n  subgraph db[Databricks]\n    sp[Spark]   \n  end\n  sr &lt;--&gt; rt\n  rt &lt;--&gt; dc\n  g1 &lt;-- Internet&lt;br&gt;Connection --&gt; sp\n  dc &lt;--&gt; g1\n  \n  style r   fill:#fff,stroke:#666,color:#000\n  style sr  fill:#fff,stroke:#666,color:#000\n  style rt  fill:#fff,stroke:#666,color:#000\n  style ps  fill:#fff,stroke:#666,color:#000\n  style lp  fill:#fff,stroke:#666,color:#fff\n  style db  fill:#fff,stroke:#666,color:#000\n  style sp  fill:#fff,stroke:#666,color:#000\n  style g1  fill:#fff,stroke:#666,color:#000\n  style dc  fill:#fff,stroke:#666,color:#000\n\n\n\n\n\n\n\n\nFigure 1: How sparklyr communicates with Databricks Connect\n\n\n\nWe are using reticulate to interact with the Python API. sparklyr extends the functionality, and user experience, by providing the dplyrback-end, DBI back-end, and integration with RStudio’s Connection pane.\nIn order to quickly iterate on enhancements and bug fixes, we have decided to isolate the Python integration into its own package. The new package, called pysparklyr, is an extension of sparklyr.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10119,8 +10105,7 @@
     "section": "Package Installation",
     "text": "Package Installation\nTo access Databricks Connect, you will need the following two packages:\n\nsparklyr - 1.8.4\npysparklyr - 0.1.3\n\ninstall.packages(\"sparklyr\")\ninstall.packages(\"pysparklyr\")",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10131,8 +10116,7 @@
     "section": "Setup credentials",
     "text": "Setup credentials\nTo use with Databricks Connect, in run-time 13 or above, you will need three configuration items:\n\nYour Workspace Instance URL\nYour Personal Authentication Token (PAT), or a Posit Workbench instance configured to manage with Databricks services (see next section)\nYour Cluster ID\n\n\nPosit Workbench\nPosit Workbench can manage Databricks credentials on behalf of the user. For users of Posit Workbench, this is the recommended approach to setting up credentials as it provides an additional layer of security. If you are not currently using Posit Workbench, feel free to skip this section.\nDetails for how to setup and configure this feature can be found here.\nFor users who have signed into a Databricks Workspace via Posit Workbench, the credentials will be automatically configured and no additional setup is required. The only thing that still needs to be supplied when making a connection to Databricks is the cluster ID.\n\n\n\nEnvironment Variables\nWe have developed this solution to align with other applications that integrate with Databricks. All applications need, at minimum, a work space (1), and an authentication token (2). For default values, those applications initially look for these environment variables:\n\nDATABRICKS_HOST - Your Workspace Instance URL\nDATABRICKS_TOKEN - Your Personal Authentication Token (Not needed if using Posit Workbench)\n\nEnvironment variables work well, because they rarely vary between projects. The thing that will change more often is the cluster you are connecting to. Using environment variables also makes connection safer, because token contents will not be in your code in plain text. We recommend that you set these two variables at your user level. To do this run:\nusethis::edit_r_environ()\nThat command will open a text file that controls the environment variables at the user level. If missing, insert the entries for the two variables:\nDATABRICKS_HOST=\"Enter here your Workspace URL\"\nDATABRICKS_TOKEN=\"Enter here your personal token\" # Not needed if using Posit Workbench\nThis is a one time operation. After saving and closing the file, restart your R session.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10143,8 +10127,7 @@
     "section": "First time connecting",
     "text": "First time connecting\nAfter setting up your Host and Token environment variables, you can now connect to your cluster by simply providing the cluster’s ID, and the method to spark_connect():\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  cluster_id = \"Enter here your cluster ID\",\n  method = \"databricks_connect\"\n)\nIn order to connect and interact with Databricks, you will need a specific set of Python libraries installed and available. To make it easier to get started, we provide functionality that will automatically do the following:\n\nCreate or re-create the necessary Python environment. Based on your OS, it will choose to create a Virtual Environment or use Conda.\nInstall the needed Python libraries into the new environment.\n\nspark_connect() will check to see if you have the expected Python environment and prompt you to accept its installation if missing. Here is an example of the code and output you would expect to see:\nsc &lt;- spark_connect(\n    cluster_id = \"1026-175310-7cpsh3g8\",\n    method = \"databricks_connect\"\n)\n\n#&gt; ! Retrieving version from cluster '1026-175310-7cpsh3g8' \n#&gt; Cluster version: '14.1' \n#&gt; ! No viable Python Environment was identified for Databricks Connect version 14.1 \n#&gt; Do you wish to install Databricks Connect version 14.1? \n#&gt;  \n#&gt; 1: Yes \n#&gt; 2: No \n#&gt; 3: Cancel \n#&gt;  \n#&gt; Selection: 1 \nAfter accepting, the Python environment will be created with a specific name, and all of the needed Python libraries will be installed within. After it is done, it will attempt to connect to your cluster. Here is an abbreviated example of the output that occurs when selecting “Yes”:\n#&gt; ✔ Automatically naming the environment:'r-sparklyr-databricks-14.1' \n#&gt; Using Python: /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 \n#&gt; Creating virtual environment 'r-sparklyr-databricks-14.1' ... \n#&gt; + /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 -m venv /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1 \n#&gt; Done! \n#&gt;   Installing packages: pip, wheel, setuptools \n#&gt; + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade pip wheel setuptools \n#&gt; Requirement already satisfied: pip in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (23.0.1) \n#&gt; Collecting pip \n#&gt; Using cached pip-23.3.1-py3-none-any.whl (2.1 MB) \n#&gt; Collecting wheel \n#&gt; Using cached wheel-0.42.0-py3-none-any.whl (65 kB) \n#&gt; Requirement already satisfied: setuptools in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (65.5.0) \n...\n...\n...\n#&gt; Successfully installed PyArrow-14.0.1 cachetools-5.3.2 certifi-2023.11.17 charset-normalizer-3.3.2 databricks-connect-14.1.0 databricks-sdk-0.14.0 google-api-core-2.14.0 google-api-python-client-2.109.0 google-auth-2.25.0 google-auth-httplib2-0.1.1 googleapis-common-protos-1.61.0 grpcio-1.59.3 grpcio_status-1.59.3 httplib2-0.22.0 idna-3.6 numpy-1.26.2 pandas-2.1.3 protobuf-4.25.1 py4j-0.10.9.7 pyasn1-0.5.1 pyasn1-modules-0.3.0 pyparsing-3.1.1 python-dateutil-2.8.2 pytz-2023.3.post1 requests-2.31.0 rsa-4.9 six-1.16.0 tzdata-2023.3 uritemplate-4.1.1 urllib3-2.1.0 \n#&gt; ✔ Using the 'r-sparklyr-databricks-14.1' Python environment \n#&gt; Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10155,8 +10138,7 @@
     "section": "Interacting with the cluster",
     "text": "Interacting with the cluster\n\nRStudio’s Connection pane\nThanks to the new way we are integrating with Spark, it is now possible to display the same structure displayed in the Databricks Data Explorer. In Databricks, the current data structure levels are:\n\nCatalog\n\nDatabase\n\nTable\n\n\n\nIn the RStudio Connections Pane, you can navigate the data structure by expanding from the top level, all the way down to the table you wish to explore. Once expanded, the table’s fields and their types are displayed.\n\nYou can also click on the table icon, situated to the right of the table name, to preview the first 1,000 rows:\n\n\n\nUsing the Connection to Access Data\n\nlibrary(dplyr)\nlibrary(dbplyr)\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n    cluster_id = \"1026-175310-7cpsh3g8\",\n    method = \"databricks_connect\"\n)\n#&gt; ! Changing host URL to: https://rstudio-partner-posit-default.cloud.databricks.com\n#&gt; ℹ Retrieving info for cluster:'1026-175310-7cpsh3g8'\n#&gt; ✔ Cluster: '1026-175310-7cpsh3g8' | DBR: '14.1' [470ms]\n#&gt; \n#&gt; ℹ Attempting to load 'r-sparklyr-databricks-14.1'\n#&gt; ✔ Python environment: 'r-sparklyr-databricks-14.1' [1.8s]\n#&gt; \n#&gt; ℹ Connecting to '14.1 cluster'\n#&gt; ✔ Connected to: '14.1 cluster' [7ms]\n#&gt; \n\nAfter connecting, you can use dbplyr’s in_catalog() function to access any table in your data catalog. You will only need to pass the respective names of the three levels as comma separated character entries to in_catalog() in this order: Catalog, Database, and Table.\nHere is an example of using tbl() and in_catalog() to point to the trips table, which is inside nyctaxi database, which is inside the *samples catalog:\n\ntrips &lt;- tbl(sc, in_catalog(\"samples\", \"nyctaxi\", \"trips\"))\n\ntrips\n#&gt; # Source:   table&lt;trips&gt; [?? x 6]\n#&gt; # Database: spark_connection\n#&gt;    tpep_pickup_datetime tpep_dropoff_datetime trip_distance fare_amount\n#&gt;    &lt;dttm&gt;               &lt;dttm&gt;                        &lt;dbl&gt;       &lt;dbl&gt;\n#&gt;  1 2016-02-14 10:52:13  2016-02-14 11:16:04            4.94        19  \n#&gt;  2 2016-02-04 12:44:19  2016-02-04 12:46:00            0.28         3.5\n#&gt;  3 2016-02-17 11:13:57  2016-02-17 11:17:55            0.7          5  \n#&gt;  4 2016-02-18 04:36:07  2016-02-18 04:41:45            0.8          6  \n#&gt;  5 2016-02-22 08:14:41  2016-02-22 08:31:52            4.51        17  \n#&gt;  6 2016-02-05 00:45:02  2016-02-05 00:50:26            1.8          7  \n#&gt;  7 2016-02-15 09:03:28  2016-02-15 09:18:45            2.58        12  \n#&gt;  8 2016-02-25 13:09:26  2016-02-25 13:24:50            1.4         11  \n#&gt;  9 2016-02-13 10:28:18  2016-02-13 10:36:36            1.21         7.5\n#&gt; 10 2016-02-13 18:03:48  2016-02-13 18:10:24            0.6          6  \n#&gt; # ℹ more rows\n#&gt; # ℹ 2 more variables: pickup_zip &lt;int&gt;, dropoff_zip &lt;int&gt;\n\nAfter pointing tbl() to that specific table, you can then use dplyr to execute queries against the data.\n\ntrips %&gt;%\n  group_by(pickup_zip) %&gt;%\n  summarise(\n    count = n(),\n    avg_distance = mean(trip_distance, na.rm = TRUE)\n  )\n#&gt; # Source:   SQL [?? x 3]\n#&gt; # Database: spark_connection\n#&gt;    pickup_zip count avg_distance\n#&gt;         &lt;int&gt; &lt;dbl&gt;        &lt;dbl&gt;\n#&gt;  1      10032    15         4.49\n#&gt;  2      10013   273         2.98\n#&gt;  3      10022   519         2.00\n#&gt;  4      10162   414         2.19\n#&gt;  5      10018  1012         2.60\n#&gt;  6      11106    39         2.03\n#&gt;  7      10011  1129         2.29\n#&gt;  8      11103    16         2.75\n#&gt;  9      11237    15         3.31\n#&gt; 10      11422   429        15.5 \n#&gt; # ℹ more rows\n\n\n\nPosit Workench’s ‘Databricks Pane’\nPosit Workbench provides users with a Databricks pane for direct access to available Databricks clusters. From this pane, users can view details about Databricks clusters and connect directly to them. More details about this feature can be found here.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10167,8 +10149,7 @@
     "section": "Machine Learning",
     "text": "Machine Learning\nMachine Learning capabilities are currently available starting with Databricks Runtime version 14.1. Compared to “legacy” Spark, Spark Connect’s ML capabilities are limited. At this time, there is only one supported model, Logistic Regression, and two scaler transformers, namely Standard Scaler and Max Abs Scaler. sparklyr makes that functionality available.\n\nUsing for the first time\nBy default, the Python environment that sparklyr creates does not include libraries that relate to Machine Learning. These include Torch and “scikit-learn”. Some of the libraries are large in size and they may have Python requirements that are challenging to new users. Additionally, we have noticed there are not many users that need to utilize ML capabilities at this time.\nThe first time an ML function is accessed through sparklyr, you will be prompted to install the additional Python libraries which are needed to access such ML capabilities.\nml_logistic_regression(tbl_mtcars, am ~ .)\n#&gt; ! Required Python libraries to run ML functions are missing\n#&gt;   Could not find: torch, torcheval, and scikit-learn\n#&gt;   Do you wish to install? (This will be a one time operation)\n#&gt; \n#&gt; 1: Yes\n#&gt; 2: Cancel\n#&gt; \n#&gt; Selection: 1\n#&gt; Using virtual environment '/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1' ...\n#&gt; + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade --no-user torch torcheval scikit-learn\n#&gt; Collecting torch\n...\n\n\n\n\n\n\nNote\n\n\n\nIt is possible to install the ML libraries along with the required libraries. There may be several reasons to do this, including trying to recreate the environment after upgrading Python in your machine. Just pass install_ml=TRUE to the installation function:\ninstall_databricks(cluster_id = \"Enter your cluster's ID\", install_ml = TRUE)\nor\ninstall_databricks(version = \"14.1\", install_ml = TRUE)\n\n\n\n\nEasily fit and use\nAt this time, Logistic Regression is the only model supported. As usual, there are specific data preparation steps in order to run. sparklyr automates those steps, so all you have to do is pass the Spark data frame and the formula to use:\n\ntbl_mtcars &lt;- copy_to(sc, mtcars)\n\nmodel1 &lt;- ml_logistic_regression(tbl_mtcars, am ~ .)\n\nThe output for Spark Connect based models has been upgraded. It will display the model parameters.\n\nmodel1\n#&gt; \n#&gt; ── ML Connect model:\n#&gt; Logistic Regression\n#&gt; \n#&gt; ── Parameters:\n#&gt; ◼ batchSize:       32            ◼ momentum:        0.9        \n#&gt; ◼ featuresCol:     features      ◼ numTrainWorkers: 1          \n#&gt; ◼ fitIntercept:    TRUE          ◼ predictionCol:   prediction \n#&gt; ◼ labelCol:        label         ◼ probabilityCol:  probability\n#&gt; ◼ learningRate:    0.001         ◼ seed:            0          \n#&gt; ◼ maxIter:         100           ◼ tol:             1e-06\n\nAs shown in the following screenshot, the new output features a first-of-its-kind tooltip, it will popup the description of the parameter when hovered over. This functionality works when used in RStudio, and any console that supports this kind of enhanced user experience.\n\nTo use the model, you can run ml_predict():\n\nml_predict(model1, tbl_mtcars)\n#&gt; # Source:   table&lt;sparklyr_tmp_table_094111f1_5410_4fc4_a728_e2b10f13eaa0&gt; [?? x 13]\n#&gt; # Database: spark_connection\n#&gt;      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb prediction\n#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;\n#&gt;  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4          0\n#&gt;  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4          0\n#&gt;  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1          1\n#&gt;  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1          0\n#&gt;  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2          0\n#&gt;  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1          0\n#&gt;  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4          0\n#&gt;  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2          0\n#&gt;  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2          0\n#&gt; 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4          1\n#&gt; # ℹ more rows\n#&gt; # ℹ 1 more variable: probability &lt;chr&gt;\n\n\n\nUsing feature transformers\nThese are the two feature transformers currently supported:\n\nStandard Scaler - ft_standard_scaler()\nMax Abs Scaler - ft_max_abs_scaler()\n\nTo access simply call the function by passing a vector of column names. Please note that it will create a single column with an array field that contains all of the newly scaled values.\n\ntbl_mtcars %&gt;% \n  ft_standard_scaler(c(\"wt\", \"mpg\"), \"features\") %&gt;% \n  select(wt, mpg, features)\n#&gt; # Source:   SQL [?? x 3]\n#&gt; # Database: spark_connection\n#&gt;       wt   mpg features                                  \n#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                                     \n#&gt;  1  2.62  21   c(-0.610399567481535, 0.150884824647656)  \n#&gt;  2  2.88  21   c(-0.349785269100972, 0.150884824647656)  \n#&gt;  3  2.32  22.8 c(-0.917004624399845, 0.449543446630647)  \n#&gt;  4  3.22  21.4 c(-0.00229953792688741, 0.217253407310543)\n#&gt;  5  3.44  18.7 c(0.227654254761845, -0.230734525663943)  \n#&gt;  6  3.46  18.1 c(0.248094591889732, -0.330287399658273)  \n#&gt;  7  3.57  14.3 c(0.360516446093113, -0.960788934955698)  \n#&gt;  8  3.19  24.4 c(-0.0278499593367465, 0.715017777282194) \n#&gt;  9  3.15  22.8 c(-0.0687306335925211, 0.449543446630647) \n#&gt; 10  3.44  19.2 c(0.227654254761845, -0.147773797335335)  \n#&gt; # ℹ more rows\n\nWhen you are done with you queries and computations, you should disconnect from the cluster.\n\nspark_disconnect(sc)",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10179,8 +10160,7 @@
     "section": "Environments",
     "text": "Environments\n\nInstall different version of databricks.connect\nHere are three different options to create a custom Python environment, that will contain the needed Python libraries to interact with Databricks Connect:\n\nTo install the latest versions of all the needed libraries, use:\npysparklyr::install_databricks()\nsparklyr will query PyPi.org to get the latest version of databricks.connect and installs that version.\nIt is recommended that the version of the databricks.connect library matches the DBR version of your cluster. To do this, pass the DBR version in the version argument:\npysparklyr::install_databricks(\"14.0\")\nThis will create a Python environment and install databricks.connect version 14.0, and it will automatically name it r-sparklyr-databricks-14.0. By using this name, sparklyr is able to know what version of databricks.connect is available inside this particular Python environment.\nIf you are not sure about the version of the cluster you want to interact with, then use the cluster_id argument. We have added a way to pull the cluster’s information without starting Spark Connect. This allows us to query the cluster and get the DBR version:\npysparklyr::install_databricks(cluster_id = \"[Your cluster's ID]\")\n\n\n\nRestricted Python environments\nIf your organization restricts Python environment creation, you can point sparklyr to the designated Python installation. To do this, pass the path to the environment in the envname argument of spark_connect():\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  method = \"databricks_connect\",\n  cluster_id = \"Enter here your cluster ID\",\n  envname = \"Enter here the path to your Python environment\"\n)\nTo successfully connect to a Databricks cluster, you will need to match the proper version of the databricks.connect Python library to the Databricks Runtime (DBR) version in the cluster. For example, if you are trying to use a Databricks cluster with a DBR version 14.0 then databricks.connect will also need to be version 14.0. Failure to do so can result in instability or even the inability to connect.\nBesides datbricks.connect, the Python environment will also need to have other Python libraries installed. The full list is in the Python Libraries section.\n\n\n\n\n\n\nImportant\n\n\n\nIf your server, or machine, has only one Python installation and no ability to create Conda or Virtual environments, then you will encounter issues when connecting to a Databricks cluster with a mismatched version of databricks.connect to DBR.\n\n\nImportant - This step needs only to be done one time. If you need to connect to a different cluster that has the same DBR version, sparklyr will use the same Python environment. If the new cluster has a different DBR version, then it is recommended that you run the installation function using the new DBR version or cluster ID.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10191,8 +10171,7 @@
     "section": "Python Libraries",
     "text": "Python Libraries\nHere is the list of the Python libraries needed in order to work with the cluster:\nRequired libraries:\n\ndatabricks-connect\ndelta-spark\npandas\nPyArrow\ngrpcio\ngoogle-api-python-client\ngrpcio_status\n\nML libraries (Optional):\n\ntorch\ntorcheval\nscikit-learn\n\nTo enable R User Defined Functions (UDFs):\n\nrpy2 (see Run R code in Databricks)",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10203,8 +10182,7 @@
     "section": "What is supported",
     "text": "What is supported\nHere is a list of what we currently support, and do not support via sparklyr and Databricks Connect:\nSupported:\n\nIntegration with most of the dplyr, and DBI, APIs\nIntegration with the invoke() command\nRStudio Connections Pane navigation\nSupport for Personal Access Token security authentication for Databricks Connect\nSupport for most read and write commands. These have only been tested in Spark Connect.\n\nNot supported:\n\nSDF functions - Most of these functions require SparkSession, which is currently not supported in Spark 3.4.\ntidyr - This is ongoing work that we are focusing on in sparklyr. We are implementing these functions using PySpark DataFrame commands instead of depending on the Scala implementation.",
     "crumbs": [
-      "Deployment",
-      "Databricks Connect (v2)",
+      "Databricks",
       "Getting Started"
     ]
   },
@@ -10215,7 +10193,7 @@
     "section": "",
     "text": "This document demonstrates how to use sparklyr with an Apache Spark cluster. Data are downloaded from the web and stored in Hive tables on HDFS across multiple worker nodes. RStudio Server is installed on the master node and orchestrates the analysis in spark. Here is the basic workflow.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10227,7 +10205,7 @@
     "section": "Set up the cluster",
     "text": "Set up the cluster\nThis demonstration uses Amazon Web Services (AWS), but it could just as easily use Microsoft, Google, or any other provider. We will use Elastic Map Reduce (EMR) to easily set up a cluster with two core nodes and one master node. Nodes use virtual servers from the Elastic Compute Cloud (EC2). Note: There is no free tier for EMR, charges will apply.\nBefore beginning this setup we assume you have:\n\nFamiliarity with and access to an AWS account\nFamiliarity with basic linux commands\nSudo privileges in order to install software from the command line\n\n\n\nBuild an EMR cluster\nBefore beginning the EMR wizard setup, make sure you create the following in AWS:\n\nAn AWS key pair (.pem key) so you can SSH into the EC2 master node\nA security group that gives you access to port 22 on your IP and port 8787 from anywhere\n\n\n\n\nStep 1: Select software\nMake sure to select Hive and Spark as part of the install. Note that by choosing Spark, R will also be installed on the master node as part of the distribution.\n\n\n\n\nStep 2: Select hardware\nInstall 2 core nodes and one master node with m3.xlarge 80 GiB storage per node. You can easily increase the number of nodes later.\n\n\n\n\nStep 3: Select general cluster settings\nClick next on the general cluster settings.\n\n\n\n\nStep 4: Select security\nEnter your EC2 key pair and security group. Make sure the security group has ports 22 and 8787 open.\n\n\n\n\n\nConnect to EMR\nThe cluster page will give you details about your EMR cluster and instructions on connecting.\n\nConnect to the master node via SSH using your key pair. Once you connect you will see the EMR welcome.\n\n# Log in to master node\nssh -i ~/spark-demo.pem hadoop@ec2-52-10-102-11.us-west-2.compute.amazonaws.com\n\n\n\n\nInstall RStudio Server\nEMR uses Amazon Linux which is based on Centos. Update your master node and install dependencies that will be used by R packages.\n\n# Update\nsudo yum update\nsudo yum install libcurl-devel openssl-devel # used for devtools\n\nThe installation of RStudio Server is easy. Download the preview version of RStudio and install on the master node.\n\n# Install RStudio Server\nwget -P /tmp https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-0.99.1266-x86_64.rpm\nsudo yum install --nogpgcheck /tmp/rstudio-server-rhel-0.99.1266-x86_64.rpm\n\n\n\nCreate a User\nCreate a user called rstudio-user that will perform the data analysis. Create a user directory for rstudio-user on HDFS with the hadoop fs command.\n\n# Make User\nsudo useradd -m rstudio-user\nsudo passwd rstudio-user\n\n# Create new directory in hdfs\nhadoop fs -mkdir /user/rstudio-user\nhadoop fs -chmod 777 /user/rstudio-user",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10239,7 +10217,7 @@
     "section": "Download flights data",
     "text": "Download flights data\nThe flights data is a well known data source representing 123 million flights over 22 years. It consumes roughly 12 GiB of storage in uncompressed CSV format in yearly files.\n\nSwitch User\nFor data loading and analysis, make sure you are logged in as regular user.\n\n# create directories on hdfs for new user\nhadoop fs -mkdir /user/rstudio-user\nhadoop fs -chmod 777 /user/rstudio-user\n\n# switch user\nsu rstudio-user\n\n\n\nDownload data\nRun the following script to download data from the web onto your master node. Download the yearly flight data and the airlines lookup table.\n\n# Make download directory\nmkdir /tmp/flights\n\n# Download flight data by year\nfor i in {1987..2008}\n  do\n    echo \"$(date) $i Download\"\n    fnam=$i.csv.bz2\n    wget -O /tmp/flights/$fnam http://stat-computing.org/dataexpo/2009/$fnam\n    echo \"$(date) $i Unzip\"\n    bunzip2 /tmp/flights/$fnam\n  done\n\n# Download airline carrier data\nwget -O /tmp/airlines.csv http://www.transtats.bts.gov/Download_Lookup.asp?Lookup=L_UNIQUE_CARRIERS\n\n# Download airports data\nwget -O /tmp/airports.csv https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat\n\n\n\nDistribute into HDFS\nCopy data into HDFS using the hadoop fs command.\n\n# Copy flight data to HDFS\nhadoop fs -mkdir /user/rstudio-user/flights/\nhadoop fs -put /tmp/flights /user/rstudio-user/\n\n# Copy airline data to HDFS\nhadoop fs -mkdir /user/rstudio-user/airlines/\nhadoop fs -put /tmp/airlines.csv /user/rstudio-user/airlines\n\n# Copy airport data to HDFS\nhadoop fs -mkdir /user/rstudio-user/airports/\nhadoop fs -put /tmp/airports.csv /user/rstudio-user/airports",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10251,7 +10229,7 @@
     "section": "Create Hive tables",
     "text": "Create Hive tables\nLaunch Hive from the command line.\n\n# Open Hive prompt\nhive\n\nCreate the metadata that will structure the flights table. Load data into the Hive table.\n# Create metadata for flights\nCREATE EXTERNAL TABLE IF NOT EXISTS flights\n(\nyear int,\nmonth int,\ndayofmonth int,\ndayofweek int,\ndeptime int,\ncrsdeptime int,\narrtime int, \ncrsarrtime int,\nuniquecarrier string,\nflightnum int,\ntailnum string, \nactualelapsedtime int,\ncrselapsedtime int,\nairtime string,\narrdelay int,\ndepdelay int, \norigin string,\ndest string,\ndistance int,\ntaxiin string,\ntaxiout string,\ncancelled int,\ncancellationcode string,\ndiverted int,\ncarrierdelay string,\nweatherdelay string,\nnasdelay string,\nsecuritydelay string,\nlateaircraftdelay string\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nLINES TERMINATED BY '\\n'\nTBLPROPERTIES(\"skip.header.line.count\"=\"1\");\n\n# Load data into table\nLOAD DATA INPATH '/user/rstudio-user/flights' INTO TABLE flights;\nCreate the metadata that will structure the airlines table. Load data into the Hive table.\n# Create metadata for airlines\nCREATE EXTERNAL TABLE IF NOT EXISTS airlines\n(\nCode string,\nDescription string\n)\nROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'\nWITH SERDEPROPERTIES\n(\n\"separatorChar\" = '\\,',\n\"quoteChar\"     = '\\\"'\n)\nSTORED AS TEXTFILE\ntblproperties(\"skip.header.line.count\"=\"1\");\n\n# Load data into table\nLOAD DATA INPATH '/user/rstudio-user/airlines' INTO TABLE airlines;\nCreate the metadata that will structure the airports table. Load data into the Hive table.\n# Create metadata for airports\nCREATE EXTERNAL TABLE IF NOT EXISTS airports\n(\nid string,\nname string,\ncity string,\ncountry string,\nfaa string,\nicao string,\nlat double,\nlon double,\nalt int,\ntz_offset double,\ndst string,\ntz_name string\n)\nROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'\nWITH SERDEPROPERTIES\n(\n\"separatorChar\" = '\\,',\n\"quoteChar\"     = '\\\"'\n)\nSTORED AS TEXTFILE;\n\n# Load data into table\nLOAD DATA INPATH '/user/rstudio-user/airports' INTO TABLE airports;",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10263,7 +10241,7 @@
     "section": "Connect to Spark",
     "text": "Connect to Spark\nLog in to RStudio Server by pointing a browser at your master node IP:8787.\n\nSet the environment variable SPARK_HOME and then run spark_connect. After connecting you will be able to browse the Hive metadata in the RStudio Server Spark pane.\n\n# Connect to Spark\nlibrary(sparklyr)\nlibrary(dplyr)\nlibrary(ggplot2)\nSys.setenv(SPARK_HOME=\"/usr/lib/spark\")\nconfig &lt;- spark_config()\nsc &lt;- spark_connect(master = \"yarn-client\", config = config, version = '1.6.2')\n\nOnce you are connected, you will see the Spark pane appear along with your hive tables.\n\nYou can inspect your tables by clicking on the data icon.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10275,7 +10253,7 @@
     "section": "Cache the tables into memory",
     "text": "Cache the tables into memory\nUse tbl_cache to load the flights table into memory. Caching tables will make analysis much faster. Create a dplyr reference to the Spark DataFrame.\n\n# Cache flights Hive table into Spark\ntbl_cache(sc, 'flights')\nflights_tbl &lt;- tbl(sc, 'flights')\n\n# Cache airlines Hive table into Spark\ntbl_cache(sc, 'airlines')\nairlines_tbl &lt;- tbl(sc, 'airlines')\n\n# Cache airports Hive table into Spark\ntbl_cache(sc, 'airports')\nairports_tbl &lt;- tbl(sc, 'airports')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10287,7 +10265,7 @@
     "section": "Create a model data set",
     "text": "Create a model data set\nFilter the data to contain only the records to be used in the fitted model. Join carrier descriptions for reference. Create a new variable called gain which represents the amount of time gained (or lost) in flight.\n\n# Filter records and create target variable 'gain'\nmodel_data &lt;- flights_tbl %&gt;%\n  filter(!is.na(arrdelay) & !is.na(depdelay) & !is.na(distance)) %&gt;%\n  filter(depdelay &gt; 15 & depdelay &lt; 240) %&gt;%\n  filter(arrdelay &gt; -60 & arrdelay &lt; 360) %&gt;%\n  filter(year &gt;= 2003 & year &lt;= 2007) %&gt;%\n  left_join(airlines_tbl, by = c(\"uniquecarrier\" = \"code\")) %&gt;%\n  mutate(gain = depdelay - arrdelay) %&gt;%\n  select(year, month, arrdelay, depdelay, distance, uniquecarrier, description, gain)\n\n# Summarize data by carrier\nmodel_data %&gt;%\n  group_by(uniquecarrier) %&gt;%\n  summarize(description = min(description), gain=mean(gain), \n            distance=mean(distance), depdelay=mean(depdelay)) %&gt;%\n  select(description, gain, distance, depdelay) %&gt;%\n  arrange(gain)\n\nSource:   query [?? x 4]\nDatabase: spark connection master=yarn-client app=sparklyr local=FALSE\n\n                    description       gain  distance depdelay\n                          &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;\n1        ATA Airlines d/b/a ATA -3.3480120 1134.7084 56.06583\n2  ExpressJet Airlines Inc. (1) -3.0326180  519.7125 59.41659\n3                     Envoy Air -2.5434415  416.3716 53.12529\n4       Northwest Airlines Inc. -2.2030586  779.2342 48.52828\n5          Delta Air Lines Inc. -1.8248026  868.3997 50.77174\n6   AirTran Airways Corporation -1.4331555  641.8318 54.96702\n7    Continental Air Lines Inc. -0.9617003 1116.6668 57.00553\n8        American Airlines Inc. -0.8860262 1074.4388 55.45045\n9             Endeavor Air Inc. -0.6392733  467.1951 58.47395\n10              JetBlue Airways -0.3262134 1139.0443 54.06156\n# ... with more rows",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10299,7 +10277,7 @@
     "section": "Train a linear model",
     "text": "Train a linear model\nPredict time gained or lost in flight as a function of distance, departure delay, and airline carrier.\n\n# Partition the data into training and validation sets\nmodel_partition &lt;- model_data %&gt;% \n  sdf_partition(train = 0.8, valid = 0.2, seed = 5555)\n\n# Fit a linear model\nml1 &lt;- model_partition$train %&gt;%\n  ml_linear_regression(gain ~ distance + depdelay + uniquecarrier)\n\n# Summarize the linear model\nsummary(ml1)\n\nDeviance Residuals: (approximate):\n     Min       1Q   Median       3Q      Max \n-305.422   -5.593    2.699    9.750  147.871 \n\nCoefficients:\n                    Estimate  Std. Error  t value  Pr(&gt;|t|)    \n(Intercept)      -1.24342576  0.10248281 -12.1330 &lt; 2.2e-16 ***\ndistance          0.00326600  0.00001670 195.5709 &lt; 2.2e-16 ***\ndepdelay         -0.01466233  0.00020337 -72.0977 &lt; 2.2e-16 ***\nuniquecarrier_AA -2.32650517  0.10522524 -22.1098 &lt; 2.2e-16 ***\nuniquecarrier_AQ  2.98773637  0.28798507  10.3746 &lt; 2.2e-16 ***\nuniquecarrier_AS  0.92054894  0.11298561   8.1475 4.441e-16 ***\nuniquecarrier_B6 -1.95784698  0.11728289 -16.6934 &lt; 2.2e-16 ***\nuniquecarrier_CO -2.52618081  0.11006631 -22.9514 &lt; 2.2e-16 ***\nuniquecarrier_DH  2.23287189  0.11608798  19.2343 &lt; 2.2e-16 ***\nuniquecarrier_DL -2.68848119  0.10621977 -25.3106 &lt; 2.2e-16 ***\nuniquecarrier_EV  1.93484736  0.10724290  18.0417 &lt; 2.2e-16 ***\nuniquecarrier_F9 -0.89788137  0.14422281  -6.2257 4.796e-10 ***\nuniquecarrier_FL -1.46706706  0.11085354 -13.2343 &lt; 2.2e-16 ***\nuniquecarrier_HA -0.14506644  0.25031456  -0.5795    0.5622    \nuniquecarrier_HP  2.09354855  0.12337515  16.9690 &lt; 2.2e-16 ***\nuniquecarrier_MQ -1.88297535  0.10550507 -17.8473 &lt; 2.2e-16 ***\nuniquecarrier_NW -2.79538927  0.10752182 -25.9983 &lt; 2.2e-16 ***\nuniquecarrier_OH  0.83520117  0.11032997   7.5700 3.730e-14 ***\nuniquecarrier_OO  0.61993842  0.10679884   5.8047 6.447e-09 ***\nuniquecarrier_TZ -4.99830389  0.15912629 -31.4109 &lt; 2.2e-16 ***\nuniquecarrier_UA -0.68294396  0.10638099  -6.4198 1.365e-10 ***\nuniquecarrier_US -0.61589284  0.10669583  -5.7724 7.815e-09 ***\nuniquecarrier_WN  3.86386059  0.10362275  37.2878 &lt; 2.2e-16 ***\nuniquecarrier_XE -2.59658123  0.10775736 -24.0966 &lt; 2.2e-16 ***\nuniquecarrier_YV  3.11113140  0.11659679  26.6828 &lt; 2.2e-16 ***\n---\nSignif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n\nR-Squared: 0.02385\nRoot Mean Squared Error: 17.74",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10311,7 +10289,7 @@
     "section": "Assess model performance",
     "text": "Assess model performance\nCompare the model performance using the validation data.\n\n# Calculate average gains by predicted decile\nmodel_deciles &lt;- lapply(model_partition, function(x) {\n  sdf_predict(ml1, x) %&gt;%\n    mutate(decile = ntile(desc(prediction), 10)) %&gt;%\n    group_by(decile) %&gt;%\n    summarize(gain = mean(gain)) %&gt;%\n    select(decile, gain) %&gt;%\n    collect()\n})\n\n# Create a summary dataset for plotting\ndeciles &lt;- rbind(\n  data.frame(data = 'train', model_deciles$train),\n  data.frame(data = 'valid', model_deciles$valid),\n  make.row.names = FALSE\n)\n\n# Plot average gains by predicted decile\ndeciles %&gt;%\n  ggplot(aes(factor(decile), gain, fill = data)) +\n  geom_bar(stat = 'identity', position = 'dodge') +\n  labs(title = 'Average gain by predicted decile', x = 'Decile', y = 'Minutes')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10323,7 +10301,7 @@
     "section": "Visualize predictions",
     "text": "Visualize predictions\nCompare actual gains to predicted gains for an out of time sample.\n\n# Select data from an out of time sample\ndata_2008 &lt;- flights_tbl %&gt;%\n  filter(!is.na(arrdelay) & !is.na(depdelay) & !is.na(distance)) %&gt;%\n  filter(depdelay &gt; 15 & depdelay &lt; 240) %&gt;%\n  filter(arrdelay &gt; -60 & arrdelay &lt; 360) %&gt;%\n  filter(year == 2008) %&gt;%\n  left_join(airlines_tbl, by = c(\"uniquecarrier\" = \"code\")) %&gt;%\n  mutate(gain = depdelay - arrdelay) %&gt;%\n  select(year, month, arrdelay, depdelay, distance, uniquecarrier, description, gain, origin,dest)\n\n# Summarize data by carrier\ncarrier &lt;- sdf_predict(ml1, data_2008) %&gt;%\n  group_by(description) %&gt;%\n  summarize(gain = mean(gain), prediction = mean(prediction), freq = n()) %&gt;%\n  filter(freq &gt; 10000) %&gt;%\n  collect\n\n# Plot actual gains and predicted gains by airline carrier\nggplot(carrier, aes(gain, prediction)) + \n  geom_point(alpha = 0.75, color = 'red', shape = 3) +\n  geom_abline(intercept = 0, slope = 1, alpha = 0.15, color = 'blue') +\n  geom_text(aes(label = substr(description, 1, 20)), size = 3, alpha = 0.75, vjust = -1) +\n  labs(title='Average Gains Forecast', x = 'Actual', y = 'Predicted')\n\n\nSome carriers make up more time than others in flight, but the differences are relatively small. The average time gains between the best and worst airlines is only six minutes. The best predictor of time gained is not carrier but flight distance. The biggest gains were associated with the longest flights.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10335,7 +10313,7 @@
     "section": "Build dashboard",
     "text": "Build dashboard\nAggregate the scored data by origin, destination, and airline. Save the aggregated data.\n\n# Summarize by origin, destination, and carrier\nsummary_2008 &lt;- sdf_predict(ml1, data_2008) %&gt;%\n  rename(carrier = uniquecarrier, airline = description) %&gt;%\n  group_by(origin, dest, carrier, airline) %&gt;%\n  summarize(\n    flights = n(),\n    distance = mean(distance),\n    avg_dep_delay = mean(depdelay),\n    avg_arr_delay = mean(arrdelay),\n    avg_gain = mean(gain),\n    pred_gain = mean(prediction)\n    )\n\n# Collect and save objects\npred_data &lt;- collect(summary_2008)\nairports &lt;- collect(select(airports_tbl, name, faa, lat, lon))\nml1_summary &lt;- capture.output(summary(ml1))\nsave(pred_data, airports, ml1_summary, file = 'flights_pred_2008.RData')",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]
@@ -10347,7 +10325,7 @@
     "section": "Publish dashboard",
     "text": "Publish dashboard\nUse the saved data to build an R Markdown flexdashboard. Publish the flexdashboard to Shiny Server, Shinyapps.io or RStudio Connect.",
     "crumbs": [
-      "Deployment",
+      "Databricks",
       "YARN (Hadoop)",
       "EMR cluster"
     ]

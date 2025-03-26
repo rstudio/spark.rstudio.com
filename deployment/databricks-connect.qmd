@@ -5,8 +5,8 @@ format:
     theme: default
     toc: true
 execute:
-    eval: false
-    freeze: false
+    eval: true
+    freeze: true
 editor: 
   markdown: 
     wrap: 72
@@ -260,7 +260,7 @@ library(dbplyr)
 library(sparklyr)
 
 sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
+    cluster_id = "0320-233822-dge6gcj3",
     method = "databricks_connect"
 )
 ```
@@ -365,7 +365,7 @@ there are specific data preparation steps in order to run. `sparklyr`
 automates those steps, so all you have to do is pass the Spark data
 frame and the formula to use:
 
-```{r}
+```r
 tbl_mtcars <- copy_to(sc, mtcars)
 
 model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
@@ -373,10 +373,6 @@ model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
 
 The output for Spark Connect based models has been upgraded. It will
 display the model parameters.
-
-```{r}
-model1
-```
 
 As shown in the following screenshot, the new output features a
 first-of-its-kind tooltip, it will popup the description of the
@@ -388,7 +384,7 @@ experience.
 
 To use the model, you can run `ml_predict()`:
 
-```{r}
+```r
 ml_predict(model1, tbl_mtcars)
 ```
 
@@ -404,6 +400,8 @@ Please note that it will create a single column with an array field that
 contains all of the newly scaled values.
 
 ```{r}
+tbl_mtcars <- copy_to(sc, mtcars)
+
 tbl_mtcars %>% 
   ft_standard_scaler(c("wt", "mpg"), "features") %>% 
   select(wt, mpg, features)

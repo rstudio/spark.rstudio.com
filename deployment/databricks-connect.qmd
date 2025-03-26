@@ -206,6 +206,28 @@ Python, and downloading the Python libraries. After connecting for the first
 time, the session should start much faster, since all of the needed Python
 components are now downloaded and cached. 
 
+## Serveles Compute
+
+[Databricks' Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
+lets you run workloads without having to provision a cluster. Databricks
+takes care or managing the resources.
+
+To use with `sparklyr`, set the `serverless` argument to `TRUE`. And make sure to
+pass the `version` of the DBR you will connect to. `sparklyr` will use the value
+from `version` to determine which version of the [`databricks-connect`](https://pypi.org/project/databricks-connect/)
+Python project will be used for the session: 
+
+``` r
+library(sparklyr)
+
+sc <- spark_connect(
+  cluster_id = "Enter here your cluster ID",
+  method = "databricks_connect",
+  serverless = TRUE,
+  version = "`databricks-connect` version to use"
+)
+```
+
 ## Interacting with the cluster
 
 ### RStudio's Connection pane

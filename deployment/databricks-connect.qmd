@@ -206,7 +206,7 @@ Python, and downloading the Python libraries. After connecting for the first
 time, the session should start much faster, since all of the needed Python
 components are now downloaded and cached. 
 
-## Serveles Compute
+## Serveless Compute
 
 [Databricks' Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
 lets you run workloads without having to provision a cluster. Databricks
@@ -227,6 +227,19 @@ sc <- spark_connect(
   version = "`databricks-connect` version to use"
 )
 ```
+
+### Known Limitations
+
+- `spark_apply()` is not supported - There is no R installation in the serverless
+environment.
+
+- Due to [caching limitations](https://docs.databricks.com/aws/en/compute/serverless/limitations#caching-limitations),
+no data can be persisted in memory during the Spark session. In practical terms,
+the `memory` argument in any `sparklyr` function will not work if set to `TRUE`.
+The `compute()` function will not work. 
+
+Please refer the [General Limitations](https://docs.databricks.com/aws/en/compute/serverless/limitations#general-limitations)
+section in this page for more background.
 
 ## Interacting with the cluster
 

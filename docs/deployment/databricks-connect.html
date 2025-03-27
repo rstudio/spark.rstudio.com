@@ -326,7 +326,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#environment-variables" id="toc-environment-variables" class="nav-link" data-scroll-target="#environment-variables">Environment Variables</a></li>
   </ul></li>
   <li><a href="#first-time-connecting" id="toc-first-time-connecting" class="nav-link" data-scroll-target="#first-time-connecting">First time connecting</a></li>
-  <li><a href="#serveles-compute" id="toc-serveles-compute" class="nav-link" data-scroll-target="#serveles-compute">Serveles Compute</a></li>
+  <li><a href="#serveless-compute" id="toc-serveless-compute" class="nav-link" data-scroll-target="#serveless-compute">Serveless Compute</a>
+  <ul class="collapse">
+  <li><a href="#known-limitations" id="toc-known-limitations" class="nav-link" data-scroll-target="#known-limitations">Known Limitations</a></li>
+  </ul></li>
   <li><a href="#interacting-with-the-cluster" id="toc-interacting-with-the-cluster" class="nav-link" data-scroll-target="#interacting-with-the-cluster">Interacting with the cluster</a>
   <ul class="collapse">
   <li><a href="#rstudios-connection-pane" id="toc-rstudios-connection-pane" class="nav-link" data-scroll-target="#rstudios-connection-pane">RStudio’s Connection pane</a></li>
@@ -375,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>Last updated: Wed Mar 26 15:58:07 2025</em></p>
+<p><em>Last updated: Thu Mar 27 12:55:03 2025</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://docs.databricks.com/en/dev-tools/databricks-connect/index.html#">Databricks Connect</a> enables the interaction with Spark clusters remotely. It is based on <a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a>, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the user’s machine.</p>
@@ -500,8 +503,8 @@ Note
 </ul>
 <p>On a new computer environment, first time installation will take some time. Under the hood, <code>reticulate</code> is downloading, or selecting, the correct version of Python, and downloading the Python libraries. After connecting for the first time, the session should start much faster, since all of the needed Python components are now downloaded and cached.</p>
 </section>
-<section id="serveles-compute" class="level2">
-<h2 class="anchored" data-anchor-id="serveles-compute">Serveles Compute</h2>
+<section id="serveless-compute" class="level2">
+<h2 class="anchored" data-anchor-id="serveless-compute">Serveless Compute</h2>
 <p><a href="https://docs.databricks.com/aws/en/compute/serverless/">Databricks’ Serverless compute</a> lets you run workloads without having to provision a cluster. Databricks takes care or managing the resources.</p>
 <p>To use with <code>sparklyr</code>, set the <code>serverless</code> argument to <code>TRUE</code>. And make sure to pass the <code>version</code> of the DBR you will connect to. <code>sparklyr</code> will use the value from <code>version</code> to determine which version of the <a href="https://pypi.org/project/databricks-connect/"><code>databricks-connect</code></a> Python project will be used for the session:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sparklyr)</span>
@@ -512,6 +515,14 @@ Note
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">serverless =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">version =</span> <span class="st">"`databricks-connect` version to use"</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="known-limitations" class="level3">
+<h3 class="anchored" data-anchor-id="known-limitations">Known Limitations</h3>
+<ul>
+<li><p><code>spark_apply()</code> is not supported - There is no R installation in the serverless environment.</p></li>
+<li><p>Due to <a href="https://docs.databricks.com/aws/en/compute/serverless/limitations#caching-limitations">caching limitations</a>, no data can be persisted in memory during the Spark session. In practical terms, the <code>memory</code> argument in any <code>sparklyr</code> function will not work if set to <code>TRUE</code>. The <code>compute()</code> function will not work.</p></li>
+</ul>
+<p>Please refer the <a href="https://docs.databricks.com/aws/en/compute/serverless/limitations#general-limitations">General Limitations</a> section in this page for more background.</p>
+</section>
 </section>
 <section id="interacting-with-the-cluster" class="level2">
 <h2 class="anchored" data-anchor-id="interacting-with-the-cluster">Interacting with the cluster</h2>
@@ -544,10 +555,10 @@ Note
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'0320-233822-dge6gcj3'</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [294ms]</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [672ms]</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Attempting to load 'r-sparklyr-databricks-15.4'</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-15.4' [1.2s]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-15.4' [1.4s]</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Connecting to 'Edgar Ruiz's Personal Compute Cluster'</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: 'Edgar Ruiz's Personal Compute Cluster' [6ms]</span></span>

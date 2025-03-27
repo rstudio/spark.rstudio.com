@@ -378,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>Last updated: Thu Mar 27 12:55:03 2025</em></p>
+<p><em>Last updated: Thu Mar 27 17:05:24 2025</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://docs.databricks.com/en/dev-tools/databricks-connect/index.html#">Databricks Connect</a> enables the interaction with Spark clusters remotely. It is based on <a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a>, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the user’s machine.</p>
@@ -449,42 +449,36 @@ Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect
 <p>To use with Databricks Connect, in run-time 13 or above, you will need three configuration items:</p>
 <ol type="1">
 <li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#workspace-url">Workspace Instance URL</a></li>
-<li>Your <a href="https://docs.databricks.com/dev-tools/auth.html#pat">Personal Authentication Token</a> (PAT), or a Posit Workbench instance configured to manage with Databricks services (see next section)</li>
 <li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id">Cluster ID</a></li>
+<li>Your credentials</li>
 </ol>
+<p>There are several options to obtain your credentials. Choose one from the following, presented in order of simplicity:</p>
+<ul>
+<li><p>If connecting from <strong>Posit Workbench</strong>, the administrator can set your company’s instance to automatically obtain the credentials for you, and your team. Please see the <a href="#posit-workbench">next section</a> for more information.</p></li>
+<li><p>If not working in Posit Workbench, the next easiest option is to obtain a <strong>Personal Authorization Token (PAT)</strong>, which will act as both your “user ID”, and your “password” to gain access. See the Databricks docs to find out how to <a href="https://docs.databricks.com/dev-tools/auth.html#pat">obtain a PAT</a></p></li>
+<li><p>If connecting to an <strong>Amazon Web Services (AWS) host</strong>, you should be able to use your user name and password to authenticate (basic authentication)</p></li>
+<li><p>If connecting to a <strong>Microsoft Azure host</strong>, you can use the Azure CLI, or the integration with Azure Active Directory via Single-Sign-On. You will need to specify other pieces of information, such as Resource ID. For more information see <a href="https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#azure-native-authentication">Azure native authentication</a></p></li>
+</ul>
+<p><strong>How do I actually “set” my credentials?</strong> There are two options to provide your credential information (PAT, Host, user name, Resource ID, etc.):</p>
+<ul>
+<li><p>Set environment variables in your R session. There are some best practices to set those variables found in the <a href="#environment-variables">Environment Variables</a> section</p></li>
+<li><p>Create and use a <a href="https://docs.databricks.com/aws/en/dev-tools/auth/config-profiles">Databricks Configuration Profile</a> file (<em>.databrickscfg</em>).</p></li>
+</ul>
+<p>For more information about how Databricks Authentication works, as well as the specific variable names to use see the <a href="https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#">Authentication</a> page.</p>
 <section id="posit-workbench" class="level3">
 <h3 class="anchored" data-anchor-id="posit-workbench">Posit Workbench</h3>
 <p>Posit Workbench can manage Databricks credentials on behalf of the user. For users of Posit Workbench, this is the recommended approach to setting up credentials as it provides an additional layer of security. If you are not currently using Posit Workbench, feel free to skip this section.</p>
 <p>Details for how to setup and configure the Databricks integration can be found <a href="https://docs.posit.co/ide/server-pro/integration/databricks.html">here</a>.</p>
-<p>For users who have signed into a Databricks Workspace via Posit Workbench, the credentials will be automatically configured and no additional setup is required. The only thing that still needs to be supplied when making a connection to Databricks is the cluster ID.</p>
 <p><img src="../images/deployment/databricks/workbench-session-start.png" class="img-fluid" width="600"></p>
 </section>
 <section id="environment-variables" class="level3">
 <h3 class="anchored" data-anchor-id="environment-variables">Environment Variables</h3>
-<p>We have developed this solution to align with other applications that integrate with Databricks. All applications need, at minimum, a work space <em>(1)</em>, and an authentication token <em>(2)</em>. For default values, those applications initially look for these environment variables:</p>
-<ul>
-<li><code>DATABRICKS_HOST</code> - Your Workspace Instance URL</li>
-<li><code>DATABRICKS_TOKEN</code> - Your Personal Authentication Token</li>
-</ul>
-<p>Environment variables work well, because they rarely vary between projects. The thing that will change more often is the cluster you are connecting to. Using environment variables also makes connection safer, because token contents will not be in your code in plain text. We recommend that you set these two variables at your <strong>user level</strong>. To do this run:</p>
+<p>Environment variables work well, because they rarely vary between projects. What usually changes more often is the cluster you are connecting to. Using environment variables also makes connection safer, because token contents will not be in your code in plain text. We recommend that you set these two variables at your <strong>user level</strong>. To do this run:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_environ</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>That command will open a text file that controls the environment variables at the <strong>user level</strong>. If missing, insert the entries for the two variables:</p>
+<p>That command will open a text file that controls the environment variables at the <strong>user level</strong>. If missing, insert the require entries on the file and save. Here is an example of the two that are required if using a PAT to connect:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_HOST</span><span class="op">=</span><span class="st">"Enter here your Workspace URL"</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">DATABRICKS_TOKEN</span><span class="op">=</span><span class="st">"Enter here your personal token"</span> <span class="co"># Not needed if using Posit Workbench</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>This is a one time operation.</strong> After saving and closing the file, restart your R session.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you are using Posit Workbench and have signed into your Databricks Workspace when starting your session, you do not need to set these environment variables.</p>
-</div>
-</div>
 </section>
 </section>
 <section id="first-time-connecting" class="level2">
@@ -555,7 +549,7 @@ Note
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'0320-233822-dge6gcj3'</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [672ms]</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [650ms]</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Attempting to load 'r-sparklyr-databricks-15.4'</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-15.4' [1.4s]</span></span>

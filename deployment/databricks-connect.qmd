@@ -114,11 +114,44 @@ three configuration items:
 
 1.  Your [Workspace Instance
     URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
-2.  Your [Personal Authentication
-    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT), or a 
-    Posit Workbench instance configured to manage with Databricks services (see next section)
-3.  Your [Cluster
+1.  Your [Cluster
     ID](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+1.  Your credentials
+
+There are several options to obtain your credentials. Choose one from the following,
+presented in order of simplicity: 
+
+- If connecting from **Posit Workbench**, the administrator can set your
+company's instance to automatically obtain the credentials for you, and your team.
+Please see the [next section](#posit-workbench) for more information.
+
+- If not working in Posit Workbench, the next easiest option is to obtain a **Personal 
+Authorization Token (PAT)**, which will act as both your "user ID", and your 
+"password" to gain access. See the Databricks docs to find out how to [obtain
+a PAT](https://docs.databricks.com/dev-tools/auth.html#pat)
+
+- If connecting to an **Amazon Web Services (AWS) host**, you should be able to 
+use your user name and password to authenticate (basic authentication)
+
+- If connecting to a **Microsoft Azure host**, you can use the Azure CLI, or the
+integration with Azure Active Directory via Single-Sign-On. You will need to
+specify other pieces of information, such as Resource ID. For more information
+see [Azure native authentication](https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#azure-native-authentication)
+
+**How do I actually "set" my credentials?** There are two options to provide
+your credential information (PAT, Host, user name, Resource ID, etc.):
+
+- Set environment variables in your R session. There are some best practices
+to set those variables found in the [Environment Variables](#environment-variables)
+section
+
+- Create and use a [Databricks Configuration Profile](https://docs.databricks.com/aws/en/dev-tools/auth/config-profiles)
+file (*.databrickscfg*).
+
+
+For more information about how Databricks Authentication works, as well as the
+specific variable names to use see the [Authentication](https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#)
+page. 
 
 ### Posit Workbench
 
@@ -130,25 +163,12 @@ are not currently using Posit Workbench, feel free to skip this section.
 Details for how to setup and configure the Databricks integration can be found
 [here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
 
-For users who have signed into a Databricks Workspace via Posit
-Workbench, the credentials will be automatically configured and no
-additional setup is required. The only thing that still needs to be
-supplied when making a connection to Databricks is the cluster ID.
-
 ![](/images/deployment/databricks/workbench-session-start.png){width="600"}
 
 ### Environment Variables
 
-We have developed this solution to align with other applications that
-integrate with Databricks. All applications need, at minimum, a work
-space *(1)*, and an authentication token *(2)*. For default values,
-those applications initially look for these environment variables:
-
--   `DATABRICKS_HOST` - Your Workspace Instance URL
--   `DATABRICKS_TOKEN` - Your Personal Authentication Token
-
 Environment variables work well, because they rarely vary between
-projects. The thing that will change more often is the cluster you are
+projects. What usually changes more often is the cluster you are
 connecting to. Using environment variables also makes connection safer,
 because token contents will not be in your code in plain text. We
 recommend that you set these two variables at your **user level**. To do
@@ -159,8 +179,9 @@ usethis::edit_r_environ()
 ```
 
 That command will open a text file that controls the environment
-variables at the **user level**. If missing, insert the entries for the
-two variables:
+variables at the **user level**. If missing, insert the require entries on the
+file and save. Here is an example of the two that are required if using a 
+PAT to connect: 
 
 ``` bash
 DATABRICKS_HOST="Enter here your Workspace URL"
@@ -169,11 +190,6 @@ DATABRICKS_TOKEN="Enter here your personal token" # Not needed if using Posit Wo
 
 **This is a one time operation.** After saving and closing the file,
 restart your R session.
-
-::: callout-note
-If you are using Posit Workbench and have signed into your Databricks Workspace
-when starting your session, you do not need to set these environment variables.
-:::
 
 ## First time connecting
 

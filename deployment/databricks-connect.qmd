@@ -42,7 +42,7 @@ Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html),
 which enables remote connectivity thanks to its new decoupled client-server
 architecture. This allows users to interact with the Spark cluster without
 having to run the jobs from a node. Additionally, it removes the requirement of
-having Java components installed in the user's machine.
+having Java components installed in the user's machine. 
 
 The API is very different than "legacy" Spark and using the Spark
 shell is no longer an option. We have decided to use Python as the new
@@ -99,8 +99,8 @@ is an extension of `sparklyr`.
 
 To access Databricks Connect, you will need the following two packages:
 
--   `sparklyr` - 1.8.4
--   `pysparklyr` - 0.1.3
+-   `sparklyr` 
+-   `pysparklyr`
 
 ``` r
 install.packages("sparklyr")
@@ -114,11 +114,43 @@ three configuration items:
 
 1.  Your [Workspace Instance
     URL](https://docs.databricks.com/workspace/workspace-details.html#workspace-url)
-2.  Your [Personal Authentication
-    Token](https://docs.databricks.com/dev-tools/auth.html#pat) (PAT), or a 
-    Posit Workbench instance configured to manage with Databricks services (see next section)
-3.  Your [Cluster
+1.  Your [Cluster
     ID](https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id)
+1.  Your credentials
+
+There are several options to obtain your credentials. Choose one of the following,
+presented in order of recommendation: 
+
+- If connecting from **Posit Workbench**, the administrator can set your
+company's instance to automatically obtain the credentials for you, and your team.
+Please see the [next section](#posit-workbench) for more information.
+
+- If connecting to a **Microsoft Azure host**, you can use the Azure CLI, or the
+integration with Azure Active Directory via Single-Sign-On. You will need to
+specify other pieces of information, such as Resource ID. For more information
+see [Azure native authentication](https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#azure-native-authentication)
+
+- If connecting to an **Amazon Web Services (AWS) host**, you should be able to 
+use your user name and password to authenticate (basic authentication)
+
+- The next  option is to obtain a **Personal Authorization Token (PAT)**, which 
+will act as both your "user ID", and your  "password" to gain access. See the 
+Databricks docs to find out how to [obtain a PAT](https://docs.databricks.com/dev-tools/auth.html#pat)
+
+**How do I actually "set" my credentials?** There are two options to provide
+your credential information (PAT, Host, user name, Resource ID, etc.):
+
+- Set environment variables in your R session. There are some best practices
+to set those variables found in the [Environment Variables](#environment-variables)
+section
+
+- Create and use a [Databricks Configuration Profile](https://docs.databricks.com/aws/en/dev-tools/auth/config-profiles)
+file (*.databrickscfg*).
+
+
+For more information about how Databricks Authentication works, as well as the
+specific variable names to use see the [Authentication](https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#)
+page. 
 
 ### Posit Workbench
 
@@ -130,25 +162,12 @@ are not currently using Posit Workbench, feel free to skip this section.
 Details for how to setup and configure the Databricks integration can be found
 [here](https://docs.posit.co/ide/server-pro/integration/databricks.html).
 
-For users who have signed into a Databricks Workspace via Posit
-Workbench, the credentials will be automatically configured and no
-additional setup is required. The only thing that still needs to be
-supplied when making a connection to Databricks is the cluster ID.
-
 ![](/images/deployment/databricks/workbench-session-start.png){width="600"}
 
 ### Environment Variables
 
-We have developed this solution to align with other applications that
-integrate with Databricks. All applications need, at minimum, a work
-space *(1)*, and an authentication token *(2)*. For default values,
-those applications initially look for these environment variables:
-
--   `DATABRICKS_HOST` - Your Workspace Instance URL
--   `DATABRICKS_TOKEN` - Your Personal Authentication Token
-
 Environment variables work well, because they rarely vary between
-projects. The thing that will change more often is the cluster you are
+projects. What usually changes more often is the cluster you are
 connecting to. Using environment variables also makes connection safer,
 because token contents will not be in your code in plain text. We
 recommend that you set these two variables at your **user level**. To do
@@ -159,8 +178,9 @@ usethis::edit_r_environ()
 ```
 
 That command will open a text file that controls the environment
-variables at the **user level**. If missing, insert the entries for the
-two variables:
+variables at the **user level**. If missing, insert the require entries on the
+file and save. Here is an example of the two that are required if using a 
+PAT to connect: 
 
 ``` bash
 DATABRICKS_HOST="Enter here your Workspace URL"
@@ -169,11 +189,6 @@ DATABRICKS_TOKEN="Enter here your personal token" # Not needed if using Posit Wo
 
 **This is a one time operation.** After saving and closing the file,
 restart your R session.
-
-::: callout-note
-If you are using Posit Workbench and have signed into your Databricks Workspace
-when starting your session, you do not need to set these environment variables.
-:::
 
 ## First time connecting
 
@@ -195,59 +210,51 @@ specific set of [Python libraries](#python-libraries) installed and
 available. To make it easier to get started, we provide functionality
 that will automatically do the following:
 
--   Create or re-create the necessary Python environment. Based on your
-    OS, it will choose to create a Virtual Environment or use Conda.
+-   Create or re-create the necessary Python environment
 
 -   Install the needed Python libraries into the new environment.
 
-`spark_connect()` will check to see if you have the expected Python
-environment and prompt you to accept its installation if missing. Here
-is an example of the code and output you would expect to see:
+
+On a new computer environment, first time installation will take some time. Under
+the hood, `reticulate` is downloading, or selecting, the correct version of 
+Python, and downloading the Python libraries. After connecting for the first
+time, the session should start much faster, since all of the needed Python
+components are now downloaded and cached. 
+
+## Serveless Compute
+
+[Databricks' Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
+lets you run workloads without having to provision a cluster. Databricks
+takes care or managing the resources.
+
+To use with `sparklyr`, set the `serverless` argument to `TRUE`. And make sure to
+pass the `version` of the DBR you will connect to. `sparklyr` will use the value
+from `version` to determine which version of the [`databricks-connect`](https://pypi.org/project/databricks-connect/)
+Python project will be used for the session: 
 
 ``` r
+library(sparklyr)
+
 sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
-    method = "databricks_connect"
+  cluster_id = "Enter here your cluster ID",
+  method = "databricks_connect",
+  serverless = TRUE,
+  version = "`databricks-connect` version to use"
 )
-
-#> ! Retrieving version from cluster '1026-175310-7cpsh3g8' 
-#> Cluster version: '14.1' 
-#> ! No viable Python Environment was identified for Databricks Connect version 14.1 
-#> Do you wish to install Databricks Connect version 14.1? 
-#>  
-#> 1: Yes 
-#> 2: No 
-#> 3: Cancel 
-#>  
-#> Selection: 1 
 ```
 
-After accepting, the Python environment will be created with a specific
-name, and all of the needed Python libraries will be installed within.
-After it is done, it will attempt to connect to your cluster. Here is an
-abbreviated example of the output that occurs when selecting "Yes":
+### Known Limitations
 
-``` r
-#> ✔ Automatically naming the environment:'r-sparklyr-databricks-14.1' 
-#> Using Python: /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 
-#> Creating virtual environment 'r-sparklyr-databricks-14.1' ... 
-#> + /Users/edgar/.pyenv/versions/3.10.13/bin/python3.10 -m venv /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1 
-#> Done! 
-#>   Installing packages: pip, wheel, setuptools 
-#> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade pip wheel setuptools 
-#> Requirement already satisfied: pip in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (23.0.1) 
-#> Collecting pip 
-#> Using cached pip-23.3.1-py3-none-any.whl (2.1 MB) 
-#> Collecting wheel 
-#> Using cached wheel-0.42.0-py3-none-any.whl (65 kB) 
-#> Requirement already satisfied: setuptools in /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/lib/python3.10/site-packages (65.5.0) 
-...
-...
-...
-#> Successfully installed PyArrow-14.0.1 cachetools-5.3.2 certifi-2023.11.17 charset-normalizer-3.3.2 databricks-connect-14.1.0 databricks-sdk-0.14.0 google-api-core-2.14.0 google-api-python-client-2.109.0 google-auth-2.25.0 google-auth-httplib2-0.1.1 googleapis-common-protos-1.61.0 grpcio-1.59.3 grpcio_status-1.59.3 httplib2-0.22.0 idna-3.6 numpy-1.26.2 pandas-2.1.3 protobuf-4.25.1 py4j-0.10.9.7 pyasn1-0.5.1 pyasn1-modules-0.3.0 pyparsing-3.1.1 python-dateutil-2.8.2 pytz-2023.3.post1 requests-2.31.0 rsa-4.9 six-1.16.0 tzdata-2023.3 uritemplate-4.1.1 urllib3-2.1.0 
-#> ✔ Using the 'r-sparklyr-databricks-14.1' Python environment 
-#> Path: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python 
-```
+- `spark_apply()` is not supported - There is no R installation in the serverless
+environment.
+
+- Due to [caching limitations](https://docs.databricks.com/aws/en/compute/serverless/limitations#caching-limitations),
+no data can be persisted in memory during the Spark session. In practical terms,
+the `memory` argument in any `sparklyr` function will not work if set to `TRUE`.
+The `compute()` function will not work. 
+
+Please refer the [General Limitations](https://docs.databricks.com/aws/en/compute/serverless/limitations#general-limitations)
+section in this page for more background.
 
 ## Interacting with the cluster
 
@@ -281,7 +288,7 @@ library(dbplyr)
 library(sparklyr)
 
 sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
+    cluster_id = "0320-233822-dge6gcj3",
     method = "databricks_connect"
 )
 ```
@@ -386,7 +393,7 @@ there are specific data preparation steps in order to run. `sparklyr`
 automates those steps, so all you have to do is pass the Spark data
 frame and the formula to use:
 
-```{r}
+```r
 tbl_mtcars <- copy_to(sc, mtcars)
 
 model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
@@ -394,10 +401,6 @@ model1 <- ml_logistic_regression(tbl_mtcars, am ~ .)
 
 The output for Spark Connect based models has been upgraded. It will
 display the model parameters.
-
-```{r}
-model1
-```
 
 As shown in the following screenshot, the new output features a
 first-of-its-kind tooltip, it will popup the description of the
@@ -409,7 +412,7 @@ experience.
 
 To use the model, you can run `ml_predict()`:
 
-```{r}
+```r
 ml_predict(model1, tbl_mtcars)
 ```
 
@@ -425,6 +428,8 @@ Please note that it will create a single column with an array field that
 contains all of the newly scaled values.
 
 ```{r}
+tbl_mtcars <- copy_to(sc, mtcars)
+
 tbl_mtcars %>% 
   ft_standard_scaler(c("wt", "mpg"), "features") %>% 
   select(wt, mpg, features)

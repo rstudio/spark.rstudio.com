@@ -10132,6 +10132,17 @@
     ]
   },
   {
+    "objectID": "deployment/databricks-connect.html#serveless-compute",
+    "href": "deployment/databricks-connect.html#serveless-compute",
+    "title": "Databricks",
+    "section": "Serveless Compute",
+    "text": "Serveless Compute\nDatabricks’ Serverless compute lets you run workloads without having to provision a cluster. Databricks takes care or managing the resources.\nTo use with sparklyr, set the serverless argument to TRUE. And make sure to pass the version of the DBR you will connect to. sparklyr will use the value from version to determine which version of the databricks-connect Python project will be used for the session:\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  cluster_id = \"Enter here your cluster ID\",\n  method = \"databricks_connect\",\n  serverless = TRUE,\n  version = \"`databricks-connect` version to use\"\n)\n\nKnown Limitations\n\nspark_apply() is not supported - There is no R installation in the serverless environment.\nDue to caching limitations, no data can be persisted in memory during the Spark session. In practical terms, the memory argument in any sparklyr function will not work if set to TRUE. The compute() function will not work.\n\nPlease refer the General Limitations section in this page for more background.",
+    "crumbs": [
+      "Databricks",
+      "Getting Started"
+    ]
+  },
+  {
     "objectID": "deployment/databricks-connect.html#interacting-with-the-cluster",
     "href": "deployment/databricks-connect.html#interacting-with-the-cluster",
     "title": "Databricks",
@@ -18604,28 +18615,6 @@
     "crumbs": [
       "Get Started",
       "Install"
-    ]
-  },
-  {
-    "objectID": "deployment/databricks-connect.html#serveles-compute",
-    "href": "deployment/databricks-connect.html#serveles-compute",
-    "title": "Databricks",
-    "section": "Serveles Compute",
-    "text": "Serveles Compute\nDatabricks’ Serverless compute lets you run workloads without having to provision a cluster. Databricks takes care or managing the resources.\nTo use with sparklyr, set the serverless argument to TRUE. And make sure to pass the version of the DBR you will connect to. sparklyr will use the value from version to determine which version of the databricks-connect Python project will be used for the session:\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  cluster_id = \"Enter here your cluster ID\",\n  method = \"databricks_connect\",\n  serverless = TRUE,\n  version = \"`databricks-connect` version to use\"\n)",
-    "crumbs": [
-      "Databricks",
-      "Getting Started"
-    ]
-  },
-  {
-    "objectID": "deployment/databricks-connect.html#serveless-compute",
-    "href": "deployment/databricks-connect.html#serveless-compute",
-    "title": "Databricks",
-    "section": "Serveless Compute",
-    "text": "Serveless Compute\nDatabricks’ Serverless compute lets you run workloads without having to provision a cluster. Databricks takes care or managing the resources.\nTo use with sparklyr, set the serverless argument to TRUE. And make sure to pass the version of the DBR you will connect to. sparklyr will use the value from version to determine which version of the databricks-connect Python project will be used for the session:\nlibrary(sparklyr)\n\nsc &lt;- spark_connect(\n  cluster_id = \"Enter here your cluster ID\",\n  method = \"databricks_connect\",\n  serverless = TRUE,\n  version = \"`databricks-connect` version to use\"\n)\n\nKnown Limitations\n\nspark_apply() is not supported - There is no R installation in the serverless environment.\nDue to caching limitations, no data can be persisted in memory during the Spark session. In practical terms, the memory argument in any sparklyr function will not work if set to TRUE. The compute() function will not work.\n\nPlease refer the General Limitations section in this page for more background.",
-    "crumbs": [
-      "Databricks",
-      "Getting Started"
     ]
   }
 ]

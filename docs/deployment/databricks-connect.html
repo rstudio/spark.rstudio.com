@@ -378,7 +378,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><em>Last updated: Thu Mar 27 17:05:24 2025</em></p>
+<p><em>Last updated: Fri Mar 28 09:07:57 2025</em></p>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
 <p><a href="https://docs.databricks.com/en/dev-tools/databricks-connect/index.html#">Databricks Connect</a> enables the interaction with Spark clusters remotely. It is based on <a href="https://spark.apache.org/docs/latest/spark-connect-overview.html">Spark Connect</a>, which enables remote connectivity thanks to its new decoupled client-server architecture. This allows users to interact with the Spark cluster without having to run the jobs from a node. Additionally, it removes the requirement of having Java components installed in the user’s machine.</p>
@@ -452,12 +452,12 @@ Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect
 <li>Your <a href="https://docs.databricks.com/workspace/workspace-details.html#cluster-url-and-id">Cluster ID</a></li>
 <li>Your credentials</li>
 </ol>
-<p>There are several options to obtain your credentials. Choose one from the following, presented in order of simplicity:</p>
+<p>There are several options to obtain your credentials. Choose one of the following, presented in order of recommendation:</p>
 <ul>
 <li><p>If connecting from <strong>Posit Workbench</strong>, the administrator can set your company’s instance to automatically obtain the credentials for you, and your team. Please see the <a href="#posit-workbench">next section</a> for more information.</p></li>
-<li><p>If not working in Posit Workbench, the next easiest option is to obtain a <strong>Personal Authorization Token (PAT)</strong>, which will act as both your “user ID”, and your “password” to gain access. See the Databricks docs to find out how to <a href="https://docs.databricks.com/dev-tools/auth.html#pat">obtain a PAT</a></p></li>
-<li><p>If connecting to an <strong>Amazon Web Services (AWS) host</strong>, you should be able to use your user name and password to authenticate (basic authentication)</p></li>
 <li><p>If connecting to a <strong>Microsoft Azure host</strong>, you can use the Azure CLI, or the integration with Azure Active Directory via Single-Sign-On. You will need to specify other pieces of information, such as Resource ID. For more information see <a href="https://databricks-sdk-py.readthedocs.io/en/latest/authentication.html#azure-native-authentication">Azure native authentication</a></p></li>
+<li><p>If connecting to an <strong>Amazon Web Services (AWS) host</strong>, you should be able to use your user name and password to authenticate (basic authentication)</p></li>
+<li><p>The next option is to obtain a <strong>Personal Authorization Token (PAT)</strong>, which will act as both your “user ID”, and your “password” to gain access. See the Databricks docs to find out how to <a href="https://docs.databricks.com/dev-tools/auth.html#pat">obtain a PAT</a></p></li>
 </ul>
 <p><strong>How do I actually “set” my credentials?</strong> There are two options to provide your credential information (PAT, Host, user name, Resource ID, etc.):</p>
 <ul>
@@ -549,13 +549,13 @@ Figure&nbsp;1: How <code>sparklyr</code> communicates with Databricks Connect
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"databricks_connect"</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Retrieving info for cluster:'0320-233822-dge6gcj3'</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [650ms]</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Cluster: '0320-233822-dge6gcj3' | DBR: '15.4' [627ms]</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Attempting to load 'r-sparklyr-databricks-15.4'</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Python environment: 'r-sparklyr-databricks-15.4' [1.4s]</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Connecting to 'Edgar Ruiz's Personal Compute Cluster'</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: 'Edgar Ruiz's Personal Compute Cluster' [6ms]</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✔ Connected to: 'Edgar Ruiz's Personal Compute Cluster' [5ms]</span></span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After connecting, you can use <code>dbplyr</code>’s <code>in_catalog()</code> function to access any table in your data catalog. You will only need to pass the respective names of the three levels as comma separated character entries to <code>in_catalog()</code> in this order: Catalog, Database, and Table.</p>

@@ -3,7 +3,7 @@ library(gert)
 library(glue)
 library(fs)
 
-build_reference <- function(pkg, org, sub = NULL) {
+build_reference <- function(pkg, org, sub = NULL, readme = TRUE) {
   clone <- path("_packages", pkg)
   if(is.null(sub)) {
     target <- path("packages", pkg)
@@ -22,10 +22,15 @@ build_reference <- function(pkg, org, sub = NULL) {
     examples = FALSE
   )
   file_copy(path(clone, "NEWS.md"), path(target, "news.md"), overwrite = TRUE)  
+  if(readme) {
+    file_copy(path(clone, "README.md"), path(target, "index.md"), overwrite = TRUE)    
+  }
 }
 
-build_reference("sparklyr", "sparklyr", "latest")
+build_reference("sparklyr", "sparklyr", "latest", FALSE)
 build_reference("pysparklyr", "mlverse")
-
-
+build_reference("sparkxgb", "rstudio")
+build_reference("sparktf", "rstudio")
+build_reference("mleap", "rstudio")
+build_reference("graphframes", "rstudio")
 

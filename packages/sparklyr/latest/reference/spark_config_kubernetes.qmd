@@ -1,42 +1,33 @@
 ---
 title: "Kubernetes Configuration"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/kubernetes_config.R*
 
 ## spark_config_kubernetes
 
 ## Description
- Convenience function to initialize a Kubernetes configuration instead of `spark_config()`, exposes common properties to set in Kubernetes clusters. 
+Convenience function to initialize a Kubernetes configuration instead of `spark_config()`, exposes common properties to set in Kubernetes clusters.
 
 
 ## Usage
 ```r
- 
-spark_config_kubernetes( 
-  master, 
-  version = "3.2.3", 
-  image = "spark:sparklyr", 
-  driver = random_string("sparklyr-"), 
-  account = "spark", 
-  jars = "local:///opt/sparklyr", 
-  forward = TRUE, 
-  executors = NULL, 
-  conf = NULL, 
-  timeout = 120, 
-  ports = c(8880, 8881, 4040), 
-  fix_config = identical(.Platform$OS.type, "windows"), 
-  ... 
-) 
+spark_config_kubernetes(
+  master,
+  version = "3.2.3",
+  image = "spark:sparklyr",
+  driver = random_string("sparklyr-"),
+  account = "spark",
+  jars = "local:///opt/sparklyr",
+  forward = TRUE,
+  executors = NULL,
+  conf = NULL,
+  timeout = 120,
+  ports = c(8880, 8881, 4040),
+  fix_config = identical(.Platform$OS.type, "windows"),
+  ...
+)
 ```
 
 ## Arguments
@@ -63,7 +54,3 @@ spark_config_kubernetes(
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

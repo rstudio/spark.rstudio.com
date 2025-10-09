@@ -1,37 +1,28 @@
 ---
 title: "Write Stream to Table"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/stream_data.R*
 
 ## stream_write_table
 
 ## Description
- Writes a Spark dataframe stream into a table. 
+Writes a Spark dataframe stream into a table.
 
 
 ## Usage
 ```r
- 
-stream_write_table( 
-  x, 
-  path, 
-  format = NULL, 
-  mode = c("append", "complete", "update"), 
-  checkpoint = file.path("checkpoints", random_string("")), 
-  options = list(), 
-  partition_by = NULL, 
-  ... 
-) 
+stream_write_table(
+  x,
+  path,
+  format = NULL,
+  mode = c("append", "complete", "update"),
+  checkpoint = file.path("checkpoints", random_string("")),
+  options = list(),
+  partition_by = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -51,11 +42,7 @@ stream_write_table(
 
 
 
+
 ## See Also
- Other Spark stream serialization:  `stream_write_csv()`, `stream_write_memory()` 
+Other Spark stream serialization: `stream_write_csv()`, `stream_write_memory()`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

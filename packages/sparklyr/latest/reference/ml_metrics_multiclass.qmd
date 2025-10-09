@@ -1,35 +1,26 @@
 ---
 title: "Extracts metrics from a fitted table"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_metrics.R*
 
 ## ml_metrics_multiclass
 
 ## Description
- The function works best when passed a `tbl_spark` created by `ml_predict()`. The output `tbl_spark` will contain the correct variable types and format that the given Spark model "evaluator" expects. 
+The function works best when passed a `tbl_spark` created by `ml_predict()`. The output `tbl_spark` will contain the correct variable types and format that the given Spark model "evaluator" expects.
 
 
 ## Usage
 ```r
- 
-ml_metrics_multiclass( 
-  x, 
-  truth = label, 
-  estimate = prediction, 
-  metrics = c("accuracy"), 
-  beta = NULL, 
-  ... 
-) 
+ml_metrics_multiclass(
+  x,
+  truth = label,
+  estimate = prediction,
+  metrics = c("accuracy"),
+  beta = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -43,34 +34,31 @@ ml_metrics_multiclass(
 | ... | Optional arguments; currently unused. |
 
 ## Details
- The `ml_metrics` family of functions implement Spark's `evaluate` closer to how the `yardstick` package works. The functions expect a table containing the truth and estimate, and return a `tibble` with the results. The `tibble` has the same format and variable names as the output of the `yardstick` functions. 
+The `ml_metrics` family of functions implement Spark's `evaluate` closer to how the `yardstick` package works. The functions expect a table containing the truth and estimate, and return a `tibble` with the results. The `tibble` has the same format and variable names as the output of the `yardstick` functions.
+
+
+
 
 
 
 
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect("local") 
-tbl_iris <- copy_to(sc, iris) 
-iris_split <- sdf_random_split(tbl_iris, training = 0.5, test = 0.5) 
-model <- ml_random_forest(iris_split$training, "Species ~ .") 
-tbl_predictions <- ml_predict(model, iris_split$test) 
- 
-ml_metrics_multiclass(tbl_predictions) 
- 
-# Request different metrics 
-ml_metrics_multiclass(tbl_predictions, metrics = c("recall", "precision")) 
- 
-# Request metrics not translated by the function, but valid in Spark 
-ml_metrics_multiclass(tbl_predictions, metrics = c("logLoss", "hammingLoss")) 
- 
-```
+```r
 
 
+sc <- spark_connect("local")
+tbl_iris <- copy_to(sc, iris)
+iris_split <- sdf_random_split(tbl_iris, training = 0.5, test = 0.5)
+model <- ml_random_forest(iris_split$training, "Species ~ .")
+tbl_predictions <- ml_predict(model, iris_split$test)
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+ml_metrics_multiclass(tbl_predictions)
+
+# Request different metrics
+ml_metrics_multiclass(tbl_predictions, metrics = c("recall", "precision"))
+
+# Request metrics not translated by the function, but valid in Spark
+ml_metrics_multiclass(tbl_predictions, metrics = c("logLoss", "hammingLoss"))
+
+
 ```

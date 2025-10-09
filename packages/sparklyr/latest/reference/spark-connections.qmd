@@ -1,57 +1,53 @@
 ---
 title: "Manage Spark Connections"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/connection_spark.R, R/spark_submit.R*
 
 ## spark-connections
 
 ## Description
- These routines allow you to manage your connections to Spark.  Call `spark_disconnect()` on each open Spark connection 
+
+These routines allow you to manage your connections to Spark. 
+
+
+
+ Call `spark_disconnect()` on each open Spark connection
 
 
 ## Usage
 ```r
- 
-spark_connect( 
-  master, 
-  spark_home = Sys.getenv("SPARK_HOME"), 
-  method = c("shell", "livy", "databricks", "test", "qubole", "synapse"), 
-  app_name = "sparklyr", 
-  version = NULL, 
-  config = spark_config(), 
-  extensions = sparklyr::registered_extensions(), 
-  packages = NULL, 
-  scala_version = NULL, 
-  ... 
-) 
- 
-spark_connection_is_open(sc) 
- 
-spark_disconnect(sc, ...) 
- 
-spark_disconnect_all(...) 
- 
-spark_submit( 
-  master, 
-  file, 
-  spark_home = Sys.getenv("SPARK_HOME"), 
-  app_name = "sparklyr", 
-  version = NULL, 
-  config = spark_config(), 
-  extensions = sparklyr::registered_extensions(), 
-  scala_version = NULL, 
-  ... 
-) 
+spark_connect(
+  master,
+  spark_home = Sys.getenv("SPARK_HOME"),
+  method = c("shell", "livy", "databricks", "test", "qubole", "synapse"),
+  app_name = "sparklyr",
+  version = NULL,
+  config = spark_config(),
+  extensions = sparklyr::registered_extensions(),
+  packages = NULL,
+  scala_version = NULL,
+  ...
+)
+
+spark_connection_is_open(sc)
+
+spark_disconnect(sc, ...)
+
+spark_disconnect_all(...)
+
+spark_submit(
+  master,
+  file,
+  spark_home = Sys.getenv("SPARK_HOME"),
+  app_name = "sparklyr",
+  version = NULL,
+  config = spark_config(),
+  extensions = sparklyr::registered_extensions(),
+  scala_version = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -71,33 +67,29 @@ spark_submit(
 | file | Path to R source file to submit for batch execution. |
 
 ## Details
- By default, when using `method = "livy"`, jars are downloaded from GitHub. But an alternative path (local to Livy server or on HDFS or HTTP(s)) to `sparklyr` JAR can also be specified through the `sparklyr.livy.jar` setting. 
+By default, when using `method = "livy"`, jars are downloaded from GitHub. But an alternative path (local to Livy server or on HDFS or HTTP(s)) to `sparklyr` JAR can also be specified through the `sparklyr.livy.jar` setting.
+
+
+
 
 
 
 
 ## Examples
-```{r, eval=ecodown::examples_run()}
-library(sparklyr)
- 
-conf <- spark_config() 
-conf$`sparklyr.shell.conf` <- c( 
-  "spark.executor.extraJavaOptions=-Duser.timezone='UTC'", 
-  "spark.driver.extraJavaOptions=-Duser.timezone='UTC'", 
-  "spark.sql.session.timeZone='UTC'" 
-) 
- 
-sc <- spark_connect( 
-  master = "spark://HOST:PORT", config = conf 
-) 
-connection_is_open(sc) 
- 
-spark_disconnect(sc) 
-```
+```r
 
+conf <- spark_config()
+conf$`sparklyr.shell.conf` <- c(
+  "spark.executor.extraJavaOptions=-Duser.timezone='UTC'",
+  "spark.driver.extraJavaOptions=-Duser.timezone='UTC'",
+  "spark.sql.session.timeZone='UTC'"
+)
 
+sc <- spark_connect(
+  master = "spark://HOST:PORT", config = conf
+)
+connection_is_open(sc)
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+spark_disconnect(sc)
+
 ```

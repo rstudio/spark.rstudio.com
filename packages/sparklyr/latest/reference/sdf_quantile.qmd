@@ -1,34 +1,25 @@
 ---
 title: "Compute (Approximate) Quantiles with a Spark DataFrame"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_interface.R*
 
 ## sdf_quantile
 
 ## Description
- Given a numeric column within a Spark DataFrame, compute approximate quantiles. 
+Given a numeric column within a Spark DataFrame, compute approximate quantiles.
 
 
 ## Usage
 ```r
- 
-sdf_quantile( 
-  x, 
-  column, 
-  probabilities = c(0, 0.25, 0.5, 0.75, 1), 
-  relative.error = 1e-05, 
-  weight.column = NULL 
-) 
+sdf_quantile(
+  x,
+  column,
+  probabilities = c(0, 0.25, 0.5, 0.75, 1),
+  relative.error = 1e-05,
+  weight.column = NULL
+)
 ```
 
 ## Arguments
@@ -47,7 +38,3 @@ sdf_quantile(
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

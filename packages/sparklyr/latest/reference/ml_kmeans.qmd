@@ -1,49 +1,40 @@
 ---
-title: "Spark ML -- K-Means Clustering"
+title: "Spark ML - K-Means Clustering"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_clustering_kmeans.R, R/ml_model_kmeans.R*
 
 ## ml_kmeans
 
 ## Description
- K-means clustering with support for k-means|| initialization proposed by Bahmani et al.   Using `ml_kmeans()` with the formula interface requires Spark 2.0+. 
+K-means clustering with support for k-means|| initialization proposed by Bahmani et al.  Using `ml_kmeans()` with the formula interface requires Spark 2.0+.
 
 
 ## Usage
 ```r
- 
-ml_kmeans( 
-  x, 
-  formula = NULL, 
-  k = 2, 
-  max_iter = 20, 
-  tol = 1e-04, 
-  init_steps = 2, 
-  init_mode = "k-means||", 
-  seed = NULL, 
-  features_col = "features", 
-  prediction_col = "prediction", 
-  uid = random_string("kmeans_"), 
-  ... 
-) 
- 
-ml_compute_cost(model, dataset) 
- 
-ml_compute_silhouette_measure( 
-  model, 
-  dataset, 
-  distance_measure = c("squaredEuclidean", "cosine") 
-) 
+ml_kmeans(
+  x,
+  formula = NULL,
+  k = 2,
+  max_iter = 20,
+  tol = 1e-04,
+  init_steps = 2,
+  init_mode = "k-means||",
+  seed = NULL,
+  features_col = "features",
+  prediction_col = "prediction",
+  uid = random_string("kmeans_"),
+  ...
+)
+
+ml_compute_cost(model, dataset)
+
+ml_compute_silhouette_measure(
+  model,
+  dataset,
+  distance_measure = c("squaredEuclidean", "cosine")
+)
 ```
 
 ## Arguments
@@ -54,7 +45,7 @@ ml_compute_silhouette_measure(
 | k | The number of clusters to create |
 | max_iter | The maximum number of iterations to use. |
 | tol | Param for the convergence tolerance for iterative algorithms. |
-| init_steps | Number of steps for the k-means|| initialization mode. This is an advanced setting -- the default of 2 is almost always enough. Must be > 0. Default: 2. |
+| init_steps | Number of steps for the k-means|| initialization mode. This is an advanced setting - the default of 2 is almost always enough. Must be > 0. Default: 2. |
 | init_mode | Initialization algorithm. This can be either "random" to choose random points as initial cluster centers, or "k-means||" to use a parallel variant of k-means++ (Bahmani et al., Scalable K-Means++, VLDB 2012). Default: k-means||. |
 | seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. |
 | features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
@@ -66,25 +57,27 @@ ml_compute_silhouette_measure(
 | distance_measure | Distance measure to apply when computing the Silhouette measure. |
 
 
-
 ## Value
- `ml_compute_cost()` returns the K-means cost (sum of   squared distances of points to their nearest center) for the model   on the given data.  `ml_compute_silhouette_measure()` returns the Silhouette measure   of the clustering on the given data. 
+
+`ml_compute_cost()` returns the K-means cost (sum of squared distances of points to their nearest center) for the model on the given data. 
+
+
+
+ `ml_compute_silhouette_measure()` returns the Silhouette measure of the clustering on the given data.
+
+
+
+
 
 
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
-iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
-ml_kmeans(iris_tbl, Species ~ .) 
- 
- 
-```
+```r
+
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+ml_kmeans(iris_tbl, Species ~ .)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

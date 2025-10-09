@@ -1,36 +1,27 @@
 ---
 title: "Generate random samples from a log normal distribution"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_stat.R*
 
 ## sdf_rlnorm
 
 ## Description
- Generator method for creating a single-column Spark dataframes comprised of i.i.d. samples from a log normal distribution. 
+Generator method for creating a single-column Spark dataframes comprised of i.i.d. samples from a log normal distribution.
 
 
 ## Usage
 ```r
- 
-sdf_rlnorm( 
-  sc, 
-  n, 
-  meanlog = 0, 
-  sdlog = 1, 
-  num_partitions = NULL, 
-  seed = NULL, 
-  output_col = "x" 
-) 
+sdf_rlnorm(
+  sc,
+  n,
+  meanlog = 0,
+  sdlog = 1,
+  num_partitions = NULL,
+  seed = NULL,
+  output_col = "x"
+)
 ```
 
 ## Arguments
@@ -49,11 +40,7 @@ sdf_rlnorm(
 
 
 
+
 ## See Also
- Other Spark statistical routines:  `sdf_rbeta()`, `sdf_rbinom()`, `sdf_rcauchy()`, `sdf_rchisq()`, `sdf_rexp()`, `sdf_rgamma()`, `sdf_rgeom()`, `sdf_rhyper()`, `sdf_rnorm()`, `sdf_rpois()`, `sdf_rt()`, `sdf_runif()`, `sdf_rweibull()` 
+Other Spark statistical routines: `sdf_rbeta()`, `sdf_rbinom()`, `sdf_rcauchy()`, `sdf_rchisq()`, `sdf_rexp()`, `sdf_rgamma()`, `sdf_rgeom()`, `sdf_rhyper()`, `sdf_rnorm()`, `sdf_rpois()`, `sdf_rt()`, `sdf_runif()`, `sdf_rweibull()`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

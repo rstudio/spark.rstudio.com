@@ -1,40 +1,31 @@
 ---
-title: "Spark ML -- Gaussian Mixture clustering."
+title: "Spark ML - Gaussian Mixture clustering."
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_clustering_gaussian_mixture.R*
 
 ## ml_gaussian_mixture
 
 ## Description
- This class performs expectation maximization for multivariate Gaussian Mixture Models (GMMs). A GMM represents a composite distribution of independent Gaussian distributions with associated "mixing" weights specifying each's contribution to the composite. Given a set of sample points, this class will maximize the log-likelihood for a mixture of k Gaussians, iterating until the log-likelihood changes by less than `tol`, or until it has reached the max number of iterations. While this process is generally guaranteed to converge, it is not guaranteed to find a global optimum. 
+This class performs expectation maximization for multivariate Gaussian Mixture Models (GMMs). A GMM represents a composite distribution of independent Gaussian distributions with associated "mixing" weights specifying each's contribution to the composite. Given a set of sample points, this class will maximize the log-likelihood for a mixture of k Gaussians, iterating until the log-likelihood changes by less than `tol`, or until it has reached the max number of iterations. While this process is generally guaranteed to converge, it is not guaranteed to find a global optimum.
 
 
 ## Usage
 ```r
- 
-ml_gaussian_mixture( 
-  x, 
-  formula = NULL, 
-  k = 2, 
-  max_iter = 100, 
-  tol = 0.01, 
-  seed = NULL, 
-  features_col = "features", 
-  prediction_col = "prediction", 
-  probability_col = "probability", 
-  uid = random_string("gaussian_mixture_"), 
-  ... 
-) 
+ml_gaussian_mixture(
+  x,
+  formula = NULL,
+  k = 2,
+  max_iter = 100,
+  tol = 0.01,
+  seed = NULL,
+  features_col = "features",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  uid = random_string("gaussian_mixture_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -56,23 +47,20 @@ ml_gaussian_mixture(
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
-iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
- 
-gmm_model <- ml_gaussian_mixture(iris_tbl, Species ~ .) 
-pred <- sdf_predict(iris_tbl, gmm_model) 
-ml_clustering_evaluator(pred) 
- 
- 
-```
+```r
+
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+gmm_model <- ml_gaussian_mixture(iris_tbl, Species ~ .)
+pred <- sdf_predict(iris_tbl, gmm_model)
+ml_clustering_evaluator(pred)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

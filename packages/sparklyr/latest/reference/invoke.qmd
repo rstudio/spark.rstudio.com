@@ -1,63 +1,45 @@
 ---
 title: "Invoke a Method on a JVM Object"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/spark_invoke.R*
 
 ## invoke
 
 ## Description
- Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from `R`. 
+Invoke methods on Java object references. These functions provide a mechanism for invoking various Java object methods directly from R.
 
 
 ## Usage
 ```r
- 
-invoke(jobj, method, ...) 
- 
-invoke_static(sc, class, method, ...) 
- 
-invoke_new(sc, class, ...) 
+invoke(jobj, method, ...)
+
+invoke_static(sc, class, method, ...)
+
+invoke_new(sc, class, ...)
 ```
 
 ## Arguments
 |Arguments|Description|
 |---|---|
-| jobj | An `R` object acting as a Java object reference (typically, a `spark_jobj`). |
+| jobj | An R object acting as a Java object reference (typically, a `spark_jobj`). |
 | method | The name of the method to be invoked. |
 | ... | Optional arguments, currently unused. |
 | sc | A `spark_connection`. |
 | class | The name of the Java class whose methods should be invoked. |
 
 ## Details
- Use each of these functions in the following scenarios:   
+
+Use each of these functions in the following scenarios: 
+
+
+
+ `invoke`         Execute a method on a Java object reference (typically, a `spark_jobj`). `invoke_static`  Execute a static method associated with a Java class. `invoke_new`     Invoke a constructor associated with a Java class.
 
 
 
 
-## Examples
-```{r, eval=ecodown::examples_run()}
-library(sparklyr)
- 
- 
-sc <- spark_connect(master = "spark://HOST:PORT") 
-spark_context(sc) %>% 
-  invoke("textFile", "file.csv", 1L) %>% 
-  invoke("count") 
-```
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

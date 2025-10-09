@@ -1,28 +1,19 @@
 ---
 title: "Perform Weighted Random Sampling on a Spark DataFrame"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_interface.R*
 
 ## sdf_weighted_sample
 
 ## Description
- Draw a random sample of rows (with or without replacement) from a Spark DataFrame If the sampling is done without replacement, then it will be conceptually equivalent to an iterative process such that in each step the probability of adding a row to the sample set is equal to its weight divided by summation of weights of all rows that are not in the sample set yet in that step. 
+Draw a random sample of rows (with or without replacement) from a Spark DataFrame If the sampling is done without replacement, then it will be conceptually equivalent to an iterative process such that in each step the probability of adding a row to the sample set is equal to its weight divided by summation of weights of all rows that are not in the sample set yet in that step.
 
 
 ## Usage
 ```r
- 
-sdf_weighted_sample(x, weight_col, k, replacement = TRUE, seed = NULL) 
+sdf_weighted_sample(x, weight_col, k, replacement = TRUE, seed = NULL)
 ```
 
 ## Arguments
@@ -39,11 +30,7 @@ sdf_weighted_sample(x, weight_col, k, replacement = TRUE, seed = NULL)
 
 
 
+
 ## See Also
- Other Spark data frames:  `sdf_copy_to()`, `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()` 
+Other Spark data frames: `sdf_copy_to()`, `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

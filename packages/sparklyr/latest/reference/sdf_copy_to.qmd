@@ -1,37 +1,28 @@
 ---
 title: "Copy an Object into Spark"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_interface.R*
 
 ## sdf_copy_to
 
 ## Description
- Copy an object into Spark, and return an `R` object wrapping the copied object (typically, a Spark DataFrame). 
+Copy an object into Spark, and return an R object wrapping the copied object (typically, a Spark DataFrame).
 
 
 ## Usage
 ```r
- 
-sdf_copy_to(sc, x, name, memory, repartition, overwrite, struct_columns, ...) 
- 
-sdf_import(x, sc, name, memory, repartition, overwrite, struct_columns, ...) 
+sdf_copy_to(sc, x, name, memory, repartition, overwrite, struct_columns, ...)
+
+sdf_import(x, sc, name, memory, repartition, overwrite, struct_columns, ...)
 ```
 
 ## Arguments
 |Arguments|Description|
 |---|---|
 | sc | The associated Spark connection. |
-| x | An `R` object from which a Spark DataFrame can be generated. |
+| x | An R object from which a Spark DataFrame can be generated. |
 | name | The name to assign to the copied table in Spark. |
 | memory | Boolean; should the table be cached into memory? |
 | repartition | The number of partitions to use when distributing the table across the Spark cluster. The default (0) can be used to avoid partitioning. |
@@ -40,29 +31,24 @@ sdf_import(x, sc, name, memory, repartition, overwrite, struct_columns, ...)
 | ... | Optional arguments, passed to implementing methods. |
 
 
-## Section
 
 ## Advanced Usage
-
-   `sdf_copy_to` is an S3 generic that, by default, dispatches to `sdf_import`. Package authors that would like to implement `sdf_copy_to` for a custom object type can accomplish this by implementing the associated method on `sdf_import`. 
-
+`sdf_copy_to` is an S3 generic that, by default, dispatches to `sdf_import`. Package authors that would like to implement `sdf_copy_to` for a custom object type can accomplish this by implementing the associated method on `sdf_import`.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "spark://HOST:PORT") 
-sdf_copy_to(sc, iris) 
- 
- 
-```
+
 
 ## See Also
- Other Spark data frames:  `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()` 
+Other Spark data frames: `sdf_distinct()`, `sdf_random_split()`, `sdf_register()`, `sdf_sample()`, `sdf_sort()`, `sdf_weighted_sample()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+
+sc <- spark_connect(master = "spark://HOST:PORT")
+sdf_copy_to(sc, iris)
+
+
+
 ```

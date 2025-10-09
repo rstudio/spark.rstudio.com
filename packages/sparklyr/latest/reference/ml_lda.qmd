@@ -1,55 +1,46 @@
 ---
-title: "Spark ML -- Latent Dirichlet Allocation"
+title: "Spark ML - Latent Dirichlet Allocation"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_clustering_lda.R*
 
 ## ml_lda
 
 ## Description
- Latent Dirichlet Allocation (LDA), a topic model designed for text documents. 
+Latent Dirichlet Allocation (LDA), a topic model designed for text documents.
 
 
 ## Usage
 ```r
- 
-ml_lda( 
-  x, 
-  formula = NULL, 
-  k = 10, 
-  max_iter = 20, 
-  doc_concentration = NULL, 
-  topic_concentration = NULL, 
-  subsampling_rate = 0.05, 
-  optimizer = "online", 
-  checkpoint_interval = 10, 
-  keep_last_checkpoint = TRUE, 
-  learning_decay = 0.51, 
-  learning_offset = 1024, 
-  optimize_doc_concentration = TRUE, 
-  seed = NULL, 
-  features_col = "features", 
-  topic_distribution_col = "topicDistribution", 
-  uid = random_string("lda_"), 
-  ... 
-) 
- 
-ml_describe_topics(model, max_terms_per_topic = 10) 
- 
-ml_log_likelihood(model, dataset) 
- 
-ml_log_perplexity(model, dataset) 
- 
-ml_topics_matrix(model) 
+ml_lda(
+  x,
+  formula = NULL,
+  k = 10,
+  max_iter = 20,
+  doc_concentration = NULL,
+  topic_concentration = NULL,
+  subsampling_rate = 0.05,
+  optimizer = "online",
+  checkpoint_interval = 10,
+  keep_last_checkpoint = TRUE,
+  learning_decay = 0.51,
+  learning_offset = 1024,
+  optimize_doc_concentration = TRUE,
+  seed = NULL,
+  features_col = "features",
+  topic_distribution_col = "topicDistribution",
+  uid = random_string("lda_"),
+  ...
+)
+
+ml_describe_topics(model, max_terms_per_topic = 10)
+
+ml_log_likelihood(model, dataset)
+
+ml_log_perplexity(model, dataset)
+
+ml_topics_matrix(model)
 ```
 
 ## Arguments
@@ -70,7 +61,7 @@ ml_topics_matrix(model)
 | optimize_doc_concentration | (For Online optimizer only) Indicates whether the `doc_concentration` (Dirichlet parameter for document-topic distribution) will be optimized during training. Setting this to true will make the model more expressive and fit the training data better. Default: `FALSE` |
 | seed | A random seed. Set this value if you need your results to be reproducible across repeated calls. |
 | features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
-| topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called "theta" in the  literature). Returns a vector of zeros for an empty document. |
+| topic_distribution_col | Output column with estimates of the topic mixture distribution for each document (often called "theta" in the literature). Returns a vector of zeros for an empty document. |
 | uid | A character string used to uniquely identify the ML estimator. |
 | ... | Optional arguments, see Details. #' @return The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. |
 | model | A fitted LDA model returned by `ml_lda()`. |
@@ -79,100 +70,129 @@ ml_topics_matrix(model)
 
 ## Details
 
- For `ml_lda.tbl_spark` with the formula interface, you can specify named arguments in `...` that will be passed `ft_regex_tokenizer()`, `ft_stop_words_remover()`, and `ft_count_vectorizer()`. For example, to increase the default `min_token_length`, you can use `ml_lda(dataset, ~ text, min_token_length = 4)`.  Terminology for LDA:    
+For `ml_lda.tbl_spark` with the formula interface, you can specify named arguments in `...` that will be passed `ft_regex_tokenizer()`, `ft_stop_words_remover()`, and `ft_count_vectorizer()`. For example, to increase the default `min_token_length`, you can use `ml_lda(dataset, ~ text, min_token_length = 4)`. 
 
-- "term" = "word": an element of the vocabulary   
 
-- "token": instance of a term appearing in a document   
 
-- "topic": multinomial distribution over terms representing some concept   
+ Terminology for LDA: 
 
-- "document": one piece of text, corresponding to one row in the input   data 
 
-  Original LDA paper (journal version): Blei, Ng, and Jordan. "Latent Dirichlet  Allocation." JMLR, 2003.  Input data (`features_col`): LDA is given a collection of documents as input data, via the `features_col` parameter. Each document is specified  as a Vector of length `vocab_size`, where each entry is the count for  the corresponding term (word) in the document. Feature transformers such as  `ft_tokenizer` and `ft_count_vectorizer` can be  useful for converting text to word count vectors 
 
-## Section
+ • "term" = "word": an element of the vocabulary 
 
-## Parameter details
 
-   `doc_concentration`   This is the parameter to a Dirichlet distribution, where larger values mean   more smoothing (more regularization). If not set by the user, then    `doc_concentration` is set automatically. If set to singleton vector     [alpha], then alpha is replicated to a vector of length k in fitting.      Otherwise, the `doc_concentration` vector must be length k.      (default = automatic)    Optimizer-specific parameter settings:  EM     
 
-- Currently only supports symmetric distributions, so all values in   the vector should be the same.   
+ • "token": instance of a term appearing in a document 
 
-- Values should be greater than 1.0   
 
-- default = uniformly (50 / k) + 1, where 50/k is common in LDA   libraries and +1 follows from Asuncion et al. (2009), who recommend a +1    adjustment for EM. 
 
-  Online     
+ • "topic": multinomial distribution over terms representing some concept 
 
-- Values should be greater than or equal to 0   
 
-- default = uniformly (1.0 / k), following the implementation from   [here](https://github.com/Blei-Lab/onlineldavb)   
 
- 
+ • "document": one piece of text, corresponding to one row in the input data 
 
-  `topic_concentration`  This is the parameter to a symmetric Dirichlet distribution.  Note: The topics' distributions over terms are called "beta" in the original LDA paper by Blei et al., but are called "phi" in many later papers such as Asuncion et al., 2009.  If not set by the user, then `topic_concentration` is set automatically. (default = automatic)  Optimizer-specific parameter settings:  EM     
 
-- Value should be greater than 1.0   
 
-- default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1   follows Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
+ Original LDA paper (journal version): Blei, Ng, and Jordan. "Latent Dirichlet Allocation." JMLR, 2003. 
 
-  Online     
 
-- Value should be greater than or equal to 0   
 
-- default = (1.0 / k), following the implementation from   [here](https://github.com/Blei-Lab/onlineldavb).   
-
- 
-
-  `topic_distribution_col`   This uses a variational approximation following Hoffman et al. (2010),   where the approximate distribution is called "gamma." Technically, this    method returns this approximation "gamma" for each document. 
-
- 
+ Input data (`features_col`): LDA is given a collection of documents as input data, via the `features_col` parameter. Each document is specified as a Vector of length `vocab_size`, where each entry is the count for the corresponding term (word) in the document. Feature transformers such as `ft_tokenizer` and `ft_count_vectorizer` can be useful for converting text to word count vectors
 
 ## Value
- `ml_describe_topics` returns a DataFrame with topics and their top-weighted terms.  `ml_log_likelihood` calculates a lower bound on the log likelihood of   the entire corpus 
+
+`ml_describe_topics` returns a DataFrame with topics and their top-weighted terms. 
+
+
+
+ `ml_log_likelihood` calculates a lower bound on the log likelihood of the entire corpus
+
+## Parameter details
+'_d_o_c__c_o_n_c_e_n_t_r_a_t_i_o_n': 
+
+ This is the parameter to a Dirichlet distribution, where larger values mean more smoothing (more regularization). If not set by the user, then `doc_concentration` is set automatically. If set to singleton vector [alpha], then alpha is replicated to a vector of length k in fitting.  Otherwise, the `doc_concentration` vector must be length k.  (default = automatic) 
+
+ Optimizer-specific parameter settings: 
+
+ EM 
+
+ • Currently only supports symmetric distributions, so all values in the vector should be the same. 
+
+ • Values should be greater than 1.0 
+
+ • default = uniformly (50 / k) + 1, where 50/k is common in LDA libraries and +1 follows from Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
+
+ Online 
+
+ • Values should be greater than or equal to 0 
+
+ • default = uniformly (1.0 / k), following the implementation from here 
+
+ '_t_o_p_i_c__c_o_n_c_e_n_t_r_a_t_i_o_n': 
+
+ This is the parameter to a symmetric Dirichlet distribution. 
+
+ Note: The topics' distributions over terms are called "beta" in the original LDA paper by Blei et al., but are called "phi" in many later papers such as Asuncion et al., 2009. 
+
+ If not set by the user, then `topic_concentration` is set automatically. (default = automatic) 
+
+ Optimizer-specific parameter settings: 
+
+ EM 
+
+ • Value should be greater than 1.0 
+
+ • default = 0.1 + 1, where 0.1 gives a small amount of smoothing and +1 follows Asuncion et al. (2009), who recommend a +1 adjustment for EM. 
+
+ Online 
+
+ • Value should be greater than or equal to 0 
+
+ • default = (1.0 / k), following the implementation from here. 
+
+ '_t_o_p_i_c__d_i_s_t_r_i_b_u_t_i_o_n__c_o_l': 
+
+ This uses a variational approximation following Hoffman et al. (2010), where the approximate distribution is called "gamma." Technically, this method returns this approximation "gamma" for each document.
+
+
+
 
 
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-library(janeaustenr) 
-library(dplyr) 
-sc <- spark_connect(master = "local") 
- 
-lines_tbl <- sdf_copy_to(sc, 
-  austen_books()[c(1:30), ], 
-  name = "lines_tbl", 
-  overwrite = TRUE 
-) 
- 
-# transform the data in a tidy form 
-lines_tbl_tidy <- lines_tbl %>% 
-  ft_tokenizer( 
-    input_col = "text", 
-    output_col = "word_list" 
-  ) %>% 
-  ft_stop_words_remover( 
-    input_col = "word_list", 
-    output_col = "wo_stop_words" 
-  ) %>% 
-  mutate(text = explode(wo_stop_words)) %>% 
-  filter(text != "") %>% 
-  select(text, book) 
- 
-lda_model <- lines_tbl_tidy %>% 
-  ml_lda(~text, k = 4) 
- 
-# vocabulary and topics 
-tidy(lda_model) 
- 
- 
-```
+```r
+
+
+library(janeaustenr)
+library(dplyr)
+sc <- spark_connect(master = "local")
+
+lines_tbl <- sdf_copy_to(sc,
+  austen_books()[c(1:30), ],
+  name = "lines_tbl",
+  overwrite = TRUE
+)
+
+# transform the data in a tidy form
+lines_tbl_tidy <- lines_tbl %>%
+  ft_tokenizer(
+    input_col = "text",
+    output_col = "word_list"
+  ) %>%
+  ft_stop_words_remover(
+    input_col = "word_list",
+    output_col = "wo_stop_words"
+  ) %>%
+  mutate(text = explode(wo_stop_words)) %>%
+  filter(text != "") %>%
+  select(text, book)
+
+lda_model <- lines_tbl_tidy %>%
+  ml_lda(~text, k = 4)
+
+# vocabulary and topics
+tidy(lda_model)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

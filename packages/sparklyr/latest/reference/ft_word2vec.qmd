@@ -1,43 +1,34 @@
 ---
-title: "Feature Transformation -- Word2Vec (Estimator)"
+title: "Feature Transformation - Word2Vec (Estimator)"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_feature_word2vec.R*
 
 ## ft_word2vec
 
 ## Description
- Word2Vec transforms a word into a code for further natural language processing or machine learning process. 
+Word2Vec transforms a word into a code for further natural language processing or machine learning process.
 
 
 ## Usage
 ```r
- 
-ft_word2vec( 
-  x, 
-  input_col = NULL, 
-  output_col = NULL, 
-  vector_size = 100, 
-  min_count = 5, 
-  max_sentence_length = 1000, 
-  num_partitions = 1, 
-  step_size = 0.025, 
-  max_iter = 1, 
-  seed = NULL, 
-  uid = random_string("word2vec_"), 
-  ... 
-) 
- 
-ml_find_synonyms(model, word, num) 
+ft_word2vec(
+  x,
+  input_col = NULL,
+  output_col = NULL,
+  vector_size = 100,
+  min_count = 5,
+  max_sentence_length = 1000,
+  num_partitions = 1,
+  step_size = 0.025,
+  max_iter = 1,
+  seed = NULL,
+  uid = random_string("word2vec_"),
+  ...
+)
+
+ml_find_synonyms(model, word, num)
 ```
 
 ## Arguments
@@ -60,19 +51,20 @@ ml_find_synonyms(model, word, num)
 | num | Number of words closest in similarity to the given word to find. |
 
 ## Details
- In the case where `x` is a `tbl_spark`, the estimator fits against `x` to obtain a transformer, returning a `tbl_spark`. 
-
+In the case where `x` is a `tbl_spark`, the estimator fits against `x` to obtain a transformer, returning a `tbl_spark`.
 
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` or a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the transformer or estimator appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the transformation  applied to it.  `ml_find_synonyms()` returns a DataFrame of synonyms and cosine similarities 
+
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` or a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the transformer or estimator appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the transformation applied to it. 
+
+
+
+ `ml_find_synonyms()` returns a DataFrame of synonyms and cosine similarities
+
+
 
 
 
 ## See Also
- Other feature transformers:  `ft_binarizer()`, `ft_bucketizer()`, `ft_chisq_selector()`, `ft_count_vectorizer()`, `ft_dct()`, `ft_elementwise_product()`, `ft_feature_hasher()`, `ft_hashing_tf()`, `ft_idf()`, `ft_imputer()`, `ft_index_to_string()`, `ft_interaction()`, `ft_lsh`, `ft_max_abs_scaler()`, `ft_min_max_scaler()`, `ft_ngram()`, `ft_normalizer()`, `ft_one_hot_encoder()`, `ft_one_hot_encoder_estimator()`, `ft_pca()`, `ft_polynomial_expansion()`, `ft_quantile_discretizer()`, `ft_r_formula()`, `ft_regex_tokenizer()`, `ft_robust_scaler()`, `ft_sql_transformer()`, `ft_standard_scaler()`, `ft_stop_words_remover()`, `ft_string_indexer()`, `ft_tokenizer()`, `ft_vector_assembler()`, `ft_vector_indexer()`, `ft_vector_slicer()` 
+Other feature transformers: `ft_binarizer()`, `ft_bucketizer()`, `ft_chisq_selector()`, `ft_count_vectorizer()`, `ft_dct()`, `ft_elementwise_product()`, `ft_feature_hasher()`, `ft_hashing_tf()`, `ft_idf()`, `ft_imputer()`, `ft_index_to_string()`, `ft_interaction()`, `ft_lsh`, `ft_max_abs_scaler()`, `ft_min_max_scaler()`, `ft_ngram()`, `ft_normalizer()`, `ft_one_hot_encoder()`, `ft_one_hot_encoder_estimator()`, `ft_pca()`, `ft_polynomial_expansion()`, `ft_quantile_discretizer()`, `ft_r_formula()`, `ft_regex_tokenizer()`, `ft_robust_scaler()`, `ft_sql_transformer()`, `ft_standard_scaler()`, `ft_stop_words_remover()`, `ft_string_indexer()`, `ft_tokenizer()`, `ft_vector_assembler()`, `ft_vector_indexer()`, `ft_vector_slicer()`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

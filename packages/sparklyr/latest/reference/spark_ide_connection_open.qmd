@@ -1,53 +1,44 @@
 ---
 title: "Set of functions to provide integration with the RStudio IDE"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/spark_ide.R*
 
 ## spark_ide_connection_open
 
 ## Description
- Set of functions to provide integration with the RStudio IDE 
+Set of functions to provide integration with the RStudio IDE
 
 
 ## Usage
 ```r
- 
-spark_ide_connection_open(con, env, connect_call) 
- 
-spark_ide_connection_closed(con) 
- 
-spark_ide_connection_updated(con, hint) 
- 
-spark_ide_connection_actions(con) 
- 
-spark_ide_objects(con, catalog, schema, name, type) 
- 
-spark_ide_columns( 
-  con, 
-  table = NULL, 
-  view = NULL, 
-  catalog = NULL, 
-  schema = NULL 
-) 
- 
-spark_ide_preview( 
-  con, 
-  rowLimit, 
-  table = NULL, 
-  view = NULL, 
-  catalog = NULL, 
-  schema = NULL 
-) 
+spark_ide_connection_open(con, env, connect_call)
+
+spark_ide_connection_closed(con)
+
+spark_ide_connection_updated(con, hint)
+
+spark_ide_connection_actions(con)
+
+spark_ide_objects(con, catalog, schema, name, type)
+
+spark_ide_columns(
+  con,
+  table = NULL,
+  view = NULL,
+  catalog = NULL,
+  schema = NULL
+)
+
+spark_ide_preview(
+  con,
+  rowLimit,
+  table = NULL,
+  view = NULL,
+  catalog = NULL,
+  schema = NULL
+)
 ```
 
 ## Arguments
@@ -66,7 +57,7 @@ spark_ide_preview(
 | rowLimit | The number of rows to show in the 'Preview' pane of the RStudio IDE |
 
 ## Details
- These function are meant for downstream packages, that provide additional backends to `sparklyr`, to override the opening, closing, update, and preview functionality. The arguments are driven by what the RStudio IDE API expects them to be, so this is the reason why some use `type` to designated views or tables, and others have one argument for `table`, and another for `view`. 
+These function are meant for downstream packages, that provide additional backends to `sparklyr`, to override the opening, closing, update, and preview functionality. The arguments are driven by what the RStudio IDE API expects them to be, so this is the reason why some use `type` to designated views or tables, and others have one argument for `table`, and another for `view`.
 
 
 
@@ -74,7 +65,3 @@ spark_ide_preview(
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

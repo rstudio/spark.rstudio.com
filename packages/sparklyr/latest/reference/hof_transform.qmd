@@ -1,28 +1,19 @@
 ---
 title: "Transform Array Column"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/dplyr_hof.R*
 
 ## hof_transform
 
 ## Description
- Apply an element-wise transformation function to an array column (this is essentially a dplyr wrapper for the `transform(array<T>, function<T, U>): array<U>` and the `transform(array<T>, function<T, Int, U>): array<U>` built-in Spark SQL functions) 
+Apply an element-wise transformation function to an array column (this is essentially a dplyr wrapper for the `transform(array<T>, function<T, U>): array<U>` and the `transform(array<T>, function<T, Int, U>): array<U>` built-in Spark SQL functions)
 
 
 ## Usage
 ```r
- 
-hof_transform(x, func, expr = NULL, dest_col = NULL, ...) 
+hof_transform(x, func, expr = NULL, dest_col = NULL, ...)
 ```
 
 ## Arguments
@@ -38,22 +29,20 @@ hof_transform(x, func, expr = NULL, dest_col = NULL, ...)
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
- 
-library(sparklyr) 
-sc <- spark_connect(master = "local") 
-# applies the (x -> x * x) transformation to elements of all arrays 
-copy_to(sc, dplyr::tibble(arr = list(1:5, 21:25))) %>% 
-  hof_transform(~ .x * .x) 
- 
- 
-```
+```r
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+library(sparklyr)
+sc <- spark_connect(master = "local")
+# applies the (x -> x * x) transformation to elements of all arrays
+copy_to(sc, dplyr::tibble(arr = list(1:5, 21:25))) %>%
+  hof_transform(~ .x * .x)
+
+
+
 ```

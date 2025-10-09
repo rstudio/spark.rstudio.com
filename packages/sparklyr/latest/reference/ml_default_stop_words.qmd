@@ -1,33 +1,24 @@
 ---
 title: "Default stop words"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_feature_stop_words_remover.R*
 
 ## ml_default_stop_words
 
 ## Description
- Loads the default stop words for the given language. 
+Loads the default stop words for the given language.
 
 
 ## Usage
 ```r
- 
-ml_default_stop_words( 
-  sc, 
-  language = c("english", "danish", "dutch", "finnish", "french", "german", "hungarian", 
-    "italian", "norwegian", "portuguese", "russian", "spanish", "swedish", "turkish"), 
-  ... 
-) 
+ml_default_stop_words(
+  sc,
+  language = c("english", "danish", "dutch", "finnish", "french", "german", "hungarian",
+    "italian", "norwegian", "portuguese", "russian", "spanish", "swedish", "turkish"),
+  ...
+)
 ```
 
 ## Arguments
@@ -38,19 +29,15 @@ ml_default_stop_words(
 | ... | Optional arguments; currently unused. |
 
 ## Details
- Supported languages: danish, dutch, english, finnish, french,   german, hungarian, italian, norwegian, portuguese, russian, spanish,   swedish, turkish. Defaults to English. See [https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/](https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/)   for more details 
-
+Supported languages: danish, dutch, english, finnish, french, german, hungarian, italian, norwegian, portuguese, russian, spanish, swedish, turkish. Defaults to English. See <https://anoncvs.postgresql.org/cvsweb.cgi/pgsql/src/backend/snowball/stopwords/> for more details
 
 ## Value
- A list of stop words. 
+A list of stop words.
+
+
 
 
 
 ## See Also
- `ft_stop_words_remover` 
+`ft_stop_words_remover`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

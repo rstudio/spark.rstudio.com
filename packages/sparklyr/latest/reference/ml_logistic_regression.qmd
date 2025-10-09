@@ -1,52 +1,43 @@
 ---
-title: "Spark ML -- Logistic Regression"
+title: "Spark ML - Logistic Regression"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_classification_logistic_regression.R*
 
 ## ml_logistic_regression
 
 ## Description
- Perform classification using logistic regression. 
+Perform classification using logistic regression.
 
 
 ## Usage
 ```r
- 
-ml_logistic_regression( 
-  x, 
-  formula = NULL, 
-  fit_intercept = TRUE, 
-  elastic_net_param = 0, 
-  reg_param = 0, 
-  max_iter = 100, 
-  threshold = 0.5, 
-  thresholds = NULL, 
-  tol = 1e-06, 
-  weight_col = NULL, 
-  aggregation_depth = 2, 
-  lower_bounds_on_coefficients = NULL, 
-  lower_bounds_on_intercepts = NULL, 
-  upper_bounds_on_coefficients = NULL, 
-  upper_bounds_on_intercepts = NULL, 
-  features_col = "features", 
-  label_col = "label", 
-  family = "auto", 
-  prediction_col = "prediction", 
-  probability_col = "probability", 
-  raw_prediction_col = "rawPrediction", 
-  uid = random_string("logistic_regression_"), 
-  ... 
-) 
+ml_logistic_regression(
+  x,
+  formula = NULL,
+  fit_intercept = TRUE,
+  elastic_net_param = 0,
+  reg_param = 0,
+  max_iter = 100,
+  threshold = 0.5,
+  thresholds = NULL,
+  tol = 1e-06,
+  weight_col = NULL,
+  aggregation_depth = 2,
+  lower_bounds_on_coefficients = NULL,
+  lower_bounds_on_intercepts = NULL,
+  upper_bounds_on_coefficients = NULL,
+  upper_bounds_on_intercepts = NULL,
+  features_col = "features",
+  label_col = "label",
+  family = "auto",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("logistic_regression_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -77,39 +68,36 @@ ml_logistic_regression(
 | ... | Optional arguments; see Details. |
 
 
-
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
-mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE) 
- 
-partitions <- mtcars_tbl %>% 
-  sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
- 
-mtcars_training <- partitions$training 
-mtcars_test <- partitions$test 
- 
-lr_model <- mtcars_training %>% 
-  ml_logistic_regression(am ~ gear + carb) 
- 
-pred <- ml_predict(lr_model, mtcars_test) 
- 
-ml_binary_classification_evaluator(pred) 
- 
- 
-```
+
+
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+sc <- spark_connect(master = "local")
+mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE)
+
+partitions <- mtcars_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+mtcars_training <- partitions$training
+mtcars_test <- partitions$test
+
+lr_model <- mtcars_training %>%
+  ml_logistic_regression(am ~ gear + carb)
+
+pred <- ml_predict(lr_model, mtcars_test)
+
+ml_binary_classification_evaluator(pred)
+
+
+
 ```

@@ -233,9 +233,5 @@ spark_apply(tbl_mtcars, nrow, arrow_max_records_per_batch = 2, columns = "x long
 
 ## Limitations
 
-`spark_apply()` **will only work on Databricks "Single Access" mode**.
-"Shared Access" mode does not currently support `mapInPandas()`, and
-`applyInPandas()` (see [Databricks - Access mode
-limitations](https://docs.databricks.com/en/compute/access-mode-limitations.html#udf-limitations-for-unity-catalog-shared-access-mode)).
-These are the Python functions that `sparklyr` uses to run the Python
-code, which in turn runs the R code via `rpy2`.
+`spark_apply()` will not work on the [Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
+because that service does not include an installation of R. 

@@ -1,70 +1,61 @@
 ---
-title: "Spark ML -- Multilayer Perceptron"
+title: "Spark ML - Multilayer Perceptron"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*NULL*
 
 ## ml_multilayer_perceptron_classifier
 
 ## Description
- Classification model based on the Multilayer Perceptron. Each layer has sigmoid activation function, output layer has softmax. 
+Classification model based on the Multilayer Perceptron. Each layer has sigmoid activation function, output layer has softmax.
 
 
 ## Usage
 ```r
- 
-ml_multilayer_perceptron_classifier( 
-  x, 
-  formula = NULL, 
-  layers = NULL, 
-  max_iter = 100, 
-  step_size = 0.03, 
-  tol = 1e-06, 
-  block_size = 128, 
-  solver = "l-bfgs", 
-  seed = NULL, 
-  initial_weights = NULL, 
-  thresholds = NULL, 
-  features_col = "features", 
-  label_col = "label", 
-  prediction_col = "prediction", 
-  probability_col = "probability", 
-  raw_prediction_col = "rawPrediction", 
-  uid = random_string("multilayer_perceptron_classifier_"), 
-  ... 
-) 
- 
-ml_multilayer_perceptron( 
-  x, 
-  formula = NULL, 
-  layers, 
-  max_iter = 100, 
-  step_size = 0.03, 
-  tol = 1e-06, 
-  block_size = 128, 
-  solver = "l-bfgs", 
-  seed = NULL, 
-  initial_weights = NULL, 
-  features_col = "features", 
-  label_col = "label", 
-  thresholds = NULL, 
-  prediction_col = "prediction", 
-  probability_col = "probability", 
-  raw_prediction_col = "rawPrediction", 
-  uid = random_string("multilayer_perceptron_classifier_"), 
-  response = NULL, 
-  features = NULL, 
-  ... 
-) 
+ml_multilayer_perceptron_classifier(
+  x,
+  formula = NULL,
+  layers = NULL,
+  max_iter = 100,
+  step_size = 0.03,
+  tol = 1e-06,
+  block_size = 128,
+  solver = "l-bfgs",
+  seed = NULL,
+  initial_weights = NULL,
+  thresholds = NULL,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("multilayer_perceptron_classifier_"),
+  ...
+)
+
+ml_multilayer_perceptron(
+  x,
+  formula = NULL,
+  layers,
+  max_iter = 100,
+  step_size = 0.03,
+  tol = 1e-06,
+  block_size = 128,
+  solver = "l-bfgs",
+  seed = NULL,
+  initial_weights = NULL,
+  features_col = "features",
+  label_col = "label",
+  thresholds = NULL,
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("multilayer_perceptron_classifier_"),
+  response = NULL,
+  features = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -72,7 +63,7 @@ ml_multilayer_perceptron(
 |---|---|
 | x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
 | formula | Used when `x` is a `tbl_spark`. R formula as a character string or a formula. This is used to transform the input dataframe before fitting, see ft_r_formula for details. |
-| layers | A numeric vector describing the layers -- each element in the vector gives the size of a layer. For example, `c(4, 5, 2)` would imply three layers, with an input (feature) layer of size 4, an intermediate layer of size 5, and an output (class) layer of size 2. |
+| layers | A numeric vector describing the layers - each element in the vector gives the size of a layer. For example, `c(4, 5, 2)` would imply three layers, with an input (feature) layer of size 4, an intermediate layer of size 5, and an output (class) layer of size 2. |
 | max_iter | The maximum number of iterations to use. |
 | step_size | Step size to be used for each iteration of optimization (> 0). |
 | tol | Param for the convergence tolerance for iterative algorithms. |
@@ -92,41 +83,38 @@ ml_multilayer_perceptron(
 | features | (Deprecated) The name of features (terms) to use for the model fit. |
 
 ## Details
- `ml_multilayer_perceptron()` is an alias for `ml_multilayer_perceptron_classifier()` for backwards compatibility. 
-
+`ml_multilayer_perceptron()` is an alias for `ml_multilayer_perceptron_classifier()` for backwards compatibility.
 
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
- 
-iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
-partitions <- iris_tbl %>% 
-  sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
- 
-iris_training <- partitions$training 
-iris_test <- partitions$test 
- 
-mlp_model <- iris_training %>% 
-  ml_multilayer_perceptron_classifier(Species ~ ., layers = c(4, 3, 3)) 
- 
-pred <- ml_predict(mlp_model, iris_test) 
- 
-ml_multiclass_classification_evaluator(pred) 
- 
- 
-```
+
+
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+sc <- spark_connect(master = "local")
+
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+partitions <- iris_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+iris_training <- partitions$training
+iris_test <- partitions$test
+
+mlp_model <- iris_training %>%
+  ml_multilayer_perceptron_classifier(Species ~ ., layers = c(4, 3, 3))
+
+pred <- ml_predict(mlp_model, iris_test)
+
+ml_multiclass_classification_evaluator(pred)
+
+
+
 ```

@@ -1,29 +1,21 @@
 ---
 title: "Enforce Specific Structure for R Objects"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/precondition.R*
 
 ## ensure
 
 ## Description
- These routines are useful when preparing to pass objects to a Spark routine, as it is often necessary to ensure certain parameters are scalar integers, or scalar doubles, and so on. 
+These routines are useful when preparing to pass objects to a Spark routine, as it is often necessary to ensure certain parameters are scalar integers, or scalar doubles, and so on.
 
 
 
 ## Arguments
 |Arguments|Description|
 |---|---|
-| object | An `R` object. |
+| object | An R object. |
 | allow.na | Are `NA` values permitted for this object? |
 | allow.null | Are `NULL` values permitted for this object? |
 | default | If `object` is `NULL`, what value should be used in its place? If `default` is specified, `allow.null` is ignored (and assumed to be `TRUE`). |
@@ -35,7 +27,3 @@ library(dplyr)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

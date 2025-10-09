@@ -1,28 +1,19 @@
 ---
 title: "Instantiate a Java array with a specific element type."
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/utils.R*
 
 ## jarray
 
 ## Description
- Given a list of Java object references, instantiate an `Array[T]` containing the same list of references, where `T` is a non-primitive type that is more specific than `java.lang.Object`. 
+Given a list of Java object references, instantiate an `Array[T]` containing the same list of references, where `T` is a non-primitive type that is more specific than `java.lang.Object`.
 
 
 ## Usage
 ```r
- 
-jarray(sc, x, element_type) 
+jarray(sc, x, element_type)
 ```
 
 ## Arguments
@@ -36,20 +27,18 @@ jarray(sc, x, element_type)
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "spark://HOST:PORT") 
- 
-string_arr <- jarray(sc, letters, element_type = "java.lang.String") 
-# string_arr is now a reference to an array of type String[] 
- 
-```
+```r
+
+
+sc <- spark_connect(master = "spark://HOST:PORT")
+
+string_arr <- jarray(sc, letters, element_type = "java.lang.String")
+# string_arr is now a reference to an array of type String[]
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

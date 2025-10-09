@@ -1,38 +1,29 @@
 ---
-title: "Frequent Pattern Mining -- PrefixSpan"
+title: "Frequent Pattern Mining - PrefixSpan"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_fpm_prefixspan.R*
 
 ## ml_prefixspan
 
 ## Description
- PrefixSpan algorithm for mining frequent itemsets. 
+PrefixSpan algorithm for mining frequent itemsets.
 
 
 ## Usage
 ```r
- 
-ml_prefixspan( 
-  x, 
-  seq_col = "sequence", 
-  min_support = 0.1, 
-  max_pattern_length = 10, 
-  max_local_proj_db_size = 3.2e+07, 
-  uid = random_string("prefixspan_"), 
-  ... 
-) 
- 
-ml_freq_seq_patterns(model) 
+ml_prefixspan(
+  x,
+  seq_col = "sequence",
+  min_support = 0.1,
+  max_pattern_length = 10,
+  max_local_proj_db_size = 3.2e+07,
+  uid = random_string("prefixspan_"),
+  ...
+)
+
+ml_freq_seq_patterns(model)
 ```
 
 ## Arguments
@@ -51,38 +42,36 @@ ml_freq_seq_patterns(model)
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
-library(sparklyr) 
-sc <- spark_connect(master = "local", version = "2.4.0") 
- 
-items_df <- dplyr::tibble( 
-  seq = list( 
-    list(list(1, 2), list(3)), 
-    list(list(1), list(3, 2), list(1, 2)), 
-    list(list(1, 2), list(5)), 
-    list(list(6)) 
-  ) 
-) 
-items_sdf <- copy_to(sc, items_df, overwrite = TRUE) 
- 
-prefix_span_model <- ml_prefixspan( 
-  sc, 
-  seq_col = "seq", 
-  min_support = 0.5, 
-  max_pattern_length = 5, 
-  max_local_proj_db_size = 32000000 
-) 
- 
-frequent_items <- prefix_span_model$frequent_sequential_patterns(items_sdf) %>% collect() 
- 
- 
-```
+```r
+
+
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "2.4.0")
+
+items_df <- dplyr::tibble(
+  seq = list(
+    list(list(1, 2), list(3)),
+    list(list(1), list(3, 2), list(1, 2)),
+    list(list(1, 2), list(5)),
+    list(list(6))
+  )
+)
+items_sdf <- copy_to(sc, items_df, overwrite = TRUE)
+
+prefix_span_model <- ml_prefixspan(
+  sc,
+  seq_col = "seq",
+  min_support = 0.5,
+  max_pattern_length = 5,
+  max_local_proj_db_size = 32000000
+)
+
+frequent_items <- prefix_span_model$frequent_sequential_patterns(items_sdf) %>% collect()
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

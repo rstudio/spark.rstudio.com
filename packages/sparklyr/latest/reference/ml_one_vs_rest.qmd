@@ -1,37 +1,28 @@
 ---
-title: "Spark ML -- OneVsRest"
+title: "Spark ML - OneVsRest"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_classification_one_vs_rest.R*
 
 ## ml_one_vs_rest
 
 ## Description
- Reduction of Multiclass Classification to Binary Classification. Performs reduction using one against all strategy. For a multiclass classification with k classes, train k models (one per class). Each example is scored against all k models and the model with highest score is picked to label the example. 
+Reduction of Multiclass Classification to Binary Classification. Performs reduction using one against all strategy. For a multiclass classification with k classes, train k models (one per class). Each example is scored against all k models and the model with highest score is picked to label the example.
 
 
 ## Usage
 ```r
- 
-ml_one_vs_rest( 
-  x, 
-  formula = NULL, 
-  classifier = NULL, 
-  features_col = "features", 
-  label_col = "label", 
-  prediction_col = "prediction", 
-  uid = random_string("one_vs_rest_"), 
-  ... 
-) 
+ml_one_vs_rest(
+  x,
+  formula = NULL,
+  classifier = NULL,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  uid = random_string("one_vs_rest_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -47,17 +38,13 @@ ml_one_vs_rest(
 | ... | Optional arguments; see Details. |
 
 
-
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
+
+
 
 
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_random_forest_classifier()`
 
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

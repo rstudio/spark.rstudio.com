@@ -1,40 +1,31 @@
 ---
-title: "Frequent Pattern Mining -- FPGrowth"
+title: "Frequent Pattern Mining - FPGrowth"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_fpm_fpgrowth.R*
 
 ## ml_fpgrowth
 
 ## Description
- A parallel FP-growth algorithm to mine frequent itemsets. 
+A parallel FP-growth algorithm to mine frequent itemsets.
 
 
 ## Usage
 ```r
- 
-ml_fpgrowth( 
-  x, 
-  items_col = "items", 
-  min_confidence = 0.8, 
-  min_support = 0.3, 
-  prediction_col = "prediction", 
-  uid = random_string("fpgrowth_"), 
-  ... 
-) 
- 
-ml_association_rules(model) 
- 
-ml_freq_itemsets(model) 
+ml_fpgrowth(
+  x,
+  items_col = "items",
+  min_confidence = 0.8,
+  min_support = 0.3,
+  prediction_col = "prediction",
+  uid = random_string("fpgrowth_"),
+  ...
+)
+
+ml_association_rules(model)
+
+ml_freq_itemsets(model)
 ```
 
 ## Arguments
@@ -43,7 +34,7 @@ ml_freq_itemsets(model)
 | x | A `spark_connection`, `ml_pipeline`, or a `tbl_spark`. |
 | items_col | Items column name. Default: "items" |
 | min_confidence | Minimal confidence for generating Association Rule. `min_confidence` will not affect the mining for frequent itemsets, but will affect the association rules generation. Default: 0.8 |
-| min_support | Minimal support level of the frequent pattern. [0.0, 1.0]. Any pattern that appears more than (min_support * size-of-the-dataset) times  will be output in the frequent itemsets. Default: 0.3 |
+| min_support | Minimal support level of the frequent pattern. [0.0, 1.0]. Any pattern that appears more than (min_support * size-of-the-dataset) times will be output in the frequent itemsets. Default: 0.3 |
 | prediction_col | Prediction column name. |
 | uid | A character string used to uniquely identify the ML estimator. |
 | ... | Optional arguments; currently unused. |
@@ -56,7 +47,3 @@ ml_freq_itemsets(model)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

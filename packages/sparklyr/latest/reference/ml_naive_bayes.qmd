@@ -1,42 +1,33 @@
 ---
-title: "Spark ML -- Naive-Bayes"
+title: "Spark ML - Naive-Bayes"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_classification_naive_bayes.R*
 
 ## ml_naive_bayes
 
 ## Description
- Naive Bayes Classifiers. It supports Multinomial NB (see [here](https://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html)) which can handle finitely supported discrete data. For example, by converting documents into TF-IDF vectors, it can be used for document classification. By making every vector a binary (0/1) data, it can also be used as Bernoulli NB (see [here](http://nlp.stanford.edu/IR-book/html/htmledition/the-bernoulli-model-1.html)). The input feature values must be nonnegative. 
+Naive Bayes Classifiers. It supports Multinomial NB (see here) which can handle finitely supported discrete data. For example, by converting documents into TF-IDF vectors, it can be used for document classification. By making every vector a binary (0/1) data, it can also be used as Bernoulli NB (see here). The input feature values must be nonnegative.
 
 
 ## Usage
 ```r
- 
-ml_naive_bayes( 
-  x, 
-  formula = NULL, 
-  model_type = "multinomial", 
-  smoothing = 1, 
-  thresholds = NULL, 
-  weight_col = NULL, 
-  features_col = "features", 
-  label_col = "label", 
-  prediction_col = "prediction", 
-  probability_col = "probability", 
-  raw_prediction_col = "rawPrediction", 
-  uid = random_string("naive_bayes_"), 
-  ... 
-) 
+ml_naive_bayes(
+  x,
+  formula = NULL,
+  model_type = "multinomial",
+  smoothing = 1,
+  thresholds = NULL,
+  weight_col = NULL,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  probability_col = "probability",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("naive_bayes_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -57,39 +48,36 @@ ml_naive_bayes(
 | ... | Optional arguments; see Details. |
 
 
-
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
-iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
- 
-partitions <- iris_tbl %>% 
-  sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
- 
-iris_training <- partitions$training 
-iris_test <- partitions$test 
- 
-nb_model <- iris_training %>% 
-  ml_naive_bayes(Species ~ .) 
- 
-pred <- ml_predict(nb_model, iris_test) 
- 
-ml_multiclass_classification_evaluator(pred) 
- 
- 
-```
+
+
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+partitions <- iris_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+iris_training <- partitions$training
+iris_test <- partitions$test
+
+nb_model <- iris_training %>%
+  ml_naive_bayes(Species ~ .)
+
+pred <- ml_predict(nb_model, iris_test)
+
+ml_multiclass_classification_evaluator(pred)
+
+
+
 ```

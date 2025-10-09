@@ -1,36 +1,27 @@
 ---
 title: "Apply Aggregate Function to Array Column"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/dplyr_hof.R*
 
 ## hof_aggregate
 
 ## Description
- Apply an element-wise aggregation function to an array column (this is essentially a dplyr wrapper for the `aggregate(array<T>, A, function<A, T, A>[, function<A, R>]): R` built-in Spark SQL functions) 
+Apply an element-wise aggregation function to an array column (this is essentially a dplyr wrapper for the `aggregate(array<T>, A, function<A, T, A>[, function<A, R>]): R` built-in Spark SQL functions)
 
 
 ## Usage
 ```r
- 
-hof_aggregate( 
-  x, 
-  start, 
-  merge, 
-  finish = NULL, 
-  expr = NULL, 
-  dest_col = NULL, 
-  ... 
-) 
+hof_aggregate(
+  x,
+  start,
+  merge,
+  finish = NULL,
+  expr = NULL,
+  dest_col = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -48,27 +39,25 @@ hof_aggregate(
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
- 
-library(sparklyr) 
-sc <- spark_connect(master = "local") 
-# concatenates all numbers of each array in `array_column` and add parentheses 
-# around the resulting string 
-copy_to(sc, dplyr::tibble(array_column = list(1:5, 21:25))) %>% 
-  hof_aggregate( 
-    start = "", 
-    merge = ~ CONCAT(.y, .x), 
-    finish = ~ CONCAT("(", .x, ")") 
-  ) 
- 
- 
-```
+```r
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+library(sparklyr)
+sc <- spark_connect(master = "local")
+# concatenates all numbers of each array in `array_column` and add parentheses
+# around the resulting string
+copy_to(sc, dplyr::tibble(array_column = list(1:5, 21:25))) %>%
+  hof_aggregate(
+    start = "",
+    merge = ~ CONCAT(.y, .x),
+    finish = ~ CONCAT("(", .x, ")")
+  )
+
+
+
 ```

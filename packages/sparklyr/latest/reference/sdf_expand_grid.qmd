@@ -1,35 +1,26 @@
 ---
 title: "Create a Spark dataframe containing all combinations of inputs"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_interface.R*
 
 ## sdf_expand_grid
 
 ## Description
- Given one or more R vectors/factors or single-column Spark dataframes, perform an expand.grid operation on all of them and store the result in a Spark dataframe 
+Given one or more R vectors/factors or single-column Spark dataframes, perform an expand.grid operation on all of them and store the result in a Spark dataframe
 
 
 ## Usage
 ```r
- 
-sdf_expand_grid( 
-  sc, 
-  ..., 
-  broadcast_vars = NULL, 
-  memory = TRUE, 
-  repartition = NULL, 
-  partition_by = NULL 
-) 
+sdf_expand_grid(
+  sc,
+  ...,
+  broadcast_vars = NULL,
+  memory = TRUE,
+  repartition = NULL,
+  partition_by = NULL
+)
 ```
 
 ## Arguments
@@ -46,19 +37,17 @@ sdf_expand_grid(
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-sc <- spark_connect(master = "local") 
-grid_sdf <- sdf_expand_grid(sc, seq(5), rnorm(10), letters) 
- 
- 
-```
+```r
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+sc <- spark_connect(master = "local")
+grid_sdf <- sdf_expand_grid(sc, seq(5), rnorm(10), letters)
+
+
+
 ```

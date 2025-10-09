@@ -1,48 +1,39 @@
 ---
-title: "Spark ML -- Generalized Linear Regression"
+title: "Spark ML - Generalized Linear Regression"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_regression_generalized_linear_regression.R*
 
 ## ml_generalized_linear_regression
 
 ## Description
- Perform regression using Generalized Linear Model (GLM). 
+Perform regression using Generalized Linear Model (GLM).
 
 
 ## Usage
 ```r
- 
-ml_generalized_linear_regression( 
-  x, 
-  formula = NULL, 
-  family = "gaussian", 
-  link = NULL, 
-  fit_intercept = TRUE, 
-  offset_col = NULL, 
-  link_power = NULL, 
-  link_prediction_col = NULL, 
-  reg_param = 0, 
-  max_iter = 25, 
-  weight_col = NULL, 
-  solver = "irls", 
-  tol = 1e-06, 
-  variance_power = 0, 
-  features_col = "features", 
-  label_col = "label", 
-  prediction_col = "prediction", 
-  uid = random_string("generalized_linear_regression_"), 
-  ... 
-) 
+ml_generalized_linear_regression(
+  x,
+  formula = NULL,
+  family = "gaussian",
+  link = NULL,
+  fit_intercept = TRUE,
+  offset_col = NULL,
+  link_power = NULL,
+  link_prediction_col = NULL,
+  reg_param = 0,
+  max_iter = 25,
+  weight_col = NULL,
+  solver = "irls",
+  tol = 1e-06,
+  variance_power = 0,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  uid = random_string("generalized_linear_regression_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -61,7 +52,7 @@ ml_generalized_linear_regression(
 | weight_col | The name of the column to use as weights for the model fit. |
 | solver | Solver algorithm for optimization. |
 | tol | Param for the convergence tolerance for iterative algorithms. |
-| variance_power | Power in the variance function of the Tweedie distribution which provides the relationship between the variance and mean of the distribution. Only applicable to the Tweedie family. (see [Tweedie Distribution (Wikipedia)](https://en.wikipedia.org/wiki/Tweedie_distribution)) Supported values: 0 and [1, Inf). Note that variance power 0, 1, or 2 corresponds to the Gaussian, Poisson or Gamma family, respectively. |
+| variance_power | Power in the variance function of the Tweedie distribution which provides the relationship between the variance and mean of the distribution. Only applicable to the Tweedie family. (see Tweedie Distribution (Wikipedia)) Supported values: 0 and [1, Inf). Note that variance power 0, 1, or 2 corresponds to the Gaussian, Poisson or Gamma family, respectively. |
 | features_col | Features column name, as a length-one character vector. The column should be single vector column of numeric values. Usually this column is output by `ft_r_formula`. |
 | label_col | Label column name. The column should be a numeric column. Usually this column is output by `ft_r_formula`. |
 | prediction_col | Prediction column name. |
@@ -70,67 +61,73 @@ ml_generalized_linear_regression(
 
 ## Details
 
- Valid link functions for each family is listed below. The first link function of each family is the default one.        
+Valid link functions for each family is listed below. The first link function of each family is the default one. 
 
-- gaussian: "identity", "log", "inverse"     
 
-- binomial: "logit", "probit", "loglog"     
 
-- poisson: "log", "identity", "sqrt"     
+ • gaussian: "identity", "log", "inverse" 
 
-- gamma: "inverse", "identity", "log"     
 
-- tweedie: power link function specified through `link_power`. The default link power in the tweedie family is `1 - variance_power`.     
 
- 
+ • binomial: "logit", "probit", "loglog" 
 
+
+
+ • poisson: "log", "identity", "sqrt" 
+
+
+
+ • gamma: "inverse", "identity", "log" 
+
+
+
+ • tweedie: power link function specified through `link_power`. The default link power in the tweedie family is `1 - variance_power`.
 
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
-library(sparklyr) 
- 
-sc <- spark_connect(master = "local") 
-mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE) 
- 
-partitions <- mtcars_tbl %>% 
-  sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
- 
-mtcars_training <- partitions$training 
-mtcars_test <- partitions$test 
- 
-# Specify the grid 
-family <- c("gaussian", "gamma", "poisson") 
-link <- c("identity", "log") 
-family_link <- expand.grid(family = family, link = link, stringsAsFactors = FALSE) 
-family_link <- data.frame(family_link, rmse = 0) 
- 
-# Train the models 
-for (i in seq_len(nrow(family_link))) { 
-  glm_model <- mtcars_training %>% 
-    ml_generalized_linear_regression(mpg ~ ., 
-      family = family_link[i, 1], 
-      link = family_link[i, 2] 
-    ) 
- 
-  pred <- ml_predict(glm_model, mtcars_test) 
-  family_link[i, 3] <- ml_regression_evaluator(pred, label_col = "mpg") 
-} 
- 
-family_link 
- 
- 
-```
+
+
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_linear_svc()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+library(sparklyr)
+
+sc <- spark_connect(master = "local")
+mtcars_tbl <- sdf_copy_to(sc, mtcars, name = "mtcars_tbl", overwrite = TRUE)
+
+partitions <- mtcars_tbl %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+mtcars_training <- partitions$training
+mtcars_test <- partitions$test
+
+# Specify the grid
+family <- c("gaussian", "gamma", "poisson")
+link <- c("identity", "log")
+family_link <- expand.grid(family = family, link = link, stringsAsFactors = FALSE)
+family_link <- data.frame(family_link, rmse = 0)
+
+# Train the models
+for (i in seq_len(nrow(family_link))) {
+  glm_model <- mtcars_training %>%
+    ml_generalized_linear_regression(mpg ~ .,
+      family = family_link[i, 1],
+      link = family_link[i, 2]
+    )
+
+  pred <- ml_predict(glm_model, mtcars_test)
+  family_link[i, 3] <- ml_regression_evaluator(pred, label_col = "mpg")
+}
+
+family_link
+
+
+
 ```

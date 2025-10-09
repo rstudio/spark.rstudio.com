@@ -1,35 +1,26 @@
 ---
 title: "Unnest wider"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/sdf_unnest_wider.R*
 
 ## sdf_unnest_wider
 
 ## Description
- Flatten a struct column within a Spark dataframe into one or more columns, similar what to tidyr::unnest_wider does to an R dataframe 
+Flatten a struct column within a Spark dataframe into one or more columns, similar what to tidyr::unnest_wider does to an R dataframe
 
 
 ## Usage
 ```r
- 
-sdf_unnest_wider( 
-  data, 
-  col, 
-  names_sep = NULL, 
-  names_repair = "check_unique", 
-  ptype = list(), 
-  transform = list() 
-) 
+sdf_unnest_wider(
+  data,
+  col,
+  names_sep = NULL,
+  names_repair = "check_unique",
+  ptype = list(),
+  transform = list()
+)
 ```
 
 ## Arguments
@@ -46,29 +37,27 @@ sdf_unnest_wider(
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
-library(sparklyr) 
-sc <- spark_connect(master = "local", version = "2.4.0") 
- 
-sdf <- copy_to( 
-  sc, 
-  dplyr::tibble( 
-    x = 1:3, 
-    y = list(list(a = 1, b = 2), list(a = 3, b = 4), list(a = 5, b = 6)) 
-  ) 
-) 
- 
-# flatten struct column 'y' into two separate columns 'y_a' and 'y_b' 
-unnested <- sdf %>% sdf_unnest_wider(y, names_sep = "_") 
- 
- 
-```
+```r
+
+
+library(sparklyr)
+sc <- spark_connect(master = "local", version = "2.4.0")
+
+sdf <- copy_to(
+  sc,
+  dplyr::tibble(
+    x = 1:3,
+    y = list(list(a = 1, b = 2), list(a = 3, b = 4), list(a = 5, b = 6))
+  )
+)
+
+# flatten struct column 'y' into two separate columns 'y_a' and 'y_b'
+unnested <- sdf %>% sdf_unnest_wider(y, names_sep = "_")
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
 ```

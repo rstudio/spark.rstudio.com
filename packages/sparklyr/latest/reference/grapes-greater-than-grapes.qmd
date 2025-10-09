@@ -1,28 +1,19 @@
 ---
 title: "Infix operator for composing a lambda expression"
 execute:
+  eval: true
   freeze: true
 ---
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/dplyr_hof.R*
-
-## %->%
+## 
 
 ## Description
- Infix operator that allows a lambda expression to be composed in R and be translated to Spark SQL equivalent using ' `dbplyr::translate_sql` functionalities 
+Infix operator that allows a lambda expression to be composed in R and be translated to Spark SQL equivalent using ' `dbplyr::translate_sql` functionalities
 
 
 ## Usage
 ```r
- 
-params %->% ... 
+params %->% ...
 ```
 
 ## Arguments
@@ -32,25 +23,22 @@ params %->% ...
 | ... | Body of the lambda expression, *must be within parentheses* |
 
 ## Details
- Notice when composing a lambda expression in R, the body of the lambda expression *must always be surrounded with parentheses*, otherwise a parsing error will occur. 
+Notice when composing a lambda expression in R, the body of the lambda expression *must always be surrounded with parentheses*, otherwise a parsing error will occur.
+
+
+
 
 
 
 
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
- 
-a %->% (mean(a) + 1) # translates to <SQL> `a` -> (AVG(`a`) OVER () + 1.0) 
- 
-.(a, b) %->% (a < 1 && b > 1) # translates to <SQL> `a`,`b` -> (`a` < 1.0 AND `b` > 1.0) 
- 
-```
+```r
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+a %->% (mean(a) + 1) # translates to <SQL> `a` -> (AVG(`a`) OVER () + 1.0)
+
+.(a, b) %->% (a < 1 && b > 1) # translates to <SQL> `a`,`b` -> (`a` < 1.0 AND `b` > 1.0)
+
+
 ```

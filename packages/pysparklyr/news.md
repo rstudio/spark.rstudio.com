@@ -1,7 +1,87 @@
-# pysparklyr (dev)
+# pysparklyr 0.1.9
+
+### Improvements
+
+* Databricks connections app:
+  * Adds a dropdown to the Python Environment to make it more flexible
+  * Check for the existence of a Virtual Environment folder inside the current RStudio project, adds it to the dropdown choices and makes it the default
+
+* Adds support for spark_write_delta() (#146)
+
+### Fixes
+
+* Gets token from Databricks SDK if one cannot be found. (#148)
+
+# pysparklyr 0.1.8
+
+### Fixes
+
+* Avoids installing `rpy2` automatically for `uv`-based environments. It will
+also install `rpy2` via `py_require()` when `spark_apply()` is called.
+
+* Fixes issue with resetting the connection label (#144)
+
+* Restores Databricks Host name sanitation 
+
+# pysparklyr 0.1.7
+
+### Improvements
+
+* Adding support for Databricks serverless interactive compute (#127)
+
+* Extended authentication method support for Databricks by deferring to SDK (#127)
+
+* Adds support for new way `reticulate` manages Python environments
+(https://rstudio.github.io/reticulate/articles/package.html). This means that 
+the need to run `install_pyspark()` or `install_databricks()` will not be 
+needed for interactive R sessions. 
+
+* Adds limited support for `context` in `spark_apply()`. It will only work when
+`group_by` is used. The object passed to `context` cannot be an R `list`
+
+* Adjusted logic for handling config to now warn users when unsupported configs
+are supplied if using Databricks serverless compute
+
+* Disables un-setting the `RETICULATE_PYTHON` environment variable. It will
+still display a warning if it's set, letting the user know that it may 
+cause connectivity issues.
+
+### Fixes
+
+* Databricks connections should now correctly use `databricks_host()`
+
+# pysparklyr 0.1.6
+
+### Improvements
+
+* Adds IDE check for positron (#121)
+
+* No longer install 'rpy2' by default. It will prompt user for installation
+the first time `spark_apply()` is called (#125)
+
+### Fixes
+
+* Fixes error returned by `httr2` to sanitize the Databricks Host URL (#130)
+
+* Fixes issues with catalog and schema names with dashes in the Connections
+Pane. 
+
+* Avoids failure when an unexpected error from Databricks is returned (#123)
+
+# pysparklyr 0.1.5
+
+### Improvements
+
+* Adds support for `I()` in `tbl()`
+
+* Ensures `arrow` is installed by adding it to Imports (#116)
 
 * If the cluster version is higher than the available Python library, it will
 either use, or offer to install the available Python library
+
+### Fixes
+
+* Fixes issues with having multiple line functions in `spark_apply()`
 
 # pysparklyr 0.1.4
 

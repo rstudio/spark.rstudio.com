@@ -1,45 +1,36 @@
 ---
-title: "Spark ML -- LinearSVC"
+title: "Spark ML - LinearSVC"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/ml_classification_linear_svc.R*
 
 ## ml_linear_svc
 
 ## Description
- Perform classification using linear support vector machines (SVM). This binary classifier optimizes the Hinge Loss using the OWLQN optimizer. Only supports L2 regularization currently. 
+Perform classification using linear support vector machines (SVM). This binary classifier optimizes the Hinge Loss using the OWLQN optimizer. Only supports L2 regularization currently.
 
 
 ## Usage
 ```r
- 
-ml_linear_svc( 
-  x, 
-  formula = NULL, 
-  fit_intercept = TRUE, 
-  reg_param = 0, 
-  max_iter = 100, 
-  standardization = TRUE, 
-  weight_col = NULL, 
-  tol = 1e-06, 
-  threshold = 0, 
-  aggregation_depth = 2, 
-  features_col = "features", 
-  label_col = "label", 
-  prediction_col = "prediction", 
-  raw_prediction_col = "rawPrediction", 
-  uid = random_string("linear_svc_"), 
-  ... 
-) 
+ml_linear_svc(
+  x,
+  formula = NULL,
+  fit_intercept = TRUE,
+  reg_param = 0,
+  max_iter = 100,
+  standardization = TRUE,
+  weight_col = NULL,
+  tol = 1e-06,
+  threshold = 0,
+  aggregation_depth = 2,
+  features_col = "features",
+  label_col = "label",
+  prediction_col = "prediction",
+  raw_prediction_col = "rawPrediction",
+  uid = random_string("linear_svc_"),
+  ...
+)
 ```
 
 ## Arguments
@@ -63,42 +54,39 @@ ml_linear_svc(
 | ... | Optional arguments; see Details. |
 
 
-
 ## Value
- The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it. 
+The object returned depends on the class of `x`. If it is a `spark_connection`, the function returns a `ml_estimator` object. If it is a `ml_pipeline`, it will return a pipeline with the predictor appended to it. If a `tbl_spark`, it will return a `tbl_spark` with the predictions added to it.
 
 
-## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(sparklyr)
- 
-library(dplyr) 
- 
-sc <- spark_connect(master = "local") 
-iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE) 
- 
-partitions <- iris_tbl %>% 
-  filter(Species != "setosa") %>% 
-  sdf_random_split(training = 0.7, test = 0.3, seed = 1111) 
- 
-iris_training <- partitions$training 
-iris_test <- partitions$test 
- 
-svc_model <- iris_training %>% 
-  ml_linear_svc(Species ~ .) 
- 
-pred <- ml_predict(svc_model, iris_test) 
- 
-ml_binary_classification_evaluator(pred) 
- 
- 
-```
+
+
 
 ## See Also
- Other ml algorithms:  `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()` 
+Other ml algorithms: `ml_aft_survival_regression()`, `ml_decision_tree_classifier()`, `ml_gbt_classifier()`, `ml_generalized_linear_regression()`, `ml_isotonic_regression()`, `ml_linear_regression()`, `ml_logistic_regression()`, `ml_multilayer_perceptron_classifier()`, `ml_naive_bayes()`, `ml_one_vs_rest()`, `ml_random_forest_classifier()`
+
+## Examples
+```r
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+library(dplyr)
+
+sc <- spark_connect(master = "local")
+iris_tbl <- sdf_copy_to(sc, iris, name = "iris_tbl", overwrite = TRUE)
+
+partitions <- iris_tbl %>%
+  filter(Species != "setosa") %>%
+  sdf_random_split(training = 0.7, test = 0.3, seed = 1111)
+
+iris_training <- partitions$training
+iris_test <- partitions$test
+
+svc_model <- iris_training %>%
+  ml_linear_svc(Species ~ .)
+
+pred <- ml_predict(svc_model, iris_test)
+
+ml_binary_classification_evaluator(pred)
+
+
+
 ```

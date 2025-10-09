@@ -1,28 +1,19 @@
 ---
 title: "Render Stream"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/stream_view.R*
 
 ## stream_render
 
 ## Description
- Collects streaming statistics to render the stream as an 'htmlwidget'. 
+Collects streaming statistics to render the stream as an 'htmlwidget'.
 
 
 ## Usage
 ```r
- 
-stream_render(stream = NULL, collect = 10, stats = NULL, ...) 
+stream_render(stream = NULL, collect = 10, stats = NULL, ...)
 ```
 
 ## Arguments
@@ -37,26 +28,24 @@ stream_render(stream = NULL, collect = 10, stats = NULL, ...)
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
- 
-library(sparklyr) 
-sc <- spark_connect(master = "local") 
- 
-dir.create("iris-in") 
-write.csv(iris, "iris-in/iris.csv", row.names = FALSE) 
- 
-stream <- stream_read_csv(sc, "iris-in/") %>% 
-  stream_write_csv("iris-out/") 
- 
-stream_render(stream) 
-stream_stop(stream) 
- 
-```
+```r
 
 
+library(sparklyr)
+sc <- spark_connect(master = "local")
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+dir.create("iris-in")
+write.csv(iris, "iris-in/iris.csv", row.names = FALSE)
+
+stream <- stream_read_csv(sc, "iris-in/") %>%
+  stream_write_csv("iris-out/")
+
+stream_render(stream)
+stream_stop(stream)
+
+
 ```

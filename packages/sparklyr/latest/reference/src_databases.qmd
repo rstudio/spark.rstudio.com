@@ -1,34 +1,26 @@
 ---
 title: "Show database list"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/tables_spark.R*
 
 ## src_databases
 
 ## Description
- Show database list 
+Show database list
 
 
 ## Usage
 ```r
- 
-src_databases(sc, ...) 
+src_databases(sc, col = "databaseName", ...)
 ```
 
 ## Arguments
 |Arguments|Description|
 |---|---|
 | sc | A `spark_connection`. |
+| col | The column name of the table that lists all databases may be referred to as `namespace` in some versions of the system. |
 | ... | Optional arguments; currently unused. |
 
 
@@ -38,7 +30,3 @@ src_databases(sc, ...)
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```

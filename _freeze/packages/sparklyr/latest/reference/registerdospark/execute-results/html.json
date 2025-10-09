@@ -1,7 +1,8 @@
 {
-  "hash": "9695d64567d35a49d615ece742f56005",
+  "hash": "e3bfa4fff2c9d59836e04197b1188925",
   "result": {
-    "markdown": "---\ntitle: \"Register a Parallel Backend\"\nexecute:\n  freeze: true\n---\n\n\n\n\n*R/do_spark.R*\n\n## registerDoSpark\n\n## Description\n Registers a parallel backend using the `foreach` package. \n\n\n## Usage\n```r\n \nregisterDoSpark(spark_conn, parallelism = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| spark_conn | Spark connection to use |\n| parallelism | Level of parallelism to use for task execution (if unspecified, then it will take the value of  `SparkContext.defaultParallelism()` which by default is the number  of cores available to the `sparklyr` application) |\n| ... | additional options for sparklyr parallel backend (currently only the only valid option is nocompile = T, F ) |\n\n\n\n## Value\n None \n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\n \n \nsc <- spark_connect(master = \"local\") \nregisterDoSpark(sc, nocompile = FALSE) \n \n \n```\n:::\n\n\n",
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Register a Parallel Backend\"\nexecute:\n  freeze: true\n---\n\n\n\n*R/do_spark.R*\n\n## registerDoSpark\n\n## Description\n Registers a parallel backend using the `foreach` package. \n\n\n## Usage\n```r\n \nregisterDoSpark(spark_conn, parallelism = NULL, ...) \n```\n\n## Arguments\n|Arguments|Description|\n|---|---|\n| spark_conn | Spark connection to use |\n| parallelism | Level of parallelism to use for task execution (if unspecified, then it will take the value of  `SparkContext.defaultParallelism()` which by default is the number  of cores available to the `sparklyr` application) |\n| ... | additional options for sparklyr parallel backend (currently only the only valid option is `nocompile`) |\n\n\n\n## Value\n None \n\n\n## Examples\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(sparklyr)\n \n \nsc <- spark_connect(master = \"local\") \nregisterDoSpark(sc, nocompile = FALSE) \n \n \n```\n:::\n\n\n\n\n\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

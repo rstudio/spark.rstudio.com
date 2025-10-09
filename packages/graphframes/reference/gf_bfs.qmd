@@ -1,29 +1,20 @@
 ---
 title: "Breadth-first search (BFS)"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/gf_bfs.R*
 
 ## gf_bfs
 
 ## Description
- Breadth-first search (BFS) 
+Breadth-first search (BFS)
 
 
 ## Usage
 ```r
- 
-gf_bfs(x, from_expr, to_expr, max_path_length = 10, edge_filter = NULL, 
-  ...) 
+gf_bfs(x, from_expr, to_expr, max_path_length = 10, edge_filter = NULL,
+  ...)
 ```
 
 ## Arguments
@@ -40,18 +31,15 @@ gf_bfs(x, from_expr, to_expr, max_path_length = 10, edge_filter = NULL,
 
 
 
+
+
+
 ## Examples
-```{r, eval=ecodown::examples_not_run()}
-library(graphframes)
- 
-g <- gf_friends(sc) 
-gf_bfs(g, from_expr = "name = 'Esther'", to_expr = "age < 32") 
- 
-```
+```r
 
 
+g <- gf_friends(sc)
+gf_bfs(g, from_expr = "name = 'Esther'", to_expr = "age < 32")
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
+
 ```

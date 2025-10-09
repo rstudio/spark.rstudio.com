@@ -1,49 +1,45 @@
 ---
 title: "Installs PySpark and Python dependencies"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/python-install.R*
 
 ## install_pyspark
 
 ## Description
- Installs PySpark and Python dependencies  Installs Databricks Connect and Python dependencies 
+
+Installs PySpark and Python dependencies 
+
+
+
+ Installs Databricks Connect and Python dependencies
 
 
 ## Usage
 ```r
- 
-install_pyspark( 
-  version = NULL, 
-  envname = NULL, 
-  python_version = NULL, 
-  new_env = TRUE, 
-  method = c("auto", "virtualenv", "conda"), 
-  as_job = TRUE, 
-  install_ml = FALSE, 
-  ... 
-) 
- 
-install_databricks( 
-  version = NULL, 
-  cluster_id = NULL, 
-  envname = NULL, 
-  python_version = NULL, 
-  new_env = TRUE, 
-  method = c("auto", "virtualenv", "conda"), 
-  as_job = TRUE, 
-  install_ml = FALSE, 
-  ... 
-) 
+install_pyspark(
+  version = NULL,
+  envname = NULL,
+  python_version = NULL,
+  new_env = TRUE,
+  method = c("auto", "virtualenv", "conda"),
+  as_job = TRUE,
+  install_ml = FALSE,
+  ...
+)
+
+install_databricks(
+  version = NULL,
+  cluster_id = NULL,
+  envname = NULL,
+  python_version = NULL,
+  new_env = TRUE,
+  method = c("auto", "virtualenv", "conda"),
+  as_job = TRUE,
+  install_ml = FALSE,
+  ...
+)
 ```
 
 ## Arguments
@@ -60,15 +56,11 @@ install_databricks(
 | cluster_id | Target of the cluster ID that will be used with. If provided, this value will be used to extract the cluster's version |
 
 
-
 ## Value
- It returns no value to the R session. This function purpose is to create the 'Python' environment, and install the appropriate set of 'Python' libraries inside the new environment. During runtime, this function will send messages to the console describing the steps that the function is taking. For example, it will let the user know if it is getting the latest version of the Python library from 'PyPi.org', and the result of such query. 
+It returns no value to the R session. This function purpose is to create the 'Python' environment, and install the appropriate set of 'Python' libraries inside the new environment. During runtime, this function will send messages to the console describing the steps that the function is taking. For example, it will let the user know if it is getting the latest version of the Python library from 'PyPi.org', and the result of such query.
 
 
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```
+

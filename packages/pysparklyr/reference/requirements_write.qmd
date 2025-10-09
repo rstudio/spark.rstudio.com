@@ -1,33 +1,24 @@
 ---
 title: "Writes the 'requirements.txt' file, containing the needed Python libraries"
 execute:
+  eval: true
   freeze: true
 ---
-
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-options("pillar.width" = 60)
-library(sparklyr) 
-library(dplyr)
-```
-
-*R/python-requirements.R*
 
 ## requirements_write
 
 ## Description
- This is a helper function that it is meant to be used for deployments of the document or application. By default, `deploy_databricks()` will run this function the first time you use that function to deploy content to Posit Connect. 
+This is a helper function that it is meant to be used for deployments of the document or application. By default, `deploy_databricks()` will run this function the first time you use that function to deploy content to Posit Connect.
 
 
 ## Usage
 ```r
- 
-requirements_write( 
-  envname = NULL, 
-  destfile = "requirements.txt", 
-  overwrite = FALSE, 
-  ... 
-) 
+requirements_write(
+  envname = NULL,
+  destfile = "requirements.txt",
+  overwrite = FALSE,
+  ...
+)
 ```
 
 ## Arguments
@@ -39,15 +30,11 @@ requirements_write(
 | ... | Additional arguments passed to `reticulate::py_list_packages()` |
 
 
-
 ## Value
- No value is returned to R. The output is a text file with the list of Python libraries. 
+No value is returned to R. The output is a text file with the list of Python libraries.
 
 
 
 
 
-```{r, eval=ecodown::examples_not_run()}
-#| include: false
-spark_disconnect_all()
-```
+

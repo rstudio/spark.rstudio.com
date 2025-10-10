@@ -221,6 +221,68 @@ Python, and downloading the Python libraries. After connecting for the first
 time, the session should start much faster, since all of the needed Python
 components are now downloaded and cached. 
 
+### Posit Workench's 'Databricks Pane'
+
+Posit Workbench provides users with a Databricks pane for direct access
+to available Databricks clusters. From this pane, users can view details
+about Databricks clusters and connect directly to them.
+
+![](/images/deployment/connect/databricks-pane-1.png){width="500" fig-align='center'}
+
+<br/>
+To connect to the cluster, click on the 'connection' icon situated to the left
+of its name (circled in yellow below). 
+
+![](/images/deployment/connect/databricks-pane-2.png){fig-align='center'}
+
+Clicking on the icon will open the connection snippet. It will have the cluster's
+ID already populated, as well as the Host URL. In the background, the snipped 
+will automatically get the information from the cluster, such as its DBR version.
+
+The snippet will apply the following logic to recommend the Python virtual 
+environment to use:
+
+1. If there is a `reticulate` Virtual Environment previously created via 
+`install_databricks()` that matches the DBR version of the cluster.
+1. If there is a project level `.venv` folder
+1. If there is a `.venv` folder available at the home directory level
+1. Create a temporary Virtual Environment using `uv` 
+
+The recommendation appears on the 'Python Env' drop down. 
+
+![](/images/deployment/connect/snippet.png){fig-align='center'}
+
+<br/>
+
+The drop down will include an option to **let {reticulate} choose the Python
+environment**. The way `reticulate` chooses an environment is found here: 
+[Order of Discovery](https://rstudio.github.io/reticulate/articles/versions.html#order-of-discovery).
+Another option available is the one to **create the temporary UV
+environment**. Additional options appear based on whatever applies from the first
+three options in the list above. All three could appear if there is a virtual
+environment that matches the DBR version of the cluster, and there are `.venv` 
+folders at the project and home directory, but only one will be automatically selected.
+
+**Important:** Using `install_databricks()` or letting `pysparklyr` create the temporary
+UV environment, `pysparklyr` will make sure to install the correct Python
+packages needed to work with the cluster. But selecting **let {reticulate} 
+choose the Python environment** or a `.venv` environment does not install 
+any Python packages, it assumes that the user has already prepared the Python
+environment.
+
+![](/images/deployment/connect/snippet-dropdown.png){fig-align='center'}
+
+
+
+The snippet modifies the `envname` argument in `spark_connect()` based on
+the final selection. The resulting code can later be modified if needed. For
+example, if a specific Python environment is needed which was not identified
+by the snippet, then the `envname` of the code can be modified after pressing
+'OK'.
+
+More details about this feature can be found in 
+[Posit Workbench's official user guide](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
+
 ## Serveless Compute
 
 [Databricks' Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
@@ -288,7 +350,7 @@ library(dbplyr)
 library(sparklyr)
 
 sc <- spark_connect(
-    cluster_id = "0903-144947-d1wfqvb4",
+    cluster_id = "1010-182058-h7wkx3s7",
     method = "databricks_connect"
 )
 ```
@@ -320,15 +382,6 @@ trips %>%
   )
 ```
 
-### Posit Workench's 'Databricks Pane'
-
-Posit Workbench provides users with a Databricks pane for direct access
-to available Databricks clusters. From this pane, users can view details
-about Databricks clusters and connect directly to them. More details
-about this feature can be found
-[here](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
-
-![](/images/deployment/databricks/workbench-databricks-pane.png){width="500"}
 
 
 ## Machine Learning

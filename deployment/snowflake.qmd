@@ -1,0 +1,112 @@
+---
+title: Snowflake
+subtitle: Snowpark Connect
+format:
+  html:
+    theme: default
+    toc: true
+execute:
+    eval: true
+    freeze: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+*Last updated: `r lubridate::date()`*
+
+## Intro
+
+Snowflake's [Snowpark Connect](https://docs.snowflake.com/en/developer-guide/snowpark-connect/snowpark-connect-overview)
+enables running Spark workloads remotely.  Snowpark Connect for Spark supports 
+using the Spark Dataframe API on Snowflake. 
+
+Snowpark Connect is based on [Spark Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html).
+This architecture decouples client  and server, so that Spark code can run
+remotely against the Snowflake compute engine without your needing to manage a 
+Spark cluster.
+
+## Package Installation
+
+To access Snowpark Connect, you will need the following two packages:
+
+-   `sparklyr` 
+-   `pysparklyr` 
+
+This feature is currently in development, so you will need to install `pysparklyr`
+from GitHub:
+
+``` r
+install.packages("sparklyr")
+pak::pak("mlverse/pysparklyr")
+```
+
+## First time connecting
+
+In order to connect, you must provide the following details from Snowflake:
+
+- Account Identifier 
+- Login name (user name)
+- Personal Access Token (PAT)
+- Default warehouse
+- Default database
+- Default schema
+
+The Account Idetifier and Login name can be found in the web portal of the 
+target Snowflake's environment. It is available in 'Connect a tool to Snowflake'
+link which is found when clicking on your user's initials link. To setup a
+Personal Access Token, follow the instructions found here: 
+[Generating a programmatic access token](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens#generating-a-programmatic-access-token).
+
+The connection will still succeed even if warehouse, database and schema are not
+provided. However, this will cause an issue when trying to navigate to the
+Snowflake catalog in RStudio's Connections pane. 
+
+In terms of actual code, this is how each piece of information is passed: 
+
+```r
+sc <- spark_connect(
+  master = "[Account Identifier]",
+  method = "snowpark_connect",
+  connection_parameters = list(
+    user = "[Login name]",
+    password = "[Personal Access Token]",
+    warehouse = "[Default warehouse]",
+    database = "[Default database]",
+    schema = "[Default schema]"
+  )
+)
+```
+
+The Account Identifier is passed as the `master`, the other pieces of information
+are passed under the `connection_parameters` argument as a list object. Use
+the method `snowpark_connect`. 
+
+::: {.callout-note}
+Avoid using your Personal Access Token as open text in your code. There are
+several ways to obfuscate it, such as loading it into an Environment Variable
+or using the [`config`](https://rstudio.github.io/config/articles/introduction.html)
+package.
+:::
+
+## Posit Workbench
+
+Posit Workbench supports [integrated authentication with 
+Snowflake](https://docs.posit.co/ide/server-pro/admin/integration/snowflake.html).
+If this integration is setup in your Workbench environment, `sparklyr` is able
+to automatically pickup your OAuth token and use it to connect. The only 
+information that is needed would be the warehouse, database and schema:
+
+```r
+sc <- spark_connect(
+  method = "snowpark_connect",
+  connection_parameters = list(
+    warehouse = "[Default warehouse]",
+    database = "[Default database]",
+    schema = "[Default schema]"
+  )
+)
+```
+
+
+

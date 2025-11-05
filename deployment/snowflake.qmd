@@ -88,3 +88,25 @@ several ways to obfuscate it, such as loading it into an Environment Variable
 or using the [`config`](https://rstudio.github.io/config/articles/introduction.html)
 package.
 :::
+
+## Posit Workbench
+
+Posit Workbench supports [integrated authentication with 
+Snowflake](https://docs.posit.co/ide/server-pro/admin/integration/snowflake.html).
+If this integration is setup in your Workbench environment, `sparklyr` is able
+to automatically pickup your OAuth token and use it to connect. The only 
+information that is needed would be the warehouse, database and schema:
+
+```r
+sc <- spark_connect(
+  method = "snowpark_connect",
+  connection_parameters = list(
+    warehouse = "[Default warehouse]",
+    database = "[Default database]",
+    schema = "[Default schema]"
+  )
+)
+```
+
+
+

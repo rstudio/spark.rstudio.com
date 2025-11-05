@@ -41,3 +41,50 @@ install.packages("sparklyr")
 pak::pak("mlverse/pysparklyr")
 ```
 
+## First time connecting
+
+In order to connect, you must provide the following details from Snowflake:
+
+- Account Identifier 
+- Login name (user name)
+- Personal Access Token (PAT)
+- Default warehouse
+- Default database
+- Default schema
+
+The Account Idetifier and Login name can be found in the web portal of the 
+target Snowflake's environment. It is available in 'Connect a tool to Snowflake'
+link which is found when clicking on your user's initials link. To setup a
+Personal Access Token, follow the instructions found here: 
+[Generating a programmatic access token](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens#generating-a-programmatic-access-token).
+
+The connection will still succeed even if warehouse, database and schema are not
+provided. However, this will cause an issue when trying to navigate to the
+Snowflake catalog in RStudio's Connections pane. 
+
+In terms of actual code, this is how each piece of information is passed: 
+
+```r
+sc <- spark_connect(
+  master = "[Account Identifier]",
+  method = "snowpark_connect",
+  connection_parameters = list(
+    user = "[Login name]",
+    password = "[Personal Access Token]",
+    warehouse = "[Default warehouse]",
+    database = "[Default database]",
+    schema = "[Default schema]"
+  )
+)
+```
+
+The Account Identifier is passed as the `master`, the other pieces of information
+are passed under the `connection_parameters` argument as a list object. Use
+the method `snowpark_connect`. 
+
+::: {.callout-note}
+Avoid using your Personal Access Token as open text in your code. There are
+several ways to obfuscate it, such as loading it into an Environment Variable
+or using the [`config`](https://rstudio.github.io/config/articles/introduction.html)
+package.
+:::

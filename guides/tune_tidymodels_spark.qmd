@@ -2,7 +2,7 @@
 title: "Tune `tidymodels` in Spark"
 execute:
   eval: true
-  freeze: false
+  freeze: true
 ---
 
 ```{r}
@@ -12,20 +12,43 @@ library(sparklyr)
 library(tidymodels)
 library(readmission)
 
-if (!interactive()) {
+if(FALSE) { # if (!interactive()) {
   pysparklyr::install_pyspark("4.1.0", python_version = "3.12")  
-  reticulate::py_install("zstandard")
-  reticulate::py_install("rpy2")
+  reticulate::py_install("rpy2", envname = "r-sparklyr-pyspark-4.1")
 }
 
-
 # TODO: Remove before publishing
-readmission <- readmission[1:1000, ]
+# readmission <- readmission[1:1000, ]
 ```
+
+
+The ability of Spark to easily distribute tasks across multiple nodes (servers)
+makes it a great target to run "embarrassing parallel" jobs, such as hyper-parameter
+tuning. For R users, the challenge is to have to learn how to run experiments 
+using the Spark ML components. Ideally, we would like to use the already familiar
+modeling R packages but have the computation happen somewhere else, faster,
+and with little to no changes to our original code. 
+
+**It is important to note
+that we are not speaking of "big data", but rather of something more like 
+"big processing"**.  What takes the job a long time to complete is the fact that
+there are numerous tuning combination that need to be discretely processed 
+(fit training data, predict on evaluation data, calculate metrics), and not that
+we have to train on gigabytes and gigabytes of data. 
+
+Using `sparklyr`, it is now possible to use the exact same R objects created
+to process the model tuning, but have the tuning itself occur in Spark. `sparklyr`
+will upload the R objects to your Spark session automatically, and have all
+of the parallel jobs run remotely. Everything made possible by running a
+very similar function call. Instead of running `tune_grid()`, we would run
+`tune_grid_spark()`, which has the extact same arguments as `tune_grid()`, with
+a couple of additions, such as requiring a current Spark connection.
 
 
 ```{r}
 #| eval: false
+
+# TODO: Replace with actual installation instructions at release time
 
 remotes::install_github("sparklyr/sparklyr", ref = "grid2")
 remotes::install_github("tidymodels/tune", ref = "grid2")
@@ -33,6 +56,10 @@ remotes::install_github("mlverse/pysparklyr", ref = "grid2")
 ```
 
 ## Prepare the workflow and re-samples locally
+
+Today, the framework that has become the standard for machine learning in R is 
+`tidymodels`. 
+
 
 ```{r}
 library(tidymodels)
@@ -67,24 +94,31 @@ spec_bt <- boost_tree(
   )
 ```
 
-```{r}
-results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
-```
-
 ## Tune in Spark Connect
 
 ```{r}
 #| eval: false
 library(sparklyr)
+```
 
+
+### Start Spark Connect locally
+
+1. Install Spark locally if the version you wish to use is not available locally
+yet
+
+```{r}
 spark_install("4.1.0")
 ```
 
+2. Start the Spark Connect service locally. Make sure to match the Spark version
+you recently installed
 
 ```{r}
 pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
 ```
 
+3. Connect to the Spark Connect services
 
 ```{r}
 sc <- spark_connect(
@@ -94,8 +128,20 @@ sc <- spark_connect(
   )
 ```
 
+### Tune the model
+
 ```{r}
 spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds)
+```
+
+```{r}
+spark_results
+```
+
+## Compare with local results
+
+```{r}
+results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
 ```
 
 ```{r}

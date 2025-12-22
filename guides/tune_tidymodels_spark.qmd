@@ -1,0 +1,109 @@
+---
+title: "Tune `tidymodels` in Spark"
+execute:
+  eval: true
+  freeze: false
+---
+
+```{r}
+#| include: false
+
+library(sparklyr)
+library(tidymodels)
+library(readmission)
+
+if (!interactive()) {
+  pysparklyr::install_pyspark("4.1.0", python_version = "3.12")  
+  reticulate::py_install("zstandard")
+  reticulate::py_install("rpy2")
+}
+
+
+# TODO: Remove before publishing
+readmission <- readmission[1:1000, ]
+```
+
+
+```{r}
+#| eval: false
+
+remotes::install_github("sparklyr/sparklyr", ref = "grid2")
+remotes::install_github("tidymodels/tune", ref = "grid2")
+remotes::install_github("mlverse/pysparklyr", ref = "grid2")
+```
+
+## Prepare the workflow and re-samples locally
+
+```{r}
+library(tidymodels)
+library(readmission)
+
+set.seed(1)
+
+readmission_splits <- initial_split(readmission, strata = readmitted)
+
+readmission_folds <- vfold_cv(
+  data = training(readmission_splits),
+  strata = readmitted
+  )
+
+recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
+  step_mutate(
+    race = factor(case_when(
+      !(race %in% c("Caucasian", "African American")) ~ "Other",
+      .default = race
+    ))
+  ) |>
+  step_unknown(all_nominal_predictors()) |>
+  step_YeoJohnson(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_dummy(all_nominal_predictors())
+
+spec_bt <- boost_tree(
+  mode = "classification",
+  mtry = tune(),
+  learn_rate = tune(),
+  trees = 10
+  )
+```
+
+```{r}
+results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
+```
+
+## Tune in Spark Connect
+
+```{r}
+#| eval: false
+library(sparklyr)
+
+spark_install("4.1.0")
+```
+
+
+```{r}
+pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
+```
+
+
+```{r}
+sc <- spark_connect(
+  "sc://localhost",
+  method = "spark_connect",
+  version = "4.1.0"
+  )
+```
+
+```{r}
+spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds)
+```
+
+```{r}
+show_best(results)
+show_best(spark_results)
+```
+
+```{r}
+pysparklyr::spark_connect_service_stop()
+```
+

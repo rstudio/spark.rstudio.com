@@ -1,8 +1,8 @@
 ---
-title: "Tune `tidymodels` in Spark"
+title: "Tune `tidymodels` remotely in Spark Connect"
 execute:
-  eval: true
-  freeze: true
+  eval: false
+  freeze: false
 ---
 
 ```{r}
@@ -103,8 +103,8 @@ spec_bt <- boost_tree(
 ```
 
 Typically, the next step would be to execute the hyper-parameter tuning by
-calling `tune_grid()`. This is where we will diverge in order to use Spark
-instead of our laptop to tune the model.
+calling `tune_grid()`. This is where we will diverge in order to use Spark,
+instead of our laptop, to tune the model.
 
 ## Tune in Spark Connect
 
@@ -125,21 +125,21 @@ start a local Spark Connect service. Please keep in mind that it is not necessar
 to create anything local if you already have a Spark Connect service available
 somewhere else, such as a vendor provided one. 
 
-1. Install Spark locally if the version you wish to use is not available locally
-yet
-
+1. Install Spark locally if the version you wish to use is not available locally yet:
 ```{r}
 spark_install("4.1.0")
 ```
 
 2. Start the Spark Connect service locally. Make sure to match the Spark version
-you recently installed
+you recently installed:
 
 ```{r}
 pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
 ```
 
 ### Tune the model
+
+The first step is to connect to to the Spark Connect instance. 
 
 ```{r}
 sc <- spark_connect(
@@ -149,27 +149,60 @@ sc <- spark_connect(
   )
 ```
 
+Now, to start the model tuning, we call `tune_grid_spark()`. The minimal required
+arguments are:
+
+1. Spark connection
+1. Model specification (`parsnip`)
+1. Pre-processor (`recipe`)
+1. Re-sampled data (`rsample`)
 
 ```{r}
 spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds)
 ```
 
+As part of adding this feature, `sparklyr` imported a lot of the functionality
+directly from the `tidymodels` packages in order to offer an equivalent experience,
+as well as to perform the same checks. The resulting object will look 
+indistinguishable from that created directly locally by `tidymodels`:
+
 ```{r}
 spark_results
 ```
 
+The object can now be used to inspect and eventually finalize the model 
+selection.
+
+```{r}
+autoplot(spark_results)
+```
+
+
 ## Compare with local results
+
+The steps in this section would not be necessary in a 'real world' scenario. 
+This is to show how the results returned by running `tune_grid()` compare to
+those from `tune_grid_spark()`
 
 ```{r}
 results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
-```
 
-```{r}
+# Use show_best() to compare the recommendations
+
 show_best(results)
 show_best(spark_results)
 ```
 
-TODO: Make sure to mention that R and package versions will affect results but the output will be reproducible
+In this case, both calls returned the exact same results. This is because both
+ran using the same exact versions R and R packages that our Positron or RStudio
+would access. It is important to note that if the tuning would occur in a remote
+Spark cluster, that has different Operating System, R version and/or R packages,
+then the results would come back different. It is also important to differentiate 
+between different results from local and not reproducible results. The results
+will still be consistent if the job is run the exact same way, and the `seed` is
+set during the local R session that calls the remote Spark jobs.  `sparklyr`
+recreates how `tune` sets the R seed for each Spark task, so the jobs will remain
+consistent after each repeated run.
 
 ## Other features 
 

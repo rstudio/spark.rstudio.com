@@ -1,8 +1,8 @@
 ---
 title: "Tune `tidymodels` in Spark"
 execute:
-  eval: true
-  freeze: true
+  eval: false
+  freeze: false
 ---
 
 ```{r}
@@ -57,8 +57,13 @@ remotes::install_github("mlverse/pysparklyr", ref = "grid2")
 
 ## Prepare the workflow and re-samples locally
 
-Today, the framework that has become the standard for machine learning in R is 
-`tidymodels`. 
+The standard framework for Machine Learning in R is 
+[Tidymodels](https://www.tidymodels.org/). It is a collection of packages that
+are designed to work together to provide everything from re-sampling, to 
+pre-processing, to model tuning, to performance measurement. 
+
+The following code prepares all the components needed to run hyper-parameter model
+tuning in order to identify the best combination of parameters:
 
 
 ```{r}
@@ -67,6 +72,7 @@ library(readmission)
 
 set.seed(1)
 
+# Data set resampling 
 readmission_splits <- initial_split(readmission, strata = readmitted)
 
 readmission_folds <- vfold_cv(
@@ -74,6 +80,7 @@ readmission_folds <- vfold_cv(
   strata = readmitted
   )
 
+# Data pre-processing
 recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
   step_mutate(
     race = factor(case_when(
@@ -86,10 +93,11 @@ recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
   step_normalize(all_numeric_predictors()) |>
   step_dummy(all_nominal_predictors())
 
+# Model specification
 spec_bt <- boost_tree(
   mode = "classification",
-  mtry = tune(),
-  learn_rate = tune(),
+  mtry = tune(), # Part of the hyper-parameters to tune
+  learn_rate = tune(), # Part of the hyper-parameters to tune
   trees = 10
   )
 ```

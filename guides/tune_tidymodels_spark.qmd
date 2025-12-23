@@ -1,8 +1,8 @@
 ---
 title: "Tune `tidymodels` remotely in Spark Connect"
 execute:
-  eval: false
-  freeze: false
+  eval: true
+  freeze: true
 ---
 
 ```{r}
@@ -204,11 +204,17 @@ set during the local R session that calls the remote Spark jobs.  `sparklyr`
 recreates how `tune` sets the R seed for each Spark task, so the jobs will remain
 consistent after each repeated run.
 
-## Other features 
+## Spark parallelization
 
-### Number of parallel Spark tasks
+A lot of effort was made to make sure that tuning the model remotely in Spark was
+as easy and automatic as possible. `sparklyr` copies the necessary R objects, and
+uses the same defaults `tune_grid()` and Spark itself use in order to not have
+to decide or setup more things than necessary. 
 
-### How to group parallel jobs 
+However, there are a few ways to customize the tuning in Spark. They relate how
+each hyper-parameter tuning task will be parallelized. The first way is to
+control the number of discrete tasks that will be requested to Spark, and the
+second how the hyper-parameter tuning combinations will be grouoped.
 
 
 ```{r}

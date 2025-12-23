@@ -102,7 +102,15 @@ spec_bt <- boost_tree(
   )
 ```
 
+Typically, the next step would be to execute the hyper-parameter tuning by
+calling `tune_grid()`. This is where we will diverge in order to use Spark
+instead of our laptop to tune the model.
+
 ## Tune in Spark Connect
+
+The feature of tuning remotely it is only available for Spark Connect connections,
+and its vendor variants such as Databricks Connect. The variants will need to 
+have R installed and available in their Spark nodes.  
 
 ```{r}
 #| eval: false
@@ -111,6 +119,11 @@ library(sparklyr)
 
 
 ### Start Spark Connect locally
+
+To show a full example throughout this article, we have included the steps to
+start a local Spark Connect service. Please keep in mind that it is not necessary
+to create anything local if you already have a Spark Connect service available
+somewhere else, such as a vendor provided one. 
 
 1. Install Spark locally if the version you wish to use is not available locally
 yet
@@ -126,7 +139,8 @@ you recently installed
 pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
 ```
 
-3. Connect to the Spark Connect services
+
+### Tune the model
 
 ```{r}
 sc <- spark_connect(
@@ -136,7 +150,6 @@ sc <- spark_connect(
   )
 ```
 
-### Tune the model
 
 ```{r}
 spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds)
@@ -157,7 +170,15 @@ show_best(results)
 show_best(spark_results)
 ```
 
+TODO: Make sure to mention that R and package versions will affect results but the output will be reproducible
+
+## Other features 
+
+### Number of parallel Spark tasks
+
+### How to group parallel jobs 
+
+
 ```{r}
 pysparklyr::spark_connect_service_stop()
 ```
-

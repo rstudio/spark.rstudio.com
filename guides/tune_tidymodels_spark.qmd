@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -66,46 +66,22 @@ remotes::install_github("tidymodels/tune", ref = "grid2")
 remotes::install_github("mlverse/pysparklyr", ref = "grid2")
 ```
 
-
 ::: {#fig-cluster}
 ```{mermaid}
 %%| fig-width: 6
-
-classDiagram
-  class R {
-  }
-  class Spark {
-  }
-  class Node1{
-    Job 1 - Model 1
-    Job 2 - Model 2
-    Job 3 - Model 3
-    Job 4 - Model 4    
-  }
-  class Node2{
-    Job 1 - Model 5
-    Job 2 - Model 6
-    Job 3 - Model 7
-    Job 4 - Model 8       
-  }
-  class Node3{
-    Job 1 - Model 9
-    Job 2 - Model 10
-    Job 3 - Model 11
-    Job 4 - Model 12      
-  }  
-  class Node4{
-    Job 1 - Model 13
-    Job 2 - Model 14
-    Job 3 - Model 15
-    Job 4 - Model 16      
-  }    
-  R --> Spark : Resamples,Model,Preprocessor
-  Spark --> Node1
-  Spark --> Node2
-  Spark --> Node3
-  Spark --> Node4
-
+flowchart RL
+  subgraph sc [Spark Connect]
+   p[Parallel processes]
+  end
+  r[local R]  -- Re-samples --> sc
+  r -- Model --> sc
+  r -- Pre-processor --> sc
+  sc -.- rs[Results] -.-> r
+  style sc fill:#F0B675,stroke:#666,color:#000;
+  style p fill:#F8DDBF,stroke:#666,color:#000;
+  style r fill:#75C7F0,stroke:#666,color:#000;
+  style rs fill:#ddd,stroke:#ddd,color:#000;
+  linkStyle default stroke:#666,color:#000
 ```
 
 Model tuning in a Spark cluster

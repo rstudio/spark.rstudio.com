@@ -309,25 +309,57 @@ results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
 There are two possible values to use in `parallel_over`: 
 
 1. **resamples** *(default)* - The tuning is performed in parallel over the 
-resamples alone. In the example, `readmission_folds` has 10 folds/resamples.
+resamples alone. In the example, `readmission_folds` has 10 folds/resamples. If 
+we had 4 tasks available from Spark, then the 10 folds would be distributed
+across that number of tasks. This means that some two tasks will run 2 folds, 
+the the other two will run 3 folds, see @fig-resamples.
+
+::: {#fig-resamples}
+```{mermaid}
+%%| fig-width: 6
+flowchart RL
+  subgraph j [<b>Job</b>]
+   t1[<b>Task 1</b> <br/> Fold 1 <br/> Fold 2 <br/> Fold 3]
+   t2[<b>Task 2</b> <br/> Fold 4 <br/> Fold 5 <br/> Fold 6]
+   t3[<b>Task 3</b> <br/> Fold 7 <br/> Fold 8]
+   t4[<b>Task 4</b> <br/> Fold 9 <br/> Fold 10]
+  end
+  style j fill:#fff,stroke:#666,color:#000;
+  linkStyle default stroke:#666,color:#000
+```
+
+How "resamples" works in Spark
+:::
 
 1. **everything** - The tuning will be performed in parallel for each 
 individual permutation of resamples and tuning combinations.  In the example,
 there are 10 tune combinations, which are then combined with the 10 
-folds/resamples, giving us 100 permutations.  
+folds/resamples, giving us 100 total combinations.  If we had 4 tasks available from
+Spark, then each would run 25 combinations.
 
+::: {#fig-everything}
+```{mermaid}
+%%| fig-width: 6
+flowchart RL
+  subgraph j [<b>Job</b>]
+   t1[<b>Task 1</b> <br/> Fold 1 - Combo 1 <br/> ... <br/> ...  <br/> Fold 3 - Combo 5]
+   t2[<b>Task 2</b> <br/> Fold 3 - Combo 6 <br/> ... <br/> ...  <br/> Fold 5 - Combo 10]
+   t3[<b>Task 3</b> <br/> Fold 6 - Combo 1 <br/> ... <br/> ...  <br/> Fold 8 - Combo 5]
+   t4[<b>Task 4</b> <br/> Fold 8 - Combo 6 <br/> ... <br/> ...  <br/> Fold 10 - Combo 10]
+  end
+  style j fill:#fff,stroke:#666,color:#000;
+  linkStyle default stroke:#666,color:#000
+```
 
-A lot of effort was made to make sure that tuning the model remotely in Spark was
-as easy and automatic as possible. `sparklyr` copies the necessary R objects, and
-uses the same defaults `tune_grid()` and Spark itself use in order to not have
-to decide or setup more things than absolutely necessary. 
+How "everything" works in Spark
+:::
 
+In either case, despite the number of re-samples, or number of tuning +
+re-samples combinations, the limit of how many processes run in parallel is set
+by how many tasks are created for the job.  The more nodes and cores there are 
+available in the Spark cluster, the more possible parallel tasks could be 
+schedule to run for the job. 
 
-
-However, there are a few ways to customize the tuning in Spark. They relate how
-each hyper-parameter tuning task will be parallelized. The first way is to
-control the number of discrete tasks that will be requested to Spark, and the
-second how the hyper-parameter tuning combinations will be grouped.
 
 ```{r}
 #| eval: !expr 'run_r'

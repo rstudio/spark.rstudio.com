@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -310,14 +310,11 @@ There are two possible values to use in `parallel_over`:
 
 1. **resamples** *(default)* - The tuning is performed in parallel over the 
 resamples alone. In the example, `readmission_folds` has 10 folds/resamples.
-This means that 
-
 
 1. **everything** - The tuning will be performed in parallel for each 
 individual permutation of resamples and tuning combinations.  In the example,
 there are 10 tune combinations, which are then combined with the 10 
 folds/resamples, giving us 100 permutations.  
-
 
 
 A lot of effort was made to make sure that tuning the model remotely in Spark was

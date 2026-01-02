@@ -252,13 +252,40 @@ as easy and automatic as possible. `sparklyr` copies the necessary R objects, an
 uses the same defaults `tune_grid()` and Spark itself use in order to not have
 to decide or setup more things than necessary. 
 
+By default, Spark will run as many concurrent jobs as there are CPU cores 
+made available by the cluster. 
+
 However, there are a few ways to customize the tuning in Spark. They relate how
 each hyper-parameter tuning task will be parallelized. The first way is to
 control the number of discrete tasks that will be requested to Spark, and the
 second how the hyper-parameter tuning combinations will be grouped.
 
+## Retrieving predictions a.k.a `save_pred = TRUE`
+
+`sparklyr` supports getting the out-of-sample predictions if they are saved. That
+is done by using `control_grid()` when calling `tune_grid()`.
 
 ```{r}
 #| eval: !expr 'run_r'
+cntrl <- control_grid(save_pred = TRUE)
+
+results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+```
+
+There will be a second job that executes in Spark. This job does not really
+process anything. The job just reads and download the predictions into the R 
+session.
+
+Once the tuning is completed, the predictions can be used in the R session
+as if they were all processed locally.
+
+```{r}
+#| eval: !expr 'run_r'
+collect_predictions(results)
+```
+
+```{r}
+#| eval: !expr 'run_r'
+#| include: false
 pysparklyr::spark_connect_service_stop()
 ```

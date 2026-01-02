@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- TRUE
+run_r <- FALSE
 
 ```
 
@@ -74,13 +74,13 @@ flowchart RL
    p[Parallel processes]
   end
   r[local R]  -- Re-samples --> sc
+  sc -.- rs[Results] -.-> r
   r -- Model --> sc
   r -- Pre-processor --> sc
-  sc -.- rs[Results] -.-> r
   style sc fill:#F0B675,stroke:#666,color:#000;
   style p fill:#F8DDBF,stroke:#666,color:#000;
   style r fill:#75C7F0,stroke:#666,color:#000;
-  style rs fill:#ddd,stroke:#ddd,color:#000;
+  style rs fill:#333,stroke:#333,color:#fff;
   linkStyle default stroke:#666,color:#000
 ```
 
@@ -245,21 +245,6 @@ set during the local R session that calls the remote Spark jobs.  `sparklyr`
 recreates how `tune` sets the R seed for each Spark task, so the jobs will remain
 consistent after each repeated run.
 
-## Spark parallelization
-
-A lot of effort was made to make sure that tuning the model remotely in Spark was
-as easy and automatic as possible. `sparklyr` copies the necessary R objects, and
-uses the same defaults `tune_grid()` and Spark itself use in order to not have
-to decide or setup more things than necessary. 
-
-By default, Spark will run as many concurrent jobs as there are CPU cores 
-made available by the cluster. 
-
-However, there are a few ways to customize the tuning in Spark. They relate how
-each hyper-parameter tuning task will be parallelized. The first way is to
-control the number of discrete tasks that will be requested to Spark, and the
-second how the hyper-parameter tuning combinations will be grouped.
-
 ## Retrieving predictions a.k.a `save_pred = TRUE`
 
 `sparklyr` supports getting the out-of-sample predictions if they are saved. That
@@ -283,6 +268,45 @@ as if they were all processed locally.
 #| eval: !expr 'run_r'
 collect_predictions(results)
 ```
+
+## Parallel processing in Spark
+
+In Spark, the term **job** differs from the term **task**. A single job
+contains multiple tasks that can run in parallel. Spark will run as many 
+*concurrent tasks* as there are CPU cores that the cluster makes available to
+that particular job. In the example on @fig-job-task, a single job is running
+4 tasks in parallel thanks to each running in a separate core.
+
+::: {#fig-job-task}
+```{mermaid}
+%%| fig-width: 6
+flowchart RL
+  subgraph j [Job]
+   t1[<b>Task 1</b> <br/> Core 1]
+   t2[<b>Task 2</b> <br/> Core 2]
+   t3[<b>Task 3</b> <br/> Core 3]
+   t4[<b>Task 4</b> <br/> Core 4]
+  end
+  style j fill:#fff,stroke:#666,color:#000;
+  linkStyle default stroke:#666,color:#000
+```
+
+Job vs. Task in Spark example
+:::
+
+
+
+A lot of effort was made to make sure that tuning the model remotely in Spark was
+as easy and automatic as possible. `sparklyr` copies the necessary R objects, and
+uses the same defaults `tune_grid()` and Spark itself use in order to not have
+to decide or setup more things than absolutely necessary. 
+
+
+
+However, there are a few ways to customize the tuning in Spark. They relate how
+each hyper-parameter tuning task will be parallelized. The first way is to
+control the number of discrete tasks that will be requested to Spark, and the
+second how the hyper-parameter tuning combinations will be grouped.
 
 ```{r}
 #| eval: !expr 'run_r'

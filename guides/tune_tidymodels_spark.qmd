@@ -206,24 +206,22 @@ sc <- spark_connect(
 
 ### Tune the model
 
-The minimum requirements to tune the model in Spark are:
-
-1. Spark connection
-1. Model specification (`parsnip`)
-1. Pre-processor (`recipe`)
-1. Re-sampled data (`rsample`)
-
-There are passed to a function in `sparklyr` called `tune_grid_spark()`.
+Once connected to Spark, to execute the tuning run: 
 
 ```{r}
 #| eval: !expr 'run_r'
-spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds)
+spark_results <- tune_grid_spark(
+  sc = sc, # Spark connection
+  object = spec_bt, # Model specification (`parsnip`)
+  preprocessor = recipe_basic, 
+  resamples = readmission_folds 
+  )
 ```
 
-As part of adding this feature, `sparklyr` imported a lot of the functionality
-directly from the `tidymodels` packages in order to offer an equivalent experience,
-as well as to perform the same checks. The resulting object will look 
-indistinguishable from that created directly locally by `tidymodels`:
+As part of adding this feature, `sparklyr` ported a lot of the functionality
+directly from the `tidymodels` packages in order to offer an equivalent 
+experience, as well as to perform the same checks. The resulting object will 
+look indistinguishable from that created directly by `tidymodels` locally in R:
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -250,7 +248,6 @@ those from `tune_grid_spark()`
 results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
 
 # Use show_best() to compare the recommendations
-
 show_best(results)
 
 show_best(spark_results)
@@ -302,7 +299,7 @@ flag is set. As with `tune_grid()`, that is driven by setting a value for
 
 cntrl <- control_grid(parallel_over = "resamples")
 
-results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+results <- tune_grid_spark(spec_bt, recipe_basic, readmission_folds, control = cntrl)
 ```
 
 There are two possible values to use in `parallel_over`: 
@@ -378,7 +375,7 @@ is done by using `control_grid()` when calling `tune_grid()`.
 #| eval: !expr 'run_r'
 cntrl <- control_grid(save_pred = TRUE)
 
-results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+results <- tune_grid_spark(spec_bt, recipe_basic, readmission_folds, control = cntrl)
 ```
 
 There will be a second Spark job that executes. The job only reads the files 

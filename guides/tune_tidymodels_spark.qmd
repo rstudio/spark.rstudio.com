@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -26,7 +26,7 @@ if(FALSE) { # if (!interactive()) {
 }
 
 # TODO: Remove before publishing
-readmission <- readmission[1:1000, ]
+# readmission <- readmission[1:1000, ]
 ```
 
 ## Intro
@@ -299,7 +299,7 @@ flag is set. As with `tune_grid()`, that is driven by setting a value for
 
 cntrl <- control_grid(parallel_over = "resamples")
 
-results <- tune_grid_spark(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds, control = cntrl)
 ```
 
 There are two possible values to use in `parallel_over`: 
@@ -375,7 +375,7 @@ is done by using `control_grid()` when calling `tune_grid()`.
 #| eval: !expr 'run_r'
 cntrl <- control_grid(save_pred = TRUE)
 
-results <- tune_grid_spark(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds, control = cntrl)
 ```
 
 There will be a second Spark job that executes. The job only reads the files 
@@ -387,5 +387,5 @@ would have done that locally in R.
 
 ```{r}
 #| eval: !expr 'run_r'
-collect_predictions(results)
+collect_predictions(spark_results)
 ```

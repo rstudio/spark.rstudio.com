@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -26,7 +26,7 @@ if(FALSE) { # if (!interactive()) {
 }
 
 # TODO: Remove before publishing
-# readmission <- readmission[1:1000, ]
+readmission <- readmission[1:1000, ]
 ```
 
 ## Intro
@@ -147,11 +147,25 @@ laptop, to tune the model.
 Remote model tuning is only available for Spark Connect connections,
 and its vendor variants such as [Databricks Connect](../deployment/databricks-connect.qmd). 
 
-The Spark cluster will need to to have R, and recent installations of several
-R packages, available in all its nodes.
+### Spark requirements
 
+In all of its nodes, the Spark cluster will need an R run-time, and recent 
+installations of some R packages. There is also a Python package requirement:
 
+**R**
 
+- `tidymodels`
+
+- `reticulate`
+
+**Python**
+
+- `rpy2`
+
+If tuning on a model not available in base R, then the package containing that
+model will need to be installed. In the example on this article, the default
+for `boost_tree()` is XGboost. This means that the `xbgoost` package should be
+available in the cluster.
 
 ### Connect to Spark
 

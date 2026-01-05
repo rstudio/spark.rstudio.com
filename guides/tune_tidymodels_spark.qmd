@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- TRUE
+run_r <- FALSE
 
 ```
 
@@ -169,12 +169,14 @@ available in the cluster.
 
 ### Connect to Spark
 
-To show a full example throughout this article, we have included the steps to
-start a local Spark Connect service. Please keep in mind that it is not necessary
+To show a full example in this article, we have included the steps to
+start a *local* Spark Connect service. Keep in mind that it is not necessary
 to create anything local if you already have a Spark Connect service available
-somewhere else, such as a vendor provided one. 
+somewhere else, such as a vendor provided cluster. 
 
-1. Install Spark locally if the version you wish to use is not available locally yet:
+1. Install Spark locally if the version you wish to use is not available locally 
+yet:
+
 ```{r}
 #| eval: false
 #| 
@@ -191,7 +193,7 @@ you recently installed:
 pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
 ```
 
-3. Start the remote session:
+3. Connect to Spark:
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -265,29 +267,6 @@ set during the local R session that calls the remote Spark jobs.  `sparklyr`
 recreates how `tune` sets the R seed for each Spark task, so the jobs will remain
 consistent after each repeated run.
 
-## Retrieving predictions a.k.a `save_pred = TRUE`
-
-`sparklyr` supports getting the out-of-sample predictions if they are saved. That
-is done by using `control_grid()` when calling `tune_grid()`.
-
-```{r}
-#| eval: !expr 'run_r'
-cntrl <- control_grid(save_pred = TRUE)
-
-results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
-```
-
-There will be a second job that executes in Spark. This job does not really
-process anything. The job just reads and download the predictions into the R 
-session.
-
-Once the tuning is completed, the predictions can be used in the R session
-as if they were all processed locally.
-
-```{r}
-#| eval: !expr 'run_r'
-collect_predictions(results)
-```
 
 ## Parallel processing in Spark
 
@@ -387,4 +366,29 @@ schedule to run for the job.
 #| eval: !expr 'run_r'
 #| include: false
 pysparklyr::spark_connect_service_stop()
+```
+
+
+## Retrieving predictions a.k.a `save_pred = TRUE`
+
+`sparklyr` supports getting the out-of-sample predictions if they are saved. That
+is done by using `control_grid()` when calling `tune_grid()`.
+
+```{r}
+#| eval: !expr 'run_r'
+cntrl <- control_grid(save_pred = TRUE)
+
+results <- tune_grid(spec_bt, recipe_basic, readmission_folds, control = cntrl)
+```
+
+There will be a second Spark job that executes. The job only reads the files 
+containing the predictions created during the tuning job, and return the
+data back to the local R session.
+
+The predictions are added to the resulting tuning object the same way `tune`
+would have done that locally in R.
+
+```{r}
+#| eval: !expr 'run_r'
+collect_predictions(results)
 ```

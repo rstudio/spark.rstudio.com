@@ -88,15 +88,16 @@ remotes::install_github("mlverse/pysparklyr", ref = "grid2")
 ```
 
 
-## Prepare the workflow and re-samples locally
+## Prepare locally
 
-The standard framework for Machine Learning in R is 
-[Tidymodels](https://www.tidymodels.org/). It is a collection of packages that
-are designed to work together to provide everything from re-sampling, to 
-pre-processing, to model tuning, to performance measurement. 
+The standard framework for Machine Learning in R is  [Tidymodels](https://www.tidymodels.org/). 
+It is a collection of packages that are designed to work together to provide 
+everything from re-sampling, to pre-processing, to model tuning, to performance 
+measurement. 
 
-The following code prepares all the components needed to run hyper-parameter model
-tuning in order to identify the best combination of parameters:
+In this article, we will follow an example of tuning a model of hospital 
+readmission data. The following code prepares the re-sampling, pre-processing
+and model specification. All of these steps are processed locally in R. 
 
 
 ```{r}
@@ -137,20 +138,19 @@ spec_bt <- boost_tree(
   )
 ```
 
-Typically, the next step would be to execute the hyper-parameter tuning by
-calling `tune_grid()`. This is where we will diverge in order to use Spark,
-instead of our laptop, to tune the model.
+Typically, the next step is calling `tune_grid()` to run the hyper-parameter
+tuning. This is where we will diverge in order to use Spark, instead of our 
+laptop, to tune the model.
 
 ## Tune in Spark Connect
 
-The feature of tuning remotely it is only available for Spark Connect connections,
-and its vendor variants such as Databricks Connect. The variants will need to 
-have R installed and available in their Spark nodes.  
+Remote model tuning is only available for Spark Connect connections,
+and its vendor variants such as [Databricks Connect](../deployment/databricks-connect.qmd). 
 
-```{r}
-#| eval: false
-library(sparklyr)
-```
+The Spark cluster will need to to have R, and recent installations of several
+R packages, available in all its nodes.
+
+
 
 
 ### Connect to Spark
@@ -163,6 +163,9 @@ somewhere else, such as a vendor provided one.
 1. Install Spark locally if the version you wish to use is not available locally yet:
 ```{r}
 #| eval: false
+#| 
+library(sparklyr)
+
 spark_install("4.1.0")
 ```
 

@@ -29,13 +29,12 @@ if(FALSE) { # if (!interactive()) {
 # readmission <- readmission[1:1000, ]
 ```
 
-## Solution
+## Intro
 
-
-It is now possible to take the exact same `tidymodels` objects created locally, 
-and have the tuning run in Spark. With one function call, `sparklyr` will upload 
-the `tidymodels` objects,  and have the parallel jobs run remotely in the Spark
-session.
+Use the `tidymodels` objects created locally in R, to run the hyper-parameter
+tuning in Spark.  With one call, `sparklyr` will upload 
+the `tidymodels` objects,  execute the parallel jobs run remotely, and return
+the finalized tuned object to the local R session.
 
 ::: {#fig-cluster}
 ```{mermaid}
@@ -58,19 +57,23 @@ flowchart RL
 Model tuning in a Spark cluster
 :::
 
-Instead of calling `tune_grid()` use `tune_grid_spark()`. 
-The function accepts the exact same arguments as `tune_grid()`. The only required
-added argument is the Spark session.
+To do this use `tune_grid_spark()` instead of calling `tune`'s `tune_grid()`
+function.  The function accepts the exact same arguments as `tune_grid()`. The 
+only required added argument is the Spark session.
 
-### Why?
+**It is important to note that we are not speaking of "big data", but rather of 
+something more like  "big processing"**. 
+Processing numerous tuning combinations is what makes the process take
+a long time. Each combination has to be individually fitted, the resulting model
+is then used run predictions, and lastly the results of the predictions to
+estimate metrics. The more of these individual combinations that can run in 
+parallel the more time is saved, and Spark is particularly good at this sort
+of processing. Additionally, Spark is a more widely available distributed 
+computing infrastructure, as opposed to something such a grid computer This 
+opens a new avenue for us to take advantage of vast resources, and without
+having to change existing code, or having to learn a new API.
 
-**It is important to note that we are not speaking of "big data", but rather of something more like 
-"big processing"**.  What takes the job a long time to complete is the fact that
-there are numerous tuning combination that need to be discretely processed 
-(fit training data, predict on evaluation data, calculate metrics), and not that
-we have to train on gigabytes and gigabytes of data. The main advantage is being
-able iterate faster. Having to wait less time for results, allows us to possibly
-try different tuning parameters.
+## Installation
 
 The latest versions of `sparklyr`, `pysparklyr` and `tune` are needed:
 
@@ -217,7 +220,7 @@ autoplot(spark_results)
 ```
 
 
-## Compare with local results
+## Comparing results
 
 The steps in this section would not be necessary in a 'real world' scenario. 
 This is to show how the results returned by running `tune_grid()` compare to

@@ -228,7 +228,7 @@ look indistinguishable from that created directly by `tidymodels` locally in R:
 spark_results
 ```
 
-The object can now be used to inspect and eventually finalize the model 
+The object can now be used to inspect and used to finalize the model 
 selection.
 
 ```{r}
@@ -239,9 +239,9 @@ autoplot(spark_results)
 
 ## Comparing results
 
-The steps in this section would not be necessary in a 'real world' scenario. 
-This is to show how the results returned by running `tune_grid()` compare to
-those from `tune_grid_spark()`
+The steps in this section should not be part of an every day workflow. It is
+included here for comparison purposes. We are comparing the results from 
+Spark versus local R. 
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -253,17 +253,11 @@ show_best(results)
 show_best(spark_results)
 ```
 
-In this case, both calls returned the exact same results. This is because both
-ran using the same exact versions R and R packages that our Positron or RStudio
-would access. It is important to note that if the tuning would occur in a remote
-Spark cluster, that has different Operating System, R version and/or R packages,
-then the results would come back different. It is also important to differentiate 
-between different results from local and not reproducible results. The results
-will still be consistent if the job is run the exact same way, and the `seed` is
-set during the local R session that calls the remote Spark jobs.  `sparklyr`
-recreates how `tune` sets the R seed for each Spark task, so the jobs will remain
-consistent after each repeated run.
-
+The results are identical because Spark is running locally. It should not be
+surprising if the results are different if using Spark remotely. Differences in
+Operating System, R, and packages can affect the results. Reproducibility is not
+impacted because the remote job will always return the same results.  `sparklyr`
+replicates how `tidymodels` sets the seed for each run. 
 
 ## Parallel processing in Spark
 

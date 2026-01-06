@@ -303,8 +303,8 @@ spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds, c
 There are two possible values to use in `parallel_over`: 
 
 1. **resamples** *(default)* - The tuning is performed in parallel over the 
-resamples alone. In the example, `readmission_folds` has 10 folds/resamples. If 
-we had 4 tasks available from Spark, then the 10 folds would be distributed
+re-samples alone. In the example, `readmission_folds` has 10 folds/re-samples. 
+If we had 4 tasks available from Spark, then the 10 folds would be distributed
 across that number of tasks. This means that some two tasks will run 2 folds, 
 the the other two will run 3 folds, see @fig-resamples. Inside the tasks, the
 2 or 3 folds will run sequentially, but the 4 tasks will start processing
@@ -331,11 +331,11 @@ flowchart RL
 How "resamples" works in Spark
 :::
 
-1. **everything** - The tuning will be performed in parallel for each 
-individual permutation of resamples and tuning combinations.  In the example,
+2. **everything** - The tuning will be performed in parallel for each 
+individual permutation of re-samples and tuning combinations.  In the example,
 there are 10 tune combinations, which are then combined with the 10 
-folds/resamples, giving us 100 total combinations.  If we had 4 tasks available from
-Spark, then each would run 25 combinations.
+folds/re-samples, giving us 100 total combinations.  If we had 4 tasks available
+from Spark, then each will run 25 combinations.
 
 ::: {#fig-everything}
 ```{mermaid}
@@ -364,13 +364,11 @@ by how many tasks are created for the job.  The more nodes and cores there are
 available in the Spark cluster, the more possible parallel tasks could be 
 schedule to run for the job. 
 
-
 ```{r}
 #| eval: !expr 'run_r'
 #| include: false
 pysparklyr::spark_connect_service_stop()
 ```
-
 
 ## Retrieving predictions a.k.a `save_pred = TRUE`
 

@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -297,7 +297,13 @@ flag is set. As with `tune_grid()`, that is driven by setting a value for
 
 cntrl <- control_grid(parallel_over = "resamples")
 
-spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds, control = cntrl)
+spark_results <- tune_grid_spark(
+  sc = sc,
+  object = spec_bt,
+  preprocessor = recipe_basic, 
+  resamples = readmission_folds,
+  control = cntrl
+  )
 ```
 
 There are two possible values to use in `parallel_over`: 
@@ -364,32 +370,35 @@ by how many tasks are created for the job.  The more nodes and cores there are
 available in the Spark cluster, the more possible parallel tasks could be 
 schedule to run for the job. 
 
-```{r}
-#| eval: !expr 'run_r'
-#| include: false
-pysparklyr::spark_connect_service_stop()
-```
-
 ## Retrieving predictions a.k.a `save_pred = TRUE`
 
-`sparklyr` supports getting the out-of-sample predictions if they are saved. That
-is done by using `control_grid()` when calling `tune_grid()`.
+`sparklyr` supports getting the out-of-sample predictions if they are saved. 
+That is done by using `control_grid()` when calling `tune_grid_spark()`.
 
 ```{r}
 #| eval: !expr 'run_r'
 cntrl <- control_grid(save_pred = TRUE)
 
-spark_results <- tune_grid_spark(sc, spec_bt, recipe_basic, readmission_folds, control = cntrl)
+spark_results <- tune_grid_spark(
+  sc = sc,
+  object = spec_bt,
+  preprocessor = recipe_basic, 
+  resamples = readmission_folds,
+  control = cntrl
+  )
 ```
 
-There will be a second Spark job that executes. The job only reads the files 
+There will be a second Spark job that executes. The job simply reads the files 
 containing the predictions created during the tuning job, and return the
 data back to the local R session.
-
-The predictions are added to the resulting tuning object the same way `tune`
-would have done that locally in R.
 
 ```{r}
 #| eval: !expr 'run_r'
 collect_predictions(spark_results)
+```
+
+```{r}
+#| eval: !expr 'run_r'
+#| include: false
+pysparklyr::spark_connect_service_stop()
 ```

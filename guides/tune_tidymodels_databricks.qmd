@@ -16,7 +16,8 @@ cluster_id <- "1218-000327-q970zsow"
 
 ## R and Python libraries
 
-These are the required packages:
+There are Python and R packages that need to be pre-installed in the Spark 
+cluster:
 
 **Python**
 
@@ -30,22 +31,26 @@ These are the required packages:
 
 - The modeling package used by `parsnip` in the tuning 
 
+Installation is a simple operation that is done via your Databricks web portal. 
+Here are the instructions that shows you how to do that: [Databricks - Cluster
+Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
+
+### Install programmatically
+
+The [`brickster`](https://databrickslabs.github.io/brickster/) package is a 
+complete toolkit for interacting with Databricks. It can be used to 
+programmatically install the Python and R libraries. It requires that the
+user has rights to modify the libraries in target cluster.
 
 ```{r}
 #| eval: false
 library(brickster)
-```
 
-```{r}
-#| eval: false
-repo <- glue(
-  "https://databricks.packagemanager.posit.co/cran/__linux__/noble/latest"
-)
-```
+# DBRs have a fixed snapshot date to source the R packages. Redirecting  
+# to the 'latest' snapshot to get the most recent package versions.
+repo <- "https://databricks.packagemanager.posit.co/cran/__linux__/noble/latest"
 
-
-```{r}
-#| eval: false
+# Builds the list of R packages, pointing them to the 'latest' snapshot
 r_libs <- libraries(
   lib_cran("reticulate", repo = repo),
   lib_cran("tidymodels", repo = repo),
@@ -53,14 +58,26 @@ r_libs <- libraries(
 )
 
 db_libs_install(cluster_id, r_libs)
-```
 
-
-```{r}
-#| eval: false
+# Builds the Python package object. Specifying the version of `rpy2` to install.
 py_lib <- lib_pypi("rpy2==3.6.4") |>
   libraries()
 
 db_libs_install(cluster_id, py_lib)
 ```
 
+As time goes by, there may be other modeling R packages that need to be installed
+in Spark. Here is a template that can be used to install a single package: 
+
+```{r}
+#| eval: false
+library(brickster)
+
+lib_cran(
+  package = "[Missing package]", 
+  repo = "https://databricks.packagemanager.posit.co/cran/__linux__/noble/latest"
+  ) |> 
+  libraries() |> 
+  db_libs_install("[Your cluster ID]", libraries =  _)
+
+```

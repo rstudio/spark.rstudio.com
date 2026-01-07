@@ -1,0 +1,66 @@
+---
+title: "Tune `tidymodels` remotely in Databricks Connect"
+execute:
+  eval: true
+  freeze: false
+---
+
+```{r}
+#| include: false
+run_r <- FALSE
+```
+
+```{r}
+cluster_id <- "1218-000327-q970zsow"
+```
+
+## R and Python libraries
+
+These are the required packages:
+
+**Python**
+
+- `rpy2`
+
+**R**
+
+- `tidymodels`
+
+- `reticulate`
+
+- The modeling package used by `parsnip` in the tuning 
+
+
+```{r}
+#| eval: false
+library(brickster)
+```
+
+```{r}
+#| eval: false
+repo <- glue(
+  "https://databricks.packagemanager.posit.co/cran/__linux__/noble/latest"
+)
+```
+
+
+```{r}
+#| eval: false
+r_libs <- libraries(
+  lib_cran("reticulate", repo = repo),
+  lib_cran("tidymodels", repo = repo),
+  lib_cran("xgboost", repo = repo) # (optional) Used in the example
+)
+
+db_libs_install(cluster_id, r_libs)
+```
+
+
+```{r}
+#| eval: false
+py_lib <- lib_pypi("rpy2==3.6.4") |>
+  libraries()
+
+db_libs_install(cluster_id, py_lib)
+```
+

@@ -15,6 +15,12 @@ library(sparklyr)
 
 ## Intro
 
+`sparklyr` makes it easy to take advantage of Databricks Connect to tune
+Tidymodels. Instead of calling `tune_grid()` simply call `tune_spark_grid()` and
+`sparklyr` will take care of all the setup and parallel job scheduling inside
+Databricks. The output from `tune_spark_grid()` is the exact same type of R
+object `tune_grid()` returns. 
+
 :::{#fig-diagram}
 
 ![](/images/guides/tidymodels-db/diagram-1.png)
@@ -66,16 +72,14 @@ spec_bt <- boost_tree(
 ## Tune in Databricks Connect
 
 
-```{r}
-cluster_id <- "1218-000327-q970zsow"
-```
 
 ```{r}
 #| eval: !expr 'run_r'
 library(sparklyr)
+
 sc <- spark_connect(
   method = "databricks_connect", 
-  cluster_id = cluster_id
+  cluster_id = "1218-000327-q970zsow"
   )
 ```
 
@@ -98,7 +102,7 @@ autoplot(spark_results)
 
 ## R and Python libraries
 
-There are Python and R packages that need to be pre-installed in the Spark 
+There are Python and R packages that need to be pre-installed in the Databricks
 cluster:
 
 **Python**
@@ -116,6 +120,7 @@ cluster:
 Installation is a simple operation that is done via your Databricks web portal. 
 Here are the instructions that shows you how to do that: [Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
+
 
 ### Install programmatically (optional)
 
@@ -139,13 +144,13 @@ r_libs <- libraries(
   lib_cran("xgboost", repo = repo) # (optional) Used in the example
 )
 
-db_libs_install(cluster_id, r_libs)
+db_libs_install("1218-000327-q970zsow", r_libs)
 
 # Builds the Python package object. Specifying the version of `rpy2` to install.
 py_lib <- lib_pypi("rpy2==3.6.4") |>
   libraries()
 
-db_libs_install(cluster_id, py_lib)
+db_libs_install("1218-000327-q970zsow", py_lib)
 ```
 
 As time goes by, there may be other modeling R packages that need to be installed

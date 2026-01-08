@@ -7,14 +7,94 @@ execute:
 
 ```{r}
 #| include: false
-run_r <- FALSE
+run_r <- TRUE
+
+library(tidymodels)
+library(sparklyr)
 ```
 
+## Intro
+
+:::{#fig-diagram}
+
 ![](/images/guides/tidymodels-db/diagram-1.png)
+
+How tune_grid_spark() works with Databricks
+
+:::
+
+## Prepare locally
+
+```{r}
+#| eval: !expr 'run_r'
+
+library(tidymodels)
+library(readmission)
+readmission <- readmission[1:1000, ]
+set.seed(1)
+
+# Data set resampling 
+readmission_splits <- initial_split(readmission, strata = readmitted)
+
+readmission_folds <- vfold_cv(
+  data = training(readmission_splits),
+  strata = readmitted
+  )
+
+# Data pre-processing
+recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
+  step_mutate(
+    race = factor(case_when(
+      !(race %in% c("Caucasian", "African American")) ~ "Other",
+      .default = race
+    ))
+  ) |>
+  step_unknown(all_nominal_predictors()) |>
+  step_YeoJohnson(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_dummy(all_nominal_predictors())
+
+# Model specification
+spec_bt <- boost_tree(
+  mode = "classification",
+  mtry = tune(), # Part of the hyper-parameters to tune
+  learn_rate = tune(), # Part of the hyper-parameters to tune
+  trees = 10
+  )
+```
+
+## Tune in Databricks Connect
+
 
 ```{r}
 cluster_id <- "1218-000327-q970zsow"
 ```
+
+```{r}
+#| eval: !expr 'run_r'
+library(sparklyr)
+sc <- spark_connect(
+  method = "databricks_connect", 
+  cluster_id = cluster_id
+  )
+```
+
+```{r}
+#| eval: !expr 'run_r'
+spark_results <- tune_grid_spark(
+  sc = sc, 
+  object = spec_bt, 
+  preprocessor = recipe_basic, 
+  resamples = readmission_folds,
+  control = control_grid(verbose = TRUE)
+  )
+```
+
+```{r}
+#| eval: !expr 'run_r'
+autoplot(spark_results)
+```
+
 
 ## R and Python libraries
 
@@ -37,7 +117,7 @@ Installation is a simple operation that is done via your Databricks web portal.
 Here are the instructions that shows you how to do that: [Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 
-### Install programmatically
+### Install programmatically (optional)
 
 The [`brickster`](https://databrickslabs.github.io/brickster/) package is a 
 complete toolkit for interacting with Databricks. It can be used to 

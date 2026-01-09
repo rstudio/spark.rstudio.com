@@ -2,12 +2,12 @@
 title: "Tune `tidymodels` remotely in Databricks Connect"
 execute:
   eval: true
-  freeze: false
+  freeze: true
 ---
 
 ```{r}
 #| include: false
-run_r <- FALSE
+run_r <- TRUE
 
 library(tidymodels)
 library(sparklyr)
@@ -18,42 +18,55 @@ library(sparklyr)
 `sparklyr` makes it easy to take advantage of Databricks Connect to tune
 Tidymodels. 
 Simply call `tune_spark_grid()` instead of `tune_spark()`. `sparklyr` will take 
-care of all the setup and parallel job scheduling inside Databricks. 
+care of all the setup and parallel job scheduling inside Databricks, see @fig-diagram. 
 The output from `tune_spark_grid()` is the exact same type of R object
 `tune_grid()` returns. 
 
 :::{#fig-diagram}
-
 ![](/images/guides/tidymodels-db/diagram-1.png)
 
 How *tune_grid_spark()* works with Databricks
-
 :::
+
+`sparklyr` accepts the exact same arguments as the function in `tune`. The only
+additional required argument is the Databricks connection object. In @fig-code
+we show how the exact same parsnip model, recipe and resamples can be passed
+to both.
+
+:::{#fig-code}
 :::{.columns}
 :::{.column width="48%"}
 ```{r}
 #| eval: false
-tune_grid(
+tune::tune_grid(
   object = my_model, 
   preprocessor = my_recipe, 
   resamples = my_resamples
   
   )
 ```
+
+Run locally
+
 :::
 :::{.column width="4%"}
 :::
 :::{.column width="48%"}
 ```{r}
 #| eval: false
-tune_grid_spark(
+sparklyr::tune_grid_spark(
   object = my_model, 
   preprocessor = my_recipe, 
   resamples = my_resamples,
   sc = my_conn # Only additional requirement
   )
 ```
+
+Run remotely in Databricks
+
 :::
+:::
+Comparing tune and sparklyr function calls
 :::
 
 ## Example
@@ -122,6 +135,11 @@ sc <- spark_connect(
   )
 ```
 
+The next step is to call `tune_grid_spark()`. We will pass the model, recipe
+and re-sample objects prepared in the previous section. The only addition is
+to have the process run in `verbose` mode, this is an optional argument. It 
+will display the steps and timings for each:
+
 ```{r}
 #| eval: !expr 'run_r'
 spark_results <- tune_grid_spark(
@@ -132,6 +150,9 @@ spark_results <- tune_grid_spark(
   control = control_grid(verbose = TRUE)
   )
 ```
+
+The `spark_results` object can be now used as if it was a tuned object that
+was prepared locally. 
 
 ```{r}
 #| eval: !expr 'run_r'

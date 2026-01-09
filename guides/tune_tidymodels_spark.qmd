@@ -183,13 +183,14 @@ spec_bt <- boost_tree(
 ```
 
 Typically, the next step is calling `tune_grid()` to run the hyper-parameter
-tuning. This is where we will diverge in order to use Spark, instead of our 
-laptop, to tune the model.
+tuning. This is where we will diverge in order and use Spark.
 
 ## Tune in Spark Connect
 
-Remote model tuning is only available for Spark Connect connections,
-and its vendor variants such as [Databricks Connect](../deployment/databricks-connect.qmd). 
+Remote model tuning is only available for 
+[Spark Connect](https://spark.apache.org/docs/latest/spark-connect-overview.html) 
+connections, and its vendor variants such as 
+[Databricks Connect](../deployment/databricks-connect.qmd). 
 
 ### Spark requirements
 
@@ -299,9 +300,10 @@ show_best(spark_results)
 
 The results are identical because Spark is running locally. It should not be
 surprising if the results are different if using Spark remotely. Differences in
-Operating System, R, and packages can affect the results. Reproducibility is not
-impacted because the remote job will always return the same results.  `sparklyr`
-replicates how `tidymodels` sets the seed for each run. 
+Operating System, R run-time, and R packages can affect the results. 
+Reproducibility is not impacted because the remote job will always return the
+same results. `sparklyr` replicates how `tidymodels` reliably sets the seed 
+during the tuning. 
 
 ## Parallel processing in Spark
 
@@ -332,25 +334,24 @@ flowchart RL
 Job vs. Task in Spark example
 :::
 
-How this relates to `tune_grid_spark()` depends on how the parallel processing
-flag is set. As with `tune_grid()`, that is driven by setting a value for
-`parallel_over` in the control grid: 
+Spark parallelism impacts `tune_grid_spark()` in one of two ways. The way is
+determined by how `parallel_over` is set in its control grid:
 
 ```{r}
 #| eval: false
-
-cntrl <- control_grid(parallel_over = "resamples")
 
 spark_results <- tune_grid_spark(
   sc = sc,
   object = spec_bt,
   preprocessor = recipe_basic, 
   resamples = readmission_folds,
-  control = cntrl
+  # Pass a `control_grid()` object to `control`
+  control = control_grid(parallel_over = "resamples") 
   )
 ```
 
-There are two possible values to use in `parallel_over`: 
+`sparklyr` accepts the two values that `tune` accepts for `parallel_over`. This
+is how each will behave in Spark: 
 
 1. **resamples** *(default)* - The tuning is performed in parallel over the 
 re-samples alone. In the example, `readmission_folds` has 10 folds/re-samples. 
@@ -408,11 +409,11 @@ flowchart RL
 How "everything" works in Spark
 :::
 
-In either case, despite the number of re-samples, or number of tuning +
+Despite the number of re-samples, or number of tuning +
 re-samples combinations, the limit of how many processes run in parallel is set
 by how many tasks are created for the job.  The more nodes and cores there are 
 available in the Spark cluster, the more possible parallel tasks could be 
-schedule to run for the job. 
+scheduled to run for the job. 
 
 ## Retrieving predictions a.k.a `save_pred = TRUE`
 
@@ -421,14 +422,13 @@ That is done by using `control_grid()` when calling `tune_grid_spark()`.
 
 ```{r}
 #| eval: !expr 'run_r'
-cntrl <- control_grid(save_pred = TRUE)
 
 spark_results <- tune_grid_spark(
   sc = sc,
   object = spec_bt,
   preprocessor = recipe_basic, 
   resamples = readmission_folds,
-  control = cntrl
+  control = control_grid(save_pred = TRUE)
   )
 ```
 

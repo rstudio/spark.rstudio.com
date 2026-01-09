@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- FALSE
+run_r <- TRUE
 
 ```
 
@@ -432,13 +432,31 @@ spark_results <- tune_grid_spark(
   )
 ```
 
-There will be a second Spark job that executes. The job simply reads the files 
-containing the predictions created during the tuning job, and return the
-data back to the local R session.
+Spark will execute an additional small job. The job simply reads the files 
+that have the predictions created during the tuning job. The data from the files
+is incorporated to the tune results object that `sparklyr` returns. 
 
 ```{r}
 #| eval: !expr 'run_r'
 collect_predictions(spark_results)
+```
+
+## Verbosity
+
+`tune_grid_spark()` also supports a more verbose output during tuning. But unlike
+the function in `tune`, `sparklyr` focuses more on stages and timings of each
+stage. It does not report on individual iterations as `tune` does. 
+
+```{r}
+#| eval: !expr 'run_r'
+
+spark_results <- tune_grid_spark(
+  sc = sc,
+  object = spec_bt,
+  preprocessor = recipe_basic, 
+  resamples = readmission_folds,
+  control = control_grid(verbose = TRUE)
+  )
 ```
 
 ```{r}

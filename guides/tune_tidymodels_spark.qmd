@@ -8,7 +8,7 @@ execute:
 ```{r}
 #| include: false
 
-run_r <- TRUE
+run_r <- FALSE
 
 ```
 
@@ -57,21 +57,65 @@ flowchart RL
 Model tuning in a Spark cluster
 :::
 
-To do this use `tune_grid_spark()` instead of calling `tune`'s `tune_grid()`
-function.  The function accepts the exact same arguments as `tune_grid()`. The 
-only required added argument is the Spark session.
+To do this simply call `tune_grid_spark()` instead of `tune_grid()`.
+`sparklyr` accepts the exact same arguments as the function in `tune`. The only
+additional required argument is the Spark connection object.  @fig-code
+shows how the same parsnip model, recipe and re-samples can be passed
+to either.
 
-**It is important to note that we are not speaking of "big data", but rather of 
-something more like  "big processing"**. 
-Processing numerous tuning combinations is what makes the process take
-a long time. Each combination has to be individually fitted, the resulting model
-is then used run predictions, and lastly the results of the predictions to
-estimate metrics. The more of these individual combinations that can run in 
-parallel the more time is saved, and Spark is particularly good at this sort
-of processing. Additionally, Spark is a more widely available distributed 
-computing infrastructure, as opposed to something such a grid computer This 
-opens a new avenue for us to take advantage of vast resources, and without
-having to change existing code, or having to learn a new API.
+:::{#fig-code}
+:::{.columns}
+:::{.column width="48%"}
+
+Run locally
+
+```{r}
+#| eval: false
+tune::tune_grid(
+  object = my_model, 
+  preprocessor = my_recipe, 
+  resamples = my_resamples
+  
+  )
+```
+
+
+
+:::
+:::{.column width="4%"}
+:::
+:::{.column width="48%"}
+
+Run remotely 
+
+```{r}
+#| eval: false
+sparklyr::tune_grid_spark(
+  object = my_model, 
+  preprocessor = my_recipe, 
+  resamples = my_resamples,
+  sc = my_conn # Only additional requirement
+  )
+```
+
+
+
+:::
+:::
+Comparing tune and sparklyr function calls
+:::
+
+**It is important to note that we are not speaking of "big data", but rather
+"big processing"**. 
+Operating over numerous tuning combinations is what makes the process take
+a long time. Each combination has to be individually fitted, then the resulting
+model runs predictions, and lastly, the results of the predictions are used to
+estimate metrics. 
+
+Spark is able to cut down the processing time by operating over each 
+combination in a parallel and distributed way across the cluster. As a 
+technology, Spark is also more widely available to users, as opposed to something
+such as a grid computer. 
 
 ## Installation
 

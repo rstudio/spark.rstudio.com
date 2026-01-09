@@ -16,10 +16,11 @@ library(sparklyr)
 ## Intro
 
 `sparklyr` makes it easy to take advantage of Databricks Connect to tune
-Tidymodels. Instead of calling `tune_grid()` simply call `tune_spark_grid()` and
-`sparklyr` will take care of all the setup and parallel job scheduling inside
-Databricks. The output from `tune_spark_grid()` is the exact same type of R
-object `tune_grid()` returns. 
+Tidymodels. 
+Simply call `tune_spark_grid()` instead of `tune_spark()`. `sparklyr` will take 
+care of all the setup and parallel job scheduling inside Databricks. 
+The output from `tune_spark_grid()` is the exact same type of R object
+`tune_grid()` returns. 
 
 :::{#fig-diagram}
 
@@ -31,12 +32,21 @@ How *tune_grid_spark()* works with Databricks
 
 ## Prepare locally
 
+The model building, the data pre-processing and re-sampling steps remain the 
+exact same. `sparklyr` will upload the R objects resulting from each step onto
+the Databricks cluster, so that it can process the hyper-tuning using the exact
+same information.
+
+To demonstrate the functionality in this article, we start with a standard
+tuning workflow. In other words, there is nothing different to do in Tidymodels
+to setup for the actual model tuning process:
+
 ```{r}
 #| eval: !expr 'run_r'
 
 library(tidymodels)
 library(readmission)
-readmission <- readmission[1:1000, ]
+
 set.seed(1)
 
 # Data set resampling 

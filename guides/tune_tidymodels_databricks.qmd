@@ -29,8 +29,36 @@ The output from `tune_spark_grid()` is the exact same type of R object
 How *tune_grid_spark()* works with Databricks
 
 :::
+:::{.columns}
+:::{.column width="48%"}
+```{r}
+#| eval: false
+tune_grid(
+  object = my_model, 
+  preprocessor = my_recipe, 
+  resamples = my_resamples
+  
+  )
+```
+:::
+:::{.column width="4%"}
+:::
+:::{.column width="48%"}
+```{r}
+#| eval: false
+tune_grid_spark(
+  object = my_model, 
+  preprocessor = my_recipe, 
+  resamples = my_resamples,
+  sc = my_conn # Only additional requirement
+  )
+```
+:::
+:::
 
-## Prepare locally
+## Example
+
+### Setup the Tidymodels objects
 
 The model building, the data pre-processing and re-sampling steps remain the 
 exact same. `sparklyr` will upload the R objects resulting from each step onto
@@ -79,9 +107,10 @@ spec_bt <- boost_tree(
   )
 ```
 
-## Tune in Databricks Connect
+### Tune in Databricks Connect
 
-
+The first step is to connect to the Databricks cluster. This operation is
+only needed one time during the R session: 
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -89,7 +118,7 @@ library(sparklyr)
 
 sc <- spark_connect(
   method = "databricks_connect", 
-  cluster_id = "1218-000327-q970zsow"
+  cluster_id = "1218-000327-q970zsow" # Replace with your own cluster's ID
   )
 ```
 

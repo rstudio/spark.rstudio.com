@@ -24,9 +24,6 @@ if(FALSE) { # if (!interactive()) {
   pysparklyr::install_pyspark("4.1.0", python_version = "3.12")  
   reticulate::py_install("rpy2", envname = "r-sparklyr-pyspark-4.1")
 }
-
-# TODO: Remove before publishing
-# readmission <- readmission[1:1000, ]
 ```
 
 ## Intro
@@ -124,11 +121,12 @@ The latest versions of `sparklyr`, `pysparklyr` and `tune` are needed:
 ```{r}
 #| eval: false
 
-# TODO: Replace with actual installation instructions at release time
+# This feature has not officially been released to CRAN so install
+# the packages from GitHub
 
-remotes::install_github("sparklyr/sparklyr", ref = "grid2")
-remotes::install_github("tidymodels/tune", ref = "grid2")
-remotes::install_github("mlverse/pysparklyr", ref = "grid2")
+pak::pak("tidymodels/tune")
+pak::pak("sparklyr/sparklyr")
+pak::pak("mlverse/pysparklyr")
 ```
 
 

@@ -58,7 +58,8 @@ To do this simply call `tune_grid_spark()` instead of `tune_grid()`.
 `sparklyr` accepts the exact same arguments as the function in `tune`. The only
 additional required argument is the Spark connection object.  @fig-code
 shows how the same parsnip model, recipe and re-samples can be passed
-to either.
+to either. `tune_grid_spark()` also accepts a `workflow` as the `object`
+argument.
 
 :::{#fig-code}
 :::{.columns}
@@ -139,7 +140,7 @@ measurement.
 
 In this article, we will follow an example of tuning a model of hospital 
 readmission data. The following code prepares the re-sampling, pre-processing
-and model specification. All of these steps are processed locally in R. 
+and model specification. All of these objects are created locally in R. 
 
 
 ```{r}
@@ -255,7 +256,7 @@ Once connected to Spark, to execute the tuning run:
 #| eval: !expr 'run_r'
 spark_results <- tune_grid_spark(
   sc = sc, # Spark connection
-  object = spec_bt, # Model specification (`parsnip`)
+  object = spec_bt, # Model specification (`parsnip`) or workflow object
   preprocessor = recipe_basic, 
   resamples = readmission_folds 
   )
@@ -381,10 +382,12 @@ How "resamples" works in Spark
 :::
 
 2. **everything** - The tuning will be performed in parallel for each 
-individual permutation of re-samples and tuning combinations.  In the example,
-there are 10 tune combinations, which are then combined with the 10 
-folds/re-samples, giving us 100 total combinations.  If we had 4 tasks available
-from Spark, then each will run 25 combinations.
+combination of re-samples and tuning parameters  In the example, we used the
+default for the `grid` argument, which is 10. That indicates the number of 
+candidate parameter sets to be created automatically. The 10 parameter sets, 
+are then combined with the 10 folds/re-samples, giving us 100 total 
+combinations.  If we had 4 tasks available from Spark, then each will run 25 
+combinations.
 
 ::: {#fig-everything}
 ```{mermaid}

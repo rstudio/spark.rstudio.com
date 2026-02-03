@@ -465,3 +465,17 @@ spark_results <- tune_grid_spark(
 #| include: false
 pysparklyr::spark_connect_service_stop()
 ```
+
+
+## Conclusion
+
+The two goals of this approach is to shorten the time it takes to tune the model,
+and to do this without re-writing the code so that it can run in Spark. The
+disadvantage is that the data has to be uploaded to Spark. 
+This means that there are size constraints for the data itself. Again, the focus
+is not so much "big data", but to accelerate tuning by taking advantage of using
+the distributed computing in Spark. If you need to tune models that use very large
+amounts of data, then consider using [Spark ML](model_tuning_text.qmd) directly.
+
+
+

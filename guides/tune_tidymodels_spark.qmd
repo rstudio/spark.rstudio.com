@@ -40,10 +40,10 @@ flowchart RL
   subgraph sc [Spark Connect]
    p[Parallel processes]
   end
-  r[local R]  -- Re-samples --> sc
+  r[local R]  -- Resamples --> sc
   sc -.- rs[Results] -.-> r
   r -- Model --> sc
-  r -- Pre-processor --> sc
+  r -- Preprocessor --> sc
   style sc fill:#F0B675,stroke:#666,color:#000;
   style p fill:#F8DDBF,stroke:#666,color:#000;
   style r fill:#75C7F0,stroke:#666,color:#000;
@@ -57,7 +57,7 @@ Model tuning in a Spark cluster
 To do this simply call `tune_grid_spark()` instead of [`tune_grid()`](https://tune.tidymodels.org/reference/tune_grid.html).
 `sparklyr` accepts the exact same arguments as the function in `tune`. The only
 additional required argument is the Spark connection object.  @fig-code
-shows how the same parsnip model, recipe and re-samples can be passed
+shows how the same parsnip model, recipe and resamples can be passed
 to either. `tune_grid_spark()` also accepts a `workflow` as the `object`
 argument.
 
@@ -135,11 +135,11 @@ pak::pak("mlverse/pysparklyr")
 
 The standard framework for Machine Learning in R is  [Tidymodels](https://www.tidymodels.org/). 
 It is a collection of packages that are designed to work together to provide 
-everything from re-sampling, to pre-processing, to model tuning, to performance 
+everything from re-sampling, to preprocessing, to model tuning, to performance 
 measurement. 
 
 In this article, we will follow an example of tuning a model of hospital 
-readmission data. The following code prepares the re-sampling, pre-processing
+readmission data. The following code prepares the re-sampling, preprocessing
 and model specification. All of these objects are created locally in R. 
 
 
@@ -159,7 +159,7 @@ readmission_folds <- vfold_cv(
   strata = readmitted
   )
 
-# Data pre-processing
+# Data preprocessing
 recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
   step_mutate(
     race = factor(case_when(
@@ -353,7 +353,7 @@ spark_results <- tune_grid_spark(
 is how each will behave in Spark: 
 
 1. **resamples** *(default)* - The tuning is performed in parallel over the 
-re-samples alone. In the example, `readmission_folds` has 10 folds/re-samples. 
+resamples alone. In the example, `readmission_folds` has 10 folds/resamples. 
 If we had 4 tasks available from Spark, then the 10 folds would be distributed
 across that number of tasks. This means that some two tasks will run 2 folds, 
 the other two will run 3 folds, see @fig-resamples. Inside the tasks, the
@@ -382,10 +382,10 @@ How "resamples" works in Spark
 :::
 
 2. **everything** - The tuning will be performed in parallel for each 
-combination of re-samples and tuning parameters  In the example, we used the
+combination of resamples and tuning parameters  In the example, we used the
 default for the `grid` argument, which is 10. That indicates the number of 
 candidate parameter sets to be created automatically. The 10 parameter sets, 
-are then combined with the 10 folds/re-samples, giving us 100 total 
+are then combined with the 10 folds/resamples, giving us 100 total 
 combinations.  If we had 4 tasks available from Spark, then each will run 25 
 combinations.
 
@@ -410,8 +410,8 @@ flowchart RL
 How "everything" works in Spark
 :::
 
-Despite the number of re-samples, or number of tuning +
-re-samples combinations, the limit of how many processes run in parallel is set
+Despite the number of resamples, or number of tuning +
+resamples combinations, the limit of how many processes run in parallel is set
 by how many tasks are created for the job.  The more nodes and cores there are 
 available in the Spark cluster, the more possible parallel tasks could be 
 scheduled to run for the job. 

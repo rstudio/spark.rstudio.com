@@ -26,7 +26,7 @@ if(FALSE) { # if (!interactive()) {
 }
 ```
 
-## Intro
+## Introduction
 
 Use the `tidymodels` objects created locally in R, to run the hyper-parameter
 tuning in Spark.  With one call, `sparklyr` will upload 
@@ -54,7 +54,7 @@ flowchart RL
 Model tuning in a Spark cluster
 :::
 
-To do this simply call `tune_grid_spark()` instead of `tune_grid()`.
+To do this simply call `tune_grid_spark()` instead of [`tune_grid()`](https://tune.tidymodels.org/reference/tune_grid.html).
 `sparklyr` accepts the exact same arguments as the function in `tune`. The only
 additional required argument is the Spark connection object.  @fig-code
 shows how the same parsnip model, recipe and re-samples can be passed
@@ -206,8 +206,8 @@ installations of some R packages. There is also a Python package requirement:
 
 - `rpy2`
 
-If tuning on a model not available in base R, then the package containing that
-model will need to be installed. In the example on this article, the default
+If the model requires computations beyond base R, the appropriate R packages must be installed. 
+ In the example on this article, the default
 for `boost_tree()` is XGboost. This means that the `xbgoost` package should be
 available in the cluster.
 
@@ -250,7 +250,7 @@ sc <- spark_connect(
 
 ### Tune the model
 
-Once connected to Spark, to execute the tuning run: 
+Once connected to Spark, execute the tuning run via:  
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -292,9 +292,9 @@ Spark versus local R.
 results <- tune_grid(spec_bt, recipe_basic, readmission_folds)
 
 # Use show_best() to compare the recommendations
-show_best(results)
+show_best(results, metric = "roc_auc")
 
-show_best(spark_results)
+show_best(spark_results, metric = "roc_auc")
 ```
 
 The results are identical because Spark is running locally. It should not be

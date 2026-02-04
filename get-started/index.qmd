@@ -84,16 +84,28 @@ spark_disconnect(sc)
 Here are some examples of how to use `spark_connect()` to connect to different
 types of Spark clusters:
 
-**Hadoop YARN**:
+
+**Databricks**: 
+
+```r
+sc <- spark_connect(method = "databricks_connect")
+```
+
+For more information visit the [Databricks](/deployment/databricks-connect.qmd) page 
+
+**Snowflake**: 
+
+```r
+sc <- spark_connect(method = "snowpark_connect")
+```
+
+For more information visit the [Snowflake](/deployment/snowflake.qmd) page 
+
+
+**YARN (Hadoop)**:
 
 ```r
 sc <- spark_connect(master = "yarn")
-```
-
-**Mesos**:
-
-```r
-sc <- spark_connect(master = "mesos://host:port")
 ```
 
 **Kubernetes**:
@@ -102,24 +114,24 @@ sc <- spark_connect(master = "mesos://host:port")
 sc <- spark_connect(master = "k8s://https://server")
 ```
 
-**Apache Livy**:
-
-```r
-sc <- spark_connect(master = "http://server/livy", method = "livy")
-```
-
 **Stand Alone**: 
 
 ```r
 sc <- spark_connect(master = "spark://master-url:7077")
 ```
 
-**Qubole**: (for more info visit the [Qubole page](/deployment/qubole-overview.qmd) on this site)
+**Spark Connect**: 
 
 ```r
-sc <- spark_connect(method = "qubole")
+sc <- spark_connect(method = "spark_connect")
 ```
 
-**Databricks** - Visit the [Databricks page](/deployment/databricks-connect.qmd) 
-on this site to review the connection
-options
+For more information visit the [Spark Connect](/deployment/spark-connect.qmd) page 
+
+**Legacy:**
+
+- **Mesos**: `sc <- spark_connect(master = "mesos://host:port")`
+
+- **[Qubole](/deployment/qubole-overview.qmd)**: `sc <- spark_connect(method = "qubole")`
+
+- **Livy**: `sc <- spark_connect(master = "http://server/livy", method = "livy")`

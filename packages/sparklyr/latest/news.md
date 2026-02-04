@@ -1,3 +1,7 @@
+# Sparklyr 1.9.3
+
+- Ensures current pre-release of Spark 4.1 works with `sparklyr`
+
 # Sparklyr 1.9.2
 
 - Avoids the cross-wire when pulling an object from a lazy table instead of pulling

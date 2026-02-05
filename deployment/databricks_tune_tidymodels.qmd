@@ -20,18 +20,18 @@ sc <- spark_connect(method = "databricks_connect", cluster_id = "1218-000327-q97
 
 ## Intro
 
-`sparklyr` makes it possible to off-load a Tidymodels grid search model
-tuning to Databricks. [Tidymodels](https://www.tidymodels.org/) is a
-collection of packages that are designed to work together to provide
-everything from resampling, to preprocessing, to model tuning, to
-performance measurement.
+`sparklyr` enables you to offload Tidymodels grid search tuning to
+Databricks. [Tidymodels](https://www.tidymodels.org/) is a collection of
+packages designed to work together to provide everything from
+resampling, to preprocessing, to model tuning, to performance
+measurement.
 
-Model tuning is a time consuming process because of the number of tuning
+Model tuning is a time-consuming process because of the number of tuning
 parameter combinations that need to be processed. Running the
-combinations in parallel saves a significant amount of time. Tidymodels
-provides ways to run parallel tuning, but not in Spark. `sparklyr` not
-only enables this possibility, but it also makes it very simple to
-access this functionality.
+combinations in parallel saves a significant amount of time. While
+Tidymodels supports parallel tuning, it does not natively integrate with
+Spark. `sparklyr` bridges this gap, making distributed tuning on a
+cluster straightforward to execute.
 
 In Tidymodels, the
 [`tune_grid()`](https://tune.tidymodels.org/reference/tune_grid.html)
@@ -81,7 +81,7 @@ such as the resample object, model specification, and the preprocessing
 steps. It will then run the tuning in parallel taking advantage of the R
 integration in Databricks. Lastly, it will collect all of the results
 back to your local R session, and return a `tune_results` object that is
-indistinguishable from one made directly by Tidymodels, , see
+indistinguishable from one made directly by Tidymodels; see
 @fig-diagram.
 
 ::: {#fig-diagram}
@@ -103,8 +103,8 @@ search tuning:
 
 -   Post processor (`tailor`) *optional*
 
-In the following example, we will create the elements just as if they
-were about to be used by `tune_grid()` locally.
+In this example, we define the modeling components exactly as we would
+for local tuning with `tune_grid()`.
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -142,11 +142,10 @@ spec_bt <- boost_tree(
   )
 ```
 
-The only required step before tuning the model in Databricks, is to
-connect to a Databricks' Spark cluster. This step could have been done
-in the outset of this example, but we want to showcase how it is
-possible to start intending to tune locally, and then decide to off-load
-the job to Databricks.
+The only required step before tuning the model in Databricks is to
+connect to a Databricks' Spark cluster. Although we could have connected
+earlier, this demonstrates how easily a local tuning workflow can be
+pivoted to a Databricks cluster.
 
 ```{r}
 #| eval: FALSE
@@ -160,8 +159,8 @@ sc <- spark_connect(
 
 The next step is to call `tune_grid_spark()`. We will pass the three
 elements created in the first step, and the Databricks connection
-variable. Adding the `control_grid()` was an optional step, this was
-done to showcase the output from `sparklyr` when running this process.
+variable. The optional `control_grid()` call is included here to display the 
+`sparklyr` output during the tuning process.
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -174,8 +173,8 @@ spark_results <- tune_grid_spark(
   )
 ```
 
-After the process completes, the `spark_results` object can be now used
-as if it was created by `tune`.
+Once complete, the `spark_results` object is fully compatible with
+standard `tune` functions.
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -199,9 +198,9 @@ Databricks cluster:
 
 -   The modeling package used by `parsnip` in the tuning
 
-Installation is a simple operation that is done via your Databricks web
-portal. Here are the instructions that shows you how to do that:
-[Databricks - Cluster
+Library installation is a straightforward process managed through the
+Databricks web portal. Here are the instructions that show you how to do
+that: [Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 
 ### Install programmatically (optional)
@@ -209,7 +208,7 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 The [`brickster`](https://databrickslabs.github.io/brickster/) package
 is a complete toolkit for interacting with Databricks. It can be used to
 programmatically install the Python and R libraries. It requires that
-the user has rights to modify the libraries in target cluster.
+the user has rights to modify the libraries in the target cluster.
 
 ```{r}
 #| eval: false

@@ -18,7 +18,7 @@ library(sparklyr)
 sc <- spark_connect(method = "databricks_connect", cluster_id = "1218-000327-q970zsow")
 ```
 
-## Intro
+## Introduction
 
 `sparklyr` enables you to offload Tidymodels grid search tuning to
 Databricks. [Tidymodels](https://www.tidymodels.org/) is a collection of
@@ -159,8 +159,8 @@ sc <- spark_connect(
 
 The next step is to call `tune_grid_spark()`. We will pass the three
 elements created in the first step, and the Databricks connection
-variable. The optional `control_grid()` call is included here to display the 
-`sparklyr` output during the tuning process.
+variable. The optional `control_grid()` call is included here to display
+the `sparklyr` output during the tuning process.
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -181,34 +181,35 @@ standard `tune` functions.
 autoplot(spark_results)
 ```
 
-## R and Python libraries
+## R and Python libraries prerequisites
 
-There are Python and R packages that need to be pre-installed in the
-Databricks cluster:
+Before tuning in Databricks, the following Python and R packages
+**must** be pre-installed on the cluster:
 
-**Python**
+-   `rpy2` **(Python)**
+-   `tidymodels` **(R)**
+-   `reticulate` **(R)**
+-   Any R packages required by the `parsnip` engine (e.g., `xgboost` or
+    `ranger`).
 
--   `rpy2`
+There are two options to accomplish the installation, the first one is
+using the web portal in the Databricks website, or by installing the
+libraries programmatically.
 
-**R**
+#### Option 1 - Databricks Web Portal
 
--   `tidymodels`
-
--   `reticulate`
-
--   The modeling package used by `parsnip` in the tuning
-
-Library installation is a straightforward process managed through the
-Databricks web portal. Here are the instructions that show you how to do
-that: [Databricks - Cluster
+The most common method is to use the Databricks UI. It is a
+straightforward process managed through the cluster's Libraries tab.
+Detailed instructions can be found here: [Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 
-### Install programmatically (optional)
+#### Option 2 - Programmatic installation via `brickster`
 
-The [`brickster`](https://databrickslabs.github.io/brickster/) package
-is a complete toolkit for interacting with Databricks. It can be used to
-programmatically install the Python and R libraries. It requires that
-the user has rights to modify the libraries in the target cluster.
+For those who prefer a scripted approach, the
+[`brickster`](https://databrickslabs.github.io/brickster/) package is a
+complete toolkit for interacting with Databricks. It can be used to
+programmatically install the Python and R libraries, provided the user
+has permissions to modify the target cluster.
 
 ```{r}
 #| eval: false

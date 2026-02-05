@@ -14,6 +14,8 @@ run_r <- TRUE
 
 library(tidymodels)
 library(sparklyr)
+
+sc <- spark_connect(method = "databricks_connect", cluster_id = "1218-000327-q970zsow")
 ```
 
 ## Intro
@@ -90,34 +92,35 @@ How *tune_grid_spark()* works with Databricks
 
 ## Example
 
-### Setup the Tidymodels objects
+In Tidymodels, there are some specific elements needed to perform a grid
+search tuning:
 
-The model building, the data pre-processing and re-sampling steps remain
-the exact same. `sparklyr` will upload the R objects resulting from each
-step onto the Databricks cluster, so that it can process the
-hyper-tuning using the exact same information.
+-   Model specification (`parsnip`)
 
-To demonstrate the functionality in this article, we start with a
-standard tuning workflow. In other words, there is nothing different to
-do in Tidymodels to setup for the actual model tuning process:
+-   Resampled data (`rsample`)
+
+-   Data preprocessor (`recipe`)
+
+-   Post processor (`tailor`) *optional*
+
+In the following example, we will create the elements just as if they
+were about to be used by `tune_grid()` locally.
 
 ```{r}
 #| eval: !expr 'run_r'
 
 library(tidymodels)
 library(readmission)
-
 set.seed(1)
-
-# Data set resampling 
 readmission_splits <- initial_split(readmission, strata = readmitted)
 
+# Resampling -------------------------------------------------------
 readmission_folds <- vfold_cv(
   data = training(readmission_splits),
   strata = readmitted
   )
 
-# Data pre-processing
+# Preprocessing ----------------------------------------------------
 recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
   step_mutate(
     race = factor(case_when(
@@ -130,22 +133,23 @@ recipe_basic <- recipe(readmitted ~ ., data = readmission) |>
   step_normalize(all_numeric_predictors()) |>
   step_dummy(all_nominal_predictors())
 
-# Model specification
+# Model specification -----------------------------------------------
 spec_bt <- boost_tree(
   mode = "classification",
-  mtry = tune(), # Part of the hyper-parameters to tune
-  learn_rate = tune(), # Part of the hyper-parameters to tune
+  mtry = tune(),       # Parameter to be tuned
+  learn_rate = tune(), # Parameter to be tuned
   trees = 10
   )
 ```
 
-### Tune in Databricks Connect
-
-The first step is to connect to the Databricks cluster. This operation
-is only needed one time during the R session:
+The only required step before tuning the model in Databricks, is to
+connect to a Databricks' Spark cluster. This step could have been done
+in the outset of this example, but we want to showcase how it is
+possible to start intending to tune locally, and then decide to off-load
+the job to Databricks.
 
 ```{r}
-#| eval: !expr 'run_r'
+#| eval: FALSE
 library(sparklyr)
 
 sc <- spark_connect(
@@ -154,10 +158,10 @@ sc <- spark_connect(
   )
 ```
 
-The next step is to call `tune_grid_spark()`. We will pass the model,
-recipe and re-sample objects prepared in the previous section. The only
-addition is to have the process run in `verbose` mode, this is an
-optional argument. It will display the steps and timings for each:
+The next step is to call `tune_grid_spark()`. We will pass the three
+elements created in the first step, and the Databricks connection
+variable. Adding the `control_grid()` was an optional step, this was
+done to showcase the output from `sparklyr` when running this process.
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -170,8 +174,8 @@ spark_results <- tune_grid_spark(
   )
 ```
 
-The `spark_results` object can be now used as if it was a tuned object
-that was prepared locally.
+After the process completes, the `spark_results` object can be now used
+as if it was created by `tune`.
 
 ```{r}
 #| eval: !expr 'run_r'

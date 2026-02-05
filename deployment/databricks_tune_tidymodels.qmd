@@ -1,8 +1,11 @@
 ---
-title: "Tune `tidymodels` remotely in Databricks Connect"
+title: Tune Tidymodel in Databricks
 execute:
   eval: true
   freeze: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
@@ -15,27 +18,28 @@ library(sparklyr)
 
 ## Intro
 
-`sparklyr` makes it easy to take advantage of Databricks Connect to tune
-Tidymodels. 
-Simply call `tune_spark_grid()` instead of `tune_spark()`. `sparklyr` will take 
-care of all the setup and parallel job scheduling inside Databricks, see @fig-diagram. 
-The output from `tune_spark_grid()` is the exact same type of R object
-`tune_grid()` returns. 
+`sparklyr` makes it possible to off-load a Tidymodels grid search model
+tuning to Databricks. [Tidymodels](https://www.tidymodels.org/) is a
+collection of packages that are designed to work together to provide
+everything from resampling, to preprocessing, to model tuning, to
+performance measurement.
 
-:::{#fig-diagram}
-![](/images/guides/tidymodels-db/diagram-1.png)
+Model tuning is a time consuming process because of the number of tuning
+parameter combinations that need to be processed. Running the
+combinations in parallel saves a significant amount of time. Tidymodels
+provides ways to run parallel tuning, but not in Spark. `sparklyr` not
+only enables this possibility, but it also makes it very simple to
+access this functionality.
 
-How *tune_grid_spark()* works with Databricks
-:::
+In Tidymodels, the
+[`tune_grid()`](https://tune.tidymodels.org/reference/tune_grid.html)
+function is called to execute the grid search locally. To run in
+Databricks, simply call `sparklyr`'s `tune_grid_spark()` instead. It
+accepts the exact same arguments as `tune_grid()` does, see @fig-code.
 
-`sparklyr` accepts the exact same arguments as the function in `tune`. The only
-additional required argument is the Databricks connection object. In @fig-code
-we show how the exact same parsnip model, recipe and resamples can be passed
-to both.
-
-:::{#fig-code}
-:::{.columns}
-:::{.column width="48%"}
+::::::: {#fig-code}
+:::::: columns
+::: {.column width="38%"}
 ```{r}
 #| eval: false
 tune::tune_grid(
@@ -47,11 +51,12 @@ tune::tune_grid(
 ```
 
 Run locally
+:::
 
+::: {.column width="4%"}
 :::
-:::{.column width="4%"}
-:::
-:::{.column width="48%"}
+
+::: {.column width="58%"}
 ```{r}
 #| eval: false
 sparklyr::tune_grid_spark(
@@ -63,24 +68,38 @@ sparklyr::tune_grid_spark(
 ```
 
 Run remotely in Databricks
+:::
+::::::
 
-:::
-:::
 Comparing tune and sparklyr function calls
+:::::::
+
+`sparklyr` will automatically upload the needed R object to Databricks,
+such as the resample object, model specification, and the preprocessing
+steps. It will then run the tuning in parallel taking advantage of the R
+integration in Databricks. Lastly, it will collect all of the results
+back to your local R session, and return a `tune_results` object that is
+indistinguishable from one made directly by Tidymodels, , see
+@fig-diagram.
+
+::: {#fig-diagram}
+![](/images/guides/tidymodels-db/diagram-1.png)
+
+How *tune_grid_spark()* works with Databricks
 :::
 
 ## Example
 
 ### Setup the Tidymodels objects
 
-The model building, the data pre-processing and re-sampling steps remain the 
-exact same. `sparklyr` will upload the R objects resulting from each step onto
-the Databricks cluster, so that it can process the hyper-tuning using the exact
-same information.
+The model building, the data pre-processing and re-sampling steps remain
+the exact same. `sparklyr` will upload the R objects resulting from each
+step onto the Databricks cluster, so that it can process the
+hyper-tuning using the exact same information.
 
-To demonstrate the functionality in this article, we start with a standard
-tuning workflow. In other words, there is nothing different to do in Tidymodels
-to setup for the actual model tuning process:
+To demonstrate the functionality in this article, we start with a
+standard tuning workflow. In other words, there is nothing different to
+do in Tidymodels to setup for the actual model tuning process:
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -122,8 +141,8 @@ spec_bt <- boost_tree(
 
 ### Tune in Databricks Connect
 
-The first step is to connect to the Databricks cluster. This operation is
-only needed one time during the R session: 
+The first step is to connect to the Databricks cluster. This operation
+is only needed one time during the R session:
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -135,10 +154,10 @@ sc <- spark_connect(
   )
 ```
 
-The next step is to call `tune_grid_spark()`. We will pass the model, recipe
-and re-sample objects prepared in the previous section. The only addition is
-to have the process run in `verbose` mode, this is an optional argument. It 
-will display the steps and timings for each:
+The next step is to call `tune_grid_spark()`. We will pass the model,
+recipe and re-sample objects prepared in the previous section. The only
+addition is to have the process run in `verbose` mode, this is an
+optional argument. It will display the steps and timings for each:
 
 ```{r}
 #| eval: !expr 'run_r'
@@ -151,43 +170,42 @@ spark_results <- tune_grid_spark(
   )
 ```
 
-The `spark_results` object can be now used as if it was a tuned object that
-was prepared locally. 
+The `spark_results` object can be now used as if it was a tuned object
+that was prepared locally.
 
 ```{r}
 #| eval: !expr 'run_r'
 autoplot(spark_results)
 ```
 
-
 ## R and Python libraries
 
-There are Python and R packages that need to be pre-installed in the Databricks
-cluster:
+There are Python and R packages that need to be pre-installed in the
+Databricks cluster:
 
 **Python**
 
-- `rpy2`
+-   `rpy2`
 
 **R**
 
-- `tidymodels`
+-   `tidymodels`
 
-- `reticulate`
+-   `reticulate`
 
-- The modeling package used by `parsnip` in the tuning 
+-   The modeling package used by `parsnip` in the tuning
 
-Installation is a simple operation that is done via your Databricks web portal. 
-Here are the instructions that shows you how to do that: [Databricks - Cluster
+Installation is a simple operation that is done via your Databricks web
+portal. Here are the instructions that shows you how to do that:
+[Databricks - Cluster
 Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
-
 
 ### Install programmatically (optional)
 
-The [`brickster`](https://databrickslabs.github.io/brickster/) package is a 
-complete toolkit for interacting with Databricks. It can be used to 
-programmatically install the Python and R libraries. It requires that the
-user has rights to modify the libraries in target cluster.
+The [`brickster`](https://databrickslabs.github.io/brickster/) package
+is a complete toolkit for interacting with Databricks. It can be used to
+programmatically install the Python and R libraries. It requires that
+the user has rights to modify the libraries in target cluster.
 
 ```{r}
 #| eval: false
@@ -213,8 +231,9 @@ py_lib <- lib_pypi("rpy2==3.6.4") |>
 db_libs_install("1218-000327-q970zsow", py_lib)
 ```
 
-As time goes by, there may be other modeling R packages that need to be installed
-in Spark. Here is a template that can be used to install a single package: 
+As time goes by, there may be other modeling R packages that need to be
+installed in Spark. Here is a template that can be used to install a
+single package:
 
 ```{r}
 #| eval: false

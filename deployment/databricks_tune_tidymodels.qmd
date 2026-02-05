@@ -10,7 +10,7 @@ editor:
 
 ```{r}
 #| include: false
-run_r <- TRUE
+run_r <- FALSE
 
 library(tidymodels)
 library(sparklyr)
@@ -251,3 +251,29 @@ lib_cran(
   db_libs_install("[Your cluster ID]", libraries =  _)
 
 ```
+
+## Considerations
+
+-   **Local vs Remote results** - It is possible that results from
+    tuning a model locally will differ than those returned from
+    Databricks. Differences in Operating Systems, R run-time, and
+    libraries between the local machine and those in the Databicks
+    cluster will affect the calculations. However, re-running the same
+    tuning in the same Databricks cluster will return the same results
+    if a seed is set in the local R session. `sparklyr` ensures that the
+    seeds are set the same way Tidymodels does for the local tuning.
+-   **Parallelism** - There are two ways to set the parallelism for
+    tuning performed in Databricks. The default way it to tune over the
+    resamples, and the second way is over all combinations of resamples
+    and parameters. For a full explanation of how parallelism works in
+    this kind of distributed computing, please refer to [Tune Tidymodels
+    in Spark - Parallel
+    Processing](/guides/tune_tidymodels_spark.html#parallel-processing-in-spark)
+-   **Retrieving predictions** - `sparklyr` supports the feature that
+    downloads the predictions from each parameter and resample
+    combination. Keep in mind that this will make the amount of
+    information downloaded from Databricks about double. In most cases
+    this is not a problem, but for a very large resampled data set it
+    may become one. To learn how to turn that feature on, see [Tune
+    Tidymodels in Spark - Retrieving
+    predictions](/guides/tune_tidymodels_spark.html#retrieving-predictions-a.k.a-save_pred-true)

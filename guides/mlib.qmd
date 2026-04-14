@@ -112,7 +112,7 @@ groups, such that the sum of squares from points to the assigned cluster centers
 is minimized.
 
 ```{r}
-kmeans_model <- iris_tbl %>%
+kmeans_model <- iris_tbl |>
   ml_kmeans(k = 3, features = c("Petal_Length", "Petal_Width"))
 
 kmeans_model
@@ -120,7 +120,7 @@ kmeans_model
 Run and collect predictions into R:
 
 ```{r}
-predicted <- ml_predict(kmeans_model, iris_tbl) %>%
+predicted <- ml_predict(kmeans_model, iris_tbl) |>
   collect()
 
 table(predicted$Species, predicted$prediction)
@@ -129,7 +129,7 @@ table(predicted$Species, predicted$prediction)
 Use the collected data to plot the results:
 
 ```{r}
-predicted %>%
+predicted |>
   ggplot(aes(Petal_Length, Petal_Width)) +
   geom_point(aes(Petal_Width, Petal_Length, col = factor(prediction + 1)),
     size = 2, alpha = 0.5
@@ -157,7 +157,7 @@ Use Spark's [linear regression](http://spark.apache.org/docs/latest/ml-classific
 explanatory variables.
 
 ```{r}
-lm_model <- iris_tbl %>%
+lm_model <- iris_tbl |>
   ml_linear_regression(Petal_Length ~ Petal_Width)
 ```
 
@@ -171,9 +171,9 @@ spark_intercept <- coef(lm_model)[["(Intercept)"]]
 
 
 ```{r}
-iris_tbl %>%
-  select(Petal_Width, Petal_Length) %>%
-  collect() %>%
+iris_tbl |>
+  select(Petal_Width, Petal_Length) |>
+  collect() |>
   ggplot(aes(Petal_Length, Petal_Width)) +
   geom_point(aes(Petal_Width, Petal_Length), size = 2, alpha = 0.5) +
   geom_abline(aes(
@@ -196,16 +196,16 @@ Use Spark's [logistic regression](http://spark.apache.org/docs/latest/ml-classif
 of one or more explanatory variables.
 
 ```{r}
-glm_model <- iris_tbl %>% 
-  mutate(is_setosa = ifelse(Species == "setosa", 1, 0)) %>% 
-  select_if(is.numeric) %>% 
+glm_model <- iris_tbl |> 
+  mutate(is_setosa = ifelse(Species == "setosa", 1, 0)) |> 
+  select(where(is.numeric)) |> 
   ml_logistic_regression(is_setosa ~.)
 
 summary(glm_model)
 ```
 
 ```{r}
-ml_predict(glm_model, iris_tbl) %>% 
+ml_predict(glm_model, iris_tbl) |> 
   count(Species, prediction) 
 ```
 
@@ -216,8 +216,8 @@ rotation such that the first coordinate has the largest variance possible, and
 each succeeding coordinate in turn has the largest variance possible.
 
 ```{r}
-pca_model <- tbl(sc, "iris") %>%
-  select(-Species) %>%
+pca_model <- tbl(sc, "iris") |>
+  select(-Species) |>
   ml_pca()
 
 pca_model
@@ -228,7 +228,7 @@ pca_model
 Use Spark's [Random Forest](https://spark.apache.org/docs/latest/ml-classification-regression.html#random-forest-regression) to perform regression or multiclass classification.
 
 ```{r}
-rf_model <- iris_tbl %>%
+rf_model <- iris_tbl |>
   ml_random_forest(
     Species ~ Petal_Length + Petal_Width, type = "classification"
     )
@@ -246,7 +246,7 @@ the prediction.  `ml_predict()` created a variable called `predicted_label`. Tha
 variable contains the string value of the prediction:
 
 ```{r}
-rf_predict %>% 
+rf_predict |> 
   count(Species, predicted_label) 
 ```
 
@@ -257,9 +257,9 @@ Use `ft_string_indexer()` and `ft_index_to_string()` to convert a character
 column into a numeric column and back again.
 
 ```{r}
-ft_string2idx <- iris_tbl %>%
-  ft_string_indexer("Species", "Species_idx") %>%
-  ft_index_to_string("Species_idx", "Species_remap") %>% 
+ft_string2idx <- iris_tbl |>
+  ft_string_indexer("Species", "Species_idx") |>
+  ft_index_to_string("Species_idx", "Species_remap") |> 
   select(Species, Species_remap, Species_idx)
 ```
 
@@ -267,9 +267,8 @@ To see the value assigned to each value in `Species`, we can pull the aggregates
 of all the species, re-mapped species and index combinations:
 
 ```{r}
-ft_string2idx %>% 
-  group_by_all() %>% 
-  summarise(count = n(), .groups = "keep")
+ft_string2idx |>
+  count(Species, Species_remap, Species_idx)
 ```
 
 
@@ -278,7 +277,7 @@ ft_string2idx %>%
 Split a Spark DataFrame into "training" and "test" datasets.
 
 ```{r}
-partitions <- iris_tbl %>%
+partitions <- iris_tbl |>
   sdf_random_split(training = 0.75, test = 0.25, seed = 1099)
 ```
 
@@ -288,15 +287,15 @@ has separated the data, so nothing is downloaded into R. Use `partitions$trainin
 to access the data the Spark has separated for that purpose. 
 
 ```{r}
-fit <- partitions$training %>%
+fit <- partitions$training |>
   ml_linear_regression(Petal_Length ~ Petal_Width)
 ```
 
 Use `ml_predict()` to then calculate the **mse** of the "test" data:
 
 ```{r}
-ml_predict(fit, partitions$test) %>%
-  mutate(resid = Petal_Length - prediction) %>%
+ml_predict(fit, partitions$test) |>
+  mutate(resid = Petal_Length - prediction) |>
   summarize(mse = mean(resid ^ 2, na.rm = TRUE)) 
 ```
 

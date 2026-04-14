@@ -9,7 +9,7 @@ aliases:
 
 ```{r connect}
 library(sparklyr)
-sc <- spark_connect(master = "local", version = "2.0.0")
+sc <- spark_connect(master = "local")
 ```
 
 ## Introduction
@@ -25,8 +25,8 @@ Here's an example of an extension function that calls the text file line countin
 ```{r}
 library(sparklyr)
 count_lines <- function(sc, file) {
-  spark_context(sc) %>% 
-    invoke("textFile", file, 1L) %>% 
+  spark_context(sc) |> 
+    invoke("textFile", file, 1L) |> 
     invoke("count")
 }
 ```
@@ -36,6 +36,7 @@ The `count_lines` function takes a `spark_connection` (`sc`) argument which enab
 You can use this function with an existing sparklyr connection as follows:
 
 ```{r}
+#| eval: false
 library(sparklyr)
 sc <- spark_connect(master = "local")
 count_lines(sc, "hdfs://path/data.csv")
@@ -97,11 +98,11 @@ billion <- invoke(billionBigInteger, "longValue")
 
 Note the `sc` argument: that's the `spark_connection` object which is provided by the front-end package (e.g. sparklyr).
 
-The previous example can be re-written to be more compact and clear using [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) pipes: 
+The previous example can be re-written to be more compact and clear using R's native pipe operator (`|>`):
 
 ```{r}
-billion <- sc %>% 
-  invoke_new("java.math.BigInteger", "1000000000") %>%
+billion <- sc |> 
+  invoke_new("java.math.BigInteger", "1000000000") |>
     invoke("longValue")
 ```
 
@@ -110,7 +111,7 @@ This syntax is similar to the method-chaining syntax often used with Scala code 
 Calling a static method of a class is also straightforward. For example, to call the `Math::hypot()` static function you would use this code:
 
 ```{r}
-hypot <- sc %>% 
+hypot <- sc |> 
   invoke_static("java.lang.Math", "hypot", 10, 20) 
 ```
 
@@ -122,8 +123,8 @@ Here's the wrapper function for `textFile().count()` which we defined earlier:
 
 ```{r, eval=FALSE}
 count_lines <- function(sc, file) {
-  spark_context(sc) %>% 
-    invoke("textFile", file, 1L) %>% 
+  spark_context(sc) |> 
+    invoke("textFile", file, 1L) |> 
       invoke("count")
 }
 ```
@@ -156,9 +157,9 @@ analyze <- function(x, features) {
   
   # create an object to do the analysis and call its `analyze` and `summary`
   # methods (note that the df and features are passed to the analyze function)
-  summary <- sc %>%  
-    invoke_new("com.example.tools.Analyzer") %>% 
-      invoke("analyze", df, features) %>% 
+  summary <- sc |>  
+    invoke_new("com.example.tools.Analyzer") |> 
+      invoke("analyze", df, features) |> 
       invoke("summary")
 
   # return the results
@@ -170,7 +171,7 @@ The first argument is an object that can be accessed using the Spark DataFrame A
 
 After using the `spark_dataframe` function to normalize the reference, we extract the underlying Spark connection associated with the data frame using the `spark_connection` function. Finally, we create a new `Analyzer` object, call it's `analyze` method with the DataFrame and list of features, and then call the `summary` method on the results of the analysis.
 
-Accepting a `spark_jobj` or `spark_dataframe` as the first argument of a function makes it very easy to incorporate into magrittr pipelines so this pattern is highly recommended when possible.
+Accepting a `spark_jobj` or `spark_dataframe` as the first argument of a function makes it very easy to incorporate into pipe-based workflows so this pattern is highly recommended when possible.
 
 ## Dependencies
 
@@ -212,6 +213,7 @@ The `...` argument is unused but nevertheless should be included to ensure compa
 The `.onLoad` function registers your extension package so that it's `spark_dependencies` function will be automatically called when new connections to Spark are made via `spark_connect`:
 
 ```{r}
+#| eval: false
 library(sparklyr)
 library(sparkds)
 sc <- spark_connect(master = "local")

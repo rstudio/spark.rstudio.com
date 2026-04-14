@@ -46,8 +46,8 @@ modeling.  In this case, we will use the `sdf_partition()` command to
 divide the `mtcars` data into "training" and "test". 
 
 ```{r}
-partitions <- mtcars_tbl %>%
-  select(mpg, wt, cyl) %>% 
+partitions <- mtcars_tbl |>
+  select(mpg, wt, cyl) |> 
   sdf_random_split(training = 0.5, test = 0.5, seed = 1099)
 ```
 
@@ -60,7 +60,7 @@ data is downloaded to the R session.
 Next, we will fit a linear model to the training data set:
 
 ```{r}
-fit <- partitions$training %>%
+fit <- partitions$training |>
   ml_linear_regression(mpg ~ .)
 
 fit

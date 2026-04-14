@@ -44,13 +44,13 @@ In this example, we can see how easy it is to summarize the flights data without
 having to know how to write Spark SQL: 
 
 ```{r}
-delay <- flights_tbl %>%
-  group_by(tailnum) %>%
+delay <- flights_tbl |>
+  group_by(tailnum) |>
   summarise(
     count = n(), 
     dist = mean(distance, na.rm = TRUE), 
     delay = mean(arr_delay, na.rm = TRUE)
-    ) %>%
+    ) |>
   filter(count > 20, dist < 2000, !is.na(delay)) 
 
 delay
@@ -93,9 +93,9 @@ For example, the `ft_binarizer()` command simplifies the creation of a new
 column that indicates if the value of another column is above a certain threshold.
 
 ```{r}
-flights_tbl %>% 
-  ft_binarizer("dep_delay", "over_one", threshold = 1) %>% 
-  select(dep_delay, over_one) %>% 
+flights_tbl |> 
+  ft_binarizer("dep_delay", "over_one", threshold = 1) |> 
+  select(dep_delay, over_one) |> 
   head(5)
 ```
 

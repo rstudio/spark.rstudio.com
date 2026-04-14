@@ -23,8 +23,8 @@ library(modeldata)
 
 data("small_fine_foods")
 
-training_data %>% 
-  head(1) %>% 
+training_data |> 
+  head(1) |> 
   as.list()
 ```
 
@@ -33,7 +33,7 @@ We will start by starting a local session of Spark, and then copying both data s
 ```{r}
 library(sparklyr)
 
-sc <- spark_connect(master = "local", version = "3.3")
+sc <- spark_connect(master = "local")
 
 sff_training_data <- copy_to(sc, training_data)
 
@@ -47,11 +47,11 @@ sff_testing_data <- copy_to(sc, testing_data)
 We will split each review into individual words, or tokens. The `ft_tokenizer()` function returns a in-line list containing the individual words.
 
 ```{r}
-sff_training_data %>% 
+sff_training_data |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   select(3:4)
 ```
 
@@ -60,15 +60,15 @@ sff_training_data %>%
 There are words very common in text, words such as: "the", "and", "or", etc. These are called "stop words". Most often, stop words are not useful in analysis and modeling, so it is necessary to remove them. That is exactly what `ft_stop_words_remover()` does. In addition to English, Spark has lists of stop words for several other languages. In the resulting table, notice that the number of words in the `wo_stop_words` is lower than the `word_list`.
 
 ```{r}
-sff_training_data %>% 
+sff_training_data |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   select(3:5) 
 ```
 
@@ -77,21 +77,21 @@ sff_training_data %>%
 Text hashing maps a sequence of words, or "terms", to their frequencies. The number of terms that are mapped can be controlled using the `num_features` argument in `ft_hashing_ft()`. Because we are eventually going to use a logistic regression model, we will need to override the frequencies from their original value to 1. This is accomplished by setting the `binary` argument to `TRUE`.
 
 ```{r}
-sff_training_data %>%
+sff_training_data |>
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 1024
-    ) %>%
+    ) |>
   select(3:6) 
 ```
 
@@ -100,25 +100,25 @@ sff_training_data %>%
 Finally, we normalize the hashed column using `ft_normalizer()` .
 
 ```{r}
-sff_training_data %>% 
+sff_training_data |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 1024
-    ) %>%
+    ) |>
   ft_normalizer(
     input_col = "hashed_features", 
     output_col = "normal_features"
-    ) %>% 
+    ) |> 
   select(3:7) 
 ```
 
@@ -135,26 +135,26 @@ The same set of complex transformations are needed for both modeling, and predic
 We can initialize a pipeline (using `ml_pipeline()`), and then pass the same exact steps used in the previous section. We then append the model via `ft_r_formula()` and then the model function, in this case `ml_logistic_regression()`
 
 ```{r}
-sff_pipeline <- ml_pipeline(sc) %>% 
+sff_pipeline <- ml_pipeline(sc) |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 1024
-    ) %>%
+    ) |>
   ft_normalizer(
     input_col = "hashed_features", 
     output_col = "normal_features"
-    ) %>% 
-  ft_r_formula(score ~ normal_features) %>% 
+    ) |> 
+  ft_r_formula(score ~ normal_features) |> 
   ml_logistic_regression()  
 
 sff_pipeline
@@ -171,7 +171,7 @@ sff_pipeline_model <- ml_fit(sff_pipeline, sff_training_data)
 `sff_pipeline_model` is more than just a "fitted" model. It also contains all of the pre-processing steps. So any new data passed through it, will go through the same transformations before running the predictions. To execute the pipeline model on against the test data, we use `ml_transform()`
 
 ```{r}
-sff_test_predictions <- sff_pipeline_model %>% 
+sff_test_predictions <- sff_pipeline_model |> 
   ml_transform(sff_testing_data) 
 
 glimpse(sff_test_predictions)

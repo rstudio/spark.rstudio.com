@@ -51,7 +51,7 @@ library(sparklyr)
 library(h2o)
 library(dplyr)
 
-sc <- spark_connect("local", version = "2.1.0")
+sc <- spark_connect("local")
 
 mtcars_tbl <- copy_to(sc, mtcars, "mtcars")
 ```
@@ -66,9 +66,9 @@ Now, let's perform some simple transformations -- we'll
 
 ``` r
 # transform our data set, and then partition into 'training', 'test'
-partitions <- mtcars_tbl %>%
-  filter(hp >= 100) %>%
-  mutate(cyl8 = cyl == 8) %>%
+partitions <- mtcars_tbl |>
+  filter(hp >= 100) |>
+  mutate(cyl8 = cyl == 8) |>
   sdf_partition(training = 0.5, test = 0.5, seed = 1099)
 ```
 
@@ -144,9 +144,9 @@ pred <- h2o.predict(glm_model, newdata = test)
 predicted <- as_spark_dataframe(sc, pred, strict_version_check = FALSE)
 
 # extract the true 'mpg' values from our test dataset
-actual <- partitions$test %>%
-  select(mpg) %>%
-  collect() %>%
+actual <- partitions$test |>
+  select(mpg) |>
+  collect() |>
   `[[`("mpg")
 
 # produce a data.frame housing our predicted + actual 'mpg' values

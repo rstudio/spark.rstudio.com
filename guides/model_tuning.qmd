@@ -30,12 +30,12 @@ number of trees.
 
 ## Data setup
 
-For this example, we will use a local connection, using Spark 3.3.
+For this example, we will use a local connection.
 
 ```{r}
 library(sparklyr)
 
-sc <- spark_connect(master = "local", version = "3.3")
+sc <- spark_connect(master = "local")
 ```
 
 The `cells` data is copied to the Spark session.
@@ -49,8 +49,8 @@ be treated as the "holdout" data to be used at the end of the process to confirm
 that we did not over fit the model.
 
 ```{r}
-tbl_cells_split <- tbl_cells %>% 
-  select(-case) %>% 
+tbl_cells_split <- tbl_cells |> 
+  select(-case) |> 
   sdf_random_split(
     training = 0.8, 
     test = 0.2, 
@@ -72,9 +72,8 @@ In this example we will use a very simple pipeline. It will contain a
 formula step and a Random Forest model.
 
 ```{r}
-cells_pipeline <- sc %>% 
-  ml_pipeline() %>%
-  ft_r_formula(class ~ .) %>%
+cells_pipeline <- ml_pipeline(sc) |>
+  ft_r_formula(class ~ .) |>
   ml_random_forest_classifier(seed = 207336481)
 
 ```
@@ -241,7 +240,7 @@ as more trees are used, and when does the benefit plateau.
 
 library(ggplot2)
 
-cv_metrics %>% 
+cv_metrics |> 
   ggplot(aes(num_trees_1, accuracy)) +
   geom_line() +
   geom_smooth()
@@ -271,7 +270,7 @@ model against the **test** split, and then piping it to `ml_metrics_multiclass()
 to confirm that the accuracy is within the expected range.
 
 ```{r}
-cell_model %>% 
-  ml_predict(tbl_cells_split$test) %>% 
+cell_model |> 
+  ml_predict(tbl_cells_split$test) |> 
   ml_metrics_multiclass()
 ```

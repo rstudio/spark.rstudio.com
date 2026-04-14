@@ -1,7 +1,8 @@
 ---
 title: "Intro to Spark Streaming with sparklyr"
-execute: 
+execute:
     freeze: true
+    eval: false
 ---
 
 ```{r}
@@ -145,8 +146,8 @@ if(file.exists("source-out")) unlink("source-out", TRUE)
 stream_generate_test(iterations = 1)
 read_folder <- stream_read_csv(sc, "source") 
 
-process_stream <- read_folder %>%
-  mutate(x = as.double(x)) %>%
+process_stream <- read_folder |>
+  mutate(x = as.double(x)) |>
   ft_binarizer(
     input_col = "x",
     output_col = "over",
@@ -161,9 +162,8 @@ invisible(future(stream_generate_test(interval = 0.2, iterations = 100)))
 Run this code a few times during the experiment:
 
 ```{r}
-spark_read_csv(sc, "stream", "source-out", memory = FALSE) %>%
-  group_by(over) %>%
-  tally()
+spark_read_csv(sc, "stream", "source-out", memory = FALSE) |>
+  count(over)
 ```
 
 The results would look similar to this. The `n` totals will increase as the experiment progresses.
@@ -187,8 +187,8 @@ spark_disconnect(sc)
 1.  The processing starts with the `read_folder` variable that contains the input stream. It coerces the integer field `x`, into a type double. This is because the next function, `ft_binarizer()` does not accept integers. The binarizer determines if `x` is over 400 or not. This is a good illustration of how `dplyr` can help simplify the manipulation needed during the processing stage.
 
     ```{r}
-    process_stream <- read_folder %>%
-      mutate(x = as.double(x)) %>%
+    process_stream <- read_folder |>
+      mutate(x = as.double(x)) |>
       ft_binarizer(
         input_col = "x",
         output_col = "over",
@@ -205,8 +205,8 @@ spark_disconnect(sc)
 3.  The "source-out" folder can be treated as a if it was a single table within Spark. Using `spark_read_csv()`, the data can be mapped, but not brought into memory (`memory = FALSE`). This allows the current results to be further analyzed using regular `dplyr` commands.
 
     ```{r}
-    spark_read_csv(sc, "stream", "source-out", memory = FALSE) %>%
-      group_by(over) %>%
+    spark_read_csv(sc, "stream", "source-out", memory = FALSE) |>
+      group_by(over) |>
       tally()
     ```
 
@@ -230,9 +230,9 @@ if(file.exists("source")) unlink("source", TRUE)
 stream_generate_test(iterations = 1)
 read_folder <- stream_read_csv(sc, "source") 
 
-process_stream <- read_folder %>%
-  stream_watermark() %>%
-  group_by(timestamp) %>%
+process_stream <- read_folder |>
+  stream_watermark() |>
+  group_by(timestamp) |>
   summarise(
     max_x = max(x, na.rm = TRUE),
     min_x = min(x, na.rm = TRUE),
@@ -263,9 +263,9 @@ spark_disconnect(sc)
 1.  The `stream_watermark()` functions add a new `timestamp` variable that is then used in the `group_by()` command. This is required by Spark Stream to accept summarized results as output of the stream. The second step is to simply decide what kinds of aggregations we need to perform. In this case, a simply max, min and count are performed.
 
     ```{r}
-    process_stream <- read_folder %>%
-      stream_watermark() %>%
-      group_by(timestamp) %>%
+    process_stream <- read_folder |>
+      stream_watermark() |>
+      group_by(timestamp) |>
       summarise(
         max_x = max(x, na.rm = TRUE),
         min_x = min(x, na.rm = TRUE),
@@ -303,9 +303,9 @@ if(file.exists("source-out")) unlink("source-out", TRUE)
 stream_generate_test(iterations = 1)
 read_folder <- stream_read_csv(sc, "source") 
 
-process_stream <- read_folder %>%
-  stream_watermark() %>%
-  group_by(timestamp) %>%
+process_stream <- read_folder |>
+  stream_watermark() |>
+  group_by(timestamp) |>
   summarise(
     max_x = max(x, na.rm = TRUE),
     min_x = min(x, na.rm = TRUE),
@@ -323,7 +323,7 @@ server <- function(input, output, session){
   ps <- reactiveSpark(process_stream)
   
   output$table <- renderTable({
-    ps() %>%
+    ps() |>
       mutate(timestamp = as.character(timestamp)) 
     })
 }
@@ -354,7 +354,7 @@ runGadget(ui, server)
       ps <- reactiveSpark(process_stream)
       
       output$table <- renderTable({
-        ps() %>%
+        ps() |>
           mutate(timestamp = as.character(timestamp)) 
       })
     }
@@ -385,9 +385,8 @@ stream_generate_test(df = df, iteration = 1)
 
 model_sample <- spark_read_csv(sc, "sample", "source")
 
-pipeline <- sc %>%
-  ml_pipeline() %>%
-  ft_r_formula(x ~ y) %>%
+pipeline <- ml_pipeline(sc) |>
+  ft_r_formula(x ~ y) |>
   ml_linear_regression()
 
 fitted_pipeline <- ml_fit(pipeline, model_sample)
@@ -396,9 +395,9 @@ ml_stream <- stream_read_csv(
     sc = sc, 
     path = "source", 
     columns = c(x = "integer", y = "integer")
-  )  %>%
-  ml_transform(fitted_pipeline, .)  %>%
-  select(- features) %>%
+  )  |>
+  ml_transform(fitted_pipeline, dataset = _)  |>
+  select(- features) |>
   stream_write_csv("source-out")
 
 stream_generate_test(df = df, interval = 0.5)
@@ -437,9 +436,8 @@ spark_disconnect(sc)
     stream_generate_test(df = df, iteration = 1)
     model_sample <- spark_read_csv(sc, "sample", "source")
 
-    pipeline <- sc %>%
-      ml_pipeline() %>%
-      ft_r_formula(x ~ y) %>%
+    pipeline <- ml_pipeline(sc) |>
+      ft_r_formula(x ~ y) |>
       ml_linear_regression()
 
     fitted_pipeline <- ml_fit(pipeline, model_sample)
@@ -452,9 +450,9 @@ spark_disconnect(sc)
         sc = sc, 
         path = "source", 
         columns = c(x = "integer", y = "integer")
-      )  %>%
-      ml_transform(fitted_pipeline, .)  %>%
-      select(- features) %>%
+      )  |>
+      ml_transform(fitted_pipeline, dataset = _)  |>
+      select(- features) |>
       stream_write_csv("source-out")
     ```
 

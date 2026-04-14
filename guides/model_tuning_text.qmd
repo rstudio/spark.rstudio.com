@@ -178,7 +178,7 @@ library(modeldata)
 
 data("small_fine_foods")
 
-sc <- spark_connect(master = "local", version = "3.5")
+sc <- spark_connect(master = "local")
 
 sff_training_data <- copy_to(sc, training_data)
 sff_testing_data <- copy_to(sc, testing_data)
@@ -202,26 +202,26 @@ code from [Text
 Modeling](textmodeling.qmd#prepare-the-model-with-an-ml-pipeline).**
 
 ```{r}
-sff_pipeline <- ml_pipeline(sc) %>% 
+sff_pipeline <- ml_pipeline(sc) |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 1024
-    ) %>%
+    ) |>
   ft_normalizer(
     input_col = "hashed_features", 
     output_col = "normal_features"
-    ) %>% 
-  ft_r_formula(score ~ normal_features) %>% 
+    ) |> 
+  ft_r_formula(score ~ normal_features) |> 
   ml_logistic_regression()
 
 sff_pipeline
@@ -351,8 +351,8 @@ sff_metrics <- ml_validation_metrics(sff_model)
 
 library(dplyr)
 
-sff_metrics %>% 
-  arrange(desc(areaUnderROC)) %>% 
+sff_metrics |> 
+  arrange(desc(areaUnderROC)) |> 
   head()
 ```
 
@@ -364,8 +364,8 @@ section of the *Tuning Text Analysis* article.
 ```{r}
 library(ggplot2)
 
-sff_metrics %>% 
-  mutate(reg_param_1 = as.factor(reg_param_1)) %>% 
+sff_metrics |> 
+  mutate(reg_param_1 = as.factor(reg_param_1)) |> 
   ggplot(aes(
     x = elastic_net_param_1, 
     y = areaUnderROC, 
@@ -389,26 +389,26 @@ pipeline. We only need to change the 3 parameters values, with values
 that performed best.
 
 ```{r}
-new_sff_pipeline <- ml_pipeline(sc) %>% 
+new_sff_pipeline <- ml_pipeline(sc) |> 
   ft_tokenizer(
     input_col = "review",
     output_col = "word_list"
-  ) %>% 
+  ) |> 
   ft_stop_words_remover(
     input_col = "word_list", 
     output_col = "wo_stop_words"
-    ) %>% 
+    ) |> 
   ft_hashing_tf(
     input_col = "wo_stop_words", 
     output_col = "hashed_features", 
     binary = TRUE, 
     num_features = 4096      
-    ) %>%
+    ) |>
   ft_normalizer(
     input_col = "hashed_features", 
     output_col = "normal_features"
-    ) %>% 
-  ft_r_formula(score ~ normal_features) %>% 
+    ) |> 
+  ft_r_formula(score ~ normal_features) |> 
   ml_logistic_regression(
     elastic_net_param = 0.05,
     reg_param = 0.25  
@@ -418,7 +418,7 @@ new_sff_pipeline <- ml_pipeline(sc) %>%
 Now, we create a final model using the new ML Pipeline.
 
 ```{r}
-new_sff_fitted <- new_sff_pipeline %>% 
+new_sff_fitted <- new_sff_pipeline |> 
   ml_fit(sff_training_data)
 ```
 
@@ -426,8 +426,8 @@ The test data set is now used to confirm that the performance gains
 hold. We use it to run predictions with the new ML Pipeline Model.
 
 ```{r}
-new_sff_fitted %>% 
-  ml_transform(sff_testing_data) %>% 
+new_sff_fitted |> 
+  ml_transform(sff_testing_data) |> 
   ml_metrics_binary()
 ```
 

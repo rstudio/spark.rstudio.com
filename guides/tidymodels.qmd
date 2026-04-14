@@ -83,8 +83,8 @@ locally in R:
 ```{r}
 #| eval: false
 
-linear_reg() %>%
-  set_engine("lm") %>%           # << Engine set to `lm`
+linear_reg() |>
+  set_engine("lm") |>           # << Engine set to `lm`
   fit(mpg ~ ., data = mtcars)    # << Local `mtcars`
 ```
 
@@ -94,8 +94,8 @@ the training data set to the remote Spark data set:
 ```{r}
 #| eval: false
 
-linear_reg() %>%
-  set_engine("spark") %>%           # << Engine set to `spark`
+linear_reg() |>
+  set_engine("spark") |>           # << Engine set to `spark`
   fit(mpg ~ ., data = spark_mtcars) # << Remote `mtcars`
 ```
 
@@ -113,32 +113,32 @@ spark_engines <- map_dfr(pf, ~{
   x <- get_from_env(.x)
   if(!is.null(x)) x$model <- .x
   x
-  }) %>% 
-  filter(engine == "spark") %>% 
+  }) |> 
+  filter(engine == "spark") |> 
   select(-engine)
 
-supported_models <- spark_engines %>% 
-  mutate(supported = "Yes") %>% 
+supported_models <- spark_engines |> 
+  mutate(supported = "Yes") |> 
   pivot_wider(
     names_from = "mode", 
     values_from = "supported", 
     values_fill = ""
-    ) %>% 
-  mutate(title = get_title(model, "parsnip")) %>% 
-  select(title, model, everything()) %>% 
+    ) |> 
+  mutate(title = get_title(model, "parsnip")) |> 
+  select(title, model, everything()) |> 
   mutate(model = paste0("`", model, "()`"))
 ```
 
 ```{r}
 #| echo: false
-supported_models %>% 
-  gt() %>% 
+supported_models |> 
+  gt() |> 
   cols_label(
     title = md("**Model**"),
     model = md("**`parsnip` function**"),
     classification = md("**Classification**"),
     regression = md("**Regression**")
-  ) %>% 
+  ) |> 
   fmt_markdown(model)
 ```
 
@@ -164,8 +164,8 @@ A linear regression model is trained with `spark_mtcars`:
 ```{r}
 library(parsnip)
 
-mtcars_model <- linear_reg() %>%
-  set_engine("spark") %>%
+mtcars_model <- linear_reg() |>
+  set_engine("spark") |>
   fit(mpg ~ ., data = spark_mtcars)
 
 mtcars_model
@@ -175,8 +175,8 @@ It is also possible to see how `parsnip` plans to translate the model
 against the given engine. Use `translate()` so view the translation:
 
 ```{r}
-linear_reg() %>%
-  set_engine("spark") %>%
+linear_reg() |>
+  set_engine("spark") |>
   translate()
 ```
 
@@ -193,9 +193,9 @@ then to set the mode to "classification", and then the engine to "spark"
 and lastly, fit the model:
 
 ```{r}
-iris_model <- rand_forest(trees = 100) %>% 
-  set_mode("classification") %>% 
-  set_engine("spark") %>% 
+iris_model <- rand_forest(trees = 100) |> 
+  set_mode("classification") |> 
+  set_engine("spark") |> 
   fit(Species ~., data = spark_iris)
 
 iris_model
@@ -254,31 +254,31 @@ current list of models and the corresponding `sparklyr` function:
 ```{r}
 #| echo: false
 
-tibble(obj_name = all_tidy) %>% 
+tibble(obj_name = all_tidy) |> 
   mutate(
     fname = str_replace(obj_name, "ml_model_", "ml_"),
     fname = str_remove(fname, "_classification"),
     fname = ifelse(fname == "ml_gbt", "ml_gradient_boosted_trees", fname)
-    ) %>% 
+    ) |> 
   filter(
     fname != "ml_decision_tree_regression", 
     fname != "ml_gbt_regression", 
     fname != "ml_random_forest_regression"
-    ) %>% 
+    ) |> 
   mutate(
     model = get_title(fname, "sparklyr"),
     model = str_remove(model, "Spark ML --"),
     model = str_remove(model, "Feature Transformation -- ")
-    ) %>% 
-  mutate(fname = md(paste0("`", fname,"()`"))) %>% 
-  arrange(model) %>% 
-  select(model, fname) %>%  
-  gt() %>% 
-  tab_header(md("**Models that support `glance()`, `tidy()`, and `augment()`**")) %>% 
+    ) |> 
+  mutate(fname = md(paste0("`", fname,"()`"))) |> 
+  arrange(model) |> 
+  select(model, fname) |>  
+  gt() |> 
+  tab_header(md("**Models that support `glance()`, `tidy()`, and `augment()`**")) |> 
   cols_label(
     model = md("**Model**"),
-    fname = md("**Function**")  ) %>% 
-  fmt_markdown(fname) %>% 
+    fname = md("**Function**")  ) |> 
+  fmt_markdown(fname) |> 
   cols_align("left")
 ```
 
@@ -371,7 +371,7 @@ Using `sdf_random_split()`, split the data into `training` and `test`. And then
 fit a model.  In this case it will be a logistic regression model.
 
 ```{r}
-prep_iris <- tbl(sc, "iris") %>%
+prep_iris <- tbl(sc, "iris") |>
   mutate(is_setosa = ifelse(Species == "setosa", 1, 0))
 
 iris_split <- sdf_random_split(prep_iris, training = 0.5, test = 0.5)
@@ -421,7 +421,7 @@ results are saved into a data frame:
 ```{r}
 #| message: false
 #| warning: false
-corr_mtcars <- spark_mtcars %>% 
+corr_mtcars <- spark_mtcars |> 
   correlate()
 ```
 
@@ -439,7 +439,7 @@ set, making it easier to read:
 ```{r}
 #| message: false
 #| warning: false
-corr_mtcars %>% 
+corr_mtcars |> 
   shave()
 ```
 
@@ -450,7 +450,7 @@ requires no extra steps:
 ```{r}
 #| message: false
 #| warning: false
-corr_mtcars %>% 
+corr_mtcars |> 
   rplot()
 ```
 

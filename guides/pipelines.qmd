@@ -47,7 +47,7 @@ library(dplyr)
 ```{r}
 library(dplyr)
 
-r_pipeline <-  . %>% mutate(cyl = paste0("c", cyl)) %>% lm(am ~ cyl + mpg, data = .)
+r_pipeline <- \(data) data |> mutate(cyl = paste0("c", cyl)) |> lm(am ~ cyl + mpg, data = _)
 r_pipeline
 ```
 
@@ -115,12 +115,12 @@ the `dplyr` code to a SQL Feature Transformer that can then be used in a
 Pipeline.
 
 ```{r}
-df <- spark_flights %>%
-  filter(!is.na(dep_delay)) %>%
+df <- spark_flights |>
+  filter(!is.na(dep_delay)) |>
   mutate(
     month = paste0("m", month),
     day = paste0("d", day)
-  ) %>%
+  ) |>
   select(dep_delay, sched_dep_time, month, day, distance) 
 ```
 
@@ -140,7 +140,7 @@ pipeline very modular.
 
 
 ```{r}
-ft_dplyr_transformer(sc, df) %>%
+ft_dplyr_transformer(sc, df) |>
   ml_param("statement")
 ```
 
@@ -158,21 +158,21 @@ The following step will create a 5 stage pipeline:
 5.  Logistic Model
 
 ```{r}
-flights_pipeline <- ml_pipeline(sc) %>%
+flights_pipeline <- ml_pipeline(sc) |>
   ft_dplyr_transformer(
     tbl = df
-    ) %>%
+    ) |>
   ft_binarizer(
     input_col = "dep_delay",
     output_col = "delayed",
     threshold = 15
-  ) %>%
+  ) |>
   ft_bucketizer(
     input_col = "sched_dep_time",
     output_col = "hours",
     splits = c(400, 800, 1200, 1600, 2000, 2400)
-  )  %>%
-  ft_r_formula(delayed ~ month + day + hours + distance) %>% 
+  )  |>
+  ft_r_formula(delayed ~ month + day + hours + distance) |> 
   ml_logistic_regression()
 ```
 
@@ -228,7 +228,7 @@ predictions <- ml_transform(
   partitioned_flights$testing
 )
 
-predictions %>%
+predictions |>
   count(delayed, prediction) 
 ```
 
@@ -273,7 +273,7 @@ time the “flights\_model” can be loaded into an independent Spark
 session outside of R.
 
 ```{r}
-new_df <- spark_flights %>%
+new_df <- spark_flights |>
   filter(
     month == 7,
     day == 5

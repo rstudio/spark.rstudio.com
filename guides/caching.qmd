@@ -93,8 +93,8 @@ Using the pre-processing capabilities of Spark, the data will be transformed bef
 The following `dplyr` script will not be immediately run, so the code is processed quickly. There are some check-ups made, but for the most part it is building a Spark SQL statement in the background.
 
 ```{r}
-trips_table <- tbl(sc,"taxi_jan_2020") %>%
-  filter(trip_distance > 20) %>% 
+trips_table <- tbl(sc,"taxi_jan_2020") |>
+  filter(trip_distance > 20) |> 
   select(VendorID, passenger_count, trip_distance)
 ```
 
@@ -137,9 +137,9 @@ spark_read_parquet(sc, "taxi_feb_2020" , "feb_2020.parquet", memory = FALSE)
 The `union()` command is akin to the `dplyr::bind_rows()` command. It will allow us to append the February file to the January file, and as with the previous transform, this script will be evaluated lazily.
 
 ```{r}
-passenger_count <- tbl(sc, "taxi_jan_2020") %>%
-  union(tbl(sc, "taxi_feb_2020")) %>%
-  mutate(pickup_date = as.Date(tpep_pickup_datetime)) %>% 
+passenger_count <- tbl(sc, "taxi_jan_2020") |>
+  union(tbl(sc, "taxi_feb_2020")) |>
+  mutate(pickup_date = as.Date(tpep_pickup_datetime)) |> 
   count(pickup_date)
 ```
 
@@ -148,7 +148,7 @@ passenger_count <- tbl(sc, "taxi_jan_2020") %>%
 When receiving a `collect()` command, Spark will execute the SQL statement and send the results back to R in a data frame. In this case, R only loads 51 observations into a data frame called *passenger_count*.
 
 ```{r}
-passenger_count <- passenger_count %>%
+passenger_count <- passenger_count |>
   collect()
 ```
 
@@ -157,8 +157,8 @@ passenger_count <- passenger_count %>%
 Now the smaller data set can be plotted
 
 ```{r}
-passenger_count %>% 
-  filter(pickup_date >= "2020-01-01", pickup_date <= "2020-02-28") %>% 
+passenger_count |> 
+  filter(pickup_date >= "2020-01-01", pickup_date <= "2020-02-28") |> 
   ggplot() +
   geom_line(aes(pickup_date, n)) +
   theme_minimal() +

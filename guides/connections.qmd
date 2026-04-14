@@ -6,6 +6,10 @@ aliases:
   - /articles/deployment-connections
 ---
 
+::: callout-note
+Spark 4.0 deprecated the **SparkR** package (the official R API maintained by the Apache Spark project). This does not affect `sparklyr`, which uses its own independent interface to Spark and remains fully supported.
+:::
+
 ## Local mode
 
 Local mode is an excellent way to learn and experiment with Spark. Local mode also provides a convenient development environment for analyses, reports, and applications that you plan to eventually deploy to a multi-node Spark cluster.
@@ -29,8 +33,7 @@ conf$`sparklyr.cores.local` <- 4
 conf$`sparklyr.shell.driver-memory` <- "16G"
 conf$spark.memory.fraction <- 0.9
 
-sc <- spark_connect(master = "local", 
-                    version = "2.1.0",
+sc <- spark_connect(master = "local",
                     config = conf)
 ```
 
@@ -51,8 +54,8 @@ conf <- spark_config()   # Load variable with spark_config()
 
 conf$spark.executor.memory <- "16G" # Use `$` to add or set values
 
-sc <- spark_connect(master = "yarn-client", 
-                    config = conf)  # Pass the conf variable 
+sc <- spark_connect(master = "yarn",
+                    config = conf)  # Pass the conf variable
 ```
 
 ### Spark definitions
@@ -83,7 +86,7 @@ It may be useful to provide some simple definitions for the Spark nomenclature:
 
 Using Spark and R inside a Hadoop based *Data Lake* is becoming a common practice at companies. Currently, *there is no good way to manage user connections to the Spark service centrally*. There are some caps and settings that can be applied, but in most cases there are configurations that the R user will need to customize.
 
-The [Running on YARN](https://spark.apache.org/docs/latest/running-on-yarn.html) page in Spark's official website is the best place to start for configuration settings reference, please bookmark it. Cluster administrators and users can benefit from this document. If Spark is new to the company, the [YARN tunning](https://blog.cloudera.com/blog/2015/03/how-to-tune-your-apache-spark-jobs-part-2/) article, courtesy of Cloudera, does a great job at explaining how the Spark/YARN architecture works.
+The [Running on YARN](https://spark.apache.org/docs/latest/running-on-yarn.html) page in Spark's official website is the best place to start for configuration settings reference, please bookmark it. Cluster administrators and users can benefit from this document.
 
 ### Recommended properties
 
@@ -99,7 +102,7 @@ The following are the recommended Spark properties to set when connecting via R:
 
 ### Client mode
 
-Using `yarn-client` as the value for the `master` argument in `spark_connect()` will make the server in which R is running to be the Spark's session driver. Here is a sample connection:
+Using `"yarn"` as the value for the `master` argument in `spark_connect()` defaults to client mode, making the server where R is running the Spark session driver. Here is a sample connection:
 
 ``` r
 conf <- spark_config()
@@ -109,9 +112,8 @@ conf$spark.executor.cores <- 2
 conf$spark.executor.instances <- 3
 conf$spark.dynamicAllocation.enabled <- "false"
 
-sc <- spark_connect(master = "yarn-client", 
+sc <- spark_connect(master = "yarn",
                     spark_home = "/usr/lib/spark/",
-                    version = "1.6.0",
                     config = conf)
 ```
 
@@ -125,7 +127,7 @@ Notice that 155.3MB per executor are assigned instead of the 300MB requested. Th
 
 ### Cluster mode
 
-Running in cluster mode means that YARN will choose where the driver of the Spark session will run. This means that the server where R is running may not necessarily be the driver for that session. Here is a good write-up explaining how running Spark applications work: [Running Spark on YARN](https://www.cloudera.com/documentation/enterprise/5-12-x/topics/cdh_ig_running_spark_on_yarn.html)
+Running in cluster mode means that YARN will choose where the driver of the Spark session will run. This means that the server where R is running may not necessarily be the driver for that session. See [Running Spark on YARN](https://spark.apache.org/docs/latest/running-on-yarn.html) in the official Spark documentation for further details.
 
 The server will need to have copies of at least two files: `yarn-site.xml` and `hive-site.xml`. There may be other files needed based on your cluster's individual setup.
 
@@ -134,7 +136,7 @@ This is an example of connecting to a Cloudera cluster:
 ``` r
 library(sparklyr)
 
-Sys.setenv(JAVA_HOME="/usr/lib/jvm/java-7-oracle-cloudera/")
+Sys.setenv(JAVA_HOME="/usr/lib/jvm/java-17/")
 Sys.setenv(SPARK_HOME = '/opt/cloudera/parcels/CDH/lib/spark')
 Sys.setenv(YARN_CONF_DIR = '/opt/cloudera/parcels/CDH/lib/spark/conf/yarn-conf')
 
@@ -144,7 +146,7 @@ conf$spark.executor.instances <- 3
 conf$spark.dynamicAllocation.enabled <- "false"
 conf <- spark_config()
 
-sc <- spark_connect(master = "yarn-cluster", 
+sc <- spark_connect(master = "yarn",
                     config = conf)
 ```
 
@@ -201,10 +203,9 @@ conf$spark.memory.fraction <- 0.9
 conf$spark.executor.cores <- 2
 conf$spark.dynamicAllocation.enabled <- "false"
 
-sc <- spark_connect(master="spark://master-url:7077", 
-              version = "2.1.0",
-              config = conf,
-              spark_home = "/home/ubuntu/spark-2.1.0-bin-hadoop2.7/")
+sc <- spark_connect(master = "spark://master-url:7077",
+                    config = conf,
+                    spark_home = "/home/ubuntu/spark/")
 ```
 
 #### Executors page

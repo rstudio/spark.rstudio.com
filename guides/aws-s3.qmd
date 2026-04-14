@@ -2,6 +2,7 @@
 title: "Using Spark with AWS S3 buckets"
 execute:
   freeze: true
+  eval: false
 ---
 
 ## AWS Access Keys
@@ -108,12 +109,12 @@ There are a few points we need to highlight about the following simple dyplr cod
 Because there were NAs in the original fields, we have to mutate them to a number. Try coercing any variable as integer instead of numeric, this will save a lot of space when cached to Spark memory. The sdf_register command can be piped at the end of the code. After running the code, a new table will appear in the RStudio IDE’s Spark tab
 
 ```r
-tidy_flights <- tbl(sc, "flights_spark") %>%
+tidy_flights <- tbl(sc, "flights_spark") |>
   mutate(ArrDelay = as.integer(ArrDelay),
          DepDelay = as.integer(DepDelay),
-         Distance = as.integer(Distance)) %>%
-  filter(!is.na(ArrDelay)) %>%
-  select(DepDelay, ArrDelay, Distance) %>%
+         Distance = as.integer(Distance)) |>
+  filter(!is.na(ArrDelay)) |>
+  select(DepDelay, ArrDelay, Distance) |>
   sdf_register("tidy_spark")
 ```
 

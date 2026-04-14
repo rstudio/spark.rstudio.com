@@ -26,14 +26,14 @@ library(sparklyr)
 
 sc <- spark_connect(master = "local")
 
-sdf_len(sc, 5, repartition = 1) %>%
+sdf_len(sc, 5, repartition = 1) |>
   spark_apply(function(e) I(e))
 ```
 
 Your R function should be designed to operate on an R [data frame](https://stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html). The R function passed to `spark_apply()` expects a DataFrame and will return an object that can be cast as a DataFrame. We can use the `class` function to verify the class of the data.
 
 ```{r}
-sdf_len(sc, 10, repartition = 1) %>%
+sdf_len(sc, 10, repartition = 1) |>
   spark_apply(function(e) class(e))
 ```
 
@@ -82,7 +82,7 @@ spark_apply(iris_tbl, nrow, group_by = "Species")
 ```
 
 ```{r}
-iris_tbl %>%
+iris_tbl |>
   spark_apply(
     function(e) summary(lm(Petal_Length ~ Petal_Width, e))$r.squared,
     names = "r.squared",
@@ -138,7 +138,7 @@ config <- spark_config()
 config[["spark.r.command"]] <- "<path-to-r-version>"
 sc <- spark_connect(master = "local", config = config)
 
-sdf_len(sc, 10) %>% spark_apply(function(e) e)
+sdf_len(sc, 10) |> spark_apply(function(e) e)
 ```
 
 ## Limitations

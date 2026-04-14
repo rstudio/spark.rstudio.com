@@ -5,6 +5,8 @@
 $navbar-dark-hover-color:       null;
 $navbar-light-hover-color:      null;
 
+$code-block-bg: #f5f6f7;
+
 
 
 /*-- scss:rules --*/
@@ -74,4 +76,58 @@ $navbar-light-hover-color:      null;
 .co {
   font-size: .830em;
   font-weight: 100;
+}
+
+// Code blocks -----------------------------------------------------------------
+
+div.sourceCode {
+  background-color: $code-block-bg;
+  border: 1px solid darken($code-block-bg, 6%);
+  border-radius: 0.5rem;
+}
+
+div.sourceCode pre.sourceCode {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 1em 3.5em 1em 1.2em !important;
+}
+
+div.sourceCode code.sourceCode {
+  background: transparent !important;
+}
+
+// Copy button — always visible with clean gray style
+.code-copy-button {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  background: rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: rgba(0, 0, 0, 0.55) !important;
+  border-radius: 6px !important;
+  padding: 7px 8px !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.12) !important;
+    border-color: rgba(0, 0, 0, 0.25) !important;
+    color: rgba(0, 0, 0, 0.75) !important;
+  }
+
+  &:active,
+  &[aria-label="Code copied"] {
+    background: #333 !important;
+    border-color: #333 !important;
+    color: #fff !important;
+  }
 }

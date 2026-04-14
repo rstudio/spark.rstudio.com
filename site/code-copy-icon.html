@@ -1,0 +1,21 @@
+<script>
+// Replace Quarto's default Bootstrap clipboard icon with a clean
+// two-document stroked SVG, and swap to a checkmark on successful copy.
+document.addEventListener('DOMContentLoaded', function () {
+  var copyIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="8" height="10" rx="1"></rect><path d="M11 4V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1"></path></svg>';
+  var checkIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 4 6 11 3 8"></polyline></svg>';
+
+  document.querySelectorAll('.code-copy-button').forEach(function (btn) {
+    // Swap the icon
+    btn.innerHTML = copyIcon;
+
+    // Intercept click to show checkmark feedback
+    btn.addEventListener('click', function () {
+      btn.innerHTML = checkIcon;
+      setTimeout(function () {
+        btn.innerHTML = copyIcon;
+      }, 2000);
+    });
+  });
+});
+</script>

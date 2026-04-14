@@ -1,3 +1,6 @@
+if (!requireNamespace("downlit", quietly = TRUE)) {
+  install.packages("downlit", repos = "https://cloud.r-project.org", quiet = TRUE)
+}
 library(downlit)
 
 # ── Collect HTML output files ────────────────────────────────────────────────

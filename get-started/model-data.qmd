@@ -42,8 +42,8 @@ mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
 ### Prepare the data
 
 Spark provides data frame operations that makes it easier to prepare data for
-modeling.  In this case, we will use the `sdf_partition()` command to 
-divide the `mtcars` data into "training" and "test". 
+modeling.  In this case, we will use the `sdf_random_split()` command to
+divide the `mtcars` data into "training" and "test".
 
 ```{r}
 partitions <- mtcars_tbl |>
@@ -88,6 +88,6 @@ head(pred)
 
 Spark machine learning supports a wide array of algorithms and feature 
 transformations and as illustrated above it's easy to chain these functions
-together with `dplyr` pipelines. To learn more see the  [Machine Learning](/guides/mlib.qmd) 
+together with pipelines. To learn more see the  [Machine Learning](/guides/mlib.qmd) 
 article on this site. For a list of Spark ML models available through `sparklyr` visit
 [Reference - ML](/packages/sparklyr/latest/reference/index.html#spark-machine-learning)

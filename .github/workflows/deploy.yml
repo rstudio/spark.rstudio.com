@@ -14,10 +14,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Cache Quarto
+        id: cache-quarto
+        uses: actions/cache@v4
+        with:
+          path: /opt/quarto
+          key: quarto-1.8.27
+
       - name: Install Quarto
+        if: steps.cache-quarto.outputs.cache-hit != 'true'
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: 1.8.27
+
+      - name: Add Quarto to PATH
+        if: steps.cache-quarto.outputs.cache-hit == 'true'
+        run: echo "/opt/quarto/bin" >> $GITHUB_PATH
 
       - name: Install R
         uses: r-lib/actions/setup-r@v2

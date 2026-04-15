@@ -25,15 +25,10 @@ jobs:
           r-version: release
           use-public-rspm: true
 
-      - name: Cache R packages
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: r-downlit-${{ hashFiles('_post-render.R') }}
-          restore-keys: r-downlit-
-
       - name: Install downlit
-        run: Rscript -e 'if (!requireNamespace("downlit", quietly = TRUE)) install.packages("downlit", repos = "https://cloud.r-project.org")'
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: downlit
 
       - name: Render site
         run: quarto render

@@ -282,7 +282,7 @@ by the snippet, then the `envname` of the code can be modified after pressing
 More details about this feature can be found in 
 [Posit Workbench's official user guide](https://docs.posit.co/ide/server-pro/user/rstudio-pro/guide/databricks.html).
 
-## Serveless Compute
+## Serverless Compute
 
 [Databricks' Serverless compute](https://docs.databricks.com/aws/en/compute/serverless/) 
 lets you run workloads without having to provision a cluster. Databricks
@@ -319,7 +319,7 @@ section in this page for more background.
 
 ## Interacting with the cluster
 
-### RStudio's Connection pane
+### Connections pane
 
 Thanks to the new way we are integrating with Spark, it is now possible
 to display the same structure displayed in the Databricks Data Explorer.
@@ -349,7 +349,7 @@ library(dbplyr)
 library(sparklyr)
 
 sc <- spark_connect(
-    cluster_id = "1010-182058-h7wkx3s7",
+    cluster_id = "0415-180932-gzusyghs",
     method = "databricks_connect"
 )
 ```
@@ -415,8 +415,8 @@ ml_logistic_regression(tbl_mtcars, am ~ .)
 #> 2: Cancel
 #> 
 #> Selection: 1
-#> Using virtual environment '/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1' ...
-#> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python -m pip install --upgrade --no-user torch torcheval scikit-learn
+#> Using virtual environment '/Users/edgar/.virtualenvs/r-sparklyr-databricks-18.1' ...
+#> + /Users/edgar/.virtualenvs/r-sparklyr-databricks-18.1/bin/python -m pip install --upgrade --no-user torch torcheval scikit-learn
 #> Collecting torch
 ...
 ```
@@ -475,15 +475,16 @@ These are the two feature transformers currently supported:
 -   Standard Scaler - `ft_standard_scaler()`
 -   Max Abs Scaler - `ft_max_abs_scaler()`
 
-To access simply call the function by passing a vector of column names.
-Please note that it will create a single column with an array field that
-contains all of the newly scaled values.
+To access the scalers, first use `ft_vector_assembler()` to combine
+the input columns into a single feature vector, then pass that vector
+column to the scaler.
 
 ```{r}
 tbl_mtcars <- copy_to(sc, mtcars)
 
-tbl_mtcars %>% 
-  ft_standard_scaler(c("wt", "mpg"), "features") %>% 
+tbl_mtcars %>%
+  ft_vector_assembler(c("wt", "mpg"), "features_raw") %>%
+  ft_standard_scaler("features_raw", "features") %>%
   select(wt, mpg, features)
 ```
 
@@ -621,7 +622,7 @@ Here is a list of what we currently support, and do not support via
 **Not supported**:
 
 -   **SDF functions** - Most of these functions require SparkSession,
-    which is currently not supported in Spark 3.4.
+    which is currently not supported via Spark Connect.
 
 -   **`tidyr`** - This is ongoing work that we are focusing on in
     `sparklyr`. We are implementing these functions using PySpark

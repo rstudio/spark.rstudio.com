@@ -7,8 +7,15 @@ library(downlit)
 output_files <- strsplit(Sys.getenv("QUARTO_PROJECT_OUTPUT_FILES"), "\n")[[1]]
 html_files   <- output_files[grepl("\\.html$", output_files)]
 
+# Fallback: if Quarto didn't populate the env var (e.g. all files were served
+# from the freeze cache in CI), scan the output directory directly.
 if (length(html_files) == 0) {
-  message("downlit: no HTML files to process, skipping")
+  message("downlit: QUARTO_PROJECT_OUTPUT_FILES empty, scanning docs/ for HTML files")
+  html_files <- list.files("docs", pattern = "\\.html$", recursive = TRUE, full.names = TRUE)
+}
+
+if (length(html_files) == 0) {
+  message("downlit: no HTML files found, skipping")
   quit(status = 0)
 }
 

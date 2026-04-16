@@ -57,7 +57,7 @@ library(sparklyr)
 library(pysparklyr)
 
 sc <- spark_connect(
-    cluster_id = "1026-175310-7cpsh3g8",
+    cluster_id = "0415-180932-gzusyghs",
     method = "databricks_connect"
 )
 ```
@@ -94,14 +94,14 @@ this:
 -   If you know the cluster's DBR version:
 
     ``` r
-    pysparklyr::deploy_databricks(version = "14.1")
+    pysparklyr::deploy_databricks(version = "18.1")
     ```
 
 -   The cluster's ID can also be used and `pysparklyr` will
     automatically determine the required DBR version:
 
     ``` r
-    pysparklyr::deploy_databricks(cluster_id = "1026-175310-7cpsh3g8")
+    pysparklyr::deploy_databricks(cluster_id = "0415-180932-gzusyghs")
     ```
 
 -   If you just ran the code of the content you plan to deploy, then the
@@ -119,7 +119,7 @@ this:
     setting the `python` argument:
 
     ``` r
-    pysparklyr::deploy_databricks(python = "/Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1")
+    pysparklyr::deploy_databricks(python = "/Users/edgar/.virtualenvs/r-sparklyr-databricks-18.1")
     ```
 
 -   You can use `DATABRICKS_CLUSTER_ID` environment variable. If you
@@ -137,11 +137,11 @@ RStudio IDE, it will choose the top one as the default but allow you to
 easily change it if necessary:
 
 ``` r
-> pysparklyr::deploy_databricks(version = "14.1")
+> pysparklyr::deploy_databricks(version = "18.1")
 
 ── Starting deployment ──────────────────────────────────────────────────────────────────────────────────────
 ℹ Source directory: /Users/edgar/r_projects/practice/test-deploy
-ℹ Python: /Users/edgar/.virtualenvs/r-sparklyr-databricks-14.1/bin/python
+ℹ Python: /Users/edgar/.virtualenvs/r-sparklyr-databricks-18.1/bin/python
 ℹ Posit server: colorado.posit.co
   Account name: edgar
 ℹ Host URL: rstudio-partner-posit-default.cloud.databricks.com
@@ -212,7 +212,7 @@ rsconnect:
 config <- config::get()
 
 pysparklyr::deploy_databricks(
-  version = "14.1", 
+  version = "18.1", 
   host = config$host_url,
   token = config$token
   )

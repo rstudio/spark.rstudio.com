@@ -83,24 +83,29 @@ How `sparklyr` communicates with Spark Connect
 
 ## Package Installation
 
-To access Spark Connect, you will need the following two packages:
-
--   `sparklyr` - 1.8.4
--   `pysparklyr` - 0.1.3
+To access Spark Connect, you will need to install the `pysparklyr` package in
+addition to `sparklyr`: 
 
 ``` r
-install.packages("sparklyr")
 install.packages("pysparklyr")
 ```
 
 ## Initial setup
 
-`sparklyr` will need specific Python libraries in order to connect, and interact
-with Spark Connect. We provide a convenience function that will automatically
-do the following:
+`sparklyr` will automatically set up a temporary Python environment for
+the duration of your R session using `uv`. This environment will
+include all the Python libraries needed to interact with the Spark
+cluster. No manual installation steps are required, simply call
+`spark_connect()` and everything will be ready to use.
 
-- Create, or re-create, a Python environment. Based on your OS, it will choose
-to create a Virtual Environment, or Conda. 
+### Legacy setup via `install_pyspark()`
+
+If `uv` is not available in your environment (for example, because your
+organization restricts its installation), you can fall back to setting
+up the Python environment manually using `install_pyspark()`. This will:
+
+- Create, or re-create, a persistent Python environment. Based on your
+OS, it will choose to create a Virtual Environment, or Conda.
 
 - Install the needed Python libraries
 
@@ -110,20 +115,19 @@ To install the latest versions of all the libraries, use:
 pysparklyr::install_pyspark()
 ```
 
-`sparklyr` will query PyPi.org to get the latest version of PySpark
-and installs that version. It is recommended that the version of the
-PySpark library matches the Spark version of your cluster. 
-To do this, pass the Spark version in the  `version` argument, for example:
+It is recommended that the version of the PySpark library matches the
+Spark version of your cluster. To do this, pass the Spark version in
+the `version` argument, for example:
 
 ```r
 pysparklyr::install_pyspark("4.1")
 ```
 
-We have seen Spark sessions crash when the version of PySpark and the version
-of Spark do not match. Specifically when a newer version of PySpark is used
-against an older version of Spark.  If you are having issues with your
-connection, consider running `install_pyspark()` to match the cluster's
-specific Spark version.
+We have seen Spark sessions crash when the version of PySpark and the
+version of Spark do not match. Specifically when a newer version of
+PySpark is used against an older version of Spark. If you are having
+issues with your connection, consider running `install_pyspark()` to
+match the cluster's specific Spark version.
 
 ## Connecting
 
@@ -151,13 +155,7 @@ message, `sparklyr` will let you know which environment it will use.
 It is possible to run Spark Connect on your machine. We provide helper
 functions that let you setup and start/stop the services locally.
 
-If you wish to try this out, first install Spark 4.0 or above:
-
-``` r
-spark_install("4.1")
-```
-
-After installing, start Spark Connect using:
+Start Spark Connect using:
 
 ```{r}
 pysparklyr::spark_connect_service_start("4.1")
@@ -196,7 +194,14 @@ Spark DataFrame:
 ```{r}
 fit <- mtcars_tbl |>
   ml_linear_regression(mpg ~ .)
+```
 
+Spark Connect models have a specialized print output that differs from
+other `sparklyr` deployment types. It displays a summary of the model,
+including the coefficients and fit statistics such as RMSE, R², and
+mean absolute error:
+
+```{r}
 fit
 ```
 

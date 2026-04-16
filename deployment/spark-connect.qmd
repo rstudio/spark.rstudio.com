@@ -40,8 +40,8 @@ shell is no longer an option. We have decided to use Python as the new
 interface. In turn, Python uses *gRPC* to interact with Spark.
 
 We are using `reticulate` to interact with the Python API. `sparklyr` extends 
-the functionality, and user experience, by providing the `dplyr`back-end, `DBI` 
-back-end, RStudio's Connection pane integration.
+the functionality, and user experience, by providing the `dplyr` back-end, `DBI`
+back-end, and RStudio's Connection pane integration.
 
 ::: {#fig-connect}
 ```{mermaid}
@@ -129,8 +129,7 @@ specific Spark version.
 
 To start a session with an open source Spark cluster, via Spark Connect, you
 will need to set the `master` and `method` values. The `master` will be an IP
-and maybe a port that you will need to pass. The protocol to use to put
-together the proper connection URL is "sc://". For `method`, use
+address and an optional port. The connection URL uses the "sc://" protocol. For `method`, use
 "spark_connect". Here is an example:
 
 ``` r
@@ -138,7 +137,7 @@ library(sparklyr)
 
 sc <- spark_connect(
   master = "sc://[Host IP(:Host Port - optional)]", 
-  method = "spark_connect"
+  method = "spark_connect",
   version = "[Version that matches your cluster]"
   )
 ```
@@ -149,42 +148,38 @@ message, `sparklyr` will let you know which environment it will use.
 
 ## Run locally
 
-It is possible to run Spark Connect in your machin. We provide helper
+It is possible to run Spark Connect on your machine. We provide helper
 functions that let you setup and start/stop the services locally.
 
-If you wish to try this out, first install Spark 3.4 or above:
+If you wish to try this out, first install Spark 4.0 or above:
 
 ``` r
-spark_install("3.5")
+spark_install("4.1")
 ```
 
 After installing, start Spark Connect using:
 
 ```{r}
-pysparklyr::spark_connect_service_start("3.5", scala_version = "2.12")
+pysparklyr::spark_connect_service_start("4.1")
 ```
 
-To connect to your local Spark cluster using SPark Connect, use **localhost**
+To connect to your local Spark cluster using Spark Connect, use **localhost**
 as the address for `master`:
 
-
 ```{r}
-sc <- spark_connect(
-  master = "sc://localhost", 
-  method = "spark_connect", 
-  version = "3.5"
-  )
+library(sparklyr)
+library(dplyr)
+
+sc <- spark_connect("sc://localhost", method = "spark_connect", version = "4.1")
 ```
 
 Now, you are able to interact with your local Spark session:
 
 ```{r}
-library(dplyr)
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
 
-tbl_mtcars <- copy_to(sc, mtcars)
-
-tbl_mtcars %>% 
-  group_by(am) %>% 
+mtcars_tbl |>
+  group_by(am) |>
   summarise(mpg = mean(mpg, na.rm = TRUE))
 ```
 
@@ -194,12 +189,43 @@ When done, you can disconnect from Spark Connect:
 spark_disconnect(sc)
 ```
 
-The regular version of local Spark would terminate the local cluster
-when the you pass `spark_disconnect()`. For Spark Connect, the local
-cluster needs to be stopped independently:
+## Machine Learning
+
+Starting with Spark 4.0, Spark Connect has access to the full
+[MLlib library](https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html).
+This means you can now train and apply machine learning models directly
+from R via `sparklyr`.
+
+Here is an example that fits a linear regression model on a Spark
+DataFrame and generates predictions:
 
 ```{r}
-pysparklyr::spark_connect_service_stop()
+sc <- spark_connect("sc://localhost", method = "spark_connect", version = "4.1")
+
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
+
+fit <- mtcars_tbl |>
+  ml_linear_regression(mpg ~ .)
+
+fit
+```
+
+Use `ml_predict()` to score new data with the fitted model:
+
+```{r}
+pred <- ml_predict(fit, mtcars_tbl)
+
+head(pred)
+```
+
+```{r}
+spark_disconnect(sc)
+```
+
+The local Spark Connect service can now be stopped:
+
+```{r}
+pysparklyr::spark_connect_service_stop(version = "4.1")
 ```
 
 ## Additional setup details

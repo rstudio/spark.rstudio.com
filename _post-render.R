@@ -22,8 +22,8 @@ if (length(html_files) == 0) {
 # ── Point downlit at the local package reference docs ────────────────────────
 # Functions from these packages will link to the reference pages hosted on this
 # site rather than to CRAN or external pkgdown sites. Functions from all other
-# packages (dplyr, ggplot2, tidymodels, etc.) are resolved automatically by
-# downlit against their published pkgdown / CRAN documentation.
+# packages (dplyr, ggplot2, etc.) are resolved automatically by downlit against
+# their published pkgdown / CRAN documentation.
 site_url <- "https://spark.posit.co"
 
 options(

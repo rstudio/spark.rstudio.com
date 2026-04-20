@@ -1,5 +1,5 @@
 ---
-title: Tune Tidymodel in Databricks
+title: Tune Tidymodels in Databricks
 execute:
   eval: true
   freeze: true
@@ -27,7 +27,7 @@ resampling, to preprocessing, to model tuning, to performance
 measurement.
 
 Model tuning is a time-consuming process because of the number of tuning
-parameter combinations that need to be processed. Running the
+parameter combinations that need to be evaluated. Running the
 combinations in parallel saves a significant amount of time. While
 Tidymodels supports parallel tuning, it does not natively integrate with
 Spark. `sparklyr` bridges this gap, making distributed tuning on a
@@ -37,7 +37,7 @@ In Tidymodels, the
 [`tune_grid()`](https://tune.tidymodels.org/reference/tune_grid.html)
 function is called to execute the grid search locally. To run in
 Databricks, simply call `sparklyr`'s `tune_grid_spark()` instead. It
-accepts the exact same arguments as `tune_grid()` does, see @fig-code.
+accepts the same arguments as `tune_grid()`, see @fig-code.
 
 ::::::: {#fig-code}
 :::::: columns
@@ -76,9 +76,9 @@ Run remotely in Databricks
 Comparing tune and sparklyr function calls
 :::::::
 
-`sparklyr` will automatically upload the needed R object to Databricks,
+`sparklyr` will automatically upload the needed R objects to Databricks,
 such as the resample object, model specification, and the preprocessing
-steps. It will then run the tuning in parallel taking advantage of the R
+steps. It will then run the tuning in parallel, taking advantage of the R
 integration in Databricks. Lastly, it will collect all of the results
 back to your local R session, and return a `tune_results` object that is
 indistinguishable from one made directly by Tidymodels; see
@@ -145,7 +145,7 @@ spec_bt <- boost_tree(
 The only required step before tuning the model in Databricks is to
 connect to a Databricks' Spark cluster. Although we could have connected
 earlier, this demonstrates how easily a local tuning workflow can be
-pivoted to a Databricks cluster.
+migrated to a Databricks cluster.
 
 ```{r}
 #| eval: FALSE
@@ -158,7 +158,7 @@ sc <- spark_connect(
 ```
 
 The next step is to call `tune_grid_spark()`. We will pass the three
-elements created in the first step, and the Databricks connection
+required elements created in the first step, and the Databricks connection
 variable. The optional `control_grid()` call is included here to display
 the `sparklyr` output during the tuning process.
 
@@ -184,7 +184,7 @@ autoplot(spark_results)
 ## R and Python libraries prerequisites
 
 Before tuning in Databricks, the following Python and R packages
-**must** be pre-installed on the cluster:
+**must** be installed on the cluster:
 
 -   `rpy2` **(Python)**
 -   `tidymodels` **(R)**
@@ -193,7 +193,7 @@ Before tuning in Databricks, the following Python and R packages
     `ranger`).
 
 There are two options to accomplish the installation, the first via the
-Databricks portal, or by installing the libraries programmatically.
+Databricks portal, the second by installing the libraries programmatically.
 
 #### Option 1 - Databricks Web Portal
 
@@ -234,8 +234,8 @@ py_lib <- lib_pypi("rpy2==3.6.4") |>
 db_libs_install("0415-180932-gzusyghs", py_lib)
 ```
 
-As time goes by, there may be other modeling R packages that need to be
-installed in Spark. Here is a template that can be used to install a
+Over time, there may be other modeling R packages that need to be
+installed on the cluster. Here is a template that can be used to install a
 single package:
 
 ```{r}
@@ -255,16 +255,16 @@ lib_cran(
 
 -   **Local vs Remote results** - It is possible that results from
     tuning a model locally will differ from those returned from
-    Databricks. Differences in Operating Systems, R run-time, and
+    Databricks. Differences in operating systems, R runtime, and
     libraries between the local machine and those in the Databricks
     cluster will affect the calculations. However, re-running the same
     tuning in the same Databricks cluster will return the same results
     if a seed is set in the local R session. `sparklyr` ensures that the
     seeds are set the same way Tidymodels does for the local tuning.
 -   **Parallelism** - There are two ways to set the parallelism for
-    tuning performed in Databricks. The default way is to tune over the
-    resamples, and the second way is over all combinations of resamples
-    and parameters. For a full explanation of how parallelism works in
+    tuning performed in Databricks. The default method tunes over
+    resamples; the second tunes over all combinations of resamples and
+    parameters. For a full explanation of how parallelism works in
     this kind of distributed computing, please refer to [Tune Tidymodels
     in Spark - Parallel
     Processing](/guides/tune_tidymodels_spark.html#parallel-processing-in-spark)
@@ -273,18 +273,18 @@ lib_cran(
     tune models using data too large to fit in local memory, consider
     using [Spark ML](/guides/model_tuning_text.qmd) directly. The downside is that Spark ML
     requires an entirely different setup and codebase than Tidymodels.
--   **Retrieving predictions** - `sparklyr` supports the feature that
-    downloads the predictions from each parameter and resample
-    combination. Keep in mind that this will roughly double the amount
-    of data downloaded from Databricks. In most cases this is not a
-    problem, but for a very large resampled data set it may become one.
+-   **Retrieving predictions** - `sparklyr` supports downloading
+    predictions from each parameter and resample combination. Keep in
+    mind that this will roughly double the amount of data downloaded from
+    Databricks. In most cases this is not a problem, but for a very
+    large resampled dataset it may become one.
     To learn how to turn that feature on, see [Tune Tidymodels in
     Spark - Retrieving
     predictions](/guides/tune_tidymodels_spark.html#retrieving-predictions-a.k.a-save_pred-true)
 
 ## Conclusion
 
-We’ve done a lot of work to ensure that `tune_grid_spark()` works
+We’ve taken care to ensure that `tune_grid_spark()` works
 exactly like `tune_grid()`. There’s no need to recode your logic or
 learn a new syntax; you just connect to the cluster and submit the job.
 Since many companies already provide access to Databricks, this workflow
@@ -292,6 +292,5 @@ allows you to take full advantage of existing infrastructure with
 minimal effort.
 
 Offloading heavy grid searches to a cluster saves significant time you
-can reinvest in deeper experimentation or presenting results to
-stakeholders faster. The next time you need to tune a model, give this a
+can reinvest in deeper experimentation or faster stakeholder reporting. The next time you need to tune a model, give this a
 try and see how much faster your workflow becomes.

@@ -37,6 +37,17 @@ options(
   )
 )
 
+# Workaround for https://github.com/r-lib/downlit/issues/173
+# downlit special-cases library(tidyverse) but not library(tidymodels), so its
+# member packages are never added to the search path used by find_rdname_attached().
+# Pre-seeding downlit.attached fixes linking for step_*, boost_tree(), tune(), etc.
+tidymodels_core <- c(
+  "broom", "dials", "dplyr", "ggplot2", "hardhat", "infer", "modeldata",
+  "parsnip", "purrr", "recipes", "rsample", "tibble", "tidyr", "tune",
+  "workflows", "workflowsets", "yardstick"
+)
+options(downlit.attached = union(tidymodels_core, getOption("downlit.attached")))
+
 # ── Process each file in-place ───────────────────────────────────────────────
 # classes_pandoc() maps downlit's token classes to the CSS class names that
 # Quarto / pandoc already emits, so existing syntax highlighting is preserved.

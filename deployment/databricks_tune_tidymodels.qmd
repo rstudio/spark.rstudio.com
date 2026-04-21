@@ -15,7 +15,7 @@ run_r <- TRUE
 library(tidymodels)
 library(sparklyr)
 
-sc <- spark_connect(method = "databricks_connect", cluster_id = "0415-180932-gzusyghs")
+sc <- spark_connect(method = "databricks_connect", cluster_id = "0420-225150-twe7n5s0")
 ```
 
 ## Introduction
@@ -153,7 +153,7 @@ library(sparklyr)
 
 sc <- spark_connect(
   method = "databricks_connect", 
-  cluster_id = "0415-180932-gzusyghs" # Replace with your own cluster's ID
+  cluster_id = "0420-225150-twe7n5s0" # Replace with your own cluster's ID
   )
 ```
 
@@ -225,13 +225,13 @@ r_libs <- libraries(
   lib_cran("xgboost", repo = repo) # (optional) Used in the example
 )
 
-db_libs_install("0415-180932-gzusyghs", r_libs)
+db_libs_install("0420-225150-twe7n5s0", r_libs)
 
 # Builds the Python package object. Specifying the version of `rpy2` to install.
-py_lib <- lib_pypi("rpy2==3.6.4") |>
+py_lib <- lib_pypi("rpy2==3.5.6") |>
   libraries()
 
-db_libs_install("0415-180932-gzusyghs", py_lib)
+db_libs_install("0420-225150-twe7n5s0", py_lib)
 ```
 
 Over time, there may be other modeling R packages that need to be

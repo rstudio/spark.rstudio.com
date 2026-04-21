@@ -20,7 +20,7 @@ library(dbplyr)
 library(sparklyr)
 library(pysparklyr)
 
-sc <- spark_connect(method = "databricks_connect", cluster_id = "0415-180932-gzusyghs")
+sc <- spark_connect(method = "databricks_connect", cluster_id = "0420-225150-twe7n5s0")
 
 tbl_mtcars <- copy_to(sc, mtcars)
 
@@ -143,7 +143,7 @@ Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html).
 | `context`                     | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `name`                        | Yes        |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `barrier`                     | Yes        | Support only on ungrouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                                                                    |
-| `fetch_result_as_sdf`         | Yes        | At this time, `spark_apply()` inside Databricks Connect only supports rectangular data, so seeing to `FALSE` will always return a data frame.                                                                                                                                                                                                                                                                                                        |
+| `fetch_result_as_sdf`         | Yes        | At this time, `spark_apply()` inside Databricks Connect only supports rectangular data, so setting it to `FALSE` will always return a data frame.                                                                                                                                                                                                                                                                                                        |
 | `partition_index_param`       | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `arrow_max_records_per_batch` | Yes        | Support only on ungrouped data. In other words, it is valid when the `group_by` argument is used.                                                                                                                                                                                                                                                                                                                                                    |
 | `auto_deps`                   | **No**     |                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -174,7 +174,7 @@ in the cluster. This was possible because R, and RStudio, was running in
 one of the matching servers in the Spark cluster. Because `sparklyr` is
 running on a remote machine, more likely a laptop, this is no longer an
 option. In the vast majority of cases, the remote machine will be on
-different a Operating System than the cluster. Additionally,
+a different Operating System than the cluster. Additionally,
 transmitting the unpacked, compiled, R packages would take a long time
 over a broadband Internet connection.
 

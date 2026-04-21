@@ -20,10 +20,6 @@ library(sparklyr)
 library(tidymodels)
 library(readmission)
 
-if(FALSE) { # if (!interactive()) {
-  pysparklyr::install_pyspark("4.1.0", python_version = "3.12")  
-  reticulate::py_install("rpy2", envname = "r-sparklyr-pyspark-4.1")
-}
 ```
 
 ## Introduction
@@ -127,12 +123,9 @@ The latest versions of `sparklyr`, `pysparklyr` and `tune` are needed:
 ```{r}
 #| eval: false
 
-# This feature has not officially been released to CRAN so install
-# the packages from GitHub
-
-pak::pak("tidymodels/tune")
-pak::pak("sparklyr/sparklyr")
-pak::pak("mlverse/pysparklyr")
+install.packages("tune")
+install.packages("sparklyr")
+install.packages("pysparklyr")
 ```
 
 
@@ -231,7 +224,7 @@ yet:
 #| 
 library(sparklyr)
 
-spark_install("4.1.0")
+spark_install("4.1.1")
 ```
 
 2. Start the Spark Connect service locally. Make sure to match the Spark version
@@ -239,7 +232,7 @@ you recently installed:
 
 ```{r}
 #| eval: !expr 'run_r'
-pysparklyr::spark_connect_service_start("4.1.0", python_version = "3.12")
+pysparklyr::spark_connect_service_start("4.1.1", python_version = "3.12")
 ```
 
 3. Connect to Spark:
@@ -468,7 +461,7 @@ spark_results <- tune_grid_spark(
 ```{r}
 #| eval: !expr 'run_r'
 #| include: false
-pysparklyr::spark_connect_service_stop()
+pysparklyr::spark_connect_service_stop("4.1.1")
 ```
 
 

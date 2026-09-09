@@ -119,7 +119,7 @@ then after upgrading the packages, you will be prompted to install
 `rpy2` in your Python environment. The prompt will occur the first time
 you use `spark_apply()` in an interactive R session. If this is the
 first time you are using `sparklyr` with Databricks Connect v2, please
-refer to our intro article["Databricks Connect
+refer to our intro article ["Databricks Connect
 v2"](/deployment/databricks-connect.qmd) to learn how to setup your
 environment.
 
@@ -180,13 +180,13 @@ over a broadband Internet connection.
 
 ## Providing a schema {#providing-a-schema}
 
-Passing a schema in `columns` will make`spark_apply()` run faster.
+Passing a schema in `columns` will make `spark_apply()` run faster.
 Because if not provided, `sparklyr` has to collect the first 10 rows,
 and run the R code in order to try and determine the names and types of
 your resulting data set. As a convenience, `sparklyr` will output a
 message with the schema it used as the schema. If you are going to rerun
 your `spark_apply()` command again, you can copy and paste the output of
-the message to you code.
+the message to your code.
 
 ```{r}
 spark_apply(
@@ -215,7 +215,7 @@ connections, `sparklyr` will, by default, attempt to use Apache Arrow.
 The Databricks Connect clusters come with Arrow installed. This approach
 also changes how Spark will partition your data. Instead of the number
 of partitions, Spark will use the value in the "Arrow Max Records per
-Bach" option. This option can be controlled directly in the
+Batch" option. This option can be controlled directly in the
 `spark_apply()` call by setting the `arrow_max_records_per_batch`.
 
 ```{r}

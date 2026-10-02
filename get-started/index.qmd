@@ -43,6 +43,11 @@ spark_install()
 Please be aware that after installation, Spark is **not** running. The next section
 will explain how to start a single node Spark cluster in your machine.
 
+:::{.callout-tip}
+To run Spark code on your computer without installing Java or Spark, try
+[Sail](/deployment/sail.qmd). Sail support is experimental.
+:::
+
 ## Connect to Spark
 
 You can use `spark_connect()` to connect to Spark clusters.  The arguments passed to
@@ -127,6 +132,15 @@ sc <- spark_connect(method = "spark_connect")
 ```
 
 For more information visit the [Spark Connect](/deployment/spark-connect.qmd) page 
+
+**Sail** *(experimental)*: 
+
+```r
+library(pysparklyr)
+sc <- spark_connect(master = "local", method = "sail")
+```
+
+For more information visit the [Sail](/deployment/sail.qmd) page 
 
 **Legacy:**
 

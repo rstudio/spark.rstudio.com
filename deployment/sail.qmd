@@ -1,0 +1,195 @@
+---
+title: "Sail"
+format:
+  html:
+    toc: true
+execute:
+    eval: true
+    freeze: true
+editor:
+  markdown:
+    wrap: 72
+---
+
+```{r}
+#| include: false
+
+library(dplyr)
+library(dbplyr)
+library(sparklyr)
+library(pysparklyr)
+
+```
+
+*Last updated: `r lubridate::date()`*
+
+::: callout-warning
+Sail support is experimental. It is only available in the development
+version of `pysparklyr`.
+:::
+
+## Intro
+
+[Sail](https://github.com/lakehq/sail) is a Spark Connect server written
+in Rust. It does not need Java or a JVM. Sail runs the same Spark
+DataFrame and SQL commands that Spark does, so `sparklyr` can talk to it
+the same way it talks to [Spark Connect](/deployment/spark-connect.qmd).
+
+Use Sail when you want to:
+
+-   Run Spark code on your laptop without installing Java or Spark
+-   Start a connection in a few seconds
+-   Work with data that fits on a single machine
+
+## How it works
+
+`sparklyr` uses `reticulate` to call the Python `pyspark-client`
+library. That library sends the commands to the Sail server over
+*gRPC*. With a "local" connection, the Sail server runs inside your R
+session.
+
+::: {#fig-sail}
+```{mermaid}
+%%| fig-width: 10
+%%| eval: true
+flowchart LR
+  subgraph rs[R session]
+    subgraph r[R]
+      sr[sparklyr]
+      rt[reticulate]
+    end
+    subgraph ps[Python]
+      pc[pyspark-client]
+      sl[Sail server]
+    end
+  end
+  sr <--> rt
+  rt <--> pc
+  pc <-- gRPC --> sl
+
+  style rs  fill:#fff,stroke:#666,color:#000
+  style r   fill:#fff,stroke:#666,color:#000
+  style sr  fill:#fff,stroke:#666,color:#000
+  style rt  fill:#fff,stroke:#666,color:#000
+  style ps  fill:#fff,stroke:#666,color:#000
+  style pc  fill:#fff,stroke:#666,color:#000
+  style sl  fill:#fff,stroke:#666,color:#000
+```
+
+How `sparklyr` communicates with a local Sail server
+:::
+
+## Package installation
+
+Install `sparklyr` from CRAN, and the development version of
+`pysparklyr` from GitHub:
+
+``` r
+install.packages("sparklyr")
+pak::pak("mlverse/pysparklyr")
+```
+
+## Python environment
+
+`sparklyr` sets up a temporary Python environment for your R session by
+using `uv`. This environment has the Python libraries that Sail needs.
+You do not need to install anything else. Call `spark_connect()` and
+`sparklyr` does the rest.
+
+If `uv` is not available, use `install_sail()`. It creates a
+persistent Python environment with these libraries:
+
+-   `pysail`
+-   The `pyspark-client` version that `pysail` needs
+-   `rpy2`, which `spark_apply()` uses
+
+``` r
+pysparklyr::install_sail()
+```
+
+To install a specific Sail version, pass it in `version`:
+
+``` r
+pysparklyr::install_sail(version = "0.7")
+```
+
+## Connect
+
+Set `method` to "sail". Use "local" for `master` to start a Sail server
+inside your R session. Load `pysparklyr` before you connect:
+
+```{r}
+library(sparklyr)
+library(pysparklyr)
+library(dplyr)
+
+sc <- spark_connect(master = "local", method = "sail")
+```
+
+The server uses a free port on your machine. `spark_disconnect()` stops
+the server. The server also stops when the R session ends.
+
+Now you can work with data in Sail. Sail does not cache tables in
+memory, so set `memory` to `FALSE`:
+
+```{r}
+mtcars_tbl <- copy_to(sc, mtcars, memory = FALSE, overwrite = TRUE)
+
+mtcars_tbl |>
+  group_by(am) |>
+  summarise(mpg = mean(mpg, na.rm = TRUE))
+```
+
+## Run R code
+
+`spark_apply()` runs R code against each part of the data:
+
+```{r}
+mtcars_tbl |>
+  spark_apply(nrow, group_by = "am", columns = "am double, x long")
+```
+
+With a "local" connection, the R code runs inside your R session, not
+in a separate R process. This means:
+
+-   If the R code crashes, it can end your R session
+-   The R code can change objects in your global environment
+
+```{r}
+spark_disconnect(sc)
+```
+
+## Connect to a running Sail server
+
+You can also connect to a Sail server that is already running. Pass the
+server's address in `master`. The address uses the "sc://" protocol:
+
+``` r
+library(pysparklyr)
+
+sc <- spark_connect(
+  master = "sc://localhost:50051",
+  method = "sail"
+)
+```
+
+The Python environment of the server needs `pyspark-client`. To use
+`spark_apply()`, the server also needs:
+
+-   `rpy2`
+-   R
+-   The same Python version as your R session
+
+See the [Sail
+documentation](https://docs.lakesail.com/sail/latest/) to learn how to
+start a Sail server.
+
+## Limitations
+
+Sail does not support some `sparklyr` features:
+
+-   **Caching** - `copy_to()` and the `spark_read_*()` functions need
+    `memory = FALSE`. `compute()` returns an error.
+-   **Machine learning** - The `ml_*()` and `ft_*()` functions do not
+    work.
+-   **Tuning** - `tune_grid_spark()` does not work.

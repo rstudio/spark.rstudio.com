@@ -117,53 +117,81 @@ the main libraries in the new Python environment:
 pysparklyr::install_sail()
 ```
 
+After that, connect with `spark_connect()` as shown in [Get
+started](#get-started). `sparklyr` finds and uses the new environment,
+instead of having `uv` create a temporary one.
+
 To install a specific Sail version, pass it in `version`:
 
 ``` r
 pysparklyr::install_sail(version = "0.7")
 ```
 
-After that, connect with `spark_connect()` as shown in [Get
-started](#get-started). `sparklyr` finds and uses the new environment.
-
 ## Work with data
 
-Sail does not cache tables in memory, so set `memory` to `FALSE`:
+Sail works with the same `sparklyr` and `dplyr` code that you use with
+Spark. Copy a local data frame to Sail with `copy_to()`:
 
 ```{r}
 library(dplyr)
 
-mtcars_tbl <- copy_to(sc, mtcars, memory = FALSE, overwrite = TRUE)
+mtcars_tbl <- copy_to(sc, mtcars, memory = FALSE)
+```
 
+Then use `dplyr` verbs. `sparklyr` turns them into Spark SQL, and Sail
+runs the query:
+
+```{r}
 mtcars_tbl |>
   group_by(am) |>
   summarise(mpg = mean(mpg, na.rm = TRUE))
 ```
 
+Use `collect()` to bring the results into R:
+
+```{r}
+mtcars_tbl |>
+  filter(hp > 150) |>
+  select(mpg, cyl, hp) |>
+  collect()
+```
+
+You can also run SQL directly with `DBI`:
+
+```{r}
+DBI::dbGetQuery(sc, "SELECT cyl, COUNT(*) AS n FROM mtcars GROUP BY cyl")
+```
+
 ## Run R code
 
-`spark_apply()` runs R code against each part of the data:
+`spark_apply()` runs an R function on each group of the data. Here,
+`nrow()` counts the rows for each value of `am`. `columns` sets the
+names and types of the result:
 
 ```{r}
 mtcars_tbl |>
   spark_apply(nrow, group_by = "am", columns = "am double, x long")
 ```
 
-With a "local" connection, the R code runs inside your R session, not
+::: callout-warning
+With a `"local"` connection, the R code runs inside your R session, not
 in a separate R process. This means:
 
 -   If the R code crashes, it can end your R session
 -   The R code can change objects in your global environment
+:::
 
 ```{r}
-#| sail_log: true
+#| include: false
 spark_disconnect(sc)
 ```
 
 ## Connect to a running Sail server
 
 You can also connect to a Sail server that is already running. Pass the
-server's address in `master`. The address uses the "sc://" protocol:
+server's address in `master`. The address uses the "sc://" protocol.
+Your machine still needs the Python environment from [Get
+started](#get-started) or [Python environment](#python-environment):
 
 ``` r
 sc <- spark_connect(
@@ -172,12 +200,12 @@ sc <- spark_connect(
 )
 ```
 
-The Python environment of the server needs `pyspark-client`. To use
-`spark_apply()`, the server also needs:
+The Python environment that runs the Sail server needs
+`pyspark-client`. To use `spark_apply()`, the server also needs:
 
 -   `rpy2`
 -   R
--   The same Python version as your R session
+-   The same Python version that your R session uses
 
 See the [Sail
 documentation](https://docs.lakesail.com/sail/latest/) to learn how to
@@ -187,7 +215,7 @@ start a Sail server.
 
 `sparklyr` uses `reticulate` to call the Python `pyspark-client`
 library. That library sends the commands to the Sail server over
-*gRPC*. With a "local" connection, `pysail` runs the Sail server, which
+*gRPC*. With a `"local"` connection, `pysail` runs the Sail server, which
 is written in Rust, inside your R session (@fig-sail). With a remote
 connection, the commands go to a Sail server on another machine instead.
 
@@ -230,7 +258,8 @@ How `sparklyr` communicates with a local Sail server
 Sail does not support some `sparklyr` features:
 
 -   **Caching** - `copy_to()` and the `spark_read_*()` functions need
-    `memory = FALSE`. `compute()` returns an error.
+    `memory = FALSE`. With `memory = TRUE`, they return an error.
+    `compute()` also returns an error.
 -   **Machine learning** - The `ml_*()` and `ft_*()` functions do not
     work.
 -   **Tuning** - `tune_grid_spark()` does not work.

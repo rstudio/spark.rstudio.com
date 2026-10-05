@@ -156,7 +156,8 @@ mtcars_tbl |>
   collect()
 ```
 
-You can also run SQL directly with `DBI`:
+`copy_to()` named the table `mtcars`, so you can also query it with SQL
+through `DBI`:
 
 ```{r}
 DBI::dbGetQuery(sc, "SELECT cyl, COUNT(*) AS n FROM mtcars GROUP BY cyl")
@@ -190,8 +191,9 @@ spark_disconnect(sc)
 
 You can also connect to a Sail server that is already running. Pass the
 server's address in `master`. The address uses the "sc://" protocol.
-Your machine still needs the Python environment from [Get
-started](#get-started) or [Python environment](#python-environment):
+Your machine still needs the `uv` setup from [Get
+started](#get-started), or the environment from [Python
+environment](#python-environment):
 
 ``` r
 sc <- spark_connect(

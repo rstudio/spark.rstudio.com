@@ -15,7 +15,6 @@ editor:
 #| include: false
 
 library(dplyr)
-library(dbplyr)
 library(sparklyr)
 
 ```
@@ -44,13 +43,13 @@ pak::pak("mlverse/pysparklyr")
 [Sail](https://github.com/lakehq/sail) is a Spark Connect server written
 in Rust. It does not need Java or a JVM. Sail runs the same Spark
 DataFrame and SQL commands that Spark does, so `sparklyr` can talk to it
-the same way it talks to [Spark Connect](/deployment/spark-connect.qmd). You 
-can connect to a remote Sail cluster that is already running, or to
-a local Sail cluster on your machine. 
+the same way it talks to [Spark Connect](/deployment/spark-connect.qmd). You
+can connect to a remote Sail server that is already running, or to
+a local Sail server on your machine.
 
 ## Get started
 
-To start and work a local Sail cluster, simply use `"sail"` as the `method`. 
+To start and work with a local Sail server, use `"sail"` as the `method`.
 If you can use [`uv`](https://docs.astral.sh/uv/) on your machine,
 `sparklyr` installs the Python libraries that Sail needs when you
 connect. It then starts a local Sail server and connects you to it. You
@@ -64,6 +63,29 @@ sc <- spark_connect(master = "local", method = "sail")
 
 The server uses a free port on your machine. `spark_disconnect()` stops
 the server. The server also stops when the R session ends.
+
+## Python environment
+
+If you cannot use `uv`, run `install_sail()` once, before you connect.
+It creates a Python environment that stays on your machine. These are
+the main libraries in the new Python environment:
+
+-   `pyspark-client`, which is a thin version of `pyspark`
+-   `pysail`, which `sparklyr` uses to start local Sail servers
+-   `rpy2`, which runs the R code that `spark_apply()` sends
+
+``` r
+pysparklyr::install_sail()
+```
+
+To install a specific Sail version, pass it in `version`:
+
+``` r
+pysparklyr::install_sail(version = "0.7")
+```
+
+After that, connect with `spark_connect()` as shown in [Get
+started](#get-started). `sparklyr` finds and uses the new environment.
 
 ## How it works
 
@@ -102,31 +124,6 @@ flowchart LR
 
 How `sparklyr` communicates with a local Sail server
 :::
-
-
-## Python environment
-
-`sparklyr` sets up a temporary Python environment for your R session by
-using `uv`. This environment has the Python libraries that Sail needs.
-You do not need to install anything else. Call `spark_connect()` and
-`sparklyr` does the rest.
-
-If `uv` is not available, use `install_sail()`. It creates a
-persistent Python environment with these libraries:
-
--   `pysail`
--   The `pyspark-client` version that `pysail` needs
--   `rpy2`, which `spark_apply()` uses
-
-``` r
-pysparklyr::install_sail()
-```
-
-To install a specific Sail version, pass it in `version`:
-
-``` r
-pysparklyr::install_sail(version = "0.7")
-```
 
 ## Work with data
 

@@ -126,44 +126,6 @@ pysparklyr::install_sail(version = "0.7")
 After that, connect with `spark_connect()` as shown in [Get
 started](#get-started). `sparklyr` finds and uses the new environment.
 
-## How it works
-
-`sparklyr` uses `reticulate` to call the Python `pyspark-client`
-library. That library sends the commands to the Sail server over
-*gRPC*. With a "local" connection, the Sail server runs inside your R
-session.
-
-::: {#fig-sail}
-```{mermaid}
-%%| fig-width: 10
-%%| eval: true
-flowchart LR
-  subgraph rs[R session]
-    subgraph r[R]
-      sr[sparklyr]
-      rt[reticulate]
-    end
-    subgraph ps[Python]
-      pc[pyspark-client]
-      sl[Sail server]
-    end
-  end
-  sr <--> rt
-  rt <--> pc
-  pc <-- gRPC --> sl
-
-  style rs  fill:#fff,stroke:#666,color:#000
-  style r   fill:#fff,stroke:#666,color:#000
-  style sr  fill:#fff,stroke:#666,color:#000
-  style rt  fill:#fff,stroke:#666,color:#000
-  style ps  fill:#fff,stroke:#666,color:#000
-  style pc  fill:#fff,stroke:#666,color:#000
-  style sl  fill:#fff,stroke:#666,color:#000
-```
-
-How `sparklyr` communicates with a local Sail server
-:::
-
 ## Work with data
 
 Sail does not cache tables in memory, so set `memory` to `FALSE`:
@@ -220,6 +182,48 @@ The Python environment of the server needs `pyspark-client`. To use
 See the [Sail
 documentation](https://docs.lakesail.com/sail/latest/) to learn how to
 start a Sail server.
+
+## How it works
+
+`sparklyr` uses `reticulate` to call the Python `pyspark-client`
+library. That library sends the commands to the Sail server over
+*gRPC*. With a "local" connection, `pysail` runs the Sail server, which
+is written in Rust, inside your R session (@fig-sail). With a remote
+connection, the commands go to a Sail server on another machine instead.
+
+::: {#fig-sail}
+```{mermaid}
+%%| fig-width: 10
+%%| eval: true
+flowchart LR
+  subgraph rs[R session]
+    subgraph r[R]
+      sr[sparklyr]
+      rt[reticulate]
+    end
+    subgraph ps[Python]
+      pc[pyspark-client]
+      subgraph rust[Rust]
+        sl[Sail server]
+      end
+    end
+  end
+  sr <--> rt
+  rt <--> pc
+  pc <-- gRPC --> sl
+
+  style rs  fill:#fff,stroke:#666,color:#000
+  style r   fill:#fff,stroke:#666,color:#000
+  style sr  fill:#fff,stroke:#666,color:#000
+  style rt  fill:#fff,stroke:#666,color:#000
+  style ps  fill:#fff,stroke:#666,color:#000
+  style pc  fill:#fff,stroke:#666,color:#000
+  style rust fill:#fff,stroke:#666,color:#000
+  style sl  fill:#fff,stroke:#666,color:#000
+```
+
+How `sparklyr` communicates with a local Sail server
+:::
 
 ## Limitations
 
